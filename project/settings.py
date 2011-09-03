@@ -34,6 +34,9 @@ LANGUAGE_CODE = 'lt'
 
 SITE_ID = 1
 
+# Django-registration settings.
+ACCOUNT_ACTIVATION_DAYS = 7
+
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
@@ -129,6 +132,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
+    'registration',
+
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 
