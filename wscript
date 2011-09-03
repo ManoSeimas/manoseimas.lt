@@ -47,7 +47,7 @@ def configure(ctx):
     ctx.find_program('git')
 
     ctx.load('python')
-    ctx.check_python_version((2,7))
+    ctx.check_python_version((2,6))
     ctx.check_python_module('PIL')
 
     ctx.env.TOP = ctx.path.abspath()
