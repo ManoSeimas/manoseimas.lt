@@ -14,6 +14,8 @@ DB_FILE = os.path.join('var', 'project.db')
 
 
 def options(ctx):
+    ctx.load('compiler_c python')
+
     gr = ctx.get_option_group('configure options')
     gr.add_option('--production', action='store_true', default=False,
                   help='build production environment')
@@ -44,11 +46,11 @@ def _check_required_options(ctx, options, msg):
 def configure(ctx):
     ctx.find_program('buildout', mandatory=False)
     ctx.find_program('hg')
-    ctx.find_program('git')
 
-    ctx.load('python')
+    ctx.load('compiler_c python')
     ctx.check_python_version((2,7))
     ctx.check_python_module('PIL')
+    ctx.check_python_headers()
 
     ctx.env.TOP = ctx.path.abspath()
     ctx.env.PRODUCTION = ctx.options.production
@@ -136,8 +138,7 @@ def distclean(ctx):
         '.lock-wafbuild', 'config.log', 'c4che', Context.DBFILE,
 
         # project specific generated files
-        'parts/paypal', DB_FILE, 'project/production.py',
-        'etc/my.cnf', 'etc/apache.conf',
+        DB_FILE, 'project/production.py', 'etc/apache.conf',
 
     ]:
         if os.path.exists(pth):
