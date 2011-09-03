@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method='POST' action="">
+    {% csrf_token %}
+    {{ search_form.as_table }}
+    <input type="submit" name="search" value="Search">
+</form>
+<div><p>
+    {% if documents %}
+        <table border="1">
+            <tr>
+                <th> Name </th>
+                <th> Number </th>
+                <th> Summary </th>
+            </tr>
+            {% for document in documents %}
+                <tr>
+                    <td><a href='/edit/{{document.id}}'>{{ document.name }}</a></td>
+                    <td><a href='/edit/{{document.id}}'>{{ document.number }}</a></td>
+                    <td>{% if document.summary %}{{ document.summary }}{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    </p></div>
+{% endblock %}
