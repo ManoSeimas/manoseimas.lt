@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+It works!
+
+{% for document in documents %}
+<p>{{ document.name }}</p>
+{% endfor %}
+
+{% endblock %}

@@ -29,3 +29,4 @@ var
 .wafpickle-98
 c4che
 config.log
+.conf_check*
