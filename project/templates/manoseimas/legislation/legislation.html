@@ -1,10 +1,11 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
 
     {% if document %}
      <div>
-      <div id="doc_name">
+          <div id="doc_name">
           {{ document.name }}
           </div>
           <div id="doc_id">
@@ -13,20 +14,20 @@
       </div>
 
       <div>
-          <div> Projektą pateikė: {{ document.number }} </div>
-          <div> Projektas priimtas: {{ document.date }} </div>
-          <div> Projekto komitetas: {{ document.number }} </div>
-          <div> <a href="">Aiškinamasis raštas</a> </div>
-          <div> <a href="">Peržiūrėti diskusijas seime</a> </div>
+          <div>{% trans "Projektą pateikė:" %} TODO</div>
+          <div>{% trans "Projektas priimtas:" %} {{ document.date }} </div>
+          <div>{% trans "Projekto komitetas:" %} TODO </div>
+          <div><a href="#">{% trans "Aiškinamasis raštas" %}</a></div>
+          <div><a href="#">{% trans "Peržiūrėti diskusijas seime" %}</a></div>
       </div>
 
       <div>
-          Apie įstatymą:<br/>
+          {% trans "Apie įstatymą:" %}<br/>
           {{ document.summary }}
       </div>
 
       <div>
-          Nedalyvavo narių:
+          {% trans "Nedalyvavo narių:" %}
       </div>
 
     {% endif %}
