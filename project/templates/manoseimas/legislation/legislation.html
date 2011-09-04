@@ -2,14 +2,34 @@
 
 {% block content %}
 
-{% if document %}
-  <div id="doc_name">
-    {{ document.name }}
-  </div>
-  <div id="doc_id">
-      <a href='{{ lrs_url }}'>{{ document.number }}</a>
-  </div>
-{% endif %}
+    {% if document %}
+     <div>
+      <div id="doc_name">
+          {{ document.name }}
+          </div>
+          <div id="doc_id">
+              <a href="{{ document.source.url }}">{{ document.number }}</a>
+          </div>
+      </div>
+
+      <div>
+          <div> Projektą pateikė: {{ document.number }} </div>
+          <div> Projektas priimtas: {{ document.date }} </div>
+          <div> Projekto komitetas: {{ document.number }} </div>
+          <div> <a href="">Aiškinamasis raštas</a> </div>
+          <div> <a href="">Peržiūrėti diskusijas seime</a> </div>
+      </div>
+
+      <div>
+          Apie įstatymą:<br/>
+          {{ document.summary }}
+      </div>
+
+      <div>
+          Nedalyvavo narių:
+      </div>
+
+    {% endif %}
 
 
 {% endblock %}

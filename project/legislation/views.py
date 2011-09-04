@@ -7,13 +7,14 @@ from mscouch.document import Document
 from .forms import SearchForm, EditForm
 
 import couchdb.design
-couch = couchdb.Server('https://manoseimas:politika@manoseimas.cloudant.com')
+couch = couchdb.Server('http://localhost:5984/')
 db = couch['manoseimas']
 
 # temporary sync
 couchdb.design.ViewDefinition.sync_many(db, [
         Document.by_number,
         Document.proposed_only,
+        Document.votes,
     ])
 
 
@@ -58,13 +59,13 @@ def document_search(request):
 
 @render_to('manoseimas/legislation/legislation.html')
 def legislation(request, legislation_id):
-    document = db[legislation_id]
+    data = Document.votes(db, limit=10)[[legislation_id]:[legislation_id, {}]]
+    document = data.rows[0]
+    votes = data.rows[1:]
     if document['doc_type'] != 'document':
         return {}
-
-    lrs_url = 'http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=403303'
+    import ipdb; ipdb.set_trace()
 
     return {
         'document': document,
-        'lrs_url': lrs_url,
     }
