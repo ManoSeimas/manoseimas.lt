@@ -1,8 +1,15 @@
 {% extends "base.html" %}
 
 {% block content %}
+
 {% if document %}
-  {{ document.name }}
+  <div id="doc_name">
+    {{ document.name }}
+  </div>
+  <div id="doc_id">
+      <a href='{{ lrs_url }}'>{{ document.number }}</a>
+  </div>
 {% endif %}
+
 
 {% endblock %}

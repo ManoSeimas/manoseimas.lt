@@ -19,3 +19,11 @@ class Document(mapping.Document):
                 emit(doc.number, null);
             }
         }''', include_docs=True)
+
+
+    proposed_only = mapping.ViewField('document', '''
+        function(doc) {
+            if (doc.doc_type == 'document' && doc.proposed) {
+                emit(doc.number, null);
+            }
+        }''', include_docs=True)

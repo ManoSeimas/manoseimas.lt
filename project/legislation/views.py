@@ -7,19 +7,20 @@ from mscouch.document import Document
 from .forms import SearchForm, EditForm
 
 import couchdb.design
-couch = couchdb.Server('http://127.0.0.1:5984/')
+couch = couchdb.Server('https://manoseimas:politika@manoseimas.cloudant.com')
 db = couch['manoseimas']
 
 # temporary sync
 couchdb.design.ViewDefinition.sync_many(db, [
         Document.by_number,
+        Document.proposed_only,
     ])
 
 
 @render_to('manoseimas/legislation/document_list.html')
 def document_list(request):
     return {
-        'documents': Document.by_number(db, limit=10),
+        'documents': Document.proposed_only(db, limit=10),
     }
 
 
@@ -59,8 +60,11 @@ def document_search(request):
 def legislation(request, legislation_id):
     document = db[legislation_id]
     if document['doc_type'] != 'document':
-        document = None
+        return {}
+
+    lrs_url = 'http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=403303'
 
     return {
         'document': document,
+        'lrs_url': lrs_url,
     }
