@@ -19,24 +19,81 @@
     <script src="{{ STATIC_URL }}js/libs/modernizr-2.0.6.min.js"></script>
 </head>
 <body>
-    <div id="header">
-        {% block header %}
-    <a href="{% url manoseimas-legislation-document-list %}">{% trans "Home" %}</a> | 
-    <a href="{% url manoseimas-legislation-document-search %}">{% trans "Search" %}</a> | 
-
-    {% if user.is_authenticated %}
-    {% trans "Logged in" %}: {{ user.username }} 
-    (<a href="{% url auth_logout %}">{% trans "Log out" %}</a> | 
-    <a href="{% url auth_password_change %}">{% trans "Change password" %}</a>)
-    {% else %}
-    <a href="{% url auth_login %}">{% trans "Log in" %}</a>
-    {% endif %}
-    <hr />
-        {% endblock %}
-    </div>
+    <div class="container">
+    
+    {% block header %}
+    <header>
+        
+        <h1 class="logo">
+            <a href="{% url manoseimas-legislation-document-list %}">Mano Seimas</a>
+        </h1>
+        
+        <nav class="main">
+            <ul>
+                {% include "partials/main_menu.html" %}
+            </ul>
+        </nav>
+        
+        <nav class="user">
+            <ul>
+                {% if user.is_authenticated %}
+                <li class="user-name">{% trans "Logged in" %}: <strong>{{ user.username }}</strong></li>
+                <li><a href="{% url auth_password_change %}">{% trans "Settings" %}</a></li>
+                <li><a href="{% url auth_logout %}">{% trans "Log out" %}</a></li>
+                {% else %}
+                <li><a href="{% url auth_login %}">{% trans "Log in" %}</a></li>
+                <li><a href="{% url registration_register %}">{% trans "Sign Up" %}</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        
+    </header>
+    {% endblock %}
 
     {% block content %}
     {% endblock %}
+    
+    {% block footer %}
+    <footer class="main">
+        <section class="menu">
+            <ul>
+                {% include "partials/main_menu.html" %}
+            </ul>
+        </section>
+        
+        <section class="newsletter">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+            
+            <ul>
+                <li>Apie ką tai bus</li>
+                <li>Kaip dažnai bus siunčiama</li>
+                <li>Visada galima atsisakyti vienu mygtuko paspaudimu</li>
+            </ul>
+            
+            <form>
+                <label>Tavo el. paštas<label>
+                <input type="text" name="email" />
+                <input type="submit" value="Užsisakyti" />
+            </form>
+        </section>
+        
+        <section class="ideas">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            
+            <form>
+                <label>Tavo idėja<label>
+                <textarea name="idea"></textarea>
+                <input type="submit" value="Siųsti idėją" />
+            </form>
+            
+        </section>
+        
+        <section class="partners">
+        </section>
+    </footer>
+    {% endblock %}
+    
+    </div>
 </body>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
