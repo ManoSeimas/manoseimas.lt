@@ -23,32 +23,24 @@ def index(request):
 
 @render_to('manoseimas/legislation/search.html')
 def search(request):
-    documents = []
+    document, edit_form = None, None
     search_form = SearchForm(data=request.POST or None)
 
-    if request.POST and search_form.is_valid():
+    if request.POST and 'search' in request.POST and search_form.is_valid():
         key = search_form.cleaned_data['number']
         documents = Document.by_number(db, limit=10, include_docs=True)[key]
+        document = documents.rows[0]
+        edit_form = EditForm(document=documents.rows[0])
+    elif request.POST and 'save' in request.POST:
+        edit_form = EditForm(data=request.POST)
+        if request.POST and edit_form.is_valid():
+            document = db[edit_form.cleaned_data['doc_id']]
+            if document['doc_type'] == 'document':
+                document['summary'] = edit_form.cleaned_data['summary']
+                db.save(document)
 
     return {
         'search_form': search_form,
-        'documents': documents,
-    }
-
-
-@render_to('manoseimas/legislation/edit.html')
-def edit(request, doc_id=None):
-    message = None
-    document = db[doc_id]
-    edit_form = EditForm(document=document, data=request.POST or None)
-
-    if request.POST and edit_form.is_valid():
-        if document['doc_type'] == 'document':
-            document['summary'] = edit_form.cleaned_data['summary']
-            db.save(document)
-            message = 'Successfully saved.'
-
-    return {
+        'document': document,
         'edit_form': edit_form,
-        'message': message,
     }

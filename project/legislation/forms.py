@@ -6,11 +6,12 @@ class SearchForm(forms.Form):
 
 
 class EditForm(forms.Form):
-    summary = forms.Field()
+    summary = forms.CharField(widget=forms.widgets.Textarea())
+    # TODO:albertas:2011-09-04: could not find max length of couchdb _id.
+    doc_id = forms.CharField(max_length=255, widget=forms.HiddenInput())
 
-    def __init__(self, document, *args, **kwargs):
+    def __init__(self, document=None, *args, **kwargs):
         super(EditForm, self).__init__(*args, **kwargs)
-        if 'summary' in document.keys():
-            self.summary = document['summary']
+        if document and 'summary' in dict(document.items()):
             self.fields['summary'] = forms.CharField(initial=document['summary'],
                                                      widget=forms.widgets.Textarea())

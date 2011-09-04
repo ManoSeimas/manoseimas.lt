@@ -5,23 +5,17 @@
     {% csrf_token %}
     {{ search_form.as_table }}
     <input type="submit" name="search" value="Search">
-</form>
 <div><p>
-    {% if documents %}
-        <table border="1">
-            <tr>
-                <th> Name </th>
-                <th> Number </th>
-                <th> Summary </th>
-            </tr>
-            {% for document in documents %}
-                <tr>
-                    <td><a href='/edit/{{document.id}}'>{{ document.name }}</a></td>
-                    <td><a href='/edit/{{document.id}}'>{{ document.number }}</a></td>
-                    <td>{% if document.summary %}{{ document.summary }}{% endif %}</td>
-                </tr>
-            {% endfor %}
-        </table>
+    {% if document %}
+        <b>Name</b>: {{ document.name }}<br/>
+        <b>Number</b>: {{ document.number }}<br/>
+        {% for field in edit_form.visible_fields %}
+            {{ field.errors }}
+            {{ field.label_tag }}: {{ field }}
+        {% endfor %}
+        <input type="hidden" name="doc_id" id="id_doc_id" value="{{ document.id }}"/>
+        <input type="submit" name="save" value="Save">
     {% endif %}
     </p></div>
+</form>
 {% endblock %}
