@@ -13,13 +13,15 @@ db = couch['manoseimas']
 # temporary sync
 couchdb.design.ViewDefinition.sync_many(db, [
         Document.by_number,
+        Document.proposed_only,
+        Document.votes,
     ])
 
 
 @render_to('manoseimas/legislation/document_list.html')
 def document_list(request):
     return {
-        'documents': Document.by_number(db, limit=10),
+        'documents': Document.proposed_only(db, limit=10),
     }
 
 
@@ -57,9 +59,11 @@ def document_search(request):
 
 @render_to('manoseimas/legislation/legislation.html')
 def legislation(request, legislation_id):
-    document = db[legislation_id]
+    data = Document.votes(db, limit=10)[[legislation_id]:[legislation_id, {}]]
+    document = data.rows[0]
+    votes = data.rows[1:]
     if document['doc_type'] != 'document':
-        document = None
+        return {}
 
     return {
         'document': document,
