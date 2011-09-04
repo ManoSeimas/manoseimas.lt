@@ -1,11 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-It works!
 
 {% for document in documents %}
     {% if document.proposed %}
-        <p>{{ document.name }}</p>
+    <p><a href="/legislation/{{ document.id }}/">{{ document.name }}</a></p>
     {% endif %}
 {% endfor %}
 

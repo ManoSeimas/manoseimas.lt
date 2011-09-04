@@ -53,3 +53,14 @@ def search(request):
         'edit_form': edit_form,
         'message': message,
     }
+
+
+@render_to('manoseimas/legislation/legislation.html')
+def legislation(request, legislation_id):
+    document = db[legislation_id]
+    if document['doc_type'] != 'document':
+        document = None
+
+    return {
+        'document': document,
+    }
