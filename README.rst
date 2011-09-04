@@ -38,3 +38,6 @@ Production environment
 2. Build project::
 
     make
+
+http://sass-lang.com/
+sass --watch project/sass:var/generated_static/css

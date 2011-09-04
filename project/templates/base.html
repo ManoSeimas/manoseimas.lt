@@ -19,77 +19,100 @@
     <script src="{{ STATIC_URL }}js/libs/modernizr-2.0.6.min.js"></script>
 </head>
 <body>
-    <div class="container">
     
     {% block header %}
     <header>
+        <div class="container">
         
-        <h1 class="logo">
-            <a href="{% url manoseimas-legislation-document-list %}">Mano Seimas</a>
-        </h1>
+            <h1 class="logo">
+                <a href="{% url manoseimas-legislation-document-list %}">Mano Seimas</a>
+            </h1>
         
-        <nav class="main">
-            <ul>
-                {% include "partials/main_menu.html" %}
-            </ul>
-        </nav>
+            <nav class="main">
+                <ul>
+                    {% include "partials/main_menu.html" %}
+                </ul>
+            </nav>
         
-        <nav class="user">
-            <ul>
-                {% if user.is_authenticated %}
-                <li class="user-name">{% trans "Logged in" %}: <strong>{{ user.username }}</strong></li>
-                <li><a href="{% url auth_password_change %}">{% trans "Settings" %}</a></li>
-                <li><a href="{% url auth_logout %}">{% trans "Log out" %}</a></li>
-                {% else %}
-                <li><a href="{% url auth_login %}">{% trans "Log in" %}</a></li>
-                <li><a href="{% url registration_register %}">{% trans "Sign Up" %}</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-        
+            <nav class="user">
+                <ul>
+                    {% if user.is_authenticated %}
+                    <li class="user-name">{% trans "Logged in" %}: <strong>{{ user.username }}</strong></li>
+                    <li><a href="{% url auth_password_change %}">{% trans "Settings" %}</a></li>
+                    <li><a href="{% url auth_logout %}">{% trans "Log out" %}</a></li>
+                    {% else %}
+                    <li><a href="{% url auth_login %}">{% trans "Log in" %}</a></li>
+                    <li><a href="{% url registration_register %}">{% trans "Sign Up" %}</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+
+        </div>
     </header>
     {% endblock %}
 
-    {% block content %}
-    {% endblock %}
+    <section id="content">
+        <div class="container">
+            {% block content %}
+            {% endblock %}
+        <div class="container">
+    </section>
     
     {% block footer %}
     <footer class="main">
-        <section class="menu">
-            <ul>
-                {% include "partials/main_menu.html" %}
-            </ul>
-        </section>
+        <div class="container">
+            <div class="row">
+                
+                <section class="menu span4 columns">
+                    <div class="footer-padding">
+                        <ul>
+                            {% include "partials/main_menu.html" %}
+                        </ul>
+                    </div>
+                </section>
+                
+                <section class="newsletter span4 columns">
+                    <div class="footer-padding">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                    
+                        <ul>
+                            <li>Apie ką tai bus</li>
+                            <li>Kaip dažnai bus siunčiama</li>
+                            <li>Visada galima atsisakyti vienu mygtuko paspaudimu</li>
+                        </ul>
+                    
+                        <form class="form-stacked">
+                            <div class="clearfix">
+                            <label for="email">Tavo el. paštas<label>
+                            <input type="text" name="email" id="email" />
+                            </div>
+                
+                            <input type="submit" value="Užsisakyti" class="button info" />
+                        </form>
+                    </div>
+                </section>
         
-        <section class="newsletter">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                <section class="ideas span4 columns">
+                    <div class="footer-padding">
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             
-            <ul>
-                <li>Apie ką tai bus</li>
-                <li>Kaip dažnai bus siunčiama</li>
-                <li>Visada galima atsisakyti vienu mygtuko paspaudimu</li>
-            </ul>
-            
-            <form>
-                <label>Tavo el. paštas<label>
-                <input type="text" name="email" />
-                <input type="submit" value="Užsisakyti" />
-            </form>
-        </section>
+                        <form class="form-stacked">
+                            <div class="clearfix">
+                                <label for="idea">Tavo idėja<label>
+                                <textarea name="idea" id="idea"></textarea>
+                            </div>
+                
+                            <input type="submit" value="Siųsti idėją" class="button info" />
+                        </form>
+                    </div>
+                </section>
         
-        <section class="ideas">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                <section class="facebook span4 columns">
+                    <iframe src="http://www.facebook.com/plugins/likebox.php?href=http%3A%2F%2Fwww.facebook.com%2Fpages%2FManoSeimaslt%2F263197427035452&amp;width=220&amp;colorscheme=light&amp;show_faces=true&amp;border_color&amp;stream=false&amp;header=false&amp;height=280" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:220px; height:280px;" allowTransparency="true"></iframe>
+                </section>
             
-            <form>
-                <label>Tavo idėja<label>
-                <textarea name="idea"></textarea>
-                <input type="submit" value="Siųsti idėją" />
-            </form>
-            
-        </section>
-        
-        <section class="partners">
-        </section>
+            </div>
+        </div>
     </footer>
     {% endblock %}
     

@@ -7,3 +7,15 @@
 //
 // =============================================================================
 
+html,
+body
+{
+  background: #eee;
+}
+
+#content
+{
+  background: $white;
+  padding-top: 35px;
+  padding-bottom: 35px;
+}

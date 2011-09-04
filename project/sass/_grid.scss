@@ -14,7 +14,7 @@
   @include clearfix;
   margin-left: -1 * $gridGutterWidth;
   
-  [class^="span"]
+  .columns
   {
     display: inline;
     float: left;

@@ -82,7 +82,7 @@ $analog2:           adjust-hue($baseColor, -22deg);
 	}
 }
 
-@mixin size ($height: 5px, $width: 5px)
+@mixin size ($width: 5px, $height: 5px)
 {
   height: $height;
   width: $width;
