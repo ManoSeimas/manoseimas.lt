@@ -3,9 +3,7 @@
 {% block content %}
 
 {% for document in documents %}
-    {% if document.proposed %}
     <p><a href="{% url manoseimas-legislation-legislation document.id %}">{{ document.name }}</a></p>
-    {% endif %}
 {% endfor %}
 
 {% endblock %}
