@@ -7,7 +7,7 @@ from mscouch.document import Document
 from .forms import SearchForm, EditForm
 
 import couchdb.design
-couch = couchdb.Server('https://manoseimas:politika@manoseimas.cloudant.com')
+couch = couchdb.Server('https://manoseimas.cloudant.com')
 db = couch['manoseimas']
 
 # temporary sync
