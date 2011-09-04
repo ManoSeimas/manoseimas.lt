@@ -6,7 +6,8 @@ class SearchForm(forms.Form):
 
 
 class EditForm(forms.Form):
-    summary = forms.CharField(widget=forms.widgets.Textarea())
+    summary = forms.CharField(widget=forms.widgets.Textarea(), required=False)
+    proposed = forms.BooleanField(required=False)
     # TODO:albertas:2011-09-04: could not find max length of couchdb _id.
     doc_id = forms.CharField(max_length=255, widget=forms.HiddenInput())
 
@@ -15,3 +16,5 @@ class EditForm(forms.Form):
         if document and 'summary' in dict(document.items()):
             self.fields['summary'] = forms.CharField(initial=document['summary'],
                                                      widget=forms.widgets.Textarea())
+        if document and 'proposed' in dict(document.items()):
+            self.fields['proposed'] = forms.BooleanField(initial=document['proposed'])

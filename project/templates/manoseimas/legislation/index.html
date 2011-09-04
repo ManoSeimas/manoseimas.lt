@@ -4,7 +4,9 @@
 It works!
 
 {% for document in documents %}
-<p>{{ document.name }}</p>
+    {% if document.proposed %}
+        <p>{{ document.name }}</p>
+    {% endif %}
 {% endfor %}
 
 {% endblock %}

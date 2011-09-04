@@ -6,12 +6,15 @@
     {{ search_form.as_table }}
     <input type="submit" name="search" value="Search">
 <div><p>
+    {% if message %}
+        <p>{{ message }}</p>
+    {% endif %}
     {% if document %}
-        <b>Name</b>: {{ document.name }}<br/>
-        <b>Number</b>: {{ document.number }}<br/>
+        <p><b>Name</b>: {{ document.name }}</p>
+        <p><b>Number</b>: {{ document.number }}</p>
         {% for field in edit_form.visible_fields %}
-            {{ field.errors }}
-            {{ field.label_tag }}: {{ field }}
+            <p>{{ field.errors }}
+            {{ field.label_tag }}: {{ field }}</p>
         {% endfor %}
         <input type="hidden" name="doc_id" id="id_doc_id" value="{{ document.id }}"/>
         <input type="submit" name="save" value="Save">
