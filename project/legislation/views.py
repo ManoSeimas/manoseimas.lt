@@ -16,15 +16,15 @@ couchdb.design.ViewDefinition.sync_many(db, [
     ])
 
 
-@render_to('manoseimas/legislation/index.html')
-def index(request):
+@render_to('manoseimas/legislation/document_list.html')
+def document_list(request):
     return {
         'documents': Document.by_number(db, limit=10),
     }
 
 
-@render_to('manoseimas/legislation/search.html')
-def search(request):
+@render_to('manoseimas/legislation/document_search.html')
+def document_search(request):
     document, edit_form, message = None, None, None
     search_form = SearchForm(data=request.POST or None)
 
@@ -45,7 +45,7 @@ def search(request):
                 document['summary'] = edit_form.cleaned_data['summary']
                 document['proposed'] = edit_form.cleaned_data['proposed']
                 db.save(document)
-            return HttpResponseRedirect(reverse('manoseimas-legislation-index'))
+            return HttpResponseRedirect(reverse('manoseimas-legislation-document-list'))
 
     return {
         'search_form': search_form,
