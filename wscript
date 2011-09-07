@@ -132,9 +132,9 @@ def build(ctx):
         source=ctx.path.ant_glob('project/static/**/*'),
         after='django', name='collectstatic', update_outputs=True)
 
-    ctx(rule='bin/sass --update project/sass:var/generated_static/css',
+    ctx(rule='bin/sass --update project/sass:var/build/sass/css',
         source=ctx.path.ant_glob('project/sass/*.scss'),
-        target='var/generated_static/css/style.css', after='collectstatic',
+        target='var/build/sass/css/style.css', after='collectstatic',
         update_outputs=True)
 
 
