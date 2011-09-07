@@ -1,0 +1,42 @@
+// =============================================================================
+//
+//    Footer Stylesheet
+//    _footer.scss
+//    
+//    Site's footer
+//
+// =============================================================================
+
+footer.main
+{
+  background: #eee;
+  padding: 15px 0;
+  
+  section
+  {
+    background: #fafafa;
+    @include border-radius (5px);
+    height: 280px;
+    
+    .footer-padding
+    {
+      padding: 10px;
+      
+      input[type="text"], textarea
+      {
+        width: 190px;
+      }
+    }
+    
+    &.menu ul
+    {
+      list-style: none;
+      margin: 10px 0 0 10px;
+      
+      li
+      {
+        margin-bottom: 8px;
+      }
+    }
+  }
+}
