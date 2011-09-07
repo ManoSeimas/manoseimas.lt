@@ -14,7 +14,7 @@ DB_FILE = os.path.join('var', 'project.db')
 
 
 def options(ctx):
-    ctx.load('compiler_c python')
+    ctx.load('compiler_c python ruby')
 
     gr = ctx.get_option_group('configure options')
     gr.add_option('--production', action='store_true', default=False,
@@ -47,10 +47,14 @@ def configure(ctx):
     ctx.find_program('buildout', mandatory=False)
     ctx.find_program('hg')
 
-    ctx.load('compiler_c python')
+    ctx.load('compiler_c python ruby')
+
     ctx.check_python_version((2,6))
     ctx.check_python_module('PIL')
     ctx.check_python_headers()
+
+    ctx.check_ruby_version((1,8,0))
+    ctx.check_ruby_ext_devel()
 
     ctx.env.TOP = ctx.path.abspath()
     ctx.env.PRODUCTION = ctx.options.production
@@ -126,7 +130,12 @@ def build(ctx):
 
     ctx(rule='bin/django collectstatic --noinput',
         source=ctx.path.ant_glob('project/static/**/*'),
-        after='django', update_outputs=True)
+        after='django', name='collectstatic', update_outputs=True)
+
+    ctx(rule='bin/sass --update project/sass:var/generated_static/css',
+        source=ctx.path.ant_glob('project/sass/*.scss'),
+        target='var/generated_static/css/style.css', after='collectstatic',
+        update_outputs=True)
 
 
 def distclean(ctx):
