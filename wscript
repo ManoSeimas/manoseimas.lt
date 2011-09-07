@@ -128,7 +128,7 @@ def build(ctx):
     else:
         _build_development(ctx)
 
-    ctx(rule='bin/django collectstatic --noinput',
+    ctx(rule='bin/django collectstatic --noinput --verbosity=0',
         source=ctx.path.ant_glob('project/static/**/*'),
         after='django', name='collectstatic', update_outputs=True)
 
