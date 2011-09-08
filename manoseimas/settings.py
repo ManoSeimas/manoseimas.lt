@@ -71,7 +71,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(BUILDOUT_DIR, 'project', 'static'),
+    os.path.join(BUILDOUT_DIR, 'manoseimas', 'static'),
     os.path.join(BUILDOUT_DIR, 'var', 'build', 'sass'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
@@ -105,7 +105,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'project.urls'
+ROOT_URLCONF = 'manoseimas.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -135,11 +135,8 @@ INSTALLED_APPS = (
     'south',
     'registration',
 
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-
-    'legislation',
-    'accounts',
+    'manoseimas.legislation',
+    'manoseimas.accounts',
 )
 
 # A sample logging configuration. The only tangible logging

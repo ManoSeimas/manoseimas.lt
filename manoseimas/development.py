@@ -1,4 +1,4 @@
-from project.settings import *
+from manoseimas.settings import *
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

@@ -2,7 +2,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from annoying.decorators import render_to
 
-from mscouch.document import Document
+from manoseimas.mscouch.document import Document
 
 from .forms import SearchForm, EditForm
 

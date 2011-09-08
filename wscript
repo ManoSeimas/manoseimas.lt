@@ -99,12 +99,12 @@ def _build_production(ctx):
     Logs.info('Building PRODUCTION environment')
 
     _substitute(ctx, [
-            ('etc/production.py.in', 'project/production.py'),
+            ('etc/production.py.in', 'manoseimas/production.py'),
             ('etc/apache.conf.in', 'etc/apache.conf'),
         ])
 
     ctx(rule='bin/buildout -c production.cfg -N', name='django',
-        source=_get_sources_for_django(ctx, 'project/production.py',
+        source=_get_sources_for_django(ctx, 'manoseimas/production.py',
                                             'production.cfg'),
         target='bin/django bin/django.wsgi', update_outputs=True)
 
@@ -129,11 +129,11 @@ def build(ctx):
         _build_development(ctx)
 
     ctx(rule='bin/django collectstatic --noinput --verbosity=0',
-        source=ctx.path.ant_glob('project/static/**/*'),
+        source=ctx.path.ant_glob('manoseimas/static/**/*'),
         after='django', name='collectstatic', update_outputs=True)
 
-    ctx(rule='bin/sass --update project/sass:var/build/sass/css',
-        source=ctx.path.ant_glob('project/sass/*.scss'),
+    ctx(rule='bin/sass --update manoseimas/sass:var/build/sass/css',
+        source=ctx.path.ant_glob('manoseimas/sass/*.scss'),
         target='var/build/sass/css/style.css', after='collectstatic',
         update_outputs=True)
 
@@ -147,8 +147,7 @@ def distclean(ctx):
         '.lock-wafbuild', 'config.log', 'c4che', Context.DBFILE,
 
         # project specific generated files
-        DB_FILE, 'project/production.py', 'etc/apache.conf',
-
+        DB_FILE, 'manoseimas/production.py', 'etc/apache.conf', '.sass-cache',
     ]:
         if os.path.exists(pth):
             Logs.info('cleaning: %s' % pth)
@@ -163,7 +162,7 @@ def distclean(ctx):
 def cleanpyc(ctx):
     "Clean *.pyc files from sources."
     Logs.info('cleaning: *.pyc')
-    for pth in ctx.path.ant_glob(['project/**/*.pyc', 'apps/**/*.pyc']):
+    for pth in ctx.path.ant_glob(['manoseimas/**/*.pyc', 'apps/**/*.pyc']):
         os.unlink(pth.abspath())
 
 

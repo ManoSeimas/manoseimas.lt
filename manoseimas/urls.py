@@ -9,8 +9,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^accounts/', include('registration.urls')),
-    (r'^accounts/', include('accounts.urls')),
-    (r'', include('legislation.urls')),
+    (r'^accounts/', include('manoseimas.accounts.urls')),
+    (r'', include('manoseimas.legislation.urls')),
 )
 
 if settings.DEBUG:
