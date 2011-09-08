@@ -119,7 +119,7 @@ manoseimas/templates/
     Django project wide templates.
 
 manoseimas/sass/
-    SASS style files, compiled CSS output will be stored to ``var/sass``.
+    SASS_ style files, compiled CSS output will be stored to ``var/sass``.
 
 manoseimas/urls.py
     Django project wide urls.
@@ -140,7 +140,7 @@ var/log/
     Logs.
 
 var/sass/
-    Generated SASS files.
+    Generated SASS_ files.
 
 var/www/media/
     Folder for serving static content, here should be stored all user uploaded
@@ -161,3 +161,4 @@ wscript
 
 .. _Waf: http://code.google.com/p/waf/
 .. _Cheetah: http://www.cheetahtemplate.org/
+.. _SASS: http://sass-lang.com/
