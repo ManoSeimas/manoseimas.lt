@@ -101,6 +101,10 @@ def build(ctx):
 
     ctx(rule=_subst, source='config/buildout.cfg', target='buildout.cfg')
 
+    if ctx.env.PRODUCTION:
+        ctx(rule=_subst, source='config/apache.conf',
+            target='var/etc/apache.conf')
+
     ctx(rule=_subst, source='config/settings.py',
         target='manoseimas/settings.py')
 
@@ -111,14 +115,14 @@ def build(ctx):
     ctx(rule='bin/django syncdb --all --noinput && bin/django migrate --fake',
         source='bin/django manoseimas/settings.py')
 
+    ctx(rule='bin/sass --update manoseimas/sass:var/sass/css',
+        source=ctx.path.ant_glob('manoseimas/sass/*.scss'),
+        target='var/sass/css/style.css', name='sass', after='django',
+        update_outputs=True)
+
     ctx(rule='bin/django collectstatic --noinput --verbosity=0',
         source=ctx.path.ant_glob('manoseimas/static/**/*'),
-        after='django', name='collectstatic', update_outputs=True)
-
-    ctx(rule='bin/sass --update manoseimas/sass:var/build/sass/css',
-        source=ctx.path.ant_glob('manoseimas/sass/*.scss'),
-        target='var/build/sass/css/style.css', after='collectstatic',
-        update_outputs=True)
+        after='sass', update_outputs=True)
 
 
 def distclean(ctx):
@@ -130,8 +134,7 @@ def distclean(ctx):
         '.lock-wafbuild', 'config.log', 'c4che', Context.DBFILE,
 
         # project specific generated files
-        'manoseimas/production.py', 'etc/apache.conf', '.sass-cache',
-        'buildout.cfg', 'manoseimas/settings.py',
+        '.sass-cache', 'buildout.cfg', 'manoseimas/settings.py', 'var',
     ]:
         if os.path.exists(pth):
             Logs.info('cleaning: %s' % pth)
@@ -146,5 +149,5 @@ def distclean(ctx):
 def cleanpyc(ctx):
     "Clean *.pyc files from sources."
     Logs.info('cleaning: *.pyc')
-    for pth in ctx.path.ant_glob(['manoseimas/**/*.pyc', 'apps/**/*.pyc']):
+    for pth in ctx.path.ant_glob('manoseimas/**/*.pyc'):
         os.unlink(pth.abspath())

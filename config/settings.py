@@ -28,7 +28,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'init_command': 'SET storage_engine=INNODB',
-            'read_default_file': os.path.join(BUILDOUT_DIR, 'etc', 'my.cnf'),
+            'read_default_file': os.path.join(BUILDOUT_DIR, 'var', 'etc',
+                                              'my.cnf'),
         },
         #end if
     }
@@ -62,7 +63,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'htdocs', 'media')
+MEDIA_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -73,7 +74,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'htdocs', 'static')
+STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -87,7 +88,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     os.path.join(BUILDOUT_DIR, 'manoseimas', 'static'),
-    os.path.join(BUILDOUT_DIR, 'var', 'build', 'sass'),
+    os.path.join(BUILDOUT_DIR, 'var', 'sass'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
