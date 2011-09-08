@@ -1,21 +1,36 @@
+# $NOTE
 import os
 
 PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 
+#if $DEVELOPMENT
+DEBUG = True
+#else
 DEBUG = False
+#end if
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    #if $PRODUCTION
+    ('Server Admin', '$SERVER_ADMIN'),
+    #end if
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '', # Or path to database file if using sqlite3.
+        #if $DEVELOPMENT
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BUILDOUT_DIR, 'var', 'development.db'),
+        #else
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'init_command': 'SET storage_engine=INNODB',
+            'read_default_file': os.path.join(BUILDOUT_DIR, 'etc', 'my.cnf'),
+        },
+        #end if
     }
 }
 
@@ -103,6 +118,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    #if $DEVELOPMENT
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #end if
 )
 
 ROOT_URLCONF = 'manoseimas.urls'
@@ -135,6 +153,12 @@ INSTALLED_APPS = (
     'south',
     'registration',
 
+    #if $DEVELOPMENT
+    'debug_toolbar',
+    'django_extensions',
+    'test_utils',
+    #end if
+
     'manoseimas.legislation',
     'manoseimas.accounts',
 )
@@ -161,3 +185,18 @@ LOGGING = {
         },
     }
 }
+
+#if $DEVELOPMENT
+INTERNAL_IPS = (
+    '127.0.0.1',
+)
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BUILDOUT_DIR, 'var', 'mail')
+
+CACHE_BACKEND = "dummy://"
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
+#end if
