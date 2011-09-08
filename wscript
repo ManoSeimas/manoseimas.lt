@@ -109,7 +109,7 @@ def build(ctx):
         target='bin/django', update_outputs=True)
 
     ctx(rule='bin/django syncdb --all --noinput && bin/django migrate --fake',
-        source='manoseimas/settings.py')
+        source='bin/django manoseimas/settings.py')
 
     ctx(rule='bin/django collectstatic --noinput --verbosity=0',
         source=ctx.path.ant_glob('manoseimas/static/**/*'),
@@ -131,6 +131,7 @@ def distclean(ctx):
 
         # project specific generated files
         'manoseimas/production.py', 'etc/apache.conf', '.sass-cache',
+        'buildout.cfg', 'manoseimas/settings.py',
     ]:
         if os.path.exists(pth):
             Logs.info('cleaning: %s' % pth)
