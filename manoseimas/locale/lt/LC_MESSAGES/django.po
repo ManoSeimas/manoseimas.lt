@@ -1,0 +1,156 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-09 14:35+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2)\n"
+
+#: templates/base.html:12
+msgid "Mano Seimas"
+msgstr ""
+
+#: templates/base.html:40
+msgid "Logged in"
+msgstr ""
+
+#: templates/base.html:41
+msgid "Settings"
+msgstr ""
+
+#: templates/base.html:42
+msgid "Log out"
+msgstr ""
+
+#: templates/base.html:44 templates/registration/activate.html:10
+#: templates/registration/login.html:9
+#: templates/registration/password_reset_complete.html:8
+msgid "Log in"
+msgstr ""
+
+#: templates/base.html:45
+msgid "Sign Up"
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:17
+msgid "Projektą pateikė:"
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:18
+msgid "Projektas priimtas:"
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:19
+msgid "Projekto komitetas:"
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:20
+msgid "Aiškinamasis raštas"
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:21
+msgid "Peržiūrėti diskusijas seime"
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:25
+msgid "Apie įstatymą:"
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:30
+msgid "Nedalyvavo narių:"
+msgstr ""
+
+#: templates/manoseimas/search/search_results.html:7
+#, python-format
+msgid ""
+"\n"
+"Viso rasta %(total)s atitikmuo.\n"
+msgid_plural ""
+"\n"
+"Viso rasta %(total)s atitikmenys.\n"
+msgstr[0] ""
+"\n"
+"Viso rasta %(total)s atitikmuo.\n"
+msgstr[1] ""
+"\n"
+"Viso rasta %(total)s atitikmenys.\n"
+msgstr[2] ""
+"\n"
+"Viso rasta %(total)s atitikmenų.\n"
+
+#: templates/manoseimas/search/templatetags/search_form.html:6
+msgid "Ieškoti"
+msgstr ""
+
+#: templates/registration/activate.html:8
+msgid "Account successfully activated"
+msgstr ""
+
+#: templates/registration/activate.html:14
+msgid "Account activation failed"
+msgstr ""
+
+#: templates/registration/login.html:13
+msgid "Forgot password"
+msgstr ""
+
+#: templates/registration/login.html:13
+msgid "Reset it"
+msgstr ""
+
+#: templates/registration/login.html:14
+msgid "Not member"
+msgstr ""
+
+#: templates/registration/login.html:14
+msgid "Register"
+msgstr ""
+
+#: templates/registration/logout.html:5
+msgid "Logged out"
+msgstr ""
+
+#: templates/registration/password_change_done.html:5
+msgid "Password changed"
+msgstr ""
+
+#: templates/registration/password_change_form.html:9
+#: templates/registration/password_reset_confirm.html:12
+#: templates/registration/password_reset_form.html:9
+#: templates/registration/registration_form.html:9
+msgid "Submit"
+msgstr ""
+
+#: templates/registration/password_reset_complete.html:6
+msgid "Password reset successfully"
+msgstr ""
+
+#: templates/registration/password_reset_confirm.html:17
+msgid "Password reset failed"
+msgstr ""
+
+#: templates/registration/password_reset_done.html:5
+msgid "Email with password reset instructions has been sent."
+msgstr ""
+
+#: templates/registration/password_reset_email.html:2
+#, python-format
+msgid "Reset password at %(site_name)s"
+msgstr ""
+
+#: templates/registration/registration_complete.html:5
+msgid "You are now registered. Activation email sent."
+msgstr ""

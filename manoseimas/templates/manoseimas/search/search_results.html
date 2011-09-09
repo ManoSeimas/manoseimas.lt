@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<p>
+{% blocktrans count total=total_rows %}
+Viso rasta {{ total }} atitikmuo.
+{% plural %}
+Viso rasta {{ total }} atitikmenys.
+{% endblocktrans %}
+</p>
+
+{% for doc in documents %}
+<p><a href="{% url manoseimas-document doc.id %}"
+    >[{{doc.number}}] {{ doc.name }}</a></p>
+{% endfor %}
+{% endblock %}

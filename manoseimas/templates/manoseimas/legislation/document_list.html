@@ -3,7 +3,7 @@
 {% block content %}
 
 {% for document in documents %}
-    <p><a href="{% url manoseimas-legislation-legislation document.id %}">{{ document.name }}</a></p>
+    <p><a href="{% url manoseimas-doc document.id %}">{{ document.name }}</a></p>
 {% endfor %}
 
 {% endblock %}

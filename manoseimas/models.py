@@ -1,7 +1,7 @@
 from couchdbkit.ext.django import schema
 
 
-class BaseDocument(schema.Document):
+class CouchDb(schema.Document):
     @property
     def id(self):
         """
@@ -17,5 +17,15 @@ class BaseDocument(schema.Document):
         return self._id
 
 
-class Document(BaseDocument):
+class Document(CouchDb):
     name = schema.StringProperty()
+
+    @classmethod
+    def by_number(cls, **kw):
+        return cls.view('documents/by_number', include_docs=True, **kw)
+
+    @classmethod
+    def search(cls, params, limit=10, **kw):
+        starts = params['query']
+        ends = starts + 'Z'
+        return cls.by_number(limit=limit, **kw)[starts:ends]

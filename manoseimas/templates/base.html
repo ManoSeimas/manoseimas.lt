@@ -9,7 +9,7 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <html>
 <head>
-    <title>{% block title %}Mano Seimas{% endblock %}</title>
+    <title>{% block title %}{% trans "Mano Seimas" %}{% endblock %}</title>
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -45,6 +45,12 @@
                     <li><a href="{% url registration_register %}">{% trans "Sign Up" %}</a></li>
                     {% endif %}
                 </ul>
+            </nav>
+
+            <div style="clear:both;"></div>
+            <nav class="search">
+                {% load manoseimassearch %}
+                {% search_form %}
             </nav>
 
         </div>

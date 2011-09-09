@@ -1,8 +1,11 @@
+# coding: utf-8
 # $NOTE
 import os
 
 PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
+
+ugettext = lambda s: s
 
 #if $DEVELOPMENT
 DEBUG = True
@@ -43,6 +46,10 @@ DATABASES = {
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
 TIME_ZONE = 'Europe/Vilnius'
+
+LANGUAGES = (
+  ('lt', ugettext(u'Lietuvių')),
+)
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -162,6 +169,7 @@ INSTALLED_APPS = (
     #end if
 
     'manoseimas',
+    'manoseimas.search',
     'manoseimas.legislation',
     'manoseimas.accounts',
 )

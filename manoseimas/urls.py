@@ -10,6 +10,7 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls)),
     (r'^accounts/', include('registration.urls')),
     (r'^accounts/', include('manoseimas.accounts.urls')),
+    (r'^paieska/', include('manoseimas.search.urls')),
     (r'', include('manoseimas.legislation.urls')),
 )
 
