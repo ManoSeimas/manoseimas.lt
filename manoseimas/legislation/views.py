@@ -2,26 +2,16 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from annoying.decorators import render_to
 
-from manoseimas.mscouch.document import Document
-
 from .forms import SearchForm, EditForm
 
-import couchdb.design
-couch = couchdb.Server('https://manoseimas.cloudant.com')
-db = couch['manoseimas']
-
-# temporary sync
-couchdb.design.ViewDefinition.sync_many(db, [
-        Document.by_number,
-        Document.proposed_only,
-        Document.votes,
-    ])
+from manoseimas.models import Document
 
 
 @render_to('manoseimas/legislation/document_list.html')
 def document_list(request):
     return {
-        'documents': Document.proposed_only(db, limit=10),
+        'documents': Document.view('documents/all', limit=10,
+                                   include_docs=True)
     }
 
 
@@ -32,7 +22,8 @@ def document_search(request):
 
     if request.POST and 'search' in request.POST and search_form.is_valid():
         key = search_form.cleaned_data['number']
-        documents = Document.by_number(db, limit=10, include_docs=True)[key]
+        documents = Document.view('documents/by_number', limit=10,
+                                  include_docs=True)[key]
         if len(documents):
             document = documents.rows[0]
             edit_form = EditForm(document=documents.rows[0])
@@ -59,12 +50,7 @@ def document_search(request):
 
 @render_to('manoseimas/legislation/legislation.html')
 def legislation(request, legislation_id):
-    data = Document.votes(db, limit=10)[[legislation_id]:[legislation_id, {}]]
-    document = data.rows[0]
-    votes = data.rows[1:]
-    if document['doc_type'] != 'document':
-        return {}
-
     return {
-        'document': document,
+        'document': Document.view('_all_docs', limit=10,
+                                  include_docs=True)[legislation_id],
     }

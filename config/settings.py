@@ -152,6 +152,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'south',
+    'couchdbkit.ext.django',
     'registration',
 
     #if $DEVELOPMENT
@@ -160,6 +161,7 @@ INSTALLED_APPS = (
     'test_utils',
     #end if
 
+    'manoseimas',
     'manoseimas.legislation',
     'manoseimas.accounts',
 )
@@ -186,6 +188,10 @@ LOGGING = {
         },
     }
 }
+
+COUCHDB_DATABASES = (
+    ('manoseimas', '$COUCHDB_URL'),
+)
 
 #if $DEVELOPMENT
 INTERNAL_IPS = (

@@ -25,6 +25,11 @@ def options(ctx):
     gr.add_option('--server-admin', action='store',
                   help='server admin email address')
 
+    gr.add_option('--couchdb-url', action='store',
+                  default='http://127.0.0.1:5984/manoseimas',
+                  help='couchdb url, example: '
+                       'http://127.0.0.1:5984/manoseimas')
+
 
 def _check_required_options(ctx, options, msg):
     missing = []
@@ -45,6 +50,7 @@ def _check_required_options(ctx, options, msg):
 def configure(ctx):
     ctx.find_program('buildout', mandatory=False)
     ctx.find_program('hg')
+    ctx.find_program('git')
 
     ctx.load('compiler_c python ruby')
 
@@ -58,6 +64,7 @@ def configure(ctx):
 
     ctx.env.TOP = ctx.path.abspath()
     ctx.env.PRODUCTION = ctx.options.production
+    ctx.env.COUCHDB_URL = ctx.options.couchdb_url
 
     if ctx.env.PRODUCTION:
         options = ['mysql_password']
