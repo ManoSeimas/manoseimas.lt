@@ -1,5 +1,8 @@
+#encoding: utf-8
 # coding: utf-8
+
 # $NOTE
+
 import os
 
 PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
