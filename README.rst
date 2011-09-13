@@ -1,3 +1,28 @@
+Requirements
+============
+
+To be able to build and run this project you will need:
+
+* working CouchDB server instance with created database, specified in
+  conf/settings.py file
+
+* python
+
+* ruby, for SASS_
+
+* mercurial and git DVCS's
+
+* Cheetah_ template engine
+
+* C/C++ compiler, python and ruby development headers for compiling python and
+  ruby extensions
+
+If you use Debian based distribution, install these requirements all at once
+using this command::
+
+    sudo apt-get install build-essential python-dev ruby ruby-dev mercurial \
+                         git python-imaging python-cheetah couchdb
+
 Building development environment
 ================================
 
