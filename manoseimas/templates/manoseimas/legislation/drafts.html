@@ -1,0 +1,20 @@
+{% extends "manoseimas/legislation/base.html" %}
+{% load i18n %}
+
+{% block nav_legislation_drafts %}
+<strong>{% trans "Projektai" %}</strong>
+{% endblock %}
+
+{% block content %}
+{% if drafts %}
+    <ul>
+    {% for document in drafts %}
+        <li>[{{ document.date|date:"SHORT_DATE_FORMAT" }}]
+            <a href="{% url manoseimas-legislation document.number %}"
+                >{{ document.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>{% trans "Susijusių įstatymo projektų nėra." %}</p>
+{% endif %}
+{% endblock %}

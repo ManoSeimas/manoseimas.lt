@@ -1,3 +1,4 @@
+from couchdbkit.exceptions import ResourceNotFound
 from couchdbkit.ext.django import schema
 
 
@@ -29,3 +30,15 @@ class Document(CouchDb):
         starts = params['query']
         ends = starts + 'Z'
         return cls.by_number(limit=limit, **kw)[starts:ends]
+
+    def current_version(self):
+        try:
+            return self.fetch_attachment('current_version.html')
+        except ResourceNotFound:
+            return self.original_version()
+
+    def original_version(self):
+        try:
+            return self.fetch_attachment('original_version.html')
+        except ResourceNotFound:
+            return u''

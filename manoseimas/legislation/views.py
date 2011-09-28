@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from annoying.decorators import render_to
@@ -5,13 +7,14 @@ from annoying.decorators import render_to
 from .forms import SearchForm, EditForm
 
 from manoseimas.models import Document
+from manoseimas.pagination import CouchDbPaginator
 
 
-@render_to('manoseimas/legislation/document_list.html')
-def document_list(request):
+@render_to('manoseimas/legislation/legislation_list.html')
+def legislation_list(request):
+    legislations = Document.view('legislation/by_name', include_docs=True)
     return {
-        'documents': Document.view('documents/all', limit=10,
-                                   include_docs=True)
+        'legislations': CouchDbPaginator(legislations, request.GET),
     }
 
 
@@ -38,7 +41,7 @@ def document_search(request):
                 document['summary'] = edit_form.cleaned_data['summary']
                 document['proposed'] = edit_form.cleaned_data['proposed']
                 db.save(document)
-            return HttpResponseRedirect(reverse('manoseimas-legislation-document-list'))
+            return HttpResponseRedirect(reverse('manoseimas-legislation-list'))
 
     return {
         'search_form': search_form,
@@ -51,6 +54,25 @@ def document_search(request):
 @render_to('manoseimas/legislation/legislation.html')
 def legislation(request, legislation_id):
     return {
-        'document': Document.view('_all_docs', limit=10,
-                                  include_docs=True)[legislation_id],
+        'legislation': Document.get(legislation_id),
+    }
+
+@render_to('manoseimas/legislation/amendments.html')
+def legislation_amendments(request, legislation_id):
+    return {
+        'legislation': Document.get(legislation_id),
+        'amendments': Document.view('legislation/amendments', limit=50,
+                                     include_docs=True,
+                                     startkey=[legislation_id],
+                                     endkey=[legislation_id,'Z']),
+    }
+
+@render_to('manoseimas/legislation/drafts.html')
+def legislation_drafts(request, legislation_id):
+    return {
+        'legislation': Document.get(legislation_id),
+        'drafts': Document.view('legislation/drafts', limit=50,
+                                include_docs=True,
+                                startkey=[legislation_id],
+                                endkey=[legislation_id,'Z']),
     }

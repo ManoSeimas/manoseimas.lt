@@ -5,7 +5,8 @@ from manoseimas.search.forms import SearchForm
 register = template.Library()
 
 
-@register.inclusion_tag('manoseimas/search/templatetags/search_form.html', takes_context=True)
+@register.inclusion_tag('manoseimas/search/templatetags/search_form.html',
+                        takes_context=True)
 def search_form(context):
     request = context['request']
     if 'query' in request.GET:

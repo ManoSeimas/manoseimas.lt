@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block container %}
+
+{% block legislation_title %}
+<h1>{{ legislation.name }}</h1>
+{% endblock %}
+
+{% block nav_legislation %}
+    {% block nav_legislation_legislation %}
+    <a href="{% url manoseimas-legislation legislation.id %}"
+        >{% trans "Įstatymas" %}</a>
+    {% endblock %} |
+    {% block nav_legislation_amendments %}
+    <a href="{% url manoseimas-legislation-amendments legislation.id %}"
+        >{% trans "Pataisos" %}</a>
+    {% endblock %} |
+    {% block nav_legislation_drafts %}
+    <a href="{% url manoseimas-legislation-drafts legislation.id %}"
+        >{% trans "Projektai" %}</a>
+    {% endblock %}
+{% endblock %}
+<hr/>
+
+{% block content %}
+{% endblock %}
+
+{% endblock %}

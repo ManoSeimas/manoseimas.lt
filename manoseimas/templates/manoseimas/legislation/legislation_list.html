@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<ul>
+{% for legislation in legislations %}
+    <li><a href="{% url manoseimas-legislation legislation.id %}"
+        >{{ legislation.name }}</a></li>
+{% endfor %}
+</ul>
+
+{% if legislations.has_prev_page %}
+<a href="{{ legislations.get_prev_page_url }}">prev page</a>
+{% endif %}
+
+{% if legislations.has_prev_page and legislations.has_next_page %}
+|
+{% endif %}
+
+{% if legislations.has_next_page %}
+<a href="{{ legislations.get_next_page_url }}">next page</a>
+{% endif %}
+
+{% endblock %}

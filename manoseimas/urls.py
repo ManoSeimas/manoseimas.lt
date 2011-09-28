@@ -11,7 +11,7 @@ urlpatterns = patterns('',
     (r'^accounts/', include('registration.urls')),
     (r'^accounts/', include('manoseimas.accounts.urls')),
     (r'^paieska/', include('manoseimas.search.urls')),
-    (r'', include('manoseimas.legislation.urls')),
+    (r'^istatymai/', include('manoseimas.legislation.urls')),
 )
 
 if settings.DEBUG:

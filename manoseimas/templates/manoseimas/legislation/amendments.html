@@ -1,0 +1,20 @@
+{% extends "manoseimas/legislation/base.html" %}
+{% load i18n %}
+
+{% block nav_legislation_amendments %}
+<strong>{% trans "Pataisos" %}</strong>
+{% endblock %}
+
+{% block content %}
+{% if amendments %}
+    <ul>
+    {% for document in amendments %}
+        <li>[{{ document.date|date:"SHORT_DATE_FORMAT" }}]
+            <a href="{% url manoseimas-legislation document.number %}"
+                >{{ document.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>{% trans "Pataisų nėra." %}</p>
+{% endif %}
+{% endblock %}

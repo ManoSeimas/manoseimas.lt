@@ -1,36 +1,18 @@
-{% extends "base.html" %}
+{% extends "manoseimas/legislation/base.html" %}
 {% load i18n %}
+
+{% block nav_legislation_legislation %}
+<strong>{% trans "Įstatymas" %}</strong>
+{% endblock %}
 
 {% block content %}
 
-    {% if document %}
-     <div>
-          <div id="doc_name">
-          {{ document.name }}
-          </div>
-          <div id="doc_id">
-              <a href="{{ document.source.url }}">{{ document.number }}</a>
-          </div>
-      </div>
+<p>
+    {% trans "Informacijos šaltinis" %}:
+    <a href="{{ legislation.source.url }}">{{ legislation.source.url }}</a>
+</p>
 
-      <div>
-          <div>{% trans "Projektą pateikė:" %} TODO</div>
-          <div>{% trans "Projektas priimtas:" %} {{ document.date }} </div>
-          <div>{% trans "Projekto komitetas:" %} TODO </div>
-          <div><a href="#">{% trans "Aiškinamasis raštas" %}</a></div>
-          <div><a href="#">{% trans "Peržiūrėti diskusijas seime" %}</a></div>
-      </div>
-
-      <div>
-          {% trans "Apie įstatymą:" %}<br/>
-          {{ document.summary }}
-      </div>
-
-      <div>
-          {% trans "Nedalyvavo narių:" %}
-      </div>
-
-    {% endif %}
-
-
+<div>
+    {{ legislation.current_version|safe }}
+</div>
 {% endblock %}
