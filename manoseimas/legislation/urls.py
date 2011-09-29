@@ -12,4 +12,6 @@ urlpatterns = patterns('manoseimas.legislation.views',
         name='manoseimas-legislation-amendments'),
     url(r'^%s/projektai/$' % LEGISLATION_ID, 'legislation_drafts',
         name='manoseimas-legislation-drafts'),
+    url(r'^projektai/$', 'legislation_all_drafts',
+        name='manoseimas-legislation-all-drafts'),
 )

@@ -1,18 +1,19 @@
 {% extends "manoseimas/legislation/base.html" %}
 {% load i18n %}
 
+
 {% block nav_legislation_legislation %}
-<strong>{% trans "Įstatymas" %}</strong>
+    <strong>{% trans "Įstatymas" %}</strong>
 {% endblock %}
 
+
 {% block content %}
+    <p>
+        {% trans "Informacijos šaltinis" %}:
+        <a href="{{ legislation.source.url }}">{{ legislation.source.url }}</a>
+    </p>
 
-<p>
-    {% trans "Informacijos šaltinis" %}:
-    <a href="{{ legislation.source.url }}">{{ legislation.source.url }}</a>
-</p>
-
-<div>
-    {{ legislation.current_version|safe }}
-</div>
+    <div>
+        {{ legislation.current_version|safe }}
+    </div>
 {% endblock %}

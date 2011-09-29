@@ -6,13 +6,14 @@ from annoying.decorators import render_to
 
 from .forms import SearchForm, EditForm
 
-from manoseimas.models import Document
 from manoseimas.pagination import CouchDbPaginator
+
+from .models import Law
 
 
 @render_to('manoseimas/legislation/legislation_list.html')
 def legislation_list(request):
-    legislations = Document.view('legislation/by_name', include_docs=True)
+    legislations = Law.view('legislation/by_name', include_docs=True)
     return {
         'legislations': CouchDbPaginator(legislations, request.GET),
     }
@@ -25,7 +26,7 @@ def document_search(request):
 
     if request.POST and 'search' in request.POST and search_form.is_valid():
         key = search_form.cleaned_data['number']
-        documents = Document.view('documents/by_number', limit=10,
+        documents = Law.view('documents/by_number', limit=10,
                                   include_docs=True)[key]
         if len(documents):
             document = documents.rows[0]
@@ -54,14 +55,14 @@ def document_search(request):
 @render_to('manoseimas/legislation/legislation.html')
 def legislation(request, legislation_id):
     return {
-        'legislation': Document.get(legislation_id),
+        'legislation': Law.get(legislation_id),
     }
 
 @render_to('manoseimas/legislation/amendments.html')
 def legislation_amendments(request, legislation_id):
     return {
-        'legislation': Document.get(legislation_id),
-        'amendments': Document.view('legislation/amendments', limit=50,
+        'legislation': Law.get(legislation_id),
+        'amendments': Law.view('legislation/amendments', limit=50,
                                      include_docs=True,
                                      startkey=[legislation_id],
                                      endkey=[legislation_id,'Z']),
@@ -70,8 +71,18 @@ def legislation_amendments(request, legislation_id):
 @render_to('manoseimas/legislation/drafts.html')
 def legislation_drafts(request, legislation_id):
     return {
-        'legislation': Document.get(legislation_id),
-        'drafts': Document.view('legislation/drafts', limit=50,
+        'legislation': Law.get(legislation_id),
+        'drafts': Law.view('legislation/drafts', limit=50,
+                                include_docs=True,
+                                startkey=[legislation_id],
+                                endkey=[legislation_id,'Z']),
+    }
+
+@render_to('manoseimas/legislation/drafts.html')
+def legislation_all_drafts(request, legislation_id):
+    return {
+        'legislation': Law.get(legislation_id),
+        'drafts': Law.view('legislation/drafts', limit=50,
                                 include_docs=True,
                                 startkey=[legislation_id],
                                 endkey=[legislation_id,'Z']),

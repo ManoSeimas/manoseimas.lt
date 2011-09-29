@@ -1,6 +1,6 @@
 from annoying.decorators import render_to
 
-from manoseimas.models import Document
+from manoseimas.legal_acts.models import LegalAct
 
 from .forms import SearchForm
 
@@ -18,7 +18,7 @@ def search_results(request):
         'search_form': search_form,
     }
     if search:
-        context['documents'] = Document.search(search)
+        context['documents'] = LegalAct.search(search)
         context['total_rows'] = context['documents'].total_rows
 
     return context

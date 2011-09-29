@@ -27,9 +27,9 @@ def options(ctx):
                   help='server admin email address')
 
     gr.add_option('--couchdb-url', action='store',
-                  default='http://127.0.0.1:5984/manoseimas',
+                  default='http://127.0.0.1:5984',
                   help='couchdb url, example: '
-                       'http://127.0.0.1:5984/manoseimas')
+                       'http://127.0.0.1:5984')
 
 
 def _check_required_options(ctx, options, msg):

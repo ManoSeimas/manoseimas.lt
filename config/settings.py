@@ -171,7 +171,6 @@ INSTALLED_APPS = (
     'test_utils',
     #end if
 
-    'manoseimas',
     'manoseimas.search',
     'manoseimas.legislation',
     'manoseimas.accounts',
@@ -201,7 +200,14 @@ LOGGING = {
 }
 
 COUCHDB_DATABASES = (
-    ('manoseimas', '$COUCHDB_URL'),
+    ('manoseimas.legal_acts', '$COUCHDB_URL/legal_acts'),
+    ('manoseimas.categories', '$COUCHDB_URL/categories'),
+    ('manoseimas.legislation', '$COUCHDB_URL/legal_acts'),
+    ('manoseimas.drafts', '$COUCHDB_URL/legal_acts'),
+    ('manoseimas.people', '$COUCHDB_URL/people'),
+    ('manoseimas.sittings', '$COUCHDB_URL/discussion'),
+    ('manoseimas.votings', '$COUCHDB_URL/discussion'),
+    ('manoseimas.profiles', '$COUCHDB_URL/profiles'),
 )
 
 #if $DEVELOPMENT
