@@ -7,14 +7,20 @@
 
 {% block content %}
 {% if drafts %}
-    <ul>
+    <table>
     {% for document in drafts %}
-        <li>[{{ document.date|date:"SHORT_DATE_FORMAT" }}]
+    <tr>
+        <td>[{{ document.date|date:"SHORT_DATE_FORMAT" }}]</td>
+        <td>
             <a href="{% url manoseimas-legislation document.number %}"
                 >{{ document.name }}</a>
+        </td>
+        <td>
             (<a href="{% url manoseimas-legislation-votings document.number  %}">{% trans "balsavimai" %}</a>)</li>
+        </td>
+    <tr>
     {% endfor %}
-    </ul>
+    </table>
 {% else %}
     <p>{% trans "Susijusių įstatymo projektų nėra." %}</p>
 {% endif %}

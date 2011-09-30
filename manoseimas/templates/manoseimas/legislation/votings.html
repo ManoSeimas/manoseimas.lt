@@ -5,8 +5,40 @@
 <strong>{% trans "Balsavimai" %}</strong>
 {% endblock %}
 
+{% block inlinejs %}
+<script type="text/javascript">
+$(function () {
+    {% for document in votings %}
+    $.plot($("#voting-{{ document.id }}"),
+        [
+            {data: {{ document.vote_aye }}, color: "green"},
+            {data: {{ document.vote_no }}, color: "red"},
+            {data: {{ document.vote_abstain }}, color: "gray"},
+            {data: {{ document.did_not_vote }}, color: "white"}
+        ],
+        {series: {pie: {show: true}}}
+    );
+    {% endfor %}
+});
+</script>
+{% endblock %}
+
 {% block content %}
 {% if votings %}
+    <p>
+        <table>
+            <tr>
+            	<td style="background:green;border: 1px solid black;"></td>
+            	<td>{% trans "už" %}</td>
+            	<td style="background:red;border: 1px solid black;"></td>
+            	<td>{% trans "prieš" %}</td>
+            	<td style="background:gray;border: 1px solid black;"></td>
+            	<td>{% trans "susilaikė" %}</td>
+            	<td style="background:white;border: 1px solid black;"></td>
+            	<td>{% trans "nebalsavo" %}</td>
+            </tr>
+        </table>
+    </p>
     <table>
     {% for document in votings %}
         <tr>
@@ -17,6 +49,9 @@
                 <a href="{% url manoseimas-legislation doc %}">{{ doc }}</a>
                 {% if not forloop.last %}, {% endif %}
                 {% endfor %}
+            </td>
+            <td>
+                <div id="voting-{{ document.id }}" style="width:40px;height:40px;"></div>
             </td>
             <td>
                 {% if document.formulation_a %}

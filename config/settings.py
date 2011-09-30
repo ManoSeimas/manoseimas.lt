@@ -99,6 +99,7 @@ ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
 STATICFILES_DIRS = (
     os.path.join(BUILDOUT_DIR, 'manoseimas', 'static'),
     os.path.join(BUILDOUT_DIR, 'var', 'sass'),
+    os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -205,8 +206,8 @@ COUCHDB_DATABASES = (
     ('manoseimas.legislation', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.drafts', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.people', '$COUCHDB_URL/people'),
-    ('manoseimas.sittings', '$COUCHDB_URL/discussion'),
-    ('manoseimas.votings', '$COUCHDB_URL/discussion'),
+    ('manoseimas.sittings', '$COUCHDB_URL/sittings'),
+    ('manoseimas.votings', '$COUCHDB_URL/sittings'),
     ('manoseimas.profiles', '$COUCHDB_URL/profiles'),
 )
 
