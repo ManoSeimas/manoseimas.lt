@@ -7,6 +7,7 @@ from annoying.decorators import render_to
 from .forms import SearchForm, EditForm
 
 from manoseimas.pagination import CouchDbPaginator
+from manoseimas.votings.models import Voting
 
 from .models import Law
 
@@ -64,8 +65,9 @@ def legislation_amendments(request, legislation_id):
         'legislation': Law.get(legislation_id),
         'amendments': Law.view('legislation/amendments', limit=50,
                                      include_docs=True,
-                                     startkey=[legislation_id],
-                                     endkey=[legislation_id,'Z']),
+                                     startkey=[legislation_id, {}],
+                                     endkey=[legislation_id],
+                                     descending=True),
     }
 
 @render_to('manoseimas/legislation/drafts.html')
@@ -74,8 +76,9 @@ def legislation_drafts(request, legislation_id):
         'legislation': Law.get(legislation_id),
         'drafts': Law.view('legislation/drafts', limit=50,
                                 include_docs=True,
-                                startkey=[legislation_id],
-                                endkey=[legislation_id,'Z']),
+                                startkey=[legislation_id, {}],
+                                endkey=[legislation_id],
+                                descending=True),
     }
 
 @render_to('manoseimas/legislation/drafts.html')
@@ -84,6 +87,18 @@ def legislation_all_drafts(request, legislation_id):
         'legislation': Law.get(legislation_id),
         'drafts': Law.view('legislation/drafts', limit=50,
                                 include_docs=True,
-                                startkey=[legislation_id],
-                                endkey=[legislation_id,'Z']),
+                                startkey=[legislation_id, {}],
+                                endkey=[legislation_id],
+                                descending=True),
+    }
+
+@render_to('manoseimas/legislation/votings.html')
+def legislation_votings(request, legislation_id):
+    return {
+        'legislation': Law.get(legislation_id),
+        'votings': Voting.view('votings/parents', limit=50,
+                               include_docs=True,
+                               startkey=[legislation_id, {}],
+                               endkey=[legislation_id],
+                               descending=True),
     }

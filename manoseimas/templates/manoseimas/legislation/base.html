@@ -19,6 +19,10 @@
     {% block nav_legislation_drafts %}
     <a href="{% url manoseimas-legislation-drafts legislation.id %}"
         >{% trans "Projektai" %}</a>
+    {% endblock %} |
+    {% block nav_legislation_votings %}
+    <a href="{% url manoseimas-legislation-votings legislation.id %}"
+        >{% trans "Balsavimai" %}</a>
     {% endblock %}
 {% endblock %}
 <hr/>

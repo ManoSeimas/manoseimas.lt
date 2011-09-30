@@ -11,7 +11,8 @@
     {% for document in drafts %}
         <li>[{{ document.date|date:"SHORT_DATE_FORMAT" }}]
             <a href="{% url manoseimas-legislation document.number %}"
-                >{{ document.name }}</a></li>
+                >{{ document.name }}</a>
+            (<a href="{% url manoseimas-legislation-votings document.number  %}">{% trans "balsavimai" %}</a>)</li>
     {% endfor %}
     </ul>
 {% else %}

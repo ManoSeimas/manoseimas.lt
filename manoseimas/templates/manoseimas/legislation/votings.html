@@ -1,0 +1,35 @@
+{% extends "manoseimas/legislation/base.html" %}
+{% load i18n %}
+
+{% block nav_legislation_votings %}
+<strong>{% trans "Balsavimai" %}</strong>
+{% endblock %}
+
+{% block content %}
+{% if votings %}
+    <table>
+    {% for document in votings %}
+        <tr>
+            <td>[<a href="http://www3.lrs.lt/pls/inter/{{ document.source.url }}"
+                    >{{ document.datetime }}</a>]</td>
+            <td>
+                {% for doc in document.documents %}
+                <a href="{% url manoseimas-legislation doc %}">{{ doc }}</a>
+                {% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </td>
+            <td>
+                {% if document.formulation_a %}
+                    {{ document.formulation_a }}<br/>
+                    {{ document.formulation_b }}
+                {% else %}
+                    {{ document.formulation }}
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>{% trans "Balsavimų nėra." %}</p>
+{% endif %}
+{% endblock %}
