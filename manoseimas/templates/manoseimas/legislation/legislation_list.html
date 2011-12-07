@@ -3,13 +3,12 @@
 
 
 {% block nav_legislation %}
+    {% block nav_legislation_categories %}
+    <a href="{% url manoseimas-category-list %}">{% trans "Įstatymų kategorijos" %}</a>
+    {% endblock %} |
     {% block nav_legislation_legislation_s %}
     <strong>{% trans "Įstatymai" %}</strong>
-    {% endblock %} |
-    {% block nav_legislation_all_drafts %}
-    <a href="{% url manoseimas-legislation-all-drafts %}"
-        >{% trans "Įstatymų projektai" %}</a>
-    {% endblock %} |
+    {% endblock %}
 {% endblock %}
 
 

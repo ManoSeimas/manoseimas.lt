@@ -174,6 +174,8 @@ INSTALLED_APPS = (
 
     'manoseimas.search',
     'manoseimas.legislation',
+    'manoseimas.categories',
+    'manoseimas.votings',
     'manoseimas.accounts',
 )
 

@@ -1,0 +1,5 @@
+{% for node in tree %}
+    {% for level in node.open_levels %}<ul><li>{% empty %}</li><li>{% endfor %}
+    {{ node.doc.name }}
+    {% for level in node.close_levels %}</li></ul>{% endfor %}
+{% endfor %}

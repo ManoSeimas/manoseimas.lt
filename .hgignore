@@ -27,3 +27,5 @@ manoseimas/settings.py
 parts
 tags
 var
+env
+*.swp

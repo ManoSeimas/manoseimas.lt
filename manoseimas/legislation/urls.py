@@ -3,7 +3,9 @@ from django.conf.urls.defaults import *
 LEGISLATION_ID = r'(?P<legislation_id>[A-Za-z0-9\(\)-]+)'
 
 urlpatterns = patterns('manoseimas.legislation.views',
-    url(r'^$', 'legislation_list', name='manoseimas-legislation-list'),
+    url(r'^$', 'category_list', name='manoseimas-category-list'),
+    url(r'^visi-istatymai/$', 'legislation_list',
+        name='manoseimas-legislation-list'),
     url(r'^paieska/$', 'document_search',
         name='manoseimas-legislation-document-search'),
     url(r'^%s/$' % LEGISLATION_ID, 'legislation',
