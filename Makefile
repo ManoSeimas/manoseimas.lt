@@ -1,6 +1,6 @@
 #!/usr/bin/make
 
-PROJECT=project
+PROJECT=manoseimas
 TESTS = 
 COVERAGE_INCLUDES = --include=project/*
 

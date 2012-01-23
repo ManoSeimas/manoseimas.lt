@@ -125,7 +125,7 @@ def configure(ctx):
     ctx.env.PROJECT_NAME = ctx.options.project_name
     ctx.env.PRODUCTION = ctx.options.production
     ctx.env.USE_SQLITE = ctx.options.use_sqlite
-    ctx.env.LANGUAGES = ctx.options.languages.split(',') or ['en']
+    ctx.env.LANGUAGES = ctx.options.languages.split(',') or ['lt']
     ctx.env.LANGUAGE_CODE = ctx.env.LANGUAGES[0]
     ctx.env.SERVER_ADMIN = ctx.options.server_admin
     ctx.env.SERVER_NAME = ctx.options.server_name
