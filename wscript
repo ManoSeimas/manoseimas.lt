@@ -229,7 +229,7 @@ def build(ctx):
             bld(rule='cd %s ; ../bin/django compilemessages -l %s' % s,
                 source='%s/locale/%s/LC_MESSAGES/django.po' % s,
                 target='%s/locale/%s/LC_MESSAGES/django.mo' % s,
-                after='django')
+                after='buildout')
 
 
 def makemessages(ctx):
