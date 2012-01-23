@@ -142,7 +142,6 @@ MEDIA_BUNDLES = (
     ),
     ('scripts.js',
         'js/jquery.js',
-        'js/plugins.js',
         'js/scripts.js',
     ),
 )
