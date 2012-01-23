@@ -8,6 +8,22 @@ import os
 PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 
+# Make external tools like SASS and Compass available in PATH.
+path = os.environ['PATH'].split(':')
+path.append(os.path.join(BUILDOUT_DIR, 'bin'),)
+os.environ['PATH'] = ':'.join(path)
+
+
+s = {
+    'PREFIX': os.path.join(BUILDOUT_DIR, 'parts', 'rubygems'),
+    'RUBYLIB': os.environ.get('RUBYLIB', ''),
+}
+os.environ['GEM_HOME'] = '%(PREFIX)s/lib/ruby/gems/1.8' % s
+os.environ['RUBYLIB'] = ':'.join([
+    '%(RUBYLIB)s', '%(PREFIX)s/lib', '%(PREFIX)s/lib/ruby',
+    '%(PREFIX)s/lib/site_ruby/1.8',]) % s
+
+
 ugettext = lambda s: s
 
 #if $DEVELOPMENT
@@ -16,6 +32,8 @@ DEBUG = True
 DEBUG = False
 #end if
 TEMPLATE_DEBUG = DEBUG
+MEDIA_DEV_MODE = DEBUG
+THUMBNAIL_DEBUG = DEBUG
 
 ADMINS = (
     #if $PRODUCTION
@@ -27,9 +45,9 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        #if $DEVELOPMENT
+        #if $USE_SQLITE or $DEVELOPMENT
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BUILDOUT_DIR, 'var', 'development.db'),
+        'NAME': os.path.join(BUILDOUT_DIR, 'var', 'db'),
         #else
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
@@ -51,12 +69,18 @@ DATABASES = {
 TIME_ZONE = 'Europe/Vilnius'
 
 LANGUAGES = (
-  ('lt', ugettext(u'Lietuvių')),
+    #for $lang in $LANGUAGES
+    ('$lang', ugettext(u'$LANG_NAMES[$lang]')),
+    #end for
 )
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'lt'
+LANGUAGE_CODE = '$LANGUAGE_CODE'
+
+LOCALE_PATHS = (
+    os.path.join(PROJECT_DIR, 'locale'),
+)
 
 SITE_ID = 1
 
@@ -80,41 +104,60 @@ MEDIA_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'media')
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/home/media/media.lawrence.com/static/"
 STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
-
-# URL prefix for static files.
-# Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
+MEDIAGENERATOR_DIR = os.path.join(BUILDOUT_DIR, 'var', 'mediagenerator')
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_DIR, 'static'),
+    os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
+    MEDIAGENERATOR_DIR,
+)
+
+DEV_MEDIA_URL = '/mediagenerator/'
+PRODUCTION_MEDIA_URL = '/static/'
+
+GENERATED_MEDIA_DIR = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
+GENERATED_MEDIA_NAMES_FILE = os.path.join(MEDIAGENERATOR_DIR,
+                                          '_generated_media_names.py')
+IMPORTED_SASS_FRAMEWORKS_DIR = os.path.join(BUILDOUT_DIR, 'var',
+                                            'sass-frameworks')
+
+MEDIAGENERATOR_DIR = os.path.join(PROJECT_DIR, 'mediagenerator')
+
+GLOBAL_MEDIA_DIRS = (
+    MEDIAGENERATOR_DIR,
+    os.path.join(BUILDOUT_DIR, 'parts', 'modernizr'),
+    #if $JQUERY_VERSION
+    os.path.join(BUILDOUT_DIR, 'parts', 'jquery'),
+    #end if
+    IMPORTED_SASS_FRAMEWORKS_DIR,
+)
+
+MEDIA_BUNDLES = (
+    ('screen.css',
+        'css/screen.sass',
+    ),
+    ('modernizr.js',
+        'js/modernizr.js',
+    ),
+    ('scripts.js',
+        'js/jquery.js',
+        'js/plugins.js',
+        'js/scripts.js',
+    ),
+)
+
+SASS_FRAMEWORKS = (
+    'compass',
+)
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = STATIC_URL + 'admin/'
-
-# Additional locations of static files
-STATICFILES_DIRS = (
-    os.path.join(BUILDOUT_DIR, 'manoseimas', 'static'),
-    os.path.join(BUILDOUT_DIR, 'var', 'sass'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
-
-# List of finder classes that know how to find static files in
-# various locations.
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
+ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '8m86q=ycpwma&n1f0t-l)y(i&lx*aon=%!(uuv985a-t+a_bfw'
+SECRET_KEY = '$SECRET_KEY'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -130,12 +173,17 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.transaction.TransactionMiddleware',
     #if $DEVELOPMENT
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     #end if
 )
 
-ROOT_URLCONF = 'manoseimas.urls'
+if MEDIA_DEV_MODE:
+    MIDDLEWARE_CLASSES = (('mediagenerator.middleware.MediaMiddleware',) +
+                          MIDDLEWARE_CLASSES)
+
+ROOT_URLCONF = '${PROJECT_NAME}.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -151,6 +199,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.static',
     'django.core.context_processors.request',
+    '${PROJECT_NAME}.context_processors.settings_for_context',
 )
 
 INSTALLED_APPS = (
@@ -162,9 +211,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.markup',
     'south',
+    'mediagenerator',
+    'sorl.thumbnail',
     'couchdbkit.ext.django',
-    'registration',
 
     #if $DEVELOPMENT
     'debug_toolbar',
@@ -221,9 +272,18 @@ INTERNAL_IPS = (
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BUILDOUT_DIR, 'var', 'mail')
 
-CACHE_BACKEND = "dummy://"
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
 #end if
+
+JQUERY_VERSION = '$JQUERY_VERSION'
+
+PROTOCOL = 'http'
+DEFAULT_FROM_EMAIL = '$SERVER_ADMIN'

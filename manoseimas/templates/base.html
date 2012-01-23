@@ -1,154 +1,85 @@
 {% extends "root.html" %}
 {% load i18n %}
+{% load media %}
 
 {% block all %}
-<!DOCTYPE html>
+<!doctype html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
 <!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
 <!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!-- Consider adding an manifest.appcache: h5bp.com/d/Offline -->
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
-<html>
 <head>
-    <title>{% block title %}{% trans "Mano Seimas" %}{% endblock %}</title>
+  <meta charset="utf-8">
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    
-    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css">
+  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
+       More info: h5bp.com/b/378 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <script src="{{ STATIC_URL }}js/libs/modernizr-2.0.6.min.js"></script>
+  <title>{% block title %}{% endblock %}</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile viewport optimized: j.mp/bplateviewport -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.ico">
+
+  <!-- CSS: implied media=all -->
+  <!-- CSS concatenated and minified via ant build script-->
+  {% include_media 'screen.css' media="screen, projection" %}
+  <!-- end CSS-->
+
+  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
+
+  <!-- All JavaScript at the bottom, except for Modernizr / Respond.
+       Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
+       For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
+  {% include_media 'modernizr.js' %}
 </head>
+
 <body>
-    
-    {% block header %}
+
+  <div id="container">
     <header>
-        <div class="container">
-        
-            <h1 class="logo">
-                <a href="{% url manoseimas-legislation-list %}">Mano Seimas</a>
-            </h1>
-        
-            <nav class="main">
-                <ul>
-                    {% include "partials/main_menu.html" %}
-                </ul>
-            </nav>
-        
-            <nav class="user">
-                <ul>
-                    {% if user.is_authenticated %}
-                    <li class="user-name">{% trans "Logged in" %}: <strong>{{ user.username }}</strong></li>
-                    <li><a href="{% url auth_password_change %}">{% trans "Settings" %}</a></li>
-                    <li><a href="{% url auth_logout %}">{% trans "Log out" %}</a></li>
-                    {% else %}
-                    <li><a href="{% url auth_login %}">{% trans "Log in" %}</a></li>
-                    <li><a href="{% url registration_register %}">{% trans "Sign Up" %}</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
 
-            <div style="clear:both;"></div>
-            <nav class="search">
-                {% load manoseimassearch %}
-                {% search_form %}
-            </nav>
-
-        </div>
     </header>
-    {% endblock %}
-
-    <section id="content">
-        <div class="container">
-            {% block container %}
-            {% block content %}
-            {% endblock %}
-            {% endblock %}
-        <div class="container">
-    </section>
-    
-    {% block footer %}
-    <footer class="main">
-        <div class="container">
-            <div class="row">
-                
-                <section class="menu span4 columns">
-                    <div class="footer-padding">
-                        <ul>
-                            {% include "partials/main_menu.html" %}
-                        </ul>
-                    </div>
-                </section>
-                
-                <section class="newsletter span4 columns">
-                    <div class="footer-padding">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    
-                        <ul>
-                            <li>Apie ką tai bus</li>
-                            <li>Kaip dažnai bus siunčiama</li>
-                            <li>Visada galima atsisakyti vienu mygtuko paspaudimu</li>
-                        </ul>
-                    
-                        <form class="form-stacked">
-                            <div class="clearfix">
-                            <label for="email">Tavo el. paštas<label>
-                            <input type="text" name="email" id="email" />
-                            </div>
-                
-                            <input type="submit" value="Užsisakyti" class="button info" />
-                        </form>
-                    </div>
-                </section>
+    <div id="main" role="main">
+        {% block content %}
         
-                <section class="ideas span4 columns">
-                    <div class="footer-padding">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            
-                        <form class="form-stacked">
-                            <div class="clearfix">
-                                <label for="idea">Tavo idėja<label>
-                                <textarea name="idea" id="idea"></textarea>
-                            </div>
-                
-                            <input type="submit" value="Siųsti idėją" class="button info" />
-                        </form>
-                    </div>
-                </section>
-        
-                <section class="facebook span4 columns">
-                </section>
-            
-            </div>
-        </div>
-    </footer>
-    {% endblock %}
-    
+        {% endblock %}
     </div>
+    <footer>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{{ STATIC_URL }}js/libs/jquery-1.6.2.min.js"><\/script>')</script>
+    </footer>
+  </div> <!--! end of #container -->
 
-    <script src="{{ STATIC_URL }}js/flot/jquery.flot.min.js"></script>
-    <script src="{{ STATIC_URL }}js/flot/jquery.flot.pie.min.js"></script>
 
-    <script src="{{ STATIC_URL }}js/plugins.js"></script>
-    <script src="{{ STATIC_URL }}js/script.js"></script>
+  <!-- JavaScript at the bottom for fast page loading -->
 
-    {% block inlinejs %}{% endblock %}
+  <!-- scripts concatenated and minified via ant build script-->
+  {% include_media 'scripts.js' %}
+  <!-- end scripts-->
 
-    <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-            // TODO: Change UA-XXXXX-X to be your site's ID
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
+	
+  <!-- Change UA-XXXXX-X to be your site's ID
+  <script>
+    window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
+    Modernizr.load({
+      load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
+    });
+  </script>
+  -->
 
-    <!--[if lt IE 7 ]>
-            <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.2/CFInstall.min.js"></script>
-            <script>window.attachEvent("onload",function(){CFInstall.check({mode:"overlay"})})</script>
-    <![endif]-->
+
+  <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.
+       chromium.org/developers/how-tos/chrome-frame-getting-started -->
+  <!--[if lt IE 7 ]>
+    <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+    <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+  <![endif]-->
+  
 </body>
-
 </html>
 {% endblock %}

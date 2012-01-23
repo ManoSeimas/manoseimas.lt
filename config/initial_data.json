@@ -3,10 +3,12 @@
         "pk": 1, 
         "model": "sites.site", 
         "fields": {
-            "domain": "127.0.0.1:8000", 
-            "name": "127.0.0.1:8000"
+            "domain": "$SERVER_NAME", 
+            "name": "$SERVER_NAME"
         }
-    }, 
+    }#slurp
+    #if $DEVELOPMENT
+, 
     {
         "pk": 1, 
         "model": "auth.user", 
@@ -21,8 +23,10 @@
             "groups": [], 
             "user_permissions": [], 
             "password": "sha1$0fe83$8e34f3d207949188b2c7e74a0740f1a8b68eeab5", 
-            "email": "admin@localhost.local", 
+            "email": "$SERVER_ADMIN", 
             "date_joined": "2010-11-06 16:07:59"
         }
-    }
+    }#slurp
+    #end if
+
 ]
