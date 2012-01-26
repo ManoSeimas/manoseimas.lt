@@ -1,7 +1,73 @@
-/*
-  Welcome to Compass.
-  In this file you should write your main styles. (or centralize your imports)
-  Import this file using the following HTML or equivalent:
-  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" />
-
 @import compass/reset
+@import compass/css3
+
+$page_width: 990px
+$sidebar_width: 240px
+
+$border_color: #BBB
+
+body
+  font-family: sans-serif
+  font-size: 14px
+  letter-spacing: 1px
+  line-height: 24px
+
+p
+  margin-bottom: 16px
+
+strong
+  font-weight: bold
+
+#container
+  margin: 0 auto
+  width: $page_width
+
+header
+  margin: 8px 0
+  padding-bottom: 8px
+  border-bottom: 1px solid $border_color
+  background:
+    image: url(/static/img/charts.jpg)
+    repeat: no-repeat
+    position: bottom right
+
+  h1
+    font-size: 32px
+
+footer
+  text-align: center
+  border-top: 1px solid $border_color
+  margin: 32px 0
+  clear: both
+  font-size: 12px
+
+#user-area
+  height: 32px
+  ul
+    float: right
+    li
+      float: left
+      margin-left: 8px
+
+#nav-bar
+  border-bottom: 1px solid $border_color
+  height: 32px
+
+#search-box
+  float: left
+
+#top-level-menu
+  float: right
+  li
+    float: left
+    margin-left: 8px
+
+#main
+  width: $page_width - $sidebar_width - 8px
+  float: left
+  border-right: 1px solid $border_color
+  margin: 8px 0
+
+#sidebar
+  width: $sidebar_width
+  float: right

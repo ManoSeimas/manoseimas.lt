@@ -42,16 +42,36 @@
 <body>
 
   <div id="container">
+    <div id="user-area">
+        <ul>
+            <li><a href="#">{% trans "Register" %}</a></li>
+            <li><a href="#">{% trans "Login" %}</a></li>
+        </ul>
+    </div>
     <header>
-
+        <h1>{% trans "manoseimas.lt" %}</h1>
     </header>
+    <div id="nav-bar">
+        <div id="search-box">
+            <input type="text" value="" />
+            <input type="button" value="{% trans "Search" %}">
+        </div>
+        <ul id="top-level-menu">
+            <li><a href="#">{% trans "Legislation" %}</a></li>
+            <li><a href="#">{% trans "Politicians" %}</a></li>
+            <li><a href="#">{% trans "Lawmaking" %}</a></li>
+        </ul>
+    </div>
     <div id="main" role="main">
         {% block content %}
         
         {% endblock %}
     </div>
+    <div id="sidebar">
+        Sidebar
+    </div>
     <footer>
-
+        <p>{% trans "manoseimas.lt team" %}</p>
     </footer>
   </div> <!--! end of #container -->
 
