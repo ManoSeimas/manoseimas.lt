@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('registration.urls')),
     url(r'^accounts/', include('manoseimas.accounts.urls')),
+    url(r'^accounts/', include('social_auth.urls')),
     url(r'^paieska/', include('manoseimas.search.urls')),
     url(r'^istatymai/', include('manoseimas.legislation.urls')),
 )

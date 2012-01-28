@@ -63,6 +63,12 @@ def options(ctx):
     gr.add_option('--mysql-dbname', action='store', default=PROJECT_NAME,
                   help='MySQL database name.')
 
+    gr.add_option('--facebook-app-id', action='store', default='',
+                  help='Facebook App ID.')
+
+    gr.add_option('--facebook-api-secret', action='store', default='',
+                  help='Facebook API secret.')
+
     gr = ctx.add_option_group('setup options')
     gr.add_option("--use-pkg-add", action="store_true", dest="use_pkg_add",
                   default=False, help="use pkg_add in BSD systems")
@@ -139,6 +145,9 @@ def configure(ctx):
     ctx.env.MYSQL_USERNAME = ctx.options.mysql_username
     ctx.env.MYSQL_PASSWORD = ctx.options.mysql_password
     ctx.env.MYSQL_DBNAME = ctx.options.mysql_dbname
+
+    ctx.env.FACEBOOK_APP_ID = ctx.options.facebook_app_id
+    ctx.env.FACEBOOK_API_SECRET = ctx.options.facebook_api_secret
 
     ctx.env.COUCHDB_URL = ctx.options.couchdb_url
 

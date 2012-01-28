@@ -213,6 +213,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'south',
     'mediagenerator',
+    'social_auth',
     'sorl.thumbnail',
     'couchdbkit.ext.django',
 
@@ -286,3 +287,26 @@ JQUERY_VERSION = '$JQUERY_VERSION'
 
 PROTOCOL = 'http'
 DEFAULT_FROM_EMAIL = '$SERVER_ADMIN'
+
+AUTHENTICATION_BACKENDS = (
+    #'social_auth.backends.twitter.TwitterBackend',
+    #if $FACEBOOK_APP_ID
+    'social_auth.backends.facebook.FacebookBackend',
+    #end if
+    #'social_auth.backends.google.GoogleOAuthBackend',
+    #'social_auth.backends.google.GoogleOAuth2Backend',
+    'social_auth.backends.google.GoogleBackend',
+    #'social_auth.backends.yahoo.YahooBackend',
+    #'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    #'social_auth.backends.contrib.livejournal.LiveJournalBackend',
+    #'social_auth.backends.contrib.orkut.OrkutBackend',
+    #'social_auth.backends.contrib.foursquare.FoursquareBackend',
+    #'social_auth.backends.contrib.github.GithubBackend',
+    #'social_auth.backends.contrib.dropbox.DropboxBackend',
+    #'social_auth.backends.contrib.flickr.FlickrBackend',
+    'social_auth.backends.OpenIDBackend',
+    #'django.contrib.auth.backends.ModelBackend',
+)
+
+FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
+FACEBOOK_API_SECRET = '$FACEBOOK_API_SECRET'
