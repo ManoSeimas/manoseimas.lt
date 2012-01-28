@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+    <p><a rel="nofollow" href="{% url socialauth_begin 'google' %}"
+        >{% trans "Login using Google" %}</a></p>
+
+    {% if settings.FACEBOOK_APP_ID %}
+    <p><a rel="nofollow" href="{% url socialauth_begin 'facebook' %}"
+        >{% trans "Login using Facebook" %}</a></p>
+    {% endif %}
+
+    <form action="{% url socialauth_begin "openid" %}" method="post">
+        {% csrf_token %}
+        <div>
+            <label for="openid_identifier">{% trans "Login using OpenID" %}:</label>
+            <input id="openid_identifier" type="text" value="" name="openid_identifier" />
+            <input type="submit" value="Login" />
+        </div>
+    </form>
+
+{% endblock %}

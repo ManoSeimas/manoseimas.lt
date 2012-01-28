@@ -44,7 +44,12 @@
   <div id="container">
     <div id="user-area">
         <ul>
-            <li><a href="#">{% trans "Login" %}</a></li>
+            {% if request.user.is_authenticated %}
+            <li><a href="{% url ms_profile %}">{{ request.user }}</a></li>
+            <li><a href="{% url ms_logout %}">{% trans "Log out" %}</a></li>
+            {% else %}
+            <li><a href="{% url ms_login %}">{% trans "Log in" %}</a></li>
+            {% endif %}
         </ul>
     </div>
     <header>
