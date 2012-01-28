@@ -1,9 +1,11 @@
 # coding: utf-8
 
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from annoying.decorators import render_to
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+
 from couchdbkit.exceptions import ResourceNotFound
+
 
 from .forms import SearchForm, EditForm
 
@@ -14,21 +16,21 @@ from manoseimas.categories.models import Category
 from .models import Law
 
 
-@render_to('manoseimas/legislation/category_list.html')
 def category_list(request):
-    return {
+    template = 'manoseimas/legislation/category_list.html'
+    return render(request, template, {
         'categories': Category.get_tree(),
-    }
+    })
 
-@render_to('manoseimas/legislation/legislation_list.html')
 def legislation_list(request):
     legislation = Law.view('legislation/by_name', include_docs=True)
-    return {
+    template = 'manoseimas/legislation/legislation_list.html'
+    return render(request, template, {
         'legislations': CouchDbPaginator(legislation, request.GET),
-    }
+    })
 
-@render_to('manoseimas/legislation/legislation.html')
 def legislation(request, legislation_id):
+    template = 'manoseimas/legislation/legislation.html'
     try:
         category = Category.get(legislation_id)
         legislation = Law.view('legislation/by_category', limit=50,
@@ -36,19 +38,18 @@ def legislation(request, legislation_id):
                                endkey=[category.id, {}],
                                include_docs=True,)
     except ResourceNotFound:
-        return {
+        return render(request, template, {
             'legislation': Law.get(legislation_id),
-        }
+        })
     else:
-        return {
+        return render(request, template, {
             'legislations': CouchDbPaginator(legislation, request.GET),
             'TEMPLATE': 'manoseimas/legislation/legislation_list.html',
-        }
+        })
 
 
 
 
-@render_to('manoseimas/legislation/document_search.html')
 def document_search(request):
     document, edit_form, message = None, None, None
     search_form = SearchForm(data=request.POST or None)
@@ -73,54 +74,55 @@ def document_search(request):
                 db.save(document)
             return HttpResponseRedirect(reverse('manoseimas-legislation-list'))
 
-    return {
+    template = 'manoseimas/legislation/document_search.html'
+    return render(request, template, {
         'search_form': search_form,
         'document': document,
         'edit_form': edit_form,
         'message': message,
-    }
+    })
 
 
-@render_to('manoseimas/legislation/amendments.html')
 def legislation_amendments(request, legislation_id):
-    return {
+    template = 'manoseimas/legislation/amendments.html'
+    return render(request, template, {
         'legislation': Law.get(legislation_id),
         'amendments': Law.view('legislation/amendments', limit=50,
                                      include_docs=True,
                                      startkey=[legislation_id, {}],
                                      endkey=[legislation_id],
                                      descending=True),
-    }
+    })
 
-@render_to('manoseimas/legislation/drafts.html')
 def legislation_drafts(request, legislation_id):
-    return {
+    template = 'manoseimas/legislation/drafts.html'
+    return render(request, template, {
         'legislation': Law.get(legislation_id),
         'drafts': Law.view('legislation/drafts', limit=50,
                                 include_docs=True,
                                 startkey=[legislation_id, {}],
                                 endkey=[legislation_id],
                                 descending=True),
-    }
+    })
 
-@render_to('manoseimas/legislation/drafts.html')
 def legislation_all_drafts(request, legislation_id):
-    return {
+    template = 'manoseimas/legislation/drafts.html'
+    return render(request, template, {
         'legislation': Law.get(legislation_id),
         'drafts': Law.view('legislation/drafts', limit=50,
                                 include_docs=True,
                                 startkey=[legislation_id, {}],
                                 endkey=[legislation_id],
                                 descending=True),
-    }
+    })
 
-@render_to('manoseimas/legislation/votings.html')
 def legislation_votings(request, legislation_id):
-    return {
+    template = 'manoseimas/legislation/votings.html'
+    return render(request, template, {
         'legislation': Law.get(legislation_id),
         'votings': Voting.view('votings/parents', limit=25,
                                include_docs=True,
                                startkey=[legislation_id, {}],
                                endkey=[legislation_id],
                                descending=True),
-    }
+    })

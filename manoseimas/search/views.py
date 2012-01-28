@@ -1,11 +1,10 @@
-from annoying.decorators import render_to
+from django.shortcuts import render
 
 from manoseimas.legal_acts.models import LegalAct
 
 from .forms import SearchForm
 
 
-@render_to('manoseimas/search/search_results.html')
 def search_results(request):
     if 'query' in request.GET:
         search_form = SearchForm(data=request.GET)
@@ -21,4 +20,5 @@ def search_results(request):
         context['documents'] = LegalAct.search(search)
         context['total_rows'] = context['documents'].total_rows
 
-    return context
+    template = 'manoseimas/search/search_results.html'
+    return render(request, template, context)
