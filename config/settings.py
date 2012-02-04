@@ -288,6 +288,8 @@ JQUERY_VERSION = '$JQUERY_VERSION'
 PROTOCOL = 'http'
 DEFAULT_FROM_EMAIL = '$SERVER_ADMIN'
 
+AUTH_PROFILE_MODULE = 'manoseimas.accounts.Profile'
+
 AUTHENTICATION_BACKENDS = (
     #'social_auth.backends.twitter.TwitterBackend',
     #if $FACEBOOK_APP_ID
