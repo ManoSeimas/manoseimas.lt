@@ -21,11 +21,12 @@ syntax:regexp
 ^buildout.cfg$
 ^c4che$
 ^configure$
+^develop-eggs$
 ^docs/build$
 ^downloads$
 ^eggs$
-^develop-eggs$
 ^env$
 ^initial_data.json$
 ^parts$
+^tags$
 ^var$
