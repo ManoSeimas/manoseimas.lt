@@ -40,39 +40,62 @@
 </head>
 
 <body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a href="{% url index %}" class="brand">manoseimas.lt</a>
+        <ul class="nav pull-right">
+          <li class="divider-vertical"></li>
+          {% if request.user.is_authenticated %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="icon-user icon-white"></i> {{ request.user }}
+              <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url ms_profile %}">
+                <i class="icon-user"></i> {% trans "Profile" %}</a></li>
+              <li><a href="{% url ms_logout %}">
+                <i class="icon-off"></i> {% trans "Log out" %}</a></li>
+            </ul>
+          </li>
+          {% else %}
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="icon-user icon-white"></i> {% trans "Log in" %}
+              <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><a href="{% url socialauth_begin 'google' %}">{% trans "Google" %}</a></li>
+              {% if FACEBOOK_APP_ID %}
+              <li><a href="{% url socialauth_begin 'facebook' %}">{% trans "Facebook" %}</a></li>
+              {% endif %}
+              <li><a href="{% url ms_login %}">{% trans "OpenID" %}</a></li>
+            </ul>
+          </li>
+          {% endif %}
+        </ul>
+        <form class="navbar-search pull-right">
+          <input type="text" placeholder="{% trans "Search" %}" class="search-query" />
+        </form>
+      </div>
+    </div>
+  </div>
 
-  <div id="container">
-    <div id="user-area">
-        <ul>
-            {% if request.user.is_authenticated %}
-            <li><a href="{% url ms_profile %}">{{ request.user }}</a></li>
-            <li><a href="{% url ms_logout %}">{% trans "Log out" %}</a></li>
-            {% else %}
-            <li><a href="{% url ms_login %}">{% trans "Log in" %}</a></li>
-            {% endif %}
-        </ul>
-    </div>
-    <header>
-        <h1>{% trans "manoseimas.lt" %}</h1>
-    </header>
-    <div id="nav-bar">
-        <div id="search-box">
-            <input type="text" value="" />
-            <input type="button" value="{% trans "Search" %}">
-        </div>
-        <ul id="top-level-menu">
-            <li><a href="#">{% trans "Legislation" %}</a></li>
-            <li><a href="#">{% trans "Politicians" %}</a></li>
-            <li><a href="#">{% trans "Lawmaking" %}</a></li>
-        </ul>
-    </div>
-    <div id="main" role="main">
+  <div class="container">
+    <ul class="nav nav-tabs">
+        <li><a href="#">{% trans "Legislation" %}</a></li>
+        <li><a href="#">{% trans "Politicians" %}</a></li>
+        <li><a href="#">{% trans "Lawmaking" %}</a></li>
+    </ul>
+
+    <div class="row">
+        <div class="span9">
         {% block content %}
         
         {% endblock %}
-    </div>
-    <div id="sidebar">
-        Sidebar
+        </div>
+        <div class="span3">
+            Sidebar
+        </div>
     </div>
     <footer>
         <p>{% trans "manoseimas.lt team" %}</p>
