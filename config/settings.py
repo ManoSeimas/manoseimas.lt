@@ -238,6 +238,7 @@ INSTALLED_APPS = (
     'manoseimas.categories',
     'manoseimas.votings',
     'manoseimas.accounts',
+    'manoseimas.policy',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -266,13 +267,14 @@ LOGGING = {
 COUCHDB_DATABASES = (
     ('sboard', '$COUCHDB_URL/nodes'),
     ('manoseimas.legal_acts', '$COUCHDB_URL/legal_acts'),
-    ('manoseimas.categories', '$COUCHDB_URL/categories'),
+    ('manoseimas.categories', '$COUCHDB_URL/nodes'),
     ('manoseimas.legislation', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.drafts', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.people', '$COUCHDB_URL/people'),
     ('manoseimas.sittings', '$COUCHDB_URL/sittings'),
     ('manoseimas.votings', '$COUCHDB_URL/sittings'),
     ('manoseimas.profiles', '$COUCHDB_URL/profiles'),
+    ('manoseimas.policy', '$COUCHDB_URL/nodes'),
 )
 
 #if $DEVELOPMENT
@@ -325,12 +327,6 @@ FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = '$FACEBOOK_API_SECRET'
 
 SBOARD_NODES = (
-    # 'sboard.articles.nodes.ArticleNode',
-    # 'sboard.discussions.nodes.DiscussionNode',
-    # 'sboard.hardware.nodes.HardwareNode',
-    # 'sboard.hardware.nodes.HardwareCompatibilityNode',
-    # 'sboard.links.nodes.LinkNode',
-    # 'sboard.polls.nodes.PollNode',
-    # 'sboard.questions.nodes.QuestionNode',
-    # 'sboard.screenshots.nodes.ScreenshotNode',
+    'manoseimas.policy.nodes.PolicyNode',
+    'manoseimas.categories.nodes.CategoryNode',
 )
