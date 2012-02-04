@@ -225,6 +225,7 @@ INSTALLED_APPS = (
     'social_auth',
     'sorl.thumbnail',
     'couchdbkit.ext.django',
+    'sboard',
 
     #if $DEVELOPMENT
     'debug_toolbar',
@@ -263,6 +264,7 @@ LOGGING = {
 }
 
 COUCHDB_DATABASES = (
+    ('sboard', '$COUCHDB_URL/nodes'),
     ('manoseimas.legal_acts', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.categories', '$COUCHDB_URL/categories'),
     ('manoseimas.legislation', '$COUCHDB_URL/legal_acts'),
@@ -321,3 +323,14 @@ AUTHENTICATION_BACKENDS = (
 
 FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = '$FACEBOOK_API_SECRET'
+
+SBOARD_NODES = (
+    # 'sboard.articles.nodes.ArticleNode',
+    # 'sboard.discussions.nodes.DiscussionNode',
+    # 'sboard.hardware.nodes.HardwareNode',
+    # 'sboard.hardware.nodes.HardwareCompatibilityNode',
+    # 'sboard.links.nodes.LinkNode',
+    # 'sboard.polls.nodes.PollNode',
+    # 'sboard.questions.nodes.QuestionNode',
+    # 'sboard.screenshots.nodes.ScreenshotNode',
+)
