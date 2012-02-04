@@ -130,11 +130,17 @@ GLOBAL_MEDIA_DIRS = (
     #if $JQUERY_VERSION
     os.path.join(BUILDOUT_DIR, 'parts', 'jquery'),
     #end if
+    #if $TWITTER_BOOTSTRAP
+    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
+    #end if
     IMPORTED_SASS_FRAMEWORKS_DIR,
 )
 
 MEDIA_BUNDLES = (
     ('screen.css',
+        #if $TWITTER_BOOTSTRAP
+        'css/bootstrap.css',
+        #end if
         'css/screen.sass',
     ),
     ('modernizr.js',
@@ -142,6 +148,9 @@ MEDIA_BUNDLES = (
     ),
     ('scripts.js',
         'js/jquery.js',
+        #if $TWITTER_BOOTSTRAP
+        'js/bootstrap.js',
+        #end if
         'js/scripts.js',
     ),
 )

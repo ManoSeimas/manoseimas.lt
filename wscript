@@ -69,6 +69,9 @@ def options(ctx):
     gr.add_option('--facebook-api-secret', action='store', default='',
                   help='Facebook API secret.')
 
+    gr.add_option('--twitter-bootstrap', action='store_true', default=True,
+                  help='Use Twitter bootstrap framework.')
+
     gr = ctx.add_option_group('setup options')
     gr.add_option("--use-pkg-add", action="store_true", dest="use_pkg_add",
                   default=False, help="use pkg_add in BSD systems")
@@ -148,6 +151,8 @@ def configure(ctx):
 
     ctx.env.FACEBOOK_APP_ID = ctx.options.facebook_app_id
     ctx.env.FACEBOOK_API_SECRET = ctx.options.facebook_api_secret
+
+    ctx.env.TWITTER_BOOTSTRAP = ctx.options.twitter_bootstrap
 
     ctx.env.COUCHDB_URL = ctx.options.couchdb_url
 
