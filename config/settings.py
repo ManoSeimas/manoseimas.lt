@@ -268,7 +268,7 @@ COUCHDB_DATABASES = (
     ('sboard', '$COUCHDB_URL/nodes'),
     ('manoseimas.legal_acts', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.categories', '$COUCHDB_URL/nodes'),
-    ('manoseimas.legislation', '$COUCHDB_URL/legal_acts'),
+    ('manoseimas.legislation', '$COUCHDB_URL/nodes'),
     ('manoseimas.drafts', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.people', '$COUCHDB_URL/people'),
     ('manoseimas.sittings', '$COUCHDB_URL/sittings'),
@@ -327,6 +327,9 @@ FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = '$FACEBOOK_API_SECRET'
 
 SBOARD_NODES = (
+    'manoseimas.legislation.nodes.LawNode',
+    'manoseimas.legislation.nodes.LawChangeNode',
+    'manoseimas.legislation.nodes.LawProjectNode',
     'manoseimas.policy.nodes.PolicyNode',
     'manoseimas.categories.nodes.CategoryNode',
 )
