@@ -4,5 +4,5 @@ from sboard.nodes import BaseNode
 
 
 class CategoryNode(BaseNode):
-    slug = 'category'
+    slug = 'categories'
     name = _('Category')

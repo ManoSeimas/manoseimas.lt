@@ -4,5 +4,5 @@ from sboard.nodes import BaseNode
 
 
 class PolicyNode(BaseNode):
-    slug = 'policy'
+    slug = 'policies'
     name = _('Policy')
