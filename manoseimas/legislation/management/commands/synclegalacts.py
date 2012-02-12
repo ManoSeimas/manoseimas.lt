@@ -89,12 +89,12 @@ class SyncProcessor(object):
 
     def process(self, legal_act):
         if 'kind' not in legal_act:
-            continue
+            return
             # TODO: examine documents, that does not have 'kind' attribute
             #raise SyncException("Document does not have 'kind' attribute.")
 
         if 'name' not in legal_act:
-            continue
+            return
             # TODO: examine documents, that does not have 'name' attribute
             #raise SyncException("Document does not have 'name' attribute.")
 
