@@ -89,10 +89,14 @@ class SyncProcessor(object):
 
     def process(self, legal_act):
         if 'kind' not in legal_act:
-            raise SyncException("Document does not have 'kind' attribute.")
+            continue
+            # TODO: examine documents, that does not have 'kind' attribute
+            #raise SyncException("Document does not have 'kind' attribute.")
 
         if 'name' not in legal_act:
-            raise SyncException("Document does not have 'name' attribute.")
+            continue
+            # TODO: examine documents, that does not have 'name' attribute
+            #raise SyncException("Document does not have 'name' attribute.")
 
         split = split_law_name(legal_act.name)
 
