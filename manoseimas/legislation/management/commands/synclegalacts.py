@@ -73,8 +73,8 @@ class SyncProcessor(object):
             # Possible solution - sync all legal acts starting from oldest, if
             # a legal act with same name exists, then track it as history node
             # with an update that comes with newer legal act with same name.
-
-        node.set_body(legal_act.current_version(), 'text/html')
+        else:
+            node.set_body(legal_act.current_version(), 'text/html')
 
         print('Node: %s' % node._id)
 
