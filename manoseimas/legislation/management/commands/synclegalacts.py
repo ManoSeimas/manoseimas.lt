@@ -56,10 +56,12 @@ class SyncProcessor(object):
         node.number = legal_act.number
         node.title = legal_act.name
         node.cleaned_name = normalize(legal_act.name)
-        node.body = legal_act.current_version()
         node.created = self.date_to_datetime(legal_act.date)
         node.parents = self.get_parents(split)
 
+        # XXX: temporary, for cleaning database.
+        if 'body' in node:
+            del node.body
 
         try:
             node.save()
@@ -72,6 +74,7 @@ class SyncProcessor(object):
             # a legal act with same name exists, then track it as history node
             # with an update that comes with newer legal act with same name.
 
+        node.set_body(legal_act.current_version(), 'text/html')
 
         print('Node: %s' % node._id)
 

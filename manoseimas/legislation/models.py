@@ -17,7 +17,7 @@ class LegalAct(Node):
     cleaned_name = schema.StringProperty()
 
     def render_body(self):
-        return mark_safe(self.body)
+        return mark_safe(self.get_body())
 
 
 class Law(LegalAct):
