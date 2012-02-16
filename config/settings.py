@@ -272,7 +272,7 @@ COUCHDB_DATABASES = (
     ('manoseimas.drafts', '$COUCHDB_URL/legal_acts'),
     ('manoseimas.people', '$COUCHDB_URL/people'),
     ('manoseimas.sittings', '$COUCHDB_URL/sittings'),
-    ('manoseimas.votings', '$COUCHDB_URL/sittings'),
+    ('manoseimas.votings', '$COUCHDB_URL/nodes'),
     ('manoseimas.profiles', '$COUCHDB_URL/profiles'),
     ('manoseimas.policy', '$COUCHDB_URL/nodes'),
 )

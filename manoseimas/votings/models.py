@@ -1,8 +1,41 @@
-from manoseimas.couchdb import Document
+from couchdbkit.ext.django import schema
+
+from sboard.models import Node
 
 
-class Voting(Document):
-    def did_not_vote(self):
-        joined = int(self.registration['joined'])
-        total = int(self.total_votes)
-        return joined - total
+class Source(schema.DocumentSchema):
+    id = schema.IntegerProperty()
+    url = schema.StringProperty()
+
+
+class Voting(Node):
+    # Number of people, that has voting right
+    has_voting_right = schema.IntegerProperty()
+
+    # Number of people, that registered for this voting session.
+    registered_for_voting = schema.IntegerProperty()
+
+    # Total votes received.
+    total_votes = schema.IntegerProperty()
+
+    # Voting results.
+    vote_abstain = schema.IntegerProperty()
+    vote_aye = schema.IntegerProperty()
+    vote_no = schema.IntegerProperty()
+
+    # Voting type (regular, urgent, ...)
+    voting_type = schema.StringProperty()
+
+    # List of votes by person and fraction.
+    votes = schema.ListProperty()
+
+    # List of legal acts that was directly voted for with this voting.
+    legal_acts = schema.ListProperty()
+
+    # List of legal acts that are parents of all legal acts voted for.
+    parent_legal_acts = schema.ListProperty()
+
+    # Source of information.
+    # FIXME: https://github.com/benoitc/couchdbkit/issues/119
+    #source = schema.SchemaDictProperty(Source())
+    source = schema.DictProperty()
