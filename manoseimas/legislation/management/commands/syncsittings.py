@@ -71,8 +71,8 @@ class SyncProcessor(object):
         return voting
 
     def get_source(self, doc):
-        voting_source_url = doc.source['url']
-        if not voting_source_url.startswith('http'):
+        voting_source_url = doc.source['url'] or ''
+        if voting_source_url and not voting_source_url.startswith('http'):
             voting_source_url = ('http://www3.lrs.lt/pls/inter/' +
                                  voting_source_url)
 
