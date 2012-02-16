@@ -111,7 +111,8 @@ class SyncProcessor(object):
         node.total_votes = doc.total_votes
 
         # Voting type (regular, urgent, ...)
-        node.voting_type = doc.type
+        if 'type' in doc:
+            node.voting_type = doc.type
 
         # Voting results.
         node.vote_abstain = doc.vote_abstain
