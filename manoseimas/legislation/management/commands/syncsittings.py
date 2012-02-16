@@ -143,6 +143,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         RawVoting.set_db(get_db('sittings'))
-        view = RawVoting.view('scrapy/votes_with_documents', include_docs=True)
         processor = SyncProcessor()
-        processor.sync(view)
+        has_docs = True
+        params = {'include_docs': True, 'limit': 10}
+        while has_docs:
+            view = RawVoting.view('scrapy/votes_with_documents', **params)
+            rows = list(view)
+            if len(rows) > 0:
+                last = rows.pop()
+                processor.sync(rows)
+                params['startkey'] = last._id
+            else:
+                has_docs = False
