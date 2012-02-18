@@ -1,0 +1,60 @@
+{% extends "sboard/node_details.html" %}
+{% load i18n %}
+
+{% block inlinejs %}
+<script type="text/javascript">
+$(function () {
+    $.plot($("#voting-chart"),
+        [
+            {data: {{ node.vote_aye }}, color: "green"},
+            {data: {{ node.vote_no }}, color: "red"},
+            {data: {{ node.vote_abstain }}, color: "gray"},
+            {data: {{ node.did_not_vote }}, color: "white"}
+        ],
+        {series: {pie: {show: true}}}
+    );
+});
+</script>
+{% endblock %}
+
+{% block node_body %}
+<p>
+  {% trans "Original source of informaction:" %}
+  <a href="{{ node.source.voting.url }}">{{ node.source.voting.url }}</a>
+</p>
+
+<table>
+  <tbody>
+  <tr>
+    <td><div id="voting-chart" style="width:200px;height:200px;"></div></td>
+    <td style="vertical-align:top;">
+      <table>
+        <tbody>
+        <tr>
+          <td style="width:40px;background:green;border: 1px solid black;"></td>
+          <td>{{ node.vote_aye }}</td>
+          <td>{% trans "aye" %}</td>
+        </tr>
+        <tr>
+          <td style="width:40px;background:red;border: 1px solid black;"></td>
+          <td>{{ node.vote_no }}</td>
+          <td>{% trans "no" %}</td>
+        </tr>
+        <tr>
+          <td style="width:40px;background:gray;border: 1px solid black;"></td>
+          <td>{{ node.vote_abstain }}</td>
+          <td>{% trans "abstain" %}</td>
+        </tr>
+        <tr>
+          <td style="width:40px;background:white;border: 1px solid black;"></td>
+          <td>{{ node.did_not_vote }}</td>
+          <td>{% trans "registered but did not vote" %}</td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+{% endblock %}

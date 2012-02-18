@@ -9,3 +9,7 @@ class VotingNode(BaseNode):
     slug = 'legislation-votings'
     name = _('Law voting')
     model = Voting
+
+    templates = {
+        'details': 'votings/voting_details.html',
+    }
