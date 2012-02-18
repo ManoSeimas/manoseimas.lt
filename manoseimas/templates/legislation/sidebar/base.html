@@ -11,5 +11,8 @@
     {% block changes_menu_item %}
     <li><a href="{% url law_changes node.get_id %}">{% trans "Changes" %}</a></li>
     {% endblock %}
+    {% block votings_menu_item %}
+    <li><a href="{% url law_votings node.get_id %}">{% trans "Votings" %}</a></li>
+    {% endblock %}
   </ul>
 </div>

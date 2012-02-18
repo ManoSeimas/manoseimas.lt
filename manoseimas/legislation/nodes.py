@@ -24,6 +24,9 @@ class LawNode(BaseNode):
 
             url(r'^changes/$', 'node', {'view': 'law_changes'},
                 name='law_changes'),
+
+            url(r'^votings/$', 'node', {'view': 'law_votings'},
+                name='law_votings'),
         )
 
     def get_law_projects(self):
@@ -35,6 +38,11 @@ class LawNode(BaseNode):
         # TODO: rename legislation/drafts to sboard/by_key_and_type
         key = [self.node._id, 'LawChange']
         return couch.view('legislation/drafts', key=key)
+
+    def get_law_votings(self):
+        return couch.view('votings/parents', startkey=[self.node._id, 'Z'],
+                          endkey=[self.node._id], descending=True,
+                          limit=10)
 
     def law_projects_view(self, request):
         return self.list_view(request, {
@@ -48,6 +56,13 @@ class LawNode(BaseNode):
             'get_node_list': self.get_law_changes,
             'template': 'legislation/law_list.html',
             'sidebar_template': 'legislation/sidebar/changes.html',
+        })
+
+    def law_votings_view(self, request):
+        return self.list_view(request, {
+            'get_node_list': self.get_law_votings,
+            'template': 'legislation/law_list.html',
+            'sidebar_template': 'legislation/sidebar/votings.html',
         })
 
     def details_view(self, request, overrides=None):
