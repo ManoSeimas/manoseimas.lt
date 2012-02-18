@@ -39,3 +39,8 @@ class Voting(Node):
     # FIXME: https://github.com/benoitc/couchdbkit/issues/119
     #source = schema.SchemaDictProperty(Source())
     source = schema.DictProperty()
+
+    def did_not_vote(self):
+        """Number of people that registered for voting session, but did not
+        vote."""
+        return self.registered_for_voting - self.total_votes

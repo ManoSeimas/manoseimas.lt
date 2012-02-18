@@ -106,11 +106,11 @@
 
 
   <!-- JavaScript at the bottom for fast page loading -->
-
+  
   <!-- scripts concatenated and minified via ant build script-->
   {% include_media 'scripts.js' %}
+  {% block inlinejs %}{% endblock %}
   <!-- end scripts-->
-
 	
   <!-- Change UA-XXXXX-X to be your site's ID
   <script>

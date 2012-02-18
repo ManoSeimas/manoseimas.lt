@@ -1,0 +1,54 @@
+{% extends "legislation/law_list.html" %}
+{% load i18n %}
+
+{% block inlinejs %}
+<script type="text/javascript">
+$(function () {
+    {% for child in children %}
+    $.plot($("#voting-{{ child.get_id }}"),
+        [
+            {data: {{ child.vote_aye }}, color: "green"},
+            {data: {{ child.vote_no }}, color: "red"},
+            {data: {{ child.vote_abstain }}, color: "gray"},
+            {data: {{ child.did_not_vote }}, color: "white"}
+        ],
+        {series: {pie: {show: true}}}
+    );
+    {% endfor %}
+});
+</script>
+{% endblock %}
+
+
+{% block content %}
+  {% if node and node.title %}
+    <h1>{{ node.title }}</h1>
+  {% endif %}
+
+  {% if children %}
+    <p>
+        <table>
+            <tr>
+            	<td style="width:40px;background:green;border: 1px solid black;"></td>
+            	<td>{% trans "aye" %}</td>
+            	<td style="width:40px;background:red;border: 1px solid black;"></td>
+            	<td>{% trans "no" %}</td>
+            	<td style="width:40px;background:gray;border: 1px solid black;"></td>
+            	<td>{% trans "abstain" %}</td>
+            	<td style="width:40px;background:white;border: 1px solid black;"></td>
+            	<td>{% trans "registered but did not vote" %}</td>
+            </tr>
+        </table>
+    </p>
+    {% for child in children %}
+    <div class="list-entry" style="height:40px;">
+      <div id="voting-{{ child.get_id }}" style="width:40px;height:40px;float:right;"></div>
+      [{{ child.created|date:"SHORT_DATE_FORMAT" }}]
+      <a href="{{ child.permalink }}">{{ child.title }}</a>
+    </div>
+    <hr />
+    {% endfor %}
+  {% else %}
+    <p>{% trans "No entries found." %}</p>
+  {% endif %}
+{% endblock %}

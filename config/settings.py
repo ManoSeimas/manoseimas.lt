@@ -133,6 +133,7 @@ GLOBAL_MEDIA_DIRS = (
     #if $TWITTER_BOOTSTRAP
     os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
     #end if
+    os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
     IMPORTED_SASS_FRAMEWORKS_DIR,
 )
 
@@ -151,6 +152,8 @@ MEDIA_BUNDLES = (
         #if $TWITTER_BOOTSTRAP
         'js/bootstrap.js',
         #end if
+        'js/flot/jquery.flot.js',
+        'js/flot/jquery.flot.pie.js',
         'js/scripts.js',
     ),
 )
@@ -330,6 +333,7 @@ SBOARD_NODES = (
     'manoseimas.legislation.nodes.LawNode',
     'manoseimas.legislation.nodes.LawChangeNode',
     'manoseimas.legislation.nodes.LawProjectNode',
+    'manoseimas.votings.nodes.VotingNode',
     'manoseimas.policy.nodes.PolicyNode',
     'manoseimas.categories.nodes.CategoryNode',
 )

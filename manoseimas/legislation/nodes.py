@@ -61,7 +61,7 @@ class LawNode(BaseNode):
     def law_votings_view(self, request):
         return self.list_view(request, {
             'get_node_list': self.get_law_votings,
-            'template': 'legislation/law_list.html',
+            'template': 'legislation/votings.html',
             'sidebar_template': 'legislation/sidebar/votings.html',
         })
 
