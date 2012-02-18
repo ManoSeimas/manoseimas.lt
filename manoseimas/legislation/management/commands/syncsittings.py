@@ -97,6 +97,8 @@ class SyncProcessor(object):
         node = self.get_or_create_voting(doc)
         node.created = doc.datetime
 
+        # TODO: some times, when 'formulation' property does not exists,
+        # 'formulation_a' and 'formulation_b' can be provided.
         if 'formulation' in doc:
             node.title = doc.formulation
 
