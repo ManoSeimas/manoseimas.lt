@@ -126,6 +126,18 @@ class Command(BaseCommand):
     help = "Synchronize raw legal acts data with django-sboard nodes."
 
     def handle(self, *args, **options):
-        view = LegalAct.view('_all_docs', include_docs=True)
         processor = SyncProcessor()
-        processor.sync(view)
+        has_docs = True
+        last = None
+        limit = 100
+        params = {'include_docs': True, 'limit': limit}
+        while has_docs:
+            view = LegalAct.view('_all_docs', **params)
+            rows = list(view)
+            if len(rows) == limit:
+                last = rows.pop()
+            else:
+                has_docs = False
+            processor.sync(rows)
+            if last is not None:
+                params['startkey'] = last._id
