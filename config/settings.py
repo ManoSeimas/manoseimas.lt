@@ -150,6 +150,9 @@ MEDIA_BUNDLES = (
     ('scripts.js',
         'js/jquery.js',
         #if $TWITTER_BOOTSTRAP
+        # FIXME: boostra.js (parts/twitter-bootstrap/js/bootstrap.js) file does
+        # not have anding ';' and breaks other scripts when joining to one
+        # file.
         'js/bootstrap.js',
         #end if
         'js/flot/jquery.flot.js',
