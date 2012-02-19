@@ -184,6 +184,32 @@ wscript
     should be built.
 
 
+Configuring ElasticSearch
+=========================
+
+Buildout automatically downloads ElasticSearch to parts/elsaticsearch
+directory.
+
+Install couchdb plugins::
+
+    ./parts/elasticsearch/bin/plugin -install river-couchdb
+
+Run ElasticSearch using this command::
+
+    ./parts/elasticsearch/bin/elasticsearch -f
+
+Start CouchDB database indexing::
+
+    curl -XPUT 'http://localhost:9200/_river/my_es_idx/_meta' -d '{
+        "type" : "couchdb",
+        "couchdb" : {
+            "host" : "localhost",
+            "port" : 5984,
+            "db" : "nodes",
+            "filter" : null
+        }
+    }'
+
 .. _Waf: http://code.google.com/p/waf/
 .. _Cheetah: http://www.cheetahtemplate.org/
 .. _SASS: http://sass-lang.com/
