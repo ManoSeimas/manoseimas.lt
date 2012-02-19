@@ -26,7 +26,7 @@ class Law(LegalAct):
     ID of this node is slugified name.
 
     """
-    pass
+    _default_importance = 7
 
 
 class LawChange(LegalAct):
