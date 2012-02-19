@@ -35,6 +35,12 @@ commands::
 
     python waf configure build
 
+If you want to make search features available, alse prepare ElasticSearch,
+using these commands::
+
+    ./parts/elasticsearch/bin/elasticsearch -f
+    bin/django syncelasticsearch
+
 Running development web server
 ------------------------------
 
