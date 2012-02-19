@@ -280,6 +280,10 @@ COUCHDB_DATABASES = (
     ('manoseimas.policy', '$COUCHDB_URL/nodes'),
 )
 
+ELASTICSEARCH_SERVERS = (
+    '127.0.0.1:9200',
+)
+
 #if $DEVELOPMENT
 INTERNAL_IPS = (
     '127.0.0.1',

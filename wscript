@@ -245,6 +245,13 @@ def build(ctx):
                 target='%s/locale/%s/LC_MESSAGES/django.mo' % s,
                 after='buildout')
 
+    # Install ElasticSearch river-couchdb plugin.
+    espath = 'parts/elasticsearch'
+    bld(rule='%s/bin/plugin -install river-couchdb' % espath,
+        target=glob(('%s/plugins/river-couchdb/'
+                     'elasticsearch-river-couchdb-*.jar') % espath),
+        after='buildout')
+
 
 def makemessages(ctx):
     for lang in ctx.env.LANGUAGES:
