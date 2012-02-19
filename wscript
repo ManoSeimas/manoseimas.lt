@@ -377,6 +377,9 @@ def setup(ctx):
         'libicu-dev',
         'libjpeg62-dev',
         'libxslt1-dev',
+
+        # Java for ElasticSearch
+        'openjdk-6-jre-headless',
     ])
 
 
