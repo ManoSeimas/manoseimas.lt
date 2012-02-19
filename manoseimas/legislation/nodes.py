@@ -71,13 +71,13 @@ class LawNode(BaseNode):
         })
 
 
-class LawChangeNode(BaseNode):
+class LawChangeNode(LawNode):
     slug = 'legislation-changes'
     name = _('Law change')
     model = LawChange
 
 
-class LawProjectNode(BaseNode):
+class LawProjectNode(LawNode):
     slug = 'legislation-projects'
     name = _('Law project')
     model = LawProject
