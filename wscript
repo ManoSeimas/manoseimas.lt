@@ -121,6 +121,7 @@ def configure(ctx):
     ctx.find_program('hg')
     ctx.find_program('git')
     ctx.find_program('virtualenv')
+    ctx.find_program('java')
 
     ctx.load('compiler_c python ruby')
 
