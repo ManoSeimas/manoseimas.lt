@@ -373,6 +373,9 @@ def setup(ctx):
         'ruby',
         'ruby-dev',
 
+        # CouchDB
+        'couchdb',
+
         # Other development headers
         'libfreetype6-dev',
         'libicu-dev',
