@@ -69,6 +69,9 @@ def options(ctx):
     gr.add_option('--facebook-api-secret', action='store', default='',
                   help='Facebook API secret.')
 
+    gr.add_option('--sass', action='store_true', default=False,
+                  help='Enable Sass-lang support.')
+
     gr.add_option('--twitter-bootstrap', action='store_true', default=True,
                   help='Use Twitter bootstrap framework.')
 
@@ -123,13 +126,15 @@ def configure(ctx):
     ctx.find_program('virtualenv')
     ctx.find_program('java')
 
-    ctx.load('compiler_c python ruby')
+    ctx.load('compiler_c python')
 
     ctx.check_python_version((2,6))
     ctx.check_python_headers()
 
-    ctx.check_ruby_version((1,8,0))
-    ctx.check_ruby_ext_devel()
+    if ctx.options.sass:
+        ctx.load('ruby')
+        ctx.check_ruby_version((1,8,0))
+        ctx.check_ruby_ext_devel()
 
     ctx.env.TOP = ctx.path.abspath()
     ctx.env.PROJECT_NAME = ctx.options.project_name
@@ -152,6 +157,8 @@ def configure(ctx):
 
     ctx.env.FACEBOOK_APP_ID = ctx.options.facebook_app_id
     ctx.env.FACEBOOK_API_SECRET = ctx.options.facebook_api_secret
+
+    ctx.env.SASS = ctx.options.sass
 
     ctx.env.TWITTER_BOOTSTRAP = ctx.options.twitter_bootstrap
 
@@ -213,7 +220,7 @@ def build(ctx):
     bld(rule=_subst, source='config/initial_data.json c4che/_cache.py',
         target='initial_data.json')
 
-    bld(rule='${PYTHON} bootstrap.py --distribute', target='bin/buildout',
+    bld(rule='env/bin/python bootstrap.py --distribute', target='bin/buildout',
         source='buildout.cfg')
 
     bld(rule='bin/buildout -N', name='buildout', target='bin/django',
@@ -224,13 +231,17 @@ def build(ctx):
               'touch ${TGT}'),
         after='buildout', target='var/db')
 
-    bld(rule='bin/django importsassframeworks',
-        target='var/sass-frameworks/_compass.scss',
-        after='buildout')
+    if ctx.env.SASS:
+        bld(rule='bin/django importsassframeworks',
+            target='var/sass-frameworks/_compass.scss',
+            after='buildout')
+
+        media_sources = ['var/sass-frameworks/_compass.scss']
+    else:
+        media_sources = []
 
     bld(rule='bin/django generatemedia',
-        source=(glob('%s/mediagenerator/**/*' % p) +
-                ['var/sass-frameworks/_compass.scss']),
+        source=(glob('%s/mediagenerator/**/*' % p) + media_sources),
         name='generatemedia', after='buildout')
 
     bld(rule='bin/django collectstatic --noinput --verbosity=0',
@@ -360,18 +371,12 @@ def setup(ctx):
         'gettext',
 
         # VCS
-        'bzr',
         'git',
         'mercurial',
-        'subversion',
 
         # Python
         'python-dev',
         'python-virtualenv',
-
-        # Ruby (used for installing sass and compass gems)
-        'ruby',
-        'ruby-dev',
 
         # CouchDB
         'couchdb',
@@ -386,6 +391,12 @@ def setup(ctx):
         'openjdk-6-jre-headless',
     ])
 
+    if ctx.env.SASS:
+        packages.update([
+            # Ruby (used for installing sass and compass gems)
+            'ruby',
+            'ruby-dev',
+        ])
 
     if name == 'ubuntu' or name == 'debian':
         packages.replace('git', 'git-core')
@@ -406,7 +417,6 @@ def setup(ctx):
         pyver = sys.version[:3].replace('.', '')
         packages.remove('build-essential')
         packages.remove('python-dev')
-        packages.remove('ruby-dev')
         packages.replace(
                 ('git', 'git-core'),
                 ('python-virtualenv', 'py%s-virtualenv' % pyver),
@@ -415,6 +425,10 @@ def setup(ctx):
                 ('libjpeg62-dev', 'jpeg'),
                 ('libxslt1-dev', 'libxslt')
         )
+
+        if ctx.env.SASS:
+            packages.remove('ruby-dev')
+
         sh('port select --set python python%s' % pyver)
         sh('port -v install %s' % ' '.join(packages))
         sh('ln -s /opt/local/bin/virtualenv-%s /opt/local/bin/virtualenv' % pyver)
@@ -438,5 +452,5 @@ from waflib.Build import BuildContext
 def use_build_context_for(*cmds):
     for cmd in cmds:
         type('BldCtx_' + cmd, (BuildContext,), {'cmd': cmd, 'fun': cmd})
-use_build_context_for('makemessages', 'distclean', 'cleanpyc')
+use_build_context_for('makemessages', 'distclean', 'cleanpyc', 'setup')
 # --------

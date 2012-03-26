@@ -1,7 +1,7 @@
 #!/usr/bin/make
 
 PROJECT=manoseimas
-TESTS = 
+TESTS = sboard
 COVERAGE_INCLUDES = --include=project/*
 
 
@@ -11,7 +11,7 @@ all: c4che env
 
 .PHONY: run
 run: all
-	bin/django runserver_plus
+	bin/django runserver
 
 c4che:
 	./waf configure --project-name=$(PROJECT)

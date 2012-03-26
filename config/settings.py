@@ -8,6 +8,7 @@ import os
 PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 
+#if $SASS
 # Make external tools like SASS and Compass available in PATH.
 path = os.environ['PATH'].split(':')
 path.append(os.path.join(BUILDOUT_DIR, 'bin'),)
@@ -22,6 +23,7 @@ os.environ['GEM_HOME'] = '%(PREFIX)s/lib/ruby/gems/1.8' % s
 os.environ['RUBYLIB'] = ':'.join([
     '%(RUBYLIB)s', '%(PREFIX)s/lib', '%(PREFIX)s/lib/ruby',
     '%(PREFIX)s/lib/site_ruby/1.8',]) % s
+#end if
 
 
 ugettext = lambda s: s
@@ -119,8 +121,10 @@ PRODUCTION_MEDIA_URL = '/static/'
 GENERATED_MEDIA_DIR = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
 GENERATED_MEDIA_NAMES_FILE = os.path.join(MEDIAGENERATOR_DIR,
                                           '_generated_media_names.py')
+#if $SASS
 IMPORTED_SASS_FRAMEWORKS_DIR = os.path.join(BUILDOUT_DIR, 'var',
                                             'sass-frameworks')
+#end if
 
 MEDIAGENERATOR_DIR = os.path.join(PROJECT_DIR, 'mediagenerator')
 
@@ -134,7 +138,9 @@ GLOBAL_MEDIA_DIRS = (
     os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
     #end if
     os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
+    #if $SASS
     IMPORTED_SASS_FRAMEWORKS_DIR,
+    #end if
 )
 
 MEDIA_BUNDLES = (
@@ -142,7 +148,11 @@ MEDIA_BUNDLES = (
         #if $TWITTER_BOOTSTRAP
         'css/bootstrap.css',
         #end if
+        #if $SASS
         'css/screen.sass',
+        #else
+        'css/screen.css',
+        #end if
     ),
     ('modernizr.js',
         'js/modernizr.js',
@@ -161,9 +171,11 @@ MEDIA_BUNDLES = (
     ),
 )
 
+#if $SASS
 SASS_FRAMEWORKS = (
     'compass',
 )
+#end if
 
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
@@ -190,6 +202,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.transaction.TransactionMiddleware',
     #if $DEVELOPMENT
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'django_pdb.middleware.PdbMiddleware',
     #end if
 )
 
@@ -237,6 +250,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'django_extensions',
     'test_utils',
+    'django_pdb',
     #end if
 
     'manoseimas.search',
