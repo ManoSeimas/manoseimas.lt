@@ -259,9 +259,10 @@ def build(ctx):
 
     # Install ElasticSearch river-couchdb plugin.
     espath = 'parts/elasticsearch'
-    bld(rule='%s/bin/plugin -install river-couchdb' % espath,
-        target=glob(('%s/plugins/river-couchdb/'
-                     'elasticsearch-river-couchdb-*.jar') % espath),
+    plugin = 'elasticsearch/elasticsearch-river-couchdb/1.1.0'
+    bld(rule='%s/bin/plugin -install %s' % (espath, plugin),
+        target=('%s/plugins/river-couchdb/'
+                'elasticsearch-river-couchdb-1.1.0.jar') % espath,
         after='buildout')
 
 
