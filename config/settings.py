@@ -112,6 +112,9 @@ MEDIAGENERATOR_DIR = os.path.join(BUILDOUT_DIR, 'var', 'mediagenerator')
 STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
     os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
+    #if $TWITTER_BOOTSTRAP
+    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
+    #end if
     MEDIAGENERATOR_DIR,
 )
 
