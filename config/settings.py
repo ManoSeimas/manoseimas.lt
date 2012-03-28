@@ -260,6 +260,8 @@ INSTALLED_APPS = (
     'social_auth',
     'sorl.thumbnail',
     'couchdbkit.ext.django',
+    'commonutils',
+
     'sboard',
 
     #if $DEVELOPMENT
