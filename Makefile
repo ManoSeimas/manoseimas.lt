@@ -11,7 +11,12 @@ all: c4che env
 
 .PHONY: run
 run: all
+	bin/django estool --path=parts/elasticsearch start
 	bin/django runserver
+
+.PHONY: stop
+stop:
+	bin/django estool --path=parts/elasticsearch stop
 
 c4che:
 	./waf configure --project-name=$(PROJECT)
