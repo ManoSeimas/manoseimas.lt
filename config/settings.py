@@ -171,6 +171,19 @@ MEDIA_BUNDLES = (
     ),
 )
 
+BASE_ROOT_MEDIA_FILTERS = {
+    '*': 'mediagenerator.filters.concat.Concat',
+    'css': '${PROJECT_NAME}.mediagenerator_filters.CSSURL',
+}
+
+# This setting works in combination with::
+#
+#    'css': '${PROJECT_NAME}.mediagenerator_filters.CSSURL',
+#
+# filter.
+REWRITE_CSS_URLS_RELATIVE_TO_SOURCE = False
+
+
 #if $SASS
 SASS_FRAMEWORKS = (
     'compass',
