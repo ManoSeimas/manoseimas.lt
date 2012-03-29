@@ -1,10 +1,8 @@
 from couchdbkit.exceptions import ResourceNotFound
 from couchdbkit.ext.django import schema
 
-from manoseimas.couchdb import Document
 
-
-class LegalAct(Document):
+class LegalAct(schema.Document):
     name = schema.StringProperty()
 
     @classmethod

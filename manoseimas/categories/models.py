@@ -1,4 +1,4 @@
-from manoseimas.couchdb import Document
+from couchdbkit.ext.django import schema
 
 
 def _get_tree_node(row, last_level, current_level, next_level):
@@ -29,7 +29,7 @@ def iterate_tree(view):
                              next_level)
 
 
-class Category(Document):
+class Category(schema.Document):
     @classmethod
     def get_tree(cls):
         view = cls.get_db().view('categories/tree', include_docs=True)
