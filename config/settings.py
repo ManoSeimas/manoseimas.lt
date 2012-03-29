@@ -368,10 +368,10 @@ FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = '$FACEBOOK_API_SECRET'
 
 SBOARD_NODES = (
+    'sboard.categories.nodes.CategoryNode',
     'manoseimas.legislation.nodes.LawNode',
     'manoseimas.legislation.nodes.LawChangeNode',
     'manoseimas.legislation.nodes.LawProjectNode',
     'manoseimas.votings.nodes.VotingNode',
     'manoseimas.policy.nodes.PolicyNode',
-    'manoseimas.categories.nodes.CategoryNode',
 )
