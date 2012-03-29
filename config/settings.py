@@ -263,6 +263,7 @@ INSTALLED_APPS = (
     'commonutils',
 
     'sboard',
+    'sboard.profiles',
 
     #if $DEVELOPMENT
     'debug_toolbar',
@@ -275,7 +276,6 @@ INSTALLED_APPS = (
     'manoseimas.legislation',
     'manoseimas.categories',
     'manoseimas.votings',
-    'manoseimas.accounts',
     'manoseimas.policy',
 )
 
@@ -311,7 +311,6 @@ COUCHDB_DATABASES = (
     ('manoseimas.people', '$COUCHDB_URL/people'),
     ('manoseimas.sittings', '$COUCHDB_URL/sittings'),
     ('manoseimas.votings', '$COUCHDB_URL/nodes'),
-    ('manoseimas.profiles', '$COUCHDB_URL/profiles'),
     ('manoseimas.policy', '$COUCHDB_URL/nodes'),
 )
 
@@ -343,7 +342,7 @@ JQUERY_VERSION = '$JQUERY_VERSION'
 PROTOCOL = 'http'
 DEFAULT_FROM_EMAIL = '$SERVER_ADMIN'
 
-AUTH_PROFILE_MODULE = 'manoseimas.accounts.Profile'
+AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 AUTHENTICATION_BACKENDS = (
     #'social_auth.backends.twitter.TwitterBackend',

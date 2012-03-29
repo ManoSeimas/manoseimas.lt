@@ -52,9 +52,9 @@
               <i class="icon-user icon-white"></i> {{ request.user }}
               <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="{% url ms_profile %}">
+              <li><a href="{% url profile %}">
                 <i class="icon-user"></i> {% trans "Profile" %}</a></li>
-              <li><a href="{% url ms_logout %}">
+              <li><a href="{% url logout %}">
                 <i class="icon-off"></i> {% trans "Log out" %}</a></li>
             </ul>
           </li>
@@ -68,7 +68,7 @@
               {% if FACEBOOK_APP_ID %}
               <li><a href="{% url socialauth_begin 'facebook' %}">{% trans "Facebook" %}</a></li>
               {% endif %}
-              <li><a href="{% url ms_login %}">{% trans "OpenID" %}</a></li>
+              <li><a href="{% url login %}">{% trans "OpenID" %}</a></li>
             </ul>
           </li>
           {% endif %}
