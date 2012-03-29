@@ -264,6 +264,7 @@ INSTALLED_APPS = (
 
     'sboard',
     'sboard.profiles',
+    'sboard.categories',
 
     #if $DEVELOPMENT
     'debug_toolbar',
