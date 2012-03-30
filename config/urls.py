@@ -6,7 +6,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'sboard.views.node', {'view': 'list'}, name='index'),
+    url(r'^$', 'sboard.views.node', {'action': 'list'}, name='index'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
