@@ -5,6 +5,7 @@ from couchdbkit.ext.django import schema
 from sboard.factory import provideNode
 from sboard.models import Node
 
+from .interfaces import IPolicyIssue
 from .interfaces import IVoting
 
 
@@ -55,3 +56,7 @@ class Voting(Node):
 provideNode(Voting, "voting")
 
 
+class PolicyIssue(Node):
+    implements(IPolicyIssue)
+
+provideNode(PolicyIssue, "policyissue")
