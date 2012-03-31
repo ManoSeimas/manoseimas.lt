@@ -1,6 +1,11 @@
+from zope.interface import implements
+
 from couchdbkit.ext.django import schema
 
+from sboard.factory import provideNode
 from sboard.models import Node
+
+from .interfaces import IVoting
 
 
 class Source(schema.DocumentSchema):
@@ -9,6 +14,8 @@ class Source(schema.DocumentSchema):
 
 
 class Voting(Node):
+    implements(IVoting)
+
     # Number of people, that has voting right
     has_voting_right = schema.IntegerProperty()
 
@@ -44,3 +51,7 @@ class Voting(Node):
         """Number of people that registered for voting session, but did not
         vote."""
         return self.registered_for_voting - self.total_votes
+
+provideNode(Voting, "voting")
+
+

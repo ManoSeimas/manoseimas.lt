@@ -14,4 +14,4 @@ class VotingView(NodeView):
         'details': 'votings/voting_details.html',
     }
 
-provideAdapter(VotingView, name="details")
+provideAdapter(VotingView)
