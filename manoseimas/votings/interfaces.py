@@ -1,5 +1,5 @@
-from zope.interface import Interface
+from sboard.interfaces import INode
 
 
-class IPolicyIssue(Interface): pass
-class IVoting(Interface): pass
+class IPolicyIssue(INode): pass
+class IVoting(INode): pass
