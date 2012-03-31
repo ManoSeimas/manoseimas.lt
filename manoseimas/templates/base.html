@@ -88,6 +88,7 @@
         <li><a href="#">{% trans "Lawmaking" %}</a></li>
     </ul>
 
+    {% block container %}
     <div class="row">
         <div class="span9">
         {% block content %}
@@ -100,6 +101,7 @@
             {% endblock %}
         </div>
     </div>
+    {% endblock %}
     <footer>
         <p>{% trans "manoseimas.lt team" %}</p>
     </footer>

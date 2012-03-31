@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}
+  {% if node %}
+    {% if not node.title and node.has_parent %}
+      <a href="{{ node.get_parent.permalink }}">
+        {{ node.get_parent.title }}
+      </a>
+    {% else %}
+      {{ node.title }}
+    {% endif %}
+  {% else %}
+    {% trans "All nodes" %}
+  {% endif %}
+{% endblock %}
+
+
+{% block container %}
+  <div class="row">
+    <ul class="nav nav-pills pull-right">
+      {% include "sboard/actions.html" %}
+    </ul>
+  </div>
+
+  {% if children %}
+  <div class="row">
+      <div class="span12">
+          <h1>{% trans "Atsakyk į 10 klausimų &ndash; sužinok, kuris Seimo narys balsuoja pagal tave" %}</h1>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="span7">
+          <ul class="nav nav-pills">
+              {% for q in children %}
+              <li id="qpill{{ forloop.counter }}" class="qpill {% if forloop.first %}active{% endif %}">
+                  <a href="#q{{ forloop.counter }}" data-toggle="pill">{{ forloop.counter }}</a></li>
+              {% endfor %}
+          </ul>
+      </div>
+      <div class="span5">
+          <h4><br> {% trans "Testo rezultatai:" %}</h4>
+      </div>
+  </div>
+
+  <div class="row">
+      <div class="span7">
+          <div class="tab-content">
+              {% for q in children %}
+              <div class="tab-pane {% if forloop.first %}active{% endif %}" id="q{{ forloop.counter }}">
+                  <div class="well">
+                      <h3>{{ q.title }}</h3>
+                      <p>{{ q.description }}</p>
+                      <div>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}">Tikrai taip</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Taip</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Nei taip, nei ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Tikrai ne</button>
+                      </div>
+                  </div>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+
+      <div class="span5">
+          <div id="side-result">
+              <p>{% trans "Norėdami pamatyti rezultatus, atsakykite į klausimą." %}</p>
+          </div>
+      </div>
+  </div>
+  {% endif %}
+
+{% endblock %}
+
+
+{% block inlinejs %}
+<script type="text/javascript">
+function submitQuestion(n, node_id, last) {
+    if (last) {
+        window.location.href="/result.html";
+    }
+    else {
+        n++;
+        $(".tab-pane").removeClass("active");
+        $(".qpill").removeClass("active");
+        $("#q" + n).addClass("active");
+        $("#qpill" + n).addClass("active");
+        updateSideResult(node_id);
+    }
+};
+
+
+function updateSideResult(node_id) {
+
+    var url = "/" + node_id + "/quick-results/";
+    var div = document.getElementById("side-result");
+
+    jQuery.getJSON(url, function(data) {
+        var html = [];
+
+        html.push('<table class="table table-condensed"><tbody>');
+        data.mps.map(function(mp) {
+            html.push('<tr>');
+            html.push('<td><img src="', mp.url, '" title="', mp.name, '" style="height: 56px;"></td>');
+            html.push('<td><b>', mp.name, '</b><br>');
+            //html.push('<img src="/static/img/green.png" style="height: 10px; width: ', mp.score * 2, 'px;"> ', mp.score, '%</td>');
+            html.push('<div class="progress progress-success"><div class="bar" style="width: ', mp.score, '%;"> ', mp.score, '%</div></div></td>');
+            html.push('</tr>');
+        });
+        html.push('</tbody></table>');
+
+        jQuery(div).html(html.join(""));
+    });
+};
+
+</script>
+{% endblock %}

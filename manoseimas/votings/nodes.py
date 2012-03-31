@@ -1,12 +1,19 @@
+# coding: utf-8
+
 from zope.component import adapts
 from zope.component import provideAdapter
 
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 
+from sboard.categories.interfaces import ICategory
 from sboard.factory import getNodeFactory
+from sboard.interfaces import INode
 from sboard.nodes import CreateView
 from sboard.nodes import DetailsView
+from sboard.nodes import ListView
+from sboard.nodes import NodeView
 from sboard.nodes import TagListView
 
 from .forms import LinkIssueForm
@@ -67,3 +74,35 @@ class CreatePolicyIssueLinkView(VotingView):
         })
 
 provideAdapter(CreatePolicyIssueLinkView, name="link-policy-issue")
+
+
+class QuestionGroupView(ListView):
+    adapts(ICategory)
+
+    templates = {
+        'list': 'votings/question_group.html',
+    }
+
+provideAdapter(QuestionGroupView)
+
+
+class QuickResultsView(NodeView):
+    adapts(INode)
+
+    def render(self):
+        return HttpResponse(u"""{
+    "mps":  [
+        {   "name":     "Antanas Nedzinskas",
+            "score":    "50",
+            "url":      "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/antanas_nedzinskas.jpg" },
+        {   "name":     "Petras Gražulis",
+            "score":    "45",
+            "url":      "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/petras_grazulis.jpg" },
+        {   "name":     "Česlovas Juršėnas",
+            "score":    "42",
+            "url":      "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/ceslovas_jursenas.jpg" }
+    ]
+}
+""")
+
+provideAdapter(QuickResultsView, name='quick-results')
