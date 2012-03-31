@@ -58,3 +58,14 @@ $(function () {
 </table>
 
 {% endblock %}
+
+
+{% block node_actions %}
+<h2>{% trans "Link to policy issue" %}</h2>
+
+<form action="{% url node_action node.get_id 'link-policy-issue' %}" method="post">
+  {% csrf_token %}
+  <p>{{ link_issue_form }}</p>
+  <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
+</form>
+{% endblock %}

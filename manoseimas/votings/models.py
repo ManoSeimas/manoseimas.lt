@@ -6,6 +6,7 @@ from sboard.factory import provideNode
 from sboard.models import Node
 
 from .interfaces import IPolicyIssue
+from .interfaces import IPolicyIssueLink
 from .interfaces import IVoting
 
 
@@ -60,3 +61,9 @@ class PolicyIssue(Node):
     implements(IPolicyIssue)
 
 provideNode(PolicyIssue, "policyissue")
+
+
+class PolicyIssueLink(Node):
+    implements(IPolicyIssueLink)
+
+provideNode(PolicyIssueLink, "policyissuelink")
