@@ -2,14 +2,14 @@ from zope.component import adapts
 from zope.component import provideAdapter
 
 from sboard.nodes import CreateView
-from sboard.nodes import NodeView
+from sboard.nodes import DetailsView
 
 from .forms import PolicyIssueForm
 from .interfaces import IVoting
 from .interfaces import IPolicyIssue
 
 
-class VotingView(NodeView):
+class VotingView(DetailsView):
     adapts(IVoting)
 
     templates = {
