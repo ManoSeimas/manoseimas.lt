@@ -1,15 +1,17 @@
-from django.utils.translation import ugettext_lazy as _
+from zope.component import adapts
+from zope.component import provideAdapter
 
-from sboard.nodes import BaseNode
+from sboard.interfaces import INode
+from sboard.nodes import NodeView
 
-from .models  import Voting
 
+class VotingView(NodeView):
+    adapts(INode)
 
-class VotingNode(BaseNode):
     slug = 'legislation-votings'
-    name = _('Law voting')
-    model = Voting
 
     templates = {
         'details': 'votings/voting_details.html',
     }
+
+provideAdapter(VotingView, name="details")

@@ -1,8 +1,8 @@
 from django.utils.translation import ugettext_lazy as _
 
-from sboard.nodes import BaseNode
+from sboard.nodes import NodeView
 
 
-class CategoryNode(BaseNode):
+class CategoryNode(NodeView):
     slug = 'categories'
     name = _('Category')

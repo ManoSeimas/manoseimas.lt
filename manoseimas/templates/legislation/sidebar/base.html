@@ -6,13 +6,13 @@
     <li><a href="{% url node_details node.get_id %}">{% trans "Law" %}</a></li>
     {% endblock %}
     {% block projects_menu_item %}
-    <li><a href="{% url law_projects node.get_id %}">{% trans "Projects" %}</a></li>
+    <li><a href="{% url node_action node.get_id 'projects' %}">{% trans "Projects" %}</a></li>
     {% endblock %}
     {% block changes_menu_item %}
-    <li><a href="{% url law_changes node.get_id %}">{% trans "Changes" %}</a></li>
+    <li><a href="{% url node_action node.get_id 'changes' %}">{% trans "Changes" %}</a></li>
     {% endblock %}
     {% block votings_menu_item %}
-    <li><a href="{% url law_votings node.get_id %}">{% trans "Votings" %}</a></li>
+    <li><a href="{% url node_action node.get_id 'votings' %}">{% trans "Votings" %}</a></li>
     {% endblock %}
   </ul>
 </div>

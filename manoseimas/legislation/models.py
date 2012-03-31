@@ -1,11 +1,19 @@
+from zope.interface import implements
+
 from django.utils.safestring import mark_safe
 
 from couchdbkit.ext.django import schema
 
+from sboard.factory import provideNode
 from sboard.models import Node
+
+from .interfaces import ILaw
+from .interfaces import ILawChange
+from .interfaces import ILawProject
 
 
 class LegalAct(Node):
+
     # A legal act marker.
     is_legal_act = schema.BooleanProperty(default=True)
 
@@ -26,7 +34,12 @@ class Law(LegalAct):
     ID of this node is slugified name.
 
     """
+
+    implements(ILaw)
+
     _default_importance = 7
+
+provideNode(Law, "law")
 
 
 class LawChange(LegalAct):
@@ -35,7 +48,9 @@ class LawChange(LegalAct):
     ID of this node is UUID.
 
     """
-    pass
+    implements(ILawChange)
+
+provideNode(LawChange, "lawchange")
 
 
 class LawProject(LegalAct):
@@ -44,4 +59,6 @@ class LawProject(LegalAct):
     ID of this node is UUID.
 
     """
-    pass
+    implements(ILawProject)
+
+provideNode(LawProject, "lawproject")
