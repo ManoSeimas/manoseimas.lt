@@ -16,9 +16,9 @@ class PolicyIssueForm(NodeForm):
 
 class LinkIssueForm(DocumentForm):
     policy_issue = forms.SlugField()
-    vote_aye = forms.IntegerField()
-    vote_no = forms.IntegerField()
-    vote_abstain = forms.IntegerField()
+    vote_aye = forms.IntegerField(initial=1)
+    vote_no = forms.IntegerField(initial=0)
+    vote_abstain = forms.IntegerField(initial=-1)
 
     class Meta:
         document = PolicyIssueLink
