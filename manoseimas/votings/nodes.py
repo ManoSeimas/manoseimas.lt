@@ -3,6 +3,7 @@ from zope.component import provideAdapter
 
 from sboard.nodes import CreateView
 from sboard.nodes import DetailsView
+from sboard.nodes import TagListView
 
 from .forms import PolicyIssueForm
 from .interfaces import IVoting
@@ -25,3 +26,5 @@ class CreatePolicyIssueView(CreateView):
     form = PolicyIssueForm
 
 provideAdapter(CreatePolicyIssueView, name="create")
+
+provideAdapter(TagListView, (IPolicyIssue,))
