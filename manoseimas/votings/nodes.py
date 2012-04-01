@@ -106,3 +106,61 @@ class QuickResultsView(NodeView):
 """)
 
 provideAdapter(QuickResultsView, name='quick-results')
+
+
+class QuickResultsView(DetailsView):
+    adapts(INode)
+
+    templates = {
+        'details': 'votings/results.html',
+    }
+
+    def render(self):
+        return super(QuickResultsView, self).render({
+            'results': [
+                {'name': u'Eligijus Masiulis',
+                 'score': 86,
+                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/eligijus_masiulis.jpg',
+                },
+                {'name': u'Irena Degutienė',
+                 'score': 85,
+                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/irena_degutiene.jpg',
+                },
+                {'name': u'Vytautas Gapšys',
+                 'score': 79,
+                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/vytautas_gapsys.jpg',
+                },
+                {'name': u'Algirdas Sysas',
+                 'score': 76,
+                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/algirdas_sysas.jpg',
+                },
+                {'name': u'Remigijus Žemaitaitis',
+                 'score': 69,
+                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/remigijus_zemaitaitis.jpg',
+                }
+            ],
+            'party_results': [
+                {'name': u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija',
+                 'score':  78,
+                 'url':    'http://manobalsas.lt/politikai/logos/part_37.gif',
+                },
+                {'name': u'Lietuvos socialdemokratų partijos frakcija',
+                 'score':  72,
+                 'url':    'http://manobalsas.lt/politikai/logos/part_20.gif',
+                },
+                {'name': u'Liberalų ir centro sąjungos frakcija',
+                 'score':  67,
+                 'url':    'http://manobalsas.lt/politikai/logos/part_3.gif',
+                },
+                {'name': u'Liberalų sąjūdžio frakcija',
+                 'score':  66,
+                 'url':    'http://manobalsas.lt/politikai/logos/part_18.gif',
+                },
+                {'name': u'Frakcija "Tvarka ir teisingumas"',
+                 'score':  56,
+                 'url':    'http://manobalsas.lt/politikai/logos/part_30.gif',
+                },
+            ],
+        })
+
+provideAdapter(QuickResultsView, name='results')

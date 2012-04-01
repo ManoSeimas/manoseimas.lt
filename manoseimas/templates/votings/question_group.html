@@ -80,7 +80,7 @@
 <script type="text/javascript">
 function submitQuestion(n, node_id, last) {
     if (last) {
-        window.location.href="/result.html";
+        window.location.href="{% url node_action node.get_id 'results' %}";
     }
     else {
         n++;
