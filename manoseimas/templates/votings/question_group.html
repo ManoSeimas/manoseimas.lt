@@ -26,7 +26,8 @@
   {% if children %}
   <div class="row">
       <div class="span12">
-          <h1>{% trans "Atsakyk į 10 klausimų &ndash; sužinok, kuris Seimo narys balsuoja pagal tave" %}</h1>
+          <h1>{% trans "Testas" %}</h1>
+          <h2>{% trans "Kuris Seimo narys balsuoja pagal tave?" %}</h2>
       </div>
   </div>
 
@@ -51,7 +52,7 @@
               <div class="tab-pane {% if forloop.first %}active{% endif %}" id="q{{ forloop.counter }}">
                   <div class="well">
                       <h3>{{ q.title }}</h3>
-                      <p>{{ q.description }}</p>
+                      <p>{{ q.get_body }}</p>
                       <div>
                           <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Tikrai taip</button>
                           <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Taip</button>
