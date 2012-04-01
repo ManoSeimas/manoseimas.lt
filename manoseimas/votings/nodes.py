@@ -241,3 +241,13 @@ class QuickResultsView(DetailsView):
         })
 
 provideAdapter(QuickResultsView, name='results')
+
+
+class PolicyIssueTempView(DetailsView):
+    adapts(INode)
+
+    templates = {
+        'details': 'votings/policy_issue.html',
+    }
+
+provideAdapter(PolicyIssueTempView, name='policy-issue')
