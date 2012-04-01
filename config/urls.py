@@ -9,7 +9,8 @@ admin.autodiscover()
 sboard.factory.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', 'sboard.views.node', {'action': 'list'}, name='index'),
+    #url(r'^$', 'sboard.views.node', {'action': 'list'}, name='index'),
+    url(r'^$', 'sboard.views.node', {'key': 'testas'}, name='index'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
