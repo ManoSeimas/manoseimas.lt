@@ -53,7 +53,7 @@
                       <h3>{{ q.title }}</h3>
                       <p>{{ q.description }}</p>
                       <div>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}">Tikrai taip</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Tikrai taip</button>
                           <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Taip</button>
                           <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Nei taip, nei ne</button>
                           <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Ne</button>

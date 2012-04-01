@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from  unidecode import unidecode
+
 from zope.component import adapts
 from zope.component import provideAdapter
 
@@ -7,9 +9,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 
+
 from sboard.categories.interfaces import ICategory
 from sboard.factory import getNodeFactory
 from sboard.interfaces import INode
+from sboard.models import couch
 from sboard.nodes import CreateView
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
@@ -86,24 +90,119 @@ class QuestionGroupView(ListView):
 provideAdapter(QuestionGroupView)
 
 
+def get_vote_value(vote, link):
+    return ({
+        'aye': link['aye'],
+        'abstain': link['abstain'],
+        'no-vote': link['no'],
+        'no': link['no'],
+    })[vote]
+
+
+def get_img_url(name):
+    uname = name.strip()
+    names = unidecode(uname).split()  
+    names.append( names.pop(0) )  #   swap/rotate order of Name and Surname
+    name_surname4photo = "_".join( names).lower()
+    link = "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/%s.jpg" % name_surname4photo
+
+    if (len(names) == 3):
+        names.append( names.pop(0) )  #  once more: rotate order of Name and Surname
+        name_surname4photo = "_".join( names).lower()
+        link = "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/%s.jpg" % name_surname4photo
+    return link
+
+def mps_vote_for_issue(policy_issue_id):
+    mps = {}
+    links = {}
+    view = couch.view('votings/by_policy_issue', key=policy_issue_id)
+    for link in view:
+        links[link.parent] = {
+            'aye': link.vote_aye,
+            'abstain': link.vote_abstain,
+            'no': link.vote_no,
+        }
+
+    view = couch.view('votings/policy_issue_votes',
+                      startkey=[policy_issue_id], endkey=[policy_issue_id, {}])
+    # Loop for all votings
+    for voting in view:
+        link = links[voting._id]
+        # Loop for MPs
+        # [{name: Jonas Petraitis, vote: aye}, ...]
+        for vote in voting.votes:
+            if vote['name'] not in mps:
+                mps[vote['name']] = {'times': 0, 'sum': 0}
+
+            mps[vote['name']]['times'] += 1
+            mp_vote = get_vote_value(vote['vote'], link)
+            mps[vote['name']]['sum'] += mp_vote
+
+    return dict([(name, mp['sum'] / mp['times']) for name, mp in mps.items()])
+
+
+def match_mps_with_user(results, mps, user_vote):
+    for name, mp_issue_vote in mps.items():
+        if name not in results:
+            results[name] = {'times': 0, 'sum': 0}
+        results[name]['times'] += 1
+        # If issues will be weighted then then multiply with issue weight
+        results[name]['sum'] += user_vote * mp_issue_vote
+
+def sort_results(mps):
+    return sorted(list([{
+        'name': k,
+        'times': v['times'],
+        'score': (1.0 * v['sum'] / v['times']) / 4 * 100,
+    } for k, v in mps.items()]), key=lambda a: a['score'], reverse=True)
+
 class QuickResultsView(NodeView):
     adapts(INode)
 
     def render(self):
-        return HttpResponse(u"""{
-    "mps":  [
-        {   "name":     "Antanas Nedzinskas",
-            "score":    "50",
-            "url":      "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/antanas_nedzinskas.jpg" },
-        {   "name":     "Petras Gražulis",
-            "score":    "45",
-            "url":      "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/petras_grazulis.jpg" },
-        {   "name":     "Česlovas Juršėnas",
-            "score":    "42",
-            "url":      "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/ceslovas_jursenas.jpg" }
-    ]
-}
-""")
+        if self.request.GET.get('clean'):
+            self.request.session['questions'] = []
+            self.request.session['mps_matches'] = {}
+
+        # XXX: implement
+        user_vote = 1
+        questions = self.request.session.get('questions', [])
+        mps_matches = self.request.session.get('mps_matches', {})
+
+        if self.node._id not in questions:
+            # Save questions
+            questions.append(self.node._id)
+            self.request.session['questions'] = questions
+
+            # Save mps
+            mps_votes = mps_vote_for_issue(self.node._id)
+            match_mps_with_user(mps_matches, mps_votes, user_vote)
+            self.request.session['mps_matches'] = mps_matches
+
+        results = sort_results(mps_matches)
+        if self.request.GET.get('raw'):
+            return HttpResponse(
+                '<table>' + ''.join(['''
+                    <tr>
+                        <td>%(name)s</td>
+                        <td>x%(times)s</td>
+                        <td>%(score)s%%</td>
+                        <td><img src="%(url)s"> %(url)s</td>
+                    </tr>''' % {
+                        'name': a['name'],
+                        'times': a['times'],
+                        'score': a['score'],
+                        'url': get_img_url(a['name']),
+                    } for a in results]) +
+                '</table>')
+        else:
+            import json
+            return HttpResponse(json.dumps({'mps': [{
+                'name': a['name'],
+                'score': a['score'],
+                'url': get_img_url(a['name']),
+                } for a in results[:8]]
+            }))
 
 provideAdapter(QuickResultsView, name='quick-results')
 
