@@ -153,8 +153,10 @@ def sort_results(mps):
     return sorted(list([{
         'name': k,
         'times': v['times'],
-        'score': (1.0 * v['sum'] / v['times']) / 4 * 100,
+        'score': int((1.0 * v['sum'] / v['times']) / 4 * 100),
+        'url': get_img_url(k),
     } for k, v in mps.items()]), key=lambda a: a['score'], reverse=True)
+
 
 class QuickResultsView(NodeView):
     adapts(INode)
@@ -197,12 +199,7 @@ class QuickResultsView(NodeView):
                 '</table>')
         else:
             import json
-            return HttpResponse(json.dumps({'mps': [{
-                'name': a['name'],
-                'score': a['score'],
-                'url': get_img_url(a['name']),
-                } for a in results[:8]]
-            }))
+            return HttpResponse(json.dumps({'mps': results[:8]}))
 
 provideAdapter(QuickResultsView, name='quick-results')
 
@@ -215,29 +212,10 @@ class QuickResultsView(DetailsView):
     }
 
     def render(self):
+        mps_matches = self.request.session.get('mps_matches', {})
+        results = sort_results(mps_matches)
         return super(QuickResultsView, self).render({
-            'results': [
-                {'name': u'Eligijus Masiulis',
-                 'score': 86,
-                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/eligijus_masiulis.jpg',
-                },
-                {'name': u'Irena Degutienė',
-                 'score': 85,
-                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/irena_degutiene.jpg',
-                },
-                {'name': u'Vytautas Gapšys',
-                 'score': 79,
-                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/vytautas_gapsys.jpg',
-                },
-                {'name': u'Algirdas Sysas',
-                 'score': 76,
-                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/algirdas_sysas.jpg',
-                },
-                {'name': u'Remigijus Žemaitaitis',
-                 'score': 69,
-                 'url': 'http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/remigijus_zemaitaitis.jpg',
-                }
-            ],
+            'results': results[:8],
             'party_results': [
                 {'name': u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija',
                  'score':  78,
