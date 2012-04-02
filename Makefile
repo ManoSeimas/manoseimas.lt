@@ -18,6 +18,12 @@ run: all
 stop:
 	bin/django estool --path=parts/elasticsearch stop
 
+
+.PHONY: pull
+pull:
+	hg pull -u
+	bin/develop up
+
 c4che/_cache.py:
 	if [ -x configure ] ; then \
 	    ./configure ; \
