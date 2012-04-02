@@ -10,48 +10,30 @@ To be able to build and run this project you will need:
 
 * ruby, for SASS_
 
-* mercurial and git DVCS's
-
-* Cheetah_ template engine
+* mercurial DVCS's
 
 * C/C++ compiler, python and ruby development headers for compiling python and
   ruby extensions
 
-If you use Debian based distribution, install these requirements all at once
-using this command::
+System requirements can be installed all at once using this command::
 
-    sudo apt-get install build-essential python-dev ruby ruby-dev mercurial \
-                         git python-imaging python-cheetah couchdb
+    sudo apt-get install mercurial
+    hg clone http://bitbucket.org/manoseimas/manoseimas
+    cd manoseimas
+    sudo ./waf setup
 
-Building development environment
-================================
+Preparing development environment
+=================================
 
-To prepare development environment, only single command is needed::
+To prepare and run development environment, only single command is needed::
 
-    make
-
-If you can't use ``make`` (for example if you running Windows), use this
-commands::
-
-    python waf configure build
+    make run
 
 If you want to make search features available, alse prepare ElasticSearch,
 using these commands::
 
     ./parts/elasticsearch/bin/elasticsearch -f
     bin/django syncelasticsearch
-
-Running development web server
-------------------------------
-
-::
-
-    make run
-
-or::
-
-    bin/django runserver
-
 
 Building production environment
 ===============================

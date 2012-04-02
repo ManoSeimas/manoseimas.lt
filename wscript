@@ -131,10 +131,9 @@ def configure(ctx):
     ctx.check_python_version((2,6))
     ctx.check_python_headers()
 
-    if ctx.options.sass:
-        ctx.load('ruby')
-        ctx.check_ruby_version((1,8,0))
-        ctx.check_ruby_ext_devel()
+    ctx.load('ruby')
+    ctx.check_ruby_version((1,8,0))
+    ctx.check_ruby_ext_devel()
 
     ctx.env.TOP = ctx.path.abspath()
     ctx.env.PROJECT_NAME = ctx.options.project_name
@@ -377,6 +376,10 @@ def setup(ctx):
         # Python
         'python-dev',
         'python-virtualenv',
+
+        # Ruby (used for installing sass and compass gems)
+        'ruby',
+        'ruby-dev',
 
         # CouchDB
         'couchdb',
