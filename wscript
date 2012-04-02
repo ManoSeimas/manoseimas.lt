@@ -371,7 +371,6 @@ def setup(ctx):
         'gettext',
 
         # VCS
-        'git',
         'mercurial',
 
         # Python
@@ -391,15 +390,7 @@ def setup(ctx):
         'openjdk-6-jre-headless',
     ])
 
-    if ctx.env.SASS:
-        packages.update([
-            # Ruby (used for installing sass and compass gems)
-            'ruby',
-            'ruby-dev',
-        ])
-
     if name == 'ubuntu' or name == 'debian':
-        packages.replace('git', 'git-core')
         sh('apt-get install %s' % ' '.join(packages))
 
     elif name == 'fedora':
@@ -426,8 +417,7 @@ def setup(ctx):
                 ('libxslt1-dev', 'libxslt')
         )
 
-        if ctx.env.SASS:
-            packages.remove('ruby-dev')
+        packages.remove('ruby-dev')
 
         sh('port select --set python python%s' % pyver)
         sh('port -v install %s' % ' '.join(packages))
@@ -452,5 +442,5 @@ from waflib.Build import BuildContext
 def use_build_context_for(*cmds):
     for cmd in cmds:
         type('BldCtx_' + cmd, (BuildContext,), {'cmd': cmd, 'fun': cmd})
-use_build_context_for('makemessages', 'distclean', 'cleanpyc', 'setup')
+use_build_context_for('makemessages', 'distclean', 'cleanpyc')
 # --------
