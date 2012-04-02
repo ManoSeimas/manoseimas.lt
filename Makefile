@@ -22,7 +22,7 @@ c4che/_cache.py:
 	if [ -x configure ] ; then \
 	    ./configure ; \
 	else \
-	    ./waf configure --project-name=$(PROJECT)
+	    ./waf configure --project-name=$(PROJECT) ; \
 	fi
 
 env:
