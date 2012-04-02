@@ -18,8 +18,12 @@ run: all
 stop:
 	bin/django estool --path=parts/elasticsearch stop
 
-c4che:
-	./waf configure --project-name=$(PROJECT)
+c4che/_cache.py:
+	if [ -x configure ] ; then \
+	    ./configure ; \
+	else \
+	    ./waf configure --project-name=$(PROJECT)
+	fi
 
 env:
 	./waf virtualenv
