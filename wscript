@@ -371,6 +371,7 @@ def setup(ctx):
         'gettext',
 
         # VCS
+        'git',
         'mercurial',
 
         # Python
@@ -391,6 +392,7 @@ def setup(ctx):
     ])
 
     if name == 'ubuntu' or name == 'debian':
+        packages.replace('git', 'git-core')
         sh('apt-get install %s' % ' '.join(packages))
 
     elif name == 'fedora':
