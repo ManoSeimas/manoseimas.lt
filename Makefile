@@ -6,7 +6,7 @@ COVERAGE_INCLUDES = --include=project/*
 
 
 .PHONY: all
-all: c4che env
+all: c4che/_cache.py env
 	env/bin/python waf
 
 .PHONY: run
