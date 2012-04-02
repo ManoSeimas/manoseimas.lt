@@ -69,7 +69,7 @@ def options(ctx):
     gr.add_option('--facebook-api-secret', action='store', default='',
                   help='Facebook API secret.')
 
-    gr.add_option('--sass', action='store_true', default=False,
+    gr.add_option('--sass', action='store_true', default=True,
                   help='Enable Sass-lang support.')
 
     gr.add_option('--twitter-bootstrap', action='store_true', default=True,
