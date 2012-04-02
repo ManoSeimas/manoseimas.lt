@@ -5,13 +5,13 @@ from sboard.models import couch
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 
-from .interfaces import ILaw
 from .interfaces import ILawChange
 from .interfaces import ILawProject
+from .interfaces import ILegalAct
 
 
 class LawView(DetailsView):
-    adapts(ILaw)
+    adapts(ILegalAct)
 
     templates = {
         'details': 'legislation/law_details.html',
@@ -26,7 +26,7 @@ provideAdapter(LawView)
 
 
 class ProjectsView(ListView):
-    adapts(ILaw)
+    adapts(ILegalAct)
 
     def get_law_projects(self):
         # TODO: rename legislation/drafts to sboard/by_key_and_type
@@ -44,7 +44,7 @@ provideAdapter(ProjectsView, name='projects')
 
 
 class ChangesView(ListView):
-    adapts(ILaw)
+    adapts(ILegalAct)
 
     def get_law_changes(self):
         # TODO: rename legislation/drafts to sboard/by_key_and_type
@@ -62,7 +62,7 @@ provideAdapter(ChangesView, name='changes')
 
 
 class VotingsView(ListView):
-    adapts(ILaw)
+    adapts(ILegalAct)
 
     def get_law_votings(self):
         return couch.view('votings/parents', startkey=[self.node._id, 'Z'],
