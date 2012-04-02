@@ -53,11 +53,11 @@
                       <h3>{{ q.title }}</h3>
                       <p>{{ q.get_body }}</p>
                       <div>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Tikrai taip</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Taip</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Nei taip, nei ne</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Ne</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }})">Tikrai ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 2)">Tikrai taip</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 1)">Taip</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 0)">Nei taip, nei ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, -1)">Ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, -2)">Tikrai ne</button>
                       </div>
                   </div>
               </div>
@@ -78,43 +78,48 @@
 
 {% block inlinejs %}
 <script type="text/javascript">
-function submitQuestion(n, node_id, last) {
-    if (last) {
-        window.location.href="{% url node_action node.get_id 'results' %}";
-    }
-    else {
-        n++;
-        $(".tab-pane").removeClass("active");
-        $(".qpill").removeClass("active");
-        $("#q" + n).addClass("active");
-        $("#qpill" + n).addClass("active");
-        updateSideResult(node_id);
-    }
-};
-
-
-function updateSideResult(node_id) {
-
-    var url = "/" + node_id + "/quick-results/";
-    var div = document.getElementById("side-result");
+function submitQuestion(n, node_id, last, vote) {
+    var url = "/" + node_id + "/quick-results/?vote=" + vote;
 
     jQuery.getJSON(url, function(data) {
-        var html = [];
-
-        html.push('<table class="table table-condensed"><tbody>');
-        data.mps.map(function(mp) {
-            html.push('<tr>');
-            html.push('<td><img src="', mp.url, '" title="', mp.name, '" style="height: 56px;"></td>');
-            html.push('<td><b>', mp.name, '</b><br>');
-            //html.push('<img src="/static/img/green.png" style="height: 10px; width: ', mp.score * 2, 'px;"> ', mp.score, '%</td>');
-            html.push('<div class="progress progress-success"><div class="bar" style="width: ', mp.score, '%;"> ', mp.score, '%</div></div></td>');
-            html.push('</tr>');
-        });
-        html.push('</tbody></table>');
-
-        jQuery(div).html(html.join(""));
+        if (last) {
+            window.location.href = "{% url node_action node.get_id 'results' %}";
+        }
+        else {
+            updateSideResult(data);
+        }
     });
+
+    if (!last) {
+        updateTabs(n);
+    }
 };
+
+function updateTabs(n) {
+      n++;
+      $(".tab-pane").removeClass("active");
+      $(".qpill").removeClass("active");
+      $("#q" + n).addClass("active");
+      $("#qpill" + n).addClass("active");
+}
+
+function updateSideResult(data) {
+    var div = document.getElementById("side-result");
+    var html = [];
+
+    html.push('<table class="table table-condensed"><tbody>');
+    data.mps.map(function(mp) {
+        html.push('<tr>');
+        html.push('<td><img src="', mp.url, '" title="', mp.name, '" style="height: 56px;"></td>');
+        html.push('<td><b>', mp.name, '</b><br>');
+        html.push('<div class="progress progress-success"><div class="bar" style="width: ', mp.score, '%;"> ', mp.score, '%</div></div></td>');
+        html.push('</tr>');
+    });
+    html.push('</tbody></table>');
+
+    jQuery(div).html(html.join(""));
+};
+
 
 </script>
 {% endblock %}

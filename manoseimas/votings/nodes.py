@@ -5,6 +5,7 @@ from  unidecode import unidecode
 from zope.component import adapts
 from zope.component import provideAdapter
 
+from django.http import Http404
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
@@ -166,8 +167,11 @@ class QuickResultsView(NodeView):
             self.request.session['questions'] = []
             self.request.session['mps_matches'] = {}
 
-        # XXX: implement
-        user_vote = 1
+        user_vote = self.request.GET.get('vote')
+        if user_vote not in ('-2', '-1', '0', '1', '2'):
+            raise Http404
+        user_vote = int(user_vote)
+
         questions = self.request.session.get('questions', [])
         mps_matches = self.request.session.get('mps_matches', {})
 
