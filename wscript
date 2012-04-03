@@ -282,7 +282,6 @@ def distclean(ctx):
 
         # project specific generated files
         '.sass-cache', 'buildout.cfg', '%s/settings.py' % ctx.env.PROJECT_NAME,
-        'var',
     ]:
         if os.path.exists(pth):
             Logs.info('cleaning: %s' % pth)
