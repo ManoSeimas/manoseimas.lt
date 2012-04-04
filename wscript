@@ -396,6 +396,9 @@ def setup(ctx):
         'openjdk-6-jre-headless',
     ])
 
+    if ctx.options.production:
+        packages.add('libmysqlclient-dev')
+
     if name == 'ubuntu' or name == 'debian':
         packages.replace('git', 'git-core')
         sh('apt-get install %s' % ' '.join(packages))
