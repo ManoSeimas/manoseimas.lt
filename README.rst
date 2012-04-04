@@ -22,33 +22,126 @@ System requirements can be installed all at once using this command::
     cd manoseimas
     sudo ./waf setup
 
-Preparing development environment
-=================================
+Configuring development environment
+===================================
 
 To prepare and run development environment, only single command is needed::
 
     make run
 
-Building production environment
-===============================
+Configuring production environment
+==================================
 
-1. Configure build environment (see ``./waf --help`` for more configuration
-   options with descriptions). Here is example comand with all required
-   configuration options::
+You need to follow these installation steps:
 
-    ./waf configure --production \
-                    --server-name=www.example.com \
-                    --server-admin=administrator@example.com
+#. Make sure, that locale packages are installed for all languages, that you
+   planing to use::
 
-   If you need to update production server often with possible changing
-   configuration options, you can create a sheel script called ``configure``
-   with configuration line. This script can be used later if one of
-   configuration options changes, then you can change it in this script,
-   without touching other options.
+       sudo apt-get install language-pack-en language-pack-lt
 
-2. Build project::
+#. Install and configure MySQL server, create new database and user::
 
-    make
+       sudo apt-get install mysql-server
+       mysql -uroot -p
+       > CREATE DATABASE manoseimas CHARACTER SET utf8;
+       > CREATE USER 'manoseimas'@'localhost' IDENTIFIED BY '<password>';
+       > GRANT ALL ON manoseimas.* TO 'manoseimas'@'localhost';
+
+#. Install Apache with mod_wsgi::
+
+       sudo apt-get install apache2 libapache2-mod-wsgi
+   
+   Make sure, that Apache locale settings are correct. ``LANG`` environment
+   variable in ``/etc/apache2/envvars`` file must be set to ``en_US.UTF-8``,
+   but not to ``C``.
+
+   Information about how to configure Apache, will be provided in next steps.
+
+#. Install and configure outgoing mail server::
+
+       sudo apt-get install postfix
+
+   Test your outgoing mail configuration::
+
+       sudo apt-get install mailutils
+       echo test | mail -s 'Test mail' yourmail@example.com
+
+#. Install all required build dependencies using this command::
+
+       sudo ./waf setup --production
+
+   This command will install needed packages using ``apt-get`` command. To see
+   what command will be executed use ``--dry-run`` flag::
+
+       ./waf setup --production --dry-run
+
+#. Configure project with configuration options that are described in
+   ``./waf --help`` command output.
+
+   Here is example how project can be configured::
+
+       ./waf configure \
+           --production \
+           --server-name=<server-name> \
+           --server-admin=<server-admin-email> \
+           --mysql-dbname=<mysql-dbname> \
+           --mysql-username=<mysql-user> \
+           --mysql-password=<mysql-password>
+
+
+
+   All your configuration options will be stored in ``configure`` file, if you
+   made a mistake, you can edit this file and configure project again using
+   this command::
+
+       ./configure
+
+   If you manually run ``./waf configure`` command, existing ``./configure``
+   file will not be overwritten.
+
+#. Finally build project using this command::
+
+       make
+
+#. Setup ElasticSearch index, to start indexing CouchDB nodes database::
+
+       bin/django estool install --path=parts/elasticsearch
+
+#. Make sure, that ``var`` folder is writable for Apache user::
+
+       sudo chown -R www-data:www-data var
+
+#. Configure Apache using these commands::
+
+       echo "include $PWD/var/etc/apache.conf" | sudo tee \
+           /etc/apache2/sites-available/manoseimas.lt.conf
+       sudo a2ensite manoseimas.lt.conf
+
+#. Restart Apache::
+
+       sudo service apache2 restart
+
+#. Create administrator user account::
+
+       bin/django createsuperuser
+
+#. Configure CouchDB public access.
+
+   To do this, first create and admin user::
+
+       curl -X PUT 'http://localhost:5984/_config/admins/<username>' -d '"<password>"'
+
+   Then configure apache virtualhost::
+
+       echo "include $PWD/var/etc/apache.couchdb.conf" | sudo tee \
+           /etc/apache2/sites-available/couchdb.manoseimas.lt.conf
+       sudo a2enmod proxy_http
+       sudo a2ensite couchdb.manoseimas.lt.conf
+
+   Fallow these instructions:
+
+       http://blog.lizconlan.com/sandbox/securing-couchdb.html
+
 
 Project layout
 ==============
@@ -165,32 +258,6 @@ wscript
     Waf_ script files. This file is used to describe how project environment
     should be built.
 
-
-Configuring ElasticSearch
-=========================
-
-Buildout automatically downloads ElasticSearch to parts/elsaticsearch
-directory.
-
-Install couchdb plugins::
-
-    ./parts/elasticsearch/bin/plugin -install river-couchdb
-
-Run ElasticSearch using this command::
-
-    ./parts/elasticsearch/bin/elasticsearch -f
-
-Start CouchDB database indexing::
-
-    curl -XPUT 'http://localhost:9200/_river/my_es_idx/_meta' -d '{
-        "type" : "couchdb",
-        "couchdb" : {
-            "host" : "localhost",
-            "port" : 5984,
-            "db" : "nodes",
-            "filter" : null
-        }
-    }'
 
 .. _Waf: http://code.google.com/p/waf/
 .. _Cheetah: http://www.cheetahtemplate.org/
