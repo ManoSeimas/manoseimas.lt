@@ -303,6 +303,7 @@ LOGGING = {
     }
 }
 
+COUCHDB_SERVER = '$COUCHDB_URL'
 COUCHDB_DATABASES = (
     ('sboard', '$COUCHDB_URL/nodes'),
     ('manoseimas.legal_acts', '$COUCHDB_URL/legal_acts'),
