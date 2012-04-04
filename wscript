@@ -204,6 +204,9 @@ def build(ctx):
         bld(rule=_subst, source='config/apache.conf c4che/_cache.py',
             target='var/etc/apache.conf')
 
+        bld(rule=_subst, source='config/apache.couchdb.conf c4che/_cache.py',
+            target='var/etc/apache.couchdb.conf')
+
         bld(rule=_subst, source='config/my.cnf',
             target='var/etc/my.cnf')
 
