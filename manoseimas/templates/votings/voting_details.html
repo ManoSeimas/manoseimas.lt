@@ -64,6 +64,15 @@ $(function () {
 </ul>
 {% endif %}
 
+{% if solutions %}
+<h3>{% trans "Related solutions" %}</h3>
+<ul>
+    {% for solution in solutions %}
+    <li><a href="{% url node_details solution.get_id %}">{{ solution.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 {% endblock %}
 
 
