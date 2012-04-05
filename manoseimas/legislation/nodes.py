@@ -5,8 +5,6 @@ from sboard.models import couch
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 
-from .interfaces import ILawChange
-from .interfaces import ILawProject
 from .interfaces import ILegalAct
 
 
@@ -77,15 +75,3 @@ class VotingsView(ListView):
         })
 
 provideAdapter(VotingsView, name='votings')
-
-
-class LawChangeNode(LawView):
-    adapts(ILawChange)
-
-provideAdapter(VotingsView)
-
-
-class LawProjectNode(LawView):
-    adapts(ILawProject)
-
-provideAdapter(VotingsView)
