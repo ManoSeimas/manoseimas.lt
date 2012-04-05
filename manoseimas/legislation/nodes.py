@@ -27,9 +27,10 @@ class ProjectsView(ListView):
     adapts(ILegalAct)
 
     def get_law_projects(self):
-        # TODO: rename legislation/drafts to sboard/by_key_and_type
-        key = [self.node._id, 'LawProject']
-        return couch.view('legislation/drafts', key=key)
+        return couch.view('legislation/projects',
+                          startkey=[self.node._id, 'Z'],
+                          endkey=[self.node._id], descending=True, limit=10)
+
 
     def render(self):
         return super(ProjectsView, self).render({
@@ -45,9 +46,9 @@ class ChangesView(ListView):
     adapts(ILegalAct)
 
     def get_law_changes(self):
-        # TODO: rename legislation/drafts to sboard/by_key_and_type
-        key = [self.node._id, 'LawChange']
-        return couch.view('legislation/drafts', key=key)
+        return couch.view('legislation/changes',
+                          startkey=[self.node._id, 'Z'],
+                          endkey=[self.node._id], descending=True, limit=10)
 
     def render(self):
         return super(ChangesView, self).render({
