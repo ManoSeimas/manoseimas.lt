@@ -36,9 +36,13 @@ class VotingView(DetailsView):
         'details': 'votings/voting_details.html',
     }
 
+    def get_related_legal_acts(self):
+        return couch.view('legislation/related_legal_acts', key=self.node._id)
+
     def render(self, overrides=None):
         return super(VotingView, self).render({
             'link_issue_form': LinkIssueForm(),
+            'related_legal_acts': self.get_related_legal_acts(),
         })
 
 provideAdapter(VotingView)
