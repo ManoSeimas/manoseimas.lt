@@ -224,7 +224,8 @@ def build(ctx):
 
     bld(rule='env/bin/python bootstrap.py --distribute', target='bin/buildout')
 
-    bld(rule='bin/buildout -N', name='buildout', target='bin/django',
+    bld(rule='bin/buildout -N', name='buildout',
+        target='bin/django parts/elasticsearch/bin/elasticsearch',
         source='bin/buildout buildout.cfg %s/settings.py' % p)
 
     bld(rule=('bin/django syncdb --all --noinput && '
