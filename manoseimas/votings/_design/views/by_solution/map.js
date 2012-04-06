@@ -1,5 +1,5 @@
 function(doc) {
-    if (doc.parent && doc.solution) {
-        emit(doc.parent, {_id: doc.solution});
+    if (doc.solution && doc.parent) {
+        emit(doc.solution, {_id: doc.parent});
     }
 }

@@ -40,7 +40,7 @@ class VotingView(DetailsView):
         return couch.view('legislation/related_legal_acts', key=self.node._id)
 
     def get_solutions(self):
-        return couch.view('votings/by_solution', key=self.node._id)
+        return couch.view('votings/solutions_by_voting', key=self.node._id)
 
     def render(self, overrides=None):
         context = {
@@ -132,15 +132,14 @@ def get_img_url(name):
 def mps_vote_for_solution(solution_id):
     mps = {}
     links = {}
-    view = couch.view('votings/by_solution_link', key=solution_id)
+    view = couch.view('votings/solutions_by_solution_link', key=solution_id)
     for link in view:
         links[link.parent] = {
             'position': link.position,
             'weight': link.weight,
         }
 
-    view = couch.view('votings/solution_votes',
-                      startkey=[solution_id], endkey=[solution_id, {}])
+    view = couch.view('votings/by_solution', key=solution_id)
     # Loop for all votings
     for voting in view:
         link = links[voting._id]
