@@ -5,22 +5,22 @@ from couchdbkit.ext.django.forms import DocumentForm
 
 from sboard.forms import NodeForm
 
-from .models import PolicyIssue
-from .models import PolicyIssueLink
+from .models import Solution
+from .models import SolutionVoting
 
 
-class PolicyIssueForm(NodeForm):
+class SolutionForm(NodeForm):
     class Meta:
-        document = PolicyIssue
+        document = Solution
         properties = ('title', 'parent', 'body')
 
 
-class LinkIssueForm(DocumentForm):
+class LinkSolutionForm(DocumentForm):
     solution = forms.SlugField()
     position = forms.BooleanField(initial=True, required=False,
             help_text=_('Uncheck if this voting is agains solution.'))
     weight = forms.IntegerField(initial=1)
 
     class Meta:
-        document = PolicyIssueLink
+        document = SolutionVoting
         properties = ('solution', 'position', 'weight')

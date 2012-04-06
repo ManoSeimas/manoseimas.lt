@@ -21,16 +21,16 @@ from sboard.nodes import ListView
 from sboard.nodes import NodeView
 from sboard.nodes import TagListView
 
-from .forms import LinkIssueForm
-from .forms import PolicyIssueForm
-from .interfaces import IPolicyIssue
+from .forms import LinkSolutionForm
+from .forms import SolutionForm
+from .interfaces import ISolution
 from .interfaces import IVoting
 
 
 class VotingView(DetailsView):
     adapts(IVoting)
 
-    form = LinkIssueForm
+    form = LinkSolutionForm
 
     templates = {
         'details': 'votings/voting_details.html',
@@ -49,30 +49,30 @@ class VotingView(DetailsView):
         }
         context.update(overrides or {})
 
-        if 'link_issue_form' not in context:
-            context['link_issue_form'] = LinkIssueForm()
+        if 'link_solution_form' not in context:
+            context['link_solution_form'] = LinkSolutionForm()
 
         return super(VotingView, self).render(context)
 
 provideAdapter(VotingView)
 
 
-class CreatePolicyIssueView(CreateView):
-    adapts(object, IPolicyIssue)
+class CreateSolutionView(CreateView):
+    adapts(object, ISolution)
 
-    form = PolicyIssueForm
+    form = SolutionForm
 
-provideAdapter(CreatePolicyIssueView, name="create")
+provideAdapter(CreateSolutionView, name="create")
 
-provideAdapter(TagListView, (IPolicyIssue,))
+provideAdapter(TagListView, (ISolution,))
 
 
-class CreatePolicyIssueLinkView(VotingView):
+class CreateSolutionVotingView(VotingView):
     adapts(IVoting)
 
     def render(self):
         if self.request.method == 'POST':
-            factory = getNodeFactory('policyissuelink')
+            factory = getNodeFactory('solutionvoting')
             if not self.can('create', factory):
                 return render(self.request, '403.html', status=403)
 
@@ -87,11 +87,11 @@ class CreatePolicyIssueLinkView(VotingView):
         else:
             form = self.get_form()
 
-        return super(CreatePolicyIssueLinkView, self).render({
-            'link_issue_form': form,
+        return super(CreateSolutionVotingView, self).render({
+            'link_solution_form': form,
         })
 
-provideAdapter(CreatePolicyIssueLinkView, name="link-policy-issue")
+provideAdapter(CreateSolutionVotingView, name="link-solution")
 
 
 class QuestionGroupView(ListView):
@@ -126,7 +126,7 @@ def get_img_url(name):
         link = "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/%s.jpg" % name_surname4photo
     return link
 
-def mps_vote_for_issue(solution_id):
+def mps_vote_for_solution(solution_id):
     mps = {}
     links = {}
     view = couch.view('votings/by_solution_link', key=solution_id)
@@ -156,12 +156,12 @@ def mps_vote_for_issue(solution_id):
 
 
 def match_mps_with_user(results, mps, user_vote):
-    for name, mp_issue_vote in mps.items():
+    for name, mp_solution_vote in mps.items():
         if name not in results:
             results[name] = {'times': 0, 'sum': 0}
         results[name]['times'] += 1
-        # If issues will be weighted then then multiply with issue weight
-        results[name]['sum'] += user_vote * mp_issue_vote
+        # If solutions will be weighted then then multiply with issue weight
+        results[name]['sum'] += user_vote * mp_solution_vote
 
 def sort_results(mps):
     return sorted(list([{
@@ -194,7 +194,7 @@ class QuickResultsView(NodeView):
             self.request.session['questions'] = questions
 
             # Save mps
-            mps_votes = mps_vote_for_issue(self.node._id)
+            mps_votes = mps_vote_for_solution(self.node._id)
             match_mps_with_user(mps_matches, mps_votes, user_vote)
             self.request.session['mps_matches'] = mps_matches
 
@@ -260,11 +260,11 @@ class QuickResultsView(DetailsView):
 provideAdapter(QuickResultsView, name='results')
 
 
-class PolicyIssueTempView(DetailsView):
-    adapts(INode)
+class SolutionDetailsView(DetailsView):
+    adapts(ISolution)
 
     templates = {
         'details': 'votings/solution.html',
     }
 
-provideAdapter(PolicyIssueTempView, name='policy-issue')
+provideAdapter(SolutionDetailsView)

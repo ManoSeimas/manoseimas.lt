@@ -1,6 +1,6 @@
 from sboard.interfaces import INode
 
 
-class IPolicyIssue(INode): pass
-class IPolicyIssueLink(INode): pass
+class ISolution(INode): pass
+class ISolutionVoting(INode): pass
 class IVoting(INode): pass
