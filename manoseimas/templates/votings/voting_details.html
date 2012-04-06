@@ -18,7 +18,9 @@ $(function () {
 {% endblock %}
 
 {% block node_body %}
-<table>
+<h1>{% trans "Voting" %} {{ node.title }}</h1>
+
+<table style="margin: 24px">
   <tbody>
   <tr>
     <td><div id="voting-chart" style="width:200px;height:200px;"></div></td>
@@ -26,24 +28,24 @@ $(function () {
       <table>
         <tbody>
         <tr>
+          <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.vote_aye }}</td>
           <td style="width:40px;background:green;border: 1px solid black;"></td>
-          <td>{{ node.vote_aye }}</td>
-          <td>{% trans "aye" %}</td>
+          <td style="padding-left:4px;">{% trans "aye" %}</td>
         </tr>
         <tr>
+          <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.vote_no }}</td>
           <td style="width:40px;background:red;border: 1px solid black;"></td>
-          <td>{{ node.vote_no }}</td>
-          <td>{% trans "no" %}</td>
+          <td style="padding-left:4px;">{% trans "no" %}</td>
         </tr>
         <tr>
+          <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.vote_abstain }}</td>
           <td style="width:40px;background:gray;border: 1px solid black;"></td>
-          <td>{{ node.vote_abstain }}</td>
-          <td>{% trans "abstain" %}</td>
+          <td style="padding-left:4px;">{% trans "abstain" %}</td>
         </tr>
         <tr>
+          <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.did_not_vote }}</td>
           <td style="width:40px;background:white;border: 1px solid black;"></td>
-          <td>{{ node.did_not_vote }}</td>
-          <td>{% trans "registered but did not vote" %}</td>
+          <td style="padding-left:4px;">{% trans "registered but did not vote" %}</td>
         </tr>
         </tbody>
       </table>
