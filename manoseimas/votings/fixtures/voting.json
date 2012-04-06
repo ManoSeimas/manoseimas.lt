@@ -1,0 +1,1783 @@
+[
+{
+   "_id": "autoriu-teisiu-ir-gretutiniu-teisiu-istatymas",
+   "doc_type": "Law",
+   "is_legal_act": true,
+   "created": "1999-05-18T00:00:00Z",
+   "importance": 7,
+   "author": null,
+   "number": "VIII-1185",
+   "parents": [
+   ],
+   "cleaned_name": "autorių teisių ir gretutinių teisių įstatymas",
+   "title": "Autorių teisių ir gretutinių teisių įstatymas",
+   "tags": [
+   ],
+   "history": null
+},
+{
+   "_id": "3e991850-b222-4ec3-a125-9cddcc6818c5",
+   "doc_type": "LawChange",
+   "is_legal_act": true,
+   "created": "2011-12-21T00:00:00Z",
+   "importance": 5,
+   "author": null,
+   "number": "XI-1833",
+   "parents": [
+       "autoriu-teisiu-ir-gretutiniu-teisiu-istatymas"
+   ],
+   "cleaned_name": "autorių teisių ir gretutinių teisių įstatymo 2, 16, 19, 20, 21, 22, 23, 24, 25, 26, 28, 33, 39, 58, 75 straipsnių ir įstatymo priedo pakeitimo ir papildymo ir įstatymo papildymo 20(1) straipsniu ir 1, 2 priedais įstatymas",
+   "title": "Autorių teisių ir gretutinių teisių įstatymo 2, 16, 19, 20, 21, 22, 23, 24, 25, 26, 28, 33, 39, 58, 75 straipsnių ir Įstatymo priedo pakeitimo ir papildymo ir Įstatymo papildymo 20(1) straipsniu ir 1, 2 priedais įstatymas",
+   "tags": [
+   ],
+   "history": null
+},
+{
+   "_id": "16aa1e75-a5fb-4233-9213-4ddcc0380fe5",
+   "vote_no": 3,
+   "vote_aye": 64,
+   "tags": [
+   ],
+   "vote_abstain": 12,
+   "voting_type": "paprastas",
+   "total_votes": 79,
+   "doc_type": "Voting",
+   "votes": [
+       {
+           "vote": "abstain",
+           "person": "48690p",
+           "name": "Adomėnas Mantas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7229p",
+           "name": "Aleknaitė Abramikienė Vilija",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7p",
+           "name": "Andriukaitis Vytenis Povilas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "53916p",
+           "name": "Anušauskas Arvydas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "45771p",
+           "name": "Auštrevičius Petras",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "7208p",
+           "name": "Ažubalis Audronius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53922p",
+           "name": "Babilius Vincas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "abstain",
+           "person": "47158p",
+           "name": "Bacevičius Vaidotas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "48114p",
+           "name": "Baltraitienė Virginija",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23552p",
+           "name": "Barakauskas Dailis Alfonsas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "38116p",
+           "name": "Bastys Mindaugas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "26656p",
+           "name": "Baškienė Rima",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "53925p",
+           "name": "Baukutė Asta",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "47221p",
+           "name": "Baura Antanas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "16689p",
+           "name": "Bekintienė Danutė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "50482p",
+           "name": "Bilotaitė Agnė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "22p",
+           "name": "Bogušis Vytautas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "265p",
+           "name": "Bradauskas Bronius",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "47856p",
+           "name": "Bucevičius Saulius",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "24594p",
+           "name": "Budrys Dainius",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "47850p",
+           "name": "Bukauskas Valentinas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "47898p",
+           "name": "Burba Andrius",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7194p",
+           "name": "Butkevičius Algirdas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "7260p",
+           "name": "Čaplikas Algis",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "47860p",
+           "name": "Čigriejienė Vida Marija",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "31p",
+           "name": "Dagys Rimantas Jonas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47844p",
+           "name": "Daukšys Kęstutis",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "47837p",
+           "name": "Dautartas Julius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7207p",
+           "name": "Degutienė Irena",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53924p",
+           "name": "Dinius Laimontas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "36693p",
+           "name": "Dumbrava Algimantas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "23703p",
+           "name": "Dumčius Arimantas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "47849p",
+           "name": "Endzinas Audrius",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47841p",
+           "name": "Galvonas Vytautas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "47932p",
+           "name": "Gapšys Vytautas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47842p",
+           "name": "Gedvilas Vydas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53905p",
+           "name": "Giedraitis Stanislovas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "155p",
+           "name": "Glaveckas Kęstutis",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "47867p",
+           "name": "Graužinienė Loreta",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7199p",
+           "name": "Gražulis Petras",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47832p",
+           "name": "Jagminas Jonas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "no-vote",
+           "person": "33749p",
+           "name": "Jankauskas Donatas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "44850p",
+           "name": "Jonyla Edmundas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "178p",
+           "name": "Juknevičienė Rasa",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "34643p",
+           "name": "Juozapaitis Jonas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53900p",
+           "name": "Jurkevičius Evaldas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "110p",
+           "name": "Juršėnas Česlovas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "114p",
+           "name": "Karosas Justinas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7198p",
+           "name": "Kašėta Algis",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "22590p",
+           "name": "Kazulėnas Algis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "53930p",
+           "name": "Kernagis Ligitas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "117p",
+           "name": "Kirkilas Gediminas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "200p",
+           "name": "Klumbys Egidijus",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53931p",
+           "name": "Komskis Kęstas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "43989p",
+           "name": "Kondrotas Jonas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "121p",
+           "name": "Kubilius Andrius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53912p",
+           "name": "Kuodytė Dalia",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "abstain",
+           "person": "7206p",
+           "name": "Kupčinskas Rytas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "53921p",
+           "name": "Kurpuvesas Vytautas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "125p",
+           "name": "Kuzminskas Kazimieras",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47905p",
+           "name": "Lementauskas Evaldas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "47211p",
+           "name": "Lydeka Arminas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "38796p",
+           "name": "Liesys Jonas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no",
+           "person": "24013p",
+           "name": "Luomanas Petras",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53909p",
+           "name": "Mackevič Michal",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "36032p",
+           "name": "Margevičienė Vincė Vaidevutė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "34422p",
+           "name": "Masiulis Eligijus",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "no",
+           "person": "47811p",
+           "name": "Masiulis Kęstutis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7221p",
+           "name": "Matulas Antanas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "34208p",
+           "name": "Matuzas Vitas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53932p",
+           "name": "Mazuronis Andrius",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23547p",
+           "name": "Mazuronis Valentinas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "53923p",
+           "name": "Meiželytė Svilienė Donalda",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "23562p",
+           "name": "Melianas Artūras",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "38848p",
+           "name": "Mikutienė Dangutė",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "39007p",
+           "name": "Mitrulevičius Albinas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "12253p",
+           "name": "Narkevič Jaroslav",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "26338p",
+           "name": "Navaitis Gediminas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "53911p",
+           "name": "Nedzinskas Antanas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7193p",
+           "name": "Olekas Juozas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23775p",
+           "name": "Pauža Bronius",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47861p",
+           "name": "Pavilionienė Marija Aušrinė",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "63p",
+           "name": "Pečeliūnas Saulius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53906p",
+           "name": "Petkus Almantas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "23310p",
+           "name": "Petrauskienė Milda",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "36392p",
+           "name": "Pupinis Edmundas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "23861p",
+           "name": "Puteikis Naglis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53914p",
+           "name": "Ramanauskaitė-Skokauskienė Auksutė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no",
+           "person": "53908p",
+           "name": "Ramelis Konstantas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "47845p",
+           "name": "Ramonas Jonas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "7242p",
+           "name": "Razma Jurgis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "50121p",
+           "name": "Ručys Rimas Antanas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7259p",
+           "name": "Rutkelytė Rūta",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "23521p",
+           "name": "Sabatauskas Julius",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "232p",
+           "name": "Sabutis Liudvikas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "54008p",
+           "name": "Sacharuk Aleksandr",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "80p",
+           "name": "Salamakinas Algimantas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53899p",
+           "name": "Saudargas Paulius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "37063p",
+           "name": "Simulik Valerijus",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "26333p",
+           "name": "Sinkevičius Rimantas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "7252p",
+           "name": "Sysas Algirdas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47830p",
+           "name": "Smetona Rimantas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53915p",
+           "name": "Songaila Gintaras",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "53917p",
+           "name": "Stancikienė Aurelija",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "53904p",
+           "name": "Stanevičius Jonas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "231p",
+           "name": "Stankevičius Česlovas Vytautas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47839p",
+           "name": "Starkevičius Kazys",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "26418p",
+           "name": "Steponavičius Gintaras",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "53902p",
+           "name": "Stirblytė Arūnė",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "53929p",
+           "name": "Stoma Saulius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "24021p",
+           "name": "Stundys Valentinas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7448p",
+           "name": "Šedbaras Stasys",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53901p",
+           "name": "Šedžius Andrius",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "51p",
+           "name": "Šiaulienė Irena",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53918p",
+           "name": "Šilgalis Žilvinas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "149p",
+           "name": "Šimėnas Jonas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23671p",
+           "name": "Šukys Raimondas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "23696p",
+           "name": "Talmont Leonard",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53913p",
+           "name": "Tamašauskas Erikas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "43842p",
+           "name": "Teišerskytė Dalia",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "94p",
+           "name": "Uoka Kazimieras",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "53910p",
+           "name": "Urbanavičius Justinas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53903p",
+           "name": "Užlytė Zita",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53919p",
+           "name": "Valinskas Arūnas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53927p",
+           "name": "Valinskienė Ingrida",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47875p",
+           "name": "Valiukevičiūtė Ona",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53907p",
+           "name": "Valkiūnas Valdemaras",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47910p",
+           "name": "Varaška Mantas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47225p",
+           "name": "Vareikis Egidijus",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23526p",
+           "name": "Vėsaitė Birutė",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "54p",
+           "name": "Veselka Julius",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7227p",
+           "name": "Vidžiūnas Arvydas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47983p",
+           "name": "Zasčiurinskas Mečislovas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "43p",
+           "name": "Zingeris Emanuelis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "65700p",
+           "name": "Zuokienė Agnė",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "47836p",
+           "name": "Žakaris Edvardas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "34505p",
+           "name": "Žeimys Pranas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "65703p",
+           "name": "Žemaitaitis Remigijus",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "45p",
+           "name": "Žiemelis Vidmantas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53926p",
+           "name": "Žilinskas Rokas",
+           "fraction": "TSLKDF"
+       }
+   ],
+   "created": "2011-12-21T18:03:38Z",
+   "title": "dėl įstatymo priėmimo;",
+   "registered_for_voting": 80,
+   "source": {
+       "voting": {
+           "url": "http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-13013",
+           "id": -13013
+       }
+   },
+   "history": null,
+   "parents": [
+   ],
+   "author": null,
+   "parent_legal_acts": [
+       "3e991850-b222-4ec3-a125-9cddcc6818c5",
+       "autoriu-teisiu-ir-gretutiniu-teisiu-istatymas"
+   ],
+   "has_voting_right": 140,
+   "legal_acts": [
+       "affc005d-4316-478a-860f-8615e86f37f0"
+   ]
+},
+{
+   "_id": "7b2427c4-4304-4230-a284-f63a126f8e5d",
+   "vote_no": 2,
+   "vote_aye": 64,
+   "tags": [
+   ],
+   "vote_abstain": 12,
+   "voting_type": "paprastas",
+   "total_votes": 78,
+   "doc_type": "Voting",
+   "votes": [
+       {
+           "vote": "no-vote",
+           "person": "48690p",
+           "name": "Adomėnas Mantas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7229p",
+           "name": "Aleknaitė Abramikienė Vilija",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7p",
+           "name": "Andriukaitis Vytenis Povilas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "53916p",
+           "name": "Anušauskas Arvydas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "45771p",
+           "name": "Auštrevičius Petras",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "7208p",
+           "name": "Ažubalis Audronius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53922p",
+           "name": "Babilius Vincas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no",
+           "person": "47158p",
+           "name": "Bacevičius Vaidotas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "48114p",
+           "name": "Baltraitienė Virginija",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23552p",
+           "name": "Barakauskas Dailis Alfonsas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "38116p",
+           "name": "Bastys Mindaugas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "26656p",
+           "name": "Baškienė Rima",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "53925p",
+           "name": "Baukutė Asta",
+           "fraction": "MG"
+       },
+       {
+           "vote": "abstain",
+           "person": "47221p",
+           "name": "Baura Antanas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "16689p",
+           "name": "Bekintienė Danutė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "50482p",
+           "name": "Bilotaitė Agnė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "22p",
+           "name": "Bogušis Vytautas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "265p",
+           "name": "Bradauskas Bronius",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "47856p",
+           "name": "Bucevičius Saulius",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "24594p",
+           "name": "Budrys Dainius",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "47850p",
+           "name": "Bukauskas Valentinas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "47898p",
+           "name": "Burba Andrius",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7194p",
+           "name": "Butkevičius Algirdas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "7260p",
+           "name": "Čaplikas Algis",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "47860p",
+           "name": "Čigriejienė Vida Marija",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "31p",
+           "name": "Dagys Rimantas Jonas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "47844p",
+           "name": "Daukšys Kęstutis",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "47837p",
+           "name": "Dautartas Julius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7207p",
+           "name": "Degutienė Irena",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "53924p",
+           "name": "Dinius Laimontas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "36693p",
+           "name": "Dumbrava Algimantas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "23703p",
+           "name": "Dumčius Arimantas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "47849p",
+           "name": "Endzinas Audrius",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47841p",
+           "name": "Galvonas Vytautas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "47932p",
+           "name": "Gapšys Vytautas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47842p",
+           "name": "Gedvilas Vydas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53905p",
+           "name": "Giedraitis Stanislovas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "155p",
+           "name": "Glaveckas Kęstutis",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "47867p",
+           "name": "Graužinienė Loreta",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7199p",
+           "name": "Gražulis Petras",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47832p",
+           "name": "Jagminas Jonas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "no-vote",
+           "person": "33749p",
+           "name": "Jankauskas Donatas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "44850p",
+           "name": "Jonyla Edmundas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "178p",
+           "name": "Juknevičienė Rasa",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "34643p",
+           "name": "Juozapaitis Jonas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53900p",
+           "name": "Jurkevičius Evaldas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "110p",
+           "name": "Juršėnas Česlovas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "114p",
+           "name": "Karosas Justinas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7198p",
+           "name": "Kašėta Algis",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "22590p",
+           "name": "Kazulėnas Algis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "53930p",
+           "name": "Kernagis Ligitas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "117p",
+           "name": "Kirkilas Gediminas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "200p",
+           "name": "Klumbys Egidijus",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53931p",
+           "name": "Komskis Kęstas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "43989p",
+           "name": "Kondrotas Jonas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "121p",
+           "name": "Kubilius Andrius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53912p",
+           "name": "Kuodytė Dalia",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "abstain",
+           "person": "7206p",
+           "name": "Kupčinskas Rytas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "53921p",
+           "name": "Kurpuvesas Vytautas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "125p",
+           "name": "Kuzminskas Kazimieras",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47905p",
+           "name": "Lementauskas Evaldas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "47211p",
+           "name": "Lydeka Arminas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "38796p",
+           "name": "Liesys Jonas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "abstain",
+           "person": "24013p",
+           "name": "Luomanas Petras",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53909p",
+           "name": "Mackevič Michal",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "36032p",
+           "name": "Margevičienė Vincė Vaidevutė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "34422p",
+           "name": "Masiulis Eligijus",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "abstain",
+           "person": "47811p",
+           "name": "Masiulis Kęstutis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7221p",
+           "name": "Matulas Antanas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "34208p",
+           "name": "Matuzas Vitas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53932p",
+           "name": "Mazuronis Andrius",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23547p",
+           "name": "Mazuronis Valentinas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "53923p",
+           "name": "Meiželytė Svilienė Donalda",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23562p",
+           "name": "Melianas Artūras",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "38848p",
+           "name": "Mikutienė Dangutė",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "39007p",
+           "name": "Mitrulevičius Albinas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "12253p",
+           "name": "Narkevič Jaroslav",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "26338p",
+           "name": "Navaitis Gediminas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "53911p",
+           "name": "Nedzinskas Antanas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7193p",
+           "name": "Olekas Juozas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23775p",
+           "name": "Pauža Bronius",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "47861p",
+           "name": "Pavilionienė Marija Aušrinė",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "63p",
+           "name": "Pečeliūnas Saulius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53906p",
+           "name": "Petkus Almantas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "23310p",
+           "name": "Petrauskienė Milda",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "36392p",
+           "name": "Pupinis Edmundas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "23861p",
+           "name": "Puteikis Naglis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53914p",
+           "name": "Ramanauskaitė-Skokauskienė Auksutė",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "abstain",
+           "person": "53908p",
+           "name": "Ramelis Konstantas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "47845p",
+           "name": "Ramonas Jonas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "7242p",
+           "name": "Razma Jurgis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "50121p",
+           "name": "Ručys Rimas Antanas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7259p",
+           "name": "Rutkelytė Rūta",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "23521p",
+           "name": "Sabatauskas Julius",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "232p",
+           "name": "Sabutis Liudvikas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "54008p",
+           "name": "Sacharuk Aleksandr",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "80p",
+           "name": "Salamakinas Algimantas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53899p",
+           "name": "Saudargas Paulius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "37063p",
+           "name": "Simulik Valerijus",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "26333p",
+           "name": "Sinkevičius Rimantas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "7252p",
+           "name": "Sysas Algirdas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47830p",
+           "name": "Smetona Rimantas",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53915p",
+           "name": "Songaila Gintaras",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "53917p",
+           "name": "Stancikienė Aurelija",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "53904p",
+           "name": "Stanevičius Jonas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "abstain",
+           "person": "231p",
+           "name": "Stankevičius Česlovas Vytautas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47839p",
+           "name": "Starkevičius Kazys",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "26418p",
+           "name": "Steponavičius Gintaras",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "53902p",
+           "name": "Stirblytė Arūnė",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "53929p",
+           "name": "Stoma Saulius",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "24021p",
+           "name": "Stundys Valentinas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "7448p",
+           "name": "Šedbaras Stasys",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53901p",
+           "name": "Šedžius Andrius",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "51p",
+           "name": "Šiaulienė Irena",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53918p",
+           "name": "Šilgalis Žilvinas",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "149p",
+           "name": "Šimėnas Jonas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23671p",
+           "name": "Šukys Raimondas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "aye",
+           "person": "23696p",
+           "name": "Talmont Leonard",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53913p",
+           "name": "Tamašauskas Erikas",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "aye",
+           "person": "43842p",
+           "name": "Teišerskytė Dalia",
+           "fraction": "LSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "94p",
+           "name": "Uoka Kazimieras",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "53910p",
+           "name": "Urbanavičius Justinas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53903p",
+           "name": "Užlytė Zita",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53919p",
+           "name": "Valinskas Arūnas",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53927p",
+           "name": "Valinskienė Ingrida",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47875p",
+           "name": "Valiukevičiūtė Ona",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "53907p",
+           "name": "Valkiūnas Valdemaras",
+           "fraction": "LCSF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47910p",
+           "name": "Varaška Mantas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47225p",
+           "name": "Vareikis Egidijus",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "23526p",
+           "name": "Vėsaitė Birutė",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "54p",
+           "name": "Veselka Julius",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "7227p",
+           "name": "Vidžiūnas Arvydas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "47983p",
+           "name": "Zasčiurinskas Mečislovas",
+           "fraction": "DPF"
+       },
+       {
+           "vote": "aye",
+           "person": "43p",
+           "name": "Zingeris Emanuelis",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no-vote",
+           "person": "65700p",
+           "name": "Zuokienė Agnė",
+           "fraction": "MG"
+       },
+       {
+           "vote": "aye",
+           "person": "47836p",
+           "name": "Žakaris Edvardas",
+           "fraction": "LSDPF"
+       },
+       {
+           "vote": "no",
+           "person": "34505p",
+           "name": "Žeimys Pranas",
+           "fraction": "TSLKDF"
+       },
+       {
+           "vote": "aye",
+           "person": "65703p",
+           "name": "Žemaitaitis Remigijus",
+           "fraction": "TTF"
+       },
+       {
+           "vote": "aye",
+           "person": "45p",
+           "name": "Žiemelis Vidmantas",
+           "fraction": "KPF"
+       },
+       {
+           "vote": "aye",
+           "person": "53926p",
+           "name": "Žilinskas Rokas",
+           "fraction": "TSLKDF"
+       }
+   ],
+   "created": "2011-12-21T17:46:43Z",
+   "title": "dėl 4 straipsnio;",
+   "registered_for_voting": 80,
+   "source": {
+       "voting": {
+           "url": "http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-13012",
+           "id": -13012
+       }
+   },
+   "history": null,
+   "parents": [
+   ],
+   "author": null,
+   "parent_legal_acts": [
+       "3e991850-b222-4ec3-a125-9cddcc6818c5",
+       "autoriu-teisiu-ir-gretutiniu-teisiu-istatymas"
+   ],
+   "has_voting_right": 140,
+   "legal_acts": [
+       "affc005d-4316-478a-860f-8615e86f37f0"
+   ]
+}
+]

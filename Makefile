@@ -1,7 +1,7 @@
 #!/usr/bin/make
 
 PROJECT=manoseimas
-TESTS = sboard
+TESTS = sboard votings
 COVERAGE_INCLUDES = --include=project/*
 
 
