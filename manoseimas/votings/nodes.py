@@ -67,31 +67,30 @@ provideAdapter(CreateSolutionView, name="create")
 provideAdapter(TagListView, (ISolution,))
 
 
-class CreateSolutionVotingView(VotingView):
+class LinkSolutionView(VotingView):
     adapts(IVoting)
 
     def render(self):
         if self.request.method == 'POST':
-            factory = getNodeFactory('solutionvoting')
-            if not self.can('create', factory):
+            if not self.can('update', None):
                 return render(self.request, '403.html', status=403)
 
             form = self.get_form(self.request.POST)
             if form.is_valid():
-                form.cleaned_data['parent'] = self.node
-                child = self.form_save(form, create=True)
-                if self.node:
-                    return redirect(self.node.permalink())
-                else:
-                    return redirect(child.permalink())
+                if 'solutions' not in self.node:
+                    self.node.solutions = {}
+                solution_id = form.cleaned_data.pop('solution')
+                self.node.solutions[solution_id] = form.cleaned_data
+                self.node.save()
+                return redirect(self.node.permalink())
         else:
             form = self.get_form()
 
-        return super(CreateSolutionVotingView, self).render({
+        return super(LinkSolutionView, self).render({
             'link_solution_form': form,
         })
 
-provideAdapter(CreateSolutionVotingView, name="link-solution")
+provideAdapter(LinkSolutionView, name="link-solution")
 
 
 class QuestionGroupView(ListView):
@@ -131,18 +130,10 @@ def get_img_url(name):
 
 def mps_vote_for_solution(solution_id):
     mps = {}
-    links = {}
-    view = couch.view('votings/solutions_by_solution_link', key=solution_id)
-    for link in view:
-        links[link.parent] = {
-            'position': link.position,
-            'weight': link.weight,
-        }
-
     view = couch.view('votings/by_solution', key=solution_id)
     # Loop for all votings
     for voting in view:
-        link = links[voting._id]
+        link = voting.solutions[solution_id]
         # Loop for MPs
         # [{name: Jonas Petraitis, vote: aye}, ...]
         for vote in voting.votes:

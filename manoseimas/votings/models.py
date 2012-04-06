@@ -6,7 +6,6 @@ from sboard.factory import provideNode
 from sboard.models import Node
 
 from .interfaces import ISolution
-from .interfaces import ISolutionVoting
 from .interfaces import IVoting
 
 
@@ -61,9 +60,3 @@ class Solution(Node):
     implements(ISolution)
 
 provideNode(Solution, "solution")
-
-
-class SolutionVoting(Node):
-    implements(ISolutionVoting)
-
-provideNode(SolutionVoting, "solutionvoting")

@@ -1,5 +1,7 @@
 function(doc) {
-    if (doc.solution && doc.parent) {
-        emit(doc.solution, {_id: doc.parent});
+    if (doc.doc_type == 'Voting' && doc.solutions) {
+        for (var solution in doc.solutions) {
+            emit(solution, null);
+        }
     }
 }
