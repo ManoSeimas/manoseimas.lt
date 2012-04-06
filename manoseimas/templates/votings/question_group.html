@@ -52,6 +52,10 @@
                   <div class="well">
                       <h3>{{ q.title }}</h3>
                       <p>{{ q.get_body }}</p>
+                      <p>
+                          <a href="{% url node_details q.get_id %}">
+                              {% trans "read more" %}</a>
+                      </p>
                       <div>
                           <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 2)">Tikrai taip</button>
                           <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 1)">Taip</button>
