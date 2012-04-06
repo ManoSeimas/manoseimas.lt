@@ -87,6 +87,9 @@ def options(ctx):
                   help='couchdb url, example: '
                        'http://127.0.0.1:5984')
 
+    gr.add_option('--couchdb-server-name', action='store',
+                  help='pulbic couchdb domain name, example: couchdb.example.com')
+
 
 def _get_secret_key(length=50):
     chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
@@ -162,6 +165,7 @@ def configure(ctx):
     ctx.env.TWITTER_BOOTSTRAP = ctx.options.twitter_bootstrap
 
     ctx.env.COUCHDB_URL = ctx.options.couchdb_url
+    ctx.env.COUCHDB_SERVER_NAME = ctx.options.couchdb_server_name
 
     if ctx.env.PRODUCTION:
         ctx.env.DEVELOPMENT = False
@@ -204,8 +208,9 @@ def build(ctx):
         bld(rule=_subst, source='config/apache.conf c4che/_cache.py',
             target='var/etc/apache.conf')
 
-        bld(rule=_subst, source='config/apache.couchdb.conf c4che/_cache.py',
-            target='var/etc/apache.couchdb.conf')
+        if ctx.env.COUCHDB_SERVER_NAME:
+            bld(rule=_subst, source='config/apache.couchdb.conf c4che/_cache.py',
+                target='var/etc/apache.couchdb.conf')
 
         bld(rule=_subst, source='config/my.cnf',
             target='var/etc/my.cnf')
