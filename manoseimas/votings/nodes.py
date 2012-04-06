@@ -43,11 +43,16 @@ class VotingView(DetailsView):
         return couch.view('votings/by_solution', key=self.node._id)
 
     def render(self, overrides=None):
-        return super(VotingView, self).render({
-            'link_issue_form': LinkIssueForm(),
+        context = {
             'related_legal_acts': self.get_related_legal_acts(),
             'solutions': self.get_solutions(),
-        })
+        }
+        context.update(overrides or {})
+
+        if 'link_issue_form' not in context:
+            context['link_issue_form'] = LinkIssueForm()
+
+        return super(VotingView, self).render(context)
 
 provideAdapter(VotingView)
 
@@ -121,10 +126,10 @@ def get_img_url(name):
         link = "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/%s.jpg" % name_surname4photo
     return link
 
-def mps_vote_for_issue(policy_issue_id):
+def mps_vote_for_issue(solution_id):
     mps = {}
     links = {}
-    view = couch.view('votings/by_policy_issue', key=policy_issue_id)
+    view = couch.view('votings/by_solution_link', key=solution_id)
     for link in view:
         links[link.parent] = {
             'aye': link.vote_aye,
@@ -132,8 +137,8 @@ def mps_vote_for_issue(policy_issue_id):
             'no': link.vote_no,
         }
 
-    view = couch.view('votings/policy_issue_votes',
-                      startkey=[policy_issue_id], endkey=[policy_issue_id, {}])
+    view = couch.view('votings/solution_votes',
+                      startkey=[solution_id], endkey=[solution_id, {}])
     # Loop for all votings
     for voting in view:
         link = links[voting._id]
@@ -259,7 +264,7 @@ class PolicyIssueTempView(DetailsView):
     adapts(INode)
 
     templates = {
-        'details': 'votings/policy_issue.html',
+        'details': 'votings/solution.html',
     }
 
 provideAdapter(PolicyIssueTempView, name='policy-issue')

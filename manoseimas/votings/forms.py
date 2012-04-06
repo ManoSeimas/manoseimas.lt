@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext_lazy as _
 
 from couchdbkit.ext.django.forms import DocumentForm
 
@@ -15,11 +16,11 @@ class PolicyIssueForm(NodeForm):
 
 
 class LinkIssueForm(DocumentForm):
-    policy_issue = forms.SlugField()
-    vote_aye = forms.IntegerField(initial=2)
-    vote_abstain = forms.IntegerField(initial=-1)
-    vote_no = forms.IntegerField(initial=-2)
+    solution = forms.SlugField()
+    position = forms.BooleanField(initial=True, required=False,
+            help_text=_('Uncheck if this voting is agains solution.'))
+    weight = forms.IntegerField(initial=1)
 
     class Meta:
         document = PolicyIssueLink
-        properties = ('policy_issue', 'vote_aye', 'vote_no', 'vote_abstain')
+        properties = ('solution', 'position', 'weight')
