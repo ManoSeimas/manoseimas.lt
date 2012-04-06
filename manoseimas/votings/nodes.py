@@ -104,13 +104,16 @@ class QuestionGroupView(ListView):
 provideAdapter(QuestionGroupView)
 
 
-def get_vote_value(vote, link):
-    return ({
-        'aye': link['aye'],
-        'abstain': link['abstain'],
-        'no-vote': link['no'],
-        'no': link['no'],
+def get_vote_value(vote, position):
+    value = ({
+        'aye': 2,
+        'abstain': -1,
+        'no-vote': -1,
+        'no': -2,
     })[vote]
+    if not position:
+        value = value * -1
+    return value
 
 
 def get_img_url(name):
@@ -132,9 +135,8 @@ def mps_vote_for_solution(solution_id):
     view = couch.view('votings/by_solution_link', key=solution_id)
     for link in view:
         links[link.parent] = {
-            'aye': link.vote_aye,
-            'abstain': link.vote_abstain,
-            'no': link.vote_no,
+            'position': link.position,
+            'weight': link.weight,
         }
 
     view = couch.view('votings/solution_votes',
@@ -148,12 +150,11 @@ def mps_vote_for_solution(solution_id):
             if vote['name'] not in mps:
                 mps[vote['name']] = {'times': 0, 'sum': 0}
 
-            mps[vote['name']]['times'] += 1
-            mp_vote = get_vote_value(vote['vote'], link)
-            mps[vote['name']]['sum'] += mp_vote
+            mps[vote['name']]['times'] += link['weight']
+            mp_vote = get_vote_value(vote['vote'], link['position'])
+            mps[vote['name']]['sum'] += mp_vote * link['weight']
 
-    return dict([(name, mp['sum'] / mp['times']) for name, mp in mps.items()])
-
+    return dict([(name, 1.0 * mp['sum'] / mp['times']) for name, mp in mps.items()])
 
 def match_mps_with_user(results, mps, user_vote):
     for name, mp_solution_vote in mps.items():

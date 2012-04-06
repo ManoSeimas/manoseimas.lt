@@ -882,6 +882,12 @@
            "person": "53926p",
            "name": "Žilinskas Rokas",
            "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no",
+           "person": "99999p",
+           "name": "test",
+           "fraction": "test"
        }
    ],
    "created": "2011-12-21T18:03:38Z",
@@ -1756,6 +1762,12 @@
            "person": "53926p",
            "name": "Žilinskas Rokas",
            "fraction": "TSLKDF"
+       },
+       {
+           "vote": "no",
+           "person": "99999p",
+           "name": "test",
+           "fraction": "test"
        }
    ],
    "created": "2011-12-21T17:46:43Z",

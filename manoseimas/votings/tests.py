@@ -44,11 +44,20 @@ class SolutionTests(NodesTestsMixin, TestCase):
 
 
         # Link voting to solution
-        v2_id = '16aa1e75-a5fb-4233-9213-4ddcc0380fe5'
+        v2_id = '7b2427c4-4304-4230-a284-f63a126f8e5d'
         v2_url = reverse('node_details', args=[v2_id])
         v2_link_url = reverse('node_action', args=[v2_id, 'link-solution'])
         response = self.client.post(v2_link_url, {
             'solution': 's1',
-            'weight': '1',
+            'weight': '3',
         })
         self.assertRedirects(response, v2_url)
+
+
+        # Try to get user voting match results
+        results_url = reverse('node_action', args=['s1', 'quick-results'])
+        response = self.client.get(results_url, {'vote': '2'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(data['mps'][0]['name'], 'test')
+        self.assertEqual(data['mps'][0]['score'], 100)
