@@ -41,7 +41,7 @@ env:
 clean:
 	./waf distclean
 
-.PHONY: clean
+.PHONY: messages
 messages:
 	./waf makemessages
 
