@@ -1,17 +1,14 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
-from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 import sboard.factory
 
-admin.autodiscover()
 sboard.factory.autodiscover()
 
 urlpatterns = patterns('',
     #url(r'^$', 'sboard.views.node', {'action': 'list'}, name='index'),
     url(r'^$', 'sboard.views.node', {'key': 'testas'}, name='index'),
-    url(r'^admin/', include(admin.site.urls)),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
     url(r'^paieska/', include('manoseimas.search.urls')),
