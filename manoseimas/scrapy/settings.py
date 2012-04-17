@@ -7,9 +7,9 @@ BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 BOT_NAME = 'manoseimas.lt'
 BOT_VERSION = '1.0'
 
-SPIDER_MODULES = ['manoseimas.spiders']
-NEWSPIDER_MODULE = 'manoseimas.spiders'
-DEFAULT_ITEM_CLASS = 'manoseimas.items.Person'
+SPIDER_MODULES = ['manoseimas.scrapy.spiders']
+NEWSPIDER_MODULE = 'manoseimas.scrapy.spiders'
+DEFAULT_ITEM_CLASS = 'manoseimas.scrapy.items.Person'
 USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
 #LOG_LEVEL = 'WARNING'
@@ -20,7 +20,7 @@ LOG_FILE = os.path.join(PROJECT_DIR, 'crawl.log')
 #HTTPCACHE_DIR = os.path.join(BUILDOUT_DIR, 'httpcache')
 
 ITEM_PIPELINES = [
-    'manoseimas.pipelines.ManoseimasPipeline',
+    'manoseimas.scrapy.pipelines.ManoseimasPipeline',
 ]
 
 COUCHDB_DATABASES = (

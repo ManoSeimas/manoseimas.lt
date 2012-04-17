@@ -11,11 +11,11 @@ from scrapy.contrib.spiders import Rule
 from scrapy.http import Request
 from scrapy.selector import HtmlXPathSelector
 
-from manoseimas.items import LegalAct, DocumentInvolved
-from manoseimas.loaders import Loader
-from manoseimas.spiders import ManoSeimasSpider
-from manoseimas.utils import (get_first, get_all, get_absolute_url,
-                              split_by_words)
+from manoseimas.scrapy.items import LegalAct, DocumentInvolved
+from manoseimas.scrapy.loaders import Loader
+from manoseimas.scrapy.spiders import ManoSeimasSpider
+from manoseimas.scrapy.utils import (get_first, get_all, get_absolute_url,
+                                     split_by_words)
 
 DOCUMENT_INVOLVED_PARTS = re.compile(ur'(\d+-\d+-\d+) ([^-]+)- (.+)')
 REQUIRED_FIELDS = ('_id', 'name', 'kind', 'number', 'date', 'source',)
@@ -128,7 +128,7 @@ class SeimasDocumentsSpider(ManoSeimasSpider):
         institution = m.group(3)
         if ',' in institution:
             # TODO: move this to utility function, same code is also used
-            # in manoseimas/spiders/sessions_of_sejm.py:171
+            # in manoseimas/scrapy/spiders/mps.py:171
             spl = institution.replace(
                     u'Švietimo, mokslo', u'Švietimo%2c mokslo')
             spl = map(lambda x: urllib.unquote(x.strip()),

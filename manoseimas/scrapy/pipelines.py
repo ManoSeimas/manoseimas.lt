@@ -6,7 +6,7 @@ from scrapy import signals
 from scrapy.conf import settings
 from scrapy.xlib.pydispatch import dispatcher
 
-from manoseimas.couchdb_util import get_databases
+from manoseimas.scrapy.couchdb_util import get_databases
 
 
 class ManoseimasPipeline(object):

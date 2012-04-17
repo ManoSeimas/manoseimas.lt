@@ -4,7 +4,7 @@ from couchdb.http import ResourceNotFound
 
 from scrapy.conf import settings
 
-from manoseimas.couchdb_util import get_databases
+from manoseimas.scrapy.couchdb_util import get_databases
 
 db = get_databases(settings['COUCHDB_DATABASES'])
 
