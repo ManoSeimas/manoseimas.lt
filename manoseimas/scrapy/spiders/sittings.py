@@ -5,9 +5,13 @@ from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import Rule
 from scrapy.selector import HtmlXPathSelector
 
-from manoseimas.scrapy.items import (Question, Session, Voting, Registration,
-                              PersonVote, QuestionDocument,
-                              QuestionDocumentSpeaker)
+from manoseimas.scrapy.items import PersonVote
+from manoseimas.scrapy.items import Question
+from manoseimas.scrapy.items import QuestionDocument
+from manoseimas.scrapy.items import QuestionDocumentSpeaker
+from manoseimas.scrapy.items import Registration
+from manoseimas.scrapy.items import Session
+from manoseimas.scrapy.items import Voting
 from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.utils import Increment
