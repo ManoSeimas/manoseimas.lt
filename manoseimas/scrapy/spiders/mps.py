@@ -7,8 +7,8 @@ from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 
 
-class MembersOfSejmSpider(ManoSeimasSpider):
-    name = 'lrslt-members-of-sejm'
+class MpsSpider(ManoSeimasSpider):
+    name = 'mps'
     allowed_domains = ['lrs.lt']
 
     start_urls = [

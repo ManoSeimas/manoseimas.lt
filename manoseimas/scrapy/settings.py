@@ -1,8 +1,11 @@
 import os.path
 
-PROJECT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
-# FIXME:sirex: wrong dir...
-BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
+from django.core.management import setup_environ
+from manoseimas import settings
+setup_environ(settings)
+
+from django.conf import settings
+
 
 BOT_NAME = 'manoseimas.lt'
 BOT_VERSION = '1.0'
@@ -14,10 +17,10 @@ USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
 #LOG_LEVEL = 'WARNING'
 #LOG_LEVEL = 'INFO'
-LOG_FILE = os.path.join(PROJECT_DIR, 'crawl.log')
+LOG_FILE = os.path.join(settings.BUILDOUT_DIR, 'var', 'scrapy.log')
 
 #HTTPCACHE_ENABLED = True
-#HTTPCACHE_DIR = os.path.join(BUILDOUT_DIR, 'httpcache')
+#HTTPCACHE_DIR = os.path.join(settings.BUILDOUT_DIR, 'var', 'httpcache')
 
 ITEM_PIPELINES = [
     'manoseimas.scrapy.pipelines.ManoseimasPipeline',

@@ -23,8 +23,8 @@ DOCUMENT_INVOLVED_PARTS = re.compile(ur'(\d+-\d+-\d+) ([^-]+)- (.+)')
 REQUIRED_FIELDS = ('_id', 'name', 'kind', 'number', 'date', 'source',)
 
 
-class SeimasDocumentsSpider(ManoSeimasSpider):
-    name = 'seimas-documents'
+class LegalActsSpider(ManoSeimasSpider):
+    name = 'legal-acts'
     allowed_domains = ['lrs.lt']
 
     # p_drus - document type

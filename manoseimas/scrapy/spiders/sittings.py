@@ -17,13 +17,13 @@ from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.utils import Increment
 
 
-class SeimasSittingsSpider(ManoSeimasSpider):
+class SittingsSpider(ManoSeimasSpider):
     """
     This spider walks through all sittings of Seimas and extracts information
     about questions and documents discussed during sittings. Also it collects
     voting results.
     """
-    name = 'seimas-sittings'
+    name = 'sittings'
     allowed_domains = ['lrs.lt']
 
     start_urls = [
