@@ -1,0 +1,34 @@
+from scrapy.contrib.loader import processor, XPathItemLoader
+
+
+class Loader(XPathItemLoader):
+    default_input_processor = processor.MapCompose(unicode.strip)
+    default_output_processor = processor.Join()
+
+    def __init__(self, spider, response, *args, **kw):
+        self.spider = spider
+        self.response = kw['response'] = response
+        self.required = kw.pop('required', tuple())
+        super(Loader, self).__init__(*args, **kw)
+
+    def reset_required(self, *args):
+        self.required = args
+
+    def load_item(self):
+        """
+        Checks if all required fields exists.
+
+        """
+        missing = []
+        for field_name in self.required:
+            if field_name not in self._values:
+                missing.append(field_name)
+
+        item = super(Loader, self).load_item()
+
+        if missing:
+            self.spider.error(self.response,
+                    "Missing fields: '%s' in %s" % ("', '".join(missing),
+                                                    item))
+
+        return item

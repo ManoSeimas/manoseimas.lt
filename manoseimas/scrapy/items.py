@@ -1,0 +1,149 @@
+from scrapy.contrib.loader import processor
+from scrapy.item import Item, Field
+
+"""
+ID suffixes:
+
+    p - person
+
+    q - question
+
+    d - document
+
+    v - voting
+
+"""
+
+
+class Source(Item):
+    id = Field()
+    url = Field()
+    name = Field()
+
+
+class Person(Item):
+    _id = Field()
+    name = Field()
+    email = Field()
+    phone = Field()
+    home_page = Field()
+    constituency = Field()
+    party_candidate = Field()
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
+
+
+class Question(Item):
+    _id = Field()
+    name = Field()
+    speakers = Field(input_processor=processor.Identity(),
+                     output_processor=processor.Identity())
+    session = Field(input_processor=processor.Identity(),
+                    output_processor=processor.TakeFirst())
+    formulation = Field()
+    documents = Field(input_processor=processor.Identity(),
+                      output_processor=processor.Identity())
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
+
+
+class QuestionDocument(Item):
+    id = Field()
+    name = Field()
+    type = Field()
+    number = Field()
+    speakers = Field(input_processor=processor.Identity(),
+                     output_processor=processor.Identity())
+
+
+class QuestionDocumentSpeaker(Item):
+    name = Field()
+    position = Field()
+    committee = Field()
+    institution = Field()
+
+
+class DocumentInvolved(Item):
+    date = Field()
+    how = Field()
+    person = Field()
+    committee = Field()
+    group = Field()
+    group_type = Field()
+    institution = Field()
+
+
+class Document(Item):
+    _id = Field()
+    name = Field()
+    type = Field(input_processor=processor.MapCompose(unicode.strip,
+                                                      unicode.lower))
+    number = Field()
+    date = Field()
+    language = Field()
+    by = Field(input_processor=processor.Identity(),
+               output_processor=processor.Identity())
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
+
+
+class LegalAct(Item):
+    _id = Field()
+    name = Field()
+    kind = Field(input_processor=processor.MapCompose(unicode.strip,
+                                                      unicode.lower))
+    number = Field()
+    date = Field()
+    relations = Field(input_processor=processor.Identity(),
+                      output_processor=processor.TakeFirst())
+    involved = Field(input_processor=processor.Identity(),
+                     output_processor=processor.Identity())
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
+
+    _attachments = Field(input_processor=processor.Identity(),
+                         output_processor=processor.Identity())
+
+
+class Session(Item):
+    number = Field()
+    date = Field()
+    type = Field()
+
+
+class Voting(Item):
+    _id = Field()
+    type = Field()
+    name = Field()
+    documents = Field(input_processor=processor.Identity(),
+                      output_processor=processor.Identity())
+    datetime = Field()
+    vote_aye = Field()
+    vote_no = Field()
+    vote_abstain = Field()
+    no_vote = Field()
+    total_votes = Field()
+    votes = Field(input_processor=processor.Identity(),
+                  output_processor=processor.Identity())
+    formulation = Field()
+    formulation_a = Field()
+    formulation_b = Field()
+    result = Field()
+    question = Field()
+    documents = Field(output_processor=processor.Identity())
+    registration = Field(input_processor=processor.Identity(),
+                         output_processor=processor.TakeFirst())
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
+
+class PersonVote(Item):
+    name = Field()
+    person = Field()
+    fraction = Field()
+    vote = Field()
+
+
+class Registration(Item):
+    id = Field()
+    datetime = Field()
+    joined = Field()
