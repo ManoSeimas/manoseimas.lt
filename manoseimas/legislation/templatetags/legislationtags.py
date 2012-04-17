@@ -1,3 +1,5 @@
+# coding: utf-8
+
 # Copyright (C) 2012  Mantas Zimnickas <sirexas@gmail.com>
 #
 # This file is part of manoseimas.lt project.
