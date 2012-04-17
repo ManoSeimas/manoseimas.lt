@@ -8,6 +8,7 @@ syntax:glob
 .installed.cfg
 .lock-wafbuild
 .mr.developer.cfg
+.noseids
 .sass-cache
 .waf*
 config.log

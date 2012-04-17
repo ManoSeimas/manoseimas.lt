@@ -270,6 +270,7 @@ INSTALLED_APPS = (
     'django_extensions',
     'test_utils',
     'django_pdb',
+    'django_nose',
     #end if
 
     'manoseimas.search',
@@ -336,6 +337,10 @@ CACHES = {
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False,
 }
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+NOSE_ARGS = ['--failed', '--stop', '--with-doctest',
+             '--where', 'manoseimas']
 #end if
 
 JQUERY_VERSION = '$JQUERY_VERSION'
