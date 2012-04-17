@@ -4,7 +4,7 @@ PROJECT_DIR = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
 # FIXME:sirex: wrong dir...
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 
-BOT_NAME = 'manoseimas'
+BOT_NAME = 'manoseimas.lt'
 BOT_VERSION = '1.0'
 
 SPIDER_MODULES = ['manoseimas.spiders']
