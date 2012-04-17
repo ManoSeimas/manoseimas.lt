@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import urlparse
+
 from  unidecode import unidecode
 
 from zope.component import adapts
@@ -27,9 +29,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 
-
 from sboard.categories.interfaces import ICategory
-from sboard.factory import getNodeFactory
 from sboard.interfaces import INode
 from sboard.models import couch
 from sboard.nodes import CreateView
@@ -276,3 +276,16 @@ class SolutionDetailsView(DetailsView):
     }
 
 provideAdapter(SolutionDetailsView)
+
+
+def search_lrs_url(query):
+    url = urlparse.urlparse(query)
+    qry = urlparse.parse_qs(url.query)
+    if url.netloc.endswith('.lrs.lt') and 'p_bals_id' in qry:
+        try:
+            source_id = int(qry['p_bals_id'][0])
+        except ValueError:
+            source_id = None
+        if source_id:
+            node = couch.view('votings/by_source_id', key=source_id).first()
+            return redirect(node.permalink())

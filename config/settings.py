@@ -376,3 +376,8 @@ SBOARD_NODES = (
     'manoseimas.votings.nodes.VotingNode',
     'manoseimas.policy.nodes.PolicyNode',
 )
+
+SBOARD_SEARCH_HANDLERS = (
+    'manoseimas.votings.nodes.search_lrs_url',
+    'sboard.nodes.SearchView',
+)

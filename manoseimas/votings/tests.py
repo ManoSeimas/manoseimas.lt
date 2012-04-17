@@ -78,3 +78,16 @@ class SolutionTests(NodesTestsMixin, TestCase):
         data = json.loads(response.content)
         self.assertEqual(data['mps'][0]['name'], 'test')
         self.assertEqual(data['mps'][0]['score'], 100)
+
+
+class SearchTest(NodesTestsMixin, TestCase):
+    def testSolutions(self):
+        db = Voting.get_db()
+        load_fixtures(db)
+
+        search_url = reverse('node_search')
+        response = self.client.get(search_url, {
+            'q': 'http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-13013',
+        })
+        self.assertRedirects(response, reverse('node_details',
+                args=['16aa1e75-a5fb-4233-9213-4ddcc0380fe5']))
