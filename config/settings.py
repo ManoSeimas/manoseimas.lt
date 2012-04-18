@@ -287,18 +287,32 @@ INSTALLED_APPS = (
 # more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+        },
     },
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'couchdbkit': {
+            'handlers':['null'],
+            'propagate': True,
+            'level':'INFO',
+        },
+        'restkit': {
+            'handlers':['null'],
+            'propagate': True,
+            'level':'INFO',
         },
     }
 }
