@@ -19,6 +19,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.forms import NodeForm
+from sboard.models import couch
 
 from .models import Solution
 
@@ -34,3 +35,10 @@ class LinkSolutionForm(forms.Form):
     position = forms.BooleanField(initial=True, required=False,
             help_text=_('Uncheck if this voting is agains solution.'))
     weight = forms.IntegerField(initial=1)
+
+    def clean_solution(self):
+        solution = self.cleaned_data.get('solution')
+        if solution:
+            return couch.by_slug(key=solution).one(True)
+        else:
+            return solution

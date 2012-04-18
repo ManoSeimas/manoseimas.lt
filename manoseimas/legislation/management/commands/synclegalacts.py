@@ -28,7 +28,7 @@ from manoseimas.legislation.models import Law, LawChange, LawProject
 from manoseimas.legislation.utils import normalize, split_law_name
 
 from sboard.models import couch
-from sboard.utils import get_node_id
+from sboard.utils import slugify
 
 
 class SyncException(Exception):
@@ -64,14 +64,15 @@ class SyncProcessor(object):
     def date_to_datetime(self, date):
         return datetime.datetime.combine(date, datetime.time())
 
-    def update_node(self, cls, legal_act, node_id, split=None):
+    def update_node(self, cls, legal_act, split=None):
         node = self.get_by_number(legal_act.number)
         if node is None:
             node = cls()
-            node._id = node_id
+            node._id = node.get_new_id()
 
         node.number = legal_act.number
         node.title = legal_act.name
+        node.slug = slugify(legal_act.name)
         node.cleaned_name = normalize(legal_act.name)
         node.created = self.date_to_datetime(legal_act.date)
         node.parents = self.get_parents(split)
@@ -96,16 +97,13 @@ class SyncProcessor(object):
         print('Node: %s' % node._id)
 
     def process_law(self, legal_act):
-        node_id = get_node_id(legal_act.name)
-        self.update_node(Law, legal_act, node_id)
+        self.update_node(Law, legal_act)
 
     def process_law_change(self, legal_act, split):
-        node_id = get_node_id()
-        self.update_node(LawChange, legal_act, node_id, split)
+        self.update_node(LawChange, legal_act, split)
 
     def process_law_project(self, legal_act, split):
-        node_id = get_node_id()
-        self.update_node(LawProject, legal_act, node_id, split)
+        self.update_node(LawProject, legal_act, split)
 
     def process(self, legal_act):
         if 'kind' not in legal_act:

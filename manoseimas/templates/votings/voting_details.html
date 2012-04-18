@@ -61,7 +61,7 @@ $(function () {
 <h3>{% trans "Related legal acts" %}</h3>
 <ul>
     {% for legal_act in related_legal_acts %}
-    <li><a href="{% url node_details legal_act.get_id %}">{{ legal_act.title }}</a></li>
+    <li><a href="{{ legal_act.permalink }}">{{ legal_act.title }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
@@ -70,7 +70,7 @@ $(function () {
 <h3>{% trans "Related solutions" %}</h3>
 <ul>
     {% for solution in solutions %}
-    <li><a href="{% url node_details solution.get_id %}">{{ solution.title }}</a></li>
+    <li><a href="{{ solution.permalink }}">{{ solution.title }}</a></li>
     {% endfor %}
 </ul>
 {% endif %}
@@ -81,7 +81,7 @@ $(function () {
 {% block node_actions %}
 <h2>{% trans "Link to solution" %}</h2>
 
-<form action="{% url node_action node.get_id 'link-solution' %}" method="post">
+<form action="{% url node node.get_slug 'link-solution' %}" method="post">
   {% csrf_token %}
   {{ link_solution_form.non_field_errors }}
   {{ link_solution_form.as_p }}

@@ -8,7 +8,7 @@ sboard.factory.autodiscover()
 
 urlpatterns = patterns('',
     #url(r'^$', 'sboard.views.node', {'action': 'list'}, name='index'),
-    url(r'^$', 'sboard.views.node', {'key': 'testas'}, name='index'),
+    url(r'^$', 'sboard.views.node', {'slug': 'testas'}, name='index'),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
     url(r'^paieska/', include('manoseimas.search.urls')),

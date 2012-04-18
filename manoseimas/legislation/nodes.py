@@ -51,7 +51,7 @@ class ProjectsView(ListView):
 
     def render(self):
         return super(ProjectsView, self).render({
-            'get_node_list': self.get_law_projects,
+            'node_list': self.get_law_projects,
             'template': 'legislation/law_list.html',
             'sidebar_template': 'legislation/sidebar/projects.html',
         })
@@ -69,7 +69,7 @@ class ChangesView(ListView):
 
     def render(self):
         return super(ChangesView, self).render({
-            'get_node_list': self.get_law_changes,
+            'node_list': self.get_law_changes,
             'template': 'legislation/law_list.html',
             'sidebar_template': 'legislation/sidebar/changes.html',
         })
@@ -87,7 +87,7 @@ class VotingsView(ListView):
 
     def render(self):
         return super(VotingsView, self).render({
-            'get_node_list': self.get_law_votings,
+            'node_list': self.get_law_votings,
             'template': 'legislation/votings.html',
             'sidebar_template': 'legislation/sidebar/votings.html',
         })

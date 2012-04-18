@@ -59,7 +59,7 @@ class VotingView(DetailsView):
     def get_solutions(self):
         return couch.view('votings/solutions_by_voting', key=self.node._id)
 
-    def render(self, overrides=None):
+    def render(self, **overrides):
         context = {
             'related_legal_acts': self.get_related_legal_acts(),
             'solutions': self.get_solutions(),
@@ -69,7 +69,7 @@ class VotingView(DetailsView):
         if 'link_solution_form' not in context:
             context['link_solution_form'] = LinkSolutionForm()
 
-        return super(VotingView, self).render(context)
+        return super(VotingView, self).render(**context)
 
 provideAdapter(VotingView)
 
@@ -96,16 +96,14 @@ class LinkSolutionView(VotingView):
             if form.is_valid():
                 if 'solutions' not in self.node:
                     self.node.solutions = {}
-                solution_id = form.cleaned_data.pop('solution')
-                self.node.solutions[solution_id] = form.cleaned_data
+                solution = form.cleaned_data.pop('solution')
+                self.node.solutions[solution._id] = form.cleaned_data
                 self.node.save()
                 return redirect(self.node.permalink())
         else:
             form = self.get_form()
 
-        return super(LinkSolutionView, self).render({
-            'link_solution_form': form,
-        })
+        return super(LinkSolutionView, self).render(link_solution_form=form)
 
 provideAdapter(LinkSolutionView, name="link-solution")
 
@@ -239,9 +237,9 @@ class QuickResultsView(DetailsView):
     def render(self):
         mps_matches = self.request.session.get('mps_matches', {})
         results = sort_results(mps_matches)
-        return super(QuickResultsView, self).render({
-            'results': results[:8],
-            'party_results': [
+        return super(QuickResultsView, self).render(
+            results=results[:8],
+            party_results=[
                 {'name': u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija',
                  'score':  78,
                  'url':    'http://manobalsas.lt/politikai/logos/part_37.gif',
@@ -262,8 +260,8 @@ class QuickResultsView(DetailsView):
                  'score':  56,
                  'url':    'http://manobalsas.lt/politikai/logos/part_30.gif',
                 },
-            ],
-        })
+            ]
+        )
 
 provideAdapter(QuickResultsView, name='results')
 

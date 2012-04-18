@@ -3,16 +3,16 @@
 <div class="well">
   <ul class="nav nav-list">
     {% block law_menu_item %}
-    <li><a href="{% url node_details node.get_id %}">{% trans "Law" %}</a></li>
+    <li><a href="{{ node.permalink }}">{% trans "Law" %}</a></li>
     {% endblock %}
     {% block projects_menu_item %}
-    <li><a href="{% url node_action node.get_id 'projects' %}">{% trans "Projects" %}</a></li>
+    <li><a href="{% url node node.get_slug 'projects' %}">{% trans "Projects" %}</a></li>
     {% endblock %}
     {% block changes_menu_item %}
-    <li><a href="{% url node_action node.get_id 'changes' %}">{% trans "Changes" %}</a></li>
+    <li><a href="{% url node node.get_slug 'changes' %}">{% trans "Changes" %}</a></li>
     {% endblock %}
     {% block votings_menu_item %}
-    <li><a href="{% url node_action node.get_id 'votings' %}">{% trans "Votings" %}</a></li>
+    <li><a href="{% url node node.get_slug 'votings' %}">{% trans "Votings" %}</a></li>
     {% endblock %}
   </ul>
 </div>

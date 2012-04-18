@@ -53,15 +53,15 @@
                       <h3>{{ q.title }}</h3>
                       <p>{{ q.get_body }}</p>
                       <p>
-                          <a href="{% url node_details q.get_id %}">
+                          <a href="{{ q.permalink }}">
                               {% trans "read more" %}</a>
                       </p>
                       <div>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 2)">Tikrai taip</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 1)">Taip</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, 0)">Nei taip, nei ne</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, -1)">Ne</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_id }}', {{ forloop.last|yesno:'1,0' }}, -2)">Tikrai ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, 2)">Tikrai taip</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, 1)">Taip</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, 0)">Nei taip, nei ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, -1)">Ne</button>
+                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, -2)">Tikrai ne</button>
                       </div>
                   </div>
               </div>
@@ -82,12 +82,12 @@
 
 {% block inlinejs %}
 <script type="text/javascript">
-function submitQuestion(n, node_id, last, vote) {
-    var url = "/" + node_id + "/quick-results/?vote=" + vote;
+function submitQuestion(n, node_slug, last, vote) {
+    var url = "/" + node_slug + "/quick-results/?vote=" + vote;
 
     jQuery.getJSON(url, function(data) {
         if (last) {
-            window.location.href = "{% url node_action node.get_id 'results' %}";
+            window.location.href = "{% url node node.get_slug 'results' %}";
         }
         else {
             updateSideResult(data);
