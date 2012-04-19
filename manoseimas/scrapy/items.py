@@ -1,5 +1,7 @@
 from scrapy.contrib.loader import processor
-from scrapy.item import Item, Field
+from scrapy.item import Field
+from scrapy.item import Item
+from scrapy.utils.python import unique
 
 from .loaders import absolute_url
 
@@ -28,12 +30,16 @@ class Person(Item):
     _id = Field()
     first_name = Field()
     last_name = Field()
+    dob = Field()
+    birth_place = Field()
     email = Field()
     phone = Field()
     home_page = Field()
     candidate_page = Field()
     raised_by = Field()
     photo = Field()
+    office_address = Field()
+    parliament = Field(output_processor=unique)
     constituency = Field()
     party_candidate = Field()
     groups = Field(input_processor=processor.Identity(),

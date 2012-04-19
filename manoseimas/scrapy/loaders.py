@@ -1,3 +1,5 @@
+import string
+
 from urlparse import urljoin
 
 from scrapy.contrib.loader import processor, XPathItemLoader
@@ -5,7 +7,7 @@ from scrapy.selector import HtmlXPathSelector
 
 
 class Loader(XPathItemLoader):
-    default_input_processor = processor.MapCompose(unicode.strip)
+    default_input_processor = processor.MapCompose(string.strip)
     default_output_processor = processor.Join()
 
     def __init__(self, spider, response, *args, **kw):
