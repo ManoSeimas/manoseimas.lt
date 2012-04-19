@@ -1,4 +1,7 @@
+from urlparse import urljoin
+
 from scrapy.contrib.loader import processor, XPathItemLoader
+from scrapy.selector import HtmlXPathSelector
 
 
 class Loader(XPathItemLoader):
@@ -32,3 +35,12 @@ class Loader(XPathItemLoader):
                                                     item))
 
         return item
+
+
+def absolute_url(value, loader_context=None):
+    response = loader_context['response']
+    xs = HtmlXPathSelector(response)
+    base_url = xs.select('//base/@href').extract()
+    base_url = (urljoin(response.url, base_url[0].encode(response.encoding))
+                if base_url else response.url)
+    return urljoin(base_url, ''.join(value))

@@ -1,6 +1,9 @@
 from scrapy.contrib.loader import processor
 from scrapy.item import Item, Field
 
+from .loaders import absolute_url
+
+
 """
 ID suffixes:
 
@@ -23,14 +26,29 @@ class Source(Item):
 
 class Person(Item):
     _id = Field()
-    name = Field()
+    first_name = Field()
+    last_name = Field()
     email = Field()
     phone = Field()
     home_page = Field()
+    candidate_page = Field()
+    raised_by = Field()
+    photo = Field()
     constituency = Field()
     party_candidate = Field()
+    groups = Field(input_processor=processor.Identity(),
+                   output_processor=processor.Identity())
     source = Field(input_processor=processor.Identity(),
                    output_processor=processor.TakeFirst())
+
+
+class Group(Item):
+    type = Field(input_processor=processor.Identity())
+    name = Field()
+    membership = Field(input_processor=processor.Identity(),
+                       output_processor=processor.Identity())
+    position = Field()
+    source = Field(output_processor=absolute_url)
 
 
 class Question(Item):
