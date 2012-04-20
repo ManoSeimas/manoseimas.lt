@@ -1,14 +1,5 @@
 # coding: utf-8
 
-from couchdb.http import ResourceNotFound
-
-from scrapy.conf import settings
-
-from manoseimas.scrapy.couchdb_util import get_databases
-
-db = get_databases(settings['COUCHDB_DATABASES'])
-
-
 def fixdocs():
     for doc in db['legalact'].view('_all_docs', include_docs=True):
         doc = doc.doc
