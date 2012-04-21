@@ -32,8 +32,8 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['first_name'], 'Antanas')
         self.assertEqual(item['last_name'], 'Nedzinskas')
         self.assertEqual(item['dob'], '1981-03-15')
-        self.assertEqual(item['email'], 'Antanas.Nedzinskas@lrs.lt')
-        self.assertEqual(item['phone'], '2396694')
+        self.assertEqual(item['email'], ['Antanas.Nedzinskas@lrs.lt'])
+        self.assertEqual(item['phone'], ['2396694'])
         self.assertEqual(item['raised_by'], u'Tautos prisikėlimo partija')
         self.assertEqual(item['candidate_page'],
                 ('http://www.vrk.lt/rinkimai/400_lt/Kandidatai/'
@@ -56,8 +56,8 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['first_name'], 'Mantas')
         self.assertEqual(item['last_name'], u'Adomėnas')
         self.assertEqual(item['dob'], '1972-10-01')
-        self.assertEqual(item['email'], 'Mantas.Adomenas@lrs.lt')
-        self.assertEqual(item['phone'], '2396631')
+        self.assertEqual(item['email'], ['Mantas.Adomenas@lrs.lt'])
+        self.assertEqual(item['phone'], ['2396631'])
         self.assertEqual(item['office_address'],
                          u'Odminių g. 3, 01122 Vilniaus m')
         self.assertEqual(item['constituency'],
@@ -149,6 +149,23 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['last_name'], u'Baltraitienė')
 
 
+    def test_jursenas(self):
+        spider = MpsSpider()
+        url = ('http://www3.lrs.lt/pls/inter/w5_show?'
+               'p_r=6113&p_k=1&p_a=5&p_asm_id=110&p_kade_id=6')
+        response = HtmlResponse(url, body=fixture('mp_110.html'))
+
+        items = list(spider.parse_person(response))
+        item = items[0]
+
+        self.assertEqual(item['first_name'], u'Česlovas')
+        self.assertEqual(item['last_name'], u'Juršėnas')
+        self.assertEqual(item['email'], [u'Ceslovas.Jursenas@lrs.lt',
+                                         u'cejurs@lrs.lt'])
+        self.assertEqual(item['home_page'],
+                'http://www3.lrs.lt/pls/inter/w5_show?p_r=4487&p_k=1')
+        self.assertEqual(item['phone'], ['2396025', '2396626'])
+
 
 class TestPipeline(unittest.TestCase):
     def setUp(self):
@@ -168,8 +185,8 @@ class TestPipeline(unittest.TestCase):
         item['first_name'] = u'Firstname'
         item['last_name'] = u'Lastname'
         item['dob'] = u'2000-01-01'
-        item['email'] = u'Firstname.Lastname@lrs.lt'
-        item['phone'] = u'2396631'
+        item['email'] = [u'Firstname.Lastname@lrs.lt']
+        item['phone'] = [u'2396631']
         item['parliament'] = ['2008-2012', '2004-2008', '2000-2004',
                               '1996-2000', '1990-1992']
         item['groups'] = [

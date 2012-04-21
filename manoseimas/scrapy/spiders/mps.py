@@ -11,6 +11,7 @@ from manoseimas.scrapy.items import Person
 from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.textutils import mapwords
+from manoseimas.scrapy.textutils import split_by_comma
 from manoseimas.scrapy.textutils import str2dict
 
 group_meta_re = re.compile(r', ([^(]+)(\([^)]+)?')
@@ -131,11 +132,13 @@ class MpsSpider(ManoSeimasSpider):
         }))
         details = dict(details)
 
+        email = details.get(u'asmeninis elektroninis paštas', '')
+        phone = details.get(u'darbo telefonas', '')
+
         person.add_value('constituency', [details.get(u'išrinktas', '')])
         person.add_value('raised_by', [details.get(u'iškėlė', '')])
-        person.add_value('email',
-                [details.get(u'asmeninis elektroninis paštas', '')])
-        person.add_value('phone', [details.get(u'darbo telefonas', '')])
+        person.add_value('email', split_by_comma(email))
+        person.add_value('phone', split_by_comma(phone))
         person.add_value('office_address', [details.get(u'biuro adresas', '')])
 
         person.add_xpath('home_page',

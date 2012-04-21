@@ -6,10 +6,25 @@ import string
 words_re = re.compile(r'\w+', re.UNICODE)
 clean_chunk_re = re.compile(
         r'(^%(chars)s)|(%(chars)s$)' % {'chars': r'(\s|[:,.])+'}, re.UNICODE)
+split_by_comma_re = re.compile(r'\s*,\s*')
 
 
 def clean_chunk(chunk):
     return clean_chunk_re.sub('', chunk)
+
+
+def split_by_comma(text):
+    """
+
+    >>> split_by_comma('Ceslovas.Jursenas@lrs.lt ,  cejurs@lrs.lt')
+    ['Ceslovas.Jursenas@lrs.lt', 'cejurs@lrs.lt']
+    >>> split_by_comma('2396025 ,   2396626')
+    ['2396025', '2396626']
+    >>> split_by_comma('2396025')
+    ['2396025']
+
+    """
+    return split_by_comma_re.split(text)
 
 
 def find_key(keys, words, normalize=string.lower):
