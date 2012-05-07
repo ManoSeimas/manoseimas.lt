@@ -157,6 +157,7 @@ class MpsSpider(ManoSeimasSpider):
         # parliament
         parliament = header_hxs.select('div/b/font/text()')
         parliament = parliament.re(r'(\d{4}-\d{4})')
+        parliament = ''.join(parliament)
         person.add_value('parliament', parliament)
         if u'seimo narys' in details:
             keys = ['nuo', 'iki']

@@ -278,6 +278,7 @@ INSTALLED_APPS = (
     'manoseimas.categories',
     'manoseimas.votings',
     'manoseimas.policy',
+    'manoseimas.mps',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -353,8 +354,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = ['--failed', '--stop', '--with-doctest',
-             '--where', 'manoseimas']
+NOSE_ARGS = ['--failed', '--stop', '--with-doctest']
 #end if
 
 JQUERY_VERSION = '$JQUERY_VERSION'

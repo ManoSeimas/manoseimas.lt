@@ -15,16 +15,5 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-
-from django.core.urlresolvers import reverse
-from django.utils.functional import lazy
-
-reverse_lazy = lazy(reverse, str)
-
-
-def todate(date_str, date_format='%Y-%m-%d'):
-    if date_str:
-        return datetime.strptime(date_str, date_format).date()
-    else:
-        return None
+def search_lrs_url(query):
+    pass

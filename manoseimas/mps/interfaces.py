@@ -15,16 +15,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-from datetime import datetime
-
-from django.core.urlresolvers import reverse
-from django.utils.functional import lazy
-
-reverse_lazy = lazy(reverse, str)
+from sboard.profiles.interfaces import IGroup
+from sboard.profiles.interfaces import IProfile
 
 
-def todate(date_str, date_format='%Y-%m-%d'):
-    if date_str:
-        return datetime.strptime(date_str, date_format).date()
-    else:
-        return None
+class IMPProfile(IProfile): pass
+
+class ICommission(IGroup): pass
+class ICommittee(IGroup): pass
+class IFraction(IGroup): pass
+class IParliament(IGroup): pass
+class IParliamentaryGroup(IGroup): pass
+class IParty(IGroup): pass
+class IPoliticalGroup(IGroup): pass
