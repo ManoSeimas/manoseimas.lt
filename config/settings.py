@@ -8,23 +8,6 @@ import os
 PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 
-#if $SASS
-# Make external tools like SASS and Compass available in PATH.
-path = os.environ['PATH'].split(':')
-path.append(os.path.join(BUILDOUT_DIR, 'bin'),)
-os.environ['PATH'] = ':'.join(path)
-
-
-s = {
-    'PREFIX': os.path.join(BUILDOUT_DIR, 'parts', 'rubygems'),
-    'RUBYLIB': os.environ.get('RUBYLIB', ''),
-}
-os.environ['GEM_HOME'] = '%(PREFIX)s/lib/ruby/gems/1.8' % s
-os.environ['RUBYLIB'] = ':'.join([
-    '%(RUBYLIB)s', '%(PREFIX)s/lib', '%(PREFIX)s/lib/ruby',
-    '%(PREFIX)s/lib/site_ruby/1.8',]) % s
-#end if
-
 
 ugettext = lambda s: s
 
@@ -34,7 +17,6 @@ DEBUG = True
 DEBUG = False
 #end if
 TEMPLATE_DEBUG = DEBUG
-MEDIA_DEV_MODE = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
 ADMINS = (
@@ -108,31 +90,9 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
 STATIC_URL = '/static/'
-MEDIAGENERATOR_DIR = os.path.join(BUILDOUT_DIR, 'var', 'mediagenerator')
 STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
     os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
-    #if $TWITTER_BOOTSTRAP
-    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
-    #end if
-    MEDIAGENERATOR_DIR,
-)
-
-DEV_MEDIA_URL = '/mediagenerator/'
-PRODUCTION_MEDIA_URL = '/static/'
-
-GENERATED_MEDIA_DIR = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
-GENERATED_MEDIA_NAMES_FILE = os.path.join(MEDIAGENERATOR_DIR,
-                                          '_generated_media_names.py')
-#if $SASS
-IMPORTED_SASS_FRAMEWORKS_DIR = os.path.join(BUILDOUT_DIR, 'var',
-                                            'sass-frameworks')
-#end if
-
-MEDIAGENERATOR_DIR = os.path.join(PROJECT_DIR, 'mediagenerator')
-
-GLOBAL_MEDIA_DIRS = (
-    MEDIAGENERATOR_DIR,
     os.path.join(BUILDOUT_DIR, 'parts', 'modernizr'),
     #if $JQUERY_VERSION
     os.path.join(BUILDOUT_DIR, 'parts', 'jquery'),
@@ -140,63 +100,59 @@ GLOBAL_MEDIA_DIRS = (
     #if $TWITTER_BOOTSTRAP
     os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
     #end if
-    os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
-    #if $SASS
-    IMPORTED_SASS_FRAMEWORKS_DIR,
-    #end if
 )
 
-MEDIA_BUNDLES = (
-    ('screen.css',
-        #if $TWITTER_BOOTSTRAP
-        'css/bootstrap.css',
-        #end if
-        #if $SASS
-        'css/screen.sass',
-        #else
-        'css/screen.css',
-        #end if
-    ),
-    ('modernizr.js',
-        'js/modernizr.js',
-    ),
-    ('scripts.js',
-        'js/jquery.js',
-        #if $TWITTER_BOOTSTRAP
-        # FIXME: boostra.js (parts/twitter-bootstrap/js/bootstrap.js) file does
-        # not have anding ';' and breaks other scripts when joining to one
-        # file.
-        'js/bootstrap.js',
-        #end if
-        'js/flot/jquery.flot.js',
-        'js/flot/jquery.flot.pie.js',
-        'js/scripts.js',
-    ),
-)
+#if $DJANGO_PIPELINE
 
-BASE_ROOT_MEDIA_FILTERS = {
-    '*': 'mediagenerator.filters.concat.Concat',
-    'css': '${PROJECT_NAME}.mediagenerator_filters.CSSURL',
+STATICFILES_STORAGE = 'pipeline.storage.PipelineFinderStorage'
+
+PIPELINE_CSS = {
+    'styles': {
+        'source_filenames': (
+          'css/styles.less',
+          #if $TWITTER_BOOTSTRAP
+          'css/bootstrap.css',
+          #end if
+        ),
+        'output_filename': 'css/styles.css',
+    },
 }
 
-# This setting works in combination with::
-#
-#    'css': '${PROJECT_NAME}.mediagenerator_filters.CSSURL',
-#
-# filter.
-REWRITE_CSS_URLS_RELATIVE_TO_SOURCE = False
+PIPELINE_JS = {
+    'scripts': {
+        'source_filenames': (
+            'js/jquery.js',
+            #if $TWITTER_BOOTSTRAP
+            'js/bootstrap.js',
+            #end if
+            'js/flot/jquery.flot.js',
+            'js/flot/jquery.flot.pie.js',
+            'js/scripts.js',
+        ),
+        'output_filename': 'js/scripts.js',
+    },
 
+    'modernizr': {
+        'source_filenames': (
+            'js/modernizr.js',
+        ),
+        'output_filename': 'js/modernizr.js',
+    },
+}
 
-#if $SASS
-SASS_FRAMEWORKS = (
-    'compass',
+PIPELINE_COMPILERS = (
+    #if $LESS
+    'pipeline.compilers.less.LessCompiler',
+    #end if
 )
+#if $LESS
+PIPELINE_LESS_BINARY = os.path.join(BUILDOUT_DIR, 'bin', 'lessc')
 #end if
 
-# URL prefix for admin static files -- CSS, JavaScript and images.
-# Make sure to use a trailing slash.
-# Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = STATIC_URL + "admin/"
+PIPELINE_CSS_COMPRESSOR = None
+PIPELINE_JS_COMPRESSOR = None
+
+#end if
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '$SECRET_KEY'
@@ -221,10 +177,6 @@ MIDDLEWARE_CLASSES = (
     'django_pdb.middleware.PdbMiddleware',
     #end if
 )
-
-if MEDIA_DEV_MODE:
-    MIDDLEWARE_CLASSES = (('mediagenerator.middleware.MediaMiddleware',) +
-                          MIDDLEWARE_CLASSES)
 
 ROOT_URLCONF = '${PROJECT_NAME}.urls'
 
@@ -255,11 +207,13 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.markup',
     'south',
-    'mediagenerator',
     'social_auth',
     'sorl.thumbnail',
     'couchdbkit.ext.django',
     'commonutils',
+    #if $DJANGO_PIPELINE
+    'pipeline',
+    #end if
 
     'sboard',
     'sboard.profiles',

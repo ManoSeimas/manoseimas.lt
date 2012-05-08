@@ -1,6 +1,6 @@
 {% extends "root.html" %}
 {% load i18n %}
-{% load media %}
+{% load compressed %}
 
 {% block all %}
 <!doctype html>
@@ -28,7 +28,7 @@
 
   <!-- CSS: implied media=all -->
   <!-- CSS concatenated and minified via ant build script-->
-  {% include_media 'screen.css' media="screen, projection" %}
+  {% compressed_css 'styles' %}
   <!-- end CSS-->
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
@@ -36,7 +36,7 @@
   <!-- All JavaScript at the bottom, except for Modernizr / Respond.
        Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
        For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
-  {% include_media 'modernizr.js' %}
+  {% compressed_js 'modernizr' %}
 </head>
 
 <body>
@@ -107,7 +107,7 @@
   <!-- JavaScript at the bottom for fast page loading -->
   
   <!-- scripts concatenated and minified via ant build script-->
-  {% include_media 'scripts.js' %}
+  {% compressed_js 'scripts' %}
   {% block inlinejs %}{% endblock %}
   <!-- end scripts-->
 	

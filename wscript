@@ -16,7 +16,7 @@ top = '.'
 out = '.'
 
 def options(ctx):
-    ctx.load('compiler_c python ruby')
+    ctx.load('compiler_c python')
     PROJECT_NAME = 'manoseimas'
 
     gr = ctx.get_option_group('configure options')
@@ -69,11 +69,11 @@ def options(ctx):
     gr.add_option('--facebook-api-secret', action='store', default='',
                   help='Facebook API secret.')
 
-    gr.add_option('--sass', action='store_true', default=True,
-                  help='Enable Sass-lang support.')
-
     gr.add_option('--twitter-bootstrap', action='store_true', default=True,
                   help='Use Twitter bootstrap framework.')
+
+    gr.add_option('--less', action='store_true', default=False,
+                  help='Use LESS, CSS processor.')
 
     gr = ctx.add_option_group('setup options')
     gr.add_option("--use-pkg-add", action="store_true", dest="use_pkg_add",
@@ -134,10 +134,6 @@ def configure(ctx):
     ctx.check_python_version((2,6))
     ctx.check_python_headers()
 
-    ctx.load('ruby')
-    ctx.check_ruby_version((1,8,0))
-    ctx.check_ruby_ext_devel()
-
     ctx.env.TOP = ctx.path.abspath()
     ctx.env.PROJECT_NAME = ctx.options.project_name
     ctx.env.PRODUCTION = ctx.options.production
@@ -160,9 +156,10 @@ def configure(ctx):
     ctx.env.FACEBOOK_APP_ID = ctx.options.facebook_app_id
     ctx.env.FACEBOOK_API_SECRET = ctx.options.facebook_api_secret
 
-    ctx.env.SASS = ctx.options.sass
-
     ctx.env.TWITTER_BOOTSTRAP = ctx.options.twitter_bootstrap
+    ctx.env.LESS = ctx.options.less or ctx.env.TWITTER_BOOTSTRAP
+
+    ctx.env.DJANGO_PIPELINE = ctx.env.LESS
 
     ctx.env.COUCHDB_URL = ctx.options.couchdb_url
     ctx.env.COUCHDB_SERVER_NAME = ctx.options.couchdb_server_name
@@ -238,22 +235,12 @@ def build(ctx):
               'touch ${TGT}'),
         after='buildout', target='var/db')
 
-    if ctx.env.SASS:
-        bld(rule='bin/django importsassframeworks',
-            target='var/sass-frameworks/_compass.scss',
-            after='buildout')
-
-        media_sources = ['var/sass-frameworks/_compass.scss']
-    else:
-        media_sources = []
-
-    bld(rule='bin/django generatemedia',
-        source=(glob('%s/mediagenerator/**/*' % p) + media_sources),
-        name='generatemedia', after='buildout')
+    if ctx.env.LESS:
+        bld(rule='npm --root parts/node --binroot bin install less',
+            target='bin/lessc')
 
     bld(rule='bin/django collectstatic --noinput --verbosity=0',
-        source=(glob('%s/static/**/*' % p)),
-        after='generatemedia')
+        source=(glob('%s/static/**/*' % p)))
 
     for lang in ctx.env.LANGUAGES:
         s = (p, lang)
@@ -290,7 +277,7 @@ def distclean(ctx):
         '.lock-wafbuild', 'config.log', 'c4che', Context.DBFILE,
 
         # project specific generated files
-        '.sass-cache', 'buildout.cfg', '%s/settings.py' % ctx.env.PROJECT_NAME,
+        'buildout.cfg', '%s/settings.py' % ctx.env.PROJECT_NAME,
     ]:
         if os.path.exists(pth):
             Logs.info('cleaning: %s' % pth)
@@ -385,9 +372,8 @@ def setup(ctx):
         'python-dev',
         'python-virtualenv',
 
-        # Ruby (used for installing sass and compass gems)
-        'ruby',
-        'ruby-dev',
+        # Node.js package manager for LESS
+        'npm',
 
         # CouchDB
         'couchdb',
@@ -432,8 +418,6 @@ def setup(ctx):
                 ('libjpeg62-dev', 'jpeg'),
                 ('libxslt1-dev', 'libxslt')
         )
-
-        packages.remove('ruby-dev')
 
         sh('port select --set python python%s' % pyver)
         sh('port -v install %s' % ' '.join(packages))
