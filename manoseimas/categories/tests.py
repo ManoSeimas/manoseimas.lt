@@ -50,7 +50,6 @@ class TestTree(TestCase):
         string = render_to_string('manoseimas/categories/tree.html', {
                 'tree': iterate_tree(view),
             })
-        print(string)
         with open('/tmp/treea.html', 'w') as f:
             f.write('<!DOCTYPE html><html><head><meta charset="utf-8">'
                     '<title>Tree</title></head><body>')
