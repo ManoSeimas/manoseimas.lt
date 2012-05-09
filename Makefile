@@ -1,8 +1,11 @@
 #!/usr/bin/make
 
-PROJECT=manoseimas
-TESTS = sboard votings mps
-COVERAGE_INCLUDES = --include=project/*
+PROJECT = manoseimas
+NOSE_ARGS = -wmanoseimas -w. \
+	    -w../parts/django-sboard/sboard \
+	    --with-doctest \
+	    --no-path-adjustment
+COVERAGE_MODULES = $(PROJECT),sboard
 
 
 .PHONY: all
@@ -54,12 +57,19 @@ todo:
 	@egrep -nirI 'FIXME|TODO|XXX' $(PROJECT) config wscript
 
 test: all
-	bin/django test $(TESTS)
+	bin/django test $(NOSE_ARGS)
+
+test-failed: all
+	bin/django test $(NOSE_ARGS) --failed --stop
 
 coverage: all
-	bin/coverage run $(COVERAGE_INCLUDES) bin/django test $(TESTS)
-	bin/coverage html -d var/htmlcov/ $(COVERAGE_INCLUDES)
-	bin/coverage report $(COVERAGE_INCLUDES)
+	bin/django test $(NOSE_ARGS) \
+		--with-coverage \
+		--cover-erase \
+		--cover-inclusive \
+		--cover-html \
+		--cover-html-dir=../var/htmlcov \
+		--cover-package=$(COVERAGE_MODULES)
 	@echo "Also try xdg-open var/htmlcov/index.html"
 
 graph: all

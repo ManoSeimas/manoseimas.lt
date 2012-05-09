@@ -308,7 +308,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = ['--failed', '--stop', '--with-doctest']
+NOSE_ARGS = ['--id-file=%s' % os.path.join(BUILDOUT_DIR, 'var', 'noseids')]
 #end if
 
 JQUERY_VERSION = '$JQUERY_VERSION'
