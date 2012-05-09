@@ -3,8 +3,10 @@
 PROJECT = manoseimas
 NOSE_ARGS = -wmanoseimas -w. \
 	    -w../parts/django-sboard/sboard \
+	    --all-modules \
 	    --with-doctest \
-	    --no-path-adjustment
+	    --no-path-adjustment \
+	    --nocapture
 COVERAGE_MODULES = $(PROJECT),sboard
 
 
