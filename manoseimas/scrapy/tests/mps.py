@@ -154,5 +154,3 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['home_page'],
                 'http://www3.lrs.lt/pls/inter/w5_show?p_r=4487&p_k=1')
         self.assertEqual(item['phone'], ['2396025', '2396626'])
-
-
