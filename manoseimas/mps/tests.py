@@ -99,7 +99,7 @@ class TestSync(NodesTestsMixin, TestCase):
         db.view.return_value = [jursenas]
         db.save_doc.return_value = True
 
-        processor = SyncProcessor(db)
+        processor = SyncProcessor(db, verbosity=0)
         processor.sync()
 
         node = couch.by_slug(key='ceslovas-jursenas').one()

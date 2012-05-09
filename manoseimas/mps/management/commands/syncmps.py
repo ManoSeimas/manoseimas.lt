@@ -40,8 +40,9 @@ class SyncException(Exception):
 
 
 class SyncProcessor(object):
-    def __init__(self, db):
+    def __init__(self, db, verbosity=1):
         self.db = db
+        self.verbosity = verbosity
 
     def get_node(self, node_id, node_class):
         if node_id:
@@ -116,7 +117,8 @@ class SyncProcessor(object):
         doc['node_id'] = node._id
         self.db.save_doc(doc)
 
-        print('Node %s (%s)' % (node._id, node.slug))
+        if self.verbosity >= 1:
+            print('Node %s (%s)' % (node._id, node.slug))
 
 
     def sync(self, view='_all_docs'):
