@@ -90,7 +90,6 @@ class SittingsSpider(ManoSeimasSpider):
         source = self._get_source(url, 'p_bals_id')
         _id = source['id']
 
-        # FIXME:sirex: make utility function that creates unique id's
         voting.add_value('_id', '%sv' % _id)
         voting.add_value('type', voting_type)
         voting.add_value('datetime', date)

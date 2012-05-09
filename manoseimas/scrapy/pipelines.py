@@ -24,24 +24,31 @@ def get_db(item_name, cache=True):
 
 
 class ManoseimasPipeline(object):
-    def process_item(self, item, spider):
-        if '_id' not in item or not item['_id']:
-            raise Exception('Missing doc _id. Doc: %s' % item)
-
-        item_name = item.__class__.__name__.lower()
+    def store_item(self, item_name, doc, item):
         db = get_db(item_name)
-        try:
-            doc = db.get(item['_id'])
-        except ResourceNotFound:
-            doc = dict(item)
-
-        doc['doc_type'] = item_name
-        doc['updated'] = datetime.datetime.now().isoformat()
-
         doc = db.save_doc(doc)
 
         if '_attachments' in item:
             for attachment, content in item['_attachments']:
                 db.put_attachment(doc, content, attachment)
+
+    def get_doc(self, item_name, item):
+        db = get_db(item_name)
+        try:
+            return db.get(item['_id'])
+        except ResourceNotFound:
+            return dict(item)
+
+    def process_item(self, item, spider):
+        if '_id' not in item or not item['_id']:
+            raise Exception('Missing doc _id. Doc: %s' % item)
+
+        item_name = item.__class__.__name__.lower()
+
+        doc = self.get_doc(item_name, item)
+        doc['doc_type'] = item_name
+        doc['updated'] = datetime.datetime.now().isoformat()
+
+        self.store_item(item_name, doc, item)
 
         return item

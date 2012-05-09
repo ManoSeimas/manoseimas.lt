@@ -19,8 +19,16 @@
 
 import unittest
 
-from .management.commands.synclegalacts import Command
-from .models import Law, LawChange, LawProject
+from django.test import TestCase
+
+from sboard.tests import NodesTestsMixin
+
+from manoseimas.legislation.management.commands.syncsittings import RawVoting
+from manoseimas.scrapy.tests.pipeline import FakePipeline
+from manoseimas.scrapy.tests.sittings import parse_question
+from manoseimas.scrapy.tests.sittings import parse_voting
+
+from .management.commands.syncsittings import SyncProcessor
 from .utils import split_law_name
 
 
@@ -55,5 +63,22 @@ class SyncLegalActsTest(unittest.TestCase):
         name = u'Žemės ūkio bendrovių įstatymas'
         self.assertEqual(split_law_name(name), [])
 
+
+class TestSyncSittings(NodesTestsMixin, TestCase):
     def test_sync(self):
-        cmd = Command()
+        pipeline = FakePipeline()
+
+        items = parse_question()
+        # question
+        pipeline.process_item(items[0], None)
+        # voting details from question agenda
+        pipeline.process_item(items[1], None)
+
+        items = parse_voting()
+        # list of votings
+        voting = pipeline.process_item(items[0], None)
+
+        voting = RawVoting(dict(voting))
+
+        processor = SyncProcessor()
+        processor.sync([voting])

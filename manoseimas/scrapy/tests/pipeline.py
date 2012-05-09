@@ -13,6 +13,19 @@ from ..spiders.mps import MpsSpider
 from .utils import fixture
 
 
+class FakePipeline(ManoseimasPipeline):
+    def __init__(self, *args, **kwargs):
+        self._stored_items = {}
+        super(FakePipeline, self).__init__(*args, **kwargs)
+
+    def get_doc(self, item_name, item):
+        return self._stored_items.get(item['_id'], dict(item))
+
+    def store_item(self, item_name, doc, item):
+        self._stored_items[item['_id']] = doc
+
+
+
 class TestPipeline(unittest.TestCase):
     def setUp(self):
         self.server = Server()
