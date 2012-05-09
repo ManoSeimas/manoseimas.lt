@@ -308,7 +308,19 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = ['--id-file=%s' % os.path.join(BUILDOUT_DIR, 'var', 'noseids')]
+NOSE_ARGS = [
+    '-w${PROJECT_NAME}',     # working dir
+    '-w.',                   # project dir (relative to working dir)
+    '-w../parts/django-sboard/sboard',
+    '--all-modules',         # search tests in all modules
+    '--with-doctest',        # search doctests
+    '--no-path-adjustment',  # do no adjust sys.path, it is already do by
+                             # zc.buildout
+    '--nocapture',           # do no capture output
+    '--id-file=%s' % os.path.join(BUILDOUT_DIR, 'var', 'noseids'),
+                             # store node id file in var direcotory
+]
+
 #end if
 
 JQUERY_VERSION = '$JQUERY_VERSION'

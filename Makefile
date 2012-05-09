@@ -1,12 +1,6 @@
 #!/usr/bin/make
 
 PROJECT = manoseimas
-NOSE_ARGS = -wmanoseimas -w. \
-	    -w../parts/django-sboard/sboard \
-	    --all-modules \
-	    --with-doctest \
-	    --no-path-adjustment \
-	    --nocapture
 COVERAGE_MODULES = $(PROJECT),sboard
 
 
@@ -59,13 +53,13 @@ todo:
 	@egrep -nirI 'FIXME|TODO|XXX' $(PROJECT) config wscript
 
 test: all
-	bin/django test $(NOSE_ARGS)
+	bin/django test
 
 test-failed: all
-	bin/django test $(NOSE_ARGS) --failed --stop
+	bin/django test --failed --stop
 
 coverage: all
-	bin/django test $(NOSE_ARGS) \
+	bin/django test \
 		--with-coverage \
 		--cover-erase \
 		--cover-inclusive \
