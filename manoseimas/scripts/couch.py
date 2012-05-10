@@ -37,6 +37,21 @@ def shell(args):
     shell()
 
 
+def deletesittings(args):
+    server = Server(settings.COUCHDB_SERVER)
+    db = server['nodes']
+    total = db.view('votings/by_source_id', limit=1).total_rows
+    counter = 0
+    pages = 0
+    while pages < total:
+        for doc in db.view('votings/by_source_id', include_docs=True, limit=1000):
+            counter += 1
+            if doc['doc']['doc_type'] == 'Voting':
+                print('del %s / %s' % (counter, total))
+                del db[doc['doc']['_id']]
+        pages += 100
+
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -50,6 +65,9 @@ def main():
     # shell
     p = subparsers.add_parser('shell')
     p.set_defaults(func=shell)
+
+    p = subparsers.add_parser('deletesittings')
+    p.set_defaults(func=deletesittings)
 
     args = parser.parse_args()
     args.func(args)
