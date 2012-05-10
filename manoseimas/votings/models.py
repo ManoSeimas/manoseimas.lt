@@ -52,7 +52,7 @@ class Voting(Node):
     voting_type = schema.StringProperty()
 
     # List of votes by person and fraction.
-    votes = schema.ListProperty()
+    votes = schema.DictProperty()
 
     # List of legal acts that was directly voted for with this voting.
     legal_acts = schema.ListProperty()

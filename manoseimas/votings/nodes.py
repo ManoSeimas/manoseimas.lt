@@ -130,8 +130,8 @@ def get_vote_value(vote, position):
     return value
 
 
-def get_img_url(name):
-    uname = name.strip()
+def get_img_url(mp_id):
+    uname = mp_id.strip()
     names = unidecode(uname).split()  
     names.append( names.pop(0) )  #   swap/rotate order of Name and Surname
     name_surname4photo = "_".join( names).lower()
@@ -149,17 +149,19 @@ def mps_vote_for_solution(solution_id):
     # Loop for all votings
     for voting in view:
         link = voting.solutions[solution_id]
-        # Loop for MPs
-        # [{name: Jonas Petraitis, vote: aye}, ...]
-        for vote in voting.votes:
-            if vote['name'] not in mps:
-                mps[vote['name']] = {'times': 0, 'sum': 0}
+        # Loop for all vote values (aye, abstain, no)
+        for vote_value, votes in voting.votes.items():
+            vote_value = get_vote_value(vote_value, link['position'])
+            # Loop for MPs
+            for mp_id, fraction_id in votes:
+                if mp_id not in mps:
+                    mps[mp_id] = {'times': 0, 'sum': 0}
 
-            mps[vote['name']]['times'] += link['weight']
-            mp_vote = get_vote_value(vote['vote'], link['position'])
-            mps[vote['name']]['sum'] += mp_vote * link['weight']
+                mps[mp_id]['times'] += link['weight']
+                mps[mp_id]['sum'] += vote_value * link['weight']
 
-    return dict([(name, 1.0 * mp['sum'] / mp['times']) for name, mp in mps.items()])
+    return dict([(mp_id, 1.0 * mp['sum'] / mp['times'])
+                 for mp_id, mp in mps.items()])
 
 def match_mps_with_user(results, mps, user_vote):
     for name, mp_solution_vote in mps.items():
@@ -171,7 +173,7 @@ def match_mps_with_user(results, mps, user_vote):
 
 def sort_results(mps):
     return sorted(list([{
-        'name': k,
+        'id': k,
         'times': v['times'],
         'score': int((1.0 * v['sum'] / v['times']) / 4 * 100),
         'url': get_img_url(k),
@@ -209,15 +211,15 @@ class QuickResultsView(NodeView):
             return HttpResponse(
                 '<table>' + ''.join(['''
                     <tr>
-                        <td>%(name)s</td>
+                        <td>%(id)s</td>
                         <td>x%(times)s</td>
                         <td>%(score)s%%</td>
                         <td><img src="%(url)s"> %(url)s</td>
                     </tr>''' % {
-                        'name': a['name'],
+                        'id': a['id'],
                         'times': a['times'],
                         'score': a['score'],
-                        'url': get_img_url(a['name']),
+                        'url': get_img_url(a['id']),
                     } for a in results]) +
                 '</table>')
         else:
@@ -240,23 +242,23 @@ class QuickResultsView(DetailsView):
         return super(QuickResultsView, self).render(
             results=results[:8],
             party_results=[
-                {'name': u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija',
+                {'id':     u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija',
                  'score':  78,
                  'url':    'http://manobalsas.lt/politikai/logos/part_37.gif',
                 },
-                {'name': u'Lietuvos socialdemokratų partijos frakcija',
+                {'id':     u'Lietuvos socialdemokratų partijos frakcija',
                  'score':  72,
                  'url':    'http://manobalsas.lt/politikai/logos/part_20.gif',
                 },
-                {'name': u'Liberalų ir centro sąjungos frakcija',
+                {'id':     u'Liberalų ir centro sąjungos frakcija',
                  'score':  67,
                  'url':    'http://manobalsas.lt/politikai/logos/part_3.gif',
                 },
-                {'name': u'Liberalų sąjūdžio frakcija',
+                {'id':     u'Liberalų sąjūdžio frakcija',
                  'score':  66,
                  'url':    'http://manobalsas.lt/politikai/logos/part_18.gif',
                 },
-                {'name': u'Frakcija "Tvarka ir teisingumas"',
+                {'id':     u'Frakcija "Tvarka ir teisingumas"',
                  'score':  56,
                  'url':    'http://manobalsas.lt/politikai/logos/part_30.gif',
                 },

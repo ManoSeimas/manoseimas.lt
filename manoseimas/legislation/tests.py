@@ -21,6 +21,7 @@ import unittest
 
 from django.test import TestCase
 
+from sboard.models import get_new_id
 from sboard.tests import NodesTestsMixin
 
 from manoseimas.legislation.management.commands.syncsittings import RawVoting
@@ -64,6 +65,28 @@ class SyncLegalActsTest(unittest.TestCase):
         self.assertEqual(split_law_name(name), [])
 
 
+class FakeSyncProcessor(SyncProcessor):
+    def __init__(self, *args, **kwargs):
+        super(FakeSyncProcessor, self).__init__(*args, **kwargs)
+        self._profile_ids = {}
+        self._fraction_ids = {}
+        self._nodes = []
+
+    def _get_or_add(self, ids, key):
+        if key not in ids:
+            ids[key] = get_new_id()
+        return ids[key]
+
+    def get_profile_id(self, profile_source_id):
+        return self._get_or_add(self._profile_ids, profile_source_id)
+
+    def get_fraction_id(self, fraction_abbreviation):
+        return self._get_or_add(self._fraction_ids, fraction_abbreviation)
+
+    def save_node(self, node):
+        self._nodes.append(node)
+
+
 class TestSyncSittings(NodesTestsMixin, TestCase):
     def test_sync(self):
         pipeline = FakePipeline()
@@ -80,5 +103,9 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
 
         voting = RawVoting(dict(voting))
 
-        processor = SyncProcessor()
+        processor = FakeSyncProcessor()
         processor.sync([voting])
+
+        node = processor._nodes[0]
+        profile_id = processor.get_profile_id('47852p')
+        self.assertEqual(node.votes['aye'][0][0], profile_id)

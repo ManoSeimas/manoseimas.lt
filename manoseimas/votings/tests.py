@@ -76,8 +76,8 @@ class SolutionTests(NodesTestsMixin, TestCase):
         response = self.client.get(results_url, {'vote': '2'})
         self.assertEqual(response.status_code, 200)
         data = json.loads(response.content)
-        self.assertEqual(data['mps'][0]['name'], 'test')
-        self.assertEqual(data['mps'][0]['score'], 100)
+        self.assertEqual(data['mps'][0]['id'], '000078')
+        self.assertEqual(data['mps'][0]['score'], 87)
 
 
 class SearchTest(NodesTestsMixin, TestCase):

@@ -107,6 +107,30 @@ class SyncProcessor(object):
                 parent_legal_acts.update(legal_act.parents)
         return list(legal_acts), list(parent_legal_acts)
 
+    def get_profile_id(self, profile_source_id):
+        raise NotImplementedError
+
+    def get_fraction_id(self, fraction_abbreviation):
+        raise NotImplementedError
+
+    def sync_votes(self, votes):
+        ret = {
+            'aye': [],
+            'abstain': [],
+            'no': [],
+        }
+        for vote in votes:
+            if vote['vote'] == 'no-vote':
+                continue
+            profile_id = self.get_profile_id(vote['person'])
+            fraction_id = self.get_fraction_id(vote['fraction'])
+            ret[vote['vote']].append([profile_id, fraction_id])
+        return ret
+
+    def save_node(self, node):
+        node.save()
+        print('Node: %s' % node._id)
+
     def process(self, doc):
         node = self.get_or_create_voting(doc)
         node.created = doc.datetime
@@ -137,7 +161,7 @@ class SyncProcessor(object):
 
         # List of votes by person and fraction.
         if 'votes' in doc:
-            node.votes = list(doc.votes)
+            node.votes = self.sync_votes(doc.votes)
 
         # Involved legal acts.
         (node.legal_acts,
@@ -146,9 +170,7 @@ class SyncProcessor(object):
         # Source information
         node.source = self.get_source(doc)
 
-        node.save()
-
-        print('Node: %s' % node._id)
+        self.save_node(node)
 
     def sync(self, view):
         for doc in view:
