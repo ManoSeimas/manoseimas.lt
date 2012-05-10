@@ -20,6 +20,7 @@
 from django.core.management.base import BaseCommand
 
 from sboard.models import couch
+from sboard.models import get_new_id
 from sboard.profiles.models import MembershipNode
 from sboard.utils import slugify
 
@@ -48,7 +49,9 @@ class SyncProcessor(object):
         if node_id:
             return couch.get(node_id)
         else:
-            return node_class()
+            node = node_class()
+            node._id = get_new_id()
+            return node
 
     def process_groups(self, groups, profile):
         group_type_map = {
