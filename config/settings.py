@@ -283,6 +283,7 @@ COUCHDB_DATABASES = (
     ('manoseimas.sittings', '$COUCHDB_URL/sittings'),
     ('manoseimas.votings', '$COUCHDB_URL/nodes'),
     ('manoseimas.policy', '$COUCHDB_URL/nodes'),
+    ('manoseimas.mps', '$COUCHDB_URL/nodes'),
 )
 
 ELASTICSEARCH_SERVERS = (
