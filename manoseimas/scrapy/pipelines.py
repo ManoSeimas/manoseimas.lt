@@ -37,7 +37,7 @@ class ManoseimasPipeline(object):
         try:
             return db.get(item['_id'])
         except ResourceNotFound:
-            return dict(item)
+            return None
 
     def process_item(self, item, spider):
         if '_id' not in item or not item['_id']:
@@ -46,8 +46,13 @@ class ManoseimasPipeline(object):
         item_name = item.__class__.__name__.lower()
 
         doc = self.get_doc(item_name, item)
-        doc['doc_type'] = item_name
-        doc['updated'] = datetime.datetime.now().isoformat()
+        if doc is None:
+            doc = dict(item)
+            doc['doc_type'] = item_name
+            doc['updated'] = datetime.datetime.now().isoformat()
+        else:
+            doc.update(item)
+            doc['updated'] = datetime.datetime.now().isoformat()
 
         self.store_item(item_name, doc, item)
 

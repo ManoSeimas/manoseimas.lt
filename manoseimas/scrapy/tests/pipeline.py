@@ -19,7 +19,7 @@ class FakePipeline(ManoseimasPipeline):
         super(FakePipeline, self).__init__(*args, **kwargs)
 
     def get_doc(self, item_name, item):
-        return self._stored_items.get(item['_id'], dict(item))
+        return self._stored_items.get(item['_id'], None)
 
     def store_item(self, item_name, doc, item):
         self._stored_items[item['_id']] = doc
