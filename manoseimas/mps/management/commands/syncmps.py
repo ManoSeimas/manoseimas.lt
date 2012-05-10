@@ -111,7 +111,7 @@ class SyncProcessor(object):
         node.title = u'%s %s' % (doc['first_name'], doc['last_name'])
         node.first_name = doc['first_name']
         node.last_name = doc['last_name']
-        node.dob = doc['dob']
+        node.dob = doc.get('dob')
         node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
@@ -133,8 +133,8 @@ class SyncProcessor(object):
         limit = 100
         params = {'include_docs': True, 'limit': limit}
         while has_docs:
-            view = self.db.view(view, **params)
-            rows = list(view)
+            rows = self.db.view(view, **params)
+            rows = list(rows)
             if len(rows) == limit:
                 last = rows.pop()
             else:
@@ -144,7 +144,7 @@ class SyncProcessor(object):
                 self.process(doc['doc'])
 
             if last is not None:
-                params['startkey'] = last._id
+                params['startkey'] = last['id']
 
 
 class Command(BaseCommand):
