@@ -17,7 +17,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import uuid
 import datetime
 
 from django.core.management.base import BaseCommand
@@ -29,6 +28,7 @@ from couchdbkit.ext.django.loading import get_db
 from manoseimas.votings.models import Voting, Source
 
 from sboard.models import couch
+from sboard.models import get_new_id
 
 
 class DateTimeProperty(schema.DateTimeProperty):
@@ -62,9 +62,6 @@ class SyncException(Exception):
 
 
 class SyncProcessor(object):
-    def get_id(self):
-        return str(uuid.uuid4())
-
     def get_voting_by_source_id(self, source_id):
         try:
             return couch.view('votings/by_source_id', key=source_id).first()
@@ -84,7 +81,7 @@ class SyncProcessor(object):
         voting = self.get_voting_by_source_id(doc.source.id)
         if voting is None:
             voting = Voting()
-            voting._id = self.get_id()
+            voting._id = get_new_id()
         return voting
 
     def get_source(self, doc):
