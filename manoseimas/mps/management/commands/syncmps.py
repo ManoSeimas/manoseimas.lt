@@ -101,8 +101,11 @@ class SyncProcessor(object):
             return
 
         node = self.get_node(doc.get('node_id'), MPProfile)
-
         node.slug = slugify('%s %s' % (doc['first_name'], doc['last_name']))
+
+        if self.verbosity >= 1:
+            print 'Node %s (%s) ...' % (node._id, node.slug),
+
         node.keywords = node.slug.split('-')
         node.importance = 10
         node.title = u'%s %s' % (doc['first_name'], doc['last_name'])
@@ -121,7 +124,7 @@ class SyncProcessor(object):
         self.db.save_doc(doc)
 
         if self.verbosity >= 1:
-            print('Node %s (%s)' % (node._id, node.slug))
+            print('OK')
 
 
     def sync(self, view='_all_docs'):
