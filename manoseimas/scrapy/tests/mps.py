@@ -9,6 +9,15 @@ from ..spiders.mps import MpsSpider
 from .utils import fixture
 
 
+def parse_mp():
+    spider = MpsSpider()
+    url = ('http://www3.lrs.lt/pls/inter/w5_show?'
+           'p_r=6113&p_k=1&p_a=5&p_asm_id=53911&p_kade_id=6')
+    response = HtmlResponse(url, body=fixture('mp_53911.html'))
+    items = list(spider.parse_person(response))
+    return items[0]
+
+
 class TestMpsSpider(unittest.TestCase):
     def test_nedzinskas(self):
         spider = MpsSpider()

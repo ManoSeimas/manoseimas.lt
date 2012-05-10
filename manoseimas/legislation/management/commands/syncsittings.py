@@ -62,6 +62,9 @@ class SyncException(Exception):
 
 
 class SyncProcessor(object):
+    def __init__(self):
+        self._profile_ids = {}
+
     def get_voting_by_source_id(self, source_id):
         try:
             return couch.view('votings/by_source_id', key=source_id).first()
@@ -107,8 +110,11 @@ class SyncProcessor(object):
                 parent_legal_acts.update(legal_act.parents)
         return list(legal_acts), list(parent_legal_acts)
 
-    def get_profile_id(self, profile_source_id):
-        raise NotImplementedError
+    def get_profile_id(self, source_id):
+        if source_id not in self._profile_ids:
+            profile = couch.view('mps/by_source_id', key=source_id).first()
+            self._profile_ids[source_id] = profile._id
+        return self._profile_ids[source_id]
 
     def get_fraction_id(self, fraction_abbreviation):
         raise NotImplementedError
@@ -122,7 +128,7 @@ class SyncProcessor(object):
         for vote in votes:
             if vote['vote'] == 'no-vote':
                 continue
-            profile_id = self.get_profile_id(vote['person'])
+            profile_id = self.get_profile_id(vote['person'].rstrip('p'))
             fraction_id = self.get_fraction_id(vote['fraction'])
             ret[vote['vote']].append([profile_id, fraction_id])
         return ret

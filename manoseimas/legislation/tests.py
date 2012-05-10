@@ -25,11 +25,15 @@ from sboard.models import get_new_id
 from sboard.tests import NodesTestsMixin
 
 from manoseimas.legislation.management.commands.syncsittings import RawVoting
+from manoseimas.mps.models import MPProfile
+from manoseimas.scrapy.tests.mps import parse_mp
 from manoseimas.scrapy.tests.pipeline import FakePipeline
 from manoseimas.scrapy.tests.sittings import parse_question
 from manoseimas.scrapy.tests.sittings import parse_voting
 
-from .management.commands.syncsittings import SyncProcessor
+import manoseimas.legislation.management.commands.syncsittings as syncsittings
+import manoseimas.mps.management.commands.syncmps as syncmps
+
 from .utils import split_law_name
 
 
@@ -65,10 +69,9 @@ class SyncLegalActsTest(unittest.TestCase):
         self.assertEqual(split_law_name(name), [])
 
 
-class FakeSyncProcessor(SyncProcessor):
+class FakeSyncProcessor(syncsittings.SyncProcessor):
     def __init__(self, *args, **kwargs):
         super(FakeSyncProcessor, self).__init__(*args, **kwargs)
-        self._profile_ids = {}
         self._fraction_ids = {}
         self._nodes = []
 
@@ -107,5 +110,19 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         processor.sync([voting])
 
         node = processor._nodes[0]
-        profile_id = processor.get_profile_id('47852p')
+        profile_id = processor.get_profile_id('47852')
         self.assertEqual(node.votes['aye'][0][0], profile_id)
+
+    def test_get_profile_by_source_id(self):
+        pipeline = FakePipeline()
+        pipeline.process_item(parse_mp(), None)
+        doc = pipeline._stored_items['53911p']
+
+        db = MPProfile.get_db()
+        processor = syncmps.SyncProcessor(db, verbosity=0)
+        processor.process(doc)
+
+        processor = syncsittings.SyncProcessor()
+        node_id = processor.get_profile_id('53911')
+
+        self.assertEqual(node_id, '000001')
