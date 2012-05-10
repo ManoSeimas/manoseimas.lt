@@ -113,11 +113,16 @@ class SyncProcessor(object):
     def get_profile_id(self, source_id):
         if source_id not in self._profile_ids:
             profile = couch.view('mps/by_source_id', key=source_id).first()
-            self._profile_ids[source_id] = profile._id
+            if profile:
+                key = profile._id
+            else:
+                print('MP %s not found ' % source_id)
+                key = None
+            self._profile_ids[source_id] = key
         return self._profile_ids[source_id]
 
     def get_fraction_id(self, fraction_abbreviation):
-        raise NotImplementedError
+        return fraction_abbreviation
 
     def sync_votes(self, votes):
         ret = {
@@ -135,11 +140,12 @@ class SyncProcessor(object):
 
     def save_node(self, node):
         node.save()
-        print('Node: %s' % node._id)
 
     def process(self, doc):
         node = self.get_or_create_voting(doc)
         node.created = doc.datetime
+
+        print 'Node: %s ... ' % (node._id,),
 
         # TODO: some times, when 'formulation' property does not exists,
         # 'formulation_a' and 'formulation_b' can be provided.
@@ -177,6 +183,8 @@ class SyncProcessor(object):
         node.source = self.get_source(doc)
 
         self.save_node(node)
+
+        print('OK')
 
     def sync(self, view):
         for doc in view:
