@@ -109,7 +109,7 @@ class SyncProcessor(object):
         node.first_name = doc['first_name']
         node.last_name = doc['last_name']
         node.dob = doc['dob']
-        node.home_page = doc['home_page']
+        node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
 
