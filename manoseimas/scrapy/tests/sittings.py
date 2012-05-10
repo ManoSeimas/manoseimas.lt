@@ -38,7 +38,7 @@ class TestSittingsSpider(unittest.TestCase):
         self.assertEqual(item['_id'], '-10765v')
 
 
-    def test_nedzinskas(self):
+    def test_voting(self):
         items = parse_voting()
 
         item = items[0]
