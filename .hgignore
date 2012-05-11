@@ -31,3 +31,5 @@ syntax:regexp
 ^parts$
 ^tags$
 ^var$
+
+manoseimas/static/css/styles.css
