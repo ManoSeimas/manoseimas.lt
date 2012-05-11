@@ -125,4 +125,4 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         processor = syncsittings.SyncProcessor()
         node_id = processor.get_profile_id('53911')
 
-        self.assertEqual(node_id, '000001')
+        self.assertEqual(node_id, '000005')
