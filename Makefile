@@ -10,13 +10,7 @@ all: c4che/_cache.py env
 
 .PHONY: run
 run: all
-	bin/django estool --path=parts/elasticsearch start
 	bin/django runserver
-
-.PHONY: stop
-stop:
-	bin/django estool --path=parts/elasticsearch stop
-
 
 .PHONY: pull
 pull:
