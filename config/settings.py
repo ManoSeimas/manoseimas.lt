@@ -259,6 +259,11 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'django.db': {
+            'handlers': ['null'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         'couchdbkit': {
             'handlers':['null'],
             'propagate': True,
