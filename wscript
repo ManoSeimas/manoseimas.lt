@@ -251,14 +251,6 @@ def build(ctx):
                 target='%s/locale/%s/LC_MESSAGES/django.mo' % s,
                 after='buildout')
 
-    # Install ElasticSearch river-couchdb plugin.
-    espath = 'parts/elasticsearch'
-    plugin = 'elasticsearch/elasticsearch-river-couchdb/1.1.0'
-    bld(rule='%s/bin/plugin -install %s' % (espath, plugin),
-        target=('%s/plugins/river-couchdb/'
-                'elasticsearch-river-couchdb-1.1.0.jar') % espath,
-        after='buildout')
-
 
 def makemessages(ctx):
     for lang in ctx.env.LANGUAGES:
@@ -383,9 +375,6 @@ def setup(ctx):
         'libicu-dev',
         'libjpeg62-dev',
         'libxslt1-dev',
-
-        # Java for ElasticSearch
-        'openjdk-6-jre-headless',
     ])
 
     if ctx.options.production:
