@@ -52,7 +52,7 @@
               <i class="icon-user icon-white"></i> {{ request.user }}
               <b class="caret"></b></a>
             <ul class="dropdown-menu">
-              <li><a href="{% url profile %}">
+              <li><a href="{{ request.user.get_profile.get_node.permalink }}">
                 <i class="icon-user"></i> {% trans "Profile" %}</a></li>
               <li><a href="{% url logout %}">
                 <i class="icon-off"></i> {% trans "Log out" %}</a></li>
