@@ -1,3 +1,4 @@
+import StringIO
 import unittest
 
 from couchdbkit import Server
@@ -70,6 +71,11 @@ class TestPipeline(unittest.TestCase):
             'name': u'lrslt',
         }
 
+        # content_type = mimetypes.guess_type('photo.png')[0]
+        item['_attachments'] = [
+            ('avatar', StringIO.StringIO('attachment content'), 'image/png')
+        ]
+
         self.assertFalse(self.db.doc_exist(item['_id']))
 
         pipeline = ManoseimasPipeline()
@@ -84,6 +90,10 @@ class TestPipeline(unittest.TestCase):
         pipeline.process_item(item, None)
         doc = self.db.get(item['_id'])
         self.assertNotEqual(rev, doc['_rev'])
+
+        attachment = self.db.fetch_attachment(doc, 'avatar', stream=True)
+        content = attachment.read()
+        self.assertEqual(content, 'attachment content')
 
     def test_pipline_from_spider(self):
         spider = MpsSpider()

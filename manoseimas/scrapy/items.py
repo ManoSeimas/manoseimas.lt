@@ -45,6 +45,8 @@ class Person(Item):
                    output_processor=processor.Identity())
     source = Field(input_processor=processor.Identity(),
                    output_processor=processor.TakeFirst())
+    _attachments = Field(input_processor=processor.Identity(),
+                         output_processor=processor.Identity())
 
 
 class Group(Item):

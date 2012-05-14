@@ -26,11 +26,11 @@ def get_db(item_name, cache=True):
 class ManoseimasPipeline(object):
     def store_item(self, item_name, doc, item):
         db = get_db(item_name)
-        doc = db.save_doc(doc)
+        attachments = doc.pop('_attachments', [])
+        db.save_doc(doc)
 
-        if '_attachments' in item:
-            for attachment, content in item['_attachments']:
-                db.put_attachment(doc, content, attachment)
+        for name, content, content_type in attachments:
+            db.put_attachment(doc, content, name, content_type)
 
     def get_doc(self, item_name, item):
         db = get_db(item_name)

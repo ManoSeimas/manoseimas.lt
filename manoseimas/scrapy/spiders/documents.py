@@ -162,7 +162,8 @@ class LegalActsSpider(ManoSeimasSpider):
     def _extract_html_as_attachment(self, response, loader, xpath, name):
         text = HtmlXPathSelector(response).select(xpath).extract()
         text = clean_html('\n'.join(text))
-        loader.add_value('_attachments', [(name, text.encode('utf-8'))])
+        body = text.encode('utf-8')
+        loader.add_value('_attachments', [(name, body, 'text/html')])
 
     def _get_legislation_links(self, response, hxs):
         for link in hxs.select('tr[4]/td/a'):
