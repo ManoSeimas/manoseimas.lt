@@ -17,7 +17,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import StringIO
 import unittest
+
+from mock import patch
 
 from django.test import TestCase
 
@@ -113,7 +116,10 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         profile_id = processor.get_profile_id('47852')
         self.assertEqual(node.votes['aye'][0][0], profile_id)
 
-    def test_get_profile_by_source_id(self):
+    @patch('manoseimas.mps.management.commands.syncmps.urllib2')
+    def test_get_profile_by_source_id(self, urllib2_mock):
+        urllib2_mock.urlopen.return_value = StringIO.StringIO('content')
+
         pipeline = FakePipeline()
         pipeline.process_item(parse_mp(), None)
         doc = pipeline._stored_items['53911p']

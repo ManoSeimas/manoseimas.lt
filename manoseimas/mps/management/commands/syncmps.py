@@ -17,8 +17,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import os.path
+import urllib2
+
 from django.core.management.base import BaseCommand
 
+from sboard.models import ImageNode
 from sboard.models import couch
 from sboard.models import get_new_id
 from sboard.profiles.models import MembershipNode
@@ -95,6 +99,22 @@ class SyncProcessor(object):
             doc['group_node_id'] = group._id
             doc['membership_node_id'] = membership._id
 
+    def fetch_photo(self, profile, url):
+        f = urllib2.urlopen(url)
+
+        # To avoid:
+        # AttributeError: addinfourl instance has no attribute 'flush'
+        f.flush = lambda: None
+
+        node = ImageNode()
+        node.title = profile.title
+        node.set_parent(profile)
+        node.ext = os.path.splitext(url)[1][1:]
+        node.importance = 0
+        node.save()
+        node.put_attachment(f, 'file')
+        f.close()
+        return node
 
     def process(self, doc):
         if 'doc_type' not in doc or doc['doc_type'] != 'person':
@@ -115,6 +135,7 @@ class SyncProcessor(object):
         node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
+        node.photo = self.fetch_photo(node, doc['photo'])
 
         node.save()
 
