@@ -83,8 +83,8 @@ class SyncProcessor(object):
             group.save()
 
             membership = self.get_node(membership_node_id, MembershipNode)
-            membership.profile = profile._id
-            membership.group = group._id
+            membership.profile = profile
+            membership.group = group
             if 'membership' in doc:
                 membership.term_from = todate(doc['membership'][0])
                 membership.term_to = todate(doc['membership'][1])
