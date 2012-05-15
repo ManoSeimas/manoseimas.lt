@@ -18,7 +18,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import os.path
-import urllib2
+import urllib
 
 from django.core.management.base import BaseCommand
 
@@ -99,21 +99,29 @@ class SyncProcessor(object):
             doc['group_node_id'] = group._id
             doc['membership_node_id'] = membership._id
 
-    def fetch_photo(self, profile, url):
-        f = urllib2.urlopen(url)
+    def fetch_photo(self, url, node):
+        path = node.path(fetch=False)
+        if not os.path.exists(path):
+            urllib.urlretrieve(url, path)
+        return open(path, 'rb')
 
-        # To avoid:
-        # AttributeError: addinfourl instance has no attribute 'flush'
-        f.flush = lambda: None
-
-        node = ImageNode()
+    def get_photo(self, profile, url):
+        if profile.photo:
+            node = profile.photo.ref
+        else:
+            node = self.get_node(None, ImageNode)
         node.title = profile.title
         node.set_parent(profile)
         node.ext = os.path.splitext(url)[1][1:]
         node.importance = 0
+
+        photo = self.fetch_photo(url, node)
+
         node.save()
-        node.put_attachment(f, 'file')
-        f.close()
+
+        node.put_attachment(photo, 'file')
+        photo.close()
+
         return node
 
     def process(self, doc):
@@ -135,7 +143,7 @@ class SyncProcessor(object):
         node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
-        node.photo = self.fetch_photo(node, doc['photo'])
+        node.photo = self.get_photo(node, doc['photo'])
 
         node.save()
 

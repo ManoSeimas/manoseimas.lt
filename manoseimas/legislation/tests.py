@@ -116,9 +116,9 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         profile_id = processor.get_profile_id('47852')
         self.assertEqual(node.votes['aye'][0][0], profile_id)
 
-    @patch('manoseimas.mps.management.commands.syncmps.urllib2')
-    def test_get_profile_by_source_id(self, urllib2_mock):
-        urllib2_mock.urlopen.return_value = StringIO.StringIO('content')
+    @patch.object(syncmps.SyncProcessor, 'fetch_photo')
+    def test_get_profile_by_source_id(self, fetch_photo):
+        fetch_photo.return_value = StringIO.StringIO('content')
 
         pipeline = FakePipeline()
         pipeline.process_item(parse_mp(), None)
