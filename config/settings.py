@@ -110,9 +110,6 @@ PIPELINE_CSS = {
     'styles': {
         'source_filenames': (
           'css/styles.less',
-          #if $TWITTER_BOOTSTRAP
-          'css/bootstrap.css',
-          #end if
         ),
         'output_filename': 'css/styles.css',
     },
@@ -123,7 +120,18 @@ PIPELINE_JS = {
         'source_filenames': (
             'js/jquery.js',
             #if $TWITTER_BOOTSTRAP
-            'js/bootstrap.js',
+            'js/bootstrap-transition.js',
+            'js/bootstrap-alert.js',
+            'js/bootstrap-button.js',
+            'js/bootstrap-carousel.js',
+            'js/bootstrap-collapse.js',
+            'js/bootstrap-dropdown.js',
+            'js/bootstrap-modal.js',
+            'js/bootstrap-tooltip.js',
+            'js/bootstrap-popover.js',
+            'js/bootstrap-scrollspy.js',
+            'js/bootstrap-tab.js',
+            'js/bootstrap-typeahead.js',
             #end if
             'js/flot/jquery.flot.js',
             'js/flot/jquery.flot.pie.js',
@@ -146,7 +154,12 @@ PIPELINE_COMPILERS = (
     #end if
 )
 #if $LESS
+LESS_PATH = ':'.join([
+    os.path.join(PROJECT_DIR, 'manoseimas', 'static', 'css'),
+    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap', 'less'),
+])
 PIPELINE_LESS_BINARY = os.path.join(BUILDOUT_DIR, 'bin', 'lessc')
+PIPELINE_LESS_ARGUMENTS = '--include-path=%s' % LESS_PATH
 #end if
 
 PIPELINE_CSS_COMPRESSOR = None
