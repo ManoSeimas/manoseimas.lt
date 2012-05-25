@@ -24,39 +24,66 @@ from django.utils.translation import ugettext_lazy as _
 
 from sboard.nodes import CreateView
 from sboard.nodes import DetailsView
+from sboard.nodes import ListView
 
 from .forms import SolutionForm
 from .interfaces import ISolution
+
+
+def solution_nav(node, nav, active):
+    if not active:
+        active = ('index',)
+
+    nav.append({
+        'key': 'node-title',
+        'title': _('Sprendimas'),
+        'header': True,
+    })
+
+    key = 'index'
+    nav.append({
+        'key': key,
+        'url': node.permalink(),
+        'title': _('Sprendimas'),
+        'children': [],
+        'active': key in active,
+    })
+
+    key = 'votings'
+    nav.append({
+        'key': key,
+        'url': node.permalink(key),
+        'title': _('Balsavimai'),
+        'children': [],
+        'active': key in active,
+    })
+
+    return nav
 
 
 class SolutionDetailsView(DetailsView):
     adapts(ISolution)
 
     def nav(self, active=tuple()):
-        if not active:
-            active = ('index',)
-
         nav = super(SolutionDetailsView, self).nav(active)
-
-        nav.append({
-            'key': 'node-title',
-            'title': _('Sprendimas'),
-            'header': True,
-        })
-
-        key = 'index'
-        nav.append({
-            'key': key,
-            'url': self.node.permalink(),
-            'title': _('Sprendimas'),
-            'children': [],
-            'active': key in active,
-        })
-
-        return nav
-
+        return solution_nav(self.node, nav, active)
 
 provideAdapter(SolutionDetailsView)
+
+
+class SolutionVotingsView(ListView):
+    adapts(ISolution)
+
+    def nav(self, active=tuple()):
+        if not active:
+            active = ('votings',)
+        nav = super(SolutionVotingsView, self).nav(active)
+        return solution_nav(self.node, nav, active)
+
+    def get_node_list(self):
+        return self.node.get_votings()
+
+provideAdapter(SolutionVotingsView, name="votings")
 
 
 class CreateSolutionView(CreateView):

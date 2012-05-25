@@ -27,6 +27,9 @@ from .interfaces import ISolution
 class Solution(Node):
     implements(ISolution)
 
+    def get_votings(self):
+        return couch.view('solutions/votings', key=self._id)
+
     def mps_positions(self):
         """Returns dict with position of each MP for this solution.
 
