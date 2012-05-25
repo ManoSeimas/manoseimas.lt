@@ -21,10 +21,16 @@ from zope.component import adapts
 from zope.component import provideAdapter
 
 from sboard.nodes import CreateView
-from sboard.nodes import TagListView
+from sboard.nodes import DetailsView
 
 from .forms import SolutionForm
 from .interfaces import ISolution
+
+
+class SolutionDetailsView(DetailsView):
+    adapts(ISolution)
+
+provideAdapter(SolutionDetailsView)
 
 
 class CreateSolutionView(CreateView):
@@ -33,5 +39,3 @@ class CreateSolutionView(CreateView):
     form = SolutionForm
 
 provideAdapter(CreateSolutionView, name="create")
-
-provideAdapter(TagListView, (ISolution,))

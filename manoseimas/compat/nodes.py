@@ -245,4 +245,4 @@ class SolutionDetailsView(DetailsView):
         'details': 'votings/solution.html',
     }
 
-provideAdapter(SolutionDetailsView)
+provideAdapter(SolutionDetailsView, name='compatibility')
