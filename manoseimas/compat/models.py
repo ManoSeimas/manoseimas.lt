@@ -15,31 +15,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import json
+from zope.interface import implements
 
-from django.core.urlresolvers import reverse
-from django.test import TestCase
+from sboard.categories.models import Category
+from sboard.factory import provideNode
 
-from sboard.tests import NodesTestsMixin
+from couchdbkit.ext.django import schema
 
-from .models import Voting
-
-
-def load_fixtures(db):
-    path = os.path.dirname(__file__)
-    with open(os.path.join(path, 'fixtures', 'voting.json')) as f:
-        db.save_docs(json.load(f))
+from .interfaces import ICompat
 
 
-class SearchTest(NodesTestsMixin, TestCase):
-    def testSolutions(self):
-        db = Voting.get_db()
-        load_fixtures(db)
+class SolutionCompat(Category):
+    implements(ICompat)
 
-        search_url = reverse('search')
-        response = self.client.get(search_url, {
-            'q': 'http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-13013',
-        })
-        self.assertRedirects(response, reverse('node',
-                args=['16aa1e75-a5fb-4233-9213-4ddcc0380fe5']))
+    categories = schema.ListProperty()
+
+provideNode(SolutionCompat, "solutions-test")

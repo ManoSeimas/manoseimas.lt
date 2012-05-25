@@ -19,35 +19,19 @@
 
 import urlparse
 
-from  unidecode import unidecode
-
 from zope.component import adapts
 from zope.component import provideAdapter
 
-from django.http import Http404
-from django.http import HttpResponse
 from django.shortcuts import redirect
-from django.shortcuts import render
 
-from sboard.categories.interfaces import ICategory
-from sboard.interfaces import INode
 from sboard.models import couch
-from sboard.nodes import CreateView
 from sboard.nodes import DetailsView
-from sboard.nodes import ListView
-from sboard.nodes import NodeView
-from sboard.nodes import TagListView
 
-from .forms import LinkSolutionForm
-from .forms import SolutionForm
-from .interfaces import ISolution
 from .interfaces import IVoting
 
 
 class VotingView(DetailsView):
     adapts(IVoting)
-
-    form = LinkSolutionForm
 
     templates = {
         'details': 'votings/voting_details.html',
@@ -56,226 +40,14 @@ class VotingView(DetailsView):
     def get_related_legal_acts(self):
         return couch.view('legislation/related_legal_acts', key=self.node._id)
 
-    def get_solutions(self):
-        return couch.view('votings/solutions_by_voting', key=self.node._id)
-
     def render(self, **overrides):
         context = {
             'related_legal_acts': self.get_related_legal_acts(),
-            'solutions': self.get_solutions(),
         }
-        context.update(overrides or {})
-
-        if 'link_solution_form' not in context:
-            context['link_solution_form'] = LinkSolutionForm()
-
+        context.update(overrides)
         return super(VotingView, self).render(**context)
 
 provideAdapter(VotingView)
-
-
-class CreateSolutionView(CreateView):
-    adapts(object, ISolution)
-
-    form = SolutionForm
-
-provideAdapter(CreateSolutionView, name="create")
-
-provideAdapter(TagListView, (ISolution,))
-
-
-class LinkSolutionView(VotingView):
-    adapts(IVoting)
-
-    def render(self):
-        if self.request.method == 'POST':
-            if not self.can('update', None):
-                return render(self.request, '403.html', status=403)
-
-            form = self.get_form(self.request.POST)
-            if form.is_valid():
-                if 'solutions' not in self.node:
-                    self.node.solutions = {}
-                solution = form.cleaned_data.pop('solution')
-                self.node.solutions[solution._id] = form.cleaned_data
-                self.node.save()
-                return redirect(self.node.permalink())
-        else:
-            form = self.get_form()
-
-        return super(LinkSolutionView, self).render(link_solution_form=form)
-
-provideAdapter(LinkSolutionView, name="link-solution")
-
-
-class QuestionGroupView(ListView):
-    adapts(ICategory)
-
-    templates = {
-        'list': 'votings/question_group.html',
-    }
-
-provideAdapter(QuestionGroupView)
-
-
-def get_vote_value(vote, position):
-    value = ({
-        'aye': 2,
-        'abstain': -1,
-        'no-vote': -1,
-        'no': -2,
-    })[vote]
-    if not position:
-        value = value * -1
-    return value
-
-
-def get_img_url(mp_id):
-    uname = mp_id.strip()
-    names = unidecode(uname).split()  
-    names.append( names.pop(0) )  #   swap/rotate order of Name and Surname
-    name_surname4photo = "_".join( names).lower()
-    link = "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/%s.jpg" % name_surname4photo
-
-    if (len(names) == 3):
-        names.append( names.pop(0) )  #  once more: rotate order of Name and Surname
-        name_surname4photo = "_".join( names).lower()
-        link = "http://www3.lrs.lt/home/seimo_nariu_nuotraukos/2008/%s.jpg" % name_surname4photo
-    return link
-
-def mps_vote_for_solution(solution_id):
-    mps = {}
-    view = couch.view('votings/by_solution', key=solution_id)
-    # Loop for all votings
-    for voting in view:
-        link = voting.solutions[solution_id]
-        # Loop for all vote values (aye, abstain, no)
-        for vote_value, votes in voting.votes.items():
-            vote_value = get_vote_value(vote_value, link['position'])
-            # Loop for MPs
-            for mp_id, fraction_id in votes:
-                if mp_id not in mps:
-                    mps[mp_id] = {'times': 0, 'sum': 0}
-
-                mps[mp_id]['times'] += link['weight']
-                mps[mp_id]['sum'] += vote_value * link['weight']
-
-    return dict([(mp_id, 1.0 * mp['sum'] / mp['times'])
-                 for mp_id, mp in mps.items()])
-
-def match_mps_with_user(results, mps, user_vote):
-    for name, mp_solution_vote in mps.items():
-        if name not in results:
-            results[name] = {'times': 0, 'sum': 0}
-        results[name]['times'] += 1
-        # If solutions will be weighted then then multiply with issue weight
-        results[name]['sum'] += user_vote * mp_solution_vote
-
-def sort_results(mps):
-    return sorted(list([{
-        'id': k,
-        'times': v['times'],
-        'score': int((1.0 * v['sum'] / v['times']) / 4 * 100),
-        'url': get_img_url(k),
-    } for k, v in mps.items()]), key=lambda a: a['score'], reverse=True)
-
-
-class QuickResultsView(NodeView):
-    adapts(INode)
-
-    def render(self):
-        if self.request.GET.get('clean'):
-            self.request.session['questions'] = []
-            self.request.session['mps_matches'] = {}
-
-        user_vote = self.request.GET.get('vote')
-        if user_vote not in ('-2', '-1', '0', '1', '2'):
-            raise Http404
-        user_vote = int(user_vote)
-
-        questions = self.request.session.get('questions', [])
-        mps_matches = self.request.session.get('mps_matches', {})
-
-        if self.node._id not in questions:
-            # Save questions
-            questions.append(self.node._id)
-            self.request.session['questions'] = questions
-
-            # Save mps
-            mps_votes = mps_vote_for_solution(self.node._id)
-            match_mps_with_user(mps_matches, mps_votes, user_vote)
-            self.request.session['mps_matches'] = mps_matches
-
-        results = sort_results(mps_matches)
-        if self.request.GET.get('raw'):
-            return HttpResponse(
-                '<table>' + ''.join(['''
-                    <tr>
-                        <td>%(id)s</td>
-                        <td>x%(times)s</td>
-                        <td>%(score)s%%</td>
-                        <td><img src="%(url)s"> %(url)s</td>
-                    </tr>''' % {
-                        'id': a['id'],
-                        'times': a['times'],
-                        'score': a['score'],
-                        'url': get_img_url(a['id']),
-                    } for a in results]) +
-                '</table>')
-        else:
-            import json
-            return HttpResponse(json.dumps({'mps': results[:8]}))
-
-provideAdapter(QuickResultsView, name='quick-results')
-
-
-class QuickResultsView(DetailsView):
-    adapts(INode)
-
-    templates = {
-        'details': 'votings/results.html',
-    }
-
-    def render(self):
-        mps_matches = self.request.session.get('mps_matches', {})
-        results = sort_results(mps_matches)
-        return super(QuickResultsView, self).render(
-            results=results[:8],
-            party_results=[
-                {'id':     u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija',
-                 'score':  78,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_37.gif',
-                },
-                {'id':     u'Lietuvos socialdemokratų partijos frakcija',
-                 'score':  72,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_20.gif',
-                },
-                {'id':     u'Liberalų ir centro sąjungos frakcija',
-                 'score':  67,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_3.gif',
-                },
-                {'id':     u'Liberalų sąjūdžio frakcija',
-                 'score':  66,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_18.gif',
-                },
-                {'id':     u'Frakcija "Tvarka ir teisingumas"',
-                 'score':  56,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_30.gif',
-                },
-            ]
-        )
-
-provideAdapter(QuickResultsView, name='results')
-
-
-class SolutionDetailsView(DetailsView):
-    adapts(ISolution)
-
-    templates = {
-        'details': 'votings/solution.html',
-    }
-
-provideAdapter(SolutionDetailsView)
 
 
 def search_lrs_url(query):

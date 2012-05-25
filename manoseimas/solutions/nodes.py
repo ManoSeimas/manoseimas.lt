@@ -1,3 +1,5 @@
+# coding: utf-8
+
 # Copyright (C) 2012  Mantas Zimnickas <sirexas@gmail.com>
 #
 # This file is part of manoseimas.lt project.
@@ -15,31 +17,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import json
+from zope.component import adapts
+from zope.component import provideAdapter
 
-from django.core.urlresolvers import reverse
-from django.test import TestCase
+from sboard.nodes import CreateView
+from sboard.nodes import TagListView
 
-from sboard.tests import NodesTestsMixin
-
-from .models import Voting
-
-
-def load_fixtures(db):
-    path = os.path.dirname(__file__)
-    with open(os.path.join(path, 'fixtures', 'voting.json')) as f:
-        db.save_docs(json.load(f))
+from .forms import SolutionForm
+from .interfaces import ISolution
 
 
-class SearchTest(NodesTestsMixin, TestCase):
-    def testSolutions(self):
-        db = Voting.get_db()
-        load_fixtures(db)
+class CreateSolutionView(CreateView):
+    adapts(object, ISolution)
 
-        search_url = reverse('search')
-        response = self.client.get(search_url, {
-            'q': 'http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-13013',
-        })
-        self.assertRedirects(response, reverse('node',
-                args=['16aa1e75-a5fb-4233-9213-4ddcc0380fe5']))
+    form = SolutionForm
+
+provideAdapter(CreateSolutionView, name="create")
+
+provideAdapter(TagListView, (ISolution,))

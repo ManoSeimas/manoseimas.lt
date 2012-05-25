@@ -40,17 +40,22 @@
 </head>
 
 <body>
-  <div class="navbar navbar-fixed-top">
+  <header class="navbar navbar-manoseimas">
     <div class="navbar-inner">
       <div class="container">
-        <a href="{% url index %}" class="brand">manoseimas.lt</a>
+        <a href="{% url index %}" class="brand">
+          <img src="{{ STATIC_URL }}img/logo.png" />
+        </a>
+
+        {% if request.user.is_authenticated %}
+        <img src="{{ request.user.get_profile.get_node.avatar_url }}"
+             class="avatar pull-right" />
+        {% endif %}
         <ul class="nav pull-right">
-          <li class="divider-vertical"></li>
           {% if request.user.is_authenticated %}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="icon-user icon-white"></i> {{ request.user }}
-              <b class="caret"></b></a>
+              {{ request.user }}<b class="caret"></b></a>
             <ul class="dropdown-menu">
               <li><a href="{{ request.user.get_profile.get_node.permalink }}">
                 <i class="icon-user"></i> {% trans "Profile" %}</a></li>
@@ -73,36 +78,105 @@
           </li>
           {% endif %}
         </ul>
-        <form action="{% url search %}" method="get" class="navbar-search pull-right">
+      </div>
+    </div>
+  </header>
+
+  <div id="middle">
+    <div class="container">
+      <div id="top-menu">
+        <ul class="nav">
+          <li><a href="{% url node "istatymai" %}">{% trans "Įstatymai" %}</a></li>
+          <li><a href="{% url node "sprendimai" %}">{% trans "Sprendimai" %}</a></li>
+          <li><a href="{% url node "problemos" %}">{% trans "Problemos" %}</a></li>
+        </ul>
+        <form action="{% url search %}" method="get" id="search-box">
           <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
                  placeholder="{% trans "Search" %}" class="search-query" />
         </form>
       </div>
+
+      {% block container %}
+      <div class="row">
+        <div class="span10">
+          <!--ul class="manoseimas-breadcrumb">
+            <li><a href="#">Seimo nariai</a> <span class="divider">/</span></li>
+            <li class="active">Andrius Kubilius</li>
+          </ul-->
+        </div>
+        <div class="span2"></div>
+        <div class="content span10">
+          <div class="content-inner">
+          {% block content %}
+          
+          {% endblock %}
+          </div>
+        </div>
+        <div class="sidebar span2">
+          <div class="sidebar-inner">
+            {% block sidebar %}
+            {% endblock %}
+          </div>
+        </div>
+      </div>
+      {% endblock %}
     </div>
   </div>
 
-  <p>&nbsp;</p>
-
-  <div class="container">
-    {% block container %}
-    <div class="row">
-        <div class="span9">
-        {% block content %}
-        
-        {% endblock %}
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="span6">
+          <div class="content">
+            <p><img src="{{ STATIC_URL }}img/logo-gray.png" /></p>
+            <p class="copyright"><small>Kai kurios teisės saugomos (ↄ) 2012
+              manoSeimas.lt ir partneriai</small></p>
+            <p><img src="{{ STATIC_URL }}img/tils.png" /></p>
+          </div>
         </div>
-        <div class="span3">
-            {% block sidebar %}
-            Sidebar
-            {% endblock %}
+        <div class="span2">
+          <h2>Informacija</h2>
+          <ul class="nav">
+            <li><a href="#">Apie projektą</a></li>
+            <li><a href="#">Komanda</a></li>
+            <li><a href="#">Kaip tai veikia</a></li>
+          </ul>
         </div>
+        <div class="span2">
+          <h2>Prisijunk</h2>
+          <ul class="nav">
+            <li><a href="#">Sprendimų atranka</a></li>
+            <li><a href="#">Programuotojams</a></li>
+          </ul>
+        </div>
+        <div class="span2">
+          <h2>Paremk</h2>
+          <ul class="nav">
+            <li><a href="#">aukok.lt</a></li>
+            <li><a href="#">dedikuoti.lt</a></li>
+          </ul>
+        </div>
+        <div class="span12">
+          <hr />
+        </div>
+        <div class="span8">
+          <div class="content fallow-us">
+            <p>Sekite mus:
+              <a href="#"><i class="icon-soc-facebook"></i>Facebook</a>
+              <a href="#"><i class="icon-soc-google"></i>Google+</a>
+              <a href="#"><i class="icon-soc-twitter"></i>Twitter</a>
+            </p>
+          </div>
+        </div>
+        <div class="span4">
+          <div class="licence">
+            <p>Visas turinys esantis šioje svetainėje <br/>
+               pateikiamas pagal <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/"><img alt="Creative Commons licencija" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/80x15.png" /></a> licenciją.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    {% endblock %}
-    <footer>
-        <p>{% trans "manoseimas.lt team" %}</p>
-    </footer>
-  </div> <!--! end of #container -->
-
+  </footer>
 
   <!-- JavaScript at the bottom for fast page loading -->
   

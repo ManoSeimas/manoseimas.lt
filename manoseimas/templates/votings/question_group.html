@@ -1,5 +1,6 @@
-{% extends "base.html" %}
+{% extends "sboard/base.html" %}
 {% load i18n %}
+{% load sboard %}
 
 {% block title %}
   {% if node %}
@@ -16,64 +17,25 @@
 {% endblock %}
 
 
-{% block container %}
-  <div class="row">
-    <ul class="nav nav-pills pull-right">
-      {% include "sboard/actions.html" %}
-    </ul>
+{% block content %}
+  <div class="test-header">
+    <button class="btn btn-success btn-large">Rodyti rezultatus</button>
+    <h2>Atsakyk į tau rūpimus klausimus ir atrask panašiai dirbančius
+      seimo narius</h2>
   </div>
+
+
 
   {% if children %}
-  <div class="row">
-      <div class="span12">
-          <h2>{% trans "Kuris Seimo narys balsuoja pagal tave?" %}</h2>
-      </div>
-  </div>
-
-  <div class="row">
-      <div class="span7">
-          <ul class="nav nav-pills">
-              {% for q in children %}
-              <li id="qpill{{ forloop.counter }}" class="qpill {% if forloop.first %}active{% endif %}">
-                  <a href="#q{{ forloop.counter }}" data-toggle="pill">{{ forloop.counter }}</a></li>
-              {% endfor %}
-          </ul>
-      </div>
-      <div class="span5">
-          <h4><br> {% trans "Testo rezultatai:" %}</h4>
-      </div>
-  </div>
-
-  <div class="row">
-      <div class="span7">
-          <div class="tab-content">
-              {% for q in children %}
-              <div class="tab-pane {% if forloop.first %}active{% endif %}" id="q{{ forloop.counter }}">
-                  <div class="well">
-                      <h3>{{ q.title }}</h3>
-                      <p>{{ q.get_body }}</p>
-                      <p>
-                          <a href="{{ q.permalink }}">
-                              {% trans "read more" %}</a>
-                      </p>
-                      <div>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, 2)">Tikrai taip</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, 1)">Taip</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, 0)">Nei taip, nei ne</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, -1)">Ne</button>
-                          <button class="btn btn-success" onclick="submitQuestion({{ forloop.counter }}, '{{ q.get_slug }}', {{ forloop.last|yesno:'1,0' }}, -2)">Tikrai ne</button>
-                      </div>
-                  </div>
-              </div>
-              {% endfor %}
-          </div>
-      </div>
-
-      <div class="span5">
-          <div id="side-result">
-              <p>{% trans "Norėdami pamatyti rezultatus, atsakykite į klausimą." %}</p>
-          </div>
-      </div>
+  <div class="test-questions">
+    {% for q in children %}
+    <div class="test-question">
+      <a href="#" class="btn btn-mini btn-success dropdown-toggle pull-right">mano nuomonė <span class="caret"></span></a>
+      <h3><a href="{{ q.permalink }}">{{ q.title }}</a></h3>
+      <p>{{ q.get_body }}</p>
+    </div>
+    <hr />
+    {% endfor %}
   </div>
   {% endif %}
 
@@ -87,7 +49,7 @@ function submitQuestion(n, node_slug, last, vote) {
 
     jQuery.getJSON(url, function(data) {
         if (last) {
-            window.location.href = "{% url node node.get_slug 'results' %}";
+            window.location.href = "{% nodeurl node 'results' %}";
         }
         else {
             updateSideResult(data);

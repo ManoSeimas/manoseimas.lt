@@ -223,7 +223,6 @@ INSTALLED_APPS = (
     'social_auth',
     'sorl.thumbnail',
     'couchdbkit.ext.django',
-    'commonutils',
     #if $DJANGO_PIPELINE
     'pipeline',
     #end if
@@ -240,12 +239,15 @@ INSTALLED_APPS = (
     'django_nose',
     #end if
 
-    'manoseimas.search',
     'manoseimas.legislation',
-    'manoseimas.categories',
     'manoseimas.votings',
-    'manoseimas.policy',
     'manoseimas.mps',
+
+    'manoseimas.solutions',         # depends on: votings
+
+    'manoseimas.compat',            # depends on: solutions
+
+    'manoseimas',                   # depends on: votings
 )
 
 # A sample logging configuration. The only tangible logging
@@ -293,15 +295,13 @@ LOGGING = {
 COUCHDB_SERVER = '$COUCHDB_URL'
 COUCHDB_DATABASES = (
     ('sboard', '$COUCHDB_URL/nodes'),
-    ('manoseimas.legal_acts', '$COUCHDB_URL/legal_acts'),
-    ('manoseimas.categories', '$COUCHDB_URL/nodes'),
+
+    # XXX: do some thing, that adding these settings should not be necessary.
+    ('manoseimas.compat', '$COUCHDB_URL/nodes'),
     ('manoseimas.legislation', '$COUCHDB_URL/nodes'),
-    ('manoseimas.drafts', '$COUCHDB_URL/legal_acts'),
-    ('manoseimas.people', '$COUCHDB_URL/people'),
-    ('manoseimas.sittings', '$COUCHDB_URL/sittings'),
-    ('manoseimas.votings', '$COUCHDB_URL/nodes'),
-    ('manoseimas.policy', '$COUCHDB_URL/nodes'),
     ('manoseimas.mps', '$COUCHDB_URL/nodes'),
+    ('manoseimas.solutions', '$COUCHDB_URL/nodes'),
+    ('manoseimas.votings', '$COUCHDB_URL/nodes'),
 )
 
 ELASTICSEARCH_SERVERS = (

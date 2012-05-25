@@ -12,7 +12,7 @@
 // -------------------------
 @black:                 #000;
 @grayDarker:            #222;
-@grayDark:              #333;
+@grayDark:              #333; 
 @gray:                  #555;
 @grayLight:             #999;
 @grayLighter:           #eee;
@@ -31,15 +31,23 @@
 @purple:                #7a43b6;
 
 
+// Colors
+// -------------------------
+@mainBgColor:           #DCEDF5;
+@msBlue:                #1B3379;
+@wellBg:                #F8F8F8;
+@wellBorder:            #D6D6D6;
+
 // Scaffolding
 // -------------------------
 @bodyBackground:        @white;
-@textColor:             @grayDark;
+@textColor:             #606060;
 
 
 // Links
 // -------------------------
-@linkColor:             #08c;
+@linkColor:             @msBlue;
+//@linkColor:             #08c;
 @linkColorHover:        darken(@linkColor, 15%);
 
 
@@ -49,7 +57,7 @@
 @serifFontFamily:       Georgia, "Times New Roman", Times, serif;
 @monoFontFamily:        Menlo, Monaco, Consolas, "Courier New", monospace;
 
-@baseFontSize:          13px;
+@baseFontSize:          14px;
 @baseFontFamily:        @sansFontFamily;
 @baseLineHeight:        18px;
 @altFontFamily:         @serifFontFamily;
@@ -57,6 +65,8 @@
 @headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
 @headingsFontWeight:    bold;    // instead of browser default, bold
 @headingsColor:         inherit; // empty to use BS default, @textColor
+
+@borderRadius:          5px;
 
 
 // Tables
@@ -139,18 +149,18 @@
 
 // Hr border color
 // -------------------------
-@hrBorder:                @grayLighter;
+@hrBorder:                #D6D6D6;
 
 
 // Navbar
 // -------------------------
 @navbarHeight:                    40px;
-@navbarBackground:                @grayDarker;
-@navbarBackgroundHighlight:       @grayDark;
+@navbarBackground:                @white;
+@navbarBackgroundHighlight:       @white;
 
-@navbarText:                      @grayLight;
-@navbarLinkColor:                 @grayLight;
-@navbarLinkColorHover:            @white;
+@navbarText:                      @grayDark;
+@navbarLinkColor:                 @grayDark;
+@navbarLinkColorHover:            @black;
 @navbarLinkColorActive:           @navbarLinkColorHover;
 @navbarLinkBackgroundHover:       transparent;
 @navbarLinkBackgroundActive:      @navbarBackground;

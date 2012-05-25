@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load sboard %}
 
 <div class="well">
   <ul class="nav nav-list">
@@ -6,13 +7,13 @@
     <li><a href="{{ node.permalink }}">{% trans "Law" %}</a></li>
     {% endblock %}
     {% block projects_menu_item %}
-    <li><a href="{% url node node.get_slug 'projects' %}">{% trans "Projects" %}</a></li>
+    <li><a href="{% nodeurl node 'projects' %}">{% trans "Projects" %}</a></li>
     {% endblock %}
     {% block changes_menu_item %}
-    <li><a href="{% url node node.get_slug 'changes' %}">{% trans "Changes" %}</a></li>
+    <li><a href="{% nodeurl node 'changes' %}">{% trans "Changes" %}</a></li>
     {% endblock %}
     {% block votings_menu_item %}
-    <li><a href="{% url node node.get_slug 'votings' %}">{% trans "Votings" %}</a></li>
+    <li><a href="{% nodeurl node 'votings' %}">{% trans "Votings" %}</a></li>
     {% endblock %}
   </ul>
 </div>

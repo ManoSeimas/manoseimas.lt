@@ -15,31 +15,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-import json
+from couchdbkit.ext.django import schema
 
-from django.core.urlresolvers import reverse
-from django.test import TestCase
+from sboard.factory import provideNode
 
-from sboard.tests import NodesTestsMixin
-
-from .models import Voting
+import manoseimas.votings.models as votings
 
 
-def load_fixtures(db):
-    path = os.path.dirname(__file__)
-    with open(os.path.join(path, 'fixtures', 'voting.json')) as f:
-        db.save_docs(json.load(f))
+class Voting(votings.Voting):
+    # List of legal acts that was directly voted for with this voting.
+    solutions = schema.DictProperty()
 
-
-class SearchTest(NodesTestsMixin, TestCase):
-    def testSolutions(self):
-        db = Voting.get_db()
-        load_fixtures(db)
-
-        search_url = reverse('search')
-        response = self.client.get(search_url, {
-            'q': 'http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-13013',
-        })
-        self.assertRedirects(response, reverse('node',
-                args=['16aa1e75-a5fb-4233-9213-4ddcc0380fe5']))
+provideNode(Voting, "voting")

@@ -22,7 +22,6 @@ from couchdbkit.ext.django import schema
 from sboard.factory import provideNode
 from sboard.models import Node
 
-from .interfaces import ISolution
 from .interfaces import IVoting
 
 
@@ -70,10 +69,10 @@ class Voting(Node):
         vote."""
         return self.registered_for_voting - self.total_votes
 
-provideNode(Voting, "voting")
-
-
-class Solution(Node):
-    implements(ISolution)
-
-provideNode(Solution, "solution")
+    def get_vote_value(self, vote):
+        return ({
+            'aye': 2,
+            'abstain': -1,
+            'no-vote': -1,
+            'no': -2,
+        })[vote]

@@ -1,5 +1,6 @@
 {% extends "sboard/node_details.html" %}
 {% load i18n %}
+{% load sboard %}
 
 {% block inlinejs %}
 <script type="text/javascript">
@@ -81,7 +82,7 @@ $(function () {
 {% block node_actions %}
 <h2>{% trans "Link to solution" %}</h2>
 
-<form action="{% url node node.get_slug 'link-solution' %}" method="post">
+<form action="{% nodeurl node 'link-solution' %}" method="post">
   {% csrf_token %}
   {{ link_solution_form.non_field_errors }}
   {{ link_solution_form.as_p }}

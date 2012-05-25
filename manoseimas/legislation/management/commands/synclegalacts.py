@@ -23,7 +23,8 @@ from django.core.management.base import BaseCommand
 
 from couchdbkit.exceptions import ResourceNotFound, ResourceConflict
 
-from manoseimas.legal_acts.models import LegalAct
+# TODO: refactor this
+# from manoseimas.legal_acts.models import LegalAct
 from manoseimas.legislation.models import Law, LawChange, LawProject
 from manoseimas.legislation.utils import normalize, split_law_name
 

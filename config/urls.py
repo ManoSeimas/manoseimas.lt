@@ -11,8 +11,6 @@ urlpatterns = patterns('',
     url(r'^$', 'sboard.views.node', {'slug': 'testas'}, name='index'),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
-    url(r'^paieska/', include('manoseimas.search.urls')),
-    url(r'^istatymai/', include('manoseimas.legislation.urls')),
     url(r'', include('sboard.urls')),
 )
 
