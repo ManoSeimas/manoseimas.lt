@@ -22,6 +22,9 @@ from sboard.factory import provideNode
 
 from couchdbkit.ext.django import schema
 
+from sboard.models import couch
+from sboard.models import parse_node_slug
+
 from .interfaces import ICompat
 
 
@@ -29,5 +32,15 @@ class SolutionCompat(Category):
     implements(ICompat)
 
     categories = schema.ListProperty()
+
+    def get_solutions(self, category):
+        keys = []
+        categories = dict(self.categories)
+        category = categories[category]
+        for slug in category['solutions']:
+            slug, key = parse_node_slug(slug)
+            if key:
+                keys.append(key)
+        return couch.by_slug(keys=keys)
 
 provideNode(SolutionCompat, "solutions-test")

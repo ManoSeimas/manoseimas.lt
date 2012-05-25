@@ -37,6 +37,8 @@
     <hr />
     {% endfor %}
   </div>
+  {% else %}
+  <p>{% trans "Šiai kategorijai nepriskirtas nei vienas sprendimas." %}</p>
   {% endif %}
 
 {% endblock %}

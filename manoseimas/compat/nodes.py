@@ -92,6 +92,10 @@ class SolutionCompatView(ListView):
         nav = super(SolutionCompatView, self).nav(active)
         return solution_compat_nav(self.node, self.category, nav, active)
 
+    def get_node_list(self):
+        return self.node.get_solutions(self.category)
+
+
 provideAdapter(SolutionCompatView)
 provideAdapter(SolutionCompatView, (ICompat, unicode))
 

@@ -19,6 +19,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.forms import BaseNodeForm
+from sboard.models import get_node_by_slug
 from sboard.utils import slugify
 
 
@@ -84,8 +85,12 @@ class AssignSolutionsForm(BaseNodeForm):
         value = self.cleaned_data.get('solutions')
         if value:
             solutions = []
-            for slug in filter(None, value.splitlines()):
-                solutions.append(slug)
+            for slug in value.splitlines():
+                slug = slug.strip()
+                if slug:
+                    node = get_node_by_slug(slug)
+                    slug = node.get_slug_with_key()
+                    solutions.append(slug)
             return solutions
         else:
             return []
