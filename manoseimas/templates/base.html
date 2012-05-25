@@ -86,9 +86,9 @@
     <div class="container">
       <div id="top-menu">
         <ul class="nav">
-          <li><a href="{% url node "istatymai" %}">{% trans "Įstatymai" %}</a></li>
           <li><a href="{% url node "sprendimai" %}">{% trans "Sprendimai" %}</a></li>
           <li><a href="{% url node "problemos" %}">{% trans "Problemos" %}</a></li>
+          <li><a href="{% url node "testas" %}">{% trans "Testas" %}</a></li>
         </ul>
         <form action="{% url search %}" method="get" id="search-box">
           <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
