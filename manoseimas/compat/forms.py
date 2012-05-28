@@ -81,15 +81,21 @@ class AssignSolutionsForm(BaseNodeForm):
                 initial['solutions'] = '\n'.join(category['solutions'])
         return initial
 
+    def get_node_slug_with_key(self, slug):
+        if slug:
+            node = get_node_by_slug(slug)
+            if node:
+                return node.get_slug_with_key()
+        return None
+
     def clean_solutions(self):
         value = self.cleaned_data.get('solutions')
         if value:
             solutions = []
             for slug in value.splitlines():
                 slug = slug.strip()
+                slug = self.get_node_slug_with_key(slug)
                 if slug:
-                    node = get_node_by_slug(slug)
-                    slug = node.get_slug_with_key()
                     solutions.append(slug)
             return solutions
         else:
@@ -98,7 +104,7 @@ class AssignSolutionsForm(BaseNodeForm):
     def clean(self):
         title = self.cleaned_data.get('title')
         solutions = self.cleaned_data.get('solutions')
-        if title and solutions:
+        if title and solutions is not None:
             updated = False
             categories = []
             current_categories = []

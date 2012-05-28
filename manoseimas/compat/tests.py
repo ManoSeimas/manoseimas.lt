@@ -55,11 +55,12 @@ class TestCompatNodeForm(unittest.TestCase):
             'title': 'x',
             'solutions': 's1\ns2\n',
         })
+        form.get_node_slug_with_key = Mock(side_effect=['+s1', '+s2'])
         is_valid = form.is_valid()
         self.assertTrue(is_valid)
 
         expected = [
-            ['x', {'title': 'x', 'solutions': ['s1', 's2']}],
+            ['x', {'title': 'x', 'solutions': ['+s1', '+s2']}],
             ['b', {'title': 'b', 'solutions': []}],
             ['c', {'title': 'c', 'solutions': []}],
         ]
@@ -77,7 +78,7 @@ class TestCompatNodeForm(unittest.TestCase):
 
         expected = [
             ['b', {'title': 'b', 'solutions': []}],
-            ['x', {'title': 'x', 'solutions': ['s1', 's2']}],
+            ['x', {'title': 'x', 'solutions': ['+s1', '+s2']}],
             ['c', {'title': 'c', 'solutions': []}],
             ['a', {'title': 'a', 'solutions': []}],
         ]
