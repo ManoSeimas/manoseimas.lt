@@ -137,14 +137,14 @@ PIPELINE_JS = {
             'js/flot/jquery.flot.pie.js',
             'js/scripts.js',
         ),
-        'output_filename': 'js/scripts.js',
+        'output_filename': 'js/scripts.min.js',
     },
 
     'modernizr': {
         'source_filenames': (
             'js/modernizr.js',
         ),
-        'output_filename': 'js/modernizr.js',
+        'output_filename': 'js/modernizr.min.js',
     },
 }
 
