@@ -28,9 +28,7 @@ from .interfaces import ILegalAct
 class LawView(DetailsView):
     adapts(ILegalAct)
 
-    templates = {
-        'details': 'legislation/law_details.html',
-    }
+    template = 'legislation/law_details.html'
 
     def render(self, overrides=None):
         return super(LawView, self).render(**{

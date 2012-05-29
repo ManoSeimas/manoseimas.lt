@@ -33,9 +33,7 @@ from .interfaces import IVoting
 class VotingView(DetailsView):
     adapts(IVoting)
 
-    templates = {
-        'details': 'votings/voting_details.html',
-    }
+    template = 'votings/voting_details.html'
 
     def get_related_legal_acts(self):
         return couch.view('legislation/related_legal_acts', key=self.node._id)

@@ -25,6 +25,14 @@ from sboard.tests import NodesTestsMixin
 from manoseimas.votings.models import Voting
 from manoseimas.votings.tests import load_fixtures
 
+from .models import Issue
+from .models import Solution
+from .models import SolutionIssue
+from .models import query_issue_raises
+from .models import query_issue_solves
+from .models import query_solution_raises
+from .models import query_solution_solves
+
 
 class SolutionTests(NodesTestsMixin, TestCase):
     def testSolutions(self):
@@ -72,3 +80,120 @@ class SolutionTests(NodesTestsMixin, TestCase):
         data = json.loads(response.content)
         self.assertEqual(data['mps'][0]['id'], '000078')
         self.assertEqual(data['mps'][0]['score'], 87)
+
+
+def create_solution(title):
+    node = Solution()
+    node.set_new_id()
+    node.title = title
+    node.save()
+    return node
+
+
+def create_issue(title):
+    node = Issue()
+    node.set_new_id()
+    node.title = title
+    node.save()
+    return node
+
+
+def create_solution_issue(solution, issue, summary, solves, likes=0):
+    node = SolutionIssue()
+    node.set_new_id()
+    node.solution = solution
+    node.issue = issue
+    node.summary = 'Solution 1 solves Issue 1'
+    node.solves = solves
+    node.likes = likes
+    node.save()
+    return node
+
+
+def solution_solves(solution, issue, summary, likes=0):
+    return create_solution_issue(solution, issue, summary, solves=True,
+                                 likes=likes)
+
+
+def solution_raises(solution, issue, summary, likes=0):
+    return create_solution_issue(solution, issue, summary, solves=False,
+                                 likes=likes)
+
+
+class SolutionIssuesTests(NodesTestsMixin, TestCase):
+
+    def test_solution_issues(self):
+        issue_1 = create_issue('Issue 1')
+        issue_2 = create_issue('Issue 2')
+        issue_3 = create_issue('Issue 3')
+        issue_4 = create_issue('Issue 4')
+        issue_5 = create_issue('Issue 5')
+
+        solution_1 = create_solution('Solution 1')
+
+        # Solution 1 solves:
+        solves_1_1 = solution_solves(solution_1, issue_1,
+                                     'Solution 1 solves Issue 1', likes=9)
+        solves_1_2 = solution_solves(solution_1, issue_2,
+                                     'Solution 1 solves Issue 2', likes=8)
+
+        # Solution 1 raises:
+        raises_1_3 = solution_raises(solution_1, issue_3,
+                                     'Solution 1 raises Issue 3', likes=9)
+        raises_1_4 = solution_raises(solution_1, issue_4,
+                                     'Solution 1 raises Issue 4', likes=9)
+        raises_1_5 = solution_raises(solution_1, issue_5,
+                                     'Solution 1 raises Issue 5', likes=7)
+
+        solves = query_solution_solves(solution_1._id)
+        solves = list(solves)
+
+        self.assertEqual(solves[0]._id, solves_1_1._id)
+        self.assertEqual(solves[0].issue.ref.title, 'Issue 1')
+        self.assertEqual(solves[1]._id, solves_1_2._id)
+        self.assertEqual(solves[1].issue.ref.title, 'Issue 2')
+
+        solves = query_solution_raises(solution_1._id)
+        solves = list(solves)
+
+        self.assertEqual(solves[0]._id, raises_1_4._id)
+        self.assertEqual(solves[0].issue.ref.title, 'Issue 4')
+        self.assertEqual(solves[1]._id, raises_1_3._id)
+        self.assertEqual(solves[1].issue.ref.title, 'Issue 3')
+        self.assertEqual(solves[2]._id, raises_1_5._id)
+        self.assertEqual(solves[2].issue.ref.title, 'Issue 5')
+
+    def test_issues(self):
+        issue_1 = create_issue('Issue 1')
+
+        solution_1 = create_solution('Solution 1')
+        solution_2 = create_solution('Solution 2')
+        solution_3 = create_solution('Solution 3')
+
+        # Issue 1 may be raised by:
+        raises_1_1 = solution_raises(solution_1, issue_1,
+                                     'Solution 1 raises Issue 1', likes=9)
+
+        # Issue 1 can be solved by:
+        solves_2_1 = solution_solves(solution_2, issue_1,
+                                     'Solution 2 solves Issue 1', likes=9)
+        solves_3_1 = solution_solves(solution_3, issue_1,
+                                     'Solution 3 solves Issue 1', likes=8)
+
+        # Raised by
+        raises = query_issue_raises(issue_1._id)
+        raises = list(raises)
+
+        self.assertEqual(len(raises), 1)
+        self.assertEqual(raises[0]._id, raises_1_1._id)
+        self.assertEqual(raises[0].solution.ref.title, 'Solution 1')
+
+        # Solved by
+        solves = query_issue_solves(issue_1._id)
+        solves = list(solves)
+
+        self.assertEqual(len(solves), 2)
+        self.assertEqual(solves[0]._id, solves_2_1._id)
+        self.assertEqual(solves[0].solution.ref.title, 'Solution 2')
+        self.assertEqual(solves[1]._id, solves_3_1._id)
+        self.assertEqual(solves[1].solution.ref.title, 'Solution 3')

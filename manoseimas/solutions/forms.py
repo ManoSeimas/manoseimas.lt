@@ -15,12 +15,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-from sboard.forms import NodeForm
+from django import forms
 
-from .models import Solution
+from sboard.forms import BaseNodeForm
+from sboard.forms import NodeForm
 
 
 class SolutionForm(NodeForm):
-    class Meta:
-        document = Solution
-        properties = ('title', 'parent', 'body')
+    pass
+
+
+class AssignIssueForm(BaseNodeForm):
+    title = forms.CharField()
+    summary = forms.CharField(widget=forms.Textarea)
+    body = forms.CharField(widget=forms.Textarea, required=False)
+
+
+class SolutionIssueForm(BaseNodeForm):
+    summary = forms.CharField(widget=forms.Textarea)
+    body = forms.CharField(widget=forms.Textarea, required=False)

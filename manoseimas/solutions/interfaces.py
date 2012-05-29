@@ -18,4 +18,6 @@
 from sboard.interfaces import INode
 
 
+class IIssue(INode): pass
 class ISolution(INode): pass
+class ISolutionIssue(INode): pass

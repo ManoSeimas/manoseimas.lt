@@ -304,3 +304,45 @@ h3 { font-size: 16px; }
 h4 { font-size: 14px; }
 h5 { font-size: 14px; }
 h6 { font-size: 14px; }
+
+
+// solutions
+// ----------------------------
+
+.solution-issues {
+  width: 100%;
+
+  td {
+    width: 50%;
+    vertical-align: top;
+    border-bottom: 1px solid @wellBorder;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  tr:last-child td {
+    border-bottom: none;
+    text-align: center;
+  }
+
+  h2 {
+    font-size: 16px;
+    line-height: 18px;
+    font-weight: normal;
+  }
+  .item-box {
+    float: left;
+    width: 40px;
+    text-align: center;
+  }
+  .item-content {
+    margin-left: 40px;
+  }
+
+  .solution-issue-title {
+    h2 {
+      line-height: 28px;
+      &.solves { color: #1B9E34; }
+      &.raises { color: #CC0000; }
+    }
+  }
+}

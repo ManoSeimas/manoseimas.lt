@@ -1,0 +1,55 @@
+{% extends "sboard/node_details.html" %}
+{% load i18n %}
+{% load sboard %}
+
+{% block node_title %}
+{% endblock %}
+
+{% block node_body %}
+  <h3>{% trans "Problema" %}</h3>
+  <h2>{{ node.title }}</h2>
+  <p>{{ node.summary }}</p>
+  <p><a href="{% nodeurl node 'details' %}"></a></p>
+
+  <h2>{% trans "Galimi sprendimai" %}</h2>
+  <table class="solution-issues">
+    <tbody>
+      <tr class="solution-issue-title">
+        <td>
+          <div class="item-box">
+            <img src="{{ STATIC_URL }}img/smile-happy.png" />
+          </div>
+          <div class="item-content">
+            <h2 class="solves">{% trans "Sprendžiantys problemą" %}</h2>
+          </div>
+        </td>
+        <td>
+          <div class="item-box">
+            <img src="{{ STATIC_URL }}img/smile-sad.png" />
+          </div>
+          <div class="item-content">
+            <h2 class="raises">{% trans "Sukeliantys problemą" %}</h2>
+          </div>
+        </td>
+      </tr>
+      {% for issue in solutions %}
+      <tr>
+        {% for solissue in issue %}
+        <td>
+          {% if solissue %}
+          <div class="item-box">{{ solissue.likes }}</div>
+          <div class="item-content">
+            <h2><a href="{{ solissue.solution.ref.permalink }}">{{ solissue.solution.ref.title }}</a></h2>
+            <p>{{ solissue.summary }}</p>
+          </div>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>{% trans "Išsamus problemos aprašymas" %}</h2>
+  {{ node.render_body }}
+{% endblock %}

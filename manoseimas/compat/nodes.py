@@ -77,9 +77,7 @@ def solution_compat_nav(node, category, nav, active=tuple()):
 class SolutionCompatView(ListView):
     adapts(ICompat)
 
-    templates = {
-        'list': 'votings/question_group.html',
-    }
+    template = 'votings/question_group.html'
 
     def __init__(self, node, category=None):
         super(SolutionCompatView, self).__init__(node)
@@ -202,9 +200,7 @@ provideAdapter(QuickResultsView, name='quick-results')
 class QuickResultsView(DetailsView):
     adapts(INode)
 
-    templates = {
-        'details': 'votings/results.html',
-    }
+    template = 'votings/results.html'
 
     def render(self):
         mps_matches = self.request.session.get('mps_matches', {})
@@ -241,8 +237,6 @@ provideAdapter(QuickResultsView, name='results')
 class SolutionDetailsView(DetailsView):
     adapts(ISolution)
 
-    templates = {
-        'details': 'votings/solution.html',
-    }
+    template = 'votings/solution.html'
 
 provideAdapter(SolutionDetailsView, name='compatibility')

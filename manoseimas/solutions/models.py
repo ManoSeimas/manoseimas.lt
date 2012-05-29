@@ -19,9 +19,14 @@ from zope.interface import implements
 
 from sboard.factory import provideNode
 from sboard.models import Node
+from sboard.models import NodeProperty
 from sboard.models import couch
 
+from couchdbkit.ext.django import schema
+
+from .interfaces import IIssue
 from .interfaces import ISolution
+from .interfaces import ISolutionIssue
 
 
 class Solution(Node):
@@ -56,3 +61,72 @@ class Solution(Node):
                      for mp_id, mp in mps.items()])
 
 provideNode(Solution, "solution")
+
+
+class Issue(Node):
+    implements(IIssue)
+
+provideNode(Issue, "issue")
+
+
+class SolutionIssue(Node):
+    implements(ISolutionIssue)
+
+    solution = NodeProperty()
+    issue = NodeProperty()
+
+    solves = schema.BooleanProperty()
+
+provideNode(SolutionIssue, "solution-issue")
+
+
+def query_solution_issues(solution_id, solves):
+    """Returns iterator over SolutionIssue nodes prepopulated with issue nodes
+    for issue attribute of SolutionIssue node.
+
+    Nodes are sorted by likes and SolutionIssue id in descending order.
+    """
+    kwargs = dict(
+        startkey=[solution_id, solves, {}],
+        endkey=[solution_id, solves],
+        descending=True
+    )
+    query = couch.view('solutions/issues', **kwargs).iterator()
+    for node in query:
+        issue = next(query)
+        node.issue = issue
+        yield node
+
+
+def query_solution_solves(solution_id):
+    return query_solution_issues(solution_id, solves=True)
+
+
+def query_solution_raises(solution_id):
+    return query_solution_issues(solution_id, solves=False)
+
+
+def query_issue_solutions(issue_id, solves):
+    """Returns iterator over SolutionIssue nodes prepopulated with solution
+    nodes for solution attribute of SolutionIssue node.
+
+    Nodes are sorted by likes and SolutionIssue id in descending order.
+    """
+    kwargs = dict(
+        startkey=[issue_id, solves, {}],
+        endkey=[issue_id, solves],
+        descending=True
+    )
+    query = couch.view('solutions/by_issue', **kwargs).iterator()
+    for node in query:
+        solution = next(query)
+        node.solution = solution
+        yield node
+
+
+def query_issue_solves(issue_id):
+    return query_issue_solutions(issue_id, solves=True)
+
+
+def query_issue_raises(issue_id):
+    return query_issue_solutions(issue_id, solves=False)

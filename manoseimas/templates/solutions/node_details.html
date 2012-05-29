@@ -1,0 +1,49 @@
+{% extends "sboard/node_details.html" %}
+{% load i18n %}
+{% load sboard %}
+
+{% block node_body %}
+  {{ block.super }}
+
+  <table class="solution-issues">
+    <tbody>
+      <tr class="solution-issue-title">
+        <td>
+          <div class="item-box">
+            <img src="{{ STATIC_URL }}img/smile-happy.png" />
+          </div>
+          <div class="item-content">
+            <h2 class="solves">{% trans "Sprendžia problemas" %}</h2>
+          </div>
+        </td>
+        <td>
+          <div class="item-box">
+            <img src="{{ STATIC_URL }}img/smile-sad.png" />
+          </div>
+          <div class="item-content">
+            <h2 class="raises">{% trans "Sukelia problemas" %}</h2>
+          </div>
+        </td>
+      </tr>
+      {% for issue in issues %}
+      <tr>
+        {% for solissue in issue %}
+        <td>
+          {% if solissue %}
+          <div class="item-box">{{ solissue.likes }}</div>
+          <div class="item-content">
+            <h2><a href="{{ solissue.permalink }}">{{ solissue.issue.ref.title }}</a></h2>
+            <p>{{ solissue.summary }}</p>
+          </div>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+      <tr>
+        <td><a href="{% nodeurl node 'sprendzia' %}">{% trans "Pasiūlyk savo" %}</a></td>
+        <td><a href="{% nodeurl node 'sukelia' %}">{% trans "Pasiūlyk savo" %}</a></td>
+      </tr>
+    </tbody>
+  </table>
+{% endblock %}
