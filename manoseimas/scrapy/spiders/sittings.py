@@ -285,10 +285,15 @@ class SittingsSpider(ManoSeimasSpider):
                 self._add_voting_legal_act_number(hxs, voting)
 
     def get_question_url(self, response):
-        xpath = '/html/body/div/table/tr[3]/td/table/tr/td/align/b/a/@href'
+        xpath = '/html/body/div/table/tr[3]/td/table/tr/td/align'
         hxs = HtmlXPathSelector(response).select(xpath)[0]
-        url = hxs.extract()
-        return absolute_url([url], {'response': response})
+        urls = hxs.select('b/a/@href') or hxs.select('ol/li/b/a/@href')
+        absolute_urls = []
+        for url in urls:
+            url = url.extract()
+            url = absolute_url([url], {'response': response})
+            absolute_urls.append(url)
+        return absolute_urls
 
     def parse_person_votes(self, response):
         xpath = ('/html/body/div/table/tr[3]/td/table/tr/td/align/'

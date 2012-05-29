@@ -66,6 +66,8 @@ class AssignVotingForm(forms.Form):
                     raise forms.ValidationError(_(
                         u'Klaidingai nurodytas balsavimo adresas lrs.lt '
                         u'svetainėje.'))
-            raise forms.ValidationError(_(
-                u'Klaidingai nurodytas balsavimo adresas.'))
+                return node
+            else:
+                raise forms.ValidationError(_(
+                    u'Klaidingai nurodytas balsavimo adresas.'))
         return voting

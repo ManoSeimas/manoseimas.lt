@@ -134,7 +134,7 @@ def fetch_voting_by_lrslt_url(url):
     items = list(spider.parse_person_votes(response))
 
     # Parse question
-    question_url = spider.get_question_url(response)
+    question_url = spider.get_question_url(response)[0]
     body = fetch_lrslt_url(question_url)
     if not body:
         return None
