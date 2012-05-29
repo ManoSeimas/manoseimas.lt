@@ -218,6 +218,9 @@ def build(ctx):
     bld(rule=_subst, source='config/settings.py c4che/_cache.py',
         target='%s/settings.py' % p)
 
+    bld(rule=_subst, source='config/scrapy_settings.py c4che/_cache.py',
+        target='%s/scrapy/settings.py' % p)
+
     bld(rule=_subst, source='config/urls.py c4che/_cache.py',
         target='%s/urls.py' % p)
 
