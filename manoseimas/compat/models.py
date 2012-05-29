@@ -36,11 +36,14 @@ class SolutionCompat(Category):
     def get_solutions(self, category):
         keys = []
         categories = dict(self.categories)
-        category = categories[category]
-        for slug in category['solutions']:
-            slug, key = parse_node_slug(slug)
-            if key:
-                keys.append(key)
-        return couch.by_slug(keys=keys)
+        category = categories.get(category)
+        if category:
+            for slug in category['solutions']:
+                slug, key = parse_node_slug(slug)
+                if key:
+                    keys.append(key)
+            return couch.by_slug(keys=keys)
+        else:
+            return []
 
 provideNode(SolutionCompat, "solutions-test")
