@@ -41,35 +41,37 @@ def solution_compat_nav(node, category, nav, active=tuple()):
     if not active and category:
         active = (category,)
 
-    nav.append({
-        'key': 'node-title',
-        'title': _('Testas'),
-        'header': True,
-    })
-
-    key = 'assign-solutions'
-    nav.append({
-        'key': key,
-        'url': node.permalink(category, key),
-        'title': _('Priskirti sprendimus'),
-        'children': [],
-        'active': key in active,
-    })
-
-    nav.append({
-        'key': 'sritys',
-        'title': _('Sritys'),
-        'header': True,
-    })
-
-    for slug, category in node.categories:
+    if category:
         nav.append({
-            'key': slug,
-            'url': node.permalink(slug),
-            'title': category['title'],
-            'children': [],
-            'active': slug in active,
+            'key': 'node-title',
+            'title': _('Testas'),
+            'header': True,
         })
+
+        key = 'assign-solutions'
+        nav.append({
+            'key': key,
+            'url': node.permalink(category, key),
+            'title': _('Priskirti sprendimus'),
+            'children': [],
+            'active': key in active,
+        })
+
+    if node.categories:
+        nav.append({
+            'key': 'sritys',
+            'title': _('Sritys'),
+            'header': True,
+        })
+
+        for slug, category in node.categories:
+            nav.append({
+                'key': slug,
+                'url': node.permalink(slug),
+                'title': category['title'],
+                'children': [],
+                'active': slug in active,
+            })
 
     return nav
 
