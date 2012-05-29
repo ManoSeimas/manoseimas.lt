@@ -1,0 +1,15 @@
+{% extends "sboard/node_list.html" %}
+{% load i18n %}
+
+{% block content %}
+  {{ block.super }}
+
+  <h2>{% trans "Priskirti seimo narių balsavimą" %}</h2>
+  <form method="POST">
+    {% csrf_token %}
+    {% include "form_fields.html" %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{% trans "Priskirti" %}</button>
+    </div>
+  </form>
+{% endblock %}

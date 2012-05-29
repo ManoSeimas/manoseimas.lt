@@ -15,12 +15,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import contextlib
+import urllib2
+import urlparse
+
 from zope.interface import implements
 
 from couchdbkit.ext.django import schema
+from scrapy.http import HtmlResponse
 
 from sboard.factory import provideNode
 from sboard.models import Node
+from sboard.models import couch
+
+from manoseimas.scrapy.pipelines import ManoseimasPipeline
+from manoseimas.scrapy.pipelines import get_db
+from manoseimas.scrapy.pipelines import set_db_from_settings
+from manoseimas.scrapy.settings import COUCHDB_DATABASES
+from manoseimas.scrapy.spiders.sittings import SittingsSpider
 
 from .interfaces import IVoting
 
@@ -76,3 +88,77 @@ class Voting(Node):
             'no-vote': -1,
             'no': -2,
         })[vote]
+
+provideNode(Voting, "voting")
+
+
+def get_voting_source_id_from_lrstl_url(url):
+    url = urlparse.urlparse(url)
+    qry = urlparse.parse_qs(url.query)
+    if url.netloc.endswith('.lrs.lt') and 'p_bals_id' in qry:
+        try:
+            return int(qry['p_bals_id'][0])
+        except ValueError:
+            return None
+    return None
+
+
+def get_voting_by_source_id(source_id):
+    return couch.view('votings/by_source_id', key=source_id).first()
+
+
+def get_voting_by_lrslt_url(url):
+    source_id = get_voting_source_id_from_lrstl_url(url)
+    if source_id:
+        return get_voting_by_source_id(source_id)
+    else:
+        return None
+
+
+def fetch_lrslt_url(url):
+    with contextlib.closing(urllib2.urlopen(url)) as f:
+        return f.read()
+
+
+def fetch_voting_by_lrslt_url(url):
+    # Avoiding circular imports
+    import manoseimas.legislation.management. \
+           commands.syncsittings as syncsittings
+
+    # Parse voting
+    body = fetch_lrslt_url(url)
+    if not body:
+        return None
+    response = HtmlResponse(url, body=body)
+    spider = SittingsSpider()
+    items = list(spider.parse_person_votes(response))
+
+    # Parse question
+    question_url = spider.get_question_url(response)
+    body = fetch_lrslt_url(question_url)
+    if not body:
+        return None
+    response = HtmlResponse(question_url, body=body)
+    items.extend(list(spider.parse_question(response)))
+
+    # Store
+    set_db_from_settings(COUCHDB_DATABASES, 'voting')
+    keys = []
+    pipeline = ManoseimasPipeline()
+    for item in items:
+        pipeline.process_item(item, spider)
+        keys.append(item['_id'])
+
+    # Process
+    syncsittings.RawVoting.set_db(get_db('voting'))
+    processor = syncsittings.SyncProcessor()
+    params = {
+        'keys': keys,
+        'include_docs': True,
+        'classes': {'voting': syncsittings.RawVoting},
+    }
+    rows = syncsittings.RawVoting.view('scrapy/votes_with_documents', **params)
+    processor.sync(rows)
+
+    # Return
+    return get_voting_by_lrslt_url(url)

@@ -13,6 +13,7 @@ from manoseimas.scrapy.items import Registration
 from manoseimas.scrapy.items import Session
 from manoseimas.scrapy.items import Voting
 from manoseimas.scrapy.loaders import Loader
+from manoseimas.scrapy.loaders import absolute_url
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.utils import Increment
 
@@ -282,6 +283,12 @@ class SittingsSpider(ManoSeimasSpider):
             has_docs = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')
             if has_docs:
                 self._add_voting_legal_act_number(hxs, voting)
+
+    def get_question_url(self, response):
+        xpath = '/html/body/div/table/tr[3]/td/table/tr/td/align/b/a/@href'
+        hxs = HtmlXPathSelector(response).select(xpath)[0]
+        url = hxs.extract()
+        return absolute_url([url], {'response': response})
 
     def parse_person_votes(self, response):
         xpath = ('/html/body/div/table/tr[3]/td/table/tr/td/align/'

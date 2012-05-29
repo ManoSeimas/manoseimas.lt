@@ -9,17 +9,26 @@ _dbs = {}
 _servers = {}
 
 
+def set_db(item_name, server_name, db_name, cache=True):
+    global _servers, _dbs
+    if not cache or server_name not in _servers:
+        server = _servers[server_name] = Server(server_name)
+    else:
+        server = _servers[server_name]
+    db = _dbs[item_name] = server.get_or_create_db(db_name)
+    return db
+
+
+def set_db_from_settings(settings, item_name, cache=True):
+    for item, server_name, db_name in settings:
+        if item == item_name:
+            return set_db(item_name, server_name, db_name, cache)
+
+
 def get_db(item_name, cache=True):
     global _servers, _dbs
     if not cache or item_name not in _dbs:
-        for item, server_name, db_name in settings['COUCHDB_DATABASES']:
-            if item == item_name:
-                if not cache or server_name not in _servers:
-                    server = _servers[server_name] = Server(server_name)
-                else:
-                    server = _servers[server_name]
-                _dbs[item_name] = server.get_or_create_db(db_name)
-                break
+        set_db_from_settings(settings['COUCHDB_DATABASES'], item_name)
     return _dbs[item_name]
 
 

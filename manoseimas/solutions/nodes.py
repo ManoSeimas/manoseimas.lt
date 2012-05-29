@@ -22,6 +22,7 @@ import itertools
 from zope.component import adapts
 from zope.component import provideAdapter
 
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.factory import getNodeFactory
@@ -32,6 +33,7 @@ from sboard.nodes import UpdateView
 from sboard.utils import slugify
 
 from .forms import AssignIssueForm
+from .forms import AssignVotingForm
 from .forms import SolutionForm
 from .forms import SolutionIssueForm
 from .interfaces import IIssue
@@ -97,6 +99,7 @@ provideAdapter(SolutionDetailsView)
 
 class SolutionVotingsView(ListView):
     adapts(ISolution)
+    template = 'solutions/votings_list.html'
 
     def nav(self, active=tuple()):
         if not active:
@@ -106,6 +109,29 @@ class SolutionVotingsView(ListView):
 
     def get_node_list(self):
         return self.node.get_votings()
+
+    def render(self, **overrides):
+        if self.request.method == 'POST':
+            form = AssignVotingForm(self.request.POST)
+            if form.is_valid():
+                voting = form.cleaned_data.get('voting')
+                solution = self.node
+                position = form.cleaned_data.get('position')
+                solutions = voting.solutions or {}
+                solutions[solution._id] = position
+
+                voting.solutions = solutions
+                voting.save()
+
+                return redirect(self.node.permalink('votings'))
+        else:
+            form = AssignVotingForm()
+
+        context = {
+            'form': form,
+        }
+        context.update(overrides)
+        return super(SolutionVotingsView, self).render(**context)
 
 provideAdapter(SolutionVotingsView, name="votings")
 
@@ -165,7 +191,7 @@ class SolutionIssueListView(DetailsView):
     def nav(self, active=tuple()):
         if not active:
             active = ('issues',)
-        nav = super(SolutionVotingsView, self).nav(active)
+        nav = super(SolutionIssueListView, self).nav(active)
         return solution_nav(self.node, nav, active)
 
 provideAdapter(SolutionIssueListView, name="issues")

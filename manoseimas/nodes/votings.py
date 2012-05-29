@@ -73,7 +73,7 @@ class LinkSolutionView(MsVotingView):
 
             form = self.form(self.request.POST)
             if form.is_valid():
-                if 'solutions' not in self.node:
+                if not self.node.solutions:
                     self.node.solutions = {}
                 solution = form.cleaned_data.pop('solution')
                 position = form.cleaned_data.pop('position')

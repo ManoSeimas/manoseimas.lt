@@ -17,8 +17,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import urlparse
-
 from zope.component import adapts
 from zope.component import provideAdapter
 
@@ -28,6 +26,7 @@ from sboard.models import couch
 from sboard.nodes import DetailsView
 
 from .interfaces import IVoting
+from .models import get_voting_by_lrslt_url
 
 
 class VotingView(DetailsView):
@@ -49,13 +48,6 @@ provideAdapter(VotingView)
 
 
 def search_lrs_url(query):
-    url = urlparse.urlparse(query)
-    qry = urlparse.parse_qs(url.query)
-    if url.netloc.endswith('.lrs.lt') and 'p_bals_id' in qry:
-        try:
-            source_id = int(qry['p_bals_id'][0])
-        except ValueError:
-            source_id = None
-        if source_id:
-            node = couch.view('votings/by_source_id', key=source_id).first()
-            return redirect(node.permalink())
+    node = get_voting_by_lrslt_url(query)
+    if node:
+        return redirect(node.permalink())
