@@ -22,10 +22,12 @@ import itertools
 from zope.component import adapts
 from zope.component import provideAdapter
 
+from django.http import Http404
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.factory import getNodeFactory
+from sboard.models import get_node_by_slug
 from sboard.nodes import CreateView
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
@@ -143,6 +145,27 @@ class SolutionVotingsView(ListView):
         return super(SolutionVotingsView, self).render(**context)
 
 provideAdapter(SolutionVotingsView, name="balsavimai")
+
+
+class UnassignVotingView(ListView):
+    adapts(ISolution, unicode)
+    template = 'solutions/votings_list.html'
+
+    def __init__(self, node, voting_id):
+        self.voting_id = voting_id
+        super(UnassignVotingView, self).__init__(node)
+
+    def render(self, **overrides):
+        voting = get_node_by_slug(self.voting_id)
+        if voting:
+            if self.node._id in voting.solutions:
+                del voting.solutions[self.node._id]
+                voting.save()
+            return redirect(self.node.permalink('balsavimai'))
+        else:
+            raise Http404
+
+provideAdapter(UnassignVotingView, name="delete")
 
 
 class CreateSolutionView(CreateView):
