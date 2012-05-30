@@ -64,7 +64,16 @@ def solution_nav(node, nav, active):
         'active': key in active,
     })
 
-    key = 'votings'
+    key = 'seimo-pozicija'
+    nav.append({
+        'key': key,
+        'url': node.permalink(key),
+        'title': _('Seimo pozicija'),
+        'children': [],
+        'active': key in active,
+    })
+
+    key = 'balsavimai'
     nav.append({
         'key': key,
         'url': node.permalink(key),
@@ -103,7 +112,7 @@ class SolutionVotingsView(ListView):
 
     def nav(self, active=tuple()):
         if not active:
-            active = ('votings',)
+            active = ('balsavimai',)
         nav = super(SolutionVotingsView, self).nav(active)
         return solution_nav(self.node, nav, active)
 
@@ -123,7 +132,7 @@ class SolutionVotingsView(ListView):
                 voting.solutions = solutions
                 voting.save()
 
-                return redirect(self.node.permalink('votings'))
+                return redirect(self.node.permalink('balsavimai'))
         else:
             form = AssignVotingForm()
 
@@ -133,7 +142,7 @@ class SolutionVotingsView(ListView):
         context.update(overrides)
         return super(SolutionVotingsView, self).render(**context)
 
-provideAdapter(SolutionVotingsView, name="votings")
+provideAdapter(SolutionVotingsView, name="balsavimai")
 
 
 class CreateSolutionView(CreateView):
@@ -237,3 +246,24 @@ class IssueDetailsView(DetailsView):
         return super(IssueDetailsView, self).render(**context)
 
 provideAdapter(IssueDetailsView)
+
+
+
+class MPsPositionView(DetailsView):
+    adapts(ISolution)
+    template = 'solutions/mps_position.html'
+
+    def nav(self, active=tuple()):
+        active = active or ('seimo-pozicija')
+        nav = super(MPsPositionView, self).nav(active)
+        return solution_nav(self.node, nav, active)
+
+    def render(self, **overrides):
+        import pprint
+        context = {
+            'mps': pprint.pformat(self.node.mps_positions()),
+        }
+        context.update(overrides)
+        return super(MPsPositionView, self).render(**context)
+
+provideAdapter(MPsPositionView, name='seimo-pozicija')
