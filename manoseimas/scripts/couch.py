@@ -101,6 +101,23 @@ def listgroups(args):
             print(u'[ %s ]: %s' % (doc['_id'], doc.get('title')))
 
 
+def listbytype(args):
+    types = args.types.split(',')
+    counter = 0
+    for type in types:
+        params = dict(
+            startkey=[type, u'\ufff0'],
+            endkey=[type],
+            descending=True
+        )
+        for doc in _list_nodes('sboard/by_type', **params):
+            counter += 1
+            if counter > args.limit:
+                return
+            else:
+                print(u'[ %s ]: %s' % (doc['_id'], doc.get('title')))
+
+
 def deletempgroups(args):
     server = Server(settings.COUCHDB_SERVER)
     db = server['nodes']
@@ -167,6 +184,12 @@ def main():
     # deletempgroups
     p = subparsers.add_parser('deletempgroups')
     p.set_defaults(func=deletempgroups)
+
+    # listbytype
+    p = subparsers.add_parser('listbytype')
+    p.add_argument('types')
+    p.add_argument('--limit', type=int, default=10)
+    p.set_defaults(func=listbytype)
 
     args = parser.parse_args()
     args.func(args)
