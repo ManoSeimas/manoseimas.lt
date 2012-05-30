@@ -42,7 +42,7 @@ class SolutionCompat(Category):
                 slug, key = parse_node_slug(slug)
                 if key:
                     keys.append(key)
-            return couch.by_slug(keys=keys)
+            return couch.view('_all_docs', keys=keys)
         else:
             return []
 
