@@ -48,24 +48,23 @@ def deletesittings(args):
             counter += 1
             if doc['doc']['doc_type'] == 'Voting':
                 print('del %s / %s' % (counter, total))
-                del db[doc['doc']['_id']]
+                db.delete_doc(doc['doc'])
         pages += 100
 
 
-def _list_nodes(view, db='nodes', page=50, **params):
+def _list_nodes(view, db='nodes', page=2, **params):
     server = Server(settings.COUCHDB_SERVER)
     db = server[db]
 
     params['include_docs'] = params.get('include_docs', True)
 
-    counter = 0
-    while counter == 0:
-        counter = 1
+    counter = None
+    while counter is None or counter > page:
+        counter = 0
         params['limit'] = page + 1
         for doc in db.view(view, **params):
             counter += 1
-            if counter >= page:
-                counter = 0
+            if counter > page:
                 params['startkey'] = doc['key']
                 params['startkey_docid'] = doc['id']
             else:
@@ -124,7 +123,7 @@ def deletempgroups(args):
         )
         for doc in _list_nodes('sboard/by_type', **params):
             print('DEL: [ %s ]: %s' % (doc['_id'], doc.get('title')))
-            del db[doc['_id']]
+            db.delete_doc(doc)
 
     db = server['mps']
     print('Cleaning mps database.')
