@@ -3,7 +3,7 @@ import datetime
 from couchdbkit import ResourceNotFound
 from couchdbkit import Server
 
-from scrapy.conf import settings
+from manoseimas.scrapy.settings import COUCHDB_DATABASES
 
 _dbs = {}
 _servers = {}
@@ -28,7 +28,7 @@ def set_db_from_settings(settings, item_name, cache=True):
 def get_db(item_name, cache=True):
     global _servers, _dbs
     if not cache or item_name not in _dbs:
-        set_db_from_settings(settings['COUCHDB_DATABASES'], item_name)
+        set_db_from_settings(COUCHDB_DATABASES, item_name)
     return _dbs[item_name]
 
 
