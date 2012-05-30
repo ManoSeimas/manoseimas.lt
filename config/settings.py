@@ -295,6 +295,7 @@ LOGGING = {
 COUCHDB_SERVER = '$COUCHDB_URL'
 COUCHDB_DATABASES = (
     ('sboard', '$COUCHDB_URL/nodes'),
+    ('sboard.profiles', '$COUCHDB_URL/nodes'),
 
     # XXX: do some thing, that adding these settings should not be necessary.
     ('manoseimas.compat', '$COUCHDB_URL/nodes'),
