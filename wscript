@@ -243,7 +243,7 @@ def build(ctx):
             target='bin/lessc')
 
     bld(rule='bin/django collectstatic --noinput --verbosity=0',
-        source=(glob('%s/static/**/*' % p)))
+        source=(glob('%s/static/**/*' % p)), after='buildout')
 
     for lang in ctx.env.LANGUAGES:
         s = (p, lang)

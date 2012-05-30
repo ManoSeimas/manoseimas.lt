@@ -15,6 +15,7 @@ config.log
 
 syntax:regexp
 
+^manoseimas/scrapy/settings.py$
 ^manoseimas/settings.py$
 ^manoseimas/urls.py$
 
