@@ -36,6 +36,8 @@ from .interfaces import IPoliticalGroup
 class MPProfile(ProfileNode):
     implements(IMPProfile)
 
+    _default_importance = 9
+
 provideNode(MPProfile, "mpprofile")
 
 
@@ -44,9 +46,13 @@ class PoliticalGroup(GroupNode):
 
     source = schema.StringProperty()
 
+    _default_importance = 4
+
 
 class Fraction(PoliticalGroup):
     implements(IFraction)
+
+    _default_importance = 6
 
 provideNode(Fraction, "fraction")
 
@@ -77,5 +83,7 @@ provideNode(ParliamentaryGroup, 'parliamentarygroup')
 
 class Party(PoliticalGroup):
     implements(IParty)
+
+    _default_importance = 7
 
 provideNode(Party, 'party')

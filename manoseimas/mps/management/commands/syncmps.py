@@ -48,14 +48,29 @@ class SyncProcessor(object):
     def __init__(self, db, verbosity=1):
         self.db = db
         self.verbosity = verbosity
+        self._nodes = {}
 
-    def get_node(self, node_id, node_class):
+    def _get_node(self, node_id, node_class):
         if node_id:
             return couch.get(node_id)
         else:
             node = node_class()
             node._id = get_new_id()
             return node
+
+    def get_node(self, node_id, node_class, key=None):
+        if key is None:
+            return self._get_node(node_id, node_class)
+
+        if isinstance(key, tuple):
+            key = (node_class.__name__,) + key
+        else:
+            key = (node_class.__name__, key)
+
+        if key not in self._nodes:
+            self._nodes[key] = self._get_node(node_id, node_class)
+
+        return self._nodes[key]
 
     def process_groups(self, groups, profile):
         group_type_map = {
@@ -73,16 +88,11 @@ class SyncProcessor(object):
 
             group_type = group_type_map[doc['type']]
 
-            if group_type is Fraction:
-                importance = 10
-            else:
-                importance = 5
-
-            group = self.get_node(group_node_id, group_type)
-            group.slug = slugify(doc['name'])
+            slug = slugify(doc['name'])
+            group = self.get_node(group_node_id, group_type, slug)
+            group.slug = slug
             # TODO: extract keywords from title
             #group.keywords = ?
-            group.importance = importance
             group.title = doc['name']
             group.save()
 
@@ -135,7 +145,6 @@ class SyncProcessor(object):
             print 'Node %s (%s) ...' % (node._id, node.slug),
 
         node.keywords = node.slug.split('-')
-        node.importance = 10
         node.title = u'%s %s' % (doc['first_name'], doc['last_name'])
         node.first_name = doc['first_name']
         node.last_name = doc['last_name']

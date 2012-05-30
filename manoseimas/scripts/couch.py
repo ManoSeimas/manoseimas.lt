@@ -52,6 +52,93 @@ def deletesittings(args):
         pages += 100
 
 
+def _list_nodes(view, db='nodes', page=50, **params):
+    server = Server(settings.COUCHDB_SERVER)
+    db = server[db]
+
+    params['include_docs'] = params.get('include_docs', True)
+
+    counter = 0
+    while counter == 0:
+        counter = 1
+        params['limit'] = page + 1
+        for doc in db.view(view, **params):
+            counter += 1
+            if counter >= page:
+                counter = 0
+                params['startkey'] = doc['key']
+                params['startkey_docid'] = doc['id']
+            else:
+                yield doc['doc']
+
+
+def listmpprofiles(args):
+    params = dict(
+        startkey=['MPProfile', u'\ufff0'],
+        endkey=['MPProfile'],
+        descending=True
+    )
+    for doc in _list_nodes('sboard/by_type', **params):
+        print('[ %s ]: %s' % (doc['_id'], doc.get('title')))
+
+
+def listgroups(args):
+    groups = [
+        'Party',
+        'Fraction',
+        'Committee',
+        'Commission',
+        'Parliament',
+        'ParliamentaryGroup',
+    ]
+    for group in groups:
+        print(group)
+        params = dict(
+            startkey=[group, u'\ufff0'],
+            endkey=[group],
+            descending=True
+        )
+        for doc in _list_nodes('sboard/by_type', **params):
+            print(u'[ %s ]: %s' % (doc['_id'], doc.get('title')))
+
+
+def deletempgroups(args):
+    server = Server(settings.COUCHDB_SERVER)
+    db = server['nodes']
+
+    print('Deleting groups and MP profiles.')
+    groups = [
+        'Party',
+        'Fraction',
+        'Committee',
+        'Commission',
+        'Parliament',
+        'ParliamentaryGroup',
+    ]
+    for group in groups:
+        print(group)
+        params = dict(
+            startkey=[group, u'\ufff0'],
+            endkey=[group],
+            descending=True
+        )
+        for doc in _list_nodes('sboard/by_type', **params):
+            print('DEL: [ %s ]: %s' % (doc['_id'], doc.get('title')))
+            del db[doc['_id']]
+
+    db = server['mps']
+    print('Cleaning mps database.')
+    for doc in _list_nodes('_all_docs', db='mps'):
+        print('CLEAN: [ %s ]: %s %s' % (doc['_id'], doc.get('first_name'),
+                                        doc.get('last_name')))
+        for group in range(len(doc.get('groups', []))):
+            if 'group_node_id' in doc['groups'][group]:
+                doc['groups'][group]['group_node_id'] = None
+            if 'membership_node_id' in doc['groups'][group]:
+                doc['groups'][group]['membership_node_id'] = None
+        db.save_doc(doc)
+
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -66,8 +153,21 @@ def main():
     p = subparsers.add_parser('shell')
     p.set_defaults(func=shell)
 
+    # deletesittings
     p = subparsers.add_parser('deletesittings')
     p.set_defaults(func=deletesittings)
+
+    # listmpprofiles
+    p = subparsers.add_parser('listmpprofiles')
+    p.set_defaults(func=listmpprofiles)
+
+    # listgroups
+    p = subparsers.add_parser('listgroups')
+    p.set_defaults(func=listgroups)
+
+    # deletempgroups
+    p = subparsers.add_parser('deletempgroups')
+    p.set_defaults(func=deletempgroups)
 
     args = parser.parse_args()
     args.func(args)
