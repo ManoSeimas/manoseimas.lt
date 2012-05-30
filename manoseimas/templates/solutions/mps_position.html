@@ -1,0 +1,8 @@
+{% extends "sboard/node_details.html" %}
+{% load i18n %}
+{% load sboard %}
+
+{% block node_body %}
+  {{ block.super }}
+  <pre>{{ mps }}</pre>
+{% endblock %}
