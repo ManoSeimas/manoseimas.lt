@@ -22,19 +22,26 @@ from zope.component import provideAdapter
 
 from django.http import Http404
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.interfaces import INode
+from sboard.models import get_node_by_slug
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 from sboard.nodes import NodeView
 from sboard.nodes import UpdateView
 
 from manoseimas.solutions.interfaces import ISolution
+from manoseimas.solutions.nodes import solution_nav
 
 from .forms import AssignSolutionsForm
+from .forms import AssignVotingForm
 from .forms import CompatNodeForm
 from .interfaces import ICompat
+from .models import PersonPosition
+from .models import query_solution_votings
+from .models import update_mps_positions
 
 
 def solution_compat_nav(node, category, nav, active=tuple()):
@@ -242,3 +249,87 @@ class SolutionDetailsView(DetailsView):
     template = 'votings/solution.html'
 
 provideAdapter(SolutionDetailsView, name='compatibility')
+
+
+
+class MPsPositionView(DetailsView):
+    adapts(ISolution)
+    template = 'solutions/mps_position.html'
+
+    def nav(self, active=tuple()):
+        active = active or ('seimo-pozicija')
+        nav = super(MPsPositionView, self).nav(active)
+        return solution_nav(self.node, nav, active)
+
+    def render(self, **overrides):
+        positions = PersonPosition.objects.mps_position_pairs(self.node._id)
+        context = {
+            'positions': positions,
+        }
+        context.update(overrides)
+        return super(MPsPositionView, self).render(**context)
+
+provideAdapter(MPsPositionView, name='seimo-pozicija')
+
+
+class SolutionVotingsView(ListView):
+    adapts(ISolution)
+    template = 'solutions/votings_list.html'
+
+    def nav(self, active=tuple()):
+        if not active:
+            active = ('balsavimai',)
+        nav = super(SolutionVotingsView, self).nav(active)
+        return solution_nav(self.node, nav, active)
+
+    def get_node_list(self):
+        return query_solution_votings(self.node._id)
+
+    def render(self, **overrides):
+        if self.request.method == 'POST':
+            form = AssignVotingForm(self.request.POST)
+            if form.is_valid():
+                voting = form.cleaned_data.get('voting')
+                solution = self.node
+                position = form.cleaned_data.get('position')
+                solutions = voting.solutions or {}
+                solutions[solution._id] = position
+
+                voting.solutions = solutions
+                voting.save()
+
+                update_mps_positions(self.node._id)
+
+                return redirect(self.node.permalink('balsavimai'))
+        else:
+            form = AssignVotingForm()
+
+        context = {
+            'form': form,
+        }
+        context.update(overrides)
+        return super(SolutionVotingsView, self).render(**context)
+
+provideAdapter(SolutionVotingsView, name="balsavimai")
+
+
+class UnassignVotingView(ListView):
+    adapts(ISolution, unicode)
+    template = 'solutions/votings_list.html'
+
+    def __init__(self, node, voting_id):
+        self.voting_id = voting_id
+        super(UnassignVotingView, self).__init__(node)
+
+    def render(self, **overrides):
+        voting = get_node_by_slug(self.voting_id)
+        if voting:
+            if self.node._id in voting.solutions:
+                del voting.solutions[self.node._id]
+                voting.save()
+                update_mps_positions(self.node._id)
+            return redirect(self.node.permalink('balsavimai'))
+        else:
+            raise Http404
+
+provideAdapter(UnassignVotingView, name="delete")

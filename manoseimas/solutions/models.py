@@ -31,35 +31,6 @@ from .interfaces import ISolutionIssue
 
 class Solution(Node):
     implements(ISolution)
-
-    def get_votings(self):
-        return couch.view('solutions/votings', key=self._id)
-
-    def mps_positions(self):
-        """Returns dict with position of each MP for this solution.
-
-        Positions are calculated from assigned votings for this solutions.
-
-        """
-        mps = {}
-        view = couch.view('solutions/votings', key=self._id)
-        # Loop for all votings
-        for voting in view:
-            position = voting.solutions[self._id]
-            # Loop for all vote values (aye, abstain, no)
-            for vote_value, votes in voting.votes.items():
-                vote_value = voting.get_vote_value(vote_value)
-                # Loop for each MP vote
-                for mp_id, fraction_id in votes:
-                    if mp_id not in mps:
-                        mps[mp_id] = {'times': 0, 'sum': 0}
-
-                    mps[mp_id]['times'] += abs(position)
-                    mps[mp_id]['sum'] += vote_value * position
-
-        return dict([(mp_id, 1.0 * mp['sum'] / mp['times'])
-                     for mp_id, mp in mps.items()])
-
 provideNode(Solution, "solution")
 
 

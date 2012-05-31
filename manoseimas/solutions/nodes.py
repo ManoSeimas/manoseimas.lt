@@ -22,20 +22,15 @@ import itertools
 from zope.component import adapts
 from zope.component import provideAdapter
 
-from django.http import Http404
-from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.factory import getNodeFactory
-from sboard.models import get_node_by_slug
 from sboard.nodes import CreateView
 from sboard.nodes import DetailsView
-from sboard.nodes import ListView
 from sboard.nodes import UpdateView
 from sboard.utils import slugify
 
 from .forms import AssignIssueForm
-from .forms import AssignVotingForm
 from .forms import SolutionForm
 from .forms import SolutionIssueForm
 from .interfaces import IIssue
@@ -106,66 +101,6 @@ class SolutionDetailsView(DetailsView):
         return super(SolutionDetailsView, self).render(**context)
 
 provideAdapter(SolutionDetailsView)
-
-
-class SolutionVotingsView(ListView):
-    adapts(ISolution)
-    template = 'solutions/votings_list.html'
-
-    def nav(self, active=tuple()):
-        if not active:
-            active = ('balsavimai',)
-        nav = super(SolutionVotingsView, self).nav(active)
-        return solution_nav(self.node, nav, active)
-
-    def get_node_list(self):
-        return self.node.get_votings()
-
-    def render(self, **overrides):
-        if self.request.method == 'POST':
-            form = AssignVotingForm(self.request.POST)
-            if form.is_valid():
-                voting = form.cleaned_data.get('voting')
-                solution = self.node
-                position = form.cleaned_data.get('position')
-                solutions = voting.solutions or {}
-                solutions[solution._id] = position
-
-                voting.solutions = solutions
-                voting.save()
-
-                return redirect(self.node.permalink('balsavimai'))
-        else:
-            form = AssignVotingForm()
-
-        context = {
-            'form': form,
-        }
-        context.update(overrides)
-        return super(SolutionVotingsView, self).render(**context)
-
-provideAdapter(SolutionVotingsView, name="balsavimai")
-
-
-class UnassignVotingView(ListView):
-    adapts(ISolution, unicode)
-    template = 'solutions/votings_list.html'
-
-    def __init__(self, node, voting_id):
-        self.voting_id = voting_id
-        super(UnassignVotingView, self).__init__(node)
-
-    def render(self, **overrides):
-        voting = get_node_by_slug(self.voting_id)
-        if voting:
-            if self.node._id in voting.solutions:
-                del voting.solutions[self.node._id]
-                voting.save()
-            return redirect(self.node.permalink('balsavimai'))
-        else:
-            raise Http404
-
-provideAdapter(UnassignVotingView, name="delete")
 
 
 class CreateSolutionView(CreateView):
@@ -269,24 +204,3 @@ class IssueDetailsView(DetailsView):
         return super(IssueDetailsView, self).render(**context)
 
 provideAdapter(IssueDetailsView)
-
-
-
-class MPsPositionView(DetailsView):
-    adapts(ISolution)
-    template = 'solutions/mps_position.html'
-
-    def nav(self, active=tuple()):
-        active = active or ('seimo-pozicija')
-        nav = super(MPsPositionView, self).nav(active)
-        return solution_nav(self.node, nav, active)
-
-    def render(self, **overrides):
-        import pprint
-        context = {
-            'mps': pprint.pformat(self.node.mps_positions()),
-        }
-        context.update(overrides)
-        return super(MPsPositionView, self).render(**context)
-
-provideAdapter(MPsPositionView, name='seimo-pozicija')
