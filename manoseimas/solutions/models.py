@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import itertools
+
 from zope.interface import implements
 
 from sboard.factory import provideNode
@@ -31,6 +33,12 @@ from .interfaces import ISolutionIssue
 
 class Solution(Node):
     implements(ISolution)
+
+    def issues(self):
+        solves = query_solution_solves(self._id)
+        raises = query_solution_raises(self._id)
+        return itertools.izip_longest(solves, raises)
+
 provideNode(Solution, "solution")
 
 

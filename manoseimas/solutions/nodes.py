@@ -39,8 +39,6 @@ from .interfaces import ISolutionIssue
 from .models import Issue
 from .models import query_issue_raises
 from .models import query_issue_solves
-from .models import query_solution_raises
-from .models import query_solution_solves
 
 
 def solution_nav(node, nav, active):
@@ -92,10 +90,8 @@ class SolutionDetailsView(DetailsView):
         return solution_nav(self.node, nav, active)
 
     def render(self, **overrides):
-        solves = query_solution_solves(self.node._id)
-        raises = query_solution_raises(self.node._id)
         context = {
-            'issues': itertools.izip_longest(solves, raises),
+            'issues': self.node.issues(),
         }
         context.update(overrides)
         return super(SolutionDetailsView, self).render(**context)
