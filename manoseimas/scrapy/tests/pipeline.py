@@ -109,16 +109,11 @@ class TestPipeline(unittest.TestCase):
 
 
 class TestPipelineGetDB(unittest.TestCase):
-    @patch('manoseimas.scrapy.pipelines.settings')
-    def test_get_db(self, mock_settings):
-        settings = {
-            'COUCHDB_DATABASES': (
-                ('legalacts', 'http://127.0.0.1:5984', 'my_legalacts_testdb',),
-                ('person', 'http://127.0.0.1:5984', 'my_person_testdb',),
-            )
-        }
-        mock_settings.__getitem__.side_effect = lambda key: settings[key]
-
+    @patch('manoseimas.scrapy.pipelines.COUCHDB_DATABASES', (
+        ('legalacts', 'http://127.0.0.1:5984', 'my_legalacts_testdb',),
+        ('person', 'http://127.0.0.1:5984', 'my_person_testdb',),
+    ))
+    def test_get_db(self):
         db = get_db('person', cache=False)
         self.assertEqual(db.dbname, 'my_person_testdb')
         db.server.delete_db(db.dbname)
