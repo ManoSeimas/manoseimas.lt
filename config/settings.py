@@ -135,6 +135,7 @@ PIPELINE_JS = {
             #end if
             'js/flot/jquery.flot.js',
             'js/flot/jquery.flot.pie.js',
+            'js/csrf.js',
             'js/scripts.js',
         ),
         'output_filename': 'js/scripts.min.js',
