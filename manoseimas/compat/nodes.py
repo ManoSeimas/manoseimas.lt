@@ -250,8 +250,6 @@ class UpdateUserPositionView(NodeView):
         solution = form.cleaned_data['node']
         position = form.cleaned_data['position']
 
-        import pprint ; pprint.pprint(self.request.session['positions'])
-
         update_position(self.request, solution._id, position)
         view = clone_view(SolutionCompatPreviewView, self, solution)
         return view.render()
