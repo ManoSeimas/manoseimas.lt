@@ -88,6 +88,7 @@ def options(ctx):
                        'http://127.0.0.1:5984')
 
     gr.add_option('--couchdb-server-name', action='store',
+                  default='127.0.0.1:5984',
                   help='pulbic couchdb domain name, example: couchdb.example.com')
 
 
