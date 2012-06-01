@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import operator
+
 from decimal import Decimal as dc
 
 from zope.interface import implements
@@ -38,6 +40,10 @@ class SolutionCompat(Category):
     implements(ICompat)
 
     categories = schema.ListProperty()
+
+    def default_category(self):
+        if self.categories:
+            return self.categories[0][0]
 
     def get_solutions(self, category):
         keys = []
@@ -71,6 +77,39 @@ class PersonPositionManager(models.Manager):
         aye = mps.filter(position__gt=0).order_by('-position')
         against = mps.filter(position__lte=0).order_by('position')
         return (aye[:limit], against[:limit])
+
+    def mp_compat_pairs(self, positions, limit=200):
+        mps = {}
+        for solution_id, position in positions:
+            for mp in self.mps(solution_id):
+                mpid = mp.profile._id
+                sum, count = mps.get(mpid, (0, 0))
+                sum += mp.position * position
+                mps[mpid] = (sum, count + 1)
+
+        aye, against = [], []
+        for mpid, numbers in mps.items():
+            sum, count = numbers
+            avg = dc(sum) / dc(count)
+            if avg > 0:
+                aye.append((mpid, avg))
+            else:
+                against.append((mpid, avg))
+
+        aye = sorted(aye, key=operator.itemgetter(1), reverse=True)
+        against = sorted(against, key=operator.itemgetter(1))
+
+        results = ([], [])
+        for i, mps in enumerate((aye, against)):
+            for mpid, avg in mps[:limit]:
+                position = PersonPosition()
+                position.profile = mpid
+                position.profile_type = MP_PROFILE
+                position.position = avg
+                results[i].append(position)
+
+        return results
+
 
 
 class PersonPosition(models.Model):
@@ -161,6 +200,15 @@ def update_position(request, solution_id, value):
         update_anonymous_position(request, solution_id, value)
     else:
         update_user_position(request.user, solution_id, value)
+
+
+def query_positions(request):
+    if request.user.is_anonymous():
+        return request.session.get('positions', {}).items()
+    else:
+        profile_id = request.user.get_profile().node._id
+        qry = PersonPosition.objects.filter(profile=profile_id)
+        return ((p.node._id, p.position) for p in qry)
 
 
 def anonymous_positions_map(request):

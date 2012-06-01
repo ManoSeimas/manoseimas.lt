@@ -48,16 +48,17 @@ from .forms import UserPositionForm
 from .interfaces import ICompat
 from .models import PersonPosition
 from .models import fetch_positions
+from .models import query_positions
 from .models import query_solution_votings
 from .models import update_mps_positions
 from .models import update_position
 
 
-def solution_compat_nav(node, category, nav, active=tuple()):
+def solution_compat_nav(request, node, category, nav, active=tuple()):
     if not active and category:
         active = (category,)
 
-    if category:
+    if category and node.can(request, 'update'):
         nav.append({
             'key': 'node-title',
             'title': _('Testas'),
@@ -99,14 +100,12 @@ class SolutionCompatView(ListView):
 
     def __init__(self, node, category=None):
         super(SolutionCompatView, self).__init__(node)
-        # Use first category if not set, by default.
-        if not category and node.categories:
-            category = node.categories[0][0]
-        self.category = category
+        self.category = category or node.default_category()
 
     def nav(self, active=tuple()):
         nav = super(SolutionCompatView, self).nav(active)
-        return solution_compat_nav(self.node, self.category, nav, active)
+        return solution_compat_nav(self.request, self.node, self.category, nav,
+                                   active)
 
     def get_node_list(self):
         nodes = self.node.get_solutions(self.category)
@@ -156,7 +155,8 @@ class AssignSolutionsView(UpdateView):
             else:
                 active = ('assign-solutions',)
         nav = super(AssignSolutionsView, self).nav(active)
-        return solution_compat_nav(self.node, self.category, nav, active)
+        return solution_compat_nav(self.request, self.node, self.category, nav,
+                                   active)
 
 provideAdapter(AssignSolutionsView, name='assign-solutions')
 
@@ -349,3 +349,23 @@ class UnassignVotingView(ListView):
             raise Http404
 
 provideAdapter(UnassignVotingView, name="delete")
+
+
+class CompatResultsView(DetailsView):
+    adapts(ICompat)
+    template = 'compat/results.html'
+
+    def nav(self, active=tuple()):
+        nav = super(CompatResultsView, self).nav(active)
+        return solution_compat_nav(self.request, self.node, None, nav, active)
+
+    def render(self, **overrides):
+        positions = query_positions(self.request)
+        aye, against = PersonPosition.objects.mp_compat_pairs(positions)
+        context = {
+            'positions': itertools.izip_longest(aye, against),
+        }
+        context.update(overrides)
+        return super(CompatResultsView, self).render(**context)
+
+provideAdapter(CompatResultsView, name='rezultatai')

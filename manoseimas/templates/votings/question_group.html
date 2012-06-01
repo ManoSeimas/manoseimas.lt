@@ -19,7 +19,9 @@
 
 {% block content %}
   <div class="test-header">
-    <button class="btn btn-success btn-large">Rodyti rezultatus</button>
+    <a href="{% nodeurl node 'rezultatai' %}" class="btn btn-success btn-large">
+      {% trans "Rodyti rezultatus" %}
+    </a>
     <h2>Atsakyk į tau rūpimus klausimus ir atrask panašiai dirbančius
       seimo narius</h2>
   </div>
