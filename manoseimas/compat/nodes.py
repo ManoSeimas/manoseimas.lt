@@ -24,17 +24,19 @@ from zope.component import provideAdapter
 
 from django.http import Http404
 from django.http import HttpResponse
+from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.ajax import AjaxView
-from sboard.json import json_response
 from sboard.models import get_node_by_slug
 from sboard.models import prefetch_nodes
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 from sboard.nodes import NodeView
 from sboard.nodes import UpdateView
+from sboard.nodes import clone_view
 
 from manoseimas.solutions.interfaces import ISolution
 from manoseimas.solutions.nodes import solution_nav
@@ -42,10 +44,13 @@ from manoseimas.solutions.nodes import solution_nav
 from .forms import AssignSolutionsForm
 from .forms import AssignVotingForm
 from .forms import CompatNodeForm
+from .forms import UserPositionForm
 from .interfaces import ICompat
 from .models import PersonPosition
+from .models import fetch_positions
 from .models import query_solution_votings
 from .models import update_mps_positions
+from .models import update_position
 
 
 def solution_compat_nav(node, category, nav, active=tuple()):
@@ -104,8 +109,18 @@ class SolutionCompatView(ListView):
         return solution_compat_nav(self.node, self.category, nav, active)
 
     def get_node_list(self):
-        return self.node.get_solutions(self.category)
+        nodes = self.node.get_solutions(self.category)
+        return fetch_positions(self.request, nodes)
 
+    def render(self, **overrides):
+        context = dict(buttons=(
+                (2, _('Tikrai taip')),
+                (1, _('Taip')),
+                (-1, _('Ne')),
+                (-2, _('Tikrai ne')),
+            ))
+        context.update(overrides)
+        return super(SolutionCompatView, self).render(**context)
 
 provideAdapter(SolutionCompatView)
 provideAdapter(SolutionCompatView, (ICompat, unicode))
@@ -210,28 +225,38 @@ class QuickResultsView(NodeView):
 provideAdapter(QuickResultsView, name='quick-results')
 
 
-class SolutionCompatJsonView(AjaxView):
+class SolutionCompatPreviewView(AjaxView):
     adapts(ISolution)
-
-    def get_positions_list(self, positions):
-        return [dict(
-            position=position.position_percent(),
-            avatar=position.profile.ref.avatar_url(),
-            profile_url=position.profile.ref.permalink(),
-            person=position.profile.ref.title,
-        ) for position in positions]
 
     def render(self, **overrides):
         solution_id = self.node._id
         aye, against = PersonPosition.objects.mp_pairs(solution_id, limit=3)
         prefetch_nodes('profile', (aye, against))
-        data = dict(
-            mps_aye=self.get_positions_list(aye),
-            mps_against=self.get_positions_list(against),
-        )
-        return json_response(data)
+        context = dict(mps_aye=aye, mps_against=against)
+        return render(self.request, 'compat/compat_preview.html', context)
 
-provideAdapter(SolutionCompatJsonView, name='compat')
+
+class UpdateUserPositionView(NodeView):
+    adapts(ICompat)
+
+    def render(self, **overrides):
+        if self.request.method != 'POST':
+            return HttpResponseBadRequest(_('Only POST method is alowed.'))
+
+        form = UserPositionForm(self.request.POST)
+        if not form.is_valid():
+            return HttpResponseBadRequest(form.errors.as_text())
+
+        solution = form.cleaned_data['node']
+        position = form.cleaned_data['position']
+
+        import pprint ; pprint.pprint(self.request.session['positions'])
+
+        update_position(self.request, solution._id, position)
+        view = clone_view(SolutionCompatPreviewView, self, solution)
+        return view.render()
+
+provideAdapter(UpdateUserPositionView, name='submit-position')
 
 
 class SolutionDetailsView(DetailsView):

@@ -1,0 +1,29 @@
+{% load sboard %}
+
+<table style="width:100%;">
+  <tr>
+{% for mp in mps_aye %}
+    <td style="width:50px; text-align:center;">
+      <a href="{% nodeurl mp.profile.ref %}">
+        <img src="{{ mp.profile.ref.avatar_url }}"
+             title="{{ mp.profile.ref.title }}" />
+      </a>
+      <p><strong>{{ mp.position_percent }}%</strong></p>
+    </td>
+{% endfor %}
+
+    <td></td>
+
+    {% for mp in mps_against %}
+    <td style="width:50px; text-align:center;">
+      <p>
+        <a href="{% nodeurl mp.profile.ref %}">
+          <img src="{{ mp.profile.ref.avatar_url }}"
+               title="{{ mp.profile.ref.title }}" />
+        </a>
+      </p>
+      <p><strong>{{ mp.position_percent }}%</strong></p>
+    </td>
+    {% endfor %}
+  </tr>
+</table>

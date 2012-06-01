@@ -20,6 +20,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from sboard.fields import NodeField
 from sboard.forms import BaseNodeForm
 from sboard.models import get_node_by_slug
 from sboard.utils import slugify
@@ -166,3 +167,8 @@ class AssignVotingForm(forms.Form):
                 raise forms.ValidationError(_(
                     u'Klaidingai nurodytas balsavimo adresas.'))
         return voting
+
+
+class UserPositionForm(forms.Form):
+    node = NodeField()
+    position = forms.IntegerField(min_value=-2, max_value=2)

@@ -130,3 +130,66 @@ def update_mps_positions(solution_id):
         position.profile = profile_id
         position.profile_type = MP_PROFILE
         position.save()
+
+
+def update_anonymous_position(request, solution_id, value):
+    if 'positions' not in request.session:
+        request.session['positions'] = {}
+    request.session['positions'][solution_id] = value
+    request.session.modified = True
+
+
+def update_user_position(user, solution_id, value):
+    profile = user.get_profile().node
+
+    params = dict(node=solution_id, profile=profile._id)
+    try:
+        position = PersonPosition.objects.get(**params)
+    except PersonPosition.DoesNotExist:
+        position = PersonPosition(**params)
+        position.profile_type = USER_PROFILE
+
+    if value:
+        position.position = value
+        position.save()
+    elif position.pk:
+        position.delete()
+
+
+def update_position(request, solution_id, value):
+    if request.user.is_anonymous():
+        update_anonymous_position(request, solution_id, value)
+    else:
+        update_user_position(request.user, solution_id, value)
+
+
+def anonymous_positions_map(request):
+    return request.session.get('positions', {})
+
+
+def user_positions_map(user, nodes):
+    keys = []
+    node_map = {}
+    for node in nodes:
+        key = node._id
+        keys.append(key)
+        node_map[key] = node
+
+    positions = {}
+    profile_id = user.get_profile().node._id
+    qry = PersonPosition.objects.filter(profile=profile_id, node__in=keys)
+    for position in qry:
+        node = node_map[position.node._id]
+        positions[node._id] = position.position
+
+    return positions
+
+
+def fetch_positions(request, nodes):
+    if request.user.is_anonymous():
+        positions = anonymous_positions_map(request)
+    else:
+        positions = user_positions_map(request.user, nodes)
+    for node in nodes:
+        position = positions.get(node._id)
+        yield (node, position)
