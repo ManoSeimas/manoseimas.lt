@@ -8,10 +8,9 @@ sboard.factory.autodiscover()
 
 urlpatterns = patterns('',
     #url(r'^$', 'sboard.views.node', {'action': 'list'}, name='index'),
-    url(r'^$', 'sboard.views.node', {'slug': 'testas'}, name='index'),
+    url(r'^$', 'sboard.views.node_view', {'slug': 'testas'}, name='index'),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
-    url(r'', include('sboard.urls')),
 )
 
 if settings.DEBUG:
@@ -21,3 +20,5 @@ if settings.DEBUG:
                 'document_root': settings.MEDIA_ROOT,
             }),
        )
+
+urlpatterns += patterns('', url(r'', include('sboard.urls')))
