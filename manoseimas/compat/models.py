@@ -85,7 +85,7 @@ class PersonPositionManager(models.Manager):
                 mpid = mp.profile._id
                 sum, count = mps.get(mpid, (0, 0))
                 sum += mp.position * position
-                mps[mpid] = (sum, count + 1)
+                mps[mpid] = (sum, count + abs(position))
 
         aye, against = [], []
         for mpid, numbers in mps.items():
