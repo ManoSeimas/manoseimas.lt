@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import itertools
+
 from zope.component import adapts
 from zope.component import provideAdapter
 
@@ -25,8 +27,10 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
-from sboard.interfaces import INode
+from sboard.ajax import AjaxView
+from sboard.json import json_response
 from sboard.models import get_node_by_slug
+from sboard.models import prefetch_nodes
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 from sboard.nodes import NodeView
@@ -206,41 +210,28 @@ class QuickResultsView(NodeView):
 provideAdapter(QuickResultsView, name='quick-results')
 
 
-class QuickResultsView(DetailsView):
-    adapts(INode)
+class SolutionCompatJsonView(AjaxView):
+    adapts(ISolution)
 
-    template = 'votings/results.html'
+    def get_positions_list(self, positions):
+        return [dict(
+            position=position.position_percent(),
+            avatar=position.profile.ref.avatar_url(),
+            profile_url=position.profile.ref.permalink(),
+            person=position.profile.ref.title,
+        ) for position in positions]
 
-    def render(self):
-        mps_matches = self.request.session.get('mps_matches', {})
-        results = sort_results(mps_matches)
-        return super(QuickResultsView, self).render(
-            results=results[:8],
-            party_results=[
-                {'id':     u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija',
-                 'score':  78,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_37.gif',
-                },
-                {'id':     u'Lietuvos socialdemokratų partijos frakcija',
-                 'score':  72,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_20.gif',
-                },
-                {'id':     u'Liberalų ir centro sąjungos frakcija',
-                 'score':  67,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_3.gif',
-                },
-                {'id':     u'Liberalų sąjūdžio frakcija',
-                 'score':  66,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_18.gif',
-                },
-                {'id':     u'Frakcija "Tvarka ir teisingumas"',
-                 'score':  56,
-                 'url':    'http://manobalsas.lt/politikai/logos/part_30.gif',
-                },
-            ]
+    def render(self, **overrides):
+        solution_id = self.node._id
+        aye, against = PersonPosition.objects.mp_pairs(solution_id, limit=3)
+        prefetch_nodes('profile', (aye, against))
+        data = dict(
+            mps_aye=self.get_positions_list(aye),
+            mps_against=self.get_positions_list(against),
         )
+        return json_response(data)
 
-provideAdapter(QuickResultsView, name='results')
+provideAdapter(SolutionCompatJsonView, name='compat')
 
 
 class SolutionDetailsView(DetailsView):
@@ -249,7 +240,6 @@ class SolutionDetailsView(DetailsView):
     template = 'votings/solution.html'
 
 provideAdapter(SolutionDetailsView, name='compatibility')
-
 
 
 class MPsPositionView(DetailsView):
@@ -262,9 +252,10 @@ class MPsPositionView(DetailsView):
         return solution_nav(self.node, nav, active)
 
     def render(self, **overrides):
-        positions = PersonPosition.objects.mps_position_pairs(self.node._id)
+        solution_id = self.node._id
+        aye, against = PersonPosition.objects.mp_pairs(solution_id)
         context = {
-            'positions': positions,
+            'positions': itertools.izip_longest(aye, against),
         }
         context.update(overrides)
         return super(MPsPositionView, self).render(**context)

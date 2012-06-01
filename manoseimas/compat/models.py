@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import itertools
-import operator
-
 from decimal import Decimal as dc
 
 from zope.interface import implements
@@ -32,7 +29,6 @@ from sboard.factory import provideNode
 from sboard.models import NodeForeignKey
 from sboard.models import couch
 from sboard.models import parse_node_slug
-from sboard.profiles.models import query_profiles
 
 from .interfaces import ICompat
 
@@ -67,36 +63,15 @@ PROFILE_TYPES = (
 )
 
 class PersonPositionManager(models.Manager):
-    def mps_positions(self, solution_id):
+    def mps(self, solution_id):
         return self.filter(node=solution_id, profile_type=MP_PROFILE)
 
-    def populate_profiles(self, positions):
-        profile_keys = []
-        positions_by_profile_id = {}
-        for position in positions:
-            profile_id = position.profile._id
-            profile_keys.append(profile_id)
-            positions_by_profile_id[profile_id] = position
+    def mp_pairs(self, solution_id, limit=200):
+        mps = self.mps(solution_id)
+        aye = mps.filter(position__gt=0).order_by('-position')
+        against = mps.filter(position__lte=0).order_by('position')
+        return (aye[:limit], against[:limit])
 
-        for profile in query_profiles(profile_keys):
-            position = positions_by_profile_id[profile._id]
-            position.profile = profile
-            yield position
-
-    def mps_position_pairs(self, solution_id):
-        aye = []
-        against = []
-        positions = self.mps_positions(solution_id)
-        for position in self.populate_profiles(positions):
-            if position.position > 0:
-                aye.append(position)
-            else:
-                against.append(position)
-
-        aye = sorted(aye, key=operator.attrgetter('position'), reverse=True)
-        against = sorted(against, key=operator.attrgetter('position'))
-
-        return itertools.izip_longest(aye, against)
 
 class PersonPosition(models.Model):
     node = NodeForeignKey()
@@ -142,7 +117,7 @@ def calculate_mps_positions(solution_id):
 
 def update_mps_positions(solution_id):
     # Clear MPs positions of solution
-    PersonPosition.objects.mps_positions(solution_id).delete()
+    PersonPosition.objects.mps(solution_id).delete()
 
     # Calculate MPs positions from votings assigned to this solution
     raw_positions = calculate_mps_positions(solution_id)
