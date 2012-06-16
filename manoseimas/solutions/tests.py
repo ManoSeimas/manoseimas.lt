@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import json
-
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -73,13 +71,14 @@ class SolutionTests(NodesTestsMixin, TestCase):
         self.assertRedirects(response, v2_url)
 
 
-        # Try to get user voting match results
-        results_url = reverse('node', args=['s1', 'quick-results'])
-        response = self.client.get(results_url, {'vote': '2'})
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertEqual(data['mps'][0]['id'], '000078')
-        self.assertEqual(data['mps'][0]['score'], 87)
+        # TODO: move this part to compat app
+        ## Try to get user voting match results
+        #results_url = reverse('node', args=['s1', 'submit-position'])
+        #response = self.client.get(results_url, {'vote': '2'})
+        #self.assertEqual(response.status_code, 200)
+        #data = json.loads(response.content)
+        #self.assertEqual(data['mps'][0]['id'], '000078')
+        #self.assertEqual(data['mps'][0]['score'], 87)
 
 
 def create_solution(title):
