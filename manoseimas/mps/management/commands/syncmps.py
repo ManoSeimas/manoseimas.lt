@@ -134,7 +134,7 @@ class SyncProcessor(object):
 
         node.save()
 
-        node.put_attachment(photo, 'file')
+        node.put_attachment(photo, 'file.%s' % node.ext)
         photo.close()
 
         return node
