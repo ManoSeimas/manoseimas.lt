@@ -63,6 +63,8 @@ provideNode(SolutionCompat, "solutions-test")
 
 USER_PROFILE = 0
 MP_PROFILE = 1
+FRACTION_PROFILE = 2
+GROUP_PROFILE = 3
 PROFILE_TYPES = (
     (USER_PROFILE, _('User')),
     (USER_PROFILE, _('Memeber of Parlament')),
@@ -110,6 +112,15 @@ class PersonPositionManager(models.Manager):
 
         return results
 
+    def fractions(self, solution_id):
+        return self.filter(node=solution_id, profile_type=FRACTION_PROFILE)
+
+    def fraction_pairs(self, solution_id, limit=200):
+        fractions = self.fractions(solution_id)
+        aye = fractions.filter(position__gt=0).order_by('-position')
+        against = fractions.filter(position__lte=0).order_by('position')
+        return (aye[:limit], against[:limit])
+
 
 
 class PersonPosition(models.Model):
@@ -136,6 +147,7 @@ def calculate_mps_positions(solution_id):
 
     """
     mps = {}
+    fractions = {}
     # Loop for all votings
     for voting in query_solution_votings(solution_id):
         position = voting.solutions[solution_id]
@@ -146,29 +158,57 @@ def calculate_mps_positions(solution_id):
             for mp_id, fraction_id in votes:
                 if mp_id not in mps:
                     mps[mp_id] = {'times': 0, 'sum': 0}
-
                 mps[mp_id]['times'] += abs(position)
                 mps[mp_id]['sum'] += vote_value * position
 
-    return dict([(mp_id, 1.0 * mp['sum'] / mp['times'])
+                # Some old fractions mey not be imported, so we need to check
+                # if fraction id is not null.
+                #
+                # To fix this, some smart importer should be written, that
+                # imports all fractions, even old ones, that no longer exists.
+                if fraction_id:
+                    if fraction_id not in fractions:
+                        fractions[fraction_id] = {'times': 0, 'sum': 0}
+                    fractions[fraction_id]['times'] += abs(position)
+                    fractions[fraction_id]['sum'] += vote_value * position
+
+    return (
+        dict([(fraction_id, 1.0 * fraction['sum'] / fraction['times'])
+                 for fraction_id, fraction in fractions.items()]),
+        dict([(mp_id, 1.0 * mp['sum'] / mp['times'])
                  for mp_id, mp in mps.items()])
+    )
 
 
 def update_mps_positions(solution_id):
-    # Clear MPs positions of solution
-    PersonPosition.objects.mps(solution_id).delete()
-
     # Calculate MPs positions from votings assigned to this solution
-    raw_positions = calculate_mps_positions(solution_id)
+    fractions, mps = calculate_mps_positions(solution_id)
 
-    # Save calculated positions to PersonPosition table
-    for profile_id, value in raw_positions.items():
-        position = PersonPosition()
-        position.node = solution_id
-        position.position = value
-        position.profile = profile_id
-        position.profile_type = MP_PROFILE
-        position.save()
+    items = (
+        (
+            PersonPosition.objects.fractions,
+            fractions,
+            FRACTION_PROFILE,
+        ),
+        (
+            PersonPosition.objects.mps,
+            mps,
+            MP_PROFILE,
+        ),
+    )
+
+    for qry, positions, profile_type in items:
+        # Clear positions of solution
+        qry(solution_id).delete()
+
+        # Save calculated positions to PersonPosition table
+        for profile_id, value in positions.items():
+            position = PersonPosition()
+            position.node = solution_id
+            position.position = value
+            position.profile = profile_id
+            position.profile_type = profile_type
+            position.save()
 
 
 def update_anonymous_position(request, solution_id, value):

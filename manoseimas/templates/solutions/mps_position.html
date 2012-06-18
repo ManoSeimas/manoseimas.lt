@@ -5,13 +5,17 @@
 {% block node_body %}
   {{ block.super }}
 
+  {% for pgroup in pgroups %}
+    
+  <h2>{{ pgroup.title }}</h2>
+
   <table style="width:100%;">
     <tbody>
       <tr>
         <th>{% trans "Palaiko" %}</th>
         <th>{% trans "Nepalaiko" %}</th>
       </tr>
-      {% for position_pair in positions %}
+      {% for position_pair in pgroup.positions %}
       <tr>
         {% for position in position_pair %}
         <td>
@@ -33,5 +37,7 @@
       {% endfor %}
     <tbody>
   </table>
+
+  {% endfor %}
 
 {% endblock %}

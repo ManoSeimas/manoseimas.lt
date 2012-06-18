@@ -276,9 +276,19 @@ class MPsPositionView(DetailsView):
 
     def render(self, **overrides):
         solution_id = self.node._id
-        aye, against = PersonPosition.objects.mp_pairs(solution_id)
+        fractions = PersonPosition.objects.fraction_pairs(solution_id)
+        mps = PersonPosition.objects.mp_pairs(solution_id)
         context = {
-            'positions': itertools.izip_longest(aye, against),
+            'pgroups': (
+                dict(
+                    title=_('Frakcijos'),
+                    positions=itertools.izip_longest(*fractions),
+                ),
+                dict(
+                    title=_('Seimo nariai'),
+                    positions=itertools.izip_longest(*mps),
+                )
+            ),
         }
         context.update(overrides)
         return super(MPsPositionView, self).render(**context)

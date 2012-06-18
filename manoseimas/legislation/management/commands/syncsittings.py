@@ -22,9 +22,10 @@ import datetime
 from django.core.management.base import BaseCommand
 
 from couchdbkit import schema
+from couchdbkit.exceptions import NoResultFound
 from couchdbkit.exceptions import ResourceNotFound
-from couchdbkit.ext.django.loading import get_db
 
+from manoseimas.scrapy.pipelines import get_db
 from manoseimas.votings.models import Voting, Source
 
 from sboard.models import couch
@@ -64,6 +65,7 @@ class SyncException(Exception):
 class SyncProcessor(object):
     def __init__(self):
         self._profile_ids = {}
+        self._fraction_ids = {}
 
     def get_voting_by_source_id(self, source_id):
         try:
@@ -122,7 +124,22 @@ class SyncProcessor(object):
         return self._profile_ids[source_id]
 
     def get_fraction_id(self, fraction_abbreviation):
-        return fraction_abbreviation
+        abbr_map = {
+            'TSF': 'TSLKDF',
+        }
+        fraction_abbreviation = abbr_map.get(fraction_abbreviation,
+                                             fraction_abbreviation)
+        if fraction_abbreviation not in self._fraction_ids:
+            print(fraction_abbreviation)
+            view = couch.view('mps/fraction_by_abbr',
+                              key=fraction_abbreviation)
+            try:
+                fraction = view.one(except_all=True)
+            except NoResultFound:
+                print('Fraction %s not found' % fraction_abbreviation)
+                return None
+            self._fraction_ids[fraction_abbreviation] = fraction._id
+        return self._fraction_ids[fraction_abbreviation]
 
     def sync_votes(self, votes):
         ret = {
@@ -142,6 +159,7 @@ class SyncProcessor(object):
         node.save()
 
     def process(self, doc):
+        import pprint ; pprint.pprint(doc.source['url'])
         node = self.get_or_create_voting(doc)
         node.created = doc.datetime
 
@@ -195,12 +213,16 @@ class Command(BaseCommand):
     help = "Synchronize raw legal acts data with django-sboard nodes."
 
     def handle(self, *args, **options):
-        RawVoting.set_db(get_db('sittings'))
+        RawVoting.set_db(get_db('voting'))
         processor = SyncProcessor()
         has_docs = True
         last = None
         limit = 100
-        params = {'include_docs': True, 'limit': limit}
+        params = dict(
+            include_docs=True,
+            limit=limit,
+            classes=dict(voting=RawVoting),
+        )
         while has_docs:
             view = RawVoting.view('scrapy/votes_with_documents', **params)
             rows = list(view)

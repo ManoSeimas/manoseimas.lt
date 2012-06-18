@@ -103,6 +103,7 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         # voting details from question agenda
         pipeline.process_item(items[1], None)
 
+        import ipdb; ipdb.set_trace()
         items = parse_voting()
         # list of votings
         voting = pipeline.process_item(items[0], None)
@@ -115,6 +116,10 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         node = processor._nodes[0]
         profile_id = processor.get_profile_id('47852')
         self.assertEqual(node.votes['aye'][0][0], profile_id)
+
+        import pprint ; pprint.pprint(node._doc)
+
+        assert False
 
     @patch.object(syncmps.SyncProcessor, 'fetch_photo')
     def test_get_profile_by_source_id(self, fetch_photo):

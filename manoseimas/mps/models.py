@@ -52,6 +52,8 @@ class PoliticalGroup(GroupNode):
 class Fraction(PoliticalGroup):
     implements(IFraction)
 
+    abbreviation = schema.StringProperty()
+
     _default_importance = 6
 
 provideNode(Fraction, "fraction")

@@ -8,12 +8,9 @@ To be able to build and run this project you will need:
 
 * python
 
-* ruby, for SASS_
-
 * mercurial DVCS's
 
-* C/C++ compiler, python and ruby development headers for compiling python and
-  ruby extensions
+* C/C++ compiler, python and development headers for compiling python extension
 
 System requirements can be installed all at once using this command::
 
@@ -248,9 +245,6 @@ manoseimas/static
 manoseimas/templates/
     Django project wide templates.
 
-manoseimas/sass/
-    SASS_ style files, compiled CSS output will be stored to ``var/sass``.
-
 manoseimas/urls.py
     Django project wide urls.
 
@@ -268,9 +262,6 @@ var/etc/
 
 var/log/
     Logs.
-
-var/sass/
-    Generated SASS_ files.
 
 var/www/media/
     Folder for serving static content, here should be stored all user uploaded
@@ -291,4 +282,3 @@ wscript
 
 .. _Waf: http://code.google.com/p/waf/
 .. _Cheetah: http://www.cheetahtemplate.org/
-.. _SASS: http://sass-lang.com/

@@ -371,9 +371,6 @@ def setup(ctx):
         # Node.js package manager for LESS
         'npm',
 
-        # CouchDB
-        'couchdb',
-
         # Other development headers
         'libfreetype6-dev',
         'libicu-dev',

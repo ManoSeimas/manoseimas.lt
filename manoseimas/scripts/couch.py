@@ -1,3 +1,5 @@
+# coding: utf-8
+
 # Copyright (C) 2012  Mantas Zimnickas <sirexas@gmail.com>
 #
 # This file is part of manoseimas.lt project.
@@ -26,9 +28,27 @@ setup_environ(settings)
 from django.conf import settings
 
 
+class ScriptError(Exception):
+    pass
+
+
 def replicate(args):
+    if args.source is None:
+        replications = (
+            ('http://couchdb.manoseimas.lt/mps', 'mps'),
+            ('http://couchdb.manoseimas.lt/nodes', 'nodes'),
+            ('http://couchdb.manoseimas.lt/sittings', 'sittings'),
+        )
+    else:
+        if not all(args.source, args.target):
+            raise ScriptError('Specify source and target.')
+        replications = (
+            (args.source, args.target),
+        )
     server = Server(settings.COUCHDB_SERVER)
-    server.replicate(args.source, args.target)
+    for source, target in replications:
+        print('Replicating: %s -> %s' % (source, target))
+        server.replicate(source, target)
 
 
 def shell(args):
@@ -62,13 +82,14 @@ def _list_nodes(view, db='nodes', page=2, **params):
     while counter is None or counter > page:
         counter = 0
         params['limit'] = page + 1
-        for doc in db.view(view, **params):
+        for row in db.view(view, **params):
             counter += 1
             if counter > page:
-                params['startkey'] = doc['key']
-                params['startkey_docid'] = doc['id']
+                params['startkey'] = row['key']
+                params['startkey_docid'] = row['id']
             else:
-                yield doc['doc']
+                doc = row.pop('doc')
+                yield row, doc
 
 
 def listmpprofiles(args):
@@ -77,7 +98,7 @@ def listmpprofiles(args):
         endkey=['MPProfile'],
         descending=True
     )
-    for doc in _list_nodes('sboard/by_type', **params):
+    for row, doc in _list_nodes('sboard/by_type', **params):
         print('[ %s ]: %s' % (doc['_id'], doc.get('title')))
 
 
@@ -97,7 +118,7 @@ def listgroups(args):
             endkey=[group],
             descending=True
         )
-        for doc in _list_nodes('sboard/by_type', **params):
+        for row, doc in _list_nodes('sboard/by_type', **params):
             print(u'[ %s ]: %s' % (doc['_id'], doc.get('title')))
 
 
@@ -110,12 +131,15 @@ def listbytype(args):
             endkey=[type],
             descending=True
         )
-        for doc in _list_nodes('sboard/by_type', **params):
+        for row, doc in _list_nodes('sboard/by_type', **params):
             counter += 1
             if counter > args.limit:
                 return
             else:
-                print(u'[ %s ]: %s' % (doc['_id'], doc.get('title')))
+                print(u'[ %s ]: %s' % (
+                    doc['_id'],
+                    doc.get('title'),
+                ))
 
 
 def deletempgroups(args):
@@ -154,6 +178,52 @@ def deletempgroups(args):
                 doc['groups'][group]['membership_node_id'] = None
         db.save_doc(doc)
 
+def listfractions(args):
+    from manoseimas.mps.abbr import get_fraction_abbr
+
+    fractions_abbr = {
+        u'Frakcija "Viena Lietuva"':                                 u'VLF',
+        u'"Ąžuolo" frakcija':                                        u'ĄF',
+        u'Tautos prisikėlimo partijos frakcija':                     u'TPPF',
+        u'Jungtinė (Liberalų ir centro sąjungos ir Tautos prisikėlimo partijos) frakcija': u'JF',
+        u'Darbo partijos  frakcija':                                 u'DPF',
+        u'Frakcija "Tvarka ir teisingumas"':                         u'TTF',
+        u'Krikščionių partijos frakcija':                            u'KPF',
+        u'Liberalų  sąjūdžio frakcija':                              u'LSF',
+        u'Liberalų ir centro sąjungos frakcija':                     u'LCSF',
+        u'Lietuvos socialdemokratų partijos frakcija':               u'LSDPF',
+        u'Mišri Seimo narių grupė':                                  u'MG',
+        u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija': u'TSLKDF',
+    }
+
+    type = 'Fraction'
+    params = dict(
+        startkey=[type, u'\ufff0'],
+        endkey=[type],
+        descending=True
+    )
+    for row, doc in _list_nodes('sboard/by_type', **params):
+        title = doc.get('title')
+        abbr = get_fraction_abbr(title)
+        real_abbr = fractions_abbr.get(title)
+        error = abbr != real_abbr
+        if not args.errors or (args.errors and error):
+            print(u'[ %s ]: %-8s %s' % (
+                doc['_id'],
+                abbr,
+                title,
+            ))
+        if error:
+            print(u'  ERROR: real abbr: %s' % real_abbr)
+
+
+def syncpositions(args):
+    import sboard.factory
+    from manoseimas.compat.models import update_mps_positions
+    sboard.factory.autodiscover()
+
+    update_mps_positions()
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -161,8 +231,8 @@ def main():
 
     # replicate
     p = subparsers.add_parser('replicate')
-    p.add_argument('source')
-    p.add_argument('target')
+    p.add_argument('--source', default=None)
+    p.add_argument('--target', default=None)
     p.set_defaults(func=replicate)
 
     # shell
@@ -190,6 +260,16 @@ def main():
     p.add_argument('types')
     p.add_argument('--limit', type=int, default=10)
     p.set_defaults(func=listbytype)
+
+    # listfractions
+    p = subparsers.add_parser('listfractions')
+    p.add_argument('--errors', action="store_true", default=False)
+    p.set_defaults(func=listfractions)
+
+    # syncpositions
+    p = subparsers.add_parser('syncpositions')
+    p.add_argument('solution')
+    p.set_defaults(func=syncpositions)
 
     args = parser.parse_args()
     args.func(args)

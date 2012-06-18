@@ -29,6 +29,7 @@ from sboard.profiles.models import MembershipNode
 from sboard.utils import slugify
 
 
+from manoseimas.mps.abbr import get_fraction_abbr
 from manoseimas.mps.models import Commission
 from manoseimas.mps.models import Committee
 from manoseimas.mps.models import Fraction
@@ -94,6 +95,10 @@ class SyncProcessor(object):
             # TODO: extract keywords from title
             #group.keywords = ?
             group.title = doc['name']
+
+            if group_type == Fraction and not group.abbreviation:
+                group.abbreviation = get_fraction_abbr(group.title)
+
             group.save()
 
             membership = self.get_node(membership_node_id, MembershipNode)
