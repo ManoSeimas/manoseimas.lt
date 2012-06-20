@@ -14,16 +14,3 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
-
-from couchdbkit.ext.django import schema
-
-from sboard.factory import provideNode
-
-import manoseimas.votings.models as votings
-
-
-class Voting(votings.Voting):
-    # List of legal acts that was directly voted for with this voting.
-    solutions = schema.DictProperty()
-
-provideNode(Voting, "voting")
