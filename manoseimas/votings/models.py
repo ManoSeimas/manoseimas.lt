@@ -68,6 +68,9 @@ class Voting(Node):
     # List of legal acts that was directly voted for with this voting.
     legal_acts = schema.ListProperty()
 
+    # List of legal acts that was directly voted for with this voting.
+    solutions = schema.DictProperty()
+
     # List of legal acts that are parents of all legal acts voted for.
     parent_legal_acts = schema.ListProperty()
 
