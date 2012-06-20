@@ -28,6 +28,14 @@ Užduotys
 * Kaip nors pertvarkyti scrapy.pipelines, kad duomenų bazės
   nustatymai būtų paprastai prieinami ir iš Django.
 
+* Fix bin/couch replicate command, all databases must be created
+  automatically and some how, RDBMS also should be replicated.
+
+  Now, if you get only couch data, then unique ID table, that generates
+  new keys for couchdb documents, starts from 0, while replicated
+  couchdb has much greater keys, what finally leads to Duplicate
+  errors in couchdb, when tying to create new records.
+
 
 Neišspręstos problemos
 ======================
