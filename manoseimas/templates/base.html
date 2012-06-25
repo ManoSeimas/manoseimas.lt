@@ -86,8 +86,6 @@
     <div class="container">
       <div id="top-menu">
         <ul class="nav">
-          <li><a href="{% url node "sprendimai" %}">{% trans "Sprendimai" %}</a></li>
-          <li><a href="{% url node "problemos" %}">{% trans "Problemos" %}</a></li>
           <li><a href="{% url node "testas" %}">{% trans "Testas" %}</a></li>
         </ul>
         <form action="{% url search %}" method="get" id="search-box">
@@ -138,22 +136,21 @@
           <h2>Informacija</h2>
           <ul class="nav">
             <li><a href="#">Apie projektą</a></li>
-            <li><a href="#">Komanda</a></li>
             <li><a href="#">Kaip tai veikia</a></li>
           </ul>
         </div>
         <div class="span2">
-          <h2>Prisijunk</h2>
+          <h2>{% trans "Prisijunk" %}</h2>
           <ul class="nav">
-            <li><a href="#">Sprendimų atranka</a></li>
-            <li><a href="#">Programuotojams</a></li>
+            <li><a href="#">{% trans "Programuotojams" %}</a></li>
+            <li><a href="#">{% trans "Savanoriams" %}</a></li>
           </ul>
         </div>
         <div class="span2">
-          <h2>Paremk</h2>
+          <h2>{% trans "Paremk" %}</h2>
           <ul class="nav">
-            <li><a href="#">aukok.lt</a></li>
-            <li><a href="#">dedikuoti.lt</a></li>
+            <li><a href="#">{% trans "Per aukok.lt" %}</a></li>
+            <li><a href="#">{% trans "Hosingu" %}</a></li>
           </ul>
         </div>
         <div class="span12">
