@@ -137,7 +137,9 @@ class PersonPosition(models.Model):
 
 
 def query_solution_votings(solution_id):
-    return couch.view('solutions/votings', key=solution_id)
+    for node in couch.view('solutions/votings', key=solution_id):
+        node.position = node.solutions[solution_id]
+        yield node
 
 
 def calculate_mps_positions(solution_id):

@@ -4,11 +4,17 @@
 
 
 {% block content %}
+  {% if node and node.title %}
+    <h1>{{ node.title }}</h1>
+  {% endif %}
+
+
   {% nodepermission node 'update' as can_update %}
 
   {% if children %}
     {% for child in children %}
     <div class="list-entry">
+        <span id="voting-chart-{{child.urlslug}}" style="width:20px;height:20px;"></span>
       [{{ child.created|date:"SHORT_DATE_FORMAT" }}]
       <a href="{{ child.permalink }}">{{ child.title }}</a>
       {% if can_update %}
@@ -16,12 +22,17 @@
         {% trans "ištrinti" %}
       </a>]
       {% endif %}
+      [<a href="{{ node.source.voting.url }}">lrs.lt</a>]
+
+      [{{ child.position }}]
+      
       <hr />
     </div>
     {% endfor %}
   {% else %}
     <p>{% trans "No entries found." %}</p>
   {% endif %}
+
 
 
   {% if can_update %}
@@ -34,4 +45,26 @@
     </div>
   </form>
   {% endif %}
+{% endblock %}
+
+
+{% block inlinejs %}
+<!-- generate pie charts -->
+<script type="text/javascript">
+  {% if children %}
+    {% for child in children %}    
+        $(function () {
+            $.plot($("#voting-chart-{{child.urlslug}}"),
+                [
+                    {data: {{ child.vote_aye }}, color: "green"},
+                    {data: {{ child.vote_no }}, color: "red"},
+                    {data: {{ child.vote_abstain }}, color: "gray"},
+                    {data: {{ child.did_not_vote }}, color: "white"}
+                ],
+                {series: {pie: {show: true}}}
+            );
+        });
+    {% endfor %}
+  {% endif %}        
+</script>
 {% endblock %}
