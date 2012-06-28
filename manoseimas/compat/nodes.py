@@ -113,10 +113,10 @@ class SolutionCompatView(ListView):
 
     def render(self, **overrides):
         context = dict(buttons=(
-                (2, _('Tikrai taip')),
-                (1, _('Taip')),
-                (-1, _('Ne')),
-                (-2, _('Tikrai ne')),
+                (2, _(u'Tikrai už')),
+                (1, _(u'Už')),
+                (-1, _(u'Prieš')),
+                (-2, _(u'Tikrai prieš')),
             ))
         context.update(overrides)
         return super(SolutionCompatView, self).render(**context)
