@@ -99,12 +99,12 @@ class SolutionDetailsView(DetailsView):
 provideAdapter(SolutionDetailsView)
 
 
-class CreateSolutionView(CreateView):
+class SolutionCreateView(CreateView):
     adapts(object, ISolution)
 
     form = SolutionForm
 
-provideAdapter(CreateSolutionView, name="create")
+provideAdapter(SolutionCreateView, name="create")
 
 
 class AssignSolutionIssue(CreateView):
