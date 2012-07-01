@@ -107,6 +107,14 @@ class SolutionCreateView(CreateView):
 provideAdapter(SolutionCreateView, name="create")
 
 
+class SolutionUpdateView(UpdateView):
+    adapts(ISolution)
+
+    form = SolutionForm
+
+provideAdapter(SolutionUpdateView, name="update")
+
+
 class AssignSolutionIssue(CreateView):
     form = AssignIssueForm
 
