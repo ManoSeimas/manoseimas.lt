@@ -3,74 +3,299 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-09 14:35+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2012-07-01 15:27+0300\n"
+"PO-Revision-Date: 2012-07-01 15:31+0300\n"
+"Last-Translator: Kiprianas Spiridonovas <k.spiridonovas@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
-"100<10 || n%100>=20) ? 1 : 2)\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 
-#: templates/base.html:12
-msgid "Mano Seimas"
+#: settings.py:39
+msgid "Lithuanian"
 msgstr ""
 
-#: templates/base.html:40
-msgid "Logged in"
+#: compat/forms.py:71
+msgid "Test category title."
 msgstr ""
 
-#: templates/base.html:41
-msgid "Settings"
+#: compat/forms.py:73
+msgid "Enter one solution slug per line."
 msgstr ""
 
-#: templates/base.html:42
+#: compat/forms.py:144
+msgid "Nurodykite balsavimo adresą iš lrs.lt svetainės arba nurodykite balsavimo ID iš manoseimas.lt svetainės."
+msgstr ""
+
+#: compat/forms.py:147
+msgid "Iveskite sveiką saičių, kuris nurodo priskiriamo balsavimo svarbą. Naudokite neigiamą reikšmę, jei balsuojama prieš šį sprendimą."
+msgstr ""
+
+#: compat/forms.py:163
+msgid "Klaidingai nurodytas balsavimo adresas lrs.lt svetainėje."
+msgstr ""
+
+#: compat/forms.py:168
+msgid "Klaidingai nurodytas balsavimo adresas."
+msgstr ""
+
+#: compat/models.py:69
+msgid "User"
+msgstr ""
+
+#: compat/models.py:70
+msgid "Memeber of Parlament"
+msgstr ""
+
+#: compat/nodes.py:64
+#: templates/base.html:89
+msgid "Testas"
+msgstr ""
+
+#: compat/nodes.py:72
+msgid "Priskirti sprendimus"
+msgstr ""
+
+#: compat/nodes.py:80
+msgid "Sritys"
+msgstr ""
+
+#: compat/nodes.py:116
+msgid "Tikrai už"
+msgstr ""
+
+#: compat/nodes.py:117
+msgid "Už"
+msgstr ""
+
+#: compat/nodes.py:118
+msgid "Prieš"
+msgstr ""
+
+#: compat/nodes.py:119
+msgid "Tikrai prieš"
+msgstr ""
+
+#: compat/nodes.py:244
+msgid "Only POST method is alowed."
+msgstr ""
+
+#: compat/nodes.py:284
+msgid "Frakcijos"
+msgstr ""
+
+#: compat/nodes.py:288
+msgid "Seimo nariai"
+msgstr ""
+
+#: legislation/templatetags/legislationtags.py:32
+#: templates/manoseimas/legislation/base.html:13
+#: templates/manoseimas/legislation/legislation.html:6
+msgid "Įstatymas"
+msgstr ""
+
+#: legislation/templatetags/legislationtags.py:35
+#: templates/manoseimas/legislation/amendments.html:5
+#: templates/manoseimas/legislation/base.html:17
+msgid "Pataisos"
+msgstr ""
+
+#: legislation/templatetags/legislationtags.py:39
+#: templates/manoseimas/legislation/base.html:21
+#: templates/manoseimas/legislation/drafts.html:5
+msgid "Projektai"
+msgstr ""
+
+#: nodes/votings.py:35
+msgid "Use negative value if this voting is against solution."
+msgstr ""
+
+#: solutions/nodes.py:49
+#: solutions/nodes.py:57
+#: templates/solutions/solution_issue_details.html:25
+msgid "Sprendimas"
+msgstr ""
+
+#: solutions/nodes.py:66
+msgid "Seimo pozicija"
+msgstr ""
+
+#: solutions/nodes.py:75
+#: templates/manoseimas/legislation/base.html:25
+#: templates/manoseimas/legislation/votings.html:5
+msgid "Balsavimai"
+msgstr ""
+
+#: templates/403.html:5
+msgid "Forbidden"
+msgstr ""
+
+#: templates/403.html:9
+msgid "You don't have permission to access this page."
+msgstr ""
+
+#: templates/404.html:5
+msgid "Page not found"
+msgstr ""
+
+#: templates/404.html:9
+msgid "We're sorry! This page is not available."
+msgstr ""
+
+#: templates/500.html:5
+msgid "Internal Server Error"
+msgstr ""
+
+#: templates/500.html:9
+msgid "The server encountered an internal error or misconfiguration and was unable to complete your request."
+msgstr ""
+
+#: templates/base.html:61
+msgid "Profile"
+msgstr "Profilis"
+
+#: templates/base.html:63
 msgid "Log out"
-msgstr ""
+msgstr "Atsijungti"
 
-#: templates/base.html:44 templates/registration/activate.html:10
+#: templates/base.html:69
+#: templates/registration/activate.html:10
 #: templates/registration/login.html:9
 #: templates/registration/password_reset_complete.html:8
 msgid "Log in"
+msgstr "Prisijungti"
+
+#: templates/base.html:72
+msgid "Google"
 msgstr ""
 
-#: templates/base.html:45
-msgid "Sign Up"
+#: templates/base.html:74
+msgid "Facebook"
 msgstr ""
 
-#: templates/manoseimas/legislation/legislation.html:17
-msgid "Projektą pateikė:"
+#: templates/base.html:76
+msgid "OpenID"
 msgstr ""
 
-#: templates/manoseimas/legislation/legislation.html:18
-msgid "Projektas priimtas:"
+#: templates/base.html:93
+msgid "Search"
+msgstr "Ieškoti"
+
+#: templates/base.html:149
+msgid "aukok.lt"
 msgstr ""
 
-#: templates/manoseimas/legislation/legislation.html:19
-msgid "Projekto komitetas:"
+#: templates/base.html:150
+msgid "Hosingu"
 msgstr ""
 
-#: templates/manoseimas/legislation/legislation.html:20
-msgid "Aiškinamasis raštas"
+#: templates/index.html:5
+msgid "Hello World!"
 msgstr ""
 
-#: templates/manoseimas/legislation/legislation.html:21
-msgid "Peržiūrėti diskusijas seime"
+#: templates/compat/results.html:11
+msgid "Labiausiai sutampa"
 msgstr ""
 
-#: templates/manoseimas/legislation/legislation.html:25
-msgid "Apie įstatymą:"
+#: templates/compat/results.html:12
+msgid "Labiausiai nesutampa"
 msgstr ""
 
-#: templates/manoseimas/legislation/legislation.html:30
-msgid "Nedalyvavo narių:"
+#: templates/legislation/votings.html:33
+#: templates/votings/voting_details.html:34
+msgid "aye"
+msgstr ""
+
+#: templates/legislation/votings.html:35
+#: templates/votings/voting_details.html:39
+msgid "no"
+msgstr ""
+
+#: templates/legislation/votings.html:37
+#: templates/votings/voting_details.html:44
+msgid "abstain"
+msgstr ""
+
+#: templates/legislation/votings.html:39
+#: templates/votings/voting_details.html:49
+msgid "registered but did not vote"
+msgstr ""
+
+#: templates/legislation/votings.html:52
+#: templates/solutions/votings_list.html:23
+msgid "No entries found."
+msgstr ""
+
+#: templates/legislation/sidebar/base.html:7
+#: templates/legislation/sidebar/law.html:5
+msgid "Law"
+msgstr ""
+
+#: templates/legislation/sidebar/base.html:10
+#: templates/legislation/sidebar/projects.html:5
+msgid "Projects"
+msgstr ""
+
+#: templates/legislation/sidebar/base.html:13
+#: templates/legislation/sidebar/changes.html:5
+msgid "Changes"
+msgstr ""
+
+#: templates/legislation/sidebar/base.html:16
+#: templates/legislation/sidebar/votings.html:5
+msgid "Votings"
+msgstr ""
+
+#: templates/manoseimas/legislation/amendments.html:18
+msgid "Pataisų nėra."
+msgstr ""
+
+#: templates/manoseimas/legislation/category_list.html:7
+#: templates/manoseimas/legislation/legislation_list.html:7
+msgid "Įstatymų kategorijos"
+msgstr ""
+
+#: templates/manoseimas/legislation/category_list.html:11
+#: templates/manoseimas/legislation/legislation_list.html:10
+msgid "Įstatymai"
+msgstr ""
+
+#: templates/manoseimas/legislation/drafts.html:19
+msgid "balsavimai"
+msgstr ""
+
+#: templates/manoseimas/legislation/drafts.html:25
+msgid "Susijusių įstatymo projektų nėra."
+msgstr ""
+
+#: templates/manoseimas/legislation/legislation.html:12
+msgid "Informacijos šaltinis"
+msgstr ""
+
+#: templates/manoseimas/legislation/votings.html:32
+msgid "už"
+msgstr ""
+
+#: templates/manoseimas/legislation/votings.html:34
+msgid "prieš"
+msgstr ""
+
+#: templates/manoseimas/legislation/votings.html:36
+msgid "susilaikė"
+msgstr ""
+
+#: templates/manoseimas/legislation/votings.html:38
+msgid "nebalsavo"
+msgstr ""
+
+#: templates/manoseimas/legislation/votings.html:68
+msgid "Balsavimų nėra."
 msgstr ""
 
 #: templates/manoseimas/search/search_results.html:7
@@ -101,6 +326,19 @@ msgstr ""
 
 #: templates/registration/activate.html:14
 msgid "Account activation failed"
+msgstr ""
+
+#: templates/registration/activation_email.txt:2
+msgid "Activate account at"
+msgstr ""
+
+#: templates/registration/activation_email.txt:6
+#, python-format
+msgid "Link is valid for %(expiration_days)s days."
+msgstr ""
+
+#: templates/registration/activation_email_subject.txt:1
+msgid "Account activation on"
 msgstr ""
 
 #: templates/registration/login.html:13
@@ -154,3 +392,112 @@ msgstr ""
 #: templates/registration/registration_complete.html:5
 msgid "You are now registered. Activation email sent."
 msgstr ""
+
+#: templates/sboard/profile.html:9
+msgid "Date of birth"
+msgstr "Gimimo data"
+
+#: templates/sboard/profile.html:9
+msgid "years old"
+msgstr "metai"
+
+#: templates/sboard/profile.html:12
+msgid "Home page"
+msgstr "Tinklalapis"
+
+#: templates/solutions/issue_details.html:9
+#: templates/solutions/solution_issue_details.html:21
+msgid "Problema"
+msgstr ""
+
+#: templates/solutions/issue_details.html:14
+msgid "Galimi sprendimai"
+msgstr ""
+
+#: templates/solutions/issue_details.html:23
+msgid "Sprendžiantys problemą"
+msgstr ""
+
+#: templates/solutions/issue_details.html:31
+msgid "Sukeliantys problemą"
+msgstr ""
+
+#: templates/solutions/issue_details.html:53
+msgid "Išsamus problemos aprašymas"
+msgstr ""
+
+#: templates/solutions/mps_position.html:15
+msgid "Palaiko"
+msgstr ""
+
+#: templates/solutions/mps_position.html:16
+msgid "Nepalaiko"
+msgstr ""
+
+#: templates/solutions/node_details.html:16
+#: templates/votings/question_group.html:64
+msgid "Sprendžia problemas"
+msgstr ""
+
+#: templates/solutions/node_details.html:24
+#: templates/votings/question_group.html:72
+msgid "Sukelia problemas"
+msgstr ""
+
+#: templates/solutions/node_details.html:44
+#: templates/solutions/node_details.html:45
+msgid "Pasiūlyk savo"
+msgstr ""
+
+#: templates/solutions/solution_issue_details.html:27
+msgid "Priežastis"
+msgstr ""
+
+#: templates/solutions/votings_list.html:16
+msgid "ištrinti"
+msgstr ""
+
+#: templates/solutions/votings_list.html:28
+msgid "Priskirti seimo narių balsavimą"
+msgstr ""
+
+#: templates/solutions/votings_list.html:33
+msgid "Priskirti"
+msgstr ""
+
+#: templates/votings/question_group.html:15
+msgid "All nodes"
+msgstr ""
+
+#: templates/votings/question_group.html:23
+msgid "Rodyti rezultatus"
+msgstr ""
+
+#: templates/votings/question_group.html:102
+msgid "Šiai kategorijai nepriskirtas nei vienas sprendimas."
+msgstr ""
+
+#: templates/votings/voting_details.html:22
+msgid "Voting"
+msgstr ""
+
+#: templates/votings/voting_details.html:58
+msgid "Source of information"
+msgstr ""
+
+#: templates/votings/voting_details.html:62
+msgid "Related legal acts"
+msgstr ""
+
+#: templates/votings/voting_details.html:71
+msgid "Related solutions"
+msgstr ""
+
+#: templates/votings/voting_details.html:83
+msgid "Link to solution"
+msgstr ""
+
+#: templates/votings/voting_details.html:89
+msgid "Save"
+msgstr ""
+
