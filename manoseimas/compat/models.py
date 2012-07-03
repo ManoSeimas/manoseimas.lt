@@ -71,8 +71,6 @@ PROFILE_TYPES = (
 )
 
 class PersonPositionManager(models.Manager):
-    """Sums up results, which MPs/fractions are most for/against solutions, AND which are most compatible with user position
-    """
     def mps(self, solution_id):
         return self.filter(node=solution_id, profile_type=MP_PROFILE)
 
@@ -83,16 +81,13 @@ class PersonPositionManager(models.Manager):
         return (aye[:limit], against[:limit])
 
     def mp_compat_pairs(self, positions, limit=200):
-        """Counts the compatibility of user vs MP/fraction
-        """
-        mps = {}    
-        for solution_id, position in positions:  # for each response (of user)
-            for mp in self.mps(solution_id):     # for each member of Parliament position (calculated from solution's assigned votings)
-                                                # maybe should also somehow pay attention to the MPs, that haven't voted? (Zuokas case)
+        mps = {}
+        for solution_id, position in positions:
+            for mp in self.mps(solution_id):
                 mpid = mp.profile._id
                 sum, count = mps.get(mpid, (0, 0))
-                sum += mp.position * position    # compatibility/matching/similarity is based on positions' multiplication
-                mps[mpid] = (sum, count + abs(position)) # why count+=abs(position) is better than count+=1 ?
+                sum += mp.position * position
+                mps[mpid] = (sum, count + abs(position))
 
         aye, against = [], []
         for mpid, numbers in mps.items():
@@ -108,11 +103,11 @@ class PersonPositionManager(models.Manager):
 
         results = ([], [])
         for i, mps in enumerate((aye, against)):
-            for mpid, avg in mps[:limit]:   
+            for mpid, avg in mps[:limit]:
                 position = PersonPosition()
                 position.profile = mpid
                 position.profile_type = MP_PROFILE
-                position.position = avg  # gal geriau "rank"/"match"
+                position.position = avg
                 results[i].append(position)
 
         return results
@@ -129,8 +124,6 @@ class PersonPositionManager(models.Manager):
 
 
 class PersonPosition(models.Model):
-    """for (MPS, fractions?) and responder positions/attitudes on solutions 
-    """
     node = NodeForeignKey()
     profile = NodeForeignKey()
     profile_type = models.IntegerField(choices=PROFILE_TYPES,
@@ -140,37 +133,38 @@ class PersonPosition(models.Model):
     objects = PersonPositionManager()
 
     def position_percent(self):
-        return int((abs(self.position) / dc(2)) * dc(100)) # what does   .../dc(2) ?
+        return int((abs(self.position) / dc(2)) * dc(100))
 
 
 def query_solution_votings(solution_id):
     for node in couch.view('solutions/votings', key=solution_id):
         node.weight = node.solutions[solution_id]   # how the voting influences solution
         node.weight_plus_if_needed = "+" if node.weight > 0 else ""
-        
+
         # was voting "accepted" - ar istatymas buvo priimtas? 
         # TODO: https://bitbucket.org/manoseimas/manoseimas/issue/88/i-lrs-svetain-s-nusiurbti-info-ar
-        
+
         # calculate general parliament position as one number
 
-        node.avg_Parl_position_normalized = sum([
+        node.avg_parl_position_normalized = sum([
             node.vote_aye * node.get_vote_value('aye'),
             node.vote_no * node.get_vote_value('no'),
             node.vote_abstain * node.get_vote_value('abstain'),
             node.did_not_vote() * node.get_vote_value('no-vote'),
         ]) / dc(node.registered_for_voting) / dc(2)  # normalize (divide by max amplitude -- 2)
-        node.weighted_avg_Parl_position = node.weight * node.avg_Parl_position_normalized
+        node.weighted_avg_parl_position = node.weight * node.avg_parl_position_normalized
         yield node
 
 
 def calculate_solution_parliament_avg_position(solution_id):
     sum, items = 0, 0
     for voting in query_solution_votings(solution_id):
-        sum += voting.weight * voting.avg_Parl_position_normalized
+        sum += voting.weight * voting.avg_parl_position_normalized
         items += abs(voting.weight)
-    avg = sum/dc(items) # normalize it by weights' sum
+    avg = sum / dc(items)
     return (sum,  avg)
-        
+
+
 def calculate_mps_positions(solution_id):
     """Returns dict with position of each MP for this solution.
 
@@ -181,18 +175,16 @@ def calculate_mps_positions(solution_id):
     fractions = {}
     # Loop for all votings
     for voting in query_solution_votings(solution_id):
-        voting_weight = voting.solutions[solution_id]   # TODO rename "position" to "weight"
+        voting_weight = voting.solutions[solution_id]
         # Loop for all vote values (aye, abstain, no)
         for vote_value_name, votes in voting.votes.items():   # misses 'no-vote' option?
             vote_value = voting.get_vote_value(vote_value_name)
             # Loop for each MP vote
-            for mp_id, fraction_id in votes:      # could be the most outer loop?  
-                                                  # TODO: howto measure influence, ir MP hasn't voted, or even hasn't registered?
-            
+            for mp_id, fraction_id in votes:
                 if mp_id not in mps:
                     mps[mp_id] = {'times': 0, 'sum': 0}
-                mps[mp_id]['times'] += abs(voting_weight)        # DID: renamed "position" to "voting_weight"
-                mps[mp_id]['sum'] += vote_value * voting_weight  
+                mps[mp_id]['times'] += abs(voting_weight)
+                mps[mp_id]['sum'] += vote_value * voting_weight
 
                 # Some old fractions may not be imported, so we need to check
                 # if fraction id is not null.
@@ -202,8 +194,8 @@ def calculate_mps_positions(solution_id):
                 if fraction_id:
                     if fraction_id not in fractions:
                         fractions[fraction_id] = {'times': 0, 'sum': 0}
-                    fractions[fraction_id]['times'] += abs(voting_weight)        
-                    fractions[fraction_id]['sum'] += vote_value * voting_weight  
+                    fractions[fraction_id]['times'] += abs(voting_weight)
+                    fractions[fraction_id]['sum'] += vote_value * voting_weight
 
     return (
         dict([(fraction_id, 1.0 * fraction['sum'] / fraction['times'])
@@ -312,5 +304,5 @@ def fetch_positions(request, nodes):
     else:
         positions = user_positions_map(request.user, nodes)
     for node in nodes:
-        position = positions.get(node._id)  # why not position[node._id] ? or just no difference
+        position = positions.get(node._id)
         yield (node, position)

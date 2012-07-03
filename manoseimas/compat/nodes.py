@@ -308,8 +308,7 @@ class SolutionVotingsView(ListView):
         return solution_nav(self.node, nav, active)
 
     def get_node_list(self):
-        #~ return query_solution_votings(self.node._id) otherwise
-        return list( query_solution_votings(self.node._id) ) # workaround: to loop childs in tpl twise 
+        return list(query_solution_votings(self.node._id))
 
     def render(self, **overrides):
         if self.request.method == 'POST':
@@ -318,7 +317,7 @@ class SolutionVotingsView(ListView):
                 voting = form.cleaned_data.get('voting')
                 solution = self.node
                 position = form.cleaned_data.get('position')
-                solutions = votichildrenng.solutions or {}
+                solutions = voting.solutions or {}
                 solutions[solution._id] = position
 
                 voting.solutions = solutions

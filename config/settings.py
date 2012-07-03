@@ -16,9 +16,6 @@ DEBUG = True
 #else
 DEBUG = False
 #end if
-
-DEBUG = True
-
 TEMPLATE_DEBUG = DEBUG
 THUMBNAIL_DEBUG = DEBUG
 
