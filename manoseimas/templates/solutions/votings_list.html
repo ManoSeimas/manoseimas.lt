@@ -14,7 +14,8 @@
   {% if children %}
     {% for child in children %}
     <div class="list-entry">
-        <span id="voting-chart-{{child.urlslug}}" style="width:20px;height:20px;"></span>
+        <span id="voting-chart-{{ child.urlslug }}" style="width:20px;height:20px;"></span>
+        x <span class="weight">{{ node.get('_id') }} <!--  --></span>
       [{{ child.created|date:"SHORT_DATE_FORMAT" }}]
       <a href="{{ child.permalink }}">{{ child.title }}</a>
       {% if can_update %}
@@ -23,8 +24,6 @@
       </a>]
       {% endif %}
       [<a href="{{ node.source.voting.url }}">lrs.lt</a>]
-
-      [{{ child.position }}]
       
       <hr />
     </div>
@@ -54,7 +53,7 @@
   {% if children %}
     {% for child in children %}    
         $(function () {
-            $.plot($("#voting-chart-{{child.urlslug}}"),
+            $.plot($("#voting-chart-{{ child.urlslug }}"),
                 [
                     {data: {{ child.vote_aye }}, color: "green"},
                     {data: {{ child.vote_no }}, color: "red"},
