@@ -51,6 +51,7 @@ from .models import fetch_positions
 from .models import query_positions
 from .models import query_solution_votings
 from .models import update_mps_positions
+from .models import calculate_solution_parliament_avg_position
 from .models import update_position
 
 
@@ -307,7 +308,8 @@ class SolutionVotingsView(ListView):
         return solution_nav(self.node, nav, active)
 
     def get_node_list(self):
-        return query_solution_votings(self.node._id)
+        #~ return query_solution_votings(self.node._id) otherwise
+        return list( query_solution_votings(self.node._id) ) # workaround: to loop childs in tpl twise 
 
     def render(self, **overrides):
         if self.request.method == 'POST':
@@ -316,7 +318,7 @@ class SolutionVotingsView(ListView):
                 voting = form.cleaned_data.get('voting')
                 solution = self.node
                 position = form.cleaned_data.get('position')
-                solutions = voting.solutions or {}
+                solutions = votichildrenng.solutions or {}
                 solutions[solution._id] = position
 
                 voting.solutions = solutions
@@ -328,8 +330,11 @@ class SolutionVotingsView(ListView):
         else:
             form = AssignVotingForm()
 
+        parl_weighted_position, parl_normalized_position = calculate_solution_parliament_avg_position(self.node._id)
         context = {
             'form': form,
+            'parl_weighted_position': parl_weighted_position,
+            'parl_normalized_position': parl_normalized_position,
         }
         context.update(overrides)
         return super(SolutionVotingsView, self).render(**context)
