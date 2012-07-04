@@ -128,7 +128,7 @@ class PersonPosition(models.Model):
     profile = NodeForeignKey()
     profile_type = models.IntegerField(choices=PROFILE_TYPES,
                                        default=USER_PROFILE)
-    position = models.DecimalField(max_digits=7, decimal_places=4)
+    position = models.DecimalField(max_digits=7, decimal_places=4, db_index=True)
 
     objects = PersonPositionManager()
 
