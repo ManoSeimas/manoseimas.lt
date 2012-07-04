@@ -242,7 +242,7 @@ class UpdateUserPositionView(NodeView):
 
     def render(self, **overrides):
         if self.request.method != 'POST':
-            return HttpResponseBadRequest(_('Only POST method is alowed.'))
+            return HttpResponseBadRequest(_('Only POST requests are allowed.'))
 
         form = UserPositionForm(self.request.POST)
         if not form.is_valid():
