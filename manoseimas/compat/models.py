@@ -61,13 +61,13 @@ class SolutionCompat(Category):
 provideNode(SolutionCompat, "solutions-test")
 
 
-USER_PROFILE = 0
-MP_PROFILE = 1
-FRACTION_PROFILE = 2
-GROUP_PROFILE = 3
+USER_PROFILE, MP_PROFILE, FRACTION_PROFILE, GROUP_PROFILE = range(4)
+
 PROFILE_TYPES = (
     (USER_PROFILE, _('User')),
-    (USER_PROFILE, _('Memeber of Parlament')),
+    (MP_PROFILE, _('Member of Parliament')),
+    (FRACTION_PROFILE, _('Fraction')),
+    (GROUP_PROFILE, _('Group')),
 )
 
 class PersonPositionManager(models.Manager):
