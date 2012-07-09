@@ -1,12 +1,13 @@
 {% extends "sboard/base.html" %}
 {% load i18n %}
 {% load thumbnail %}
+{% load manoseimas %}
 
 {% block content %}
 <p><img src="{{ profile.avatar_url_big }}" style="float:left;margin-right:8px;" /></p>
 <h1>{{ profile.title }}</h1>
 {% if profile.dob %}
-<p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {% trans "years old" %})</p>
+<p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
 {% endif %}
 {% if profile.home_page %}
 <p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>

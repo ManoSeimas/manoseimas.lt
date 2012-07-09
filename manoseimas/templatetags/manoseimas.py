@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright (C) 2012  Mantas Zimnickas <sirexas@gmail.com>
 #
 # This file is part of manoseimas.lt project.
@@ -17,9 +18,17 @@
 
 from django import template
 from django.forms.fields import CheckboxInput
+from django.utils.translation import ugettext as _
 
 register = template.Library()
 
 @register.filter(name='is_checkbox')
 def is_checkbox(value):
     return isinstance(value, CheckboxInput)
+
+@register.filter(name='age_plural')
+def age_plural(age):
+    if age % 10 == 0 or 10 < age < 20:
+        return _(u'metų')
+    else:
+        return _(u'metai')
