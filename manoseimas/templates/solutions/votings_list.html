@@ -13,21 +13,33 @@
 
   {% if children %}
     {% for child in children %}
+    
     <div class="list-entry">
-        <span id="voting-chart-{{ child.urlslug }}" style="width:20px;height:20px;"></span>
-        x <span class="weight">{{ node.get('_id') }} <!--  --></span>
+
+    
+    <strong>{{ child.weight_plus_if_needed }}{{ child.weight }}</strong> 
+    <span class="multiply-sign" style="color:silver">*</span> 
+    <span id="voting-chart-{{ child.urlslug }}" style="width:30px;height:30px;" 
+    title="{{ child.weight }} * {{ child.avg_Parl_position_normalized|floatformat:2 }} = {{ child.weighted_avg_Parl_position|floatformat:2 }} "></span>
+
       [{{ child.created|date:"SHORT_DATE_FORMAT" }}]
-      <a href="{{ child.permalink }}">{{ child.title }}</a>
+        <a href="{{ child.permalink }}">{{ child.title }}</a>
       {% if can_update %}
       [<a href="{% nodeurl node child.urlslug 'delete' %}">
         {% trans "ištrinti" %}
       </a>]
       {% endif %}
       [<a href="{{ node.source.voting.url }}">lrs.lt</a>]
+
       
       <hr />
     </div>
     {% endfor %}
+   <div class="list-summary">
+    {% trans "Suminė parlamento pozicija" %} = <strong>{{ parl_weighted_position|floatformat:2 }}</strong>
+    ({% trans "normuota pagal svorius" %} = <strong>{{ parl_normalized_position|floatformat:2 }}</strong>)
+    
+    </div>
   {% else %}
     <p>{% trans "No entries found." %}</p>
   {% endif %}
@@ -50,6 +62,7 @@
 {% block inlinejs %}
 <!-- generate pie charts -->
 <script type="text/javascript">
+
   {% if children %}
     {% for child in children %}    
         $(function () {
