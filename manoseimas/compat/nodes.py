@@ -373,11 +373,19 @@ class CompatResultsView(DetailsView):
 
     def render(self, **overrides):
         positions = list(query_positions(self.request))
-        mp_compat = PersonPosition.objects.mp_compat_pairs(positions)
-        fraction_compat = PersonPosition.objects.fraction_compat_pairs(positions)
+        mps = PersonPosition.objects.mp_compat_pairs(positions)
+        fractions = PersonPosition.objects.fraction_compat_pairs(positions)
         context = {
-            'mp_positions': itertools.izip_longest(*mp_compat),
-            'fraction_positions': itertools.izip_longest(*fraction_compat),
+            'pgroups': (
+                dict(
+                    title=_('Frakcijos'),
+                    positions=itertools.izip_longest(*fractions),
+                ),
+                dict(
+                    title=_('Seimo nariai'),
+                    positions=itertools.izip_longest(*mps),
+                )
+            ),
         }
         context.update(overrides)
         return super(CompatResultsView, self).render(**context)
