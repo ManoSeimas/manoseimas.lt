@@ -30,14 +30,21 @@ def search_lrs_url(query):
 
 
 def classify_position(position):
-    if -2 <= position <= -1:
+    if -2 <= position < -1:
         return _(u'Stipriai prieš')
-    elif -1 < position <= 0:
+    elif -1 <= position <= 0:
         return _(u'Prieš')
     elif 0 < position <= 1:
         return _(u'Už')
     else:
         return _(u'Stipriai už')
+
+
+def format_position_percent(personposition):
+    if personposition.position >= 0:
+        return _(u'Palaiko %d%%') % personposition.position_percent()
+    else:
+        return _(u'Nepalaiko %d%%') % personposition.position_percent()
 
 
 class MPProfileView(ProfileView):
@@ -47,7 +54,11 @@ class MPProfileView(ProfileView):
     def render(self, **overrides):
         positions = PersonPosition.objects.filter(profile=self.node)
         context = {
-            'positions': [(pp.node, classify_position(pp.position)) for pp in positions]
+            'positions': [{
+                'solution': pp.node,
+                'position': classify_position(pp.position),
+                'percent': format_position_percent(pp),
+            } for pp in positions],
         }
         context.update(overrides)
         return super(MPProfileView, self).render(**context)

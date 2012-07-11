@@ -18,7 +18,8 @@
 
 <h2>Politiniai sprendimai</h2>
 
-{% for solution, position in positions %}
-<p>Balsavo <strong>{{ position|upper }}</strong> „<a href="{% nodeurl solution.ref %}">{{ solution.ref.title }}</a>“</p>
+{% for position in positions %}
+<p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
+„<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
 {% endfor %}
 {% endblock %}
