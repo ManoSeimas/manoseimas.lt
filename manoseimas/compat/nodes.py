@@ -372,10 +372,12 @@ class CompatResultsView(DetailsView):
         return solution_compat_nav(self.request, self.node, None, nav, active)
 
     def render(self, **overrides):
-        positions = query_positions(self.request)
-        aye, against = PersonPosition.objects.mp_compat_pairs(positions)
+        positions = list(query_positions(self.request))
+        mp_compat = PersonPosition.objects.mp_compat_pairs(positions)
+        fraction_compat = PersonPosition.objects.fraction_compat_pairs(positions)
         context = {
-            'positions': itertools.izip_longest(aye, against),
+            'mp_positions': itertools.izip_longest(*mp_compat),
+            'fraction_positions': itertools.izip_longest(*fraction_compat),
         }
         context.update(overrides)
         return super(CompatResultsView, self).render(**context)

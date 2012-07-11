@@ -121,6 +121,37 @@ class PersonPositionManager(models.Manager):
         against = fractions.filter(position__lte=0).order_by('position')
         return (aye[:limit], against[:limit])
 
+    def fraction_compat_pairs(self, positions, limit=200):
+        fractions = {}
+        for solution_id, position in positions:
+            for fraction in self.fractions(solution_id):
+                fractionid = fraction.profile._id
+                sum, count = fractions.get(fractionid, (0, 0))
+                sum += fraction.position * position
+                fractions[fractionid] = (sum, count + abs(position))
+
+        aye, against = [], []
+        for fractionid, numbers in fractions.items():
+            sum, count = numbers
+            avg = dc(sum) / dc(count)
+            if avg > 0:
+                aye.append((fractionid, avg))
+            else:
+                against.append((fractionid, avg))
+
+        aye = sorted(aye, key=operator.itemgetter(1), reverse=True)
+        against = sorted(against, key=operator.itemgetter(1))
+
+        results = ([], [])
+        for i, fractions in enumerate((aye, against)):
+            for fractionid, avg in fractions[:limit]:
+                position = PersonPosition()
+                position.profile = fractionid
+                position.profile_type = FRACTION_PROFILE
+                position.position = avg
+                results[i].append(position)
+
+        return results
 
 
 class PersonPosition(models.Model):
@@ -306,3 +337,11 @@ def fetch_positions(request, nodes):
     for node in nodes:
         position = positions.get(node._id)
         yield (node, position)
+
+
+def fetch_user_positions(request, user):
+    positions = {}
+    profile_id = user.get_profile().node._id
+    qry = PersonPosition.objects.filter(profile=profile_id)
+    for position in qry:
+        yield (position.node.ref, position.position)

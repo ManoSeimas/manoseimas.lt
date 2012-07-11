@@ -11,7 +11,36 @@
         <th>{% trans "Labiausiai sutampa" %}</th>
         <th>{% trans "Labiausiai nesutampa" %}</th>
       </tr>
-      {% for position_pair in positions %}
+      {% for position_pair in fraction_positions %}
+      <tr>
+        {% for position in position_pair %}
+        <td>
+          {% if position %}
+          <a href="{% nodeurl position.profile.ref %}">
+            <img src="{{ position.profile.ref.avatar_url }}"
+                 style="float:left;margin-right:8px;" />
+          </a>
+          <p>
+            <a href="{% nodeurl position.profile.ref %}">
+              {{ position.profile.ref.title }}
+            </a>
+          </p>
+          <p><strong>{{ position.position_percent }}%</strong></p>
+          {% endif %}
+        </td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    <tbody>
+  </table>
+
+  <table style="width:100%;">
+    <tbody>
+      <tr>
+        <th>{% trans "Labiausiai sutampa" %}</th>
+        <th>{% trans "Labiausiai nesutampa" %}</th>
+      </tr>
+      {% for position_pair in mp_positions %}
       <tr>
         {% for position in position_pair %}
         <td>
