@@ -64,6 +64,7 @@ LANGUAGE_CODE = '$LANGUAGE_CODE'
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_DIR, 'locale'),
+    os.path.join(BUILDOUT_DIR, 'parts/django-sboard/sboard/locale'),
 )
 
 SITE_ID = 1
