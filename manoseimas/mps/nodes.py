@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright (C) 2012  Mantas Zimnickas <sirexas@gmail.com>
 #
 # This file is part of manoseimas.lt project.
@@ -15,5 +16,40 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+from zope.component import adapts
+from zope.component import provideAdapter
+from sboard.profiles.nodes import ProfileView
+from django.utils.translation import ugettext as _
+from manoseimas.compat.models import PersonPosition
+
+from .interfaces import IMPProfile
+
+
 def search_lrs_url(query):
     pass
+
+
+def classify_position(position):
+    if -2 <= position <= -1:
+        return _(u'Stipriai prieš')
+    elif -1 < position <= 0:
+        return _(u'Prieš')
+    elif 0 < position <= 1:
+        return _(u'Už')
+    else:
+        return _(u'Stipriai už')
+
+
+class MPProfileView(ProfileView):
+    adapts(IMPProfile)
+    template = 'mps/profile.html'
+
+    def render(self, **overrides):
+        positions = PersonPosition.objects.filter(profile=self.node)
+        context = {
+            'positions': [(pp.node, classify_position(pp.position)) for pp in positions]
+        }
+        context.update(overrides)
+        return super(MPProfileView, self).render(**context)
+
+provideAdapter(MPProfileView)
