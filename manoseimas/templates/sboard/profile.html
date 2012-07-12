@@ -1,0 +1,25 @@
+{% extends "sboard/base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% load manoseimas %}
+{% load sboard %}
+
+{% block content %}
+<p><img src="{{ profile.avatar_url_big }}" class="avatar"></p>
+<h1>{{ profile.title }}</h1>
+{% if profile.dob %}
+<p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
+{% endif %}
+{% if profile.home_page %}
+<p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>
+{% endif %}
+
+<hr style="clear: both">
+
+<h2>Politiniai sprendimai</h2>
+
+{% for position in positions %}
+<p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
+„<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
+{% endfor %}
+{% endblock %}

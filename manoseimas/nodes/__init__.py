@@ -21,3 +21,4 @@ This module works as glue between all manseimas project apps.
 """
 
 import manoseimas.nodes.votings
+import manoseimas.nodes.profile
