@@ -19,10 +19,12 @@
 from zope.component import adapts
 from zope.component import provideAdapter
 from sboard.profiles.nodes import ProfileView
+from sboard.profiles.nodes import GroupView
 from django.utils.translation import ugettext as _
 from manoseimas.compat.models import PersonPosition
 
 from .interfaces import IMPProfile
+from .interfaces import IFraction
 
 
 def search_lrs_url(query):
@@ -64,3 +66,22 @@ class MPProfileView(ProfileView):
         return super(MPProfileView, self).render(**context)
 
 provideAdapter(MPProfileView)
+
+
+class FractionView(GroupView):
+    adapts(IFraction)
+    template = 'mps/fraction.html'
+
+    def render(self, **overrides):
+        positions = PersonPosition.objects.filter(profile=self.node)
+        context = {
+            'positions': [{
+                'solution': pp.node,
+                'position': classify_position(pp.position),
+                'percent': format_position_percent(pp),
+            } for pp in positions],
+        }
+        context.update(overrides)
+        return super(FractionView, self).render(**context)
+
+provideAdapter(FractionView)

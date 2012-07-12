@@ -1,0 +1,27 @@
+{% extends "sboard/base.html" %}
+{% load i18n %}
+{% load sboard %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+
+  <hr>
+  <h2>Frakcijos nariai</h2>
+  {% if children %}
+  {% for child in children %}
+  <p>
+    <a href="{{ child.profile.ref.permalink }}">{{ child.profile.ref.title }}</a>
+    (frakcijoje nuo {% if child.term_from.year = child.term_to.year %}{{ child.term_from|date:"Y-m-d" }} iki {{ child.term_to|date:"Y-m-d" }}{% else %}{{ child.term_from|date:"Y" }}{% if child.term_to %} iki {{ child.term_to|date:"Y" }}{% endif %}{% endif %})
+  </p>
+  {% endfor %}
+  {% else %}
+  <p>{% trans "This fraction does not have any members." %}</p>
+  {% endif %}
+
+  <hr>
+  <h2>Politiniai sprendimai</h2>
+  {% for position in positions %}
+  <p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
+  „<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
+  {% endfor %}
+{% endblock %}
