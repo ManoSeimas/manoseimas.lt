@@ -54,7 +54,8 @@ class MPProfileView(ProfileView):
     template = 'mps/profile.html'
 
     def render(self, **overrides):
-        positions = PersonPosition.objects.filter(profile=self.node)
+        positions = list(PersonPosition.objects.filter(profile=self.node))
+        positions.sort(key=lambda pp: pp.node.ref.title)
         context = {
             'positions': [{
                 'solution': pp.node,
@@ -73,7 +74,8 @@ class FractionView(GroupView):
     template = 'mps/fraction.html'
 
     def render(self, **overrides):
-        positions = PersonPosition.objects.filter(profile=self.node)
+        positions = list(PersonPosition.objects.filter(profile=self.node))
+        positions.sort(key=lambda pp: pp.node.ref.title)
         context = {
             'positions': [{
                 'solution': pp.node,
