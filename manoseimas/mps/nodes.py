@@ -54,20 +54,25 @@ def format_position_percent(personposition):
     else:
         return _(u'Nepalaiko %d%%') % personposition.position_percent()
 
+def prepare_position_list(node):
+    """Returns list of positions of a person or fraction to be passed to a
+    template."""
+    positions = list(PersonPosition.objects.filter(profile=node))
+    positions.sort(key=lambda pp: pp.node.ref.title)
+    return [{
+        'solution': pp.node,
+        'position': classify_position(pp.position),
+        'percent': format_position_percent(pp),
+    } for pp in positions]
+
 
 class MPProfileView(ProfileView):
     adapts(IMPProfile)
     template = 'mps/profile.html'
 
     def render(self, **overrides):
-        positions = list(PersonPosition.objects.filter(profile=self.node))
-        positions.sort(key=lambda pp: pp.node.ref.title)
         context = {
-            'positions': [{
-                'solution': pp.node,
-                'position': classify_position(pp.position),
-                'percent': format_position_percent(pp),
-            } for pp in positions],
+            'positions': prepare_position_list(self.node),
         }
         context.update(overrides)
         return super(MPProfileView, self).render(**context)
@@ -80,14 +85,8 @@ class FractionView(GroupView):
     template = 'mps/fraction.html'
 
     def render(self, **overrides):
-        positions = list(PersonPosition.objects.filter(profile=self.node))
-        positions.sort(key=lambda pp: pp.node.ref.title)
         context = {
-            'positions': [{
-                'solution': pp.node,
-                'position': classify_position(pp.position),
-                'percent': format_position_percent(pp),
-            } for pp in positions],
+            'positions': prepare_position_list(self.node),
         }
         context.update(overrides)
         return super(FractionView, self).render(**context)
