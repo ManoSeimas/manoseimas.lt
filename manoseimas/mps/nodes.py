@@ -32,11 +32,17 @@ def search_lrs_url(query):
 
 
 def classify_position(position):
-    if -2 <= position < -1:
+    if -2 <= position < -1.32:
         return _(u'Stipriai prieš')
-    elif -1 <= position <= 0:
+    elif -1.32 <= position < -0.66:
         return _(u'Prieš')
-    elif 0 < position <= 1:
+    elif -0.66 <= position < 0:
+        return _(u'Silpnai prieš')
+    elif position == 0:
+        return _(u'Neutraliai')
+    elif 0 < position <= 0.66:
+        return _(u'Silpnai už')
+    elif 0.66 < position <= 1.32:
         return _(u'Už')
     else:
         return _(u'Stipriai už')
