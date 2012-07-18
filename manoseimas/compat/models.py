@@ -71,6 +71,39 @@ PROFILE_TYPES = (
 )
 
 class PersonPositionManager(models.Manager):
+    def compat_pairs(self, positions, profile_type, limit):
+        profile_sums = {}
+        for solution_id, position in positions:
+            for pp in self.filter(node=solution_id, profile_type=profile_type):
+                profile = pp.profile._id
+                numerator, denominator = profile_sums.get(profile, (0, 0))
+                numerator += pp.position * position
+                denominator += abs(position)
+                profile_sums[profile] = (numerator, denominator)
+
+        aye, against = [], []
+        for profile, sums in profile_sums.items():
+            numerator, denominator = sums
+            compatibility = dc(numerator) / dc(denominator)
+            if compatibility > 0:
+                aye.append((compatibility, profile))
+            else:
+                against.append((compatibility, profile))
+
+        aye.sort(reverse=True)
+        against.sort()
+
+        results = ([], [])
+        for i, compatibilities in enumerate((aye, against)):
+            for compatibility, profile in compatibilities[:limit]:
+                position = PersonPosition()
+                position.profile = profile
+                position.profile_type = profile_type
+                position.position = compatibility
+                results[i].append(position)
+
+        return results
+
     def mps(self, solution_id):
         return self.filter(node=solution_id, profile_type=MP_PROFILE)
 
@@ -81,36 +114,7 @@ class PersonPositionManager(models.Manager):
         return (aye[:limit], against[:limit])
 
     def mp_compat_pairs(self, positions, limit=200):
-        mps = {}
-        for solution_id, position in positions:
-            for mp in self.mps(solution_id):
-                mpid = mp.profile._id
-                sum, count = mps.get(mpid, (0, 0))
-                sum += mp.position * position
-                mps[mpid] = (sum, count + abs(position))
-
-        aye, against = [], []
-        for mpid, numbers in mps.items():
-            sum, count = numbers
-            avg = dc(sum) / dc(count)
-            if avg > 0:
-                aye.append((mpid, avg))
-            else:
-                against.append((mpid, avg))
-
-        aye = sorted(aye, key=operator.itemgetter(1), reverse=True)
-        against = sorted(against, key=operator.itemgetter(1))
-
-        results = ([], [])
-        for i, mps in enumerate((aye, against)):
-            for mpid, avg in mps[:limit]:
-                position = PersonPosition()
-                position.profile = mpid
-                position.profile_type = MP_PROFILE
-                position.position = avg
-                results[i].append(position)
-
-        return results
+        return self.compat_pairs(positions, MP_PROFILE, limit)
 
     def fractions(self, solution_id):
         return self.filter(node=solution_id, profile_type=FRACTION_PROFILE)
@@ -122,36 +126,7 @@ class PersonPositionManager(models.Manager):
         return (aye[:limit], against[:limit])
 
     def fraction_compat_pairs(self, positions, limit=200):
-        fractions = {}
-        for solution_id, position in positions:
-            for fraction in self.fractions(solution_id):
-                fractionid = fraction.profile._id
-                sum, count = fractions.get(fractionid, (0, 0))
-                sum += fraction.position * position
-                fractions[fractionid] = (sum, count + abs(position))
-
-        aye, against = [], []
-        for fractionid, numbers in fractions.items():
-            sum, count = numbers
-            avg = dc(sum) / dc(count)
-            if avg > 0:
-                aye.append((fractionid, avg))
-            else:
-                against.append((fractionid, avg))
-
-        aye = sorted(aye, key=operator.itemgetter(1), reverse=True)
-        against = sorted(against, key=operator.itemgetter(1))
-
-        results = ([], [])
-        for i, fractions in enumerate((aye, against)):
-            for fractionid, avg in fractions[:limit]:
-                position = PersonPosition()
-                position.profile = fractionid
-                position.profile_type = FRACTION_PROFILE
-                position.position = avg
-                results[i].append(position)
-
-        return results
+        return self.compat_pairs(positions, FRACTION_PROFILE, limit)
 
 
 class PersonPosition(models.Model):
