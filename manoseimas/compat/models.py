@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import operator
-
 from decimal import Decimal as dc
 
 from zope.interface import implements
@@ -33,7 +31,6 @@ from sboard.models import couch
 from sboard.models import parse_node_slug
 
 from .interfaces import ICompat
-
 
 
 class SolutionCompat(Category):
@@ -69,6 +66,7 @@ PROFILE_TYPES = (
     (FRACTION_PROFILE, _('Fraction')),
     (GROUP_PROFILE, _('Group')),
 )
+
 
 class PersonPositionManager(models.Manager):
     def compat_pairs(self, positions, profile_type, limit):
@@ -147,7 +145,7 @@ def query_solution_votings(solution_id):
         node.weight = node.solutions[solution_id]   # how the voting influences solution
         node.weight_plus_if_needed = "+" if node.weight > 0 else ""
 
-        # was voting "accepted" - ar istatymas buvo priimtas? 
+        # was voting "accepted" - ar istatymas buvo priimtas?
         # TODO: https://bitbucket.org/manoseimas/manoseimas/issue/88/i-lrs-svetain-s-nusiurbti-info-ar
 
         # calculate general parliament position as one number
@@ -168,7 +166,7 @@ def calculate_solution_parliament_avg_position(solution_id):
         sum += voting.weight * voting.avg_parl_position_normalized
         items += abs(voting.weight)
     avg = sum / dc(items)
-    return (sum,  avg)
+    return (sum, avg)
 
 
 def calculate_mps_positions(solution_id):
@@ -315,7 +313,6 @@ def fetch_positions(request, nodes):
 
 
 def fetch_user_positions(request, user):
-    positions = {}
     profile_id = user.get_profile().node._id
     qry = PersonPosition.objects.filter(profile=profile_id)
     for position in qry:
