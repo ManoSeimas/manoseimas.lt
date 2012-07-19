@@ -177,9 +177,11 @@ def calculate_mps_positions(solution_id):
     """
     mps = {}
     fractions = {}
+    solution_votings_weight = 0.0
     # Loop for all votings
     for voting in query_solution_votings(solution_id):
         voting_weight = voting.solutions[solution_id]
+        solution_votings_weight += abs(voting_weight)
         # Loop for all vote values (aye, abstain, no)
         for vote_value_name, votes in voting.votes.items():   # misses 'no-vote' option?
             vote_value = voting.get_vote_value(vote_value_name)
@@ -189,17 +191,25 @@ def calculate_mps_positions(solution_id):
                     mps[mp_id] = {'times': 0, 'sum': 0}
                 mps[mp_id]['times'] += abs(voting_weight)
                 mps[mp_id]['sum'] += vote_value * voting_weight
+                mps[mp_id]['fraction'] = fraction_id
 
-                # Some old fractions may not be imported, so we need to check
-                # if fraction id is not null.
-                #
-                # To fix this, some smart importer should be written, that
-                # imports all fractions, even old ones, that no longer exists.
-                if fraction_id:
-                    if fraction_id not in fractions:
-                        fractions[fraction_id] = {'times': 0, 'sum': 0}
-                    fractions[fraction_id]['times'] += abs(voting_weight)
-                    fractions[fraction_id]['sum'] += vote_value * voting_weight
+    # Fraction position is calculated as an average of mp positions weighted by
+    # their participation, which is the weighted ratio of votings that they
+    # have participated in.
+    for mp_id, mp in mps.items():
+        fraction_id = mp['fraction']
+        # Some old fractions may not be imported, so we need to check
+        # if fraction id is not null.
+        #
+        # To fix this, some smart importer should be written, that
+        # imports all fractions, even old ones, that no longer exists.
+        if fraction_id:
+            mp_position = mp['sum'] / mp['times']
+            mp_participation = mp['times'] / solution_votings_weight
+            if fraction_id not in fractions:
+                fractions[fraction_id] = {'times': 0, 'sum': 0}
+            fractions[fraction_id]['times'] += mp_participation
+            fractions[fraction_id]['sum'] += mp_position * mp_participation
 
     return (
         dict([(fraction_id, 1.0 * fraction['sum'] / fraction['times'])
