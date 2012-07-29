@@ -19,12 +19,14 @@
   <p>{{ node.summary }}</p>
   <p>{{ node.render_body }}</p>
 
-  <hr>
 
+  {% if node.counter_arguments %}
+  <hr>
   <h2>Kontr-argumentai</h2>
   <ul>
     {% for counter_argument in node.counter_arguments %}
     <li><a style="color: #333" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></li>
     {% endfor %}
   </ul>
+  {% endif %}
 {% endblock %}
