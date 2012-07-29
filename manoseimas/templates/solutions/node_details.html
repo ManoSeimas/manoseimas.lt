@@ -35,7 +35,7 @@
           <button class="btn" data-toggle="collapse" data-target="#{{ solissue.slug }}">kontrargumentai</button>
           <ul id="{{ solissue.slug }}" class="collapse">
             {% for counter_argument in solissue.counter_arguments %}
-            <li><a style="color: #333" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></li>
+            <li>{{ counter_argument.summary }}</li>
             {% endfor %}
           </ul>
           {% endif %}
