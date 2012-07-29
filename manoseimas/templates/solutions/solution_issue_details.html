@@ -6,41 +6,25 @@
 {% endblock %}
 
 {% block node_body %}
-  {% if node.solves %}
-  <h1>Argumentacija problemos sprendimui</h1>
-  {% else %}
-  <h1>Argumentacija problemos priežasčiai</h1>
-  {% endif %}
-
-  <p>&nbsp;</p>
-
-  <table style="width:100%;">
-    <tbody>
-      <tr>
-        <td>
-          <strong>{% trans "Problema" %}</strong>
-        </td>
-        <td>
-          {% if node.solves %}
-          <strong>{% trans "Sprendimas" %}</strong>
-          {% else %}
-          <strong>{% trans "Priežastis" %}</strong>
-          {% endif %}
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <a href="{{ node.issue.ref.permalink }}">{{ node.issue.ref.title }}</a>
-        </td>
-        <td>
-          <a href="{{ node.solution.ref.permalink }}">{{ node.solution.ref.title }}</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>&nbsp;</p>
+  <h1>
+    {% if node.solves %}
+    <span style="color: green;">UŽ</span>
+    {% else %}
+    <span style="color: ref;">PRIEŠ</span>
+    {% endif %}
+    - <a href="{{ node.issue.ref.permalink }}">{{ node.issue.ref.title }}</a>
+  </h1>
+  <h2><a href="{{ node.solution.ref.permalink }}">{{ node.solution.ref.title }}</a></h2>
 
   <p>{{ node.summary }}</p>
   <p>{{ node.render_body }}</p>
+
+  <hr>
+
+  <h2>Kontr-argumentai</h2>
+  <ul>
+    {% for counter_argument in node.counter_arguments %}
+    <li><a style="color: #333" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></li>
+    {% endfor %}
+  </ul>
 {% endblock %}

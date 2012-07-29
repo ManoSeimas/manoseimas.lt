@@ -29,6 +29,7 @@ from couchdbkit.ext.django import schema
 from .interfaces import IIssue
 from .interfaces import ISolution
 from .interfaces import ISolutionIssue
+from .interfaces import ICounterArgument
 
 
 class Solution(Node):
@@ -56,7 +57,16 @@ class SolutionIssue(Node):
 
     solves = schema.BooleanProperty()
 
+    def counter_arguments(self):
+        return list(couch.view('solutions/counter_arguments', key=self._id).iterator())
+
 provideNode(SolutionIssue, "solution-issue")
+
+
+class CounterArgument(Node):
+    implements(ICounterArgument)
+
+provideNode(CounterArgument, "counter-argument")
 
 
 def query_solution_issues(solution_id, solves):

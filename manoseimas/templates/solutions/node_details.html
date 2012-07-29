@@ -21,9 +21,9 @@
           </div>
         </td>
       </tr>
-      {% for issue in issues %}
+      {% for issue_pair in issues %}
       <tr>
-        {% for solissue in issue %}
+        {% for solissue in issue_pair %}
         <td>
           {% if solissue %}
           <div class="item-box">{{ solissue.likes }}</div>
@@ -31,6 +31,14 @@
             <h2><a href="{{ solissue.permalink }}">{{ solissue.issue.ref.title }}</a></h2>
             <p>{{ solissue.summary }}</p>
           </div>
+          {% if solissue.counter_arguments %}
+          <button class="btn" data-toggle="collapse" data-target="#{{ solissue.slug }}">kontrargumentai</button>
+          <ul id="{{ solissue.slug }}" class="collapse">
+            {% for counter_argument in solissue.counter_arguments %}
+            <li><a style="color: #333" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
           {% endif %}
         </td>
         {% endfor %}
