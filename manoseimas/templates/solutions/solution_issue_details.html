@@ -25,7 +25,10 @@
   <h2>Kontr-argumentai</h2>
   <ul>
     {% for counter_argument in node.counter_arguments %}
-    <li><a style="color: #333" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></li>
+    <li>
+      <p><a style="color: #333" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></p>
+      <p>{{ counter_argument.render_body }}</p>
+    </li>
     {% endfor %}
   </ul>
   {% endif %}
