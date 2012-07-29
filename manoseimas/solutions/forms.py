@@ -19,6 +19,7 @@ from django import forms
 
 from sboard.forms import BaseNodeForm
 from sboard.forms import NodeForm
+from sboard.fields import NodeField
 
 
 class SolutionForm(NodeForm):
@@ -32,5 +33,11 @@ class AssignIssueForm(BaseNodeForm):
 
 
 class SolutionIssueForm(BaseNodeForm):
+    summary = forms.CharField(widget=forms.Textarea)
+    body = forms.CharField(widget=forms.Textarea, required=False)
+
+
+class CounterArgumentForm(BaseNodeForm):
+    parent = NodeField(required=True)
     summary = forms.CharField(widget=forms.Textarea)
     body = forms.CharField(widget=forms.Textarea, required=False)

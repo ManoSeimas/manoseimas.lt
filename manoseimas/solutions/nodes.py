@@ -33,9 +33,11 @@ from sboard.utils import slugify
 from .forms import AssignIssueForm
 from .forms import SolutionForm
 from .forms import SolutionIssueForm
+from .forms import CounterArgumentForm
 from .interfaces import IIssue
 from .interfaces import ISolution
 from .interfaces import ISolutionIssue
+from .interfaces import ICounterArgument
 from .models import Issue
 from .models import query_issue_raises
 from .models import query_issue_solves
@@ -208,3 +210,29 @@ class IssueDetailsView(DetailsView):
         return super(IssueDetailsView, self).render(**context)
 
 provideAdapter(IssueDetailsView)
+
+
+class CounterArgumentCreateView(CreateView):
+    adapts(ISolutionIssue, ICounterArgument)
+
+    form = CounterArgumentForm
+
+    def get_form(self, *args, **kwargs):
+        kwargs['initial'] = {
+            'parent': self.node.urlslug(),
+        }
+        return self.form(None, *args, **kwargs)
+
+    def before_save(self, form, node, create):
+        # Counterarguments lack titles, so create slug using summary.
+        node.slug = slugify(node.summary)
+
+provideAdapter(CounterArgumentCreateView, name="create")
+
+
+class CounterArgumentUpdateView(UpdateView):
+    adapts(ICounterArgument)
+
+    form = CounterArgumentForm
+
+provideAdapter(CounterArgumentUpdateView, name="update")
