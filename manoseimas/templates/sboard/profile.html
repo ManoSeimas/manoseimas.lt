@@ -6,7 +6,7 @@
 
 {% block content %}
 <p><img src="{{ profile.avatar_url_big }}" class="avatar"></p>
-<h1>{{ profile.title }}</h1>
+<h1>{{ profile.title|default:profile.user.username }}</h1>
 {% if profile.dob %}
 <p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
 {% endif %}
@@ -14,6 +14,7 @@
 <p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>
 {% endif %}
 
+{% if request.user = profile.user %}
 <hr style="clear: both">
 
 <h2>Politiniai sprendimai</h2>
@@ -22,4 +23,6 @@
 <p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
 „<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
 {% endfor %}
+{% endif %}
+
 {% endblock %}
