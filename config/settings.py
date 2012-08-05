@@ -424,3 +424,7 @@ SBOARD_SEARCH_HANDLERS = (
     'manoseimas.votings.nodes.search_lrs_url',
     'sboard.nodes.SearchView',
 )
+
+RESTRUCTUREDTEXT_FILTER_SETTINGS = {
+    'footnote_references': 'superscript',
+}
