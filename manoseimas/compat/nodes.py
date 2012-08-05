@@ -113,12 +113,15 @@ class SolutionCompatView(ListView):
         return fetch_positions(self.request, nodes)
 
     def render(self, **overrides):
-        context = dict(buttons=(
+        context = dict(
+            buttons=(
                 (2, _(u'Tikrai už')),
                 (1, _(u'Už')),
                 (-1, _(u'Prieš')),
                 (-2, _(u'Tikrai prieš')),
-            ))
+            ),
+            category=dict(self.node.categories)[self.category],
+        )
         context.update(overrides)
         return super(SolutionCompatView, self).render(**context)
 
