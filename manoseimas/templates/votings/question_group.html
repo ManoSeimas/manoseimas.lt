@@ -19,15 +19,13 @@
 
 {% block content %}
   {% for category in categories %}
-  <div id="{{ category.slug }}" class="bar-header top">
-    <h2>{{ category.title|upper }}</h2>
-  </div>
+  <h1>{{ category.title|upper }}</h1>
 
   {% if category.positions %}
-  <div id="test-questions" class="test-questions">
+  <div class="test-questions">
     {% for q, position in category.positions %}
     <div id="{{ q.key }}" class="accordion-group test-question">
-      <h3 class="inline-header"><a href="{{ q.permalink }}">{{ q.title }}</a></h3>
+      <h2 class="inline-header"><a href="{{ q.permalink }}">{{ q.title }}</a></h2>
       <div id="{{ q.key }}-summary">
         <p>{{ q.summary }}</p>
       </div>
@@ -98,7 +96,7 @@
   {% endif %}
   {% endfor %}
 
-  <div class="bar-header" style="margin-bottom: -1px">
+  <div class="bar" style="margin-bottom: -21px">
     <a href="{% nodeurl node 'rezultatai' %}" class="btn btn-success btn-large">
       {% trans "RODYTI REZULTATUS" %}
     </a>

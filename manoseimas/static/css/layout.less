@@ -163,14 +163,17 @@
 // ----------------------------
 
 #middle {
-  margin-top: -1px;
+  background-color: @mainBgColor;
+
   .content {
     background-color: @white;
-    border: 1px solid @wellBorder;
+    border-left: 1px solid @wellBorder;
+    border-right: 1px solid @wellBorder;
+
+    margin-left: 6px;
 
     .content-inner {
-      padding: 10px 20px 20px 20px;
-      padding-bottom: 0px;
+      padding: 20px 20px 20px 20px;
 
       input, textarea, select, .uneditable-input {
         width: 100%;
@@ -208,7 +211,7 @@
       width: 156px;
       position: fixed;
       border: 1px solid @wellBorder;
-      border-left: none;
+      margin: -1px 0 0 -1px;
       padding-bottom: 7px;
 
       & > li > a {
@@ -219,40 +222,54 @@
         margin-top: 7px;
       }
 
-      .bar-header {
+      .nav-header {
+        border-top: 1px solid @wellBorder;
+        border-bottom: 1px solid @wellBorder;
+        margin: 10px -20px 20px -20px;
+        padding: 5px;
         padding: 5px;
         margin: 7px -15px 0px -15px;
         background: #f2f3f7 url(../img/bar-header-gradient.png);
+        font-size: 16px;
+        line-height: 18px;
+        text-align: center;
+        color: @msBlue;
+        font-weight: 600;
       }
 
-      .bar-header:first-child {
+      .nav-header:first-child {
         margin-top: -1px;
       }
     }
   }
 
-  .bar-header {
+  h1 {
+    border-top: 1px solid @wellBorder;
+    border-bottom: 1px solid @wellBorder;
+    margin: 10px -20px 20px -20px;
+    padding: 5px;
+    text-transform: uppercase;
+    background: #f2f3f7 url(../img/bar-header-gradient.png);
+
+    &:first-child {
+      margin-top: -21px;
+      min-height: 0;
+      max-height: 31px;
+    }
+
+    font-size: 16px;
+    line-height: 18px;
+    text-align: center;
+    color: @msBlue;
+    font-weight: 600;
+  }
+
+  .bar {
     border-top: 1px solid @wellBorder;
     border-bottom: 1px solid @wellBorder;
     margin: 10px -20px 20px -20px;
     padding: 5px;
     background: #f8fafc;
-    text-transform: uppercase;
-
-    &.top {
-      background: #f2f3f7 url(../img/bar-header-gradient.png);
-      margin-top: -11px;
-      min-height: 0;
-      max-height: 31px;
-    }
-
-    h2 {
-      font-size: 16px;
-      line-height: 18px;
-      text-align: center;
-      color: @msBlue;
-      font-weight: 600;
-    }
   }
 
   .footnote-reference {
@@ -300,7 +317,6 @@
 footer {
   padding: 20px 0 20px 0;
   background: @white;
-  margin-top: -1px;
   border-top: 1px solid @wellBorder;
 
   h2 {
@@ -423,6 +439,8 @@ h6 { font-size: 14px; }
 .inline-header {
   color: @msGreen;
   float: left;
+  font-size: @baseFontSize + 2px;
+  font-weight: 600;
   line-height: @baseLineHeight;
 
   a {
