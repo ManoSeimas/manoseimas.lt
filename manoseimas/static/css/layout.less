@@ -198,29 +198,36 @@
 
   .sidebar {
     margin-left: 0px;
-    width: 156px;
-    background-color: @wellBg;
-    border: 1px solid @wellBorder;
-    border-left: none;
 
     .well {
       border: none;
     }
 
     .nav-list {
+      background-color: @wellBg;
+      width: 156px;
+      position: fixed;
+      border: 1px solid @wellBorder;
+      border-left: none;
+      padding-bottom: 7px;
+
       & > li > a {
         padding: 4px 15px;
       }
-    }
 
-    .bar-header {
-      padding: 5px;
-      margin: 15px -15px 0px -15px;
-      background: #f2f3f7 url(../img/bar-header-gradient.png);
-    }
+      & > li:first-child {
+        margin-top: 7px;
+      }
 
-    .bar-header:first-child {
-      margin-top: -1px;
+      .bar-header {
+        padding: 5px;
+        margin: 7px -15px 0px -15px;
+        background: #f2f3f7 url(../img/bar-header-gradient.png);
+      }
+
+      .bar-header:first-child {
+        margin-top: -1px;
+      }
     }
   }
 
