@@ -169,7 +169,7 @@
     border: 1px solid @wellBorder;
 
     .content-inner {
-      padding: 0 20px 20px 20px;
+      padding: 10px 20px 20px 20px;
       padding-bottom: 0px;
 
       input, textarea, select, .uneditable-input {
@@ -208,24 +208,33 @@
     }
 
     .nav-list {
-      margin-top: 6px;
-      margin-bottom: 6px;
-
       & > li > a {
         padding: 4px 15px;
       }
+    }
+
+    .bar-header {
+      padding: 5px;
+      margin: 15px -15px 0px -15px;
+      background: #f2f3f7 url(../img/bar-header-gradient.png);
+    }
+
+    .bar-header:first-child {
+      margin-top: -1px;
     }
   }
 
   .bar-header {
     border-top: 1px solid @wellBorder;
     border-bottom: 1px solid @wellBorder;
-    margin: -1px -20px 20px -20px;
+    margin: 10px -20px 20px -20px;
     padding: 5px;
     background: #f8fafc;
+    text-transform: uppercase;
 
     &.top {
       background: #f2f3f7 url(../img/bar-header-gradient.png);
+      margin-top: -11px;
       min-height: 0;
       max-height: 31px;
     }
