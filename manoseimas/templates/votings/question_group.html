@@ -18,13 +18,14 @@
 
 
 {% block content %}
-  <div class="bar-header top">
+  {% for category in categories %}
+  <div id="{{ category.slug }}" class="bar-header top">
     <h2>{{ category.title|upper }}</h2>
   </div>
 
-  {% if children %}
+  {% if category.positions %}
   <div id="test-questions" class="test-questions">
-    {% for q, position in children %}
+    {% for q, position in category.positions %}
     <div id="{{ q.key }}" class="accordion-group test-question">
       <h3 class="inline-header"><a href="{{ q.permalink }}">{{ q.title }}</a></h3>
       <div id="{{ q.key }}-summary">
@@ -91,15 +92,16 @@
     {% endfor %}
   </div>
 
+  {% else %}
+  <p>{% trans "Šiai kategorijai nepriskirtas nei vienas sprendimas." %}</p>
+  {% endif %}
+  {% endfor %}
+
   <div class="bar-header" style="margin-bottom: -1px">
     <a href="{% nodeurl node 'rezultatai' %}" class="btn btn-success btn-large">
       {% trans "RODYTI REZULTATUS" %}
     </a>
   </div>
-
-  {% else %}
-  <p>{% trans "Šiai kategorijai nepriskirtas nei vienas sprendimas." %}</p>
-  {% endif %}
 
 {% endblock %}
 

@@ -55,21 +55,18 @@ from .models import calculate_solution_parliament_avg_position
 from .models import update_position
 
 
-def solution_compat_nav(request, node, category, nav, active=tuple()):
-    if not active and category:
-        active = (category,)
-
-    if category and node.can(request, 'update'):
+def solution_compat_nav(request, node, nav, active=tuple()):
+    if node.can(request, 'update'):
         nav.append({
             'key': 'node-title',
             'title': _('Testas'),
             'header': True,
         })
 
-        key = 'assign-solutions'
+        key = 'assign-solutions-categories'
         nav.append({
             'key': key,
-            'url': node.permalink(category, key),
+            'url': node.permalink(key),
             'title': _('Priskirti sprendimus'),
             'children': [],
             'active': key in active,
@@ -85,7 +82,7 @@ def solution_compat_nav(request, node, category, nav, active=tuple()):
         for slug, category in node.categories:
             nav.append({
                 'key': slug,
-                'url': node.permalink(slug),
+                'url': '#%s' % slug,
                 'title': category['title'],
                 'children': [],
                 'active': slug in active,
@@ -94,39 +91,45 @@ def solution_compat_nav(request, node, category, nav, active=tuple()):
     return nav
 
 
-class SolutionCompatView(ListView):
+class SolutionCompatView(NodeView):
     adapts(ICompat)
 
     template = 'votings/question_group.html'
 
-    def __init__(self, node, category=None):
+    def __init__(self, node):
         super(SolutionCompatView, self).__init__(node)
-        self.category = category or node.default_category()
 
     def nav(self, active=tuple()):
         nav = super(SolutionCompatView, self).nav(active)
-        return solution_compat_nav(self.request, self.node, self.category, nav,
-                                   active)
+        return solution_compat_nav(self.request, self.node, nav, active)
 
-    def get_node_list(self):
-        nodes = self.node.get_solutions(self.category)
-        return fetch_positions(self.request, nodes)
+    def get_category_list(self):
+        for slug, category in self.node.categories:
+            nodes = self.node.get_solutions(slug)
+            yield {
+                'slug': slug,
+                'title': category['title'],
+                'nodes': nodes,
+                'positions': fetch_positions(self.request, nodes),
+            }
 
     def render(self, **overrides):
-        context = dict(
-            buttons=(
+        context = {
+            'title': self.node.title,
+            'view': self,
+            'node': self.node,
+            'buttons': (
                 (2, _(u'Tikrai už')),
                 (1, _(u'Už')),
                 (-1, _(u'Prieš')),
                 (-2, _(u'Tikrai prieš')),
             ),
-            category=dict(self.node.categories)[self.category],
-        )
+            'categories': self.get_category_list(),
+        }
         context.update(overrides)
-        return super(SolutionCompatView, self).render(**context)
+        return render(self.request, self.template, context)
 
 provideAdapter(SolutionCompatView)
-provideAdapter(SolutionCompatView, (ICompat, unicode))
 
 
 class SolutionCompatUpdateView(UpdateView):
@@ -135,6 +138,22 @@ class SolutionCompatUpdateView(UpdateView):
     form = CompatNodeForm
 
 provideAdapter(SolutionCompatUpdateView, name="update")
+
+
+class AssignSolutionsCategoriesView(ListView):
+    adapts(ICompat)
+
+    def get_node_list(self):
+        for slug, cat in self.node.categories:
+            yield {
+                'title': cat['title'],
+                'permalink': self.node.permalink(slug, 'assign-solutions'),
+            }
+
+    def render(self, **overrides):
+        return super(AssignSolutionsCategoriesView, self).render(title=_(u'Pasirinkite kategoriją sprendimų priskyrimui'))
+
+provideAdapter(AssignSolutionsCategoriesView, name='assign-solutions-categories')
 
 
 class AssignSolutionsView(UpdateView):
@@ -159,8 +178,7 @@ class AssignSolutionsView(UpdateView):
             else:
                 active = ('assign-solutions',)
         nav = super(AssignSolutionsView, self).nav(active)
-        return solution_compat_nav(self.request, self.node, self.category, nav,
-                                   active)
+        return solution_compat_nav(self.request, self.node, nav, active)
 
 provideAdapter(AssignSolutionsView, name='assign-solutions')
 
@@ -372,7 +390,7 @@ class CompatResultsView(DetailsView):
 
     def nav(self, active=tuple()):
         nav = super(CompatResultsView, self).nav(active)
-        return solution_compat_nav(self.request, self.node, None, nav, active)
+        return solution_compat_nav(self.request, self.node, nav, active)
 
     def render(self, **overrides):
         positions = list(query_positions(self.request))
