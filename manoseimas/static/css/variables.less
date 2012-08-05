@@ -12,8 +12,8 @@
 // -------------------------
 @black:                 #000;
 @grayDarker:            #222;
-@grayDark:              #333; 
-@gray:                  #555;
+@grayDark:              #555;
+@gray:                  #666;
 @grayLight:             #999;
 @grayLighter:           #eee;
 @white:                 #fff;
@@ -33,40 +33,40 @@
 
 // Colors
 // -------------------------
-@mainBgColor:           #DCEDF5;
-@msBlue:                #1B3379;
+@mainBgColor:           #F8FBFF;
+@msBlue:                #436BA7;
+@msGreen:               #4db036;
 @wellBg:                #F8F8F8;
-@wellBorder:            #D6D6D6;
+@wellBorder:            #DDDDDD;
 
 // Scaffolding
 // -------------------------
-@bodyBackground:        @white;
+@bodyBackground:        @mainBgColor;
 @textColor:             #606060;
 
 
 // Links
 // -------------------------
 @linkColor:             @msBlue;
-//@linkColor:             #08c;
 @linkColorHover:        darken(@linkColor, 15%);
 
 
 // Typography
 // -------------------------
-@sansFontFamily:        sans-serif;
+@sansFontFamily:        'Open Sans', sans-serif;
 @serifFontFamily:       serif;
 @monoFontFamily:        monospace;
 
 @baseFontSize:          14px;
 @baseFontFamily:        @sansFontFamily;
-@baseLineHeight:        18px;
+@baseLineHeight:        20px;
 @altFontFamily:         @serifFontFamily;
 
 @headingsFontFamily:    inherit; // empty to use BS default, @baseFontFamily
 @headingsFontWeight:    bold;    // instead of browser default, bold
 @headingsColor:         inherit; // empty to use BS default, @textColor
 
-@borderRadius:          5px;
+@borderRadius:          4px;
 
 
 // Tables
@@ -81,16 +81,16 @@
 // -------------------------
 @btnBackground:                     @white;
 @btnBackgroundHighlight:            darken(@white, 10%);
-@btnBorder:                         #ccc;
+@btnBorder:                         #eee;
 
-@btnPrimaryBackground:              @linkColor;
-@btnPrimaryBackgroundHighlight:     spin(@btnPrimaryBackground, 15%);
+@btnPrimaryBackground:              #5f87bb;
+@btnPrimaryBackgroundHighlight:     #4067a4;
 
 @btnInfoBackground:                 #5bc0de;
 @btnInfoBackgroundHighlight:        #2f96b4;
 
-@btnSuccessBackground:              #62c462;
-@btnSuccessBackgroundHighlight:     #51a351;
+@btnSuccessBackground:              #85c539;
+@btnSuccessBackgroundHighlight:     #25a134;
 
 @btnWarningBackground:              lighten(@orange, 15%);
 @btnWarningBackgroundHighlight:     @orange;

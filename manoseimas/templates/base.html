@@ -26,6 +26,8 @@
 
   <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.ico">
 
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
   <!-- CSS: implied media=all -->
   <!-- CSS concatenated and minified via ant build script-->
   {% compressed_css 'styles' %}
@@ -41,72 +43,68 @@
 
 <body>
   <header class="navbar navbar-manoseimas">
-    <div class="navbar-inner">
-      <div class="container">
+    <div class="navbar-inner" id="top-menu-inner">
+      <div class="container" id="top-menu">
+        <ul class="nav pull-left">
+          <li><a href="{% url node "testas" %}">{% trans "Testas" %}</a></li>
+        </ul>
+
+        <div class="pull-right">
+          <ul class="nav pull-right">
+            {% if request.user.is_authenticated %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                {{ request.user }} <i class="white-caret"></i></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ request.user.get_profile.get_node.permalink }}">
+                  <i class="icon-user"></i> {% trans "Profile" %}</a></li>
+                <li><a href="{% url logout %}">
+                  <i class="icon-off"></i> {% trans "Log out" %}</a></li>
+              </ul>
+            </li>
+            {% else %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i style="margin-top: 3px" class="icon-user icon-white"></i> {% trans "Log in" %}
+                <i class="white-caret"></i></a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url socialauth_begin 'google' %}">{% trans "Google" %}</a></li>
+                {% if FACEBOOK_APP_ID %}
+                <li><a href="{% url socialauth_begin 'facebook' %}">{% trans "Facebook" %}</a></li>
+                {% endif %}
+                <li><a href="{% url login %}">{% trans "OpenID" %}</a></li>
+              </ul>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+        {% if request.user.is_authenticated %}
+        <img src="{{ request.user.get_profile.get_node.avatar_url_small }}"
+             class="avatar pull-right" />
+        {% endif %}
+      </div>
+    </div>
+    <div class="navbar-inner" id="logo-bar-inner">
+      <div class="container" id="logo-bar">
         <a href="{% url index %}" class="brand">
           <img src="{{ STATIC_URL }}img/logo.png" />
         </a>
 
-        {% if request.user.is_authenticated %}
-        <img src="{{ request.user.get_profile.get_node.avatar_url }}"
-             class="avatar pull-right" />
-        {% endif %}
-        <ul class="nav pull-right">
-          {% if request.user.is_authenticated %}
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              {{ request.user }}<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="{{ request.user.get_profile.get_node.permalink }}">
-                <i class="icon-user"></i> {% trans "Profile" %}</a></li>
-              <li><a href="{% url logout %}">
-                <i class="icon-off"></i> {% trans "Log out" %}</a></li>
-            </ul>
-          </li>
-          {% else %}
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="icon-user icon-white"></i> {% trans "Log in" %}
-              <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url socialauth_begin 'google' %}">{% trans "Google" %}</a></li>
-              {% if FACEBOOK_APP_ID %}
-              <li><a href="{% url socialauth_begin 'facebook' %}">{% trans "Facebook" %}</a></li>
-              {% endif %}
-              <li><a href="{% url login %}">{% trans "OpenID" %}</a></li>
-            </ul>
-          </li>
-          {% endif %}
-        </ul>
+        <form action="{% url search %}" method="get" id="search-box">
+          <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
+                 placeholder="{% trans "Search" %}" class="search-query" />
+        </form>
       </div>
     </div>
   </header>
 
   <div id="middle">
     <div class="container">
-      <div id="top-menu">
-        <ul class="nav">
-          <li><a href="{% url node "testas" %}">{% trans "Testas" %}</a></li>
-        </ul>
-        <form action="{% url search %}" method="get" id="search-box">
-          <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
-                 placeholder="{% trans "Search" %}" class="search-query" />
-        </form>
-      </div>
-
       {% block container %}
       <div class="row">
-        <div class="span10">
-          <!--ul class="manoseimas-breadcrumb">
-            <li><a href="#">Seimo nariai</a> <span class="divider">/</span></li>
-            <li class="active">Andrius Kubilius</li>
-          </ul-->
-        </div>
-        <div class="span2"></div>
         <div class="content span10">
           <div class="content-inner">
           {% block content %}
-          
           {% endblock %}
           </div>
         </div>
