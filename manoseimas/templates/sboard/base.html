@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block sidebar %}
+{% if view.nav %}
 <ul class="nav nav-list">
   {% for item in view.nav %}
 
@@ -43,4 +44,5 @@
   {% endif %}
   {% endfor %}
 </ul>
+{% endif %}
 {% endblock %}
