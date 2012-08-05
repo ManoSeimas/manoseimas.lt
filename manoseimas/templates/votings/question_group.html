@@ -77,7 +77,8 @@
               </td>
               {% endfor %}
             </tr>
-            <tr></tr>
+            {% empty %}
+            <tr><td class="empty" colspan="2"><p>Nėra argumentų</p></td></tr>
             {% endfor %}
           </tbody>
         </table>
