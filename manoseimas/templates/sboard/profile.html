@@ -5,8 +5,8 @@
 {% load sboard %}
 
 {% block content %}
-<p><img src="{{ profile.avatar_url_big }}" class="avatar"></p>
 <h1>{{ profile.title|default:profile.user.username }}</h1>
+<p><img src="{{ profile.avatar_url_big }}" class="avatar"></p>
 {% if profile.dob %}
 <p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
 {% endif %}
