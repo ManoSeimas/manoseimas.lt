@@ -75,30 +75,40 @@ class PersonPositionManager(models.Manager):
         for solution_id, position in positions:
             for pp in self.filter(node=solution_id, profile_type=profile_type):
                 profile = pp.profile._id
-                numerator, denominator = profile_sums.get(profile, (0, 0))
-                numerator += pp.position * position
-                denominator += abs(position)
-                profile_sums[profile] = (numerator, denominator)
+                ps = profile_sums.setdefault(profile, {
+                    'weighted_positions': 0,
+                    'weights': 0,
+                    'participations': 0,
+                    'total_participation': 0,
+                })
+                # Note: not exactly a weighted average, because the user's
+                # positions can be negative, but the denominator is the sum of
+                # their absolute values.
+                ps['weighted_positions'] += pp.position * position
+                ps['weights'] += abs(position)
+                ps['participations'] += pp.participation
+                ps['total_participation'] += 1
 
         aye, against = [], []
         for profile, sums in profile_sums.items():
-            numerator, denominator = sums
-            compatibility = dc(numerator) / dc(denominator)
+            compatibility = dc(sums['weighted_positions']) / dc(sums['weights'])
+            precision = dc(sums['participations']) / dc(sums['total_participation'])
             if compatibility > 0:
-                aye.append((compatibility, profile))
+                aye.append((compatibility, profile, precision))
             else:
-                against.append((compatibility, profile))
+                against.append((compatibility, profile, precision))
 
         aye.sort(reverse=True)
         against.sort()
 
         results = ([], [])
         for i, compatibilities in enumerate((aye, against)):
-            for compatibility, profile in compatibilities[:limit]:
+            for compatibility, profile, precision in compatibilities[:limit]:
                 position = PersonPosition()
                 position.profile = profile
                 position.profile_type = profile_type
                 position.position = compatibility
+                position.participation = precision
                 results[i].append(position)
 
         return results
