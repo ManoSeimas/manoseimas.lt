@@ -143,6 +143,10 @@ provideAdapter(SolutionCompatUpdateView, name="update")
 class AssignSolutionsCategoriesView(ListView):
     adapts(ICompat)
 
+    def nav(self, active='assign-solutions-categories'):
+        nav = super(AssignSolutionsCategoriesView, self).nav(active)
+        return solution_compat_nav(self.request, self.node, nav, active)
+
     def get_node_list(self):
         for slug, cat in self.node.categories:
             yield {
