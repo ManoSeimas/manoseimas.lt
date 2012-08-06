@@ -134,6 +134,7 @@ class PersonPosition(models.Model):
     profile_type = models.IntegerField(choices=PROFILE_TYPES,
                                        default=USER_PROFILE)
     position = models.DecimalField(max_digits=7, decimal_places=4, db_index=True)
+    participation = models.DecimalField(max_digits=7, decimal_places=4, db_index=True, default=dc(1))
 
     objects = PersonPositionManager()
 
@@ -254,6 +255,7 @@ def update_mps_positions(solution_id):
             position = PersonPosition()
             position.node = solution_id
             position.position = values['position']
+            position.participation = values['participation']
             position.profile = profile_id
             position.profile_type = profile_type
             position.save()
