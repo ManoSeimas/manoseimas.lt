@@ -70,49 +70,6 @@ PROFILE_TYPES = (
 
 
 class PersonPositionManager(models.Manager):
-    def compat_pairs(self, positions, profile_type, limit):
-        profile_sums = {}
-        for solution_id, position in positions:
-            for pp in self.filter(node=solution_id, profile_type=profile_type):
-                profile = pp.profile._id
-                ps = profile_sums.setdefault(profile, {
-                    'weighted_positions': 0,
-                    'weights': 0,
-                    'participations': 0,
-                    'total_participation': 0,
-                })
-                # Note: not exactly a weighted average, because the user's
-                # positions can be negative, but the denominator is the sum of
-                # their absolute values.
-                ps['weighted_positions'] += pp.position * position
-                ps['weights'] += abs(position)
-                ps['participations'] += pp.participation
-                ps['total_participation'] += 1
-
-        aye, against = [], []
-        for profile, sums in profile_sums.items():
-            compatibility = dc(sums['weighted_positions']) / dc(sums['weights'])
-            precision = dc(sums['participations']) / dc(sums['total_participation'])
-            if compatibility > 0:
-                aye.append((compatibility, profile, precision))
-            else:
-                against.append((compatibility, profile, precision))
-
-        aye.sort(reverse=True)
-        against.sort()
-
-        results = ([], [])
-        for i, compatibilities in enumerate((aye, against)):
-            for compatibility, profile, precision in compatibilities[:limit]:
-                position = PersonPosition()
-                position.profile = profile
-                position.profile_type = profile_type
-                position.position = compatibility
-                position.participation = precision
-                results[i].append(position)
-
-        return results
-
     def mps(self, solution_id):
         return self.filter(node=solution_id, profile_type=MP_PROFILE)
 
@@ -122,9 +79,6 @@ class PersonPositionManager(models.Manager):
         against = mps.filter(position__lte=0).order_by('position')
         return (aye[:limit], against[:limit])
 
-    def mp_compat_pairs(self, positions, limit=200):
-        return self.compat_pairs(positions, MP_PROFILE, limit)
-
     def fractions(self, solution_id):
         return self.filter(node=solution_id, profile_type=FRACTION_PROFILE)
 
@@ -133,9 +87,6 @@ class PersonPositionManager(models.Manager):
         aye = fractions.filter(position__gt=0).order_by('-position')
         against = fractions.filter(position__lte=0).order_by('position')
         return (aye[:limit], against[:limit])
-
-    def fraction_compat_pairs(self, positions, limit=200):
-        return self.compat_pairs(positions, FRACTION_PROFILE, limit)
 
 
 class PersonPosition(models.Model):
@@ -150,6 +101,77 @@ class PersonPosition(models.Model):
 
     def position_percent(self):
         return int((abs(self.position) / dc(2)) * dc(100))
+
+
+class Compatibility(object):
+    """Represents compatibility between the user and an MP or fraction.
+
+    The compatibility value belongs to the range [-2; 2], with -2 being the least compatible
+    (polar opposites)."""
+
+    def __init__(self, profile, profile_type, compatibility, precision):
+        self.profile = profile
+        self.profile_type = profile_type
+        self.compatibility = compatibility
+        self.precision = precision
+
+    def percent(self):
+        return int((abs(self.compatibility) / dc(2)) * dc(100))
+
+
+def compatibilities(positions, profile_type):
+    profile_sums = {}
+    for solution_id, position in positions:
+        for pp in PersonPosition.objects.filter(node=solution_id, profile_type=profile_type):
+            profile_id = pp.profile._id
+            ps = profile_sums.setdefault(profile_id, {
+                'profile': pp.profile,
+                'weighted_positions': 0,
+                'weights': 0,
+                'participations': 0,
+                'total_participation': 0,
+            })
+            # Note: not exactly a weighted average, because the user's
+            # positions can be negative, but the denominator is the sum of
+            # their absolute values.
+            ps['weighted_positions'] += pp.position * position
+            ps['weights'] += abs(position)
+            ps['participations'] += pp.participation
+            ps['total_participation'] += 1
+
+    for profile_id, sums in profile_sums.items():
+        compatibility = dc(sums['weighted_positions']) / dc(sums['weights'])
+        precision = dc(sums['participations']) / dc(sums['total_participation'])
+        yield Compatibility(
+            profile=sums['profile'],
+            profile_type=profile_type,
+            compatibility=compatibility,
+            precision=precision,
+        )
+
+
+def compatibilities_by_sign(positions, profile_type, limit):
+    aye, against = [], []
+
+    for compat in compatibilities(positions, profile_type):
+        if compat.compatibility > 0:
+            aye.append(compat)
+        else:
+            against.append(compat)
+
+    by_compatibility = lambda c: c.compatibility
+    aye.sort(reverse=True, key=by_compatibility)
+    against.sort(key=by_compatibility)
+
+    return (aye, against)
+
+
+def mp_compatibilities_by_sign(positions, limit=200):
+    return compatibilities_by_sign(positions, MP_PROFILE, limit)
+
+
+def fraction_compatibilities_by_sign(positions, limit=200):
+    return compatibilities_by_sign(positions, FRACTION_PROFILE, limit)
 
 
 def query_solution_votings(solution_id):

@@ -5,9 +5,9 @@
 {% block node_body %}
   {{ block.super }}
 
-  {% for pgroup in pgroups %}
+  {% for group in groups %}
 
-  <h2>{{ pgroup.title }}</h2>
+  <h2>{{ group.title }}</h2>
 
   <table style="width:100%;">
     <tbody>
@@ -15,21 +15,21 @@
         <th style="width: 50%">{% trans "Labiausiai sutampa" %}</th>
         <th>{% trans "Labiausiai nesutampa" %}</th>
       </tr>
-      {% for position_pair in pgroup.positions %}
+      {% for compatibility_pair in group.compatibilities %}
       <tr>
-        {% for position in position_pair %}
+        {% for compatibility in compatibility_pair %}
         <td>
-          {% if position %}
-          <a href="{% nodeurl position.profile.ref %}">
-            <img src="{{ position.profile.ref.avatar_url }}"
+          {% if compatibility %}
+          <a href="{% nodeurl compatibility.profile.ref %}">
+            <img src="{{ compatibility.profile.ref.avatar_url }}"
                  class="avatar-thumbnail">
           </a>
           <p>
-            <a href="{% nodeurl position.profile.ref %}">
-              {{ position.profile.ref.title }}
+            <a href="{% nodeurl compatibility.profile.ref %}">
+              {{ compatibility.profile.ref.title }}
             </a>
           </p>
-          <p><strong>{{ position.position_percent }}%</strong></p>
+          <p><strong>{{ compatibility.percent }}%</strong></p>
           {% endif %}
         </td>
         {% endfor %}

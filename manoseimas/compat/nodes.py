@@ -47,6 +47,8 @@ from .forms import CompatNodeForm
 from .forms import UserPositionForm
 from .interfaces import ICompat
 from .models import PersonPosition
+from .models import mp_compatibilities_by_sign
+from .models import fraction_compatibilities_by_sign
 from .models import fetch_positions
 from .models import query_positions
 from .models import query_solution_votings
@@ -398,17 +400,17 @@ class CompatResultsView(DetailsView):
 
     def render(self, **overrides):
         positions = list(query_positions(self.request))
-        mps = PersonPosition.objects.mp_compat_pairs(positions)
-        fractions = PersonPosition.objects.fraction_compat_pairs(positions)
+        mps = mp_compatibilities_by_sign(positions)
+        fractions = fraction_compatibilities_by_sign(positions)
         context = {
-            'pgroups': (
+            'groups': (
                 dict(
                     title=_('Frakcijos'),
-                    positions=itertools.izip_longest(*fractions),
+                    compatibilities=list(map(list, itertools.izip_longest(*fractions))),
                 ),
                 dict(
                     title=_('Seimo nariai'),
-                    positions=itertools.izip_longest(*mps),
+                    compatibilities=itertools.izip_longest(*mps),
                 )
             ),
         }
