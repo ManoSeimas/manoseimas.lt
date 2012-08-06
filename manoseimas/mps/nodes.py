@@ -31,28 +31,12 @@ def search_lrs_url(query):
     pass
 
 
-def classify_position(position):
-    if -2 <= position < -1.32:
-        return _(u'Stipriai prieš')
-    elif -1.32 <= position < -0.66:
-        return _(u'Prieš')
-    elif -0.66 <= position < 0:
-        return _(u'Silpnai prieš')
-    elif position == 0:
-        return _(u'Neutraliai')
-    elif 0 < position <= 0.66:
-        return _(u'Silpnai už')
-    elif 0.66 < position <= 1.32:
-        return _(u'Už')
-    else:
-        return _(u'Stipriai už')
-
-
 def format_position_percent(personposition):
     if personposition.position >= 0:
-        return _(u'Palaiko %d%%') % personposition.position_percent()
+        return _(u'Palaiko %d%%') % personposition.percent()
     else:
-        return _(u'Nepalaiko %d%%') % personposition.position_percent()
+        return _(u'Nepalaiko %d%%') % personposition.percent()
+
 
 def prepare_position_list(node):
     """Returns list of positions of a person or fraction to be passed to a
@@ -61,7 +45,7 @@ def prepare_position_list(node):
     positions.sort(key=lambda pp: pp.node.ref.title)
     return [{
         'solution': pp.node,
-        'position': classify_position(pp.position),
+        'position': pp.classify,
         'percent': format_position_percent(pp),
     } for pp in positions]
 

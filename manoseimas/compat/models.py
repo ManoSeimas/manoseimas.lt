@@ -1,3 +1,4 @@
+# coding: utf-8
 # Copyright (C) 2012  Mantas Zimnickas <sirexas@gmail.com>
 #
 # This file is part of manoseimas.lt project.
@@ -99,8 +100,24 @@ class PersonPosition(models.Model):
 
     objects = PersonPositionManager()
 
-    def position_percent(self):
+    def percent(self):
         return int((abs(self.position) / dc(2)) * dc(100))
+
+    def classify(self):
+        if -2 <= self.position < -1.32:
+            return _(u'Stipriai prieš')
+        elif -1.32 <= self.position < -0.66:
+            return _(u'Prieš')
+        elif -0.66 <= self.position < 0:
+            return _(u'Silpnai prieš')
+        elif self.position == 0:
+            return _(u'Neutraliai')
+        elif 0 < self.position <= 0.66:
+            return _(u'Silpnai už')
+        elif 0.66 < self.position <= 1.32:
+            return _(u'Už')
+        else:
+            return _(u'Stipriai už')
 
 
 class Compatibility(object):
