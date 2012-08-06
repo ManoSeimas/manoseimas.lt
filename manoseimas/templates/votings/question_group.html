@@ -19,7 +19,7 @@
 
 {% block content %}
   {% for category in categories %}
-  <h1 id="{{ category.slug }}">{{ category.title|upper }}</h1>
+  <h1 class="header-bar" id="{{ category.slug }}">{{ category.title|upper }}</h1>
 
   {% if category.positions %}
   <div class="test-questions">
