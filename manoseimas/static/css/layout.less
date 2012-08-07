@@ -414,13 +414,28 @@ footer {
 // test
 // ----------------------------
 
-.btn-large {
+.btn-show-results {
+  .btn-success;
+  .btn-large;
   font-weight: 800;
   font-size: 16px;
+  line-height: 20px;
   display: block;
   width: 200px;
   margin: 5px auto 5px auto;
   padding: 6px;
+
+  &:hover {
+    .btn-success;
+  }
+}
+
+.sidebar .btn-show-results {
+  width: 174px;
+  font-weight: 600;
+  .border-radius-left(0);
+  margin: 20px 0;
+  border-left: none;
 }
 
 .test-questions {
