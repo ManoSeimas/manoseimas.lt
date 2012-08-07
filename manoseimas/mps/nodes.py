@@ -33,9 +33,9 @@ def search_lrs_url(query):
 
 def format_position_percent(personposition):
     if personposition.position >= 0:
-        return _(u'Palaiko %d%%') % personposition.percent()
+        return _(u'Palaiko %d%%') % personposition.position_percent()
     else:
-        return _(u'Nepalaiko %d%%') % personposition.percent()
+        return _(u'Nepalaiko %d%%') % personposition.position_percent()
 
 
 def prepare_position_list(node):

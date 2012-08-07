@@ -100,7 +100,7 @@ class PersonPosition(models.Model):
 
     objects = PersonPositionManager()
 
-    def percent(self):
+    def position_percent(self):
         return int((abs(self.position) / dc(2)) * dc(100))
 
     def classify(self):
@@ -132,7 +132,7 @@ class Compatibility(object):
         self.compatibility = compatibility
         self.precision = precision
 
-    def percent(self):
+    def compatibility_percent(self):
         return int((abs(self.compatibility) / dc(2)) * dc(100))
 
     def precision_percent(self):
