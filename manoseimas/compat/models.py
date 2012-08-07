@@ -222,7 +222,10 @@ def calculate_solution_parliament_avg_position(solution_id):
     for voting in query_solution_votings(solution_id):
         sum += voting.weight * voting.avg_parl_position_normalized
         items += abs(voting.weight)
-    avg = sum / dc(items)
+    if items:
+        avg = sum / dc(items)
+    else:
+        avg = None
     return (sum, avg)
 
 

@@ -18,7 +18,7 @@
       <strong>{{ child.weight_plus_if_needed }}{{ child.weight }}</strong>
       <span class="multiply-sign" style="color:silver">*</span>
       <span id="voting-chart-{{ child.urlslug }}" style="width:30px;height:30px;"
-      title="{{ child.weight }} * {{ child.avg_Parl_position_normalized|floatformat:2 }} = {{ child.weighted_avg_Parl_position|floatformat:2 }} "></span>
+      title="{{ child.weight }} * {{ child.avg_parl_position_normalized|floatformat:2 }} = {{ child.weighted_avg_parl_position|floatformat:2 }} "></span>
 
       [{{ child.created|date:"SHORT_DATE_FORMAT" }}]
       <a href="{{ child.permalink }}">{{ child.title }}</a>
@@ -32,10 +32,12 @@
       <hr />
     </div>
     {% endfor %}
+    {% if parl_normalized_position != None %}
     <div class="list-summary">
       {% trans "Suminė parlamento pozicija" %} = <strong>{{ parl_weighted_position|floatformat:2 }}</strong>
       ({% trans "normuota pagal svorius" %} = <strong>{{ parl_normalized_position|floatformat:2 }}</strong>)
     </div>
+    {% endif %}
   {% else %}
     <p>{% trans "No entries found." %}</p>
   {% endif %}
