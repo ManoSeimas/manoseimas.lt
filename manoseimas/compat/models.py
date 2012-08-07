@@ -103,6 +103,9 @@ class PersonPosition(models.Model):
     def position_percent(self):
         return int((abs(self.position) / dc(2)) * dc(100))
 
+    def participation_percent(self):
+        return int(self.participation * dc(100))
+
     def classify(self):
         if -2 <= self.position < -1.32:
             return _(u'Stipriai prieš')
