@@ -135,6 +135,9 @@ class Compatibility(object):
     def percent(self):
         return int((abs(self.compatibility) / dc(2)) * dc(100))
 
+    def precision_percent(self):
+        return int(self.precision * dc(100))
+
 
 def compatibilities(positions, profile_type):
     profile_sums = {}
