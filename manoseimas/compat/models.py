@@ -19,6 +19,7 @@
 from decimal import Decimal as dc
 from operator import attrgetter
 from collections import Counter
+from collections import defaultdict
 
 from zope.interface import implements
 
@@ -145,14 +146,14 @@ class Compatibility(object):
 
 
 def compatibilities(positions, profile_type):
-    profile_sums = {}
+    profile_sums = defaultdict(lambda: Counter())
     user_solutions = 0
     for solution_id, position in positions:
         position = float(position)
         user_solutions += 1
         for pp in PersonPosition.objects.filter(node=solution_id, profile_type=profile_type):
             profile_id = pp.profile._id
-            ps = profile_sums.setdefault(profile_id, Counter())
+            ps = profile_sums[profile_id]
             ps['profile'] = pp.profile
             # Note: not exactly a weighted average, because the user's
             # positions can be negative, but the denominator is the sum of
