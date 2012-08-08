@@ -138,16 +138,17 @@ class Compatibility(object):
         self.precision = precision
 
     def compatibility_percent(self):
-        return int((abs(self.compatibility) / dc(2)) * dc(100))
+        return int(abs(self.compatibility) / 2 * 100)
 
     def precision_percent(self):
-        return int(self.precision * dc(100))
+        return int(self.precision * 100)
 
 
 def compatibilities(positions, profile_type):
     profile_sums = {}
     user_solutions = 0
     for solution_id, position in positions:
+        position = float(position)
         user_solutions += 1
         for pp in PersonPosition.objects.filter(node=solution_id, profile_type=profile_type):
             profile_id = pp.profile._id
@@ -156,13 +157,13 @@ def compatibilities(positions, profile_type):
             # Note: not exactly a weighted average, because the user's
             # positions can be negative, but the denominator is the sum of
             # their absolute values.
-            ps['weighted_positions'] += pp.position * position
+            ps['weighted_positions'] += float(pp.position) * position
             ps['weights'] += abs(position)
-            ps['participation'] += pp.participation
+            ps['participation'] += float(pp.participation)
 
     for profile_id, sums in profile_sums.items():
-        compatibility = dc(sums['weighted_positions']) / dc(sums['weights'])
-        precision = dc(sums['participation']) / dc(user_solutions)
+        compatibility = sums['weighted_positions'] / sums['weights']
+        precision = sums['participation'] / user_solutions
         yield Compatibility(
             profile=sums['profile'],
             profile_type=profile_type,
