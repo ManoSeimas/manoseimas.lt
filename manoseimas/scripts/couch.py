@@ -219,10 +219,10 @@ def listfractions(args):
 
 def syncpositions(args):
     import sboard.factory
-    from manoseimas.compat.models import update_mps_positions
+    from manoseimas.compat.models import update_parliament_positions
     sboard.factory.autodiscover()
 
-    update_mps_positions()
+    update_parliament_positions()
 
 
 def main():

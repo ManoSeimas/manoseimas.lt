@@ -228,54 +228,39 @@ def calculate_solution_parliament_avg_position(solution_id):
     return (sum, avg)
 
 
-def calculate_mps_positions(solution_id):
-    """Returns dict with position of each MP for this solution.
-
-    Positions are calculated from assigned votings for this solutions.
-
-    """
-    mps = {}
-    votings_weight = 0.0
+def calculate_parliament_positions(solution_id):
+    mps = defaultdict(lambda: Counter())
+    voting_weights_sum = 0
     # Loop for all votings
     for voting in query_solution_votings(solution_id):
         voting_weight = voting.solutions[solution_id]
-        votings_weight += abs(voting_weight)
+        voting_weights_sum += abs(voting_weight)
         # Loop for all vote values (aye, abstain, no)
-        for vote_value_name, votes in voting.votes.items():   # misses 'no-vote' option?
+        for vote_value_name, votes in voting.votes.items():
             vote_value = voting.get_vote_value(vote_value_name)
             # Loop for each MP vote
             for mp_id, fraction_id in votes:
-                if mp_id not in mps:
-                    mps[mp_id] = {
-                        'weighted_votes': 0.0,
-                        'weight_sum': 0.0,
-                    }
-                mps[mp_id]['weighted_votes'] += vote_value * voting_weight
-                mps[mp_id]['weight_sum'] += abs(voting_weight)
-                mps[mp_id]['fraction'] = fraction_id
+                mp = mps[(mp_id, fraction_id)]
+                mp['weighted_votes'] += vote_value * voting_weight
+                mp['weights'] += abs(voting_weight)
 
-    fractions = {}
+    fractions = defaultdict(lambda: Counter())
     # Fraction position is calculated as an average of mp positions weighted by
     # their participation, which is the weighted ratio of votings that they
     # have participated in.
-    for mp_id, mp in mps.items():
-        mp['position'] = mp['weighted_votes'] / mp['weight_sum']
-        mp['participation'] = mp['weight_sum'] / votings_weight
+    for (mp_id, fraction_id), mp in mps.items():
+        mp['position'] = mp['weighted_votes'] / float(mp['weights'])
+        mp['participation'] = mp['weights'] / float(voting_weights_sum)
 
-        fraction_id = mp['fraction']
         # Some old fractions may not be imported, so we need to check
         # if fraction id is not null.
         #
-        # To fix this, some smart importer should be written, that
-        # imports all fractions, even old ones, that no longer exists.
+        # To fix this, the importer should be modified to import fractions
+        # which no longer exist.
         if fraction_id:
-            if fraction_id not in fractions:
-                fractions[fraction_id] = {
-                    'weighted_positions': 0.0,
-                    'participation_sum': 0.0,
-                }
-            fractions[fraction_id]['weighted_positions'] += mp['position'] * mp['participation']
-            fractions[fraction_id]['participation_sum'] += mp['participation']
+            fraction = fractions[fraction_id]
+            fraction['weighted_positions'] += mp['position'] * mp['participation']
+            fraction['participation_sum'] += mp['participation']
 
     for fraction_id, fraction in fractions.items():
         fraction['position'] = fraction['weighted_positions'] / fraction['participation_sum']
@@ -283,12 +268,11 @@ def calculate_mps_positions(solution_id):
         mp_count = len(list(query_group_membership(fraction_id)))
         fraction['participation'] = fraction['participation_sum'] / mp_count
 
-    return (fractions, mps)
+    return (fractions, {mp_id: mp for (mp_id, fraction_id), mp in mps.items()})
 
 
-def update_mps_positions(solution_id):
-    # Calculate MPs positions from votings assigned to this solution
-    fractions, mps = calculate_mps_positions(solution_id)
+def update_parliament_positions(solution_id):
+    fractions, mps = calculate_parliament_positions(solution_id)
 
     items = (
         (

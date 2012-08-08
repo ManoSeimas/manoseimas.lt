@@ -21,7 +21,7 @@ from django.core.management.base import BaseCommand
 
 from sboard.models import couch
 
-from manoseimas.compat.models import update_mps_positions
+from manoseimas.compat.models import update_parliament_positions
 
 
 class Command(BaseCommand):
@@ -30,4 +30,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         for node in couch.iterchunks('sboard/by_type', skey='Solution'):
             print('[ %s ]: %s' % (node.key, node.title))
-            update_mps_positions(node.key)
+            update_parliament_positions(node.key)

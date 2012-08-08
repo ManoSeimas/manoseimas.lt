@@ -52,7 +52,7 @@ from .models import fraction_compatibilities_by_sign
 from .models import fetch_positions
 from .models import query_positions
 from .models import query_solution_votings
-from .models import update_mps_positions
+from .models import update_parliament_positions
 from .models import calculate_solution_parliament_avg_position
 from .models import update_position
 
@@ -350,7 +350,7 @@ class SolutionVotingsView(ListView):
                 voting.solutions = solutions
                 voting.save()
 
-                update_mps_positions(self.node._id)
+                update_parliament_positions(self.node._id)
 
                 return redirect(self.node.permalink('balsavimai'))
         else:
@@ -382,7 +382,7 @@ class UnassignVotingView(ListView):
             if self.node._id in voting.solutions:
                 del voting.solutions[self.node._id]
                 voting.save()
-                update_mps_positions(self.node._id)
+                update_parliament_positions(self.node._id)
             return redirect(self.node.permalink('balsavimai'))
         else:
             raise Http404
