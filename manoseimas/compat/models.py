@@ -17,6 +17,8 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 from decimal import Decimal as dc
+from operator import attrgetter
+from collections import Counter
 
 from zope.interface import implements
 
@@ -144,17 +146,13 @@ class Compatibility(object):
 
 def compatibilities(positions, profile_type):
     profile_sums = {}
-    total_participation = 0
+    user_solutions = 0
     for solution_id, position in positions:
-        total_participation += 1
+        user_solutions += 1
         for pp in PersonPosition.objects.filter(node=solution_id, profile_type=profile_type):
             profile_id = pp.profile._id
-            ps = profile_sums.setdefault(profile_id, {
-                'profile': pp.profile,
-                'weighted_positions': 0,
-                'weights': 0,
-                'participation': 0,
-            })
+            ps = profile_sums.setdefault(profile_id, Counter())
+            ps['profile'] = pp.profile
             # Note: not exactly a weighted average, because the user's
             # positions can be negative, but the denominator is the sum of
             # their absolute values.
@@ -164,7 +162,7 @@ def compatibilities(positions, profile_type):
 
     for profile_id, sums in profile_sums.items():
         compatibility = dc(sums['weighted_positions']) / dc(sums['weights'])
-        precision = dc(sums['participation']) / dc(total_participation)
+        precision = dc(sums['participation']) / dc(user_solutions)
         yield Compatibility(
             profile=sums['profile'],
             profile_type=profile_type,
@@ -182,9 +180,8 @@ def compatibilities_by_sign(positions, profile_type, limit):
         else:
             against.append(compat)
 
-    by_compatibility = lambda c: c.compatibility
-    aye.sort(reverse=True, key=by_compatibility)
-    against.sort(key=by_compatibility)
+    aye.sort(reverse=True, key=attrgetter('compatibility'))
+    against.sort(key=attrgetter('compatibility'))
 
     return (aye, against)
 
