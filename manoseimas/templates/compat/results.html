@@ -21,8 +21,7 @@
         <td>
           {% if compatibility %}
           <a href="{% nodeurl compatibility.profile.ref %}">
-            <img src="{{ compatibility.profile.ref.avatar_url }}"
-                 class="avatar-thumbnail">
+            {% nodephoto compatibility.profile.ref %}
           </a>
           <p>
             <a href="{% nodeurl compatibility.profile.ref %}">

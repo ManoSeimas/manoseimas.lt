@@ -21,8 +21,7 @@
         <td>
           {% if position %}
           <a href="{% nodeurl position.profile.ref %}">
-            <img src="{{ position.profile.ref.avatar_url }}"
-                 class="avatar-thumbnail">
+            {% nodephoto position.profile.ref %}
           </a>
           <p>
             <a href="{% nodeurl position.profile.ref %}">

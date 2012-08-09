@@ -1,6 +1,7 @@
 {% extends "root.html" %}
 {% load i18n %}
 {% load compressed %}
+{% load sboard %}
 
 {% block all %}
 <!doctype html>
@@ -79,8 +80,7 @@
           </ul>
         </div>
         {% if request.user.is_authenticated %}
-        <img src="{{ request.user.get_profile.get_node.avatar_url_small }}"
-             class="avatar pull-right" />
+        {% nodephoto request.user.get_profile.get_node 'small' 'pull-right' %}
         {% endif %}
       </div>
     </div>

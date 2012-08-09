@@ -5,7 +5,7 @@
 {% load sboard %}
 
 {% block content %}
-<p><img src="{{ profile.avatar_url_big }}" class="avatar"></p>
+<p>{% nodephoto profile 'large' %}</p>
 <h1>{{ profile.title }}</h1>
 {% if profile.dob %}
 <p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>

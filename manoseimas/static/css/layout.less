@@ -90,7 +90,7 @@
     }
   }
 
-  .avatar {
+  .node-photo-small {
     padding-top: 4px;
   }
 }
@@ -189,16 +189,20 @@
         margin: 20px -20px -40px -20px;
       }
 
-      img.avatar {
-        width: 135px;
+      .node-photo {
         float: left;
-        margin: 0 12px 20px 0;
       }
 
-      img.avatar-thumbnail {
+      .node-photo-normal {
+        .node-photo;
         width: 40px;
-        float: left;
         margin-right: 8px;
+      }
+
+      .node-photo-large {
+        .node-photo;
+        width: 135px;
+        margin: 0 12px 20px 0;
       }
     }
   }
