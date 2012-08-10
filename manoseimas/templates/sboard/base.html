@@ -7,6 +7,10 @@
 
   {% if item.header %}
 
+  {% if not forloop.first %}
+</ul>
+<ul class="nav nav-list">
+  {% endif %}
   <li class="nav-header">{{ item.title }}</li>
 
   {% elif item.children %}
