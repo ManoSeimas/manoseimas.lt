@@ -80,7 +80,7 @@
           </ul>
         </div>
         {% if request.user.is_authenticated %}
-        {% nodephoto request.user.get_profile.get_node 'small' 'pull-right' %}
+        {% nodeimage request.user.get_profile.get_node 'small' 'pull-right' %}
         {% endif %}
       </div>
     </div>

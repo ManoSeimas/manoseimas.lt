@@ -5,7 +5,7 @@
 {% for mp in mps_aye %}
     <td style="width:50px; text-align:center;">
       <a href="{% nodeurl mp.profile.ref %}">
-        {% nodephoto mp.profile.ref %}
+        {% nodeimage mp.profile.ref %}
       </a>
       <p><strong>{{ mp.position_percent }}%</strong></p>
     </td>
@@ -17,7 +17,7 @@
     <td style="width:50px; text-align:center;">
       <p>
         <a href="{% nodeurl mp.profile.ref %}">
-          {% nodephoto mp.profile.ref %}
+          {% nodeimage mp.profile.ref %}
         </a>
       </p>
       <p><strong>{{ mp.position_percent }}%</strong></p>

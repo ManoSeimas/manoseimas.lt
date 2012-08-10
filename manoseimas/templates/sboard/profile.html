@@ -6,7 +6,7 @@
 
 {% block content %}
 <h1>{{ profile.title|default:profile.user.username }}</h1>
-<p>{% nodephoto profile 'large' %}</p>
+<p>{% nodeimage profile 'large' %}</p>
 {% if profile.dob %}
 <p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
 {% endif %}

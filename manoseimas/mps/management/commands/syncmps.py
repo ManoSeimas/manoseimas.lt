@@ -121,8 +121,8 @@ class SyncProcessor(object):
         return open(path, 'rb')
 
     def get_photo(self, profile, url):
-        if profile.photo:
-            node = profile.photo.ref
+        if profile.image:
+            node = profile.image.ref
         else:
             node = self.get_node(None, ImageNode)
         node.title = profile.title
@@ -157,7 +157,7 @@ class SyncProcessor(object):
         node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
-        node.photo = self.get_photo(node, doc['photo'])
+        node.image = self.get_photo(node, doc['photo'])
 
         node.save()
 
