@@ -135,7 +135,7 @@
 // ----------------------------
 
 #logo-bar-inner {
-  background: #F2F2F2 url(../img/header-gradient.png);
+  #gradient > .vertical(@white, #eee);
   border-bottom: 1px solid @wellBorder;
 
   #logo-bar {
@@ -155,7 +155,8 @@
 
   .search-query {
     .border-radius(@borderRadius);
-    .box-shadow(inset 1px 4px 14px -8px @gray);
+    .box-shadow(inset 1px 2px 7px #e0e0e0);
+    #gradient > .vertical(#fafafa, @white);
   }
 }
 
@@ -210,8 +211,7 @@
   .header-bar-mixin {
     border-top: 1px solid @wellBorder;
     border-bottom: 1px solid @wellBorder;
-    background-color: #f2f3f7;
-    background-image: url(../img/bar-header-gradient.png);
+    #gradient > .vertical(#F8FAFC, #F1F3F7);
     padding: 0;
     display: block;
     font-size: 16px;
