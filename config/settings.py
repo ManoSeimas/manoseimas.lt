@@ -113,6 +113,7 @@ PIPELINE_CSS = {
           'css/styles.less',
         ),
         'output_filename': 'css/styles.css',
+        'variant': 'datauri',
     },
 }
 
