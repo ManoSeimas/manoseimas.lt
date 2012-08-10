@@ -19,81 +19,83 @@
 
 {% block content %}
   {% for category in categories %}
-  <h1 class="header-bar" id="{{ category.slug }}">{{ category.title|upper }}</h1>
+  <div class="section">
+    <h1 id="{{ category.slug }}">{{ category.title|upper }}</h1>
 
-  {% if category.positions %}
-  <div class="test-questions">
-    {% for q, position in category.positions %}
-    <div id="{{ q.key }}" class="accordion-group test-question">
-      <h2 class="inline-header"><a href="{{ q.permalink }}">{{ q.title }}</a></h2>
-      <div id="{{ q.key }}-summary">
-        <p>{{ q.summary }}</p>
-      </div>
-      <div id="{{ q.key }}-result"></div>
-      <div class="btn-toolbar answers">
-        <div class="btn-group position-buttons" data-toggle="buttons-radio">
-          {% for value, label in buttons %}
-          <button class="btn btn-primary{% if value == position %} active{% endif %}"
-                  data-value="{{ value }}">
-            {{ label|upper }}
-          </button>
-          {% endfor %}
+    {% if category.positions %}
+    <div class="test-questions">
+      {% for q, position in category.positions %}
+      <div id="{{ q.key }}" class="accordion-group test-question">
+        <h2 class="inline-header"><a href="{{ q.permalink }}">{{ q.title }}</a></h2>
+        <div id="{{ q.key }}-summary">
+          <p>{{ q.summary }}</p>
         </div>
-        <div class="btn-group">
-          <a href="#{{ q.key }}-details"
-             data-toggle="collapse" data-parent="#test-questions"
-             class="btn">
-            ARGUMENTAI <span class="caret"></span></a>
-        </div>
-      </div>
-      <div id="{{ q.key }}-details"class="collapse solution-details">
-        <table class="solution-issues">
-          <tbody>
-            <tr class="solution-issue-title">
-              <td>
-                <div class="item-content">
-                  <h2 class="solves">{% trans "UŽ" %}</h2>
-                </div>
-              </td>
-              <td>
-                <div class="item-content">
-                  <h2 class="raises">{% trans "PRIEŠ" %}</h2>
-                </div>
-              </td>
-            </tr>
-            {% for issue in q.issues %}
-            <tr>
-              {% for solissue in issue %}
-              <td>
-                {% if solissue %}
-                <div class="item-box">{{ solissue.likes }}</div>
-                <div class="item-content">
-                  <h2><a href="{{ solissue.permalink }}">{{ solissue.issue.ref.title }}</a></h2>
-                  <p>{{ solissue.summary }}</p>
-                </div>
-                {% endif %}
-              </td>
-              {% endfor %}
-            </tr>
-            {% empty %}
-            <tr><td class="empty" colspan="2"><p>Nėra argumentų</p></td></tr>
+        <div id="{{ q.key }}-result"></div>
+        <div class="btn-toolbar answers">
+          <div class="btn-group position-buttons" data-toggle="buttons-radio">
+            {% for value, label in buttons %}
+            <button class="btn btn-primary{% if value == position %} active{% endif %}"
+                    data-value="{{ value }}">
+              {{ label|upper }}
+            </button>
             {% endfor %}
-          </tbody>
-        </table>
+          </div>
+          <div class="btn-group">
+            <a href="#{{ q.key }}-details"
+               data-toggle="collapse" data-parent="#test-questions"
+               class="btn">
+              ARGUMENTAI <span class="caret"></span></a>
+          </div>
+        </div>
+        <div id="{{ q.key }}-details"class="collapse solution-details">
+          <table class="solution-issues">
+            <tbody>
+              <tr class="solution-issue-title">
+                <td>
+                  <div class="item-content">
+                    <h2 class="solves">{% trans "UŽ" %}</h2>
+                  </div>
+                </td>
+                <td>
+                  <div class="item-content">
+                    <h2 class="raises">{% trans "PRIEŠ" %}</h2>
+                  </div>
+                </td>
+              </tr>
+              {% for issue in q.issues %}
+              <tr>
+                {% for solissue in issue %}
+                <td>
+                  {% if solissue %}
+                  <div class="item-box">{{ solissue.likes }}</div>
+                  <div class="item-content">
+                    <h2><a href="{{ solissue.permalink }}">{{ solissue.issue.ref.title }}</a></h2>
+                    <p>{{ solissue.summary }}</p>
+                  </div>
+                  {% endif %}
+                </td>
+                {% endfor %}
+              </tr>
+              {% empty %}
+              <tr><td class="empty" colspan="2"><p>Nėra argumentų</p></td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
 
 
+        </div>
       </div>
+
+      {% if not forloop.last %}
+      <hr>
+      {% endif %}
+      {% endfor %}
     </div>
 
-    {% if not forloop.last %}
-    <hr>
+    {% else %}
+    <p>{% trans "Šiai kategorijai nepriskirtas nei vienas sprendimas." %}</p>
     {% endif %}
-    {% endfor %}
   </div>
-
-  {% else %}
-  <p>{% trans "Šiai kategorijai nepriskirtas nei vienas sprendimas." %}</p>
-  {% endif %}
   {% endfor %}
 
   <div class="bar" style="margin-bottom: -21px">
@@ -126,6 +128,9 @@ $(function() {
         submitPosition(node, position);
     });
 });
+
+window.onscroll = throttle(200, chooseMenuAnchor);
+window.onload = chooseMenuAnchor;
 
 </script>
 {% endblock %}

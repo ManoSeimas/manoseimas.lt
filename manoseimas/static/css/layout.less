@@ -276,23 +276,15 @@
     }
   }
 
-  .header-bar {
+  .content-inner > h1:first-child, .section:first-child h1:first-child {
     .header-bar-mixin;
-    margin: 10px -20px 20px -20px;
-
-    &:first-child {
-      margin-top: -20px;
-      border-top: none;
-    }
-  }
-
-  h1:first-child {
-    .header-bar;
+    margin: -20px -20px 20px -20px;
+    border-top: none;
   }
 
   .section h1:first-child {
-    margin-top: 20px;
-    border-top: 1px solid @wellBorder;
+    .header-bar-mixin;
+    margin: 20px -20px 20px -20px;
   }
 
   .bar {
