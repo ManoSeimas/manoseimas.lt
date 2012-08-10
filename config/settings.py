@@ -137,7 +137,7 @@ PIPELINE_JS = {
             'js/flot/jquery.flot.js',
             'js/flot/jquery.flot.pie.js',
             'js/csrf.js',
-            'js/scripts.js',
+            'js/manoSeimas.js',
         ),
         'output_filename': 'js/scripts.min.js',
     },
