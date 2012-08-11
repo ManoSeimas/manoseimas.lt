@@ -18,13 +18,19 @@
 
 from zope.component import adapts
 from zope.component import provideAdapter
+
+from sboard.nodes import UpdateView
 from sboard.profiles.nodes import ProfileView
 from sboard.profiles.nodes import GroupView
+
 from django.utils.translation import ugettext as _
+
 from manoseimas.compat.models import PersonPosition
 
 from .interfaces import IMPProfile
 from .interfaces import IFraction
+
+from .forms import FractionForm
 
 
 def search_lrs_url(query):
@@ -76,3 +82,11 @@ class FractionView(GroupView):
         return super(FractionView, self).render(**context)
 
 provideAdapter(FractionView)
+
+
+class FractionUpdateView(UpdateView):
+    adapts(IFraction)
+
+    form = FractionForm
+
+provideAdapter(FractionUpdateView, name='update')

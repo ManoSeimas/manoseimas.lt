@@ -429,3 +429,5 @@ SBOARD_SEARCH_HANDLERS = (
 RESTRUCTUREDTEXT_FILTER_SETTINGS = {
     'footnote_references': 'superscript',
 }
+
+THUMBNAIL_QUALITY = 100
