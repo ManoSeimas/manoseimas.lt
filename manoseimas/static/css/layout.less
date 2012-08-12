@@ -313,6 +313,34 @@
       background: transparent;
     }
   }
+
+  @positive-color: #1B9E34;
+  @negative-color: #CC0000;
+
+  .colored-table-header(@color) {
+    color: @color;
+    border-bottom: solid 1px @color;
+    text-align: center;
+    font-weight: 500;
+    font-size: @baseFontSize + 4px;
+    padding: 4px;
+    h2 { color: @color }
+  }
+
+  .positive-header { .colored-table-header(@positive-color); }
+  .negative-header { .colored-table-header(@negative-color); }
+
+  .positive-percent {
+    font-weight: 700;
+    font-size: @baseFontSize + 4px;
+    color: @positive-color;
+  }
+
+  .negative-percent {
+    font-weight: 700;
+    font-size: @baseFontSize + 4px;
+    color: @negative-color;
+  }
 }
 
 .manoseimas-breadcrumb {
@@ -546,13 +574,5 @@ hr {
   }
   .arguments-header {
     text-align:center;
-  }
-  .solution-issue-title {
-    h2 {
-      line-height: 28px;
-      text-align: center;
-      &.solves { color: #1B9E34; }
-      &.raises { color: #CC0000; }
-    }
   }
 }

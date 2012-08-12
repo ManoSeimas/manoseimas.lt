@@ -126,6 +126,13 @@ class PersonPosition(models.Model):
             return _(u'Stipriai už')
 
 
+# Results with lower precision get hidden.
+PRECISION_SHOW_TRESHOLD = 0.1
+
+# Results with lower precision get grayed out.
+PRECISION_PRECISE_TRESHOLD = 0.5
+
+
 class Compatibility(object):
     """Represents compatibility between the user and an MP or fraction.
 
@@ -143,6 +150,21 @@ class Compatibility(object):
 
     def precision_percent(self):
         return int(self.precision * 100)
+
+    def precise(self):
+        return self.precision > PRECISION_PRECISE_TRESHOLD
+
+    def positive(self):
+        return self.compatibility >= 0
+
+    def __key__(self):
+        # Positive results are sorted descending, so we need select which side
+        # to put imprecise results appropriately.
+        if self.positive():
+            precision_key = self.precise()
+        else:
+            precision_key = not self.precise()
+        return (precision_key, self.compatibility)
 
 
 def compatibilities(positions, profile_type):
@@ -163,14 +185,15 @@ def compatibilities(positions, profile_type):
             ps['participation'] += float(pp.participation)
 
     for profile_id, sums in profile_sums.items():
-        compatibility = sums['weighted_positions'] / sums['weights']
         precision = sums['participation'] / user_solutions
-        yield Compatibility(
-            profile=sums['profile'],
-            profile_type=profile_type,
-            compatibility=compatibility,
-            precision=precision,
-        )
+        if precision > PRECISION_SHOW_TRESHOLD:
+            compatibility = sums['weighted_positions'] / sums['weights']
+            yield Compatibility(
+                profile=sums['profile'],
+                profile_type=profile_type,
+                compatibility=compatibility,
+                precision=precision,
+            )
 
 
 def compatibilities_by_sign(positions, profile_type, limit):
@@ -182,8 +205,8 @@ def compatibilities_by_sign(positions, profile_type, limit):
         else:
             against.append(compat)
 
-    aye.sort(reverse=True, key=attrgetter('compatibility'))
-    against.sort(key=attrgetter('compatibility'))
+    aye.sort(reverse=True, key=Compatibility.__key__)
+    against.sort(key=Compatibility.__key__)
 
     return (aye, against)
 

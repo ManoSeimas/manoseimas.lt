@@ -9,11 +9,11 @@
 
   <h2>{{ group.title }}</h2>
 
-  <table style="width:100%;">
+  <table style="width:100%;" class="solution-issues">
     <tbody>
       <tr>
-        <th style="width: 50%">{% trans "Labiausiai sutampa" %}</th>
-        <th>{% trans "Labiausiai nesutampa" %}</th>
+        <th class="positive-header" style="width: 50%">{% trans "ATITINKA JŪSŲ POZICIJĄ" %}</th>
+        <th class="negative-header">{% trans "NEATITINKA JŪSŲ POZICIJOS" %}</th>
       </tr>
       {% for compatibility_pair in group.compatibilities %}
       <tr>
@@ -23,12 +23,15 @@
           <a href="{% nodeurl compatibility.profile.ref %}">
             {% nodeimage compatibility.profile.ref %}
           </a>
+          <p title="Tikslumas: {{ compatibility.precision_percent }}%" class="{% if compatibility.positive %}positive{% else %}negative{% endif %}-percent">{{ compatibility.compatibility_percent }}%</p>
+          {% if not compatibility.precise %}
+          [?]
+          {% endif %}
           <p>
             <a href="{% nodeurl compatibility.profile.ref %}">
               {{ compatibility.profile.ref.title }}
             </a>
           </p>
-          <p title="Tikslumas: {{ compatibility.precision_percent }}%"><strong>{{ compatibility.compatibility_percent }}%</strong></p>
           {% endif %}
         </td>
         {% endfor %}
