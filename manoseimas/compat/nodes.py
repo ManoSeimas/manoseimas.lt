@@ -254,6 +254,7 @@ class SolutionCompatPreviewView(AjaxView):
     def render(self, **overrides):
         solution_id = self.node._id
         aye, against = fraction_compatibilities_by_sign([(solution_id, self.position)], precise=True)
+        against.reverse()
         return render(self.request, 'compat/compat_preview.html', {
             'aye': aye[:3],
             'against': against[:3],
