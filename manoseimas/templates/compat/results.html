@@ -23,7 +23,7 @@
           {% for compatibility_pair in group.compatibilities %}
           <tr>
             {% for compatibility in compatibility_pair %}
-            <td {% if not compatibility.precise %}class="inaccurate"{% endif %}>
+            <td {% if not compatibility.precise %}class="imprecise"{% endif %}>
               {% if compatibility %}
               <a href="{% nodeurl compatibility.profile.ref %}">
                 {% nodeimage compatibility.profile.ref 80 %}

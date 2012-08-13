@@ -16,8 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import itertools
 from decimal import Decimal as dc
-from operator import attrgetter
 from collections import Counter
 from collections import defaultdict
 
@@ -73,23 +73,41 @@ PROFILE_TYPES = (
 )
 
 
+PARTICIPATION_SHOW_TRESHOLD = 0.1
+PARTICIPATION_ACTIVE_TRESHOLD = 0.5
+
+
 class PersonPositionManager(models.Manager):
+    show_q = models.Q(participation__gte=PARTICIPATION_SHOW_TRESHOLD)
+    active_q = models.Q(participation__gte=PARTICIPATION_ACTIVE_TRESHOLD)
+
     def mps(self, solution_id):
-        return self.filter(node=solution_id, profile_type=MP_PROFILE)
+        return self.filter(node=solution_id, profile_type=MP_PROFILE).filter(PersonPositionManager.show_q)
 
     def mp_pairs(self, solution_id, limit=200):
         mps = self.mps(solution_id)
-        aye = mps.filter(position__gt=0).order_by('-position')
-        against = mps.filter(position__lte=0).order_by('position')
-        return (aye[:limit], against[:limit])
+
+        aye = mps.filter(position__gt=0)
+        aye_active = aye.filter(PersonPositionManager.active_q).order_by('-position')[:limit]
+        aye_inactive = aye.filter(~PersonPositionManager.active_q).order_by('-participation')[:limit]
+        aye_sorted = itertools.chain(aye_active, aye_inactive)
+
+        against = mps.filter(position__lte=0)
+        against_active = against.filter(PersonPositionManager.active_q).order_by('position')[:limit]
+        against_inactive = against.filter(~PersonPositionManager.active_q).order_by('-participation')[:limit]
+        against_sorted = itertools.chain(against_active, against_inactive)
+
+        return (aye_sorted, against_sorted)
 
     def fractions(self, solution_id):
-        return self.filter(node=solution_id, profile_type=FRACTION_PROFILE)
+        return self.filter(node=solution_id, profile_type=FRACTION_PROFILE).filter(PersonPositionManager.show_q)
 
     def fraction_pairs(self, solution_id, limit=200):
         fractions = self.fractions(solution_id)
-        aye = fractions.filter(position__gt=0).order_by('-position')
-        against = fractions.filter(position__lte=0).order_by('position')
+        aye = list(fractions.filter(position__gt=0).order_by('-position'))
+        aye.sort(reverse=True, key=PersonPosition.__key__)
+        against = list(fractions.filter(position__lte=0).order_by('position'))
+        against.sort(reverse=True, key=PersonPosition.__key__)
         return (aye[:limit], against[:limit])
 
 
@@ -124,6 +142,20 @@ class PersonPosition(models.Model):
             return _(u'Už')
         else:
             return _(u'Stipriai už')
+
+    def active(self):
+        return self.participation >= PARTICIPATION_ACTIVE_TRESHOLD
+
+    def positive(self):
+        return self.position >= 0
+
+    def __key__(self):
+        if self.active():
+            second_key = 0
+        else:
+            second_key = self.participation
+
+        return (self.active(), second_key, abs(self.position))
 
 
 # Results with lower precision get hidden.
@@ -160,11 +192,11 @@ class Compatibility(object):
     def __key__(self):
         # Sort imprecise results by precision instead of compatibility.
         if self.precise():
-            second_key = abs(self.compatibility)
+            second_key = 0
         else:
             second_key = self.precision
 
-        return (self.precise(), second_key)
+        return (self.precise(), second_key, abs(self.compatibility))
 
 
 def compatibilities(positions, profile_type):
@@ -196,7 +228,7 @@ def compatibilities(positions, profile_type):
             )
 
 
-def compatibilities_by_sign(positions, profile_type, limit):
+def compatibilities_by_sign(positions, profile_type):
     aye, against = [], []
 
     for compat in compatibilities(positions, profile_type):
@@ -211,12 +243,12 @@ def compatibilities_by_sign(positions, profile_type, limit):
     return (aye, against)
 
 
-def mp_compatibilities_by_sign(positions, limit=200):
-    return compatibilities_by_sign(positions, MP_PROFILE, limit)
+def mp_compatibilities_by_sign(positions):
+    return compatibilities_by_sign(positions, MP_PROFILE)
 
 
-def fraction_compatibilities_by_sign(positions, limit=200):
-    return compatibilities_by_sign(positions, FRACTION_PROFILE, limit)
+def fraction_compatibilities_by_sign(positions):
+    return compatibilities_by_sign(positions, FRACTION_PROFILE)
 
 
 def query_solution_votings(solution_id):

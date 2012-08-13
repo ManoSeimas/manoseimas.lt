@@ -5,38 +5,51 @@
 {% block node_body %}
   {{ block.super }}
 
-  {% for pgroup in pgroups %}
+  <ul class="nav nav-tabs" id="result-tabs">
+    {% for group in groups %}
+    <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ group.slug }}" data-toggle="tab">{{ group.title }}</a></li>
+    {% endfor %}
+  </ul>
 
-  <h2>{{ pgroup.title }}</h2>
-
-  <table style="width:100%;">
-    <tbody>
-      <tr>
-        <th style="width: 50%">{% trans "Palaiko" %}</th>
-        <th>{% trans "Nepalaiko" %}</th>
-      </tr>
-      {% for position_pair in pgroup.positions %}
-      <tr>
-        {% for position in position_pair %}
-        <td>
-          {% if position %}
-          <a href="{% nodeurl position.profile.ref %}">
-            {% nodeimage position.profile.ref %}
-          </a>
-          <p>
-            <a href="{% nodeurl position.profile.ref %}">
-              {{ position.profile.ref.title }}
-            </a>
-          </p>
-          <p title="Dalyvavimas: {{ position.participation_percent }}%"><strong>{{ position.position_percent }}%</strong></p>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    <tbody>
-  </table>
-
-  {% endfor %}
-
+  <div class="tab-content">
+    {% for group in groups %}
+    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ group.slug }}">
+      <table class="positive-negative">
+        <tbody>
+          <tr>
+            <td class="positive-header" style="width: 50%">{% trans "PALAIKO" %}</th>
+            <td class="negative-header">{% trans "NEPALAIKO" %}</th>
+          </tr>
+          {% for position_pair in group.positions %}
+          <tr>
+            {% for position in position_pair %}
+            <td {% if not position.active %}class="inactive"{% endif %}>
+              {% if position %}
+              <a href="{% nodeurl position.profile.ref %}">
+                {% nodeimage position.profile.ref 80 %}
+              </a>
+              <div class="description">
+                <p>
+                  <span title="Dalyvavimas: {{ position.participation_percent }}%" class="{% if position.positive %}positive{% else %}negative{% endif %}-percent">{{ position.position_percent }}%</span>
+                  {% if not position.active %}
+                  [?]
+                  {% endif %}
+                </p>
+                <p>
+                  <a href="{% nodeurl position.profile.ref %}">
+                    {{ position.profile.ref.title }}
+                  </a>
+                </p>
+                <p class="sub-title">{{ position.profile.ref.fraction_abbreviation|default:'' }}</p>
+              </div>
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        <tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
 {% endblock %}

@@ -307,15 +307,17 @@ class MPsPositionView(DetailsView):
         fractions = PersonPosition.objects.fraction_pairs(solution_id)
         mps = PersonPosition.objects.mp_pairs(solution_id)
         context = {
-            'pgroups': (
-                dict(
-                    title=_('Frakcijos'),
-                    positions=itertools.izip_longest(*fractions),
-                ),
-                dict(
-                    title=_('Seimo nariai'),
-                    positions=itertools.izip_longest(*mps),
-                )
+            'groups': (
+                {
+                    'title': _('Frakcijos'),
+                    'slug': 'frakcijos',
+                    'positions': itertools.izip_longest(*fractions),
+                },
+                {
+                    'title': _('Seimo nariai'),
+                    'slug': 'seimo-nariai',
+                    'positions': itertools.izip_longest(*mps),
+                },
             ),
         }
         context.update(overrides)
