@@ -16,14 +16,10 @@
     <tbody>
       <tr>
         <td class="positive-header">
-          <div class="item-content">
-            <h2>{% trans "Sprendžiantys problemą" %}</h2>
-          </div>
+          <h2>{% trans "Sprendžiantys problemą" %}</h2>
         </td>
         <td class="negative-header">
-          <div class="item-content">
-            <h2>{% trans "Sukeliantys problemą" %}</h2>
-          </div>
+          <h2>{% trans "Sukeliantys problemą" %}</h2>
         </td>
       </tr>
       {% for issue in solutions %}
@@ -31,11 +27,8 @@
         {% for solissue in issue %}
         <td>
           {% if solissue %}
-          <div class="item-box">{{ solissue.likes }}</div>
-          <div class="item-content">
-            <h2><a href="{{ solissue.solution.ref.permalink }}">{{ solissue.solution.ref.title }}</a></h2>
-            <p>{{ solissue.summary }}</p>
-          </div>
+          <h2><a href="{{ solissue.solution.ref.permalink }}">{{ solissue.solution.ref.title }}</a></h2>
+          <p>{{ solissue.summary }}</p>
           {% endif %}
         </td>
         {% endfor %}

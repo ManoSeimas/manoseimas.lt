@@ -52,14 +52,10 @@
             <tbody>
               <tr>
                 <td class="positive-header">
-                  <div class="item-content">
-                    <h2>{% trans "UŽ" %}</h2>
-                  </div>
+                  <h2>{% trans "UŽ" %}</h2>
                 </td>
                 <td class="negative-header">
-                  <div class="item-content">
-                    <h2>{% trans "PRIEŠ" %}</h2>
-                  </div>
+                  <h2>{% trans "PRIEŠ" %}</h2>
                 </td>
               </tr>
               {% for aye_against in q.short_arguments %}
@@ -67,11 +63,8 @@
                 {% for argument in aye_against %}
                 <td>
                   {% if argument %}
-                  <div class="item-box">{{ argument.likes }}</div>
-                  <div class="item-content">
-                    <h2><a href="{{ argument.permalink }}">{{ argument.issue.ref.title }}</a></h2>
-                    <p>{{ argument.summary }}</p>
-                  </div>
+                  <h2><a href="{{ argument.permalink }}">{{ argument.issue.ref.title }}</a></h2>
+                  <p>{{ argument.summary }}</p>
                   {% endif %}
                 </td>
                 {% endfor %}
