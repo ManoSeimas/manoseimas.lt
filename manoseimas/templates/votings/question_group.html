@@ -132,8 +132,8 @@ $(function() {
     });
 });
 
-window.onscroll = manoSeimas.throttle(200, manoSeimas.chooseMenuAnchor);
-window.onload = manoSeimas.chooseMenuAnchor;
+$(window).scroll(manoSeimas.throttle(200, manoSeimas.chooseMenuAnchor));
+$(manoSeimas.chooseMenuAnchor);
 
 </script>
 {% endblock %}

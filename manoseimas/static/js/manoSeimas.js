@@ -19,7 +19,7 @@
   }
 
   function chooseMenuAnchor() {
-    var viewportHeight = $(window).height();
+    var viewportHeight = Math.min($(window).height(), 600);
     var viewportCenter = $(window).scrollTop() + viewportHeight / 2;
 
     function centerDistance(elem) {
