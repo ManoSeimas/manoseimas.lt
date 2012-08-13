@@ -35,6 +35,8 @@ from sboard.models import couch
 from sboard.models import parse_node_slug
 from sboard.profiles.models import query_group_membership
 
+from manoseimas.solutions.models import query_solution_votings
+
 from .interfaces import ICompat
 
 
@@ -264,26 +266,6 @@ def mp_compatibilities_by_sign(positions, precise=False):
 
 def fraction_compatibilities_by_sign(positions, precise=False):
     return compatibilities_by_sign(positions, FRACTION_PROFILE, precise)
-
-
-def query_solution_votings(solution_id):
-    for node in couch.view('solutions/votings', key=solution_id):
-        node.weight = node.solutions[solution_id]   # how the voting influences solution
-        node.weight_plus_if_needed = "+" if node.weight > 0 else ""
-
-        # was voting "accepted" - ar istatymas buvo priimtas?
-        # TODO: https://bitbucket.org/manoseimas/manoseimas/issue/88/i-lrs-svetain-s-nusiurbti-info-ar
-
-        # calculate general parliament position as one number
-
-        node.avg_parl_position_normalized = sum([
-            node.vote_aye * node.get_vote_value('aye'),
-            node.vote_no * node.get_vote_value('no'),
-            node.vote_abstain * node.get_vote_value('abstain'),
-            node.did_not_vote() * node.get_vote_value('no-vote'),
-        ]) / dc(node.registered_for_voting) / dc(2)  # normalize (divide by max amplitude -- 2)
-        node.weighted_avg_parl_position = node.weight * node.avg_parl_position_normalized
-        yield node
 
 
 def calculate_solution_parliament_avg_position(solution_id):

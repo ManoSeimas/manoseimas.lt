@@ -25,13 +25,10 @@ from zope.component import provideAdapter
 from django.http import Http404
 from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
-from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.ajax import AjaxView
-from sboard.models import get_node_by_slug
-from sboard.models import prefetch_nodes
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 from sboard.nodes import NodeView
@@ -39,21 +36,15 @@ from sboard.nodes import UpdateView
 from sboard.nodes import clone_view
 
 from manoseimas.solutions.interfaces import ISolution
-from manoseimas.solutions.nodes import solution_nav
 
 from .forms import AssignSolutionsForm
-from .forms import AssignVotingForm
 from .forms import CompatNodeForm
 from .forms import UserPositionForm
 from .interfaces import ICompat
-from .models import PersonPosition
 from .models import mp_compatibilities_by_sign
 from .models import fraction_compatibilities_by_sign
 from .models import fetch_positions
 from .models import query_positions
-from .models import query_solution_votings
-from .models import update_parliament_positions
-from .models import calculate_solution_parliament_avg_position
 from .models import update_position
 
 
@@ -93,6 +84,14 @@ def solution_compat_nav(request, node, nav, active=tuple()):
     return nav
 
 
+TEST_BUTTONS = (
+    (2, _(u'Tikrai už')),
+    (1, _(u'Už')),
+    (-1, _(u'Prieš')),
+    (-2, _(u'Tikrai prieš')),
+)
+
+
 class SolutionCompatView(NodeView):
     adapts(ICompat)
 
@@ -120,12 +119,7 @@ class SolutionCompatView(NodeView):
             'title': self.node.title,
             'view': self,
             'node': self.node,
-            'buttons': (
-                (2, _(u'Tikrai už')),
-                (1, _(u'Už')),
-                (-1, _(u'Prieš')),
-                (-2, _(u'Tikrai prieš')),
-            ),
+            'buttons': TEST_BUTTONS,
             'categories': self.get_category_list(),
         }
         context.update(overrides)
@@ -197,6 +191,7 @@ def match_mps_with_user(results, mps, user_vote):
         # If solutions will be weighted then then multiply with issue weight
         results[name]['sum'] += user_vote * mp_solution_vote
 
+
 def sort_results(mps):
     return sorted(list([{
         'id': k,
@@ -252,6 +247,7 @@ class QuickResultsView(NodeView):
 
 provideAdapter(QuickResultsView, name='quick-results')
 
+
 class SolutionCompatPreviewView(AjaxView):
     adapts(ISolution)
 
@@ -292,105 +288,6 @@ class SolutionDetailsView(DetailsView):
     template = 'votings/solution.html'
 
 provideAdapter(SolutionDetailsView, name='compatibility')
-
-
-class MPsPositionView(DetailsView):
-    adapts(ISolution)
-    template = 'solutions/mps_position.html'
-
-    def nav(self, active=tuple()):
-        active = active or ('seimo-pozicija')
-        nav = super(MPsPositionView, self).nav(active)
-        return solution_nav(self.node, nav, active)
-
-    def render(self, **overrides):
-        solution_id = self.node._id
-        fractions = PersonPosition.objects.fraction_pairs(solution_id)
-        mps = PersonPosition.objects.mp_pairs(solution_id)
-        context = {
-            'groups': (
-                {
-                    'title': _('Frakcijos'),
-                    'slug': 'frakcijos',
-                    'positions': itertools.izip_longest(*fractions),
-                },
-                {
-                    'title': _('Seimo nariai'),
-                    'slug': 'seimo-nariai',
-                    'positions': itertools.izip_longest(*mps),
-                },
-            ),
-        }
-        context.update(overrides)
-        return super(MPsPositionView, self).render(**context)
-
-provideAdapter(MPsPositionView, name='seimo-pozicija')
-
-
-class SolutionVotingsView(ListView):
-    adapts(ISolution)
-    template = 'solutions/votings_list.html'
-
-    def nav(self, active=tuple()):
-        if not active:
-            active = ('balsavimai',)
-        nav = super(SolutionVotingsView, self).nav(active)
-        return solution_nav(self.node, nav, active)
-
-    def get_node_list(self):
-        return list(query_solution_votings(self.node._id))
-
-    def render(self, **overrides):
-        if self.request.method == 'POST':
-            form = AssignVotingForm(self.request.POST)
-            if form.is_valid():
-                voting = form.cleaned_data.get('voting')
-                solution = self.node
-                position = form.cleaned_data.get('position')
-                solutions = voting.solutions or {}
-                solutions[solution._id] = position
-
-                voting.solutions = solutions
-                voting.save()
-
-                update_parliament_positions(self.node._id)
-
-                return redirect(self.node.permalink('balsavimai'))
-        else:
-            form = AssignVotingForm()
-
-        parl_weighted_position, parl_normalized_position = calculate_solution_parliament_avg_position(self.node._id)
-        context = {
-            'form': form,
-            'parl_weighted_position': parl_weighted_position,
-            'parl_normalized_position': parl_normalized_position,
-        }
-        context.update(overrides)
-        return super(SolutionVotingsView, self).render(**context)
-
-provideAdapter(SolutionVotingsView, name="balsavimai")
-
-
-class UnassignVotingView(ListView):
-    adapts(ISolution, unicode)
-    template = 'solutions/votings_list.html'
-
-    def __init__(self, node, voting_id):
-        self.voting_id = voting_id
-        super(UnassignVotingView, self).__init__(node)
-
-    def render(self, **overrides):
-        voting = get_node_by_slug(self.voting_id)
-        if voting:
-            if self.node._id in voting.solutions:
-                del voting.solutions[self.node._id]
-                voting.save()
-                update_parliament_positions(self.node._id)
-            return redirect(self.node.permalink('balsavimai'))
-        else:
-            raise Http404
-
-provideAdapter(UnassignVotingView, name="delete")
 
 
 class CompatResultsView(DetailsView):

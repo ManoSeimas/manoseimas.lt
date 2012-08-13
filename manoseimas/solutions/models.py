@@ -17,6 +17,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import itertools
+from decimal import Decimal as dc
 
 from zope.interface import implements
 
@@ -34,6 +35,7 @@ from .interfaces import ICounterArgument
 
 
 SHORT_ARGUMENT_COUNT = 3
+
 
 class Solution(Node):
     implements(ISolution)
@@ -146,3 +148,23 @@ def query_issue_solves(issue_id):
 
 def query_issue_raises(issue_id):
     return query_issue_solutions(issue_id, solves=False)
+
+
+def query_solution_votings(solution_id):
+    for node in couch.view('solutions/votings', key=solution_id):
+        node.weight = node.solutions[solution_id]   # how the voting influences solution
+        node.weight_plus_if_needed = "+" if node.weight > 0 else ""
+
+        # was voting "accepted" - ar istatymas buvo priimtas?
+        # TODO: https://bitbucket.org/manoseimas/manoseimas/issue/88/i-lrs-svetain-s-nusiurbti-info-ar
+
+        # calculate general parliament position as one number
+
+        node.avg_parl_position_normalized = sum([
+            node.vote_aye * node.get_vote_value('aye'),
+            node.vote_no * node.get_vote_value('no'),
+            node.vote_abstain * node.get_vote_value('abstain'),
+            node.did_not_vote() * node.get_vote_value('no-vote'),
+        ]) / dc(node.registered_for_voting) / dc(2)  # normalize (divide by max amplitude -- 2)
+        node.weighted_avg_parl_position = node.weight * node.avg_parl_position_normalized
+        yield node
