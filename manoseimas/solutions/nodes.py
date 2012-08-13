@@ -93,7 +93,7 @@ class SolutionDetailsView(DetailsView):
 
     def render(self, **overrides):
         context = {
-            'issues': self.node.issues(),
+            'arguments': self.node.arguments(),
         }
         context.update(overrides)
         return super(SolutionDetailsView, self).render(**context)

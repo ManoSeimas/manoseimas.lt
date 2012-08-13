@@ -33,13 +33,21 @@ from .interfaces import ISolutionIssue
 from .interfaces import ICounterArgument
 
 
+SHORT_ARGUMENT_COUNT = 3
+
 class Solution(Node):
     implements(ISolution)
 
-    def issues(self):
+    def arguments(self):
         solves = query_solution_solves(self._id)
         raises = query_solution_raises(self._id)
         return itertools.izip_longest(solves, raises)
+
+    def short_arguments(self):
+        return list(self.arguments())[:SHORT_ARGUMENT_COUNT]
+
+    def more_arguments(self):
+        return len(list(self.arguments())) > SHORT_ARGUMENT_COUNT
 
 provideNode(Solution, "solution")
 

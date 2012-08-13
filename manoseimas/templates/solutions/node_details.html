@@ -5,7 +5,7 @@
 {% block node_body %}
   {{ block.super }}
 
-  <h2 class="arguments-header">{% trans "Argumentai" %}</h2>
+  <h2 id="argumentai">{% trans "Argumentai" %}</h2>
 
   <table class="positive-negative">
     <tbody>
@@ -21,20 +21,20 @@
           </div>
         </td>
       </tr>
-      {% for issue_pair in issues %}
+      {% for aye_against in arguments %}
       <tr>
-        {% for solissue in issue_pair %}
+        {% for argument in aye_against %}
         <td>
-          {% if solissue %}
-          <div class="item-box">{{ solissue.likes }}</div>
+          {% if argument %}
+          <div class="item-box">{{ argument.likes }}</div>
           <div class="item-content">
-            <h2><a href="{{ solissue.permalink }}">{{ solissue.issue.ref.title }}</a></h2>
-            <p>{{ solissue.summary }}</p>
+            <h2><a href="{{ argument.permalink }}">{{ argument.issue.ref.title }}</a></h2>
+            <p>{{ argument.summary }}</p>
           </div>
-          {% if solissue.counter_arguments %}
-          <button class="btn" data-toggle="collapse" data-target="#{{ solissue.slug }}">kontrargumentai</button>
-          <ul id="{{ solissue.slug }}" class="collapse">
-            {% for counter_argument in solissue.counter_arguments %}
+          {% if argument.counter_arguments %}
+          <button class="btn" data-toggle="collapse" data-target="#{{ argument.slug }}">kontrargumentai</button>
+          <ul id="{{ argument.slug }}" class="collapse">
+            {% for counter_argument in argument.counter_arguments %}
             <li>{{ counter_argument.summary }}</li>
             {% endfor %}
           </ul>
