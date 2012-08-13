@@ -38,6 +38,16 @@ class MPProfile(ProfileNode):
 
     _default_importance = 9
 
+    def fraction(self):
+        for group in self.groups():
+            if group.doc_type == 'Fraction':
+                return group
+
+    def fraction_abbreviation(self):
+        fraction = self.fraction()
+        if fraction:
+            return fraction.abbreviation
+
 provideNode(MPProfile, "mpprofile")
 
 
@@ -55,6 +65,9 @@ class Fraction(PoliticalGroup):
     abbreviation = schema.StringProperty()
 
     _default_importance = 6
+
+    def fraction_abbreviation(self):
+        return self.abbreviation
 
 provideNode(Fraction, "fraction")
 
