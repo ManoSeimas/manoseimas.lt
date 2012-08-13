@@ -3,24 +3,24 @@
 <table style="width:100%;">
   <tr>
     {% for fraction in aye %}
-    <td style="width:50px; text-align:center;">
-      <a href="{% nodeurl fraction.profile.ref %}">
-        {% nodeimage fraction.profile.ref 80 %}
+    <td style="width: 60px; padding: 0 20px; text-align:center;">
+      <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
+        {% nodeimage fraction.profile.ref 60 %}
       </a>
-      <p><span class="positive-percent">{{ fraction.compatibility_percent }}%</span></p>
+      <p style="padding-top: 4px; clear: both" class="positive-percent">{{ fraction.compatibility_percent }}%</p>
     </td>
     {% endfor %}
 
     <td></td>
 
     {% for fraction in against %}
-    <td style="width:50px; text-align:center;">
+    <td style="width: 60px; padding: 0 20px; text-align:center;">
       <p>
-        <a href="{% nodeurl fraction.profile.ref %}">
-          {% nodeimage fraction.profile.ref 80 %}
+        <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
+          {% nodeimage fraction.profile.ref 60 %}
         </a>
       </p>
-      <p><span class="negative-percent">{{ fraction.compatibility_percent }}%</span></p>
+      <p style="padding-top: 4px; clear: both" class="negative-percent">{{ fraction.compatibility_percent }}%</p>
     </td>
     {% endfor %}
   </tr>
