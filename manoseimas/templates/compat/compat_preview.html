@@ -2,25 +2,25 @@
 
 <table style="width:100%;">
   <tr>
-{% for mp in mps_aye %}
+    {% for fraction in aye %}
     <td style="width:50px; text-align:center;">
-      <a href="{% nodeurl mp.profile.ref %}">
-        {% nodeimage mp.profile.ref %}
+      <a href="{% nodeurl fraction.profile.ref %}">
+        {% nodeimage fraction.profile.ref 80 %}
       </a>
-      <p><strong>{{ mp.position_percent }}%</strong></p>
+      <p><span class="positive-percent">{{ fraction.compatibility_percent }}%</span></p>
     </td>
-{% endfor %}
+    {% endfor %}
 
     <td></td>
 
-    {% for mp in mps_against %}
+    {% for fraction in against %}
     <td style="width:50px; text-align:center;">
       <p>
-        <a href="{% nodeurl mp.profile.ref %}">
-          {% nodeimage mp.profile.ref %}
+        <a href="{% nodeurl fraction.profile.ref %}">
+          {% nodeimage fraction.profile.ref 80 %}
         </a>
       </p>
-      <p><strong>{{ mp.position_percent }}%</strong></p>
+      <p><span class="negative-percent">{{ fraction.compatibility_percent }}%</span></p>
     </td>
     {% endfor %}
   </tr>

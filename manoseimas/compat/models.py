@@ -104,11 +104,18 @@ class PersonPositionManager(models.Manager):
 
     def fraction_pairs(self, solution_id, limit=200):
         fractions = self.fractions(solution_id)
-        aye = list(fractions.filter(position__gt=0).order_by('-position'))
-        aye.sort(reverse=True, key=PersonPosition.__key__)
-        against = list(fractions.filter(position__lte=0).order_by('position'))
-        against.sort(reverse=True, key=PersonPosition.__key__)
-        return (aye[:limit], against[:limit])
+
+        aye = fractions.filter(position__gt=0)
+        aye_active = aye.filter(PersonPositionManager.active_q).order_by('-position')[:limit]
+        aye_inactive = aye.filter(~PersonPositionManager.active_q).order_by('-participation')[:limit]
+        aye_sorted = itertools.chain(aye_active, aye_inactive)
+
+        against = fractions.filter(position__lte=0)
+        against_active = against.filter(PersonPositionManager.active_q).order_by('position')[:limit]
+        against_inactive = against.filter(~PersonPositionManager.active_q).order_by('-participation')[:limit]
+        against_sorted = itertools.chain(against_active, against_inactive)
+
+        return (aye_sorted, against_sorted)
 
 
 class PersonPosition(models.Model):
@@ -228,14 +235,22 @@ def compatibilities(positions, profile_type):
             )
 
 
-def compatibilities_by_sign(positions, profile_type):
+def compatibilities_by_sign(positions, profile_type, precise=False):
     aye, against = [], []
 
+    if precise:
+        def precisep(c):
+            return c.precise()
+    else:
+        def precisep(c):
+            return True
+
     for compat in compatibilities(positions, profile_type):
-        if compat.compatibility > 0:
-            aye.append(compat)
-        else:
-            against.append(compat)
+        if precisep(compat):
+            if compat.compatibility > 0:
+                aye.append(compat)
+            else:
+                against.append(compat)
 
     aye.sort(reverse=True, key=Compatibility.__key__)
     against.sort(reverse=True, key=Compatibility.__key__)
@@ -243,12 +258,12 @@ def compatibilities_by_sign(positions, profile_type):
     return (aye, against)
 
 
-def mp_compatibilities_by_sign(positions):
-    return compatibilities_by_sign(positions, MP_PROFILE)
+def mp_compatibilities_by_sign(positions, precise=False):
+    return compatibilities_by_sign(positions, MP_PROFILE, precise)
 
 
-def fraction_compatibilities_by_sign(positions):
-    return compatibilities_by_sign(positions, FRACTION_PROFILE)
+def fraction_compatibilities_by_sign(positions, precise=False):
+    return compatibilities_by_sign(positions, FRACTION_PROFILE, precise)
 
 
 def query_solution_votings(solution_id):

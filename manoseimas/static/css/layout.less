@@ -312,6 +312,21 @@
     }
   }
 
+  @positive-color: #1B9E34;
+  @negative-color: #CC0000;
+
+  .positive-percent {
+    font-weight: 600;
+    font-size: @baseFontSize + 4px;
+    color: @positive-color;
+  }
+
+  .negative-percent {
+    font-weight: 600;
+    font-size: @baseFontSize + 4px;
+    color: @negative-color;
+  }
+
   table.positive-negative {
     width: 100%;
 
@@ -321,6 +336,11 @@
 
     .node-image {
       margin-right: 20px;
+    }
+
+    .positive-percent, .negative-percent {
+      font-weight: 700;
+      font-size: @baseFontSize - 2px;
     }
 
     td {
@@ -384,9 +404,6 @@
       }
     }
 
-    @positive-color: #1B9E34;
-    @negative-color: #CC0000;
-
     .colored-table-header(@color) {
       color: @color;
       border-bottom: solid 1px @color;
@@ -399,18 +416,6 @@
 
     .positive-header { .colored-table-header(@positive-color); }
     .negative-header { .colored-table-header(@negative-color); }
-
-    .positive-percent {
-      font-weight: 600;
-      font-size: @baseFontSize + 4px;
-      color: @positive-color;
-    }
-
-    .negative-percent {
-      font-weight: 600;
-      font-size: @baseFontSize + 4px;
-      color: @negative-color;
-    }
 
     .imprecise, .inactive {
       opacity: 0.5;

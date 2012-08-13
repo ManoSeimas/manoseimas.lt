@@ -252,16 +252,16 @@ class QuickResultsView(NodeView):
 
 provideAdapter(QuickResultsView, name='quick-results')
 
-
 class SolutionCompatPreviewView(AjaxView):
     adapts(ISolution)
 
     def render(self, **overrides):
         solution_id = self.node._id
-        aye, against = PersonPosition.objects.mp_pairs(solution_id, limit=3)
-        prefetch_nodes('profile', (aye, against))
-        context = dict(mps_aye=aye, mps_against=against)
-        return render(self.request, 'compat/compat_preview.html', context)
+        aye, against = fraction_compatibilities_by_sign([(solution_id, self.position)], precise=True)
+        return render(self.request, 'compat/compat_preview.html', {
+            'aye': aye[:3],
+            'against': against[:3],
+        })
 
 
 class UpdateUserPositionView(NodeView):
@@ -280,6 +280,7 @@ class UpdateUserPositionView(NodeView):
 
         update_position(self.request, solution._id, position)
         view = clone_view(SolutionCompatPreviewView, self, solution)
+        view.position = position
         return view.render()
 
 provideAdapter(UpdateUserPositionView, name='submit-position')
