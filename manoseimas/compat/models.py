@@ -158,13 +158,13 @@ class Compatibility(object):
         return self.compatibility >= 0
 
     def __key__(self):
-        # Positive results are sorted descending, so we need select which side
-        # to put imprecise results appropriately.
-        if self.positive():
-            precision_key = self.precise()
+        # Sort imprecise results by precision instead of compatibility.
+        if self.precise():
+            second_key = abs(self.compatibility)
         else:
-            precision_key = not self.precise()
-        return (precision_key, self.compatibility)
+            second_key = self.precision
+
+        return (self.precise(), second_key)
 
 
 def compatibilities(positions, profile_type):
@@ -206,7 +206,7 @@ def compatibilities_by_sign(positions, profile_type, limit):
             against.append(compat)
 
     aye.sort(reverse=True, key=Compatibility.__key__)
-    against.sort(key=Compatibility.__key__)
+    against.sort(reverse=True, key=Compatibility.__key__)
 
     return (aye, against)
 
