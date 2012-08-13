@@ -3,11 +3,22 @@
 {% load sboard %}
 
 {% block node_body %}
-  {{ block.super }}
+  <div class="solution-body">
+    {{ node.render_body }}
+  </div>
 
-  <h2 id="argumentai">{% trans "Argumentai" %}</h2>
+  <div class="btn-toolbar answers">
+    <div class="btn-group position-buttons" data-toggle="buttons-radio">
+      {% for value, label in buttons %}
+      <button class="btn btn-primary{% if value == position %} active{% endif %}"
+              data-value="{{ value }}">
+        {{ label|upper }}
+      </button>
+      {% endfor %}
+    </div>
+  </div>
 
-  <table class="positive-negative">
+  <table id="argumentai" class="positive-negative">
     <tbody>
       <tr>
         <td class="positive-header">
@@ -50,4 +61,18 @@
       </tr>
     </tbody>
   </table>
+{% endblock %}
+
+{% block inlinejs %}
+<script type="text/javascript">
+
+$(function() {
+  $(".position-buttons > button").click(function() {
+    var node = "{{ node.key }}";
+    var position = $(this).attr('data-value');
+    var url = "/testas/submit-position/";
+    manoSeimas.submitPosition(url, node, position);
+  });
+});
+</script>
 {% endblock %}

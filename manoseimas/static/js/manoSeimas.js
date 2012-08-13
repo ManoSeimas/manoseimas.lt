@@ -68,4 +68,16 @@
   }
 
   manoSeimas.throttle = throttle;
+
+
+  function submitPosition(url, node_id, position, callback) {
+    var postData = {
+      node: "+" + node_id,
+      position: position
+    };
+    $.post(url, postData, callback, 'html');
+  };
+
+  manoSeimas.submitPosition = submitPosition;
+
 })(window);

@@ -37,6 +37,7 @@ from sboard.utils import slugify
 from manoseimas.compat.models import PersonPosition
 from manoseimas.compat.models import update_parliament_positions
 from manoseimas.compat.models import calculate_solution_parliament_avg_position
+from manoseimas.compat.models import fetch_positions
 from manoseimas.compat.nodes import TEST_BUTTONS
 
 from .forms import AssignIssueForm
@@ -103,8 +104,11 @@ class SolutionDetailsView(DetailsView):
         return solution_nav(self.node, nav, active)
 
     def render(self, **overrides):
+        node, position = next(fetch_positions(self.request, [self.node]))
         context = {
             'arguments': self.node.arguments(),
+            'buttons': TEST_BUTTONS,
+            'position': position,
         }
         context.update(overrides)
         return super(SolutionDetailsView, self).render(**context)

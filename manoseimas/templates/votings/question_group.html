@@ -112,24 +112,16 @@
 
 {% block inlinejs %}
 <script type="text/javascript">
-function submitPosition(node_id, position) {
-    var url = "{% nodeurl node 'submit-position' %}";
-    var postData = {
-            node: "+" + node_id,
-            position: position
-        };
-    $.post(url, postData, function(result) {
-        $("#" + node_id + "-result").html(result);
-    }, 'html');
-};
-
 $(function() {
-    $(".position-buttons > button").click(function() {
-        var btn = $(this);
-        var node = btn.parentsUntil('.test-question').parent().attr('id');
-        var position = btn.attr('data-value');
-        submitPosition(node, position);
+  $(".position-buttons > button").click(function() {
+    var btn = $(this);
+    var node = btn.parentsUntil('.test-question').parent().attr('id');
+    var position = btn.attr('data-value');
+    var url = "{% nodeurl node 'submit-position' %}";
+    manoSeimas.submitPosition(url, node, position, function(result) {
+      $("#" + node + "-result").html(result);
     });
+  });
 });
 
 $(window).scroll(manoSeimas.throttle(200, manoSeimas.chooseMenuAnchor));
