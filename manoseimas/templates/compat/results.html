@@ -5,41 +5,51 @@
 {% block node_body %}
   {{ block.super }}
 
-  {% for group in groups %}
+  <ul class="nav nav-tabs" id="result-tabs">
+    {% for group in groups %}
+    <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ group.slug }}" data-toggle="tab">{{ group.title }}</a></li>
+    {% endfor %}
+  </ul>
 
-  <h2>{{ group.title }}</h2>
-
-  <table style="width:100%;" class="solution-issues">
-    <tbody>
-      <tr>
-        <th class="positive-header" style="width: 50%">{% trans "ATITINKA JŪSŲ POZICIJĄ" %}</th>
-        <th class="negative-header">{% trans "NEATITINKA JŪSŲ POZICIJOS" %}</th>
-      </tr>
-      {% for compatibility_pair in group.compatibilities %}
-      <tr>
-        {% for compatibility in compatibility_pair %}
-        <td>
-          {% if compatibility %}
-          <a href="{% nodeurl compatibility.profile.ref %}">
-            {% nodeimage compatibility.profile.ref %}
-          </a>
-          <p title="Tikslumas: {{ compatibility.precision_percent }}%" class="{% if compatibility.positive %}positive{% else %}negative{% endif %}-percent">{{ compatibility.compatibility_percent }}%</p>
-          {% if not compatibility.precise %}
-          [?]
-          {% endif %}
-          <p>
-            <a href="{% nodeurl compatibility.profile.ref %}">
-              {{ compatibility.profile.ref.title }}
-            </a>
-          </p>
-          {% endif %}
-        </td>
-        {% endfor %}
-      </tr>
-      {% endfor %}
-    <tbody>
-  </table>
-
-  {% endfor %}
+  <div class="tab-content">
+    {% for group in groups %}
+    <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ group.slug }}">
+      <table class="positive-negative">
+        <tbody>
+          <tr>
+            <td class="positive-header" style="width: 50%">{% trans "ATITINKA JŪSŲ POZICIJĄ" %}</th>
+            <td class="negative-header">{% trans "NEATITINKA JŪSŲ POZICIJOS" %}</th>
+          </tr>
+          {% for compatibility_pair in group.compatibilities %}
+          <tr>
+            {% for compatibility in compatibility_pair %}
+            <td {% if not compatibility.precise %}class="inaccurate"{% endif %}>
+              {% if compatibility %}
+              <a href="{% nodeurl compatibility.profile.ref %}">
+                {% nodeimage compatibility.profile.ref 80 %}
+              </a>
+              <div class="description">
+                <p>
+                  <span title="Tikslumas: {{ compatibility.precision_percent }}%" class="{% if compatibility.positive %}positive{% else %}negative{% endif %}-percent">{{ compatibility.compatibility_percent }}%</span>
+                  {% if not compatibility.precise %}
+                  [?]
+                  {% endif %}
+                </p>
+                <p>
+                  <a href="{% nodeurl compatibility.profile.ref %}">
+                    {{ compatibility.profile.ref.title }}
+                  </a>
+                </p>
+              </div>
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        <tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
 
 {% endblock %}

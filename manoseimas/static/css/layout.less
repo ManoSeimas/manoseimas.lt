@@ -197,12 +197,14 @@
       .node-image-normal {
         .node-image;
         width: 40px;
+        height: 40px;
         margin-right: 8px;
       }
 
       .node-image-large {
         .node-image;
         width: 135px;
+        height: 135px;
         margin: 0 12px 20px 0;
       }
     }
@@ -314,32 +316,120 @@
     }
   }
 
-  @positive-color: #1B9E34;
-  @negative-color: #CC0000;
+  table.positive-negative {
+    width: 100%;
 
-  .colored-table-header(@color) {
-    color: @color;
-    border-bottom: solid 1px @color;
-    text-align: center;
-    font-weight: 500;
-    font-size: @baseFontSize + 4px;
-    padding: 4px;
-    h2 { color: @color }
+    a {
+      color: #444;
+    }
+
+    .node-image {
+      margin-right: 20px;
+    }
+
+    td {
+      width: 50%;
+      border-bottom: 1px solid @wellBorder;
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+
+    td:first-child {
+      border-right: 20px solid white;
+    }
+
+    td.empty {
+      text-align: center;
+      padding: 20px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr.actions td {
+      border-bottom: none;
+      text-align: center;
+
+      .btn-group {
+        margin-top: 8px;
+        margin-bottom: 16px;
+        margin-left: 230px;
+      }
+    }
+
+    h2 {
+      font-size: 16px;
+      line-height: 18px;
+      font-weight: normal;
+    }
+
+    .item-box {
+      float: left;
+      width: 40px;
+      text-align: center;
+    }
+    .item-content {
+      margin-left: 40px;
+    }
+    .arguments-header {
+      text-align:center;
+    }
+
+    .description {
+      display: table-cell;
+      vertical-align: middle;
+      height: 80px;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    @positive-color: #1B9E34;
+    @negative-color: #CC0000;
+
+    .colored-table-header(@color) {
+      color: @color;
+      border-bottom: solid 1px @color;
+      text-align: center;
+      font-weight: 500;
+      font-size: @baseFontSize + 4px;
+      padding: 8px 0 8px 0;
+      h2 { color: @color }
+    }
+
+    .positive-header { .colored-table-header(@positive-color); }
+    .negative-header { .colored-table-header(@negative-color); }
+
+    .positive-percent {
+      font-weight: 600;
+      font-size: @baseFontSize + 4px;
+      color: @positive-color;
+    }
+
+    .negative-percent {
+      font-weight: 600;
+      font-size: @baseFontSize + 4px;
+      color: @negative-color;
+    }
+
+    .inaccurate {
+      opacity: 0.5;
+      .positive-percent, .negative-percent {
+        font-weight: 400;
+      }
+    }
   }
 
-  .positive-header { .colored-table-header(@positive-color); }
-  .negative-header { .colored-table-header(@negative-color); }
+  .nav-tabs {
+    margin: 20px -20px;
+    padding: 0 20px;
 
-  .positive-percent {
-    font-weight: 700;
-    font-size: @baseFontSize + 4px;
-    color: @positive-color;
-  }
-
-  .negative-percent {
-    font-weight: 700;
-    font-size: @baseFontSize + 4px;
-    color: @negative-color;
+    li {
+      width: 50%;
+      text-align: center;
+    }
   }
 }
 
@@ -523,56 +613,3 @@ hr {
   border-bottom: 1px solid @wellBorder;
 }
 
-// solutions
-// ----------------------------
-
-.solution-issues {
-  width: 100%;
-
-  margin-bottom: 10px;
-
-  td {
-    width: 50%;
-    vertical-align: top;
-    border-bottom: 1px solid @wellBorder;
-    padding-top: 8px;
-    padding-bottom: 8px;
-  }
-
-  td.empty {
-    text-align: center;
-    padding: 20px;
-  }
-
-  tr:last-child td {
-    border-bottom: none;
-  }
-
-  tr.actions td {
-    border-bottom: none;
-    text-align: center;
-
-    .btn-group {
-      margin-top: 8px;
-      margin-bottom: 16px;
-      margin-left: 230px;
-    }
-  }
-
-  h2 {
-    font-size: 16px;
-    line-height: 18px;
-    font-weight: normal;
-  }
-  .item-box {
-    float: left;
-    width: 40px;
-    text-align: center;
-  }
-  .item-content {
-    margin-left: 40px;
-  }
-  .arguments-header {
-    text-align:center;
-  }
-}

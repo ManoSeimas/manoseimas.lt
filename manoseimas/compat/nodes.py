@@ -395,8 +395,7 @@ class CompatResultsView(DetailsView):
     template = 'compat/results.html'
 
     def nav(self, active=tuple()):
-        nav = super(CompatResultsView, self).nav(active)
-        return solution_compat_nav(self.request, self.node, nav, active)
+        return super(CompatResultsView, self).nav(active)
 
     def render(self, **overrides):
         positions = list(query_positions(self.request))
@@ -404,15 +403,18 @@ class CompatResultsView(DetailsView):
         fractions = fraction_compatibilities_by_sign(positions)
         context = {
             'groups': (
-                dict(
-                    title=_('Frakcijos'),
-                    compatibilities=list(map(list, itertools.izip_longest(*fractions))),
-                ),
-                dict(
-                    title=_('Seimo nariai'),
-                    compatibilities=itertools.izip_longest(*mps),
-                )
+                {
+                    'title': _('Frakcijos'),
+                    'slug': 'frakcijos',
+                    'compatibilities': list(map(list, itertools.izip_longest(*fractions))),
+                },
+                {
+                    'title': _('Seimo nariai'),
+                    'slug': 'seimo-nariai',
+                    'compatibilities': itertools.izip_longest(*mps),
+                },
             ),
+            'title': _(u'Testo rezultatai'),
         }
         context.update(overrides)
         return super(CompatResultsView, self).render(**context)
