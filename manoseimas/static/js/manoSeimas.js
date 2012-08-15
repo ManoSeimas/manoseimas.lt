@@ -80,4 +80,30 @@
 
   manoSeimas.submitPosition = submitPosition;
 
+  function showFractionMPs(fraction) {
+    var mps = $('.doc-type-mpprofile');
+    if (fraction === '') {
+      mps.show();
+    } else {
+      var fractionClass = '.fraction-' + fraction;
+      mps.not(fractionClass).hide();
+      mps.filter(fractionClass).show();
+    }
+  }
+
+  manoSeimas.showFractionMPs = showFractionMPs;
+
+  function activateFractionFilter(){
+    $('#filter-fraction').change(function() {
+      showFractionMPs(this.value);
+    });
+
+    $('.doc-type-fraction .description p:first-child').click(function() {
+      $('#result-tabs a[href=#seimo-nariai]').tab('show');
+      var slug = $(this).parent().parent().data('slug');
+      $('#filter-fraction').val(slug).change();
+    });
+  }
+
+  manoSeimas.activateFractionFilter = activateFractionFilter;
 })(window);

@@ -14,42 +14,59 @@
   <div class="tab-content">
     {% for group in groups %}
     <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ group.slug }}">
+      {% if group.fraction_list %}
+      <select id="filter-fraction">
+        <option value="" selected>{% trans "Visos frakcijos" %}
+        {% for fraction in group.fraction_list %}
+        <option value="{{ fraction.slug }}">{{ fraction.title }}</option>
+        {% endfor %}
+      </select>
+      {% endif %}
       <table class="positive-negative">
         <tbody>
           <tr>
             <td class="positive-header" style="width: 50%">{% trans "PALAIKO" %}</th>
             <td class="negative-header">{% trans "NEPALAIKO" %}</th>
           </tr>
-          {% for position_pair in group.positions %}
           <tr>
-            {% for position in position_pair %}
-            <td {% if not position.active %}class="inactive"{% endif %}>
-              {% if position %}
-              <a href="{% nodeurl position.profile.ref %}">
-                {% nodeimage position.profile.ref 80 %}
-              </a>
-              <div class="description">
-                <p>
-                  <span title="Dalyvavimas: {{ position.participation_percent }}%" class="{% if position.positive %}positive{% else %}negative{% endif %}-percent">{{ position.position_percent }}%</span>
-                  {% if not position.active %}
-                  [?]
-                  {% endif %}
-                </p>
-                <p>
-                  <a href="{% nodeurl position.profile.ref %}">
-                    {{ position.profile.ref.title }}
-                  </a>
-                </p>
-                <p class="sub-title">{{ position.profile.ref.fraction_abbreviation|default:'' }}</p>
+            {% for position_list in group.positions %}
+            <td class="result-container">
+              {% for position in position_list %}
+              <div class="result {% if not position.active %}inactive{% endif %}
+                          doc-type-{{ position.profile.ref.doc_type|slugify }}
+                          {% if position.profile.ref.doc_type == "MPProfile" %}fraction-{{ position.profile.ref.fraction.slug }}{% endif %}"
+                   data-slug="{{ position.profile.ref.slug }}">
+                <a href="{% nodeurl position.profile.ref %}">
+                  {% nodeimage position.profile.ref 80 %}
+                </a>
+                <div class="description">
+                  <p>
+                    <span title="Dalyvavimas: {{ position.participation_percent }}%" class="{% if position.positive %}positive{% else %}negative{% endif %}-percent">{{ position.position_percent }}%</span>
+                    {% if not position.active %}
+                    [?]
+                    {% endif %}
+                  </p>
+                  <p>
+                    <a href="{% nodeurl position.profile.ref %}">
+                      {{ position.profile.ref.title }}
+                    </a>
+                  </p>
+                  <p class="sub-title">{{ position.profile.ref.fraction_abbreviation|default:'' }}</p>
+                </div>
               </div>
-              {% endif %}
+              {% endfor %}
             </td>
             {% endfor %}
           </tr>
-          {% endfor %}
         <tbody>
       </table>
     </div>
     {% endfor %}
   </div>
+{% endblock %}
+
+{% block inlinejs %}
+<script type="text/javascript">
+$(manoSeimas.activateFractionFilter);
+</script>
 {% endblock %}

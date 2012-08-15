@@ -325,6 +325,12 @@
     color: @negative-color;
   }
 
+  #filter-fraction {
+    width: 40%;
+    display: block;
+    margin: 0 auto 20px auto;
+  }
+
   table.positive-negative {
     width: 100%;
 
@@ -342,10 +348,17 @@
     }
 
     td {
-      vertical-align: top;
       width: 50%;
+    }
+
+    td, .result {
+      vertical-align: top;
       border-bottom: 1px solid @wellBorder;
       padding: 16px 8px;
+    }
+
+    td.result-container {
+      padding: 0;
     }
 
     td:first-child {

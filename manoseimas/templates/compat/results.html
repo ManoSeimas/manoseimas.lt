@@ -14,43 +14,59 @@
   <div class="tab-content">
     {% for group in groups %}
     <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ group.slug }}">
+      {% if group.fraction_list %}
+      <select id="filter-fraction">
+        <option value="" selected>{% trans "Visos frakcijos" %}
+        {% for fraction in group.fraction_list %}
+        <option value="{{ fraction.slug }}">{{ fraction.title }}</option>
+        {% endfor %}
+      </select>
+      {% endif %}
       <table class="positive-negative">
         <tbody>
           <tr>
             <td class="positive-header" style="width: 50%">{% trans "ATITINKA JŪSŲ POZICIJĄ" %}</th>
             <td class="negative-header">{% trans "NEATITINKA JŪSŲ POZICIJOS" %}</th>
           </tr>
-          {% for compatibility_pair in group.compatibilities %}
           <tr>
-            {% for compatibility in compatibility_pair %}
-            <td {% if not compatibility.precise %}class="imprecise"{% endif %}>
-              {% if compatibility %}
-              <a href="{% nodeurl compatibility.profile.ref %}">
-                {% nodeimage compatibility.profile.ref 80 %}
-              </a>
-              <div class="description">
-                <p>
-                  <span title="Tikslumas: {{ compatibility.precision_percent }}%" class="{% if compatibility.positive %}positive{% else %}negative{% endif %}-percent">{{ compatibility.compatibility_percent }}%</span>
-                  {% if not compatibility.precise %}
-                  [?]
-                  {% endif %}
-                </p>
-                <p>
-                  <a href="{% nodeurl compatibility.profile.ref %}">
-                    {{ compatibility.profile.ref.title }}
-                  </a>
-                </p>
-                <p class="sub-title">{{ compatibility.profile.ref.fraction_abbreviation|default:'' }}</p>
+            {% for compatibility_list in group.compatibilities %}
+            <td class="result-container">
+              {% for compatibility in compatibility_list %}
+              <div class="result {% if not compatibility.precise %}imprecise{% endif %}
+                          doc-type-{{ compatibility.profile.ref.doc_type|slugify }}
+                          {% if compatibility.profile.ref.doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.slug }}{% endif %}"
+                   data-slug="{{ compatibility.profile.ref.slug }}">
+                <a href="{% nodeurl compatibility.profile.ref %}">
+                  {% nodeimage compatibility.profile.ref 80 %}
+                </a>
+                <div class="description">
+                  <p>
+                    <span title="Tikslumas: {{ compatibility.precision_percent }}%" class="{% if compatibility.positive %}positive{% else %}negative{% endif %}-percent">{{ compatibility.compatibility_percent }}%</span>
+                    {% if not compatibility.precise %}
+                    [?]
+                    {% endif %}
+                  </p>
+                  <p>
+                    <a href="{% nodeurl compatibility.profile.ref %}">
+                      {{ compatibility.profile.ref.title }}
+                    </a>
+                  </p>
+                  <p class="sub-title">{{ compatibility.profile.ref.fraction_abbreviation|default:'' }}</p>
+                </div>
               </div>
-              {% endif %}
+              {% endfor %}
             </td>
             {% endfor %}
           </tr>
-          {% endfor %}
         <tbody>
       </table>
     </div>
     {% endfor %}
   </div>
+{% endblock %}
 
+{% block inlinejs %}
+<script type="text/javascript">
+$(manoSeimas.activateFractionFilter);
+</script>
 {% endblock %}

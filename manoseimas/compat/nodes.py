@@ -18,6 +18,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import itertools
+from operator import attrgetter
 
 from zope.component import adapts
 from zope.component import provideAdapter
@@ -302,17 +303,20 @@ class CompatResultsView(DetailsView):
         positions = list(query_positions(self.request))
         mps = mp_compatibilities_by_sign(positions)
         fractions = fraction_compatibilities_by_sign(positions)
+        fraction_list = [c.profile.ref for c in itertools.chain(fractions[0], fractions[1])]
+        fraction_list.sort(key=attrgetter('title'))
         context = {
             'groups': (
                 {
                     'title': _('Frakcijos'),
                     'slug': 'frakcijos',
-                    'compatibilities': list(map(list, itertools.izip_longest(*fractions))),
+                    'compatibilities': fractions,
                 },
                 {
                     'title': _('Seimo nariai'),
                     'slug': 'seimo-nariai',
-                    'compatibilities': itertools.izip_longest(*mps),
+                    'compatibilities': mps,
+                    'fraction_list': fraction_list,
                 },
             ),
             'title': _(u'Testo rezultatai'),

@@ -18,6 +18,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import itertools
+from operator import attrgetter
 
 from zope.component import adapts
 from zope.component import provideAdapter
@@ -127,19 +128,22 @@ class MPsPositionView(DetailsView):
 
     def render(self, **overrides):
         solution_id = self.node._id
-        fractions = PersonPosition.objects.fraction_pairs(solution_id)
         mps = PersonPosition.objects.mp_pairs(solution_id)
+        fractions = map(list, PersonPosition.objects.fraction_pairs(solution_id))
+        fraction_list = [pp.profile.ref for pp in itertools.chain(fractions[0], fractions[1])]
+        fraction_list.sort(key=attrgetter('title'))
         context = {
             'groups': (
                 {
                     'title': _('Frakcijos'),
                     'slug': 'frakcijos',
-                    'positions': itertools.izip_longest(*fractions),
+                    'positions': fractions,
                 },
                 {
                     'title': _('Seimo nariai'),
                     'slug': 'seimo-nariai',
-                    'positions': itertools.izip_longest(*mps),
+                    'positions': mps,
+                    'fraction_list': fraction_list,
                 },
             ),
         }
