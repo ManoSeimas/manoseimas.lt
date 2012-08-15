@@ -5,6 +5,7 @@
 {% load sboard %}
 
 {% block content %}
+<h1>Profilis</h1>
 <h1>{{ profile.title|default:profile.user.username }}</h1>
 <p>{% nodeimage profile 'large' %}</p>
 {% if profile.dob %}

@@ -3,7 +3,16 @@
 {% load sboard %}
 
 {% block content %}
+  <h1>Profilis</h1>
+  {% nodeimage node 'large' %}
   <h1>{{ title }}</h1>
+
+  <hr>
+  <h2>Politiniai sprendimai</h2>
+  {% for position in positions %}
+  <p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
+  „<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
+  {% endfor %}
 
   <hr>
   <h2>Frakcijos nariai</h2>
@@ -17,11 +26,4 @@
   {% else %}
   <p>{% trans "This fraction does not have any members." %}</p>
   {% endif %}
-
-  <hr>
-  <h2>Politiniai sprendimai</h2>
-  {% for position in positions %}
-  <p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
-  „<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
-  {% endfor %}
 {% endblock %}

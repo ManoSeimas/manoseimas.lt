@@ -5,8 +5,12 @@
 {% load sboard %}
 
 {% block content %}
+<h1>Profilis</h1>
 <p>{% nodeimage profile 'large' %}</p>
 <h1>{{ profile.title }}</h1>
+{% if profile.fraction %}
+<p>{{ profile.fraction.title }}</p>
+{% endif %}
 {% if profile.dob %}
 <p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
 {% endif %}
