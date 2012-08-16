@@ -8,9 +8,9 @@
 {% block node_body %}
   <h1>
     {% if node.solves %}
-    <span style="color: green;">UŽ</span>
+    <span class="positive">UŽ</span>
     {% else %}
-    <span style="color: red;">PRIEŠ</span>
+    <span class="negative">PRIEŠ</span>
     {% endif %}
     - <a href="{{ node.issue.ref.permalink }}">{{ node.issue.ref.title }}</a>
   </h1>

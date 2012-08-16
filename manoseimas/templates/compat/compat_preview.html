@@ -7,7 +7,7 @@
       <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
         {% nodeimage fraction.profile.ref 60 %}
       </a>
-      <p style="padding-top: 4px; clear: both" class="positive-percent">{{ fraction.compatibility_percent }}%</p>
+      <p style="padding-top: 4px; clear: both" class="positive percent">{{ fraction.compatibility_percent }}%</p>
     </td>
     {% endfor %}
 
@@ -20,7 +20,7 @@
           {% nodeimage fraction.profile.ref 60 %}
         </a>
       </p>
-      <p style="padding-top: 4px; clear: both" class="negative-percent">{{ fraction.compatibility_percent }}%</p>
+      <p style="padding-top: 4px; clear: both" class="negative percent">{{ fraction.compatibility_percent }}%</p>
     </td>
     {% endfor %}
   </tr>

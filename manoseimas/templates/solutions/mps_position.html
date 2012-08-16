@@ -41,7 +41,7 @@
                 </a>
                 <div class="description">
                   <p>
-                    <span title="Dalyvavimas: {{ position.participation_percent }}%" class="{% if position.positive %}positive{% else %}negative{% endif %}-percent">{{ position.position_percent }}%</span>
+                    <span title="Dalyvavimas: {{ position.participation_percent }}%" class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
                     {% if not position.active %}
                     [?]
                     {% endif %}
