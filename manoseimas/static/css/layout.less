@@ -419,7 +419,7 @@
       color: @color;
       border-bottom: solid 1px @color;
       text-align: center;
-      font-weight: 500;
+      font-weight: 400;
       font-size: @baseFontSize + 4px;
       padding: 8px 0 8px 0;
       h2 { color: @color }
@@ -469,6 +469,72 @@
 }
 
 
+// index
+// ----------------------------
+
+#middle.index {
+  background: url(../img/skies.jpg) no-repeat center top;
+
+  h1 {
+    text-align: center;
+    font-size: 50px;
+    line-height: 44px;
+    padding: 44px;
+    font-weight: 300;
+
+    strong {
+      font-weight: 400;
+    }
+  }
+
+  .icons {
+    margin: 0 auto;
+    width: 788px;
+    height: 228px;
+
+    & > * {
+      display: inline-block;
+      vertical-align: middle;
+      margin: 20px 30px;
+    }
+
+    & > * > img {
+      width: 140px;
+      height: 138px;
+    }
+
+    p {
+      line-height: 40px;
+      font-size: 16px;
+      color: #777;
+      text-align: center;
+    }
+
+    .arrow {
+      padding-bottom: 60px;
+      width: 23px;
+    }
+  }
+
+  .begin-test {
+    padding: 9px;
+    border-radius: 9px;
+    border: solid 1px #ddd;
+    width: 320px;
+    margin: 15px auto 55px auto;
+
+    .btn {
+      font-weight: 700;
+      font-size: 32px;
+      line-height: 55px;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+
 // footer
 // ----------------------------
 
@@ -479,8 +545,9 @@ footer {
 
   h2 {
     color: #2A4C96;
-    font-size: @baseFontSize + 4;
-    font-weight: normal;
+    font-size: @baseFontSize;
+    font-weight: 600;
+    line-height: @baseLineHeight + 4px;
   }
 
   a {
@@ -491,7 +558,7 @@ footer {
     padding-left: 20px;
 
     .tils {
-      margin: 10px 0;
+      margin: 5px 0;
       width: 189px;
       height: 49px;
       background: url("../img/tils-sprite.png") no-repeat;
@@ -506,11 +573,17 @@ footer {
     text-align: right;
   }
 
-  .nav li > a {
-    display: inline;
+  .nav {
+    li {
+      margin-top: 7px;
+    }
 
-    &:hover {
-      background-color: transparent;
+    li > a {
+      display: inline;
+
+      &:hover {
+        background-color: transparent;
+      }
     }
   }
 
@@ -589,7 +662,7 @@ footer {
 // ----------------------------
 
 h1, h2, h3, h4, h5 {
-  color: @msBlue;
+  color: #3C4D53;
   margin-top: @baseLineHeight;
   font-weight: 600;
 

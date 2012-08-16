@@ -27,7 +27,7 @@
 
   <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.png">
 
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,600italic,400,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
 
   <!-- CSS: implied media=all -->
   <!-- CSS concatenated and minified via ant build script-->
@@ -98,6 +98,7 @@
     </div>
   </header>
 
+  {% block middle %}
   <div id="middle">
     <div class="container">
       {% block container %}
@@ -118,6 +119,7 @@
       {% endblock %}
     </div>
   </div>
+  {% endblock %}
 
   <footer>
     <div class="container">

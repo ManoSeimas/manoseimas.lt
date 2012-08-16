@@ -1,6 +1,36 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load sboard %}
 
-{% block content %}
-{% trans "Hello World!" %}
+{% block middle %}
+<div id="middle" class="index">
+  <div class="container">
+    <h1>
+      Išsirink <strong style="font-weight: 400">savo</strong> Seimo narius!
+    </h1>
+
+    <div class="icons">
+      <div>
+        <img src="{{ STATIC_URL }}img/icon1.png">
+        <p>Atsakyk į klausimus</p>
+      </div>
+      <img class="arrow" src="{{ STATIC_URL }}img/arrow.png">
+      <div>
+        <img src="{{ STATIC_URL }}img/icon2.png">
+        <p>Gauk rezultatus</p>
+      </div>
+      <img class="arrow" src="{{ STATIC_URL }}img/arrow.png">
+      <div>
+        <img src="{{ STATIC_URL }}img/icon3.png" style="height: 134px; padding: 2px 0">
+        <p>Žiūrėk daugiau</p>
+      </div>
+    </div>
+
+    <div class="begin-test">
+      <a href="/testas/" class="btn btn-primary">
+        PRADĖTI TESTĄ
+      </a>
+    </div>
+  </div>
+</div>
 {% endblock %}

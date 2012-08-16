@@ -426,6 +426,11 @@ SBOARD_SEARCH_HANDLERS = (
     'sboard.nodes.SearchView',
 )
 
+SBOARD_PAGE_TEMPLATES = (
+    ('sboard/page.html', 'Plain page'),
+    ('index.html', 'Index page'),
+)
+
 RESTRUCTUREDTEXT_FILTER_SETTINGS = {
     'footnote_references': 'superscript',
 }
