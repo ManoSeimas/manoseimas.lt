@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+from operator import attrgetter
+
 from zope.component import adapts
 from zope.component import provideAdapter
 
@@ -75,7 +77,11 @@ class FractionView(GroupView):
     template = 'mps/fraction.html'
 
     def render(self, **overrides):
+        memberships = super(FractionView, self).get_node_list()
+        members = set(m.profile.ref for m in memberships)
+
         context = {
+            'members': sorted(members, key=attrgetter('last_name', 'first_name')),
             'positions': prepare_position_list(self.node),
         }
         context.update(overrides)

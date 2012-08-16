@@ -26,7 +26,7 @@
     <div class="test-questions">
       {% for q, position in category.positions %}
       <div id="{{ q.key }}" class="accordion-group test-question">
-        <h2 class="inline-header"><a href="{{ q.permalink }}">{{ q.title }}</a></h2>
+        <h2 class="inline-header arrow-after"><a href="{{ q.permalink }}">{{ q.title }}</a></h2>
         <div id="{{ q.key }}-summary">
           <p>{{ q.summary }}</p>
         </div>

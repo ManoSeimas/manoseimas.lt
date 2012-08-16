@@ -3,27 +3,35 @@
 {% load sboard %}
 
 {% block content %}
-  <h1>Profilis</h1>
+  <h1>Frakcija</h1>
   {% nodeimage node 'large' %}
   <h1>{{ title }}</h1>
 
   <hr>
   <h2>Politiniai sprendimai</h2>
+
   {% for position in positions %}
-  <p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
-  „<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
+  <p>Balsavo <strong title="{{ position.percent }}">{{ position.position|lower }}</strong> temą
+  <a class="profile-solution-title arrow-before" href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a></p>
   {% endfor %}
 
   <hr>
   <h2>Frakcijos nariai</h2>
-  {% if children %}
-  {% for child in children %}
-  <p>
-    <a href="{{ child.profile.ref.permalink }}">{{ child.profile.ref.title }}</a>
-    (frakcijoje nuo {% if child.term_from.year = child.term_to.year %}{{ child.term_from|date:"Y-m-d" }} iki {{ child.term_to|date:"Y-m-d" }}{% else %}{{ child.term_from|date:"Y" }}{% if child.term_to %} iki {{ child.term_to|date:"Y" }}{% endif %}{% endif %})
-  </p>
-  {% endfor %}
+  {% if members %}
+  <ul class="fraction-members">
+    {% for member in members %}
+    <li>
+      <a class="stealth" href="{% nodeurl member %}">
+        {% nodeimage member 50 %}
+        <div>
+          {{ member.title }}
+        </div>
+      </a>
+    </li>
+    {% endfor %}
+    <div style="clear: both"></div>
+  </div>
   {% else %}
-  <p>{% trans "This fraction does not have any members." %}</p>
+  <p>{% trans "Ši frakcija neturi narių." %}</p>
   {% endif %}
 {% endblock %}

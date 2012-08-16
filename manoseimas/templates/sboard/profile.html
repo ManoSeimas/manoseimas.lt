@@ -5,7 +5,7 @@
 {% load sboard %}
 
 {% block content %}
-<h1>Profilis</h1>
+<h1>Naudotojas</h1>
 <p>{% nodeimage profile 'large' %}</p>
 <h1>{{ profile.title|default:profile.user.username }}</h1>
 {% if profile.dob %}
@@ -21,8 +21,8 @@
 <h2>Politiniai sprendimai</h2>
 
 {% for position in positions %}
-<p>Balsavo <strong title="{{ position.percent }}">{{ position.position|upper }}</strong>
-„<a href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>“</p>
+<p>Balsavo <strong title="{{ position.percent }}">{{ position.position|lower }}</strong> temą
+<a class="profile-solution-title arrow-before" href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a></p>
 {% endfor %}
 {% endif %}
 
