@@ -244,9 +244,10 @@
         line-height: 18px;
       }
 
-      & > li.active {
-        height: 25px;
+      .positive > a { color: lighten(desaturate(@positiveColor, 30%), 10%); }
+      .negative > a { color: lighten(desaturate(@negativeColor, 30%), 10%); }
 
+      & > li.active {
         a {
           color: @white;
           position: relative;
@@ -316,11 +317,8 @@
     }
   }
 
-  @positive-color: #1B9E34;
-  @negative-color: #CC0000;
-
-  .positive { color: @positive-color; }
-  .negative { color: @negative-color; }
+  .positive { color: @positiveColor; }
+  .negative { color: @negativeColor; }
   .percent { font-weight: 600; }
 
   #filter-fraction {
@@ -423,11 +421,11 @@
       h2 { color: @color }
     }
 
-    .positive-header { .colored-table-header(@positive-color); }
-    .negative-header { .colored-table-header(@negative-color); }
+    .positive-header { .colored-table-header(@positiveColor); }
+    .negative-header { .colored-table-header(@negativeColor); }
 
     .imprecise, .inactive {
-      opacity: 0.5;
+      .opacity(50);
       .positive-percent, .negative-percent {
         font-weight: 400;
       }
@@ -446,7 +444,7 @@
       .icon-remove {
         margin-left: 10px;
         vertical-align: middle;
-        opacity: 0.4;
+        .opacity(40);
         visibility: hidden;
       }
 
@@ -454,7 +452,7 @@
         visibility: visible;
 
         &:hover {
-          opacity: 0.9;
+          .opacity(90);
         }
       }
     }
@@ -564,7 +562,7 @@
 
   .begin-test {
     padding: 9px;
-    border-radius: 9px;
+    .border-radius(9px);
     border: solid 1px #ddd;
     width: 320px;
     margin: 15px auto 55px auto;

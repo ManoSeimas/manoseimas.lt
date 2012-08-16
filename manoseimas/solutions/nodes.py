@@ -53,6 +53,8 @@ from .interfaces import ICounterArgument
 from .models import Issue
 from .models import query_issue_raises
 from .models import query_issue_solves
+from .models import query_solution_raises
+from .models import query_solution_solves
 from .models import query_solution_votings
 
 
@@ -288,17 +290,52 @@ class SolutionIssueListView(DetailsView):
 provideAdapter(SolutionIssueListView, name="issues")
 
 
+def solution_issue_nav(node, nav, active):
+    nav.append({
+        'key': 'node-title',
+        'title': _('Argumentas'),
+        'header': True,
+    })
+
+    for arg in query_solution_solves(node.solution._id):
+        key = arg.key
+        nav.append({
+            'key': key,
+            'class': 'positive',
+            'url': arg.permalink(),
+            'title': arg.issue.ref.title,
+            'children': [],
+            'active': key in active,
+        })
+
+    for arg in query_solution_raises(node.solution._id):
+        key = arg.key
+        nav.append({
+            'key': key,
+            'class': 'negative',
+            'url': arg.permalink(),
+            'title': arg.issue.ref.title,
+            'children': [],
+            'active': key in active,
+        })
+
+    return nav
+
+
 class SolutionIssueDetailsView(DetailsView):
     adapts(ISolutionIssue)
 
     template = 'solutions/solution_issue_details.html'
 
+    def nav(self, active=None):
+        if not active:
+            active = (self.node.key,)
+        nav = super(SolutionIssueDetailsView, self).nav(active)
+        return solution_issue_nav(self.node, nav, active)
+
     def render(self, **overrides):
-        solves = query_issue_solves(self.node.issue._id)
-        raises = query_issue_raises(self.node.issue._id)
         context = {
             'title': self.node.issue.ref.title,
-            'solutions': itertools.izip_longest(solves, raises),
         }
         context.update(overrides)
         return super(SolutionIssueDetailsView, self).render(**context)

@@ -11,7 +11,7 @@
 </ul>
 <ul class="nav nav-list">
   {% endif %}
-  <li class="nav-header">{{ item.title }}</li>
+  <li class="nav-header {{ item.class }}">{{ item.title }}</li>
 
   {% elif item.children %}
 
@@ -40,9 +40,9 @@
   {% else %}
 
   {% if item.active %}
-  <li class="active"><a href="{{ item.url }}">{{ item.title }}</a></li>
+  <li class="active {{ item.class }}"><a href="{{ item.url }}">{{ item.title }}</a></li>
   {% else %}
-  <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+  <li class="{{ item.class }}"><a href="{{ item.url }}">{{ item.title }}</a></li>
   {% endif %}
 
   {% endif %}
