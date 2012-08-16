@@ -440,6 +440,32 @@
     }
   }
 
+  ul.positions {
+    list-style: none;
+    margin: 10px 0 20px 0;
+
+    li {
+      display: block;
+      width: 100%;
+      margin: 4px 0;
+
+      .icon-remove {
+        margin-left: 10px;
+        vertical-align: middle;
+        opacity: 0.4;
+        visibility: hidden;
+      }
+
+      &:hover .icon-remove {
+        visibility: visible;
+
+        &:hover {
+          opacity: 0.9;
+        }
+      }
+    }
+  }
+
   .fraction-members {
     display: block;
     list-style: none;
@@ -449,6 +475,7 @@
       display: block;
       float: left;
       vertical-align: middle;
+      line-height: @baseLineHeight;
       width: 32%;
       height: 50px;
       margin: 6px 6px 6px 0;

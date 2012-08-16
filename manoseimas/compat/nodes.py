@@ -30,6 +30,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
 from sboard.ajax import AjaxView
+from sboard.json import json_response
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 from sboard.nodes import NodeView
@@ -277,9 +278,14 @@ class UpdateUserPositionView(NodeView):
         position = form.cleaned_data['position']
 
         update_position(self.request, solution._id, position)
-        view = clone_view(SolutionCompatPreviewView, self, solution)
-        view.position = position
-        return view.render()
+        if position:
+            view = clone_view(SolutionCompatPreviewView, self, solution)
+            view.position = position
+            return view.render()
+        else:
+            # If position is zero (which means removal), we can't make a
+            # compatibility preview, so just return an empty response.
+            return HttpResponse()
 
 provideAdapter(UpdateUserPositionView, name='submit-position')
 
