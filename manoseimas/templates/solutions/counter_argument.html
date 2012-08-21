@@ -2,14 +2,11 @@
 {% load i18n %}
 {% load sboard %}
 
-{% block node_title %}
-{% endblock %}
-
 {% block node_body %}
-  <h1>Kontr &ndash; {{ node.parent.ref.issue.ref.title }}</h2>
+<h1>{% block title %}Kontr &ndash; {{ node.parent.ref.issue.ref.title }}{% endblock %}</h2>
 
-  <p>{{ node.summary }}</p>
+<p>{{ node.summary }}</p>
 
-  {{ node.render_body }}
+{{ node.render_body }}
 {% endblock %}
 
