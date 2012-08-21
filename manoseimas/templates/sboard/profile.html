@@ -7,13 +7,7 @@
 {% block content %}
 <h1>Naudotojas</h1>
 <p>{% nodeimage profile 'large' %}</p>
-<h1>{{ profile.title|default:profile.user.username }}</h1>
-{% if profile.dob %}
-<p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
-{% endif %}
-{% if profile.home_page %}
-<p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>
-{% endif %}
+<h1 style="text-align: center; line-height: 135px; margin-right: 135px">{{ profile.title|default:profile.user.username }}</h1>
 
 {% if request.user = profile.user %}
 <hr style="clear: both">
@@ -23,7 +17,7 @@
 <ul class="positions">
   {% for position in positions %}
   <li>
-    Balsavo <strong title="{{ position.percent }}">{{ position.position|lower }}</strong> temą
+    Balsavo <strong title="{{ position.percent }}">{{ position.position|lower }}</strong>
     <a class="profile-solution-title arrow-before" href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>
     <a href="#" class="icon-remove" title="Ištrinti pasirinkimą" data-solution="{{ position.solution.ref.key }}"></a>
   </li>
