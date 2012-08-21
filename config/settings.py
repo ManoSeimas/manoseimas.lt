@@ -271,7 +271,7 @@ LOGGING = {
             'class': 'logging.handlers.RotatingFileHandler',
             'level': 'DEBUG',
             'formatter': 'verbose',
-            'filename': os.path.join(BUILDOUT_DIR, 'logs/everything.log'),
+            'filename': os.path.join(BUILDOUT_DIR, 'var/log/django.log'),
             'backupCount': 2,
             'maxBytes': 1024 * 1024 * 3,
         },

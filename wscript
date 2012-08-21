@@ -255,9 +255,6 @@ def build(ctx):
                 target='%s/locale/%s/LC_MESSAGES/django.mo' % s,
                 after='buildout')
 
-    if not os.path.exists('logs'):
-        os.mkdir('logs')
-
 
 def makemessages(ctx):
     for lang in ctx.env.LANGUAGES:
