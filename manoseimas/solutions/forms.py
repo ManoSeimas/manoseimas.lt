@@ -41,6 +41,10 @@ class AssignIssueForm(BaseNodeForm):
 class SolutionIssueForm(BaseNodeForm):
     summary = forms.CharField(widget=forms.Textarea)
     body = forms.CharField(widget=forms.Textarea, required=False)
+    listing_priority = forms.IntegerField(
+        initial=0,
+        label=_(u'Prioritetas sąrašuose'),
+        help_text=_(u'Argumentai su aukštesniu prioritetu yra rodomi aukščiau.'))
 
 
 class CounterArgumentForm(BaseNodeForm):

@@ -63,6 +63,8 @@ provideNode(Issue, "issue")
 class SolutionIssue(Node):
     implements(ISolutionIssue)
 
+    listing_priority = schema.IntegerProperty()
+
     solution = NodeProperty()
     issue = NodeProperty()
 
