@@ -74,26 +74,8 @@ class SolutionIssue(Node):
 provideNode(SolutionIssue, "solution-issue")
 
 
-def shorten_by_words(string, characters):
-    """Shortens string to a given maximum number of characters, while
-    respecting word boundaries and adding ellipsis if needed."""
-    out = []
-    for word in string.split(u' '):
-        characters -= len(word)
-        if characters >= 0:
-            out.append(word)
-        else:
-            out.append(u'…')
-            break
-    return u' '.join(out)
-
-
 class CounterArgument(Node):
     implements(ICounterArgument)
-
-    @property
-    def title(self):
-        return shorten_by_words(self.summary, 30)
 
 provideNode(CounterArgument, "counter-argument")
 

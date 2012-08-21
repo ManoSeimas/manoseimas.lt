@@ -367,6 +367,14 @@ class IssueDetailsView(DetailsView):
 provideAdapter(IssueDetailsView)
 
 
+class CounterArgumentView(DetailsView):
+    adapts(ICounterArgument)
+
+    template = 'solutions/counter_argument.html'
+
+provideAdapter(CounterArgumentView)
+
+
 class CounterArgumentCreateView(CreateView):
     adapts(ISolutionIssue, ICounterArgument)
 
