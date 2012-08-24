@@ -1,27 +1,30 @@
 {% load sboard %}
 
-<table style="width:100%;">
-  <tr>
-    {% for fraction in aye %}
-    <td style="width: 60px; padding: 0 20px; text-align:center;">
-      <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
-        {% nodeimage fraction.profile.ref 60 %}
-      </a>
-      <p style="padding-top: 4px; clear: both" class="positive percent">{{ fraction.compatibility_percent }}%</p>
-    </td>
-    {% endfor %}
+{% for fraction in aye %}
+<div style="width: 60px; padding: 0 20px; text-align:center; float: left">
+  <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
+    {% nodeimage fraction.profile.ref 60 %}
+  </a>
+  <p style="padding-top: 4px; clear: both" class="positive percent">{{ fraction.compatibility_percent }}%</p>
+</div>
+{% endfor %}
 
-    <td></td>
+{% for fraction in against %}
+<div style="width: 60px; padding: 0 20px; text-align:center; float: right">
+  <p>
+    <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
+      {% nodeimage fraction.profile.ref 60 %}
+    </a>
+  </p>
+  <p style="padding-top: 4px; clear: both" class="negative percent">{{ fraction.compatibility_percent }}%</p>
+</div>
+{% endfor %}
 
-    {% for fraction in against %}
-    <td style="width: 60px; padding: 0 20px; text-align:center;">
-      <p>
-        <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
-          {% nodeimage fraction.profile.ref 60 %}
-        </a>
-      </p>
-      <p style="padding-top: 4px; clear: both" class="negative percent">{{ fraction.compatibility_percent }}%</p>
-    </td>
-    {% endfor %}
-  </tr>
-</table>
+<div class="position-scale">
+  <div class="positive">
+    Atitinka jūsų poziciją
+  </div>
+  <div class="negative">
+    Neatitinka jūsų pozicijos
+  </div>
+</div>
