@@ -178,13 +178,14 @@ class SittingsSpider(ManoSeimasSpider):
                                       speaker_details.split(','))
                 speaker_details = filter(None, speaker_details)
 
-                dspeaker.reset_required('name', 'position', 'institution',)
+                dspeaker.reset_required('name', 'position',)
 
                 inc = Increment(-1)
                 dspeaker.add_value('position', speaker_details[inc()])
                 if len(speaker_details) == 3:
                     dspeaker.add_value('committee', speaker_details[inc()])
-                dspeaker.add_value('institution', speaker_details[inc()])
+                if len(speaker_details) > 1:
+                    dspeaker.add_value('institution', speaker_details[inc()])
             item.add_value('speakers', dict(dspeaker.load_item()))
 
     def _get_question_documents(self, response, hxs):
