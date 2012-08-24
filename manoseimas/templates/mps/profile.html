@@ -7,21 +7,21 @@
 {% block content %}
 <h1>Seimo narys</h1>
 <p>{% nodeimage profile 'large' %}</p>
-<h1>{{ profile.title }}</h1>
+<div class="profile-box">
+  <div>
+    <h1>{{ profile.title }}</h1>
 
-{% with fraction=profile.fraction %}
-{% if fraction %}
-<p><a href="{% nodeurl fraction %}">{{ fraction.title }}</a></p>
-{% endif %}
-{% endwith %}
+    {% with fraction=profile.fraction %}
+    {% if fraction %}
+    <p><a class="fraction" href="{% nodeurl fraction %}">{{ fraction.title }}</a></p>
+    {% endif %}
+    {% endwith %}
 
-{% if profile.home_page %}
-<p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>
-{% endif %}
-
-{% if profile.dob %}
-<p>{% trans "Date of birth" %}: {{ profile.dob }} ({{ profile.age }} {{ profile.age|age_plural }})</p>
-{% endif %}
+    {% if profile.home_page %}
+    <p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>
+    {% endif %}
+  </div>
+</div>
 
 <hr style="clear: both">
 

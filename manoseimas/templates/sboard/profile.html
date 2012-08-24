@@ -7,7 +7,11 @@
 {% block content %}
 <h1>Naudotojas</h1>
 <p>{% nodeimage profile 'large' %}</p>
-<h1 style="text-align: center; line-height: 135px; margin-right: 135px">{{ profile.title|default:profile.user.username }}</h1>
+<div class="profile-box">
+  <div>
+    <h1>{{ profile.title|default:profile.user.username }}</h1>
+  </div>
+</div>
 
 {% if request.user = profile.user %}
 <hr style="clear: both">
