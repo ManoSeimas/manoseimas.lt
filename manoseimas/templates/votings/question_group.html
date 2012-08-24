@@ -30,7 +30,7 @@
         <div id="{{ q.key }}-summary">
           <p>{{ q.summary }}</p>
         </div>
-        <div id="{{ q.key }}-result"></div>
+        <div class="compat-preview" id="{{ q.key }}-result"></div>
         <div class="btn-toolbar answers">
           <div class="btn-group position-buttons" data-toggle="buttons-radio">
             {% for value, label in buttons %}
@@ -112,7 +112,8 @@ $(function() {
     var position = btn.attr('data-value');
     var url = "{% nodeurl node 'submit-position' %}";
     manoSeimas.submitPosition(url, node, position, function(result) {
-      $("#" + node + "-result").html(result);
+      $('.compat-preview').hide()
+      $("#" + node + "-result").html(result).show();
     });
   });
 });
