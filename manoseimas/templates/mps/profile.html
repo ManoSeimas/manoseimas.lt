@@ -9,7 +9,7 @@
 <p>{% nodeimage profile 'large' %}</p>
 <div class="profile-box">
   <div>
-    <h1>{{ profile.title }}</h1>
+    <h1>{% block title %}{{ profile.title }}{% endblock %}</h1>
 
     {% if profile.fraction %}
       <p><a class="fraction" href="{% nodeurl profile.fraction.ref %}">{{ profile.fraction.ref.title }}</a></p>
