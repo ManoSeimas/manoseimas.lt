@@ -134,6 +134,7 @@ PIPELINE_JS = {
             'js/bootstrap-scrollspy.js',
             'js/bootstrap-tab.js',
             'js/bootstrap-typeahead.js',
+            'js/bootstrap-affix.js',
             #end if
             'js/flot/jquery.flot.js',
             'js/flot/jquery.flot.pie.js',
