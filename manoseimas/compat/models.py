@@ -76,7 +76,7 @@ PROFILE_TYPES = (
 
 
 PARTICIPATION_SHOW_TRESHOLD = 0.1
-PARTICIPATION_ACTIVE_TRESHOLD = 0.5
+PARTICIPATION_ACTIVE_TRESHOLD = 0.33
 
 
 class PersonPositionManager(models.Manager):
@@ -171,7 +171,7 @@ class PersonPosition(models.Model):
 PRECISION_SHOW_TRESHOLD = 0.1
 
 # Results with lower precision get grayed out.
-PRECISION_PRECISE_TRESHOLD = 0.5
+PRECISION_PRECISE_TRESHOLD = 0.33
 
 
 class Compatibility(object):
