@@ -249,6 +249,7 @@ class QuickResultsView(NodeView):
 
 provideAdapter(QuickResultsView, name='quick-results')
 
+COMPAT_MAX_FRACTIONS = 8
 
 class SolutionCompatPreviewView(AjaxView):
     adapts(ISolution)
@@ -256,9 +257,12 @@ class SolutionCompatPreviewView(AjaxView):
     def render(self, **overrides):
         solution_id = self.node._id
         aye, against = fraction_compatibilities_by_sign([(solution_id, self.position)], precise=True)
+        if len(aye) + len(against) > 8:
+            aye = aye[:4]
+            against = against[:4]
         return render(self.request, 'compat/compat_preview.html', {
-            'aye': aye[:3],
-            'against': against[:3],
+            'aye': aye,
+            'against': against,
         })
 
 

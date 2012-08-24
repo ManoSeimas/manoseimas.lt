@@ -1,7 +1,7 @@
 {% load sboard %}
 
 {% for fraction in aye %}
-<div style="width: 60px; padding: 0 20px; text-align:center; float: left">
+<div style="width: 60px; padding: 0 16px; text-align:center; float: left">
   <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
     {% nodeimage fraction.profile.ref 60 %}
   </a>
@@ -10,7 +10,7 @@
 {% endfor %}
 
 {% for fraction in against %}
-<div style="width: 60px; padding: 0 20px; text-align:center; float: right">
+<div style="width: 60px; padding: 0 16px; text-align:center; float: right">
   <p>
     <a href="{% nodeurl fraction.profile.ref %}" title="{{ fraction.abbreviation }}">
       {% nodeimage fraction.profile.ref 60 %}
