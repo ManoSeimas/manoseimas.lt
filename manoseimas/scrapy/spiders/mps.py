@@ -14,7 +14,7 @@ from manoseimas.scrapy.textutils import mapwords
 from manoseimas.scrapy.textutils import split_by_comma
 from manoseimas.scrapy.textutils import str2dict
 
-group_meta_re = re.compile(r', ([^(]+)(\([^)]+)?')
+group_meta_re = re.compile(r'.*, ([^(]+)(?:\(([^)]+)\))?')
 date_re = re.compile(r'\d{4}-\d\d-\d\d')
 bio_re = re.compile(ur'Gim\u0117 (\d{4}) m\. (\w+) (\d+) d\.', re.UNICODE)
 
@@ -65,7 +65,7 @@ class MpsSpider(ManoSeimasSpider):
             group.add_xpath('name', 'a/text()')
             group.add_xpath('source', 'a/@href')
 
-            meta = ''.join(group_hxs.select('text()').extract())
+            meta = ''.join(group_hxs.select('text() | */text()').extract())
             position, membership = group_meta_re.match(meta).groups()
             group.add_value('position', position)
 
