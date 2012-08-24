@@ -111,6 +111,9 @@ class SyncProcessor(object):
                 membership.position = doc['position']
             membership.save()
 
+            if group_type == Fraction and membership.is_current():
+                profile.fraction = group
+
             doc['group_node_id'] = group._id
             doc['membership_node_id'] = membership._id
 
@@ -159,9 +162,9 @@ class SyncProcessor(object):
         node.source = doc['source']
         node.image = self.get_photo(node, doc['photo'])
 
-        node.save()
-
         self.process_groups(doc['groups'], node)
+
+        node.save()
 
         doc['node_id'] = node._id
         self.db.save_doc(doc)

@@ -34,7 +34,7 @@
               {% for compatibility in compatibility_list %}
               <div class="result {% if not compatibility.precise %}imprecise{% endif %}
                           doc-type-{{ compatibility.profile.ref.doc_type|slugify }}
-                          {% if compatibility.profile.ref.doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.slug }}{% endif %}"
+                          {% if compatibility.profile.ref.doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.ref.slug }}{% endif %}"
                    data-slug="{{ compatibility.profile.ref.slug }}">
                 <a href="{% nodeurl compatibility.profile.ref %}">
                   {% nodeimage compatibility.profile.ref 80 %}

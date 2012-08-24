@@ -11,11 +11,9 @@
   <div>
     <h1>{{ profile.title }}</h1>
 
-    {% with fraction=profile.fraction %}
-    {% if fraction %}
-    <p><a class="fraction" href="{% nodeurl fraction %}">{{ fraction.title }}</a></p>
+    {% if profile.fraction %}
+      <p><a class="fraction" href="{% nodeurl profile.fraction.ref %}">{{ profile.fraction.ref.title }}</a></p>
     {% endif %}
-    {% endwith %}
 
     {% if profile.home_page %}
     <p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>

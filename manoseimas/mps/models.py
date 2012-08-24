@@ -20,6 +20,7 @@ from zope.interface import implements
 from couchdbkit.ext.django import schema
 
 from sboard.factory import provideNode
+from sboard.models import NodeProperty
 from sboard.profiles.models import ProfileNode
 from sboard.profiles.models import GroupNode
 
@@ -36,17 +37,13 @@ from .interfaces import IPoliticalGroup
 class MPProfile(ProfileNode):
     implements(IMPProfile)
 
+    fraction = NodeProperty()
+
     _default_importance = 9
 
-    def fraction(self):
-        for group in self.groups():
-            if group.doc_type == 'Fraction':
-                return group
-
     def fraction_abbreviation(self):
-        fraction = self.fraction()
-        if fraction:
-            return fraction.abbreviation
+        if self.fraction:
+            return self.fraction.ref.abbreviation
 
 provideNode(MPProfile, "mpprofile")
 
