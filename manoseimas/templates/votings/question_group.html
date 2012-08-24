@@ -117,9 +117,10 @@ $(function() {
   });
 });
 
-$(window).scroll(manoSeimas.throttle(200, manoSeimas.chooseMenuAnchor));
-$(manoSeimas.chooseMenuAnchor);
-
+$(function() {
+  var $firstHeading = $('h1:first')
+  $(window).scrollspy({ offset: $firstHeading.offset().top + 1 });
+});
 </script>
 {% endblock %}
 
