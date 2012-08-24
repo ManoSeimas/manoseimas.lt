@@ -2,8 +2,10 @@
 {% load i18n %}
 {% load sboard %}
 
+{% block title %}Kontr &ndash; {{ node.parent.ref.issue.ref.title }}{% endblock %}
+
 {% block node_body %}
-<h1>{% block title %}Kontr &ndash; {{ node.parent.ref.issue.ref.title }}{% endblock %}</h2>
+<h1>Kontr &ndash; <a href="{% nodeurl node.parent.ref.issue.ref %}">{{ node.parent.ref.issue.ref.title }}</a></h2>
 
 <p>{{ node.summary }}</p>
 
