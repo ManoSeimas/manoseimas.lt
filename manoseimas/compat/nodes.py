@@ -87,10 +87,10 @@ def solution_compat_nav(request, node, nav, active=tuple()):
 
 
 TEST_BUTTONS = (
-    (2, _(u'Tikrai už')),
-    (1, _(u'Už')),
-    (-1, _(u'Prieš')),
-    (-2, _(u'Tikrai prieš')),
+    (2, _(u'Tikrai taip')),
+    (1, _(u'Taip')),
+    (-1, _(u'Ne')),
+    (-2, _(u'Tikrai ne')),
 )
 
 
