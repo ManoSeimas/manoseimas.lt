@@ -19,6 +19,8 @@
 import itertools
 from decimal import Decimal as dc
 
+from django.utils.translation import ugettext as _
+
 from zope.interface import implements
 
 from sboard.factory import provideNode
@@ -70,6 +72,11 @@ class SolutionIssue(Node):
 
     solves = schema.BooleanProperty()
 
+    @property
+    def title(self):
+        solves_text = _(u'UŽ') if self.solves else _(u'PRIEŠ')
+        return u'%s – %s' % (solves_text, self.issue.ref.title)
+
     def counter_arguments(self):
         return list(couch.view('solutions/counter_arguments', key=self._id).iterator())
 
@@ -78,6 +85,10 @@ provideNode(SolutionIssue, "solution-issue")
 
 class CounterArgument(Node):
     implements(ICounterArgument)
+
+    @property
+    def title(self):
+        return _(u'Kontr - %s') % self.parent.ref.issue.ref.title
 
 provideNode(CounterArgument, "counter-argument")
 
