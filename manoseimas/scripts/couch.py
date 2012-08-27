@@ -162,13 +162,13 @@ def deletempgroups(args):
             endkey=[group],
             descending=True
         )
-        for doc in _list_nodes('sboard/by_type', **params):
+        for row, doc in _list_nodes('sboard/by_type', **params):
             print('DEL: [ %s ]: %s' % (doc['_id'], doc.get('title')))
             db.delete_doc(doc)
 
     db = server['mps']
     print('Cleaning mps database.')
-    for doc in _list_nodes('_all_docs', db='mps'):
+    for row, doc in _list_nodes('_all_docs', db='mps'):
         print('CLEAN: [ %s ]: %s %s' % (doc['_id'], doc.get('first_name'),
                                         doc.get('last_name')))
         for group in range(len(doc.get('groups', []))):
