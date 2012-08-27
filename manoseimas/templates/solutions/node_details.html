@@ -48,10 +48,14 @@
         {% endfor %}
       </tr>
       {% endfor %}
+
+      {% nodepermission node 'create' as can_create %}
+      {% if can_create %}
       <tr class="actions">
         <td><a href="{% nodeurl node 'sprendzia' %}">{% trans "Pasiūlyk savo" %}</a></td>
         <td><a href="{% nodeurl node 'sukelia' %}">{% trans "Pasiūlyk savo" %}</a></td>
       </tr>
+      {% endif %}
     </tbody>
   </table>
 {% endblock %}
