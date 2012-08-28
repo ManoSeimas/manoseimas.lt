@@ -146,7 +146,7 @@ def deletempgroups(args):
     server = Server(settings.COUCHDB_SERVER)
     db = server['nodes']
 
-    print('Deleting groups and MP profiles.')
+    print('Deleting groups and memberships.')
     groups = [
         'Party',
         'Fraction',
@@ -163,8 +163,17 @@ def deletempgroups(args):
             descending=True
         )
         for row, doc in _list_nodes('sboard/by_type', **params):
-            print('DEL: [ %s ]: %s' % (doc['_id'], doc.get('title')))
+            group_id = doc['_id']
+            print('DEL: [ %s ]: %s' % (group_id, doc.get('title')))
             db.delete_doc(doc)
+
+            query = _list_nodes('profiles/group_members', startkey=[group_id], endkey=[group_id, u'\ufff0'])
+            for row, doc in query:
+                _ = next(query)
+                if not doc:
+                    continue
+                print('DEL membership: [ %s ]: %s' % (doc['_id'], doc.get('profile')))
+                db.delete_doc(doc)
 
     db = server['mps']
     print('Cleaning mps database.')
