@@ -84,10 +84,10 @@ class PersonPositionManager(models.Manager):
     active_q = models.Q(participation__gte=PARTICIPATION_ACTIVE_TRESHOLD)
 
     def mps(self, solution_id):
-        return self.filter(node=solution_id, profile_type=MP_PROFILE).filter(PersonPositionManager.show_q)
+        return self.filter(node=solution_id, profile_type=MP_PROFILE)
 
     def mp_pairs(self, solution_id, limit=200):
-        mps = self.mps(solution_id)
+        mps = self.mps(solution_id).filter(PersonPositionManager.show_q)
 
         aye = mps.filter(position__gt=0)
         aye_active = aye.filter(PersonPositionManager.active_q).order_by('-position')[:limit]
@@ -102,10 +102,10 @@ class PersonPositionManager(models.Manager):
         return (aye_sorted, against_sorted)
 
     def fractions(self, solution_id):
-        return self.filter(node=solution_id, profile_type=FRACTION_PROFILE).filter(PersonPositionManager.show_q)
+        return self.filter(node=solution_id, profile_type=FRACTION_PROFILE)
 
     def fraction_pairs(self, solution_id, limit=200):
-        fractions = self.fractions(solution_id)
+        fractions = self.fractions(solution_id).filter(PersonPositionManager.show_q)
 
         aye = fractions.filter(position__gt=0)
         aye_active = aye.filter(PersonPositionManager.active_q).order_by('-position')[:limit]
