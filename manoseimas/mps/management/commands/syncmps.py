@@ -19,8 +19,10 @@
 
 import os.path
 import urllib
+import glob
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 from sboard.models import ImageNode
 from sboard.models import couch
@@ -73,6 +75,33 @@ class SyncProcessor(object):
 
         return self._nodes[key]
 
+    def get_image_node(self, profile):
+        if profile.image:
+            node = profile.image.ref
+        else:
+            node = self.get_node(None, ImageNode)
+        node.title = profile.title
+        node.set_parent(profile)
+        node.importance = 0
+        return node
+
+    def set_image_from_file(self, profile, filename):
+        image = open(filename, 'rb')
+        node = self.get_image_node(profile)
+        node.ext = os.path.splitext(filename)[1][1:]
+        node.save()
+        node.put_attachment(image, 'file.%s' % node.ext)
+        image.close()
+        profile.image = node
+
+    def set_image_from_url(self, profile, url):
+        node = self.get_image_node(profile)
+        node.ext = os.path.splitext(url)[1][1:]
+        path = node.path(fetch=False)
+        if not os.path.exists(path):
+            urllib.urlretrieve(url, path)
+        self.set_image_from_file(profile, path)
+
     def process_groups(self, groups, profile):
         group_type_map = {
             "fraction": Fraction,
@@ -90,11 +119,17 @@ class SyncProcessor(object):
             group_type = group_type_map[doc['type']]
 
             slug = slugify(doc['name'])
+            first_time = (group_type.__name__, slug) not in self._nodes
             group = self.get_node(group_node_id, group_type, slug)
             group.slug = slug
             # TODO: extract keywords from title
             #group.keywords = ?
             group.title = doc['name']
+
+            if first_time:
+                image_filenames = glob.glob(settings.PROJECT_DIR + u'/images/fractions/' + slug + u'.*')
+                if image_filenames:
+                    self.set_image_from_file(group, image_filenames[0])
 
             if group_type == Fraction and not group.abbreviation:
                 group.abbreviation = get_fraction_abbr(group.title)
@@ -117,31 +152,6 @@ class SyncProcessor(object):
             doc['group_node_id'] = group._id
             doc['membership_node_id'] = membership._id
 
-    def fetch_photo(self, url, node):
-        path = node.path(fetch=False)
-        if not os.path.exists(path):
-            urllib.urlretrieve(url, path)
-        return open(path, 'rb')
-
-    def get_photo(self, profile, url):
-        if profile.image:
-            node = profile.image.ref
-        else:
-            node = self.get_node(None, ImageNode)
-        node.title = profile.title
-        node.set_parent(profile)
-        node.ext = os.path.splitext(url)[1][1:]
-        node.importance = 0
-
-        photo = self.fetch_photo(url, node)
-
-        node.save()
-
-        node.put_attachment(photo, 'file.%s' % node.ext)
-        photo.close()
-
-        return node
-
     def process(self, doc):
         if 'doc_type' not in doc or doc['doc_type'] != 'person':
             return
@@ -160,7 +170,7 @@ class SyncProcessor(object):
         node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
-        node.image = self.get_photo(node, doc['photo'])
+        self.set_image_from_url(node, doc['photo'])
 
         self.process_groups(doc['groups'], node)
 
