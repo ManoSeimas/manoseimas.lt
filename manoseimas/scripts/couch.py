@@ -142,6 +142,25 @@ def listbytype(args):
                 ))
 
 
+def deletemps(args):
+    server = Server(settings.COUCHDB_SERVER)
+
+    db = server['nodes']
+    print('Deleting MP profiles.')
+    for row, doc in _list_nodes('sboard/by_type', startkey=['MPProfile'], endkey=['MPProfile', u'\ufff0']):
+        group_id = doc['_id']
+        print('DEL: [ %(_id)s ]: %(first_name)s %(last_name)s' % doc)
+        db.delete_doc(doc)
+
+    db = server['mps']
+    print('Cleaning mps database.')
+    for row, doc in _list_nodes('_all_docs', db='mps'):
+        print('CLEAN: [ %s ]: %s %s' % (doc['_id'], doc.get('first_name'),
+                                        doc.get('last_name')))
+        doc['node_id'] = None
+        db.save_doc(doc)
+
+
 def deletempgroups(args):
     server = Server(settings.COUCHDB_SERVER)
     db = server['nodes']
@@ -263,6 +282,10 @@ def main():
     # deletempgroups
     p = subparsers.add_parser('deletempgroups')
     p.set_defaults(func=deletempgroups)
+
+    # deletemps
+    p = subparsers.add_parser('deletemps')
+    p.set_defaults(func=deletemps)
 
     # listbytype
     p = subparsers.add_parser('listbytype')
