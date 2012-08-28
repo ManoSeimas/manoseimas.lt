@@ -118,7 +118,6 @@ class SyncProcessor(object):
             if profile:
                 key = profile._id
             else:
-                print('MP %s not found ' % source_id)
                 key = None
             self._profile_ids[source_id] = key
         return self._profile_ids[source_id]
@@ -130,13 +129,11 @@ class SyncProcessor(object):
         fraction_abbreviation = abbr_map.get(fraction_abbreviation,
                                              fraction_abbreviation)
         if fraction_abbreviation not in self._fraction_ids:
-            print(fraction_abbreviation)
             view = couch.view('mps/fraction_by_abbr',
                               key=fraction_abbreviation)
             try:
                 fraction = view.one(except_all=True)
             except NoResultFound:
-                print('Fraction %s not found' % fraction_abbreviation)
                 return None
             self._fraction_ids[fraction_abbreviation] = fraction._id
         return self._fraction_ids[fraction_abbreviation]
@@ -159,11 +156,8 @@ class SyncProcessor(object):
         node.save()
 
     def process(self, doc):
-        import pprint ; pprint.pprint(doc.source['url'])
         node = self.get_or_create_voting(doc)
         node.created = doc.datetime
-
-        print 'Node: %s ... ' % (node._id,),
 
         # TODO: some times, when 'formulation' property does not exists,
         # 'formulation_a' and 'formulation_b' can be provided.
@@ -201,8 +195,6 @@ class SyncProcessor(object):
         node.source = self.get_source(doc)
 
         self.save_node(node)
-
-        print('OK')
 
     def sync(self, view):
         for doc in view:
