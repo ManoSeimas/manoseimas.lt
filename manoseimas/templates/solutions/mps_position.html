@@ -30,17 +30,18 @@
             {% for position_list in group.positions %}
             <td class="result-container">
               {% for position in position_list %}
+              {% with position.profile.ref.doc_type as doc_type %}
               <div class="result {% if not position.active %}inactive{% endif %}
-                          doc-type-{{ position.profile.ref.doc_type|slugify }}
-                          {% if position.profile.ref.doc_type == "MPProfile" %}fraction-{{ position.profile.ref.fraction.ref.slug }}{% endif %}"
-                   data-slug="{{ position.profile.ref.slug }}"
+                          {{ doc_type|slugify }}
+                          {% if doc_type == "MPProfile" %}fraction-{{ position.profile.ref.fraction.ref.slug }}{% endif %}"
                    title="Dalyvavimas: {{ position.participation_percent }}%">
                 <a href="{% nodeurl position.profile.ref %}">
                   {% nodeimage position.profile.ref 80 %}
                 </a>
                 <div class="description">
                   <p>
-                    <span class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
+                    <span {% if doc_type == "Fraction" %}data-slug="{{ position.profile.ref.slug }}"{% endif %}
+                          class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
                     {% if not position.active %}
                     [?]
                     {% endif %}
@@ -53,6 +54,7 @@
                   <p class="sub-title">{{ position.profile.ref.fraction_abbreviation|default:'' }}</p>
                 </div>
               </div>
+              {% endwith %}
               {% endfor %}
             </td>
             {% endfor %}

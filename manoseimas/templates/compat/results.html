@@ -32,18 +32,19 @@
             {% for compatibility_list in group.compatibilities %}
             <td class="result-container">
               {% for compatibility in compatibility_list %}
+              {% with compatibility.profile.ref.doc_type as doc_type %}
               <div class="result {% if not compatibility.precise %}imprecise{% endif %}
-                          doc-type-{{ compatibility.profile.ref.doc_type|slugify }}
-                          {% if compatibility.profile.ref.doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.ref.slug }}{% endif %}"
-                   data-slug="{{ compatibility.profile.ref.slug }}"
+                          {{ doc_type|slugify }}
+                          {% if doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.ref.slug }}{% endif %}"
                    title="Tikslumas: {{ compatibility.precision_percent }}%">
                 <a href="{% nodeurl compatibility.profile.ref %}">
                   {% nodeimage compatibility.profile.ref 80 %}
                 </a>
                 <div class="description">
                   <p>
-                    <span class="{% if compatibility.positive %}positive{% else %}negative{% endif %} percent">{{ compatibility.compatibility_percent }}%</span>
-                    {% if not compatibility.precise %}
+                    <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.ref.slug }}"{% endif %}
+                          class="{% if compatibility.positive %}positive{% else %}negative{% endif %} percent">{{ compatibility.compatibility_percent }}%</span>
+                    {% if not compatibility.active %}
                     [?]
                     {% endif %}
                   </p>
@@ -55,6 +56,7 @@
                   <p class="sub-title">{{ compatibility.profile.ref.fraction_abbreviation|default:'' }}</p>
                 </div>
               </div>
+              {% endwith %}
               {% endfor %}
             </td>
             {% endfor %}

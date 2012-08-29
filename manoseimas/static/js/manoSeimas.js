@@ -24,7 +24,7 @@
   manoSeimas.submitPosition = submitPosition;
 
   function showFractionMPs(fraction) {
-    var mps = $('.doc-type-mpprofile');
+    var mps = $('.mpprofile');
     if (fraction === '') {
       mps.show();
     } else {
@@ -41,9 +41,9 @@
       showFractionMPs(this.value);
     });
 
-    $('.doc-type-fraction .description p:first-child').click(function() {
+    $('.fraction .description .percent').click(function() {
       $('#result-tabs a[href=#seimo-nariai]').tab('show');
-      var slug = $(this).parent().parent().data('slug');
+      var slug = $(this).data('slug');
       $('#filter-fraction').val(slug).change();
     });
   }
