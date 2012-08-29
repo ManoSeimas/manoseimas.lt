@@ -33,13 +33,14 @@
               <div class="result {% if not position.active %}inactive{% endif %}
                           doc-type-{{ position.profile.ref.doc_type|slugify }}
                           {% if position.profile.ref.doc_type == "MPProfile" %}fraction-{{ position.profile.ref.fraction.ref.slug }}{% endif %}"
-                   data-slug="{{ position.profile.ref.slug }}">
+                   data-slug="{{ position.profile.ref.slug }}"
+                   title="Dalyvavimas: {{ position.participation_percent }}%">
                 <a href="{% nodeurl position.profile.ref %}">
                   {% nodeimage position.profile.ref 80 %}
                 </a>
                 <div class="description">
                   <p>
-                    <span title="Dalyvavimas: {{ position.participation_percent }}%" class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
+                    <span class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
                     {% if not position.active %}
                     [?]
                     {% endif %}
