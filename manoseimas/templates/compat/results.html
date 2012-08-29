@@ -44,7 +44,7 @@
                   <p>
                     <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.ref.slug }}"{% endif %}
                           class="{% if compatibility.positive %}positive{% else %}negative{% endif %} percent">{{ compatibility.compatibility_percent }}%</span>
-                    {% if not compatibility.active %}
+                    {% if not compatibility.precise %}
                     [?]
                     {% endif %}
                   </p>
