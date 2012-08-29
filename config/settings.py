@@ -101,6 +101,7 @@ STATICFILES_DIRS = (
     #if $TWITTER_BOOTSTRAP
     os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
     #end if
+    os.path.join(BUILDOUT_DIR, 'parts', 'history.js'),
 )
 
 #if $DJANGO_PIPELINE
@@ -139,6 +140,7 @@ PIPELINE_JS = {
             'js/flot/jquery.flot.js',
             'js/flot/jquery.flot.pie.js',
             'js/csrf.js',
+            'scripts/bundled/html5/jquery.history.js',
             'js/manoSeimas.js',
         ),
         'output_filename': 'js/scripts.min.js',
