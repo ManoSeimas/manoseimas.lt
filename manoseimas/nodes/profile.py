@@ -21,11 +21,15 @@ class ManoseimasProfileView(ProfileView):
     template = 'sboard/profile.html'
 
     def render(self, **overrides):
-        positions = [{
-            'solution': pp.node,
-            'position': USER_POSITION_NAMES[int(pp.position)],
-        } for pp in PersonPosition.objects.filter(profile=self.node)]
-        positions.sort(key=lambda p: p['solution'].ref.title)
+        if self.request.user.id == self.node.uid:
+            positions = [{
+                'solution': pp.node,
+                'position': USER_POSITION_NAMES[int(pp.position)],
+            } for pp in PersonPosition.objects.filter(profile=self.node)]
+            positions.sort(key=lambda p: p['solution'].ref.title)
+        else:
+            positions = None
+
         context = {
             'positions': positions,
         }

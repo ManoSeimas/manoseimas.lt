@@ -21,8 +21,8 @@
   </div>
 </div>
 
+{% if positions %}
 <hr style="clear: both">
-
 <h2 class="hr">Politiniai sprendimai</h2>
 
 <ul class="positions">
@@ -33,4 +33,6 @@
   </li>
   {% endfor %}
 </ul>
+{% endif %}
+
 {% endblock %}
