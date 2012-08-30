@@ -92,7 +92,8 @@
 
         <form action="{% url search %}" method="get" id="search-box">
           <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
-                 placeholder="{% trans "Search" %}" class="search-query" />
+                 placeholder="{% trans "Ieškok politikų, temų, argumentų&hellip;" %}" class="search-query">
+          <input type="submit" class="submit icon-search" value="">
         </form>
       </div>
     </div>

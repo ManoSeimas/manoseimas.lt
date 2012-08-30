@@ -157,11 +157,29 @@
   float: right;
   padding: 14px 0 14px 0;
   margin: 0;
+  position: relative;
 
   .search-query {
+    padding: 4px 28px 4px 8px;
     .border-radius(@borderRadius);
     .box-shadow(inset 1px 2px 7px #e0e0e0);
     #gradient > .vertical(#fafafa, @white);
+    width: 300px;
+  }
+
+  .submit {
+    display: block;
+    border: none;
+    background-color: transparent;
+    .size(20px, 20px);
+    position: absolute;
+    top: 21px;
+    right: 4px;
+    opacity: 0.5;
+
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 
