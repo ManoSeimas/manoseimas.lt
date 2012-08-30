@@ -6,15 +6,15 @@
 {% endblock %}
 
 {% block node_body %}
-  <h1>
+  <h1 style="text-transform: none; font-weight: 700; margin-bottom: 10px">
     {% if node.solves %}
-    <span class="positive">UŽ</span>
+    <span class="positive">Už</span>
     {% else %}
-    <span class="negative">PRIEŠ</span>
+    <span class="negative">Prieš</span>
     {% endif %}
-    - <a href="{{ node.issue.ref.permalink }}">{{ node.issue.ref.title }}</a>
+    - <a href="{{ node.solution.ref.permalink }}">{{ node.solution.ref.title }}</a>
   </h1>
-  <h2><a class="stealth" href="{{ node.solution.ref.permalink }}">{{ node.solution.ref.title }}</a></h2>
+  <h2 class="argument"><a class="stealth" href="{{ node.issue.ref.permalink }}">{{ node.issue.ref.title }}</a></h2>
 
   <p>{{ node.summary }}</p>
   <p>{{ node.render_body }}</p>
