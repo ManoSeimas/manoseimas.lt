@@ -63,7 +63,7 @@ def solution_nav(node, nav, active):
 
     nav.append({
         'key': 'node-title',
-        'title': _('Sprendimas'),
+        'title': _('Tema'),
         'header': True,
     })
 
@@ -71,7 +71,7 @@ def solution_nav(node, nav, active):
     nav.append({
         'key': key,
         'url': node.permalink(),
-        'title': _('Sprendimas'),
+        'title': _(u'Aprašymas'),
         'children': [],
         'active': key in active,
     })
