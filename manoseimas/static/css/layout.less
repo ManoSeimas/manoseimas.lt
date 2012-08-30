@@ -308,15 +308,24 @@
 
   table.footnote {
     text-align: left;
+    width: 700px;
+    table-layout: fixed;
 
     td {
       padding: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       font-weight: normal;
+      color: #aaa;
+
       a {
         color: #888;
       }
     }
+
     .label {
+      width: 30px;
       background: transparent;
     }
   }
