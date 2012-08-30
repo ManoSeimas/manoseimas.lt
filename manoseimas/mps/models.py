@@ -23,6 +23,7 @@ from sboard.factory import provideNode
 from sboard.models import NodeProperty
 from sboard.profiles.models import ProfileNode
 from sboard.profiles.models import GroupNode
+from sboard.profiles.models import query_group_membership
 
 from .interfaces import ICommission
 from .interfaces import ICommittee
@@ -65,6 +66,10 @@ class Fraction(PoliticalGroup):
 
     def fraction_abbreviation(self):
         return self.abbreviation
+
+    def members(self):
+        memberships = query_group_membership(self._id)
+        return set(m.profile.ref for m in memberships)
 
 provideNode(Fraction, "fraction")
 

@@ -62,6 +62,32 @@ class MPProfileView(ProfileView):
     adapts(IMPProfile)
     template = 'mps/profile.html'
 
+    def nav(self, active=tuple()):
+        nav = super(MPProfileView, self).nav(active)
+
+        if self.node.fraction:
+            nav.append({
+                'title': _('Frakcijos nariai'),
+                'header': True,
+            })
+
+            MEMBER_LIMIT = 10
+
+            members = list(self.node.fraction.ref.members())
+            members.sort(key=attrgetter('last_name', 'first_name'))
+            for member in members[:MEMBER_LIMIT]:
+                nav.append({
+                    'title': member.title,
+                    'url': member.permalink(),
+                })
+            if len(members) > MEMBER_LIMIT:
+                nav.append({
+                    'title': _(u'Daugiau narių…'),
+                    'url': self.node.fraction.ref.permalink() + '#nariai',
+                })
+
+        return nav
+
     def render(self, **overrides):
         context = {
             'positions': prepare_position_list(self.node),
@@ -77,11 +103,8 @@ class FractionView(GroupView):
     template = 'mps/fraction.html'
 
     def render(self, **overrides):
-        memberships = super(FractionView, self).get_node_list()
-        members = set(m.profile.ref for m in memberships)
-
         context = {
-            'members': sorted(members, key=attrgetter('last_name', 'first_name')),
+            'members': sorted(self.node.members(), key=attrgetter('last_name', 'first_name')),
             'positions': prepare_position_list(self.node),
         }
         context.update(overrides)
