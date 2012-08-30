@@ -37,9 +37,9 @@
           <p>{{ argument.summary }}</p>
           {% if argument.counter_arguments %}
           <a class="counter-arguments-toggle" data-toggle="collapse" data-target="#{{ argument.slug }}">Kontr-argumentai <span class="caret"></span></a>
-          <ul id="{{ argument.slug }}" class="counter-arguments collapse">
+          <ul id="{{ argument.slug }}" class="inline counter-arguments collapse">
             {% for counter_argument in argument.counter_arguments %}
-            <li>{{ counter_argument.summary }} <a href="{% nodeurl counter_argument %}">Daugiau</a></li>
+            <li>{{ counter_argument.summary }} <a class="more" href="{% nodeurl counter_argument %}">Daugiau</a></li>
             {% endfor %}
           </ul>
           {% endif %}

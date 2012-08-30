@@ -23,7 +23,7 @@
   {% if node.counter_arguments %}
   <hr>
   <h2>Kontr-argumentai</h2>
-  <ul>
+  <ul class="counter-arguments">
     {% for counter_argument in node.counter_arguments %}
     <li>
       <p><a class="stealth" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></p>
