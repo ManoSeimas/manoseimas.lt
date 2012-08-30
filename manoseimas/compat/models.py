@@ -156,7 +156,7 @@ class PersonPosition(models.Model):
         return self.participation >= PARTICIPATION_ACTIVE_TRESHOLD
 
     def positive(self):
-        return self.position >= 0
+        return self.position > 0
 
     def __key__(self):
         if self.active():
@@ -196,7 +196,7 @@ class Compatibility(object):
         return self.precision > PRECISION_PRECISE_TRESHOLD
 
     def positive(self):
-        return self.compatibility >= 0
+        return self.compatibility > 0
 
     def __key__(self):
         # Sort imprecise results by precision instead of compatibility.
@@ -249,7 +249,7 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
 
     for compat in compatibilities(positions, profile_type):
         if precisep(compat):
-            if compat.compatibility > 0:
+            if compat.positive():
                 aye.append(compat)
             else:
                 against.append(compat)
