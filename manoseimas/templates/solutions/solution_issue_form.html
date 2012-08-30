@@ -1,0 +1,13 @@
+{% extends "sboard/node_form.html" %}
+{% load sboard %}
+
+{% block node_form_extra %}
+{% if node.counter_arguments %}
+<h2>Redaguoti kontr-argumentą</h2>
+<ul>
+  {% for counter_argument in node.counter_arguments %}
+  <li><a href="{% nodeurl counter_argument 'update' %}">{{ counter_argument.summary }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

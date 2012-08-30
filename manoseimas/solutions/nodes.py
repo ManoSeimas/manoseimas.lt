@@ -346,6 +346,7 @@ provideAdapter(SolutionIssueDetailsView)
 class SolutionIssueUpdateView(UpdateView):
     adapts(ISolutionIssue)
     form = SolutionIssueForm
+    template = 'solutions/solution_issue_form.html'
 
 provideAdapter(SolutionIssueUpdateView, name='update')
 
