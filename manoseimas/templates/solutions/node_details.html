@@ -33,8 +33,8 @@
         {% for argument in aye_against %}
         <td>
           {% if argument %}
-          <h2><a href="{{ argument.permalink }}">{{ argument.issue.ref.title }}</a></h2>
-          <p>{{ argument.summary }}</p>
+          <h2><a href="{% nodeurl argument %}">{{ argument.issue.ref.title }}</a></h2>
+          <p>{{ argument.summary }} <a class="more" href="{% nodeurl argument %}">Daugiau</a></p>
           {% if argument.counter_arguments %}
           <a class="counter-arguments-toggle" data-toggle="collapse" data-target="#{{ argument.slug }}">Kontr-argumentai <span class="caret"></span></a>
           <ul id="{{ argument.slug }}" class="inline counter-arguments collapse">
