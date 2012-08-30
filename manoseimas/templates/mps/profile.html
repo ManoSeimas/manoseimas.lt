@@ -14,10 +14,6 @@
     {% if profile.fraction %}
       <p><a class="fraction" href="{% nodeurl profile.fraction.ref %}">{{ profile.fraction.ref.title }}</a></p>
     {% endif %}
-
-    {% if profile.home_page %}
-    <p><a href="{{ profile.home_page }}">{% trans "Home page" %}</a></p>
-    {% endif %}
   </div>
 </div>
 
