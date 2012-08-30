@@ -36,10 +36,10 @@
           <h2><a href="{{ argument.permalink }}">{{ argument.issue.ref.title }}</a></h2>
           <p>{{ argument.summary }}</p>
           {% if argument.counter_arguments %}
-          <button class="btn" data-toggle="collapse" data-target="#{{ argument.slug }}">kontrargumentai</button>
-          <ul id="{{ argument.slug }}" class="collapse">
+          <a class="counter-arguments-toggle" data-toggle="collapse" data-target="#{{ argument.slug }}">Kontr-argumentai <span class="caret"></span></a>
+          <ul id="{{ argument.slug }}" class="counter-arguments collapse">
             {% for counter_argument in argument.counter_arguments %}
-            <li>{{ counter_argument.summary }}</li>
+            <li>{{ counter_argument.summary }} <a href="{% nodeurl counter_argument %}">Daugiau</a></li>
             {% endfor %}
           </ul>
           {% endif %}
