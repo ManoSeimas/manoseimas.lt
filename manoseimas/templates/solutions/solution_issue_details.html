@@ -16,9 +16,7 @@
   </h1>
   <h2 class="argument"><a class="stealth" href="{{ node.issue.ref.permalink }}">{{ node.issue.ref.title }}</a></h2>
 
-  <p>{{ node.summary }}</p>
-  <p>{{ node.render_body }}</p>
-
+  {{ node.render_body }}
 
   {% if node.counter_arguments %}
   <hr>
