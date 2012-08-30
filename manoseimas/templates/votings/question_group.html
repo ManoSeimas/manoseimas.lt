@@ -18,6 +18,8 @@
 
 
 {% block content %}
+  {{ node.render_body }}
+
   {% for category in categories %}
   <div class="section">
     <h1 id="{{ category.slug }}">{{ category.title|upper }}</h1>

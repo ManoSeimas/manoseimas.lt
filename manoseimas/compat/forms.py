@@ -30,6 +30,7 @@ class CompatNodeForm(BaseNodeForm):
     title = forms.CharField()
     categories = forms.Field(widget=forms.Textarea,
             help_text="Enter category names, one category name per line.")
+    body = forms.Field(widget=forms.Textarea, required=False)
 
     def get_current_categories(self):
         if self.node:
