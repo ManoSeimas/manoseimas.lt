@@ -74,7 +74,7 @@ class SolutionIssue(Node):
 
     @property
     def title(self):
-        solves_text = _(u'UŽ') if self.solves else _(u'PRIEŠ')
+        solves_text = _(u'Už') if self.solves else _(u'Prieš')
         return u'%s – %s' % (solves_text, self.issue.ref.title)
 
     def counter_arguments(self):
