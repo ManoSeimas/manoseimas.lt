@@ -21,6 +21,7 @@ from couchdbkit.ext.django import schema
 
 from sboard.factory import provideNode
 from sboard.models import NodeProperty
+from sboard.models import couch
 from sboard.profiles.models import ProfileNode
 from sboard.profiles.models import GroupNode
 from sboard.profiles.models import query_group_membership
@@ -72,6 +73,10 @@ class Fraction(PoliticalGroup):
         return set(m.profile.ref for m in memberships)
 
 provideNode(Fraction, "fraction")
+
+
+def query_fractions():
+    return couch.view('sboard/by_type', startkey=[Fraction.__name__], endkey=[Fraction.__name__, {}]).iterator()
 
 
 class Committee(PoliticalGroup):

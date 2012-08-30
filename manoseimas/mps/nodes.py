@@ -32,6 +32,8 @@ from manoseimas.compat.models import PersonPosition
 from .interfaces import IMPProfile
 from .interfaces import IFraction
 
+from .models import query_fractions
+
 from .forms import FractionForm
 
 
@@ -79,6 +81,7 @@ class MPProfileView(ProfileView):
                 nav.append({
                     'title': member.title,
                     'url': member.permalink(),
+                    'active': member == self.node,
                 })
             if len(members) > MEMBER_LIMIT:
                 nav.append({
@@ -101,6 +104,24 @@ provideAdapter(MPProfileView)
 class FractionView(GroupView):
     adapts(IFraction)
     template = 'mps/fraction.html'
+
+    def nav(self, active=tuple()):
+        nav = super(FractionView, self).nav(active)
+
+        nav.append({
+            'title': _('Frakcijos'),
+            'header': True,
+        })
+
+        fractions = sorted(query_fractions(), key=attrgetter('title'))
+        for fraction in fractions:
+            nav.append({
+                'title': fraction.title,
+                'url': fraction.permalink(),
+                'active': fraction == self.node,
+            })
+
+        return nav
 
     def render(self, **overrides):
         context = {
