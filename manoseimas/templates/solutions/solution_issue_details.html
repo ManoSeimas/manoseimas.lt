@@ -26,8 +26,11 @@
   <ul class="counter-arguments">
     {% for counter_argument in node.counter_arguments %}
     <li>
-      <p><a class="stealth" href="{{ counter_argument.permalink }}">{{ counter_argument.summary }}</a></p>
-      <p>{{ counter_argument.render_body }}</p>
+      <p>
+        {{ counter_argument.summary }}
+        <a class="more" href="#" data-toggle="collapse" data-target="#{{ counter_argument.key }}">Daugiau</a>
+      </p>
+      <div id="{{ counter_argument.key }}" class="collapse">{{ counter_argument.render_body }}</div>
     </li>
     {% endfor %}
   </ul>
