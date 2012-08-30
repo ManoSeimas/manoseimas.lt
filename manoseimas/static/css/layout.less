@@ -246,6 +246,9 @@
         padding: 4px 15px;
         color: @gray;
         line-height: 18px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .positive > a { color: lighten(desaturate(@positiveColor, 30%), 10%); }
@@ -254,15 +257,14 @@
       & > li.active {
         a {
           color: @white;
+        }
           position: relative;
-
           &:before {
             content: url(../img/embed/active-menuitem-arrow.png);
             position: absolute;
-            left: -11px;
+            left: -26px;
             top: 0px;
           }
-        }
       }
 
       & > li:first-child {
