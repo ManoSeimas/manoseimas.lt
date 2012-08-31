@@ -323,6 +323,16 @@ def calculate_parliament_positions(solution_id):
     return (fractions, {mp_id: mp for (mp_id, fraction_id), mp in mps.items()})
 
 
+def clear_parliament_positions():
+    """Deletes all positions of MPs and Fractions.
+
+    Should be used before regenerating positions for each solution with
+    update_parliament_positions. If any solutions were deleted, their positions
+    are deleted too this way."""
+
+    PersonPosition.objects.filter(profile_type__in=[MP_PROFILE, FRACTION_PROFILE]).delete()
+
+
 def update_parliament_positions(solution_id):
     fractions, mps = calculate_parliament_positions(solution_id)
 
@@ -340,9 +350,6 @@ def update_parliament_positions(solution_id):
     )
 
     for qry, positions, profile_type in items:
-        # Clear positions of solution
-        qry(solution_id).delete()
-
         # Save calculated positions to PersonPosition table
         for profile_id, values in positions.items():
             position = PersonPosition()
