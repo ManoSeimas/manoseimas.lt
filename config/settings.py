@@ -440,3 +440,6 @@ RESTRUCTUREDTEXT_FILTER_SETTINGS = {
 }
 
 THUMBNAIL_QUALITY = 100
+
+# This is only for anonymous users and is overriden when a user logs in.
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
