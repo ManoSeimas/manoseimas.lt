@@ -416,6 +416,8 @@ AUTHENTICATION_BACKENDS = (
 FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
 FACEBOOK_API_SECRET = '$FACEBOOK_API_SECRET'
 
+GOOGLE_ANALYTICS_KEY = '$GOOGLE_ANALYTICS_KEY'
+
 SBOARD_NODES = (
     'sboard.categories.nodes.CategoryNode',
     'manoseimas.legislation.nodes.LawNode',

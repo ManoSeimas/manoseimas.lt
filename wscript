@@ -69,6 +69,9 @@ def options(ctx):
     gr.add_option('--facebook-api-secret', action='store', default='',
                   help='Facebook API secret.')
 
+    gr.add_option('--google-analytics-key', action='store', default='',
+                  help='Google Analytics key.')
+
     gr.add_option('--twitter-bootstrap', action='store_true', default=True,
                   help='Use Twitter bootstrap framework.')
 
@@ -156,6 +159,8 @@ def configure(ctx):
 
     ctx.env.FACEBOOK_APP_ID = ctx.options.facebook_app_id
     ctx.env.FACEBOOK_API_SECRET = ctx.options.facebook_api_secret
+
+    ctx.env.GOOGLE_ANALYTICS_KEY = ctx.options.google_analytics_key
 
     ctx.env.TWITTER_BOOTSTRAP = ctx.options.twitter_bootstrap
     ctx.env.LESS = ctx.options.less or ctx.env.TWITTER_BOOTSTRAP

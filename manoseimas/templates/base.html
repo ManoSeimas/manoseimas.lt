@@ -179,14 +179,14 @@
   {% block inlinejs %}{% endblock %}
   <!-- end scripts-->
 	
-  <!-- Change UA-XXXXX-X to be your site's ID
+  {% if GOOGLE_ANALYTICS_KEY %}
   <script>
-    window._gaq = [['_setAccount','UAXXXXXXXX1'],['_trackPageview'],['_trackPageLoadTime']];
+    window._gaq = [['_setAccount','{{ GOOGLE_ANALYTICS_KEY }}'],['_trackPageview'],['_trackPageLoadTime']];
     Modernizr.load({
       load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
     });
   </script>
-  -->
+  {% endif %}
 
 
   <!-- Prompt IE 6 users to install Chrome Frame. Remove this if you want to support IE 6.

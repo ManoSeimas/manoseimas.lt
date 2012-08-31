@@ -23,6 +23,7 @@ def settings_for_context(context):
     settings_var_names = (
         'JQUERY_VERSION',
         'FACEBOOK_APP_ID',
+        'GOOGLE_ANALYTICS_KEY',
     )
     for name in settings_var_names:
         if hasattr(settings, name):
