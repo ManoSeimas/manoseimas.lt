@@ -28,7 +28,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
 
 from sboard.ajax import AjaxView
 from sboard.json import json_response
@@ -103,10 +103,6 @@ class SolutionCompatView(NodeView):
     def __init__(self, node):
         super(SolutionCompatView, self).__init__(node)
 
-    def set_view_func(self, view):
-        view = ensure_csrf_cookie(view)
-        super(SolutionCompatView, self).set_view_func(view)
-
     def nav(self, active=tuple()):
         nav = super(SolutionCompatView, self).nav(active)
         return solution_compat_nav(self.request, self.node, nav, active)
@@ -122,6 +118,10 @@ class SolutionCompatView(NodeView):
             }
 
     def render(self, **overrides):
+        # Ensures that a CSRF token is generated and sent. This is required by
+        # the submit-position view.
+        get_token(self.request)
+
         context = {
             'title': self.node.title,
             'view': self,
