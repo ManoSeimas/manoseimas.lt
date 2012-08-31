@@ -38,7 +38,7 @@
                 <a href="{% nodeurl compatibility.profile.ref %}">
                   {% nodeimage compatibility.profile.ref 80 %}
                 </a>
-                <div class="description">
+                <div class="result-description">
                   <p>
                     <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.ref.slug }}"{% endif %}
                           class="{% if compatibility.positive %}positive{% else %}negative{% endif %} percent">{{ compatibility.compatibility_percent }}%</span>

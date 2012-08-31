@@ -38,7 +38,7 @@
                 <a href="{% nodeurl position.profile.ref %}">
                   {% nodeimage position.profile.ref 80 %}
                 </a>
-                <div class="description">
+                <div class="result-description">
                   <p>
                     <span {% if doc_type == "Fraction" %}data-slug="{{ position.profile.ref.slug }}"{% endif %}
                           class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
