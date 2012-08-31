@@ -6,6 +6,8 @@ import sboard.factory
 
 sboard.factory.autodiscover()
 
+import manoseimas.docutils_roles
+
 urlpatterns = patterns('',
     url(r'^$', 'sboard.views.node_view', {'slug': 'manoseimas'}, name='index'),
     url(r'^accounts/', include('social_auth.urls')),
