@@ -170,7 +170,7 @@ PIPELINE_LESS_ARGUMENTS = '--compress --include-path=%s' % LESS_PATH
 #end if
 
 PIPELINE_CSS_COMPRESSOR = None
-PIPELINE_JS_COMPRESSOR = None
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.jsmin.JSMinCompressor'
 
 #end if
 
