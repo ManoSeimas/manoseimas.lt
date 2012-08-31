@@ -166,7 +166,7 @@ LESS_PATH = ':'.join([
     os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap', 'less'),
 ])
 PIPELINE_LESS_BINARY = os.path.join(BUILDOUT_DIR, 'bin', 'lessc')
-PIPELINE_LESS_ARGUMENTS = '--include-path=%s' % LESS_PATH
+PIPELINE_LESS_ARGUMENTS = '--compress --include-path=%s' % LESS_PATH
 #end if
 
 PIPELINE_CSS_COMPRESSOR = None
