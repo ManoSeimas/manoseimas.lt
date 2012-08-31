@@ -111,6 +111,7 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineFinderStorage'
 PIPELINE_CSS = {
     'styles': {
         'source_filenames': (
+          'fonts/open-sans/stylesheet.less',
           'css/styles.less',
         ),
         'output_filename': 'css/styles.css',
