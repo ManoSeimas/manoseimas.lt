@@ -18,7 +18,7 @@
   <ul class="positions">
     {% for position in positions %}
     <li>
-      Balsavo <strong title="{{ position.percent }}">{{ position.position|lower }}</strong> temą
+      Balsavo <strong class="very" title="{{ position.percent }}">{{ position.position|lower }}</strong>
       <a class="profile-solution-title arrow-before" href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>
     </li>
     {% endfor %}
