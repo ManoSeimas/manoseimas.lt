@@ -137,20 +137,23 @@ class PersonPosition(models.Model):
         return int(self.participation * dc(100))
 
     def classify(self):
-        if -2 <= self.position < -1.32:
-            return _(u'Stipriai prieš')
-        elif -1.32 <= self.position < -0.66:
-            return _(u'Prieš')
-        elif -0.66 <= self.position < 0:
-            return _(u'Silpnai prieš')
-        elif self.position == 0:
-            return _(u'Neutraliai')
-        elif 0 < self.position <= 0.66:
-            return _(u'Silpnai už')
-        elif 0.66 < self.position <= 1.32:
-            return _(u'Už')
+        if self.position == 0:
+            return _(u'neutraliai')
+
+        if self.positive():
+            sign = _(u'už')
         else:
-            return _(u'Stipriai už')
+            sign = _(u'prieš')
+
+        percent = self.position_percent()
+        if 0 < percent <= 33:
+            quantifier = _(u'nestipriai')
+        elif 33 < percent <= 66:
+            quantifier = _(u'vidutiniškai')
+        else:
+            quantifier = _(u'stipriai')
+
+        return u'%s %s' % (quantifier, sign)
 
     def active(self):
         return self.participation >= PARTICIPATION_ACTIVE_TRESHOLD
