@@ -244,11 +244,9 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
     aye, against = [], []
 
     if precise:
-        def precisep(c):
-            return c.precise()
+        precisep = lambda c: c.precise()
     else:
-        def precisep(c):
-            return True
+        precisep = lambda c: True
 
     for compat in compatibilities(positions, profile_type):
         if precisep(compat):
