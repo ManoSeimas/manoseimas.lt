@@ -32,9 +32,13 @@ from sboard.categories.models import Category
 from sboard.factory import provideNode
 from sboard.models import NodeForeignKey
 from sboard.models import couch
+from sboard.models import node_pre_delete
 from sboard.models import parse_node_slug
 from sboard.profiles.models import query_group_membership
 
+from manoseimas.mps.models import Fraction
+from manoseimas.mps.models import MPProfile
+from manoseimas.solutions.models import Solution
 from manoseimas.solutions.models import query_solution_votings
 
 from .interfaces import ICompat
@@ -444,3 +448,21 @@ def fetch_user_positions(request, user):
     qry = PersonPosition.objects.filter(profile=profile_id)
     for position in qry:
         yield (position.node.ref, position.position)
+
+
+def delete_profile_positions(profile_node, **kwargs):
+    import ipdb; ipdb.set_trace()
+    (PersonPosition.objects.
+     filter(profile=profile_node,
+            profile_type__in=(FRACTION_PROFILE, MP_PROFILE)).
+     delete())
+
+node_pre_delete.connect(delete_profile_positions, Fraction)
+node_pre_delete.connect(delete_profile_positions, MPProfile)
+
+
+def delete_solution_positions(solution_node, **kwargs):
+    import ipdb; ipdb.set_trace()
+    PersonPosition.objects.filter(node=solution_node).delete()
+
+node_pre_delete.connect(delete_profile_positions, Solution)
