@@ -130,6 +130,11 @@ class PersonPosition(models.Model):
 
     objects = PersonPositionManager()
 
+    def __unicode__(self):
+        return '%s: %s -> %s [%s]' % (self.__class__.__name__,
+                                      self.profile.key, self.node.key,
+                                      self.position)
+
     def position_percent(self):
         return int((abs(self.position) / dc(2)) * dc(100))
 

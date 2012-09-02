@@ -253,6 +253,34 @@ def syncpositions(args):
     update_parliament_positions()
 
 
+def fixbrokenrefs(args):
+    """After incorrect node deletion implementation, deleted nodes is left with
+    broken references in other objects, that links to deleted node.
+
+    This script tries to find broken references and remove them.
+    """
+
+    from couchdbkit.exceptions import ResourceNotFound
+    from manoseimas.compat.models import PersonPosition
+
+    for pp in PersonPosition.objects.all():
+        if pp.node:
+            try:
+                pp.node.ref.title
+            except ResourceNotFound:
+                print('Broken node ref: %s' % pp)
+                pp.delete()
+                continue
+
+        if pp.profile:
+            try:
+                pp.profile.ref.title
+            except ResourceNotFound:
+                print('Broken profile ref: %s' % pp)
+                pp.delete()
+                continue
+
+
 def main():
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers()
@@ -302,6 +330,10 @@ def main():
     p = subparsers.add_parser('syncpositions')
     p.add_argument('solution')
     p.set_defaults(func=syncpositions)
+
+    # fixbrokenrefs
+    p = subparsers.add_parser('fixbrokenrefs')
+    p.set_defaults(func=fixbrokenrefs)
 
     args = parser.parse_args()
     args.func(args)
