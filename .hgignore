@@ -35,4 +35,5 @@ syntax:regexp
 ^logs$
 ^node_modules$
 
-manoseimas/static/css/styles.css
+^manoseimas/static/css/styles.css$
+^manoseimas/static/fonts/open-sans/stylesheet.css$
