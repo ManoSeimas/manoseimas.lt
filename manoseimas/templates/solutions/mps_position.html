@@ -34,12 +34,11 @@
               {% with position.profile.ref.doc_type as doc_type %}
               <div class="result {% if not position.active %}inactive{% endif %}
                           {{ doc_type|slugify }}
-                          {% if doc_type == "MPProfile" %}fraction-{{ position.profile.ref.fraction.ref.slug }}{% endif %}"
-                   title="Dalyvavimas: {{ position.participation_percent }}%">
-                <a href="{% nodeurl position.profile.ref %}">
+                          {% if doc_type == "MPProfile" %}fraction-{{ position.profile.ref.fraction.ref.slug }}{% endif %}">
+                <a href="{% nodeurl position.profile.ref %}" title="Dalyvavimas: {{ position.participation_percent }}%">
                   {% nodeimage position.profile.ref 80 %}
                 </a>
-                <div class="result-description">
+                <span class="result-description" title="Dalyvavimas: {{ position.participation_percent }}%">
                   <p>
                     <span {% if doc_type == "Fraction" %}data-slug="{{ position.profile.ref.slug }}"{% endif %}
                           class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
@@ -53,7 +52,7 @@
                     </a>
                   </p>
                   <p class="sub-title">{{ position.profile.ref.fraction_abbreviation|default:'' }}</p>
-                </div>
+                </span>
               </div>
               {% endwith %}
               {% endfor %}

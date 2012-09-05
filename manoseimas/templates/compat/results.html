@@ -35,12 +35,11 @@
               {% with compatibility.profile.ref.doc_type as doc_type %}
               <div class="result {% if not compatibility.precise %}imprecise{% endif %}
                           {{ doc_type|slugify }}
-                          {% if doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.ref.slug }}{% endif %}"
-                   title="Tikslumas: {{ compatibility.precision_percent }}%">
-                <a href="{% nodeurl compatibility.profile.ref %}">
+                          {% if doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.ref.slug }}{% endif %}">
+                <a href="{% nodeurl compatibility.profile.ref %}" title="Tikslumas: {{ compatibility.precision_percent }}%">
                   {% nodeimage compatibility.profile.ref 80 %}
                 </a>
-                <div class="result-description">
+                <span class="result-description" title="Tikslumas: {{ compatibility.precision_percent }}%">
                   <p>
                     <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.ref.slug }}"{% endif %}
                           class="{% if compatibility.positive %}positive{% else %}negative{% endif %} percent">{{ compatibility.compatibility_percent }}%</span>
@@ -54,7 +53,7 @@
                     </a>
                   </p>
                   <p class="sub-title">{{ compatibility.profile.ref.fraction_abbreviation|default:'' }}</p>
-                </div>
+                </span>
               </div>
               {% endwith %}
               {% endfor %}
