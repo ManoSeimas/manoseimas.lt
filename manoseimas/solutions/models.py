@@ -72,11 +72,6 @@ class SolutionIssue(Node):
 
     solves = schema.BooleanProperty()
 
-    @property
-    def title(self):
-        solves_text = _(u'Už') if self.solves else _(u'Prieš')
-        return u'%s – %s' % (solves_text, self.issue.ref.title)
-
     def counter_arguments(self):
         return list(couch.view('solutions/counter_arguments', key=self._id).iterator())
 
