@@ -21,6 +21,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from sboard.forms import BaseNodeForm
 from sboard.forms import NodeForm
+from sboard.forms import validate_body
 from sboard.fields import NodeField
 
 from manoseimas.votings.models import fetch_voting_by_lrslt_url
@@ -35,12 +36,12 @@ class SolutionForm(NodeForm):
 class AssignIssueForm(BaseNodeForm):
     title = forms.CharField()
     summary = forms.CharField(widget=forms.Textarea)
-    body = forms.CharField(widget=forms.Textarea, required=False)
+    body = forms.CharField(widget=forms.Textarea, required=False, validators=[validate_body])
 
 
 class SolutionIssueForm(BaseNodeForm):
     summary = forms.CharField(widget=forms.Textarea)
-    body = forms.CharField(widget=forms.Textarea, required=False)
+    body = forms.CharField(widget=forms.Textarea, required=False, validators=[validate_body])
     listing_priority = forms.IntegerField(
         initial=0,
         label=_(u'Prioritetas sąrašuose'),
@@ -50,7 +51,7 @@ class SolutionIssueForm(BaseNodeForm):
 class CounterArgumentForm(BaseNodeForm):
     parent = NodeField(required=True)
     summary = forms.CharField(widget=forms.Textarea)
-    body = forms.CharField(widget=forms.Textarea, required=False)
+    body = forms.CharField(widget=forms.Textarea, required=False, validators=[validate_body])
 
 
 class AssignVotingForm(forms.Form):
