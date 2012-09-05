@@ -291,33 +291,34 @@ provideAdapter(SolutionIssueListView, name="issues")
 
 
 def solution_issue_nav(node, nav, active):
-    nav.append({
-        'key': 'node-title',
-        'title': _('Argumentas'),
-        'header': True,
-    })
-
-    for arg in query_solution_solves(node.solution._id):
-        key = arg.key
+    if node.solution:
         nav.append({
-            'key': key,
-            'class': 'positive',
-            'url': arg.permalink(),
-            'title': arg.issue.ref.title,
-            'children': [],
-            'active': key in active,
+            'key': 'node-title',
+            'title': _('Argumentas'),
+            'header': True,
         })
 
-    for arg in query_solution_raises(node.solution._id):
-        key = arg.key
-        nav.append({
-            'key': key,
-            'class': 'negative',
-            'url': arg.permalink(),
-            'title': arg.issue.ref.title,
-            'children': [],
-            'active': key in active,
-        })
+        for arg in query_solution_solves(node.solution._id):
+            key = arg.key
+            nav.append({
+                'key': key,
+                'class': 'positive',
+                'url': arg.permalink(),
+                'title': arg.issue.ref.title,
+                'children': [],
+                'active': key in active,
+            })
+
+        for arg in query_solution_raises(node.solution._id):
+            key = arg.key
+            nav.append({
+                'key': key,
+                'class': 'negative',
+                'url': arg.permalink(),
+                'title': arg.issue.ref.title,
+                'children': [],
+                'active': key in active,
+            })
 
     return nav
 
@@ -334,8 +335,12 @@ class SolutionIssueDetailsView(DetailsView):
         return solution_issue_nav(self.node, nav, active)
 
     def render(self, **overrides):
+        if self.node.issue:
+            title = self.node.issue.ref.title
+        else:
+            title = self.node.title
         context = {
-            'title': self.node.issue.ref.title,
+            'title': title,
         }
         context.update(overrides)
         return super(SolutionIssueDetailsView, self).render(**context)
