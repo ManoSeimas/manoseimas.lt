@@ -43,7 +43,7 @@
                     <span {% if doc_type == "Fraction" %}data-slug="{{ position.profile.ref.slug }}"{% endif %}
                           class="{% if position.positive %}positive{% else %}negative{% endif %} percent">{{ position.position_percent }}%</span>
                     {% if not position.active %}
-                    [?]
+                    <a class="help inline" href="#inactive-help" data-toggle="modal"></a>
                     {% endif %}
                   </p>
                   <p>
@@ -64,6 +64,27 @@
     </div>
     {% endfor %}
   </div>
+
+  <div class="modal hide fade" id="inactive-help">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Pagalba</h3>
+    </div>
+    <div class="modal-body">
+      <p>Frakcijos ir Seimo nariai, dalyvavę mažiau nei 25% temos balsavimų, yra
+      rodomi rezultatų apačioje, o dalyvavę mažiau nei 10% temos balsavimų,
+      nėra rodomi rezultatuose. Taip padaryta dėl to, kad jų rezultatai gali
+      neatspindėti jų tikrosios pozicijos.</p>
+
+      <p>Balsavimuose būna didelių variacijų, todėl esant nedideliam balsavimų
+      skaičiui, kyla rizika, kad atsitiktinis balsavimas iškreips rezultatus ir
+      Seimo narį / frakciją nepelnytai "iškels" į rezultatų viršų. Tuo tarpu
+      sudalyvavus daugiau balsavimų, išryškėja ilgalaikės, tvarios,
+      patikimesnės tendencijos, tiksliau atspindinčios tikrąją jų poziciją
+      temos atžvilgiu.</p>
+    </div>
+  </div>
+
 {% endblock %}
 
 {% block inlinejs %}

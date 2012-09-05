@@ -842,10 +842,17 @@ footer {
 }
 
 .help {
+  display: block;
   float: right;
   width: 12px;
   height: 12px;
   background: url(../img/help.png);
+
+  &.inline {
+    display: inline-block;
+    .ie7-inline-block();
+    float: none;
+  }
 }
 
 
