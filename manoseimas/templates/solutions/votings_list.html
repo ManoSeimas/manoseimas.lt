@@ -11,6 +11,29 @@
 
   {% nodepermission node 'update' as can_update %}
 
+
+  <a class="help" href="#votings-help" data-toggle="modal"></a>
+  <div class="modal hide fade" id="votings-help">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Pagalba</h3>
+    </div>
+    <div class="modal-body">
+      <p>Tai - temos balsavimai, kurie buvo svarbiausi sprendžiant, ar šios
+      temos esminės nuostatos bus įgyvendintos Seime. Balsavimus priskiriame
+      pagal jų sąsajas su atitinkama tema ir jų svarbą tai temai.</p>
+
+      <p>Sąsajos su tema gali būti dvejopos: balsavimas gali paremti arba gali
+      prieštarauti temos nuostatoms. Jei paremia, priskiriamas teigiamas
+      vertinimas, jei prieštarauja - neigiamas. Svarba nustatoma įvertinant, ar
+      be to konkretaus balsavimo gali būti įgyvendintos temos nuostatos; jei
+      negali, tuomet be šio balsavimo nuostatos nebūtų realizuotos, ir
+      balsavimas yra lemiamas. Kuo balsavimas yra svarbesnis, tuo didesnis
+      vertinimas yra priskiriamas. Išsamią metodiką galite rasti "Kaip tai
+      veikia" puslapyje.</p>
+    </div>
+  </div>
+
   {% if children %}
     {% for child in children %}
     <div class="list-entry">
