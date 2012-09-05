@@ -41,7 +41,7 @@
       showFractionMPs(this.value);
     });
 
-    $('.fraction .description .percent').click(function() {
+    $('.fraction .result-description .percent').click(function() {
       $('#result-tabs a[href=#seimo-nariai]').tab('show');
       var slug = $(this).data('slug');
       $('#filter-fraction').val(slug).change();
