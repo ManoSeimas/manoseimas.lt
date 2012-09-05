@@ -20,6 +20,7 @@
         {% endfor %}
       </select>
       {% endif %}
+      <a class="help" href="#position-help" data-toggle="modal"></a>
       <table class="positive-negative">
         <tbody>
           <tr>
@@ -63,6 +64,29 @@
       </table>
     </div>
     {% endfor %}
+  </div>
+
+  <div class="modal hide fade" id="position-help">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Pagalba</h3>
+    </div>
+    <div class="modal-body">
+      <p>"Seimo pozicija" nurodo, kokios pozicijos temos atžvilgiu laikosi
+      kiekviena frakcija ir Seimo narys.</p>
+
+      <p><strong>Seimo narys</strong>. Kiekvieno temos balsavimo (žr. skiltį
+      "Balsavimai") rezultatai yra įvertinami (<strong>už</strong> = 2,
+      <strong>prieš</strong> = -2, <strong>susilaikė/nebalsavo</strong> = -1)
+      ir susumuojami, o tada padalinami iš maksimalaus įmanomo taškų skaičiaus
+      (t.y. jei visi balsavimai būtų "už"). Taip gaunama Seimo nario pozicija
+      temos atžvilgiu tarp 100% ir -100%.</p>
+
+      <p><strong>Frakcija</strong>. Gautos Seimo narių pozicijos yra sudedamos
+      pagal frakcijų priklausomybę. T.y., kiekvieno frakcijos nario pozicija
+      yra sudedama su kitų narių pozicijomis, ir visa tai suvidurkinama.
+      Išsamią metodiką galite pažiūrėti "Kaip tai veikia" puslapyje.</p>
+    </div>
   </div>
 
   <div class="modal hide fade" id="inactive-help">
