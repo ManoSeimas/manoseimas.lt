@@ -20,6 +20,8 @@
         {% endfor %}
       </select>
       {% endif %}
+
+      <a class="help" href="#results-help" data-toggle="modal"></a>
       <table class="positive-negative">
         <tbody>
           <tr>
@@ -63,6 +65,24 @@
       </table>
     </div>
     {% endfor %}
+  </div>
+
+  <div class="modal hide fade" id="results-help">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <h3>Pagalba</h3>
+    </div>
+    <div class="modal-body">
+      <p>Testo rezultatai parodo, kiek frakcijos ar Seimo narių balsavimai Seime
+      sutampa su jūsų atsakymais į klausimus-temas. Testo rezultatuose yra
+      susumuojami visi atsakyti klausimai.</p>
+
+      <p>Kiekvienas atsakymas nurodo, kiek jūsų pozicija sutampa su kiekvienos
+      frakcijos ir Seimo nario pozicijomis, ir galutiniame rezultate jos yra
+      sudedamos. "Tikrai taip/ne" atsakymams priskiriamas dvigubai didesnis
+      svoris nei "taip/ne" atsakymams. Tikslesnę ir išsamesnę metodiką galite
+      pažiūrėti "Kaip tai veikia" puslapyje.</p>
+    </div>
   </div>
 {% endblock %}
 
