@@ -40,6 +40,7 @@ class AssignIssueForm(BaseNodeForm):
 
 
 class SolutionIssueForm(BaseNodeForm):
+    title = forms.CharField()
     summary = forms.CharField(widget=forms.Textarea)
     body = forms.CharField(widget=forms.Textarea, required=False, validators=[validate_body])
     listing_priority = forms.IntegerField(
