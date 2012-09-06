@@ -104,9 +104,10 @@
 // ----------------------------
 
 #top-menu-inner {
-  background: @msBlue;
   height: 32px;
   min-height: 32px;
+  background: @msBlue;
+  filter: none;
 
   #top-menu .nav {
     position: relative;
@@ -903,7 +904,7 @@ h6 { font-size: 14px; }
   color: @msGreen;
   float: left;
   font-size: @baseFontSize + 2px;
-  line-height: @baseLineHeight;
+  line-height: @baseLineHeight - 1px;
   padding: 0;
   margin: 0;
   font-weight: 600;
@@ -964,3 +965,9 @@ hr {
   border-bottom: 1px dotted #c6c6c6;
   cursor: help;
 }
+
+// Needed for IE
+.collapse {
+  overflow: hidden;
+}
+
