@@ -1,0 +1,21 @@
+{% extends "sboard/base.html" %}
+{% load i18n %}
+{% load sboard %}
+
+{% block content %}
+  {% block node_title %}
+  {% if title %}
+  <h1>{{ title }}</h1>
+  {% endif %}
+  {% endblock %}
+
+  {% block node_body %}
+  {{ node.render_body }}
+  {% endblock %}
+{% endblock %}
+
+{% block inlinejs %}
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+{% endblock %}

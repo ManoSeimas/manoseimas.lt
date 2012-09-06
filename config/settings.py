@@ -440,6 +440,7 @@ SBOARD_PAGE_TEMPLATES = (
 
 RESTRUCTUREDTEXT_FILTER_SETTINGS = {
     'footnote_references': 'superscript',
+    'math_output': 'MathJax',
 }
 
 THUMBNAIL_QUALITY = 100
