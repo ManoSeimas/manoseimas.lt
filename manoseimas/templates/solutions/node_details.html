@@ -7,6 +7,7 @@
     {{ node.render_body }}
   </div>
 
+    <div class="compat-preview" id="result"></div>
   <div class="btn-toolbar answers">
     <div class="btn-group position-buttons" data-toggle="buttons-radio">
       {% for value, label in buttons %}
@@ -68,7 +69,9 @@ $(function() {
     var node = "{{ node.key }}";
     var position = $(this).attr('data-value');
     var url = "/testas/submit-position/";
-    manoSeimas.submitPosition(url, node, position);
+    manoSeimas.submitPosition(url, node, position, function(result) {
+      $("#result").html(result).show();
+    });
   });
 });
 </script>
