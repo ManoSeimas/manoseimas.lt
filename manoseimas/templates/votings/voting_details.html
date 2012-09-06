@@ -19,8 +19,6 @@ $(function () {
 {% endblock %}
 
 {% block node_body %}
-<h1>{% trans "Voting" %} {{ node.title }}</h1>
-
 <table style="margin: 24px">
   <tbody>
   <tr>
@@ -31,22 +29,22 @@ $(function () {
         <tr>
           <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.vote_aye }}</td>
           <td style="width:40px;background:green;border: 1px solid black;"></td>
-          <td style="padding-left:4px;">{% trans "aye" %}</td>
+          <td style="padding-left:4px;">{% trans "Už" %}</td>
         </tr>
         <tr>
           <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.vote_no }}</td>
           <td style="width:40px;background:red;border: 1px solid black;"></td>
-          <td style="padding-left:4px;">{% trans "no" %}</td>
+          <td style="padding-left:4px;">{% trans "Prieš" %}</td>
         </tr>
         <tr>
           <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.vote_abstain }}</td>
           <td style="width:40px;background:gray;border: 1px solid black;"></td>
-          <td style="padding-left:4px;">{% trans "abstain" %}</td>
+          <td style="padding-left:4px;">{% trans "Susilaikė" %}</td>
         </tr>
         <tr>
           <td style="padding-right:4px;text-align:right;font-weight:bold;">{{ node.did_not_vote }}</td>
           <td style="width:40px;background:white;border: 1px solid black;"></td>
-          <td style="padding-left:4px;">{% trans "registered but did not vote" %}</td>
+          <td style="padding-left:4px;">{% trans "Užsiregistravo, bet nebalsavo" %}</td>
         </tr>
         </tbody>
       </table>
@@ -55,11 +53,11 @@ $(function () {
   </tbody>
 </table>
 
-<h3>{% trans "Source of information" %}</h3>
+<h3>{% trans "Šaltinis" %}</h3>
 <ul><li><a href="{{ node.source.voting.url }}">{{ node.source.voting.url }}</a></li></ul>
 
 {% if related_legal_acts %}
-<h3>{% trans "Related legal acts" %}</h3>
+<h3>{% trans "Susiję teisiniai aktai" %}</h3>
 <ul>
     {% for legal_act in related_legal_acts %}
     <li><a href="{{ legal_act.permalink }}">{{ legal_act.title }}</a></li>
@@ -68,7 +66,7 @@ $(function () {
 {% endif %}
 
 {% if solutions %}
-<h3>{% trans "Related solutions" %}</h3>
+<h3>{% trans "Susijusios temos" %}</h3>
 <ul>
     {% for solution in solutions %}
     <li><a href="{{ solution.permalink }}">{{ solution.title }}</a></li>
@@ -80,7 +78,7 @@ $(function () {
 
 
 {% block node_actions %}
-<h2>{% trans "Link to solution" %}</h2>
+<h2>{% trans "Susieti su tema" %}</h2>
 
 <form action="{% nodeurl node 'link-solution' %}" method="post">
   {% csrf_token %}
