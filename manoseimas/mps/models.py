@@ -26,6 +26,9 @@ from sboard.profiles.models import ProfileNode
 from sboard.profiles.models import GroupNode
 from sboard.profiles.models import query_group_membership
 
+from manoseimas.compat.models import PersonPosition
+from manoseimas.compat.models import update_parliament_positions
+
 from .interfaces import ICommission
 from .interfaces import ICommittee
 from .interfaces import IFraction
@@ -60,6 +63,10 @@ class PoliticalGroup(GroupNode):
 
 class Fraction(PoliticalGroup):
     implements(IFraction)
+
+    # Reference to a fraction, that this fraction is merged to.
+    # All votings done by this fraction goes to merged fraction (if specified).
+    mergedto = NodeProperty(required=False)
 
     abbreviation = schema.StringProperty()
 
@@ -109,3 +116,25 @@ class Party(PoliticalGroup):
     _default_importance = 7
 
 provideNode(Party, 'party')
+
+
+def get_votings_by_fraction_id(fraction_id, **kwargs):
+    return couch.view('mps/votings_by_fraction', key=fraction_id, **kwargs)
+
+
+def merge_fraction_votings(source, dest):
+    votings = set()
+    for voting in get_votings_by_fraction_id(source.key):
+        for votes in voting.votes.values():
+            for i, (mp_vote, fraction_vote) in enumerate(votes):
+                if fraction_vote == source.key:
+                    votes[i][1] = dest.key
+        voting.save()
+        votings.add(voting.key)
+
+    votings = list(votings)
+    solutions = couch.view('votings/solutions_by_voting', keys=votings)
+    solutions = set([solution.key for solution in solutions])
+    for solution_id in solutions:
+        PersonPosition.objects.filter(node=solution_id).delete()
+        update_parliament_positions(solution_id)

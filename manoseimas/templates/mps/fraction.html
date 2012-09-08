@@ -11,8 +11,19 @@
     </div>
   </div>
 
-  {% if positions %}
+  {% if positions or node.mergedto %}
   <hr>
+
+  {% if node.mergedto %}
+  <div class="alert alert-warning">
+    {% blocktrans with mergedto_url=node.mergedto.ref.permalink mergedto_title=node.mergedto.ref.title %}
+    Ši frakcija sujungta su <a href="{{ mergedto_url }}">
+    {{ mergedto_title }}</a>. Visi šios frakcijos narių balsai priskirti
+    {{ mergedto_title }}.
+    {% endblocktrans %}
+  </div>
+  {% else %}
+
   {% include "mps/help_partial.html" %}
   <h2 class="hr">Politiniai sprendimai</h2>
 
@@ -24,6 +35,8 @@
     </li>
     {% endfor %}
   </ul>
+  {% endif %}
+
   {% endif %}
 
   {% if members %}
