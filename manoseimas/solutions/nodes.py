@@ -181,7 +181,8 @@ class SolutionVotingsView(ListView):
                 voting.solutions = solutions
                 voting.save()
 
-                update_parliament_positions(self.node._id)
+                PersonPosition.objects.filter(node=solution._id).delete()
+                update_parliament_positions(solution._id)
 
                 return redirect(self.node.permalink('balsavimai'))
         else:
@@ -213,6 +214,7 @@ class UnassignVotingView(ListView):
             if self.node._id in voting.solutions:
                 del voting.solutions[self.node._id]
                 voting.save()
+                PersonPosition.objects.filter(node=self.node._id).delete()
                 update_parliament_positions(self.node._id)
             return redirect(self.node.permalink('balsavimai'))
         else:
