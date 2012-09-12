@@ -24,6 +24,7 @@ from collections import defaultdict
 from zope.interface import implements
 
 from django.db import models
+from django.db import connection
 from django.utils.translation import ugettext_lazy as _
 
 from couchdbkit.ext.django import schema
@@ -121,7 +122,7 @@ class PersonPositionManager(models.Manager):
 
 
 class PersonPosition(models.Model):
-    node = NodeForeignKey()
+    node = NodeForeignKey(db_index=True)
     profile = NodeForeignKey()
     profile_type = models.IntegerField(choices=PROFILE_TYPES,
                                        default=USER_PROFILE)
@@ -216,54 +217,67 @@ class Compatibility(object):
         return (self.precise(), second_key, abs(self.compatibility))
 
 
-def compatibilities(positions, profile_type):
-    profile_sums = defaultdict(lambda: Counter())
-    user_solutions = 0
-    for solution_id, position in positions:
-        position = float(position)
-        user_solutions += 1
-        for pp in PersonPosition.objects.filter(node=solution_id, profile_type=profile_type):
-            profile_id = pp.profile._id
-            ps = profile_sums[profile_id]
-            ps['profile'] = pp.profile
-            # Note: not exactly a weighted average, because the user's
-            # positions can be negative, but the denominator is the sum of
-            # their absolute values.
-            ps['weighted_positions'] += float(pp.position) * position
-            ps['weights'] += abs(position)
-            ps['participation'] += float(pp.participation)
-
-    for profile_id, sums in profile_sums.items():
-        precision = sums['participation'] / user_solutions
-        if precision > PRECISION_SHOW_TRESHOLD:
-            compatibility = sums['weighted_positions'] / sums['weights']
-            yield Compatibility(
-                profile=sums['profile'],
-                profile_type=profile_type,
-                compatibility=compatibility,
-                precision=precision,
-            )
-
-
 def compatibilities_by_sign(positions, profile_type, precise=False):
-    aye, against = [], []
+    assert(positions)
+    user_solutions = len(positions)
 
-    if precise:
-        precisep = lambda c: c.precise()
-    else:
-        precisep = lambda c: True
+    cursor = connection.cursor()
 
-    for compat in compatibilities(positions, profile_type):
-        if precisep(compat):
-            if compat.positive():
-                aye.append(compat)
-            else:
-                against.append(compat)
+    try:
+        cursor.execute('''
+            CREATE TEMPORARY TABLE user_position (
+                solution_id CHAR(6),
+                position REAL);
+        ''')
 
-    aye.sort(reverse=True, key=Compatibility.__key__)
-    against.sort(reverse=True, key=Compatibility.__key__)
+        cursor.execute('INSERT INTO user_position VALUES ' +
+            "(%s, %s), " * (user_solutions - 1) +
+            '(%s, %s);',
+            sum(([solution_id, float(position)] for solution_id, position in positions), []))
 
-    return (aye, against)
+        def query(compat_sign, compat_ordering):
+            cursor.execute('''
+                SELECT
+                    profile,
+                    weighted_positions / weights AS compatibility,
+                    participation / %s AS precision
+                FROM (
+                    SELECT
+                        profile,
+                        SUM(compat_personposition.position * user_position.position) AS weighted_positions,
+                        SUM(ABS(user_position.position)) AS weights,
+                        SUM(participation) AS participation
+                    FROM compat_personposition
+                    INNER JOIN user_position ON node = solution_id
+                    WHERE profile_type = %s
+                    GROUP BY profile
+                )
+                WHERE precision > %s
+                AND compatibility ''' + compat_sign + ''' 0
+                ORDER BY
+                    precision < %s,
+                    compatibility ''' + compat_ordering + ''';
+            ''', [user_solutions, profile_type, PRECISION_SHOW_TRESHOLD, PRECISION_PRECISE_TRESHOLD])
+            return cursor.fetchall()
+
+        aye = query('>=', 'DESC')
+        against = query('<', 'ASC')
+
+    finally:
+        cursor.execute('''
+            DROP TABLE user_position;
+        ''')
+
+    def make_compat(row):
+        profile, compatibility, precision = row
+        return Compatibility(
+            profile=couch.get(profile),
+            profile_type=profile_type,
+            compatibility=compatibility,
+            precision=precision,
+        )
+
+    return (map(make_compat, aye), map(make_compat, against))
 
 
 def mp_compatibilities_by_sign(positions, precise=False):

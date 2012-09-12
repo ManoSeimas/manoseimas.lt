@@ -32,27 +32,27 @@
             {% for compatibility_list in group.compatibilities %}
             <td class="result-container">
               {% for compatibility in compatibility_list %}
-              {% with compatibility.profile.ref.doc_type as doc_type %}
+              {% with compatibility.profile.doc_type as doc_type %}
               <div class="result {% if not compatibility.precise %}imprecise{% endif %}
                           {{ doc_type|slugify }}
-                          {% if doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.ref.slug }}{% endif %}">
-                <a href="{% nodeurl compatibility.profile.ref %}" title="Tikslumas: {{ compatibility.precision_percent }}%">
-                  {% nodeimage compatibility.profile.ref 80 %}
+                          {% if doc_type == "MPProfile" %}fraction-{{ compatibility.profile.fraction.ref.slug }}{% endif %}">
+                <a href="{% nodeurl compatibility.profile %}" title="Tikslumas: {{ compatibility.precision_percent }}%">
+                  {% nodeimage compatibility.profile 80 %}
                 </a>
                 <span class="result-description" title="Tikslumas: {{ compatibility.precision_percent }}%">
                   <p>
-                    <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.ref.slug }}"{% endif %}
+                    <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.slug }}"{% endif %}
                           class="{% if compatibility.positive %}positive{% else %}negative{% endif %} percent">{{ compatibility.compatibility_percent }}%</span>
                     {% if not compatibility.precise %}
                     <a class="help inline" href="#inactive-help" data-toggle="modal"></a>
                     {% endif %}
                   </p>
                   <p>
-                    <a href="{% nodeurl compatibility.profile.ref %}">
-                      {{ compatibility.profile.ref.title }}
+                    <a href="{% nodeurl compatibility.profile %}">
+                      {{ compatibility.profile.title }}
                     </a>
                   </p>
-                  <p class="sub-title">{{ compatibility.profile.ref.fraction_abbreviation|default:'' }}</p>
+                  <p class="sub-title">{{ compatibility.profile.fraction_abbreviation|default:'' }}</p>
                 </span>
               </div>
               {% endwith %}

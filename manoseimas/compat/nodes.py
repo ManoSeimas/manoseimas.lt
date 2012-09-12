@@ -317,7 +317,7 @@ class CompatResultsView(DetailsView):
         positions = list(query_positions(self.request))
         mps = mp_compatibilities_by_sign(positions)
         fractions = fraction_compatibilities_by_sign(positions)
-        fraction_list = [c.profile.ref for c in itertools.chain(fractions[0], fractions[1])]
+        fraction_list = [c.profile for c in itertools.chain(fractions[0], fractions[1])]
         fraction_list.sort(key=attrgetter('title'))
         context = {
             'groups': (
