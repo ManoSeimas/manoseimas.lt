@@ -135,7 +135,11 @@ class SyncProcessor(object):
                 fraction = view.one(except_all=True)
             except NoResultFound:
                 return None
-            self._fraction_ids[fraction_abbreviation] = fraction._id
+            if fraction.mergedto:
+                fraction_id = fraction.mergedto.ref.key
+            else:
+                fraction_id = fraction.key
+            self._fraction_ids[fraction_abbreviation] = fraction_id
         return self._fraction_ids[fraction_abbreviation]
 
     def sync_votes(self, votes):

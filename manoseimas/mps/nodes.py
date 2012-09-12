@@ -21,10 +21,13 @@ from operator import attrgetter
 from zope.component import adapts
 from zope.component import provideAdapter
 
+from sboard.nodes import NodeView
 from sboard.nodes import UpdateView
-from sboard.profiles.nodes import ProfileView
 from sboard.profiles.nodes import GroupView
+from sboard.profiles.nodes import ProfileView
 
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from manoseimas.compat.models import PersonPosition
@@ -32,9 +35,12 @@ from manoseimas.compat.models import PersonPosition
 from .interfaces import IMPProfile
 from .interfaces import IFraction
 
+from .models import get_votings_by_fraction_id
 from .models import query_fractions
+from .models import merge_fraction_votings
 
 from .forms import FractionForm
+from .forms import FractionMergeToForm
 
 
 def search_lrs_url(query):
@@ -101,12 +107,41 @@ class MPProfileView(ProfileView):
 provideAdapter(MPProfileView)
 
 
+def mergeto_nav(view, nav, active=tuple()):
+    if not view.can('update'):
+        return nav
+
+    if view.node.mergedto:
+        key = 'remove-merge'
+        link = view.node.permalink(key)
+        nav.append({
+            'key': key,
+            'url': link,
+            'title': _(u'Panaikinti sujungimą'),
+            'children': [],
+            'active': key in active,
+        })
+    else:
+        key = 'merge-to'
+        link = view.node.permalink(key)
+        nav.append({
+            'key': key,
+            'url': link,
+            'title': _(u'Sujungti su...'),
+            'children': [],
+            'active': key in active,
+        })
+    return nav
+
+
 class FractionView(GroupView):
     adapts(IFraction)
     template = 'mps/fraction.html'
 
     def nav(self, active=tuple()):
         nav = super(FractionView, self).nav(active)
+
+        nav = mergeto_nav(self, nav, active)
 
         nav.append({
             'title': _('Frakcijos'),
@@ -140,3 +175,60 @@ class FractionUpdateView(UpdateView):
     form = FractionForm
 
 provideAdapter(FractionUpdateView, name='update')
+
+
+class FractionMergeView(NodeView):
+    adapts(IFraction)
+
+    template = 'mps/fraction_mergeto.html'
+
+    def nav(self, active='merge-to'):
+        nav = super(FractionMergeView, self).nav(active)
+        return mergeto_nav(self, nav, active)
+
+    def render(self, **overrides):
+        if not self.can('update'):
+            return render(self.request, '403.html', status=403)
+
+        if self.request.method == 'POST':
+            form = FractionMergeToForm(self.request.POST)
+            if form.is_valid():
+                mergeto_fraction = form.cleaned_data.get('mergeto')
+                self.node.mergedto = mergeto_fraction
+                self.node.save()
+                merge_fraction_votings(self.node, mergeto_fraction)
+                return redirect(self.node.permalink())
+        else:
+            form = FractionMergeToForm()
+
+        template = overrides.pop('template', self.template)
+        votings = get_votings_by_fraction_id(self.node.key, limit=10)
+        num_of_votings = get_votings_by_fraction_id(
+                self.node.key, include_docs=False).count()
+
+        context = {
+            'title': _(u'Sujungti %s su...') % self.node.title,
+            'view': self,
+            'node': self.node,
+            'votings': votings,
+            'num_of_votings': num_of_votings,
+            'form': form,
+        }
+        context.update(overrides or {})
+        return render(self.request, template, context)
+
+provideAdapter(FractionMergeView, name='merge-to')
+
+
+class FractionRemoveMergeView(NodeView):
+    adapts(IFraction)
+
+    def render(self):
+        if not self.can('update'):
+            return render(self.request, '403.html', status=403)
+
+        self.node.mergedto = None
+        self.node.save()
+        return redirect(self.node.permalink())
+
+provideAdapter(FractionRemoveMergeView, name='remove-merge')

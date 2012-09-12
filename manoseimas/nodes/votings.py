@@ -25,6 +25,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from sboard.models import couch
 
+from manoseimas.compat.models import PersonPosition
+from manoseimas.compat.models import update_parliament_positions
 from manoseimas.votings.interfaces import IVoting
 from manoseimas.votings.nodes import VotingView
 
@@ -79,6 +81,8 @@ class LinkSolutionView(MsVotingView):
                 position = form.cleaned_data.pop('position')
                 self.node.solutions[solution._id] = position
                 self.node.save()
+                PersonPosition.objects.filter(node=solution._id).delete()
+                update_parliament_positions(solution._id)
                 return redirect(self.node.permalink())
         else:
             form = self.get_form()
