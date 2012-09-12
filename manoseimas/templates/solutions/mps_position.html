@@ -1,8 +1,10 @@
 {% extends "sboard/node_details.html" %}
 {% load i18n %}
 {% load sboard %}
+{% load cache %}
 
 {% block node_body %}
+  {% cache 3600 mps_position node.key %}
   <ul class="nav nav-tabs" id="result-tabs">
     {% for group in groups %}
     <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ group.slug }}" data-toggle="tab">{{ group.title }}</a></li>
@@ -64,6 +66,7 @@
     </div>
     {% endfor %}
   </div>
+  {% endcache %}
 
   <div class="modal hide fade" id="position-help">
     <div class="modal-header">
@@ -107,7 +110,6 @@
       temos atžvilgiu.</p>
     </div>
   </div>
-
 {% endblock %}
 
 {% block inlinejs %}
