@@ -220,6 +220,7 @@ class Compatibility(object):
 def compatibilities_by_sign(positions, profile_type, precise=False):
     assert(positions)
     position_count = len(positions)
+    precise_treshold = PRECISION_PRECISE_TRESHOLD
     show_treshold = PRECISION_PRECISE_TRESHOLD if precise else PRECISION_SHOW_TRESHOLD
 
     cursor = connection.cursor()
@@ -232,16 +233,17 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
         ''')
 
         cursor.execute('INSERT INTO user_position VALUES ' +
-            "(%s, %s), " * (position_count - 1) +
-            '(%s, %s);',
-            sum(([solution_id, float(position)] for solution_id, position in positions), []))
+            ', '.join(
+                "('%s', %.0f)" % (solution_id, float(position))
+                for solution_id, position in positions) +
+            ';')
 
         # `precision` is a reserved word in MySQL so we have to quote it.
         cursor.execute('''
             SELECT
                 profile AS profile_id,
                 weighted_positions / weights AS compatibility,
-                participation / %s AS `precision`,
+                participation / %(position_count)d AS `precision`,
                 weighted_positions > 0 AS positive
             FROM (
                 SELECT
@@ -251,19 +253,20 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
                     SUM(participation) AS participation
                 FROM compat_personposition
                 INNER JOIN user_position ON node = solution_id
-                WHERE profile_type = %s
+                WHERE profile_type = %(profile_type)d
                 GROUP BY profile
             ) AS accumulations
-            WHERE `precision` >= %s
+            -- Can't use `precision` alias in WHERE.
+            WHERE participation / %(position_count)d >= %(show_treshold)f
             ORDER BY
                 positive DESC,
-                `precision` >= %s DESC,
+                `precision` >= %(precise_treshold)f DESC,
                 CASE WHEN positive THEN
                     compatibility
                 ELSE
                     -compatibility
                 END DESC;
-            ''', [position_count, profile_type, show_treshold, PRECISION_PRECISE_TRESHOLD])
+            ''' % locals())
         results = cursor.fetchall()
     finally:
         cursor.execute('''
