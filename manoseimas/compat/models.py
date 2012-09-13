@@ -66,6 +66,39 @@ class SolutionCompat(Category):
 provideNode(SolutionCompat, "solutions-test")
 
 
+class ProfileCache(object):
+    def __init__(self):
+        self._profiles = None
+
+    def prefetch_profiles(self):
+        self._profiles = {
+            node._id: node
+            for node
+            in couch.view(
+                'sboard/by_type',
+                startkey=['Fraction'],
+                endkey=['Fraction', {}]
+            ).iterator()
+        }
+
+        mps = couch.view('sboard/by_type', startkey=['MPProfile'], endkey=['MPProfile', {}])
+        for node in mps.iterator():
+            # Also prefetch fraction NodeRefs
+            if node.fraction:
+                node.fraction._node = self._profiles[node.fraction._id]
+            self._profiles[node._id] = node
+
+    def get(self, key):
+        if not self._profiles:
+            self.prefetch_profiles()
+        return self._profiles[key]
+
+
+# Profiles don't change much, so we can cache them in a global variable. It
+# gets set the first time it's needed.
+profile_cache = ProfileCache()
+
+
 USER_PROFILE, MP_PROFILE, FRACTION_PROFILE, GROUP_PROFILE = range(4)
 
 PROFILE_TYPES = (
@@ -277,7 +310,7 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
     against = []
     for profile_id, compatibility, precision, positive in results:
         compat = Compatibility(
-            profile=couch.get(profile_id),
+            profile=profile_cache.get(profile_id),
             profile_type=profile_type,
             compatibility=compatibility,
             precision=precision,
