@@ -219,7 +219,8 @@ class Compatibility(object):
 
 def compatibilities_by_sign(positions, profile_type, precise=False):
     assert(positions)
-    user_solutions = len(positions)
+    position_count = len(positions)
+    show_treshold = PRECISION_PRECISE_TRESHOLD if precise else PRECISION_SHOW_TRESHOLD
 
     cursor = connection.cursor()
 
@@ -231,53 +232,59 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
         ''')
 
         cursor.execute('INSERT INTO user_position VALUES ' +
-            "(%s, %s), " * (user_solutions - 1) +
+            "(%s, %s), " * (position_count - 1) +
             '(%s, %s);',
             sum(([solution_id, float(position)] for solution_id, position in positions), []))
 
-        def query(compat_sign, compat_ordering):
-            cursor.execute('''
+        # `precision` is a reserved word in MySQL so we have to quote it.
+        cursor.execute('''
+            SELECT
+                profile AS profile_id,
+                weighted_positions / weights AS compatibility,
+                participation / %s AS `precision`,
+                weighted_positions > 0 AS positive
+            FROM (
                 SELECT
                     profile,
-                    weighted_positions / weights AS compatibility,
-                    participation / %s AS precision
-                FROM (
-                    SELECT
-                        profile,
-                        SUM(compat_personposition.position * user_position.position) AS weighted_positions,
-                        SUM(ABS(user_position.position)) AS weights,
-                        SUM(participation) AS participation
-                    FROM compat_personposition
-                    INNER JOIN user_position ON node = solution_id
-                    WHERE profile_type = %s
-                    GROUP BY profile
-                )
-                WHERE precision > %s
-                AND compatibility ''' + compat_sign + ''' 0
-                ORDER BY
-                    precision < %s,
-                    compatibility ''' + compat_ordering + ''';
-            ''', [user_solutions, profile_type, PRECISION_SHOW_TRESHOLD, PRECISION_PRECISE_TRESHOLD])
-            return cursor.fetchall()
-
-        aye = query('>=', 'DESC')
-        against = query('<', 'ASC')
-
+                    SUM(compat_personposition.position * user_position.position) AS weighted_positions,
+                    SUM(ABS(user_position.position)) AS weights,
+                    SUM(participation) AS participation
+                FROM compat_personposition
+                INNER JOIN user_position ON node = solution_id
+                WHERE profile_type = %s
+                GROUP BY profile
+            ) AS accumulations
+            WHERE `precision` >= %s
+            ORDER BY
+                positive DESC,
+                `precision` >= %s DESC,
+                CASE WHEN positive THEN
+                    compatibility
+                ELSE
+                    -compatibility
+                END DESC;
+            ''', [position_count, profile_type, show_treshold, PRECISION_PRECISE_TRESHOLD])
+        results = cursor.fetchall()
     finally:
         cursor.execute('''
             DROP TABLE user_position;
         ''')
 
-    def make_compat(row):
-        profile, compatibility, precision = row
-        return Compatibility(
-            profile=couch.get(profile),
+    aye = []
+    against = []
+    for profile_id, compatibility, precision, positive in results:
+        compat = Compatibility(
+            profile=couch.get(profile_id),
             profile_type=profile_type,
             compatibility=compatibility,
             precision=precision,
         )
+        if positive:
+            aye.append(compat)
+        else:
+            against.append(compat)
 
-    return (map(make_compat, aye), map(make_compat, against))
+    return (aye, against)
 
 
 def mp_compatibilities_by_sign(positions, precise=False):
