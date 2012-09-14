@@ -164,6 +164,11 @@ class PersonPosition(models.Model):
 
     objects = PersonPositionManager()
 
+    def __init__(self, *args, **kwargs):
+        super(PersonPosition, self).__init__(*args, **kwargs)
+        if self.profile_type in [MP_PROFILE, FRACTION_PROFILE]:
+            self.profile._node = profile_cache.get(self.profile._id)
+
     def __unicode__(self):
         return '%s: %s -> %s [%s]' % (self.__class__.__name__,
                                       self.profile.key, self.node.key,
