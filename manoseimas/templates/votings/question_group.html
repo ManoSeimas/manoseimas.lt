@@ -1,6 +1,7 @@
 {% extends "sboard/base.html" %}
 {% load i18n %}
 {% load sboard %}
+{% load cache %}
 
 {% block title %}
   {% if node %}
@@ -65,6 +66,7 @@
                   <h2>{% trans "PRIEŠ" %}</h2>
                 </td>
               </tr>
+              {% cache 3600 short_arguments q.key %}
               {% for aye_against in q.short_arguments %}
               <tr>
                 {% for argument in aye_against %}
@@ -90,6 +92,7 @@
               {% if q.more_arguments %}
               <tr><td class="empty" colspan="2"><a href="{{ q.permalink }}#argumentai">Daugiau argumentų</a></td></tr>
               {% endif %}
+              {% endcache %}
             </tbody>
           </table>
 
