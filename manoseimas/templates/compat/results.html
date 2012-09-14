@@ -3,6 +3,7 @@
 {% load sboard %}
 
 {% block node_body %}
+  {% if groups %}
   <ul class="nav nav-tabs" id="result-tabs">
     {% for group in groups %}
     <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ group.slug }}" data-toggle="tab">{{ group.title }}</a></li>
@@ -95,6 +96,10 @@
   </div>
 
   {% include "partials/inactive_help.html" %}
+  {% else %}
+  <p>Jeigu norite sužinoti savo testo rezultatus, atsakykite bent į vieną
+  klausimą <a href="{% nodeurl node %}">testo puslapyje</a>.</p>
+  {% endif %}
 {% endblock %}
 
 {% block inlinejs %}

@@ -321,13 +321,16 @@ class CompatResultsView(DetailsView):
         return super(CompatResultsView, self).nav(active)
 
     def render(self, **overrides):
-        positions = list(query_positions(self.request))
-        mps = mp_compatibilities_by_sign(positions)
-        fractions = fraction_compatibilities_by_sign(positions)
-        fraction_list = [c.profile for c in itertools.chain(fractions[0], fractions[1])]
-        fraction_list.sort(key=attrgetter('title'))
         context = {
-            'groups': (
+            'title': _(u'Testo rezultatai'),
+        }
+        positions = list(query_positions(self.request))
+        if positions:
+            mps = mp_compatibilities_by_sign(positions)
+            fractions = fraction_compatibilities_by_sign(positions)
+            fraction_list = [c.profile for c in itertools.chain(fractions[0], fractions[1])]
+            fraction_list.sort(key=attrgetter('title'))
+            context['groups'] = (
                 {
                     'title': _('Frakcijos'),
                     'slug': 'frakcijos',
@@ -339,9 +342,7 @@ class CompatResultsView(DetailsView):
                     'compatibilities': mps,
                     'fraction_list': fraction_list,
                 },
-            ),
-            'title': _(u'Testo rezultatai'),
-        }
+            )
         context.update(overrides)
         return super(CompatResultsView, self).render(**context)
 
