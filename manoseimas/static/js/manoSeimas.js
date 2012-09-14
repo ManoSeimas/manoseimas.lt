@@ -27,7 +27,7 @@
     $(".answers > .position-buttons > button, .answers > .important input").click(function() {
       var sender = $(this);
       var answers = $($(this).parents('.answers'));
-      var solutionId = answers.data('solution');
+      var solutionId = answers.attr('data-solution');
       if (sender.is('input')) {
         var btnPosition = answers.find('.position-buttons > button.active').data('value');
       } else {
