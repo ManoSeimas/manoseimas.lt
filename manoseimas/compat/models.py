@@ -387,9 +387,12 @@ def calculate_parliament_positions(solution_id):
 
     for fraction_id, fraction in fractions.items():
         fraction['position'] = fraction['weighted_positions'] / fraction['participation_sum']
-
-        mp_count = len(list(query_group_membership(fraction_id)))
-        fraction['participation'] = fraction['participation_sum'] / mp_count
+        try:
+            mp_count = len(profile_cache.get(fraction_id).members())
+            fraction['participation'] = fraction['participation_sum'] / mp_count
+        except KeyError:
+            # Fraction profile doesn't exist -- ignore it.
+            del fractions[fraction_id]
 
     return (fractions, {mp_id: mp for (mp_id, fraction_id), mp in mps.items()})
 
