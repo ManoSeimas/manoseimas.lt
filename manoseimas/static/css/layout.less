@@ -676,15 +676,14 @@
 // ----------------------------
 
 footer {
-  padding: 20px 0 20px 0;
+  padding: 20px 20px 20px 20px;
   background: @white;
   border-top: 1px solid @wellBorder;
 
-  h2 {
+  h2, h2 a, h2 a:hover {
     color: #2A4C96;
     font-size: @baseFontSize;
     font-weight: 600;
-    margin: 0;
     padding: 0;
     line-height: @baseLineHeight;
   }
@@ -693,24 +692,17 @@ footer {
     color: @gray;
   }
 
-  .content {
-    padding-left: 20px;
-
-    .tils {
-      padding: 0;
-      margin: 5px 0;
-      width: 189px;
-      height: 49px;
-      background: url("../img/tils-sprite.png") no-repeat 0px 0px;
-    }
-
-    .tils:hover {
-      background-position: 0px -49px;
-    }
+  .tils {
+    padding: 0;
+    margin: 5px 0;
+    display: block;
+    width: 189px;
+    height: 49px;
+    background: url("../img/tils-sprite.png") no-repeat 0px 0px;
   }
 
-  .license {
-    text-align: right;
+  .tils:hover {
+    background-position: 0px -49px;
   }
 
   .nav {
