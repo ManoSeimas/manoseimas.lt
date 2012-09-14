@@ -96,6 +96,7 @@ TEST_BUTTONS = (
 
 def adapt_position(position):
     solution, value = position
+    value = value or 0
     important = abs(value) > 1
     clipped = max(-1, min(1, value))
     return (solution, value, clipped, important)
