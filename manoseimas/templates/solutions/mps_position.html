@@ -74,42 +74,28 @@
       <h3>Pagalba</h3>
     </div>
     <div class="modal-body">
-      <p>"Seimo pozicija" nurodo, kokios pozicijos temos atžvilgiu laikosi
-      kiekviena frakcija ir Seimo narys.</p>
+      <p>Procentai parodo, kiek frakcijos ir Seimo nariai palaiko pasirinktą
+      temą. Skaičiuojant šiuos procentus, atsižvelgiama į balsavimų kiekį, šių
+      balsavimų svarbą ir balsavusių Seimo narių skaičių.</p>
 
-      <p><strong>Seimo narys</strong>. Kiekvieno temos balsavimo (žr. skiltį
-      "Balsavimai") rezultatai yra įvertinami (<strong>už</strong> = 2,
-      <strong>prieš</strong> = -2, <strong>susilaikė/nebalsavo</strong> = -1)
-      ir susumuojami, o tada padalinami iš maksimalaus įmanomo taškų skaičiaus
-      (t.y. jei visi balsavimai būtų "už"). Taip gaunama Seimo nario pozicija
-      temos atžvilgiu tarp 100% ir -100%.</p>
+      <p><strong>Frakcijos</strong> pozicija gaunama apskaičiavus visų šiai
+      frakcijai priklausančių Seimo narių balsavimus ir išvedus jų vidurkį.
+      <em>Pavyzdžiui, trys frakcijos nariai (dalyvavę tiek pat balsavimų) turi
+        pozicijas 30%, 67% ir -16%. Tuomet frakcijos pozicija bus lygi
+        (30+67-16)/3 = 27%.</em></p>
 
-      <p><strong>Frakcija</strong>. Gautos Seimo narių pozicijos yra sudedamos
-      pagal frakcijų priklausomybę. T.y., kiekvieno frakcijos nario pozicija
-      yra sudedama su kitų narių pozicijomis, ir visa tai suvidurkinama.
-      Išsamią metodiką galite pažiūrėti "Kaip tai veikia" puslapyje.</p>
+      <p><strong>Seimo nario</strong> pozicija apskaičiuojama pagal jo
+      balsavimus Seime, taip pat atsižvelgiant į tų balsavimų reikšmę temai.
+      <em>Pavyzdžiui, temai "Lietuva" yra priskirti trys (vienodos vertės)
+        balsavimai, kuriuose Seimo narys balsavo "už", "prieš" ir "susilaikė".
+        Tada šio Seimo nario pozicija bus lygi (2-2-1)/(2+2+2) = (-1)/6 =
+        -17%.</em></p>
+
+      <p><a href="/kaip-tai-veikia/">Išsamiau &ndash; čia</a>.</p>
     </div>
   </div>
 
-  <div class="modal hide fade" id="inactive-help">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h3>Pagalba</h3>
-    </div>
-    <div class="modal-body">
-      <p>Frakcijos ir Seimo nariai, dalyvavę mažiau nei 25% temos balsavimų, yra
-      rodomi rezultatų apačioje, o dalyvavę mažiau nei 10% temos balsavimų,
-      nėra rodomi rezultatuose. Taip padaryta dėl to, kad jų rezultatai gali
-      neatspindėti jų tikrosios pozicijos.</p>
-
-      <p>Balsavimuose būna didelių variacijų, todėl esant nedideliam balsavimų
-      skaičiui, kyla rizika, kad atsitiktinis balsavimas iškreips rezultatus ir
-      Seimo narį / frakciją nepelnytai "iškels" į rezultatų viršų. Tuo tarpu
-      sudalyvavus daugiau balsavimų, išryškėja ilgalaikės, tvarios,
-      patikimesnės tendencijos, tiksliau atspindinčios tikrąją jų poziciją
-      temos atžvilgiu.</p>
-    </div>
-  </div>
+  {% include "partials/inactive_help.html" %}
 {% endblock %}
 
 {% block inlinejs %}

@@ -71,38 +71,27 @@
       <h3>Pagalba</h3>
     </div>
     <div class="modal-body">
-      <p>Testo rezultatai parodo, kiek frakcijos ar Seimo narių balsavimai Seime
-      sutampa su jūsų atsakymais į klausimus-temas. Testo rezultatuose yra
-      susumuojami visi atsakyti klausimai.</p>
+      <p>Testo rezultatai parodo, kiek jūsų atsakymai į klausimus sutampa su
+      frakcijų / Seimo narių pozicijomis, apskaičiuojamomis pagal Seime
+      vykusius balsavimus.</p>
 
-      <p>Kiekvienas atsakymas nurodo, kiek jūsų pozicija sutampa su kiekvienos
-      frakcijos ir Seimo nario pozicijomis, ir galutiniame rezultate jos yra
-      sudedamos. "Tikrai taip/ne" atsakymams priskiriamas dvigubai didesnis
-      svoris nei "taip/ne" atsakymams. Tikslesnę ir išsamesnę metodiką galite
-      pažiūrėti "Kaip tai veikia" puslapyje.</p>
+      <p>Seimo narių ir frakcijų pozicija yra lyginama su jūsų atsakymais, o
+      procentais parodoma, kiek jos sutampa. Jei pažymėjote "Man tai svarbu",
+      jūsų pozicija pažymima kaip dvigubai svarbesnė nei atsakant nepažymėjus
+      šio pasirinkimo. Skaičiuojami tik atsakyti klausimai, todėl testo
+      rezultatai bus tikslesni, jei atsakysite į kuo daugiau klausimų. Daugiau
+      apie skaičiavimą <a href="/kaip-tai-veikia/">čia</a>.</p>
+
+      <p><em>Pavyzdžiui, atsakėte "taip" į du klausimus ir gavote, kad jūsų
+        atsakymai sutampa su frakcijos "X" pozicija 20% ir 70%. Tada testo
+        rezultate ši frakcija turės (20+70)/2 = 45% atitikimą su jūsų pozicija.
+        Tačiau jei atsakėte "tikrai taip" ir "taip", tada rezultate atitikimas
+        bus (20*2+70*1)/3 = 37%. Jei atsakėte "tikrai ne" ir "taip", tada
+        rezultatas bus (20*(-2)+70*1)/3 = 10%.</em></p>
     </div>
   </div>
 
-  <div class="modal hide fade" id="inactive-help">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h3>Pagalba</h3>
-    </div>
-    <div class="modal-body">
-      <p>Frakcijos ir Seimo nariai, dalyvavę mažiau nei 25% temos balsavimų, yra
-      rodomi rezultatų apačioje, o dalyvavę mažiau nei 10% temos balsavimų,
-      nėra rodomi rezultatuose. Taip padaryta dėl to, kad jų rezultatai gali
-      neatspindėti jų tikrosios pozicijos.</p>
-
-      <p>Balsavimuose būna didelių variacijų, todėl esant nedideliam balsavimų
-      skaičiui, kyla rizika, kad atsitiktinis balsavimas iškreips rezultatus ir
-      Seimo narį / frakciją nepelnytai "iškels" į rezultatų viršų. Tuo tarpu
-      sudalyvavus daugiau balsavimų, išryškėja ilgalaikės, tvarios,
-      patikimesnės tendencijos, tiksliau atspindinčios tikrąją jų poziciją
-      temos atžvilgiu.</p>
-    </div>
-  </div>
-
+  {% include "partials/inactive_help.html" %}
 {% endblock %}
 
 {% block inlinejs %}
