@@ -150,11 +150,12 @@ class FractionView(GroupView):
 
         fractions = sorted(query_fractions(), key=attrgetter('title'))
         for fraction in fractions:
-            nav.append({
-                'title': fraction.title,
-                'url': fraction.permalink(),
-                'active': fraction == self.node,
-            })
+            if not fraction.mergedto:
+                nav.append({
+                    'title': fraction.title,
+                    'url': fraction.permalink(),
+                    'active': fraction == self.node,
+                })
 
         return nav
 
