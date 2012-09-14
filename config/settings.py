@@ -106,7 +106,7 @@ STATICFILES_DIRS = (
 
 #if $DJANGO_PIPELINE
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineFinderStorage'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 PIPELINE_CSS = {
     'styles': {
