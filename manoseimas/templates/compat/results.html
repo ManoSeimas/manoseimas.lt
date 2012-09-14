@@ -13,6 +13,9 @@
     {% for group in groups %}
     <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ group.slug }}">
       <a class="help" href="#results-help" data-toggle="modal"></a>
+      <div class="facebook-right">
+        <div class="fb-like" data-send="false" data-layout="button_count" data-href="http://manoseimas.lt"></div>
+      </div>
       {% if group.fraction_list %}
       <select id="filter-fraction">
         <option value="" selected>{% trans "Visos frakcijos" %}
