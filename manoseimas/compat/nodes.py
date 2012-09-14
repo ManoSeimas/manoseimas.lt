@@ -88,11 +88,17 @@ def solution_compat_nav(request, node, nav, active=tuple()):
 
 
 TEST_BUTTONS = (
-    (2, _(u'Tikrai taip')),
-    (1, _(u'Taip')),
-    (-1, _(u'Ne')),
-    (-2, _(u'Tikrai ne')),
+    (1, _(u'Pritariu')),
+    (0, _(u'Neturiu nuomonės')),
+    (-1, _(u'Nepritariu')),
 )
+
+
+def adapt_position(position):
+    solution, value = position
+    important = abs(value) > 1
+    clipped = max(-1, min(1, value))
+    return (solution, value, clipped, important)
 
 
 class SolutionCompatView(NodeView):
@@ -114,7 +120,7 @@ class SolutionCompatView(NodeView):
                 'slug': slug,
                 'title': category['title'],
                 'nodes': nodes,
-                'positions': fetch_positions(self.request, nodes),
+                'positions': map(adapt_position, fetch_positions(self.request, nodes)),
             }
 
     def render(self, **overrides):

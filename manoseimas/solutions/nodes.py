@@ -40,6 +40,7 @@ from manoseimas.compat.models import update_parliament_positions
 from manoseimas.compat.models import calculate_solution_parliament_avg_position
 from manoseimas.compat.models import fetch_positions
 from manoseimas.compat.nodes import TEST_BUTTONS
+from manoseimas.compat.nodes import adapt_position
 
 from .forms import AssignIssueForm
 from .forms import SolutionForm
@@ -107,11 +108,14 @@ class SolutionDetailsView(DetailsView):
         return solution_nav(self.node, nav, active)
 
     def render(self, **overrides):
-        node, position = next(fetch_positions(self.request, [self.node]))
+        node, position, clipped, important = adapt_position(
+                next(fetch_positions(self.request, [self.node])))
         context = {
             'arguments': self.node.arguments(),
             'buttons': TEST_BUTTONS,
             'position': position,
+            'clipped': clipped,
+            'important': important,
         }
         context.update(overrides)
         return super(SolutionDetailsView, self).render(**context)

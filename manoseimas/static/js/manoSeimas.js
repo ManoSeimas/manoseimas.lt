@@ -23,6 +23,27 @@
 
   manoSeimas.submitPosition = submitPosition;
 
+  function handlePositionChange(callback) {
+    $(".answers > .position-buttons > button, .answers > .important input").click(function() {
+      var sender = $(this);
+      var answers = $($(this).parents('.answers'));
+      var solutionId = answers.data('solution');
+      if (sender.is('input')) {
+        var btnPosition = answers.find('.position-buttons > button.active').data('value');
+      } else {
+        var btnPosition = sender.data('value');
+      }
+      var important = answers.find('.important input').is(':checked') ? 2 : 1;
+      var position = btnPosition * important;
+      var url = "/testas/submit-position/";
+      manoSeimas.submitPosition(url, solutionId, position, callback && function(result) {
+        callback(result, solutionId, position);
+      });
+    });
+  }
+
+  manoSeimas.handlePositionChange = handlePositionChange;
+
   function showFractionMPs(fraction) {
     var mps = $('.mpprofile');
     if (fraction === '') {
