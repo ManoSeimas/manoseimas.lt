@@ -12,6 +12,7 @@
   <div class="tab-content">
     {% for group in groups %}
     <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ group.slug }}">
+      <a class="help" href="#results-help" data-toggle="modal"></a>
       {% if group.fraction_list %}
       <select id="filter-fraction">
         <option value="" selected>{% trans "Visos frakcijos" %}
@@ -20,8 +21,6 @@
         {% endfor %}
       </select>
       {% endif %}
-
-      <a class="help" href="#results-help" data-toggle="modal"></a>
       <table class="positive-negative">
         <tbody>
           <tr>

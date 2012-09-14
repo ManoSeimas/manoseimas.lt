@@ -857,11 +857,13 @@ footer {
 .help {
   display: block;
   float: right;
-  width: 12px;
-  height: 12px;
-  background: url(../img/help.png);
+
+  .size(20px, 20px);
+  background: url(../img/help.png) no-repeat;
 
   &.inline {
+    .size(12px, 12px);
+    background: url(../img/help-small.png) no-repeat;
     display: inline-block;
     .ie7-inline-block();
     float: none;
