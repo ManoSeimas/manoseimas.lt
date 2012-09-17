@@ -29,9 +29,9 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.middleware.csrf import get_token
-from django.core.cache import cache
 
 from sboard.ajax import AjaxView
+from sboard.json import json_response
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 from sboard.nodes import NodeView
@@ -116,11 +116,7 @@ class SolutionCompatView(NodeView):
 
     def get_category_list(self):
         for slug, category in self.node.categories:
-            key = '%s:category:%s' % (self.node._id, slug)
-            nodes = cache.get(key)
-            if not nodes:
-                nodes = self.node.get_solutions(slug)
-                cache.set(key, nodes, 5 * 60)
+            nodes = self.node.get_solutions(slug)
             yield {
                 'slug': slug,
                 'title': category['title'],
