@@ -3,6 +3,7 @@
 {% load sboard %}
 
 {% block node_body %}
+  {% if groups %}
   <ul class="nav nav-tabs" id="result-tabs">
     {% for group in groups %}
     <li {% if forloop.first %}class="active"{% endif %}><a href="#{{ group.slug }}" data-toggle="tab">{{ group.title }}</a></li>
@@ -12,6 +13,10 @@
   <div class="tab-content">
     {% for group in groups %}
     <div class="tab-pane {% if forloop.first %}active{% endif %}" id="{{ group.slug }}">
+      <a class="help" href="#results-help" data-toggle="modal"></a>
+      <div class="facebook-right">
+        <div class="fb-like" data-send="false" data-layout="button_count" data-href="http://manoseimas.lt"></div>
+      </div>
       {% if group.fraction_list %}
       <select id="filter-fraction">
         <option value="" selected>{% trans "Visos frakcijos" %}
@@ -20,8 +25,6 @@
         {% endfor %}
       </select>
       {% endif %}
-
-      <a class="help" href="#results-help" data-toggle="modal"></a>
       <table class="positive-negative">
         <tbody>
           <tr>
@@ -32,27 +35,27 @@
             {% for compatibility_list in group.compatibilities %}
             <td class="result-container">
               {% for compatibility in compatibility_list %}
-              {% with compatibility.profile.ref.doc_type as doc_type %}
+              {% with compatibility.profile.doc_type as doc_type %}
               <div class="result {% if not compatibility.precise %}imprecise{% endif %}
                           {{ doc_type|slugify }}
-                          {% if doc_type == "MPProfile" %}fraction-{{ compatibility.profile.ref.fraction.ref.slug }}{% endif %}">
-                <a href="{% nodeurl compatibility.profile.ref %}" title="Tikslumas: {{ compatibility.precision_percent }}%">
-                  {% nodeimage compatibility.profile.ref 80 %}
+                          {% if doc_type == "MPProfile" %}fraction-{{ compatibility.profile.fraction.ref.slug }}{% endif %}">
+                <a href="{% nodeurl compatibility.profile %}" title="Tikslumas: {{ compatibility.precision_percent }}%">
+                  {% nodeimage compatibility.profile 80 %}
                 </a>
                 <span class="result-description" title="Tikslumas: {{ compatibility.precision_percent }}%">
                   <p>
-                    <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.ref.slug }}"{% endif %}
+                    <span {% if doc_type == "Fraction" %}data-slug="{{ compatibility.profile.slug }}"{% endif %}
                           class="{% if compatibility.positive %}positive{% else %}negative{% endif %} percent">{{ compatibility.compatibility_percent }}%</span>
                     {% if not compatibility.precise %}
                     <a class="help inline" href="#inactive-help" data-toggle="modal"></a>
                     {% endif %}
                   </p>
                   <p>
-                    <a href="{% nodeurl compatibility.profile.ref %}">
-                      {{ compatibility.profile.ref.title }}
+                    <a href="{% nodeurl compatibility.profile %}">
+                      {{ compatibility.profile.title }}
                     </a>
                   </p>
-                  <p class="sub-title">{{ compatibility.profile.ref.fraction_abbreviation|default:'' }}</p>
+                  <p class="sub-title">{{ compatibility.profile.fraction_abbreviation|default:'' }}</p>
                 </span>
               </div>
               {% endwith %}
@@ -72,38 +75,31 @@
       <h3>Pagalba</h3>
     </div>
     <div class="modal-body">
-      <p>Testo rezultatai parodo, kiek frakcijos ar Seimo narių balsavimai Seime
-      sutampa su jūsų atsakymais į klausimus-temas. Testo rezultatuose yra
-      susumuojami visi atsakyti klausimai.</p>
+      <p>Testo rezultatai parodo, kiek jūsų atsakymai į klausimus sutampa su
+      frakcijų/Seimo narių pozicijomis, apskaičiuojamomis pagal Seime
+      vykusius balsavimus.</p>
 
-      <p>Kiekvienas atsakymas nurodo, kiek jūsų pozicija sutampa su kiekvienos
-      frakcijos ir Seimo nario pozicijomis, ir galutiniame rezultate jos yra
-      sudedamos. "Tikrai taip/ne" atsakymams priskiriamas dvigubai didesnis
-      svoris nei "taip/ne" atsakymams. Tikslesnę ir išsamesnę metodiką galite
-      pažiūrėti "Kaip tai veikia" puslapyje.</p>
+      <p>Seimo narių ir frakcijų pozicija yra lyginama su jūsų atsakymais, o
+      procentais parodoma, kiek jos sutampa. Jei pažymėjote "Man tai svarbu",
+      jūsų pozicija pažymima kaip dvigubai svarbesnė nei atsakant nepažymėjus
+      šio pasirinkimo. Skaičiuojami tik atsakyti klausimai, todėl testo
+      rezultatai bus tikslesni, jei atsakysite į kuo daugiau klausimų. Daugiau
+      apie skaičiavimą <a href="/kaip-tai-veikia/">čia</a>.</p>
+
+      <p><em>Pavyzdžiui, atsakėte "taip" į du klausimus ir gavote, kad jūsų
+        atsakymai sutampa su frakcijos "X" pozicija 20% ir 70%. Tada testo
+        rezultate ši frakcija turės (20+70)/2 = 45% atitikimą su jūsų pozicija.
+        Tačiau jei atsakėte "tikrai taip" ir "taip", tada rezultate atitikimas
+        bus (20*2+70*1)/3 = 37%. Jei atsakėte "tikrai ne" ir "taip", tada
+        rezultatas bus (20*(-2)+70*1)/3 = 10%.</em></p>
     </div>
   </div>
 
-  <div class="modal hide fade" id="inactive-help">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-      <h3>Pagalba</h3>
-    </div>
-    <div class="modal-body">
-      <p>Frakcijos ir Seimo nariai, dalyvavę mažiau nei 25% temos balsavimų, yra
-      rodomi rezultatų apačioje, o dalyvavę mažiau nei 10% temos balsavimų,
-      nėra rodomi rezultatuose. Taip padaryta dėl to, kad jų rezultatai gali
-      neatspindėti jų tikrosios pozicijos.</p>
-
-      <p>Balsavimuose būna didelių variacijų, todėl esant nedideliam balsavimų
-      skaičiui, kyla rizika, kad atsitiktinis balsavimas iškreips rezultatus ir
-      Seimo narį / frakciją nepelnytai "iškels" į rezultatų viršų. Tuo tarpu
-      sudalyvavus daugiau balsavimų, išryškėja ilgalaikės, tvarios,
-      patikimesnės tendencijos, tiksliau atspindinčios tikrąją jų poziciją
-      temos atžvilgiu.</p>
-    </div>
-  </div>
-
+  {% include "partials/inactive_help.html" %}
+  {% else %}
+  <p>Jeigu norite sužinoti savo testo rezultatus, atsakykite bent į vieną
+  klausimą <a href="{% nodeurl node %}">testo puslapyje</a>.</p>
+  {% endif %}
 {% endblock %}
 
 {% block inlinejs %}
@@ -118,6 +114,6 @@ $(manoSeimas.activateFractionFilter);
 <ul class="nav nav-list">
   <li class="nav-header ">Aplankyk</li>
   <li>Ką žada kandidatai?</li>
-  <li class="no-hover"><a href="http://manobalsas.lt"><img alt="Manobalsas.lt" src="{{ STATIC_URL }}img/manobalsas.png"></a></li>
+  <li class="no-hover"><a target="_blank" href="http://manobalsas.lt"><img alt="Manobalsas.lt" src="{{ STATIC_URL }}img/manobalsas.png"></a></li>
 </ul>
 {% endblock %}

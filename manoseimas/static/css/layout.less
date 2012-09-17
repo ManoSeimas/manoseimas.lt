@@ -200,11 +200,11 @@
     .content-inner {
       padding: 20px 40px 20px 40px;
 
-      input, textarea, select, .uneditable-input {
-        width: 100%;
-      }
-
       .form-vertical {
+        input, textarea, select, .uneditable-input {
+          width: 100%;
+        }
+
         textarea#id_body {
           height: 400px;
         }
@@ -617,12 +617,23 @@
     text-align: center;
     font-size: 50px;
     line-height: 44px;
-    padding: 44px;
+    margin: 44px 0;
     font-weight: 300;
 
     strong {
       font-weight: 400;
     }
+  }
+
+  p {
+    font-size: 16px;
+    color: #777;
+    text-align: center;
+  }
+
+  .motto {
+    width: 600px;
+    margin: 30px auto;
   }
 
   .icons {
@@ -637,18 +648,16 @@
 
     & > * > img {
       height: 138px;
-    }
-
-    p {
-      line-height: 40px;
-      font-size: 16px;
-      color: #777;
-      text-align: center;
+      width: 140px;
     }
 
     .arrow {
       padding: 61px 0;
       width: 23px;
+    }
+
+    p {
+      line-height: 40px;
     }
   }
 
@@ -657,7 +666,7 @@
     .border-radius(9px);
     border: solid 1px #ddd;
     width: 320px;
-    margin: 15px auto 55px auto;
+    margin: 0 auto 30px auto;
 
     .btn {
       font-weight: 700;
@@ -675,15 +684,14 @@
 // ----------------------------
 
 footer {
-  padding: 20px 0 20px 0;
+  padding: 20px 20px 20px 20px;
   background: @white;
   border-top: 1px solid @wellBorder;
 
-  h2 {
+  h2, h2 a, h2 a:hover {
     color: #2A4C96;
     font-size: @baseFontSize;
     font-weight: 600;
-    margin: 0;
     padding: 0;
     line-height: @baseLineHeight;
   }
@@ -692,24 +700,17 @@ footer {
     color: @gray;
   }
 
-  .content {
-    padding-left: 20px;
-
-    .tils {
-      padding: 0;
-      margin: 5px 0;
-      width: 189px;
-      height: 49px;
-      background: url("../img/tils-sprite.png") no-repeat 0px 0px;
-    }
-
-    .tils:hover {
-      background-position: 0px -49px;
-    }
+  .tils {
+    padding: 0;
+    margin: 5px 0;
+    display: block;
+    width: 189px;
+    height: 49px;
+    background: url("../img/tils-sprite.png") no-repeat 0px 0px;
   }
 
-  .license {
-    text-align: right;
+  .tils:hover {
+    background-position: 0px -49px;
   }
 
   .nav {
@@ -809,6 +810,12 @@ footer {
     min-width: 90px;
     font-weight: 600;
   }
+
+  .important {
+    height: 26px;
+    vertical-align: middle;
+    margin: 4px 10px 0 20px;
+  }
 }
 
 .compat-preview {
@@ -850,15 +857,28 @@ footer {
 .help {
   display: block;
   float: right;
-  width: 12px;
-  height: 12px;
-  background: url(../img/help.png);
+  margin: 2px 0 0 10px;
+
+  .size(16px, 16px);
+  background: url(../img/help.png) no-repeat;
 
   &.inline {
+    .size(12px, 12px);
+    background: url(../img/help-small.png) no-repeat;
     display: inline-block;
     .ie7-inline-block();
     float: none;
   }
+}
+
+.facebook-right {
+  float: right;
+  padding-bottom: 20px;
+}
+
+.facebook-middle {
+  width: 600px;
+  margin: 30px auto;
 }
 
 

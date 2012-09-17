@@ -19,18 +19,17 @@
       <h3>Pagalba</h3>
     </div>
     <div class="modal-body">
-      <p>Tai - temos balsavimai, kurie buvo svarbiausi sprendžiant, ar šios
-      temos esminės nuostatos bus įgyvendintos Seime. Balsavimus priskiriame
-      pagal jų sąsajas su atitinkama tema ir jų svarbą tai temai.</p>
+      <p>Tai Seime įvykę balsavimai, pagal kuriuos yra skaičiuojami testo
+      rezultatai ir frakcijų pozicijos. Atrinkti balsavimai yra susiję su testo
+      temomis, tačiau jų svarba nevienoda. Su taisyklėmis, kaip balsavimams
+      buvo skiriami taškai, galima susipažinti čia &ndash;
+      <a href="/kaip-tai-veikia/">Kaip tai veikia</a> puslapyje.</p>
 
-      <p>Sąsajos su tema gali būti dvejopos: balsavimas gali paremti arba gali
-      prieštarauti temos nuostatoms. Jei paremia, priskiriamas teigiamas
-      vertinimas, jei prieštarauja - neigiamas. Svarba nustatoma įvertinant, ar
-      be to konkretaus balsavimo gali būti įgyvendintos temos nuostatos; jei
-      negali, tuomet be šio balsavimo nuostatos nebūtų realizuotos, ir
-      balsavimas yra lemiamas. Kuo balsavimas yra svarbesnis, tuo didesnis
-      vertinimas yra priskiriamas. Išsamią metodiką galite rasti "Kaip tai
-      veikia" puslapyje.</p>
+      <p><em>Pavyzdys. Temai priskirti du balsavimai su įvertinimais +1 ir +2.
+        Seimo narys balsavo atitinkamai "už" (vertė +2) ir "prieš" (vertė -2).
+        Tada Seimo nario pozicija bus (1*2+2*(-2))/(1*2+2*2) = (-2)/6 = -33%.
+        Jei Seimo narys balsavo "už" ir "už", tada jo pozicija bus
+        (1*2+2*2)/(1*2+2*2) = 6/6 = 100%.</em></p>
     </div>
   </div>
 
@@ -98,4 +97,8 @@
     {% endfor %}
   {% endif %}
 </script>
+{% endblock %}
+
+{% block additional_sidebar %}
+{% include "partials/return_to_test.html" %}
 {% endblock %}

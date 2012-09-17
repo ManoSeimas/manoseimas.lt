@@ -88,11 +88,18 @@ def solution_compat_nav(request, node, nav, active=tuple()):
 
 
 TEST_BUTTONS = (
-    (2, _(u'Tikrai taip')),
-    (1, _(u'Taip')),
-    (-1, _(u'Ne')),
-    (-2, _(u'Tikrai ne')),
+    (1, _(u'Pritariu')),
+    (0, _(u'Neturiu nuomonės')),
+    (-1, _(u'Nepritariu')),
 )
+
+
+def adapt_position(position):
+    solution, value = position
+    value = value or 0
+    important = abs(value) > 1
+    clipped = max(-1, min(1, value))
+    return (solution, value, clipped, important)
 
 
 class SolutionCompatView(NodeView):
@@ -114,7 +121,7 @@ class SolutionCompatView(NodeView):
                 'slug': slug,
                 'title': category['title'],
                 'nodes': nodes,
-                'positions': fetch_positions(self.request, nodes),
+                'positions': map(adapt_position, fetch_positions(self.request, nodes)),
             }
 
     def render(self, **overrides):
@@ -314,13 +321,16 @@ class CompatResultsView(DetailsView):
         return super(CompatResultsView, self).nav(active)
 
     def render(self, **overrides):
-        positions = list(query_positions(self.request))
-        mps = mp_compatibilities_by_sign(positions)
-        fractions = fraction_compatibilities_by_sign(positions)
-        fraction_list = [c.profile.ref for c in itertools.chain(fractions[0], fractions[1])]
-        fraction_list.sort(key=attrgetter('title'))
         context = {
-            'groups': (
+            'title': _(u'Testo rezultatai'),
+        }
+        positions = list(query_positions(self.request))
+        if positions:
+            mps = mp_compatibilities_by_sign(positions)
+            fractions = fraction_compatibilities_by_sign(positions)
+            fraction_list = [c.profile for c in itertools.chain(fractions[0], fractions[1])]
+            fraction_list.sort(key=attrgetter('title'))
+            context['groups'] = (
                 {
                     'title': _('Frakcijos'),
                     'slug': 'frakcijos',
@@ -332,9 +342,7 @@ class CompatResultsView(DetailsView):
                     'compatibilities': mps,
                     'fraction_list': fraction_list,
                 },
-            ),
-            'title': _(u'Testo rezultatai'),
-        }
+            )
         context.update(overrides)
         return super(CompatResultsView, self).render(**context)
 

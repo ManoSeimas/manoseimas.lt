@@ -24,6 +24,7 @@ from collections import defaultdict
 from zope.interface import implements
 
 from django.db import models
+from django.db import connection
 from django.utils.translation import ugettext_lazy as _
 
 from couchdbkit.ext.django import schema
@@ -63,6 +64,39 @@ class SolutionCompat(Category):
             return []
 
 provideNode(SolutionCompat, "solutions-test")
+
+
+class ProfileCache(object):
+    def __init__(self):
+        self._profiles = None
+
+    def prefetch_profiles(self):
+        self._profiles = {
+            node._id: node
+            for node
+            in couch.view(
+                'sboard/by_type',
+                startkey=['Fraction'],
+                endkey=['Fraction', {}]
+            ).iterator()
+        }
+
+        mps = couch.view('sboard/by_type', startkey=['MPProfile'], endkey=['MPProfile', {}])
+        for node in mps.iterator():
+            # Also prefetch fraction NodeRefs
+            if node.fraction:
+                node.fraction._node = self._profiles[node.fraction._id]
+            self._profiles[node._id] = node
+
+    def get(self, key):
+        if not self._profiles:
+            self.prefetch_profiles()
+        return self._profiles[key]
+
+
+# Profiles don't change much, so we can cache them in a global variable. It
+# gets set the first time it's needed.
+profile_cache = ProfileCache()
 
 
 USER_PROFILE, MP_PROFILE, FRACTION_PROFILE, GROUP_PROFILE = range(4)
@@ -121,7 +155,7 @@ class PersonPositionManager(models.Manager):
 
 
 class PersonPosition(models.Model):
-    node = NodeForeignKey()
+    node = NodeForeignKey(db_index=True)
     profile = NodeForeignKey()
     profile_type = models.IntegerField(choices=PROFILE_TYPES,
                                        default=USER_PROFILE)
@@ -129,6 +163,14 @@ class PersonPosition(models.Model):
     participation = models.DecimalField(max_digits=7, decimal_places=4, db_index=True, default=dc(1))
 
     objects = PersonPositionManager()
+
+    def __init__(self, *args, **kwargs):
+        super(PersonPosition, self).__init__(*args, **kwargs)
+        if self.profile_type in [MP_PROFILE, FRACTION_PROFILE]:
+            try:
+                self.profile._node = profile_cache.get(self.profile._id)
+            except KeyError:
+                pass
 
     def __unicode__(self):
         return '%s: %s -> %s [%s]' % (self.__class__.__name__,
@@ -216,52 +258,75 @@ class Compatibility(object):
         return (self.precise(), second_key, abs(self.compatibility))
 
 
-def compatibilities(positions, profile_type):
-    profile_sums = defaultdict(lambda: Counter())
-    user_solutions = 0
-    for solution_id, position in positions:
-        position = float(position)
-        user_solutions += 1
-        for pp in PersonPosition.objects.filter(node=solution_id, profile_type=profile_type):
-            profile_id = pp.profile._id
-            ps = profile_sums[profile_id]
-            ps['profile'] = pp.profile
-            # Note: not exactly a weighted average, because the user's
-            # positions can be negative, but the denominator is the sum of
-            # their absolute values.
-            ps['weighted_positions'] += float(pp.position) * position
-            ps['weights'] += abs(position)
-            ps['participation'] += float(pp.participation)
-
-    for profile_id, sums in profile_sums.items():
-        precision = sums['participation'] / user_solutions
-        if precision > PRECISION_SHOW_TRESHOLD:
-            compatibility = sums['weighted_positions'] / sums['weights']
-            yield Compatibility(
-                profile=sums['profile'],
-                profile_type=profile_type,
-                compatibility=compatibility,
-                precision=precision,
-            )
-
-
 def compatibilities_by_sign(positions, profile_type, precise=False):
-    aye, against = [], []
+    assert(positions)
+    position_count = len(positions)
+    precise_treshold = PRECISION_PRECISE_TRESHOLD
+    show_treshold = PRECISION_PRECISE_TRESHOLD if precise else PRECISION_SHOW_TRESHOLD
 
-    if precise:
-        precisep = lambda c: c.precise()
-    else:
-        precisep = lambda c: True
+    cursor = connection.cursor()
 
-    for compat in compatibilities(positions, profile_type):
-        if precisep(compat):
-            if compat.positive():
-                aye.append(compat)
-            else:
-                against.append(compat)
+    try:
+        cursor.execute('''
+            CREATE TEMPORARY TABLE user_position (
+                solution_id CHAR(6),
+                position REAL);
+        ''')
 
-    aye.sort(reverse=True, key=Compatibility.__key__)
-    against.sort(reverse=True, key=Compatibility.__key__)
+        cursor.execute('INSERT INTO user_position VALUES ' +
+            ', '.join(
+                "('%s', %.0f)" % (solution_id, float(position))
+                for solution_id, position in positions) +
+            ';')
+
+        # `precision` is a reserved word in MySQL so we have to quote it.
+        cursor.execute('''
+            SELECT
+                profile AS profile_id,
+                weighted_positions / weights AS compatibility,
+                participation / %(position_count)d AS `precision`,
+                weighted_positions > 0 AS positive
+            FROM (
+                SELECT
+                    profile,
+                    SUM(compat_personposition.position * user_position.position) AS weighted_positions,
+                    SUM(ABS(user_position.position)) AS weights,
+                    SUM(participation) AS participation
+                FROM compat_personposition
+                INNER JOIN user_position ON node = solution_id
+                WHERE profile_type = %(profile_type)d
+                GROUP BY profile
+            ) AS accumulations
+            -- Can't use `precision` alias in WHERE.
+            WHERE participation / %(position_count)d >= %(show_treshold)f
+            ORDER BY
+                positive DESC,
+                `precision` >= %(precise_treshold)f DESC,
+                CASE WHEN positive THEN
+                    compatibility
+                ELSE
+                    -compatibility
+                END DESC;
+            ''' % locals())
+        results = cursor.fetchall()
+    finally:
+        cursor.execute('''
+            DROP TABLE user_position;
+        ''')
+
+    aye = []
+    against = []
+    for profile_id, compatibility, precision, positive in results:
+        compat = Compatibility(
+            profile=profile_cache.get(profile_id),
+            profile_type=profile_type,
+            compatibility=compatibility,
+            precision=precision,
+        )
+        if positive:
+            aye.append(compat)
+        else:
+            against.append(compat)
 
     return (aye, against)
 
@@ -322,9 +387,12 @@ def calculate_parliament_positions(solution_id):
 
     for fraction_id, fraction in fractions.items():
         fraction['position'] = fraction['weighted_positions'] / fraction['participation_sum']
-
-        mp_count = len(list(query_group_membership(fraction_id)))
-        fraction['participation'] = fraction['participation_sum'] / mp_count
+        try:
+            mp_count = len(profile_cache.get(fraction_id).members())
+            fraction['participation'] = fraction['participation_sum'] / mp_count
+        except KeyError:
+            # Fraction profile doesn't exist -- ignore it.
+            del fractions[fraction_id]
 
     return (fractions, {mp_id: mp for (mp_id, fraction_id), mp in mps.items()})
 
