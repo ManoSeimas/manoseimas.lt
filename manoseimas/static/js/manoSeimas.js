@@ -1,19 +1,19 @@
-(function(window) {
-  manoSeimas = {}
+(function (window) {
+  var manoSeimas = {};
   window.manoSeimas = manoSeimas;
 
-  function ensureSidebarFits() {
+  manoSeimas.ensureSidebarFits = function () {
     var sidebarInner = $('#middle .sidebar-inner');
     var height = sidebarInner.height() + 20;
     $('#middle .content').css('min-height', height + 'px');
     if (height >= $('#middle').height()) {
       sidebarInner.css('position', 'static');
     }
-  }
+  };
 
   $(manoSeimas.ensureSidebarFits);
 
-  function submitPosition(url, node_id, position, callback) {
+  manoSeimas.submitPosition = function (url, node_id, position, callback) {
     var postData = {
       node: "+" + node_id,
       position: position
@@ -21,9 +21,7 @@
     $.post(url, postData, callback, 'html');
   };
 
-  manoSeimas.submitPosition = submitPosition;
-
-  function handlePositionChange(callback) {
+  manoSeimas.handlePositionChange = function (callback) {
     $(".answers > .position-buttons > button, .answers > .important input").click(function() {
       var sender = $(this);
       var answers = $($(this).parents('.answers'));
@@ -40,11 +38,9 @@
         callback(result, solutionId, position);
       });
     });
-  }
+  };
 
-  manoSeimas.handlePositionChange = handlePositionChange;
-
-  function showFractionMPs(fraction) {
+  manoSeimas.showFractionMPs = function (fraction) {
     var mps = $('.mpprofile');
     if (fraction === '') {
       mps.show();
@@ -53,21 +49,17 @@
       mps.not(fractionClass).hide();
       mps.filter(fractionClass).show();
     }
-  }
+  };
 
-  manoSeimas.showFractionMPs = showFractionMPs;
-
-  function activateFractionFilter(){
+  manoSeimas.activateFractionFilter = function () {
     $('#filter-fraction').change(function() {
       showFractionMPs(this.value);
     });
 
-    $('.fraction .result-description .percent').click(function() {
+    $('.fraction .result-description .percent').click(function () {
       $('#result-tabs a[href=#seimo-nariai]').tab('show');
       var slug = $(this).data('slug');
       $('#filter-fraction').val(slug).change();
     });
-  }
-
-  manoSeimas.activateFractionFilter = activateFractionFilter;
+  };
 })(window);
