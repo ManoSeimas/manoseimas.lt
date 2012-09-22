@@ -32,6 +32,7 @@ from couchdbkit.ext.django import schema
 from sboard.categories.models import Category
 from sboard.factory import provideNode
 from sboard.models import NodeForeignKey
+from sboard.models import Node
 from sboard.models import couch
 from sboard.models import parse_node_slug
 from sboard.profiles.models import query_group_membership
@@ -66,11 +67,19 @@ class SolutionCompat(Category):
 provideNode(SolutionCompat, "solutions-test")
 
 
+class ProfileCacheUnusableException(Exception):
+    pass
+
+
 class ProfileCache(object):
     def __init__(self):
         self._profiles = None
 
     def prefetch_profiles(self):
+        if couch.get_doc_type_map().get('MPProfile') is Node:
+            raise ProfileCacheUnusableException(
+                "MP/fraction node types aren't registered yet.")
+
         self._profiles = {
             node._id: node
             for node
@@ -169,7 +178,7 @@ class PersonPosition(models.Model):
         if self.profile_type in [MP_PROFILE, FRACTION_PROFILE]:
             try:
                 self.profile._node = profile_cache.get(self.profile._id)
-            except KeyError:
+            except ProfileCacheUnusableException, KeyError:
                 pass
 
     def __unicode__(self):
