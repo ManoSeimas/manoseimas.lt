@@ -286,7 +286,7 @@ def fixbrokenrefs(args):
             try:
                 node.parent.ref
             except ResourceNotFound:
-                print('Broken parent %s of %s %s.' % (parent_id, node.doc_type, node._id))
+                print('Broken parent %s of %s %s.' % (node.parent._id, node.doc_type, node._id))
                 node.delete()
 
 def main():
