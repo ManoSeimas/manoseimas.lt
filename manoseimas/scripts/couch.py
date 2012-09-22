@@ -262,6 +262,7 @@ def fixbrokenrefs(args):
 
     from couchdbkit.exceptions import ResourceNotFound
     from manoseimas.compat.models import PersonPosition
+    from sboard.models import couch
 
     for pp in PersonPosition.objects.all():
         if pp.node:
@@ -280,6 +281,13 @@ def fixbrokenrefs(args):
                 pp.delete()
                 continue
 
+    for node in couch.view('_all_docs').iterator():
+        if node.parent:
+            try:
+                node.parent.ref
+            except ResourceNotFound:
+                print('Broken parent %s of %s %s.' % (parent_id, node.doc_type, node._id))
+                node.delete()
 
 def main():
     parser = argparse.ArgumentParser()
