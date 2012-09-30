@@ -46,18 +46,19 @@
 
 <body>
   <header class="navbar navbar-manoseimas">
-    <div class="navbar-inner" id="top-menu-inner">
-      <div class="container" id="top-menu">
-        <ul class="nav pull-left">
-          <li><a href="{% url node "testas" %}">{% trans "Testas" %}</a></li>
-        </ul>
+    <div class="navbar-inner" id="logo-bar-inner">
+      <div class="container" id="logo-bar">
+        <a href="{% url node 'testas' %}" class="brand">
+          <img src="{{ STATIC_URL }}img/logo.png" />
+        </a>
 
         <div class="pull-right">
           <ul class="nav pull-right">
             {% if request.user.is_authenticated %}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                {{ request.user }} <i class="white-caret"></i></a>
+                {% nodeimage request.user.get_profile.get_node 'small' %}
+                {{ request.user|truncatechars:26 }} <i class="caret"></i></a>
               <ul class="dropdown-menu">
                 <li><a href="{{ request.user.get_profile.get_node.permalink }}">
                   <i class="icon-user"></i> {% trans "Profile" %}</a></li>
@@ -68,8 +69,8 @@
             {% else %}
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i style="margin-top: 3px" class="icon-user icon-white"></i> {% trans "Log in" %}
-                <i class="white-caret"></i></a>
+                <i style="margin-top: 3px" class="icon-user"></i> {% trans "Log in" %}
+                <i class="caret"></i></a>
               <ul class="dropdown-menu">
                 <li><a href="{% url socialauth_begin 'google' %}">{% trans "Google" %}</a></li>
                 {% if FACEBOOK_APP_ID %}
@@ -81,16 +82,6 @@
             {% endif %}
           </ul>
         </div>
-        {% if request.user.is_authenticated %}
-        {% nodeimage request.user.get_profile.get_node 'small' 'pull-right' %}
-        {% endif %}
-      </div>
-    </div>
-    <div class="navbar-inner" id="logo-bar-inner">
-      <div class="container" id="logo-bar">
-        <a href="{% url node 'testas' %}" class="brand">
-          <img src="{{ STATIC_URL }}img/logo.png" />
-        </a>
 
         <form action="{% url search %}" method="get" id="search-box">
           <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
