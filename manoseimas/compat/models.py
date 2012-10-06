@@ -35,7 +35,6 @@ from sboard.models import NodeForeignKey
 from sboard.models import Node
 from sboard.models import couch
 from sboard.models import parse_node_slug
-from sboard.profiles.models import query_group_membership
 
 from manoseimas.solutions.models import query_solution_votings
 
@@ -269,9 +268,12 @@ class Compatibility(object):
 
 def compatibilities_by_sign(positions, profile_type, precise=False):
     assert(positions)
-    position_count = len(positions)
-    precise_treshold = PRECISION_PRECISE_TRESHOLD
-    show_treshold = PRECISION_PRECISE_TRESHOLD if precise else PRECISION_SHOW_TRESHOLD
+    ctx = dict(
+        position_count=len(positions),
+        precise_treshold=PRECISION_PRECISE_TRESHOLD,
+        show_treshold=(PRECISION_PRECISE_TRESHOLD if precise
+                       else PRECISION_SHOW_TRESHOLD),
+    )
 
     cursor = connection.cursor()
 
@@ -316,7 +318,7 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
                 ELSE
                     -compatibility
                 END DESC;
-            ''' % locals())
+            ''' % ctx)
         results = cursor.fetchall()
     finally:
         cursor.execute('''
