@@ -310,6 +310,11 @@ LOGGING = {
             'propagate': True,
             'level':'INFO',
         },
+        'south': {
+            'handlers':['null'],
+            'propagate': True,
+            'level':'INFO',
+        },
     }
 }
 
