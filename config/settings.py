@@ -368,7 +368,7 @@ DEBUG_TOOLBAR_PANELS = (
     'sboard.debugtoolbar.NodeDebugPanel',
 )
 
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+TEST_RUNNER = 'sboard.testrunner.SboardTestSuiteRunner'
 NOSE_ARGS = [
     '-w${PROJECT_NAME}',     # working dir
     '-w.',                   # project dir (relative to working dir)
