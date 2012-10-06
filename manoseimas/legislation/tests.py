@@ -17,10 +17,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
-import StringIO
 import unittest
-
-from mock import patch
 
 from django.test import TestCase
 
@@ -117,10 +114,7 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         self.assertEqual(node.votes['aye'][0][0], profile_id)
 
 
-    @patch.object(syncmps.SyncProcessor, 'fetch_photo')
-    def test_get_profile_by_source_id(self, fetch_photo):
-        fetch_photo.return_value = StringIO.StringIO('content')
-
+    def test_get_profile_by_source_id(self):
         pipeline = FakePipeline()
         pipeline.process_item(parse_mp(), None)
         doc = pipeline._stored_items['53911p']
@@ -130,6 +124,4 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         processor.process(doc)
 
         processor = syncsittings.SyncProcessor()
-        node_id = processor.get_profile_id('53911')
-
-        self.assertEqual(node_id, '000005')
+        processor.get_profile_id('53911')
