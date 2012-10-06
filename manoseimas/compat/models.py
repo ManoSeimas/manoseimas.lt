@@ -178,7 +178,7 @@ class PersonPosition(models.Model):
         if self.profile_type in [MP_PROFILE, FRACTION_PROFILE]:
             try:
                 self.profile._node = profile_cache.get(self.profile._id)
-            except ProfileCacheUnusableException, KeyError:
+            except (ProfileCacheUnusableException, KeyError):
                 pass
 
     def __unicode__(self):
