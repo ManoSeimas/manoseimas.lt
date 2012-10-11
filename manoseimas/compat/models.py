@@ -273,6 +273,7 @@ def compatibilities_by_sign(positions, profile_type, precise=False):
         precise_treshold=PRECISION_PRECISE_TRESHOLD,
         show_treshold=(PRECISION_PRECISE_TRESHOLD if precise
                        else PRECISION_SHOW_TRESHOLD),
+        profile_type=profile_type,
     )
 
     cursor = connection.cursor()
