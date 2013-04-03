@@ -1,0 +1,75 @@
+<div class='links'>
+    <a target='_blank' href='{{voting.source.voting.url}}'>lrs.lt</a>&nbsp;&nbsp;
+    <a target='_blank' href='{{page_url voting._id}}'>manoSeimas.lt</a>
+</div>
+<div class="votetitle">{{voting.title}}</div>
+<div class="button_bar">
+    <div id="MSWidget-fractions_button" class="mode_button fractions_button" onClick="MSWidget.show_fractions()">Fractions</div>
+    <div id="MSWidget-mps_button" class="mode_button mps_button" onClick="MSWidget.show_mps()">MPs</div>
+</div>
+<div id="MSWidget-fractions" class="content_pane fractions_pane" style="display:none;">
+{{#each_value fractions }}
+    {{render "fraction" }}
+{{/each_value}}
+</div>
+<div id="MSWidget-mps">
+<div id="MSWidget-mps-buttons" class="button_bar">
+    <div id="MSWidget-mps-aye_button" class="mode_button" onClick="MSWidget.show_mps('aye')" style="background-color: #ccc;">UZ</div>
+    <div id="MSWidget-mps-no_button" class="mode_button" onClick="MSWidget.show_mps('no')">SUSILAIKE</div>
+    <div id="MSWidget-mps-abstain_button" class="mode_button" onClick="MSWidget.show_mps('abstain')">PRIES</div>
+</div>
+<div id="MSWidget-mps-content" class="content_pane mps_pane">
+    <div id="MSWidget-mps-aye" class="mps_section">
+        <div><b>AYE!</b></div>
+        {{#each_value voting.votes.aye }}
+            {{render "mp" }}
+        {{/each_value}}
+        {{#unless voting.vote_aye}}
+            <i>None</i>
+        {{/unless}}
+    </div>
+    <br/>
+
+    <div id="MSWidget-mps-no" class="mps_section">
+        <div><b>NO!</b></div>
+        {{#each_value voting.votes.no }}
+            {{render "mp" }}
+        {{/each_value}}
+        {{#unless voting.vote_no}}
+            <i>None</i>
+        {{/unless}}
+    </div>
+    <br/>
+
+    <div id="MSWidget-mps-abstain" class="mps_section">
+        <div><b>ABSTAIN!</b></div>
+        {{#each_value voting.votes.abstain }}
+            {{render "mp" }}
+        {{/each_value}}
+        {{#unless voting.vote_abstain}}
+            <i>None</i>
+        {{/unless}}
+    </div>
+    
+</div>
+</div>
+</div>
+<div class="vote_pane">
+    <button id="yes" onClick="MSWidget.vote(1);">Agree</button>
+    <button id="no" onClick="MSWidget.vote(-1);">Disagree</button>
+    <label>
+        <input id='important' type='checkbox'> Man tai svbaru!
+    </label>
+    <div class="links">
+        <a target='_blank' href='#'>kas tai?</a><br/>
+        <a target='_blank' href='http://www.manoSeimas.lt/'>manoSeimas.lt</a>
+    </div>
+</div>
+<div id='MSWidget-thanks' class='overlay' style='display:none'></div>
+<div id='MSWidget-connect' class='overlay' style='display:none'>
+    {{render "connect-pane"}}
+</div>
+<div id='MSWidget-viso' class='overlay' style='display:none'>
+    <div class='close' onClick='MSWidget.hide_overlays();'>X</div>
+    Info goes here about wtf VISO is.
+</div>

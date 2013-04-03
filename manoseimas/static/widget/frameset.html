@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <title>Widget Test</title>
+        <link href="http://netdna.bootstrapcdn.com/bootswatch/2.3.0/slate/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+        <!-- <script src="/js/libs/jquery-1.6.2.min.js"></script> -->
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+        <style>
+            .slider { 
+                float: left;
+                display: inline;
+                width: 200px;
+                margin: 15px;
+            }
+            #code_snippet {
+                height: 120px;
+                width: 300px;
+                font-size: 10px;
+                font-family: "Courier New";
+                background-color: #666;
+            }
+            .ui-slider-range { background: #fff; }
+        </style>
+
+    </head>
+    <body>
+        <h1>Widget Test</h1>
+        <div class='container'>
+            <div class='row'>
+                <div class='span4'>
+                    <p>
+                    <u>Set By Voting ID</u>:<br/> <input type='text' id='voting_id' value='000d6j' style="height: 22px; font-size: 20px;" class="input-medium search-query"> <button class='btn btn-medium' id='set_by_voting_id'>Set &raquo;&raquo;</button>
+                    </p>
+                    <p>
+                    <u>Set By lrs.lt Voting URL</u>:<br/> <input type='text' id='source_url' value='' style="height: 22px; font-size: 20px;" class="input-medium"> <button class='btn btn-medium' id='set_by_source_url'>Set &raquo;&raquo;</button>
+                    </p>
+                </div>
+                <div class='span4'>
+                    <u>Adjust Dimensions</u>:<br/>
+                    <div class='slider' id='width'></div>
+                    <div class='slider' id='height'></div>
+                </div>
+                <div class='span3'>
+                    <u>Realtime Code Snippet</u>:<br/>
+                    <textarea id='code_snippet'></textarea>
+                </div>
+            </div>
+            <div class='row'>
+                <script>
+                    $(function() {
+                        function widget_url(args) {
+                            url = "http://localhost:8000/widget/?";
+                            if (args.voting_id) {
+                                url += "voting_id="+args.voting_id;
+                                } else if (args.source_id) {
+                                url += "source_id="+args.source_id;
+                                } else if (args.source_url) {
+                                url += "source_url="+encodeURIComponent(args.source_url);
+                            } 
+                            return url;
+                        }
+
+                        function update_snippet() {
+                            var src = $("#widget_container")[0].src.replace("&dev=1","");
+                            var w =  $("#width").slider("value");
+                            var h = $("#height").slider("value");
+                            $("#code_snippet").val("<iframe src='"+src+"' scrolling='no' style='width:"+w+";height:"+h+";border:0;overflow:hidden;'></iframe>");
+                        }
+
+                        $("#set_by_voting_id").click(function(e) {
+                            e.preventDefault();
+                            var voting_id =$("#voting_id").val();
+                            console.log("Loading Vote by voting_id: "+voting_id);
+                            //$("#widget_container")[0].src = "about:blank";
+                            $("#widget_container")[0].src = "http://localhost:8000/widget?voting_id="+voting_id+"&dev=1";
+                            update_snippet();
+                        });
+                        $("#set_by_source_url").click(function(e) {
+                            e.preventDefault();
+                            var source_url = $("#source_url").val();
+                            console.log("Loading Vote by source_url: "+source_url);
+                            //$("#widget_container")[0].src = "about:blank";
+                            $("#widget_container")[0].src = "http://localhost:8000/widget?source_url="+encodeURIComponent(source_url)+"&dev=1";
+                            update_snippet();
+                        });
+
+                        function updateDimensions() {
+                            w = $("#width").slider("value");
+                            h = $("#height").slider("value");
+
+                            $("#widget_container").width(w);
+                            $("#widget_container").height(h);
+
+                            update_snippet();
+                        }
+
+                        $( "#width" ).slider({
+                            orientation: "horizontal",
+                            range: "min",
+                            min: 425,
+                            max: 1000,
+                            value: 675,
+                            slide: updateDimensions,
+                            change: updateDimensions
+                        });
+                        $( "#height" ).slider({
+                            orientation: "horizontal",
+                            range: "min",
+                            max: 1000,
+                            min: 150,
+                            value: 250,
+                            slide: updateDimensions,
+                            change: updateDimensions
+                        });
+                        $( "#width" ).slider( "value", 675 );
+                        $( "#height" ).slider( "value", 250 );
+
+                        update_snippet();
+                    });
+                </script>
+            </div>
+            <hr/>
+            <iframe id='widget_container' src='http://localhost:8000/widget?voting_id=000d6j&amp;dev=1' scrolling='no' style='margin-left: 25px;border:0;width:675px;height:250px;overflow:hidden;'>
+                Problem.
+            </iframe>
+        </div>
+        <div style='height: 250px'><!-- filler --></div>
+    </body>
+</html>
+

@@ -13,6 +13,9 @@ syntax:glob
 .waf*
 config.log
 
+.vagrant
+Vagrantfile
+
 syntax:regexp
 
 ^manoseimas/scrapy/settings.py$
@@ -37,3 +40,9 @@ syntax:regexp
 
 ^manoseimas/static/css/styles.css$
 ^manoseimas/static/fonts/open-sans/stylesheet.css$
+
+# Widget build files and output
+^manoseimas/static/js/manoSeimas-widget\..*\.js$
+^manoseimas/widget/frontend/build$
+^manoseimas/widget/frontend/tmp$
+

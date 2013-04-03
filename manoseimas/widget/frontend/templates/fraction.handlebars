@@ -1,0 +1,21 @@
+<div class="content_row">
+    <div class='fraction_details'>
+        {{#if image}}
+            <img height='50' alt='' src='{{image}}' />
+        {{/if}}
+        <div>
+            {{ title }}<br/>
+            {{ abbreviation }}&nbsp;&nbsp;
+            {{#if source}}
+                <a target='_blank' href='{{ source.url }}'>lrs.lt</a>&nbsp;&nbsp;
+            {{/if}}
+            <a target='_blank' href='{{page_url slug}}'>manoSeimas.lt</a>
+        </div>
+    </div>
+    <div class='fraction_data'>
+        <table class='votetable'>
+            <tr><th>UZ</th><th>SUSIL.</th><th>PRIES</th><th>VISO<a onClick='MSWidget.show_overlay("viso"); return false;' href='#'>[?]</a></th></tr>
+            <tr><td>{{votes.aye}}</td><td>{{votes.no}}</td><td>{{votes.abstain}}</td><td>??%</td></tr>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+{
+   "_id": "_design/widget",
+   "_rev": "8-54ddae45102690c63bd6b4e3b3b82842",
+   "language": "coffeescript",
+   "views": {
+       "voting-objects": {
+           "map": "(doc) ->\n  return unless doc.doc_type == \"Voting\" \n  \n  emit [doc._id, doc.doc_type], { _id: doc._id }\n  \n  for vote,voters of doc.votes\n    for v in voters\n      emit [doc._id, \"MPProfile\", vote], { _id: v[0] }\n      emit [doc._id, \"Fraction\", vote], { _id: v[1] }\n"
+       }
+   },
+   "lists": {
+       "voting-joined": "(head, req) ->\n    if req.query.include_docs != 'true'\n        start { code: 400, headers: { 'Content-Type': 'application/json' } }\n        return send JSON.stringify { error: 'include_docs=true is required.' }\n\n    mps = {}\n    fractions = {}\n    voting = null\n\n    # We remap our Fractions and MPs to include the minimal content necessary\n    filter = (o, keys) -> new class then constructor: -> @[k] = o[k] for k in keys\n    filter_mp = (o) -> filter o, ['_id','fraction','first_name','last_name','image','slug','source','title']\n    filter_fraction = (o) -> filter o, ['_id','abbreviation','image','slug','source','title']\n \n    while row = getRow()\n        [voteid, doctype, vote] = row.key\n        switch doctype\n            when 'Voting' then voting = row.doc\n            when 'Fraction' then fractions[ row.doc._id ] ?= filter_fraction row.doc\n            when 'MPProfile' then mps[ row.doc._id ] ?= filter_mp row.doc\n\n    if !voting?\n        start { code: 404, headers: { 'Content-Type': 'application/json' } }\n        return send JSON.stringify { error: 'Voting not found.' }\n\n\n    result = {\n        voting: {\n            _id: voting._id,\n            title: voting.title,\n            source: voting.source,\n            registered_for_voting: voting.registered_for_voting,\n            total_votes: voting.total_votes,\n            vote_aye: voting.vote_aye,\n            vote_no: voting.vote_no,\n            vote_abstain: voting.vote_abstain,\n            votes: voting.votes,\n        }\n        mps: mps,\n        fractions: fractions\n    }\n\n    start { headers: { 'Content-Type': 'application/json' } }\n    send JSON.stringify result\n"
+   }
+}

@@ -1,0 +1,203 @@
+.MSWidget {
+  position: relative;
+  background-color: #fff;
+  color: black;
+  //width: 675px;
+  //height: 250px;
+  width: 100%;
+  height: 100%;
+  font-family: Verdana;
+  font-size: 10px;
+  line-height: 20px;
+}
+
+.votetitle {
+  font-weight: bold;
+  white-space: nowrap;
+  padding-left: 5px;
+}
+
+.links {
+  clear: right;
+  float: right;
+  margin-right: 10px;
+}
+
+.button_bar {
+  display: table;
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+
+.mode_button {
+  border: 1px solid black;
+  display: table-cell;
+  text-align: center;
+  text-decoration: underline;
+  &:hover {
+    background-color: #ccc !important;
+    cursor: pointer;
+  }
+}
+
+.content_pane {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 40px;
+  bottom: 50px;
+  border: 1px solid #999;
+  overflow-y: scroll;
+}
+
+.overlay {
+  position: absolute;
+  top: 20px;
+  bottom: 50px;
+  left: 0;
+  right: 0;
+  background-color: #fcf;
+  z-index: 2;
+  padding: 10px 15px 10px 15px;
+  font-size: 12px;
+  border: 1px solid #999;
+  overflow-y: scroll;
+}
+
+.fractions_pane {
+  background-color: #faa;
+}
+
+.mps_pane {
+  background-color: #afa;
+  top: 62px;
+  .mode_button {
+    border-top: 0;
+  }
+
+  // More natural scrolling for end items
+  padding-bottom: 50px;
+}
+
+.mp {
+    display: inline-block;
+
+    width: 200px;
+    border: 1px solid red;
+    margin: 5px 0px 5px 15px;
+
+    vertical-align: top;
+    
+    img {
+        float: left;
+        margin-right: 10px;
+    }
+    
+    /* IE 6 & 7 */
+    zoom: 1;
+    *display: inline;
+}
+
+.mps_section {
+    clear: left;
+    border-top: 1px solid #999;
+    min-height: 40px;
+}
+
+.vote_pane {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40px;
+  padding-top: 10px;
+  background-color: #ff9;
+  font-size: 12px;
+  button {
+    margin-left: 20px;
+    width: 90px;
+    height: 25px;
+    font-size: 18px;
+  }
+  input[type=checkbox] {
+    vertical-align: middle;
+  }
+}
+
+.fraction_pane {
+  table-layout: auto;
+  display: table;
+  width: 100%;
+}
+
+.content_row {
+  border-bottom: 1px solid grey;
+  clear: left;
+  width: 100%;
+}
+
+.fraction_details {
+    max-width: 500px;
+    min-width: 250px;
+    padding: 5px 10px 5px 5px;
+    line-height: 12px;
+    float: left;
+    img {
+        float: left;
+        padding-right: 15px;
+    }
+}
+.fraction_data {
+    float: right;
+    clear: right;
+    padding: 5px 20px 5px 5px;
+}
+
+.faction_col {
+  width: 50%;
+  img {
+    float: left;
+    clear: left;
+    padding-right: 10px;
+  }
+}
+
+.content_col {
+  display: table-cell;
+  padding: 5px;
+}
+
+.votetable {
+  font-size: 12px;
+  border: 1px solid black;
+  border-collapse: collapse;
+  th {
+      background-color: #999;
+  }
+  td {
+    padding: 3px;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.connect_button {
+    height: 30px;
+    width: 100px;
+    float: left;
+    margin: 10px;
+    font-size: 16px;
+}
+

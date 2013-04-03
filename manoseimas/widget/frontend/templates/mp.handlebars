@@ -1,0 +1,13 @@
+<div class="mp">
+    {{#if image}}
+        <img height='50' alt='' class='lazy' src='{{image}}' />
+    {{/if}}
+    <div>
+        {{ first_name }} {{ last_name }}<br/>
+        {{ fraction.abbreviation }}&nbsp;&nbsp;
+        {{#if source}}
+            <a target='_blank' href='{{ source.url }}'>lrs.lt</a>&nbsp;&nbsp;
+        {{/if}}
+        <a target='_blank' href='{{page_url slug}}'>mS.lt</a>
+    </div>
+</div>

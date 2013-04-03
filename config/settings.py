@@ -256,6 +256,8 @@ INSTALLED_APPS = (
     'manoseimas.compat',            # depends on: solutions
 
     'manoseimas',                   # depends on: votings
+    
+    'manoseimas.widget',
 )
 
 

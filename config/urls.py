@@ -14,6 +14,8 @@ urlpatterns = patterns('',
     url(r'^$', 'sboard.views.node_view', {'slug': 'manoseimas'}, name='index'),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
+
+    url(r'^widget/', include('widget.urls')),
 )
 
 if settings.DEBUG:

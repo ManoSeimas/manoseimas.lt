@@ -33,7 +33,7 @@ def ajax_request(*allowed_methods):
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(request, *args, **kwargs):
-            if request.method not in allowed_methods or not request.is_ajax():
+            if request.method not in allowed_methods:
                 return HttpResponseBadRequest()
             response = view_func(request, *args, **kwargs)
             if isinstance(response, HttpResponse):
@@ -42,3 +42,5 @@ def ajax_request(*allowed_methods):
                 return JsonResponse(response)
         return wrapper
     return csrf_exempt(decorator)
+
+

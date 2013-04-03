@@ -1,0 +1,49 @@
+fs          = require 'fs'
+{exec}      = require 'child_process'
+Rehab       = require 'rehab'
+
+option '-o', '--output [DIR]', 'directory for compiled Javascript file'
+option '-t', '--tmp [DIR]', 'directory for intermediary build files'
+
+cmd = (command, callback) ->
+    exec command, (err, stdout, stderr) ->
+        console.warn stderr  if stderr
+        console.log stdout   if stdout
+
+        process.exit -1  if err
+
+        callback?()
+
+
+task 'build:compile', 'Compile associated CoffeeScript, SCSS, and Handlebars templates', (options) ->
+    tmp_dir   = options.tmp or 'tmp'
+
+    console.log "Compiling down stylesheets..."
+    cmd "sass -t compressed stylesheets/*.scss #{tmp_dir}/widget.css", () ->
+        console.log "Compiling templates & CSS to Javascript..."
+        cmd "handlebars -m -f #{tmp_dir}/templates.js #{tmp_dir}/*.css templates/*.handlebars"
+
+    files = new Rehab().process 'scripts'
+    console.log "Compiling Coffeescript to Javascript..."
+    cmd "coffee -b -o tmp -j widget.js -c #{ files.join ' ' }"
+
+
+task 'build:pack', 'Pack all Javascript into a single script', (options) ->
+    out_dir     = options.output or 'build'
+    tmp_dir   = options.tmp or 'tmp'
+    lib_dir     = options.libs or 'lib'
+
+    console.log "Boiling Javascript to beautiful #{out_dir}/js/manoSeimas-widget.debug.js..."
+    cmd "mkdir -p #{out_dir}/js && uglifyjs #{tmp_dir}/*.js -b --wrap MSWidget -o #{out_dir}/js/manoSeimas-widget.debug.js"
+
+    console.log "Boiling Javascript & libs to ugly #{out_dir}/js/manoSeimas-widget.min.js..."
+    cmd "mkdir -p #{out_dir}/js && uglifyjs #{lib_dir}/*.js #{tmp_dir}/*.js -c -m --wrap MSWidget -o #{out_dir}/js/manoSeimas-widget.min.js"
+
+task 'clean', "Cleanup package tree", (options) ->
+    out_dir     = options.output or 'build'
+    tmp_dir   = options.tmp or 'tmp'
+
+    console.log "Cleaning up dirs #{tmp_dir} and #{out_dir}..."
+    cmd "rm -f #{tmp_dir}/* #{out_dir}/js/manoSeimas-widget.debug.js #{out_dir}/js/manoSeimas-widget.min.js"
+
+
