@@ -13,6 +13,36 @@
   </div>
 </div>
 
+<style type="text/css">
+    select.inline { 
+        position: relative; 
+        opacity: 0; 
+        filter: alpha(opacity=0); 
+        z-index: 5; 
+        margin: 0;
+    } 
+    select.inline:hover {
+        cursor: pointer;
+        border-bottom: 1px dashed gray;
+    }
+
+    .select_placeholder {
+        position: absolute;
+    }
+    .select_placeholder i {
+        vertical-align: top
+        margin-top: 2px;
+        opacity: 0;
+        filter: alpha(opacity=0);
+    }
+
+    .position_alert {
+        color: red;
+        font-weight: bold;
+        font-style: italic;
+    }
+</style>
+
 {% if positions %}
 <hr style="clear: both">
 
@@ -20,10 +50,15 @@
 
 <ul class="positions">
   {% for position in positions %}
-  <li>
-    Balsavo <strong class="very" title="{{ position.percent }}">{{ position.position|lower }}</strong>
+  <li class="position" data-solution="{{ position.solution.ref.key }}">
+  <span class='select_placeholder'><i class='icon-pencil'></i> Balsavo <strong class='very' title='{{ position.val }}'>{{ position.text|lower }}</strong></span>
+      <select class='inline'>
+          {% for val,text in position_mapping.items %}
+              <option value='{{ val }}' {% if val == position.val %}selected{% endif %}>Balsavo {{ text|lower }}</option>
+          {% endfor %}
+      </select>
     <a class="profile-solution-title arrow-before" href="{% nodeurl position.solution.ref %}">{{ position.solution.ref.title }}</a>
-    <a href="#" class="icon-remove" title="Ištrinti pasirinkimą" data-solution="{{ position.solution.ref.key }}"></a>
+    <a href="#" class="icon-remove" title="Ištrinti pasirinkimą" ></a>
   </li>
   {% endfor %}
 </ul>
@@ -34,15 +69,51 @@
 {% block inlinejs %}
 <script type="text/javascript">
 $(function() {
-  $(".positions .icon-remove").click(function() {
-    var li = $(this).parent();
-    var node = $(this).attr('data-solution');
     var url = "/testas/submit-position/";
-    console.log(li, node, url);
-    manoSeimas.submitPosition(url, node, 0, function() {
-      li.hide();
+
+    $(".positions .icon-remove").click(function() {
+        var li = $(this).parent();
+        var node = $(this).parents('.position').attr('data-solution');
+        console.log(li, node, url);
+        manoSeimas.submitPosition(url, node, 0, function() {
+            li.hide();
+        });
     });
-  });
+
+    // NOTE: This is hacky and could likely be replaced with more clever CSS.
+    sync_dimensions = function(src, target) {
+        target.width( src.width() );
+        target.height( src.height() );
+    }
+    $("select.inline").each(function() {
+        sync_dimensions( $(this).prev(), $(this) );
+    });
+    
+    $("select.inline").hover(
+        function() { 
+            $(this).prev().css("border-bottom", "1px dashed gray");
+            $(this).prev().find("i").fadeTo(500, 1);
+        },
+        function() { 
+            $(this).prev().css("border-bottom", "0");
+            $(this).prev().find("i").stop().fadeTo(100, 0);
+        }
+    );
+
+    $("select.inline").change(function() {
+        val = $(this).find("option:selected").val()
+        text = $(this).find("option:selected").text()
+        placeholder = $(this).prev();
+        placeholder.html( text.replace(/^Balsavo (.+)$/, "<i class='icon-pencil'></i> Balsavo <strong class='very'>$1</strong>") );
+        sync_dimensions( placeholder, $(this) );
+
+        var node = $(this).parents('.position').attr('data-solution');
+        
+        _self = $(this);
+        manoSeimas.submitPosition(url, node, val, function() {
+            $("<span class='position_alert'>Saved...</span>").appendTo(_self.parent()).fadeOut({duration:1500, easing:'linear'});
+        });
+    });
 });
 </script>
 {% endblock %}
