@@ -15,35 +15,56 @@ cmd = (command, callback) ->
         callback?()
 
 
-task 'build:compile', 'Compile associated CoffeeScript, SCSS, and Handlebars templates', (options) ->
-    tmp_dir   = options.tmp or 'tmp'
+task 'build', 'Compile & Build everything.', (options) ->
+    compile options, -> 
+        pack options
 
+
+task 'build:compile', 'Compile associated CoffeeScript, SCSS, and Handlebars templates', (options) ->
+    compile options
+
+task 'build:pack', 'Pack all Javascript into a single script', (options) ->
+    pack options
+
+task 'clean', "Cleanup package tree", (options) ->
+    clean options
+
+
+
+compile = (options, callback) ->
+    compile_scripts options, -> 
+        compile_stylesheets options, callback
+
+compile_stylesheets = (options, callback) ->
+    tmp_dir   = options.tmp or 'tmp'
     console.log "Compiling down stylesheets..."
     cmd "sass -t compressed stylesheets/*.scss #{tmp_dir}/widget.css", () ->
         console.log "Compiling templates & CSS to Javascript..."
-        cmd "handlebars -m -f #{tmp_dir}/templates.js #{tmp_dir}/*.css templates/*.handlebars"
+        cmd "handlebars -m -f #{tmp_dir}/templates.js #{tmp_dir}/*.css templates/*.handlebars", callback
 
+compile_scripts = (options, callback) ->
+    tmp_dir   = options.tmp or 'tmp'
     files = new Rehab().process 'scripts'
     console.log "Compiling Coffeescript to Javascript..."
-    cmd "coffee -b -o tmp -j widget.js -c #{ files.join ' ' }"
+    cmd "coffee -b -o tmp -j widget.js -c #{ files.join ' ' }", callback
 
 
-task 'build:pack', 'Pack all Javascript into a single script', (options) ->
+pack = (options, callback) ->
     out_dir     = options.output or 'build'
     tmp_dir   = options.tmp or 'tmp'
     lib_dir     = options.libs or 'lib'
 
     console.log "Boiling Javascript to beautiful #{out_dir}/js/manoSeimas-widget.debug.js..."
-    cmd "mkdir -p #{out_dir}/js && uglifyjs #{tmp_dir}/*.js -b --wrap MSWidget -o #{out_dir}/js/manoSeimas-widget.debug.js"
+    cmd "mkdir -p #{out_dir}/js && uglifyjs #{tmp_dir}/*.js -b --wrap MSWidget -o #{out_dir}/js/manoSeimas-widget.debug.js", ->
+        console.log "Boiling Javascript & libs to ugly #{out_dir}/js/manoSeimas-widget.min.js..."
+        cmd "mkdir -p #{out_dir}/js && uglifyjs #{lib_dir}/*.js #{tmp_dir}/*.js -c -m --wrap MSWidget -o #{out_dir}/js/manoSeimas-widget.min.js", callback
 
-    console.log "Boiling Javascript & libs to ugly #{out_dir}/js/manoSeimas-widget.min.js..."
-    cmd "mkdir -p #{out_dir}/js && uglifyjs #{lib_dir}/*.js #{tmp_dir}/*.js -c -m --wrap MSWidget -o #{out_dir}/js/manoSeimas-widget.min.js"
 
-task 'clean', "Cleanup package tree", (options) ->
+clean = (options, callback) ->
     out_dir     = options.output or 'build'
     tmp_dir   = options.tmp or 'tmp'
 
     console.log "Cleaning up dirs #{tmp_dir} and #{out_dir}..."
-    cmd "rm -f #{tmp_dir}/* #{out_dir}/js/manoSeimas-widget.debug.js #{out_dir}/js/manoSeimas-widget.min.js"
+    cmd "rm -f #{tmp_dir}/* #{out_dir}/js/manoSeimas-widget.debug.js #{out_dir}/js/manoSeimas-widget.min.js", callback
 
 
