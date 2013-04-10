@@ -36,8 +36,8 @@
         filter: alpha(opacity=0);
     }
 
-    .position_alert {
-        color: red;
+    .position_msg {
+        color: #c00;
         font-weight: bold;
         font-style: italic;
     }
@@ -109,9 +109,14 @@ $(function() {
 
         var node = $(this).parents('.position').attr('data-solution');
         
+        msgEl = $("<span class='position_msg'>Saving...</span>")
+        msgEl.appendTo($(this).parent())
+
         _self = $(this);
         manoSeimas.submitPosition(url, node, val, function() {
-            $("<span class='position_alert'>Saved...</span>").appendTo(_self.parent()).fadeOut({duration:1500, easing:'linear'});
+            msgEl.text('Saved!');
+            msgEl.css('color', 'green');
+            msgEl.fadeOut({duration:1500, easing:'linear'});
         });
     });
 });
