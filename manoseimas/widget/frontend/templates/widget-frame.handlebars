@@ -8,9 +8,9 @@
     <div id="MSWidget-mps_button" class="mode_button mps_button" onClick="MSWidget.show_mps()">MPs</div>
 </div>
 <div id="MSWidget-fractions" class="content_pane fractions_pane" style="display:none;">
-{{#each_value fractions }}
-    {{render "fraction" }}
-{{/each_value}}
+{{render "arrow_bar" }}
+<h3 style='font-style: italic; color: #444;'>Fraction Voting Results</h3>
+{{render "fraction_list" }}
 </div>
 <div id="MSWidget-mps">
 <div id="MSWidget-mps-buttons" class="button_bar">
@@ -55,15 +55,16 @@
 </div>
 </div>
 <div class="vote_pane">
+    <div class="links">
+        <a target='_blank' href='#'>kas tai?</a><br/>
+        <a target='_blank' href='http://www.manoSeimas.lt/'>manoSeimas.lt</a>
+    </div>
+    What do *you* think of this Resolution?<br/>
     <button id="yes" onClick="MSWidget.vote(1);">Agree</button>
     <button id="no" onClick="MSWidget.vote(-1);">Disagree</button>
     <label>
         <input id='important' type='checkbox'> Man tai svbaru!
     </label>
-    <div class="links">
-        <a target='_blank' href='#'>kas tai?</a><br/>
-        <a target='_blank' href='http://www.manoSeimas.lt/'>manoSeimas.lt</a>
-    </div>
 </div>
 <div id='MSWidget-thanks' class='overlay' style='display:none'></div>
 <div id='MSWidget-connect' class='overlay' style='display:none'>

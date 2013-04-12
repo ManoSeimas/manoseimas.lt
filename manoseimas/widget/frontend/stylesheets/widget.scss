@@ -2,8 +2,6 @@
   position: relative;
   background-color: #fff;
   color: black;
-  //width: 675px;
-  //height: 250px;
   width: 100%;
   height: 100%;
   font-family: Verdana;
@@ -47,7 +45,7 @@
   left: 0;
   right: 0;
   top: 40px;
-  bottom: 50px;
+  bottom: 70px;
   border: 1px solid #999;
   overflow-y: scroll;
 }
@@ -55,7 +53,7 @@
 .overlay {
   position: absolute;
   top: 20px;
-  bottom: 50px;
+  bottom: 70px;
   left: 0;
   right: 0;
   background-color: #fcf;
@@ -111,8 +109,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 40px;
-  padding-top: 10px;
+  height: 60px;
+  padding: 10px 10px 0 10px;
   background-color: #ff9;
   font-size: 12px;
   button {
@@ -132,28 +130,134 @@
   width: 100%;
 }
 
+.position_bar {
+    min-height: 80px;
+    min-width: 530px;
+    margin: 10px 5px 5px 5px;
+}
+
+.iconified_fraction {
+    display: inline-block;
+    text-align: center;
+    min-width: 60px;
+    font-weight: bold;
+    height: 50px;
+    
+    -moz-transition: all .2s ease-in-out;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    -ms-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+
+    p {
+        margin-top: 55px;
+    }
+}
+
+.iconified_fraction:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    
+    -moz-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -o-transform: scale(1.1); 
+    -ms-transform: scale(1.1); 
+    transform: scale(1.1); 
+}
+
+.positive {
+    color: #1B9E34 !important;
+}
+.negative {
+    color: #c00 !important;
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+
 .content_row {
   border-bottom: 1px solid grey;
   clear: left;
   width: 100%;
 }
 
-.fraction_details {
-    max-width: 500px;
-    min-width: 250px;
-    padding: 5px 10px 5px 5px;
-    line-height: 12px;
-    float: left;
-    img {
-        float: left;
-        padding-right: 15px;
+table.fractions_list {
+    border: 0;
+    width: 100%;
+
+    tr {
+        border-top: 1px solid gray;
+
+        // VISO percentage
+        td:first-child {
+            font-size: 28px;
+            text-align: right;
+        }
+        // Fraction image
+        td:first-child + td {
+            text-align: center;
+        }
+        // Fraction details
+        td:first-child + td + td {
+            max-width: 500px;
+            min-width: 250px;
+            padding: 5px 10px 5px 5px;
+            line-height: 1;
+            vertical-align: top;
+        }
+        // Fraction vote data
+        td:first-child + td + td + td {
+            padding: 5px 20px 5px 5px;
+            min-width: 145px;
+
+            label {
+                display: inline-block;
+                font-weight: bold;
+                text-decoration: underline;
+                width: 40px;
+                text-align: right;
+                clear: left;
+                float: left;
+                margin: 3px 10px 0px 0px;
+                line-height: 1;
+                font-size: 10px;
+            }
+
+            div {
+                display: inline-block;
+                font-weight: bold;
+                height: 10px;
+                line-height: 1;
+                font-size: 10px;
+                text-align: right;
+                float: left;
+                margin-top: 3px;
+                padding: 0px 10px 0px 5px;
+                border: 1px solid black;
+            }
+        }
     }
 }
-.fraction_data {
-    float: right;
-    clear: right;
-    padding: 5px 20px 5px 5px;
+
+.aye_data_bar {
+    background-color: #1b9e33;
 }
+.no_data_bar {
+    background-color: #c00;
+}
+.abstain_data_bar {
+    background-color: #cc9e33;
+}
+.null_data_bar {
+    border: 0 !important;
+    padding: 0 !important;
+}
+
 
 .faction_col {
   width: 50%;
@@ -201,3 +305,42 @@
     font-size: 16px;
 }
 
+.harrow {
+    height: 4px;
+    margin:2px 12px 0px 12px;
+    position: relative;
+
+    background-color: black; /* Older browsers */
+    background-image: -ms-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* IE10 */
+    background-image: -moz-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* FF */
+    background-image: -o-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Opera */
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #1B9E34), color-stop(1, #CC0000)); /* Webkit (Safari/Chrome 10) */ 
+    background-image: -webkit-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Webkit (Chrome 11+) */ 
+    background-image: linear-gradient(to right, #1B9E34 0%, #CC0000 100%); /* W3C */
+}
+
+.harrow:before {
+    content: "";
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    left: -12px;
+    margin-top: -2px;
+    border-style: solid;
+    border-width: 4px 12px 4px 0;
+    border-color: transparent #1b9e33 transparent transparent;
+    -webkit-transform: rotate(360deg);
+}
+
+.harrow:after {
+    content: "";
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    right: -12px;
+    margin-top: -2px;
+    border-style: solid;
+    border-width: 4px 0 4px 12px;
+    border-color: transparent transparent transparent #c00;
+    -webkit-transform: rotate(360deg);
+}

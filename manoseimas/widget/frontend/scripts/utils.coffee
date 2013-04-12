@@ -34,11 +34,30 @@ Handlebars.registerHelper "key_value", (obj, options) ->
 
 # For iterating over hash values in Handlebars templates
 Handlebars.registerHelper "each_value", (obj, options) ->
-    (options.fn(v) for own k,v of obj).join('')
+    values = (v for own k,v of obj)
+    if options.hash.sorting?
+        values = values.sort (a,b) -> a[options.hash.sorting] < b[options.hash.sorting]
+
+    (options.fn(v) for v in values).join('')
 
 # Constructs a URL to webpage identified by the slug
 Handlebars.registerHelper "page_url", (slug) ->
     SERVER_URL + "/" + slug
+
+# Fractional math
+Handlebars.registerHelper "fraction", (n, d, scale, options) ->
+    if scale?
+        scale * n/d
+    else
+        n/d
+    
+Handlebars.registerHelper "vote_data_bar", (key, width) ->
+    if this.votes[key] > 0
+        result = "<div class='#{key}_data_bar' style='width:#{ width * this.votes[key] / this.total_votes }px'>#{ this.votes[key] }</div>"
+    else 
+        result = "<div class='null_data_bar'>0</div>"
+
+    new Handlebars.SafeString result
 
 
 # Inject CSS into DOM from template
@@ -93,6 +112,7 @@ fetch_voting = (slug, callback) ->
 
         for own id,f of data.fractions 
             f.viso = Math.round( 100 * f.voting_score / (2*f.total_votes) )
+            f.supports = f.viso > 50
 
         callback data if callback?
 

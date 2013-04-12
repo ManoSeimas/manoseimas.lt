@@ -1,0 +1,24 @@
+<table class="fractions_list">
+{{#each_value fractions }}
+    <tr id="MSWidget-fraction-{{_id}}">
+        <td class="{{#if supports}}positive{{ else }}negative{{/if}}">{{viso}}%</td>
+        <td><img src='{{image}}' /></td>
+        <td>
+            {{ title }}<br/>
+            {{ abbreviation }}&nbsp;&nbsp;
+            {{#if source}}
+                <a target='_blank' href='{{ source.url }}'>lrs.lt</a>&nbsp;&nbsp;
+            {{/if}}
+            <a target='_blank' href='{{page_url slug}}'>manoSeimas.lt</a>
+        </td>
+        <td>
+            <label>UZ:</label>
+            {{ vote_data_bar 'aye' 75 }}
+            <label>SUSIL.:</label>
+            {{ vote_data_bar 'no' 75 }}
+            <label>PRIES:</label>
+            {{ vote_data_bar 'abstain' 75 }}
+        </td>
+    </tr>
+{{/each_value}}
+</table>

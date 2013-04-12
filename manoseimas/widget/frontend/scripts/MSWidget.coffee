@@ -52,6 +52,12 @@ window.MSWidget = {
 
 
     show_fractions: () -> MSWidget.show_panel 'fractions'
+
+    show_fraction: (fraction) ->
+        target = $("#MSWidget-fraction-#{fraction}")
+        # Because fraction rows are part of a table, we must also incorporate the parent table's offset
+        $("#MSWidget-fractions").scrollTop = target.offsetTop + target.offsetParent.offsetTop
+
     show_mps: (subpanel) -> 
         MSWidget.show_panel 'mps'
         if subpanel?

@@ -1,0 +1,17 @@
+<div class='position_bar'>
+    <div style='min-height: 85px;'>
+    {{#each_value fractions sorting='viso' }}
+        <div class='iconified_fraction {{#if supports}}pull-left positive{{else}}pull-right negative{{/if}}' 
+             {{#if image}}
+                 style='background:url({{image}}) no-repeat center center' 
+             {{/if}}
+             onClick="MSWidget.show_fraction('{{_id}}')">
+            {{#unless image}}
+                {{ abbreviation }}
+            {{/unless}}
+            <p>{{viso}}%</p>
+        </div>
+    {{/each_value}}
+    </div>
+    <div class='harrow'></div>
+</div>

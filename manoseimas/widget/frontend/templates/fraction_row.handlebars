@@ -1,0 +1,24 @@
+<div id="MSWidget-fraction-{{_id}}" class="content_row">
+    <div class='fraction_details'>
+        <div class='big_viso {{#if supports}}positive{{ else }}negative{{/if}}'>{{viso}}%</div>
+        {{#if image}}
+            <img height='50' alt='' src='{{image}}' />
+        {{/if}}
+        <div>
+            {{ title }}<br/>
+            {{ abbreviation }}&nbsp;&nbsp;
+            {{#if source}}
+                <a target='_blank' href='{{ source.url }}'>lrs.lt</a>&nbsp;&nbsp;
+            {{/if}}
+            <a target='_blank' href='{{page_url slug}}'>manoSeimas.lt</a>
+        </div>
+    </div>
+    <div class='fraction_data'>
+        <label>UZ:</label>
+        <div class='aye_data_bar' style='width:{{ fraction votes.aye total_votes 75 }}px'>{{votes.aye}}</div>
+        <label>SUSIL.:</label>
+        <div class='no_data_bar' style='width:{{ fraction votes.no total_votes 75 }}px'>{{votes.no}}</div>
+        <label>PRIES:</label>
+        <div class='abstain_data_bar' style='width:{{ fraction votes.abstain total_votes 75 }}px'>{{votes.abstain}}</div>
+    </div>
+</div>
