@@ -1,0 +1,107 @@
+{% extends "sboard/base.html" %}
+
+{% block content %}
+<h1>Widget Builder</h1>
+<p>The manoSeimas Widget displays the voting behavior of Fractions and MPs for a specific Resolution from Seimas.  Use the following tool to configure the widget, including which Resolution you'd like it to display. After you've configured the widget, copy and paste the code snippet into your site.</p>
+
+<form style='margin-bottom: 0'>
+    <fieldset> 
+        <legend>Configure Widget</legend>
+
+        <div class='row'>
+            <div class='span6'>
+                <label>Voting (lrs.lt URL):</label>
+                <div class="input-append">
+                    <input style='width: 300px;' type='text' id='widget_voting_url' value='http://www.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-12994' onClick='this.select();' />
+                    <button class='btn btn-primary' onClick='update_source(); return false;'>Use &raquo;</button>
+                </div>
+                <span class="help-block">Note: This must be a voting url from lrs.lt.</span>
+            </div>
+            <div class='span2'>
+                <label>Width:</label>
+                <div class='slider' id='widget_width'></div>
+                <label>Height:</label>
+                <div class='slider' id='widget_height'></div>
+            </div>
+        </div>
+        <div class='row' style='border-top: 1px dashed gray; padding-top: 20px'>
+            <div style='text-align: center'>
+                <p style='font-weight: bold;'>Your Widget Snippet:</p>
+                <textarea id='code_snippet' style='background-color: #eee; width:400px;height:50px;font-size:10px;font-family: "Courier New";' onClick='this.select();'></textarea>
+                <label style='text-style: italic; font-size: 10px;'>(copy &amp; paste this!)</label>
+            </div>
+        </div>
+    </fieldset>
+</form>
+
+<div class="section" id="widget-preview">
+    <h1>Widget Preview</h1>
+    <div style='text-align:center'>
+        <iframe id='widget_container' src='http://localhost:8000/widget?source_url=http%3A%2F%2Fwww.lrs.lt%2Fpls%2Finter%2Fw5_sale.bals%3Fp_bals_id%3D-12994' scrolling='no' style='border:1px solid black;width:575px;height:225px;overflow:hidden;'></iframe>
+    </div>
+</div>
+{% endblock %}
+
+{% block inlinejs %}
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script>
+    function update_dimensions() {
+      //var w = $("#widget_width").val();
+      //var h = $("#widget_height").val();
+      var w = $("#widget_width").slider("value");
+      var h = $("#widget_height").slider("value");
+      
+      $("#widget_container").width(w);
+      $("#widget_container").height(h);
+
+      update_snippet();
+    }
+
+    function mk_src_url(voting_url) {
+      return 'http://localhost:8000/widget?source_url='+encodeURIComponent(voting_url);
+    } 
+
+    function update_source() {
+      var voting_url = $("#widget_voting_url").val();
+      $("#widget_container").attr('src', mk_src_url(voting_url));
+
+      update_snippet();
+   }
+
+    function update_snippet() { 
+      var voting_url = $("#widget_voting_url").val();
+      var src_url = mk_src_url(voting_url);
+
+      var w = $("#widget_width").slider("value");
+      var h = $("#widget_height").slider("value");
+
+      var snippet = "<iframe src='"+src_url+"' scrolling='no' style='width:"+w+"px;height:"+h+"px;border:0;overflow:hidden;'></iframe>";
+      $("#code_snippet").val(snippet);
+    }
+
+    $(function() {
+        $( "#widget_width" ).slider({
+            orientation: "horizontal",
+            range: "min",
+            min: 425,
+            max: 1000,
+            value: 575,
+            slide: update_dimensions,
+            change: update_dimensions
+        });
+        $( "#widget_height" ).slider({
+            orientation: "horizontal",
+            range: "min",
+            max: 1000,
+            min: 200,
+            value: 225,
+            slide: update_dimensions,
+            change: update_dimensions
+        });
+
+        update_snippet();
+    });
+
+  </script>
+{% endblock %}

@@ -91,3 +91,7 @@ def auth_finish(request):
 
     return HttpResponse(response)
 
+
+def builder(request):
+    return render(request, 'widget/builder.html')
+
