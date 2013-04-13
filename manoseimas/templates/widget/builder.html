@@ -37,7 +37,7 @@
 <div class="section" id="widget-preview">
     <h1>Widget Preview</h1>
     <div style='text-align:center'>
-        <iframe id='widget_container' src='http://localhost:8000/widget?source_url=http%3A%2F%2Fwww.lrs.lt%2Fpls%2Finter%2Fw5_sale.bals%3Fp_bals_id%3D-12994' scrolling='no' style='border:1px solid black;width:575px;height:225px;overflow:hidden;'></iframe>
+        <iframe id='widget_container' src='/widget?source_url=http%3A%2F%2Fwww.lrs.lt%2Fpls%2Finter%2Fw5_sale.bals%3Fp_bals_id%3D-12994' scrolling='no' style='border:1px solid black;width:575px;height:225px;overflow:hidden;'></iframe>
     </div>
 </div>
 {% endblock %}
@@ -47,8 +47,6 @@
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 <script>
     function update_dimensions() {
-      //var w = $("#widget_width").val();
-      //var h = $("#widget_height").val();
       var w = $("#widget_width").slider("value");
       var h = $("#widget_height").slider("value");
       
@@ -59,7 +57,7 @@
     }
 
     function mk_src_url(voting_url) {
-      return 'http://localhost:8000/widget?source_url='+encodeURIComponent(voting_url);
+        return location.protocol + '//' + location.host + '/widget?source_url='+encodeURIComponent(voting_url);
     } 
 
     function update_source() {
