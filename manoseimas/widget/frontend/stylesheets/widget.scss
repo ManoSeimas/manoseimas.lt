@@ -66,6 +66,9 @@
 
 .fractions_pane {
   background-color: #faa;
+  
+  // More natural scrolling for end items
+  padding-bottom: 50px;
 }
 
 .mps_pane {
@@ -310,13 +313,14 @@ table.fractions_list {
     margin:2px 12px 0px 12px;
     position: relative;
 
+    background: linear-gradient(to right, #1B9E34 0%, #CC0000 100%); /* W3C */
+    background: -moz-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* FF */
+    background: -o-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Opera */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0, #1B9E34), color-stop(1, #CC0000)); /* Webkit (Safari/Chrome 10) */ 
+    background: -webkit-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Webkit (Chrome 11+) */ 
+    background: -ms-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* IE10 */
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr='#1B9E34', endColorstr='#CC0000'); /* IE7-8-9 */ 
     background-color: black; /* Older browsers */
-    background-image: -ms-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* IE10 */
-    background-image: -moz-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* FF */
-    background-image: -o-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Opera */
-    background-image: -webkit-gradient(linear, left top, right top, color-stop(0, #1B9E34), color-stop(1, #CC0000)); /* Webkit (Safari/Chrome 10) */ 
-    background-image: -webkit-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Webkit (Chrome 11+) */ 
-    background-image: linear-gradient(to right, #1B9E34 0%, #CC0000 100%); /* W3C */
 }
 
 .harrow:before {
