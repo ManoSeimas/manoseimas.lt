@@ -63,7 +63,7 @@ Handlebars.registerHelper "vote_data_bar", (key, width) ->
 track_event = (params...) ->
     window._gaq ?= []
     window._gaq.push ['_trackEvent', 'Widget', params...]
-    console.log "track_event -> Widget,#{params}"
+    #console.log "track_event -> Widget,#{params}"
 
 
 # Inject CSS into DOM from template
