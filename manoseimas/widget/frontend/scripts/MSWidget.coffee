@@ -77,6 +77,10 @@ window.MSWidget = {
         else
             track_event "Click", "MPs"
 
+        # Lazy loading the MPs list panel to delay MP image loading until we really need it.
+        if $("#MSWidget-mps-content").innerHTML is ""
+            $("#MSWidget-mps-content").innerHTML = render "mp_list", MSWidget.content
+
         MSWidget.show_panel 'mps'
         if subpanel?
             $("#MSWidget-mps-#{subpanel}").offsetParent.scrollTop = $("#MSWidget-mps-#{subpanel}").offsetTop
