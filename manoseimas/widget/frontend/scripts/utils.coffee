@@ -60,6 +60,12 @@ Handlebars.registerHelper "vote_data_bar", (key, width) ->
     new Handlebars.SafeString result
 
 
+track_event = (params...) ->
+    window._gaq ?= []
+    window._gaq.push ['_trackEvent', 'Widget', params...]
+    console.log "track_event -> Widget,#{params}"
+
+
 # Inject CSS into DOM from template
 inject_css = (target) -> 
     return if $("#MSWidget-style")

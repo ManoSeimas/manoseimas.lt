@@ -7,7 +7,7 @@
 
 {{#if profile}}
     <p> Your vote has been recorded! A history of your preferences is available on manoSeimas.lt, including recommendations for Fractions and MPs that best match your preferences!</p>
-    <p><a target='_blank' href='{{page_url "accounts/profile" }}'>Your Voting History</a></p>
+    <p><a target='_blank' href='{{page_url "accounts/profile" }}' onClick="MSWidget.clickthrough('Voting History')">Your Voting History</a></p>
 {{else}}
     <p><b>Thanks for sharing your opinion!</b> Did you know - manoSeimas.lt can track your opinions and let you know which parlimentarians and fractions most closely match your preferences.</p>
     <p>Connect now to start tracking your opinions! <button onClick='MSWidget.show_overlay("connect")'>Prisijungti &raquo;&raquo;</button>

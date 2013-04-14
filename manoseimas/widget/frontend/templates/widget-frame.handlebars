@@ -1,6 +1,6 @@
 <div class='links'>
-    <a target='_blank' href='{{voting.source.voting.url}}'>lrs.lt</a>&nbsp;&nbsp;
-    <a target='_blank' href='{{page_url voting._id}}'>manoSeimas.lt</a>
+    <a target='_blank' href='{{voting.source.voting.url}}' onClick="MSWidget.clickthrough('Voting Source')" >lrs.lt</a>&nbsp;&nbsp;
+    <a target='_blank' href='{{page_url voting._id}}' onClick="MSWidget.clickthrough('Voting')">manoSeimas.lt</a>
 </div>
 <div class="votetitle">{{voting.title}}</div>
 <div class="button_bar">
@@ -56,8 +56,8 @@
 </div>
 <div class="vote_pane">
     <div class="links">
-        <a target='_blank' href='#'>kas tai?</a><br/>
-        <a target='_blank' href='http://www.manoSeimas.lt/'>manoSeimas.lt</a>
+        <a target='_blank' href='#' onClick="MSWidget.clickthrough('Kas Tai')">kas tai?</a><br/>
+        <a target='_blank' href='http://www.manoSeimas.lt/' onClick="MSWidget.clickthrough('manoSeimas.lt')">manoSeimas.lt</a>
     </div>
     What do *you* think of this Resolution?<br/>
     <button id="yes" onClick="MSWidget.vote(1);">Agree</button>

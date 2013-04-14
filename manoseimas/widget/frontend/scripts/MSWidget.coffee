@@ -15,7 +15,7 @@ window.MSWidget = {
                 MSWidget.content = data
                 $("#MSWidget").innerHTML = render "widget-frame", MSWidget.content
                 ui_refresh() 
-                MSWidget.show_fractions()
+                MSWidget.show_fractions track: false
 
     load_profile: (profile_id, callback) ->
         fetch_profile profile_id, (profile) ->
@@ -25,10 +25,17 @@ window.MSWidget = {
     vote: (position) ->
         position *= 2 if $("#important").checked
         update_position MSWidget.content.voting._id, position
+
+        if position > 0
+            track_event "Vote", "Support", position
+        else
+            track_event "Vote", "Oppose", position
         
         MSWidget.show_thanks()
 
     connect: (service) ->
+        track_event "Click", "Connect", service
+
         # Different tweaks for different services
         switch service
             when "google"
@@ -46,19 +53,30 @@ window.MSWidget = {
         window.open url+"?next=/widget/auth/finish", "", "width=#{w},height=#{h},status=1,location=1,resizable=yes,left=#{x},top=#{y}"
     
     connected: (profile_id) ->
+        track_event "Connected"
         MSWidget.load_profile profile_id, (profile) ->
             MSWidget.show_thanks true
 
+    show_fractions: ({track} = {track:true}) -> 
+        if track
+            track_event "Click", "Fractions"
 
-
-    show_fractions: () -> MSWidget.show_panel 'fractions'
+        MSWidget.show_panel 'fractions'
 
     show_fraction: (fraction) ->
         target = $("#MSWidget-fraction-#{fraction}")
+        
+        track_event "Click", "Fraction", fraction
+
         # Because fraction rows are part of a table, we must also incorporate the parent table's offset
         $("#MSWidget-fractions").scrollTop = target.offsetTop + target.offsetParent.offsetTop
 
     show_mps: (subpanel) -> 
+        if subpanel?
+            track_event "Click", "MP", subpanel
+        else
+            track_event "Click", "MPs"
+
         MSWidget.show_panel 'mps'
         if subpanel?
             $("#MSWidget-mps-#{subpanel}").offsetParent.scrollTop = $("#MSWidget-mps-#{subpanel}").offsetTop
@@ -91,6 +109,10 @@ window.MSWidget = {
     show_overlay: (name) ->
         MSWidget.hide_overlays();
         show $("#MSWidget-#{name}")
+
+    clickthrough: (type) ->
+        track_event "Link", type
+
     
 }
 

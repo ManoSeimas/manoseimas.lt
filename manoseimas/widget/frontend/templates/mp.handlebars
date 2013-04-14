@@ -6,8 +6,8 @@
         {{ first_name }} {{ last_name }}<br/>
         {{ fraction.abbreviation }}&nbsp;&nbsp;
         {{#if source}}
-            <a target='_blank' href='{{ source.url }}'>lrs.lt</a>&nbsp;&nbsp;
+            <a target='_blank' href='{{ source.url }}' onClick="MSWidget.clickthrough('MP Source')">lrs.lt</a>&nbsp;&nbsp;
         {{/if}}
-        <a target='_blank' href='{{page_url slug}}'>mS.lt</a>
+        <a target='_blank' href='{{page_url slug}}' onClick="MSWidget.clickthrough('MP')">mS.lt</a>
     </div>
 </div>

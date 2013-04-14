@@ -1,8 +1,19 @@
 # UI Handlers, effects, and related magic
 
+mps_scroll_tracked = fractions_scroll_tracked = false
+
 # This is called any time the widget's UI is reloaded.
 ui_refresh = () ->
+    $("#MSWidget-fractions").onscroll = (e) ->
+        unless fractions_scroll_tracked
+            track_event "Scroll", "Fractions"
+            fractions_scroll_tracked = true
+    
     $("#MSWidget-mps-content").onscroll = (e) ->
+        unless mps_scroll_tracked
+            track_event "Scroll", "MPs"
+            mps_scroll_tracked = true
+
         #check_mp_visibility()
         detect_mps_section()
 

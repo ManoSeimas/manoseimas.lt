@@ -7,9 +7,9 @@
             {{ title }}<br/>
             {{ abbreviation }}&nbsp;&nbsp;
             {{#if source}}
-                <a target='_blank' href='{{ source.url }}'>lrs.lt</a>&nbsp;&nbsp;
+                <a target='_blank' href='{{ source.url }}' onClick="MSWidget.clickthrough('Fraction Source')">lrs.lt</a>&nbsp;&nbsp;
             {{/if}}
-            <a target='_blank' href='{{page_url slug}}'>manoSeimas.lt</a>
+            <a target='_blank' href='{{page_url slug}}' onClick="MSWidget.clickthrough('Fraction')">manoSeimas.lt</a>
         </td>
         <td>
             <label>UZ:</label>

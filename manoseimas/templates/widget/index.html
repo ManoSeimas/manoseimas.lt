@@ -28,11 +28,17 @@
                     p.parentNode.insertBefore(s, p);}
             }(document,'script'));
         </script>
+      {% if GOOGLE_ANALYTICS_KEY %}
         <script>
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount','{{ GOOGLE_ANALYTICS_KEY }}']);
+            _gaq.push(['_setCustomVar', 1, 'Authenticated', '{{ profile_id|yesno:"True,False" }}']);
+            _gaq.push(['_trackPageview']);
+            _gaq.push(['_trackEvent', 'Widget', 'Load', "{{ voting_id }}"]);
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
             g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
             s.parentNode.insertBefore(g,s)}(document,'script'));
         </script>
+      {% endif %}
     </body>
 </html>
