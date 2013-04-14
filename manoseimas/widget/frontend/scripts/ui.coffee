@@ -14,26 +14,7 @@ ui_refresh = () ->
             track_event "Scroll", "MPs"
             mps_scroll_tracked = true
 
-        #check_mp_visibility()
         detect_mps_section()
-
-element_visible = (el) ->
-    rect = el.getBoundingCientRect()
-    return rect.top >= 0 && rect.left >= 0 && rect.top <= (window.innerHeight || document.documentElement.clientHeight)
-
-load_image = (el, callback) ->
-    img = new Image()
-    img.alt = ''
-    img.onload = () ->
-        el.parent.replaceChild img, el
-        callback()
-
-    img.src = el.getAttribute 'data-src'
-
-check_mp_visibility = () ->
-    for el in $(".lazy")
-        if element_visible el
-            load_image el
 
 # Automatically select section buttons based on context
 detect_mps_section = () ->
@@ -53,8 +34,3 @@ detect_mps_section = () ->
             $("#MSWidget-mps-#{sp}_button").style.backgroundColor = '#ccc'
         else 
             $("#MSWidget-mps-#{sp}_button").style.backgroundColor = '#fff'
-        
-
-
-#addEventListener('scroll',processScroll);
-#EX: https://gist.github.com/aliem/2171438
