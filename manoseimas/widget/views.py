@@ -93,5 +93,6 @@ def auth_finish(request):
 
 
 def builder(request):
-    return render(request, 'widget/builder.html')
+    params = { 'dev': settings.DEBUG and 'dev' in request.GET }
+    return render(request, 'widget/builder.html', params)
 
