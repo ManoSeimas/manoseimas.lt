@@ -17,11 +17,11 @@ def parse_question():
     return list(spider.parse_question(response))
 
 
-def parse_voting():
+def parse_voting(voting_id):
     spider = SittingsSpider()
     url = ('http://www3.lrs.lt/pls/inter/w5_sale_new.bals?'
-           'p_bals_id=-10765')
-    response = HtmlResponse(url, body=fixture('sitting_-10765.html'))
+           'p_bals_id='+voting_id)
+    response = HtmlResponse(url, body=fixture('sitting_'+voting_id+'.html'))
     return list(spider.parse_person_votes(response))
 
 
@@ -39,7 +39,7 @@ class TestSittingsSpider(unittest.TestCase):
 
 
     def test_voting(self):
-        items = parse_voting()
+        items = parse_voting("-10765")
 
         item = items[0]
         self.assertEqual(item['_id'], '-10765v')
@@ -49,4 +49,17 @@ class TestSittingsSpider(unittest.TestCase):
             'name': u'Ačas Remigijus',
             'person': u'47852p',
             'vote': u'aye'
+        })
+
+    def test_voting2(self):
+        items = parse_voting("-11071")
+
+        item = items[0]
+        self.assertEqual(item['_id'], '-11071v')
+        self.assertEqual(item['documents'], [u'XIP-2779(2)', u'XIP-2780(2)', u'XIP-2781(2)'])
+        self.assertEqual(item['votes'][0], {
+            'fraction': u'TSLKDF',
+            'name': u'Adomėnas Mantas',
+            'person': u'48690p',
+            'vote': u'abstain'
         })
