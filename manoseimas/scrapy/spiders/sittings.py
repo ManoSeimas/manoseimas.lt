@@ -30,6 +30,13 @@ class SittingsSpider(ManoSeimasSpider):
     start_urls = [
         # 'http://www3.lrs.lt/pls/inter/w5_sale.kad_ses',
 
+        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=96',
+        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=95',
+        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=94',
+        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=93',
+        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=92',
+        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=91',
+        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=90',
         'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=89',
         'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=88',
     ]
@@ -196,7 +203,7 @@ class SittingsSpider(ManoSeimasSpider):
         qdoc.add_xpath('name', 'b[1]/text()')
         qdoc.add_value('type',
                 hxs.select('b[1]/following::text()[1]').re('^; (.+)'))
-        number_re = (r'[A-Z]{1,3}'
+        number_re = (r'[A-Z]{1,4}'
                      r'-'
                      r'\d+'
                      r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
@@ -263,7 +270,7 @@ class SittingsSpider(ManoSeimasSpider):
             return u'no-vote'
 
     def _add_voting_legal_act_number(self, hxs, voting):
-        number_re = (r'[A-Z]{1,3}'
+        number_re = (r'[A-Z]{1,4}'
                      r'-'
                      r'\d+'
                      r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
