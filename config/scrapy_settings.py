@@ -8,12 +8,11 @@
 
 
 BOT_NAME = 'manoseimas.lt'
-BOT_VERSION = '1.0'
 
 SPIDER_MODULES = ['manoseimas.scrapy.spiders']
 NEWSPIDER_MODULE = 'manoseimas.scrapy.spiders'
 DEFAULT_ITEM_CLASS = 'manoseimas.scrapy.items.Person'
-USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
+USER_AGENT = '%s/1.1' % (BOT_NAME)
 
 LOG_ENABLED = True
 LOG_LEVEL = 'WARNING' # CRITICAL, ERROR, WARNING, INFO, DEBUG
