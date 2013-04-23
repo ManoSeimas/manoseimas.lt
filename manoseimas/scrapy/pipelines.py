@@ -46,7 +46,6 @@ def store_doc(db, doc):
     attachments = doc.pop('_attachments', [])
     db.save_doc(doc)
     _docs[doc['_id']] = doc
-    print "pipline stored doc %s" % doc['_id']
 
     for name, content, content_type in attachments:
         db.put_attachment(doc, content, name, content_type)
@@ -79,7 +78,6 @@ class ManoseimasPipeline(object):
             # we must ensure we're not clobbering a newer sourced
             # document with an older version.
             if not is_latest_version(item, doc):
-                print "Rejecting older version of %s (%d < %d)" % (item['_id'], item['source']['version'], doc['source']['version'])
                 return
             
             doc.update(item)
