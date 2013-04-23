@@ -27,7 +27,9 @@ from django.conf import settings
 from sboard.models import ImageNode
 from sboard.models import couch
 from sboard.models import get_new_id
+from sboard.models import get_node_by_slug
 from sboard.profiles.models import MembershipNode
+from sboard.profiles.models import query_group_membership
 from sboard.utils import slugify
 
 
@@ -52,6 +54,7 @@ class SyncProcessor(object):
         self.db = db
         self.verbosity = verbosity
         self._nodes = {}
+        self._profiles = {}
 
     def _get_node(self, node_id, node_class):
         if node_id:
@@ -60,6 +63,13 @@ class SyncProcessor(object):
             node = node_class()
             node._id = get_new_id()
             return node
+
+    def _cache_node(self, node, key):
+        key = (node.doc_type, key)
+        self._nodes[key] = node
+
+    def make_node(self, node_class):
+        return self._get_node(None, node_class)
 
     def get_node(self, node_id, node_class, key=None):
         if key is None:
@@ -101,6 +111,27 @@ class SyncProcessor(object):
         if not os.path.exists(path):
             urllib.urlretrieve(url, path)
         self.set_image_from_file(profile, path)
+    
+    def get_profile_node(self, source_id):
+        if source_id not in self._profiles:
+            profile = couch.view('mps/by_source_id', key=source_id).first()
+            self._profiles[source_id] = profile
+        return self._profiles[source_id]
+
+    def get_group_by_slug(self, slug):
+        node = get_node_by_slug(slug)
+        if node:
+            self._cache_node(node, slug)
+
+        return node
+
+    def get_membership_node(self, group, profile):
+        # FIXME: This is necessary because we lack an adequate
+        # index in the couch. We need to add a view to accomodate
+        # this basic query.
+        for node in query_group_membership(group._id):
+            if node.profile == profile:
+                return node
 
     def process_groups(self, groups, profile):
         group_type_map = {
@@ -119,9 +150,21 @@ class SyncProcessor(object):
             group_type = group_type_map[doc['type']]
 
             slug = slugify(doc['name'])
+
             first_time = (group_type.__name__, slug) not in self._nodes
-            group = self.get_node(group_node_id, group_type, slug)
-            group.slug = slug
+
+            if group_node_id:
+                group = self.get_node(group_node_id, group_type, slug)
+                if group.slug != slug:
+                    group.slug = slug
+            else:
+                group = self.get_group_by_slug(slug)
+                
+            if not group:
+                group = self.make_node(group_type)
+                group.slug = slug
+
+
             # TODO: extract keywords from title
             #group.keywords = ?
             group.title = doc['name']
@@ -136,7 +179,14 @@ class SyncProcessor(object):
 
             group.save()
 
-            membership = self.get_node(membership_node_id, MembershipNode)
+            if membership_node_id:
+                membership = self.get_node(membership_node_id, MembershipNode)
+            else:
+                membership = self.get_membership_node(group, profile)
+
+            if not membership:
+                membership = self.make_node(MembershipNode)
+
             membership.profile = profile
             membership.group = group
             if 'membership' in doc:
@@ -156,11 +206,19 @@ class SyncProcessor(object):
         if 'doc_type' not in doc or doc['doc_type'] != 'person':
             return
 
-        node = self.get_node(doc.get('node_id'), MPProfile)
+        if doc.get('node_id'):
+            node = self.get_node(doc.get('node_id'), MPProfile)
+        else:
+            node = self.get_profile_node( doc['source']['id'] )
+        
+        if not node:
+            node = self.make_node(MPProfile)
+
+
         node.slug = slugify('%s %s' % (doc['first_name'], doc['last_name']))
 
         if self.verbosity >= 1:
-            print 'Node %s (%s) ...' % (node._id, node.slug),
+            print 'Node %s (%s) ...' % (node._id, node.slug)
 
         node.keywords = node.slug.split('-')
         node.title = u'%s %s' % (doc['first_name'], doc['last_name'])
