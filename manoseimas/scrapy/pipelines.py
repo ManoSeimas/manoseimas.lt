@@ -7,6 +7,7 @@ from manoseimas.scrapy.settings import COUCHDB_DATABASES
 
 _dbs = {}
 _servers = {}
+_docs = {}
 
 
 def set_db(item_name, server_name, db_name, cache=True):
@@ -31,38 +32,59 @@ def get_db(item_name, cache=True):
         set_db_from_settings(COUCHDB_DATABASES, item_name)
     return _dbs[item_name]
 
+def get_doc(db, _id, cache=True):
+    global _docs
+    if cache and _id in _docs:
+        return _docs[_id]
+
+    try:
+        return db.get(_id)
+    except ResourceNotFound:
+        return None
+
+def store_doc(db, doc):
+    attachments = doc.pop('_attachments', [])
+    db.save_doc(doc)
+    _docs[doc['_id']] = doc
+    print "pipline stored doc %s" % doc['_id']
+
+    for name, content, content_type in attachments:
+        db.put_attachment(doc, content, name, content_type)
+
+
+def is_latest_version(item, doc):
+    item_version = item.get('source', {}).get('version')
+    doc_version = doc.get('source', {}).get('version')
+    if not item_version or not doc_version:
+        return True
+
+    return item_version >= doc_version
+
 
 class ManoseimasPipeline(object):
-    def store_item(self, item_name, doc, item):
-        db = get_db(item_name)
-        attachments = doc.pop('_attachments', [])
-        db.save_doc(doc)
-
-        for name, content, content_type in attachments:
-            db.put_attachment(doc, content, name, content_type)
-
-    def get_doc(self, item_name, item):
-        db = get_db(item_name)
-        try:
-            return db.get(item['_id'])
-        except ResourceNotFound:
-            return None
 
     def process_item(self, item, spider):
         if '_id' not in item or not item['_id']:
             raise Exception('Missing doc _id. Doc: %s' % item)
 
         item_name = item.__class__.__name__.lower()
+        db = get_db(item_name)
 
-        doc = self.get_doc(item_name, item)
+        doc = get_doc(db, item['_id'])
         if doc is None:
             doc = dict(item)
             doc['doc_type'] = item_name
-            doc['updated'] = datetime.datetime.now().isoformat()
         else:
+            # Some documents contain source versioning. In those cases,
+            # we must ensure we're not clobbering a newer sourced
+            # document with an older version.
+            if not is_latest_version(item, doc):
+                print "Rejecting older version of %s (%d < %d)" % (item['_id'], item['source']['version'], doc['source']['version'])
+                return
+            
             doc.update(item)
-            doc['updated'] = datetime.datetime.now().isoformat()
 
-        self.store_item(item_name, doc, item)
+        doc['updated'] = datetime.datetime.now().isoformat()
+        store_doc(db, doc)
 
         return item

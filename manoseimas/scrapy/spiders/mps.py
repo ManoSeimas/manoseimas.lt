@@ -33,12 +33,19 @@ month_names_map = {
     u'gruodžio':  12,
 }
 
+# This maps URL components to different Seimas versions
+seimas_version_map = {
+    6113: 10,
+    8801: 11
+}
+
 class MpsSpider(ManoSeimasSpider):
     name = 'mps'
     allowed_domains = ['lrs.lt']
 
     start_urls = [
         'http://www3.lrs.lt/pls/inter/w5_show?p_r=6113&p_k=1',
+        'http://www3.lrs.lt/pls/inter/w5_show?p_r=8801&p_k=1',
     ]
 
     rules = (
@@ -103,13 +110,18 @@ class MpsSpider(ManoSeimasSpider):
         hxs = HtmlXPathSelector(response).select(xpath)[0]
 
         source = self._get_source(response.url, 'p_asm_id')
+        
+        seimas_code = self._get_query_attr(response.url, 'p_r')
+        if seimas_code:
+            source['version'] = seimas_version_map[int(seimas_code)]
+
+
         _id = source['id']
 
         person_hxs = hxs.select('tr/td/table/tr/td[2]/table/tr[2]/td[2]')
         person = Loader(self, response, Person(), person_hxs,
                         required=('first_name', 'last_name'))
         person.add_value('_id', '%sp' % _id)
-
 
         # Details
 
@@ -176,7 +188,9 @@ class MpsSpider(ManoSeimasSpider):
 
         # groups
         party_name = person.get_output_value('raised_by')
-        person.add_value('groups', [{'type': 'party', 'name': party_name}])
+        if party_name:
+            person.add_value('groups', [{'type': 'party', 'name': party_name}])
+
         self._parse_groups(response, hxs, person)
 
         # biography
