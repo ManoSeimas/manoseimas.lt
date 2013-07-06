@@ -18,7 +18,10 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+import os 
+from subprocess import call
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from couchdbkit import schema
@@ -226,8 +229,21 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         update_mode = "update" in args
+
+        if "scrape" in args:
+            scrapy_path = os.path.abspath(os.path.join(settings.BUILDOUT_DIR, 'bin', 'scrapy'))
+            scrapy_cmd = [scrapy_path, "crawl", "sittings"]
+            if update_mode:
+                print "Update mode enabled. Re-scraping all sittings..."
+                scrapy_cmd += ["-a", "resume=no"]
+            else:
+                print 'Scraping incremental sittings from lrs.lt...'
+
+            call(scrapy_cmd)
+
         if update_mode:
-            print "Update mode enabled. Re-syncing all sittings."
+            print "Update mode enabled. Re-syncing all sittings..."
+
 
         RawVoting.set_db(get_db('voting'))
         processor = SyncProcessor()

@@ -20,6 +20,8 @@
 import os.path
 import urllib
 import glob
+import os 
+from subprocess import call
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -265,6 +267,11 @@ class Command(BaseCommand):
     help = "Synchronize raw legal acts data with django-sboard nodes."
 
     def handle(self, *args, **options):
+        if "scrape" in args:
+            print "Scraping all MPs from lrs.lt..."
+            scrapy_path = os.path.abspath(os.path.join(settings.BUILDOUT_DIR, 'bin', 'scrapy'))
+            call([scrapy_path, "crawl", "mps"])
+
         db = get_db('person')
         processor = SyncProcessor(db)
         processor.sync()
