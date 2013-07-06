@@ -51,7 +51,7 @@ class SittingsSpider(ManoSeimasSpider):
     allowed_domains = ['lrs.lt']
 
     def __init__(self, resume="yes", start_url='http://www3.lrs.lt/pls/inter/w5_sale.kad_ses'):
-        print "Arguments: Start_url: %s ; Resume? %s" % (start_url, resume)
+        #print "Arguments: Start_url: %s ; Resume? %s" % (start_url, resume)
 
         self.start_urls = [ start_url ]
 
@@ -65,8 +65,8 @@ class SittingsSpider(ManoSeimasSpider):
             voting = get_sequential_votings(limit=1)[0]
             question = get_question(voting['question'])
             session = question['session']
-            print "VOTING: [_id=%s, question=%s]" % (voting['_id'], voting['question'])
-            print "QUESTION: [_id=%s, session=%s]" % (question['_id'], question['session'])
+            #print "VOTING: [_id=%s, question=%s]" % (voting['_id'], voting['question'])
+            #print "QUESTION: [_id=%s, session=%s]" % (question['_id'], question['session'])
 
             # Note: We're incrementing range arguments by 1 because our
             # range comparison expects a standard [a,b) interval, with 2nd-argument
