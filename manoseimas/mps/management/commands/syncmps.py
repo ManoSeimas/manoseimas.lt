@@ -125,7 +125,8 @@ class SyncProcessor(object):
         return node
 
     def get_membership_node(self, group, profile):
-        # FIXME: This is necessary because we lack an adequate
+        # FIXME: This is a massive bottleneck for syncmps.
+        # It is necessary because we lack an adequate
         # index in the couch. We need to add a view to accomodate
         # this basic query.
         for node in query_group_membership(group._id):
