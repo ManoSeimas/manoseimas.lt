@@ -41,7 +41,7 @@ from manoseimas.mps.models import MPProfile
 from manoseimas.mps.models import Parliament
 from manoseimas.mps.models import ParliamentaryGroup
 from manoseimas.mps.models import Party
-from manoseimas.scrapy.pipelines import get_db
+from manoseimas.scrapy.db import get_db
 from manoseimas.utils import todate
 
 

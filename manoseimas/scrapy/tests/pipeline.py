@@ -8,7 +8,7 @@ from scrapy.http import HtmlResponse
 
 from ..items import Person
 from ..pipelines import ManoseimasPipeline
-from ..pipelines import get_db
+from ..db import get_db
 from ..spiders.mps import MpsSpider
 
 from .utils import fixture
@@ -35,7 +35,7 @@ class TestPipeline(unittest.TestCase):
     def tearDown(self):
         self.server.delete_db(self.db.dbname)
 
-    @patch('manoseimas.scrapy.pipelines.get_db')
+    @patch('manoseimas.scrapy.db.get_db')
     def test_pipline(self, mock_get_db):
         mock_get_db.return_value = self.db
 
@@ -109,7 +109,7 @@ class TestPipeline(unittest.TestCase):
 
 
 class TestPipelineGetDB(unittest.TestCase):
-    @patch('manoseimas.scrapy.pipelines.COUCHDB_DATABASES', (
+    @patch('manoseimas.scrapy.db.COUCHDB_DATABASES', (
         ('legalacts', 'http://127.0.0.1:5984', 'my_legalacts_testdb',),
         ('person', 'http://127.0.0.1:5984', 'my_person_testdb',),
     ))

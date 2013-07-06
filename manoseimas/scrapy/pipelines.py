@@ -1,55 +1,6 @@
 import datetime
 
-from couchdbkit import ResourceNotFound
-from couchdbkit import Server
-
-from manoseimas.scrapy.settings import COUCHDB_DATABASES
-
-_dbs = {}
-_servers = {}
-_docs = {}
-
-
-def set_db(item_name, server_name, db_name, cache=True):
-    global _servers, _dbs
-    if not cache or server_name not in _servers:
-        server = _servers[server_name] = Server(server_name)
-    else:
-        server = _servers[server_name]
-    db = _dbs[item_name] = server.get_or_create_db(db_name)
-    return db
-
-
-def set_db_from_settings(settings, item_name, cache=True):
-    for item, server_name, db_name in settings:
-        if item == item_name:
-            return set_db(item_name, server_name, db_name, cache)
-
-
-def get_db(item_name, cache=True):
-    global _servers, _dbs
-    if not cache or item_name not in _dbs:
-        set_db_from_settings(COUCHDB_DATABASES, item_name)
-    return _dbs[item_name]
-
-def get_doc(db, _id, cache=True):
-    global _docs
-    if cache and _id in _docs:
-        return _docs[_id]
-
-    try:
-        return db.get(_id)
-    except ResourceNotFound:
-        return None
-
-def store_doc(db, doc):
-    attachments = doc.pop('_attachments', [])
-    db.save_doc(doc)
-    _docs[doc['_id']] = doc
-
-    for name, content, content_type in attachments:
-        db.put_attachment(doc, content, name, content_type)
-
+from manoseimas.scrapy.db import get_db, get_doc, store_doc
 
 def is_latest_version(item, doc):
     item_version = item.get('source', {}).get('version')

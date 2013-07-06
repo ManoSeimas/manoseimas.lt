@@ -29,8 +29,8 @@ from sboard.models import Node
 from sboard.models import couch
 
 from manoseimas.scrapy.pipelines import ManoseimasPipeline
-from manoseimas.scrapy.pipelines import get_db
-from manoseimas.scrapy.pipelines import set_db_from_settings
+from manoseimas.scrapy.db import get_db
+from manoseimas.scrapy.db import set_db_from_settings
 from manoseimas.scrapy.settings import COUCHDB_DATABASES
 from manoseimas.scrapy.spiders.sittings import SittingsSpider
 

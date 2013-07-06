@@ -25,7 +25,7 @@ from couchdbkit import schema
 from couchdbkit.exceptions import NoResultFound
 from couchdbkit.exceptions import ResourceNotFound
 
-from manoseimas.scrapy.pipelines import get_db
+from manoseimas.scrapy.db import get_db
 from manoseimas.votings.models import Voting, Source
 
 from sboard.models import couch
