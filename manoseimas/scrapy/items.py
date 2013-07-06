@@ -131,6 +131,8 @@ class LegalAct(Item):
 
 
 class Session(Item):
+    id = Field()
+    fakt_pos_id = Field()
     number = Field()
     date = Field()
     type = Field()

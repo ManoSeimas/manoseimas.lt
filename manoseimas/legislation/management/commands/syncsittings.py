@@ -159,7 +159,19 @@ class SyncProcessor(object):
     def save_node(self, node):
         node.save()
 
-    def process(self, doc):
+    def process(self, doc, update_mode=False):
+        voting = self.get_voting_by_source_id(doc.source.id)
+
+        # If the voting already exists, it means we've reached
+        # the end of our new nodes. We only proceed if we're in
+        # update mode.
+        if voting:
+            if not update_mode:
+                return False
+            
+            voting = Voting()
+            voting._id = get_new_id()
+
         node = self.get_or_create_voting(doc)
         node.created = doc.datetime
 
@@ -200,15 +212,23 @@ class SyncProcessor(object):
 
         self.save_node(node)
 
-    def sync(self, view):
+        return True
+
+    def sync(self, view, update_mode):
         for doc in view:
-            self.process(doc)
+            if not self.process(doc, update_mode):
+                return
+            
 
 
 class Command(BaseCommand):
     help = "Synchronize raw legal acts data with django-sboard nodes."
 
     def handle(self, *args, **options):
+        update_mode = "update" in args
+        if update_mode:
+            print "Update mode enabled. Re-syncing all sittings."
+
         RawVoting.set_db(get_db('voting'))
         processor = SyncProcessor()
         has_docs = True
@@ -220,12 +240,12 @@ class Command(BaseCommand):
             classes=dict(voting=RawVoting),
         )
         while has_docs:
-            view = RawVoting.view('scrapy/votes_with_documents', **params)
+            view = RawVoting.view('scrapy/sequential_votings_with_documents', **params)
             rows = list(view)
             if len(rows) == limit:
                 last = rows.pop()
             else:
                 has_docs = False
-            processor.sync(rows)
+            processor.sync(rows, update_mode)
             if last is not None:
                 params['startkey'] = last._id

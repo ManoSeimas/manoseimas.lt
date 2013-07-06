@@ -1,7 +1,8 @@
 # coding: utf-8
 import urllib
 
-from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
+
 from scrapy.contrib.spiders import Rule
 from scrapy.selector import HtmlXPathSelector
 
@@ -16,55 +17,110 @@ from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.loaders import absolute_url
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.utils import Increment
+from manoseimas.scrapy.db import  get_sequential_votings, get_question
 
 
+        
 class SittingsSpider(ManoSeimasSpider):
     """
     This spider walks through all sittings of Seimas and extracts information
     about questions and documents discussed during sittings. Also it collects
     voting results.
+    
+    LRS.LT PAGE HIERARCHY:
+    All Seimas Sessions
+    http://www3.lrs.lt/pls/inter/w5_sale.kad_ses 
+     -> List of Seimas sittings, organized by date, broken into morning and afternoon sittings
+        Ex: http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=96
+       -> List of events for a particular sitting, including Question discussions
+          Ex: http://www3.lrs.lt/pls/inter/w5_sale.fakt_pos?p_fakt_pos_id=-500731
+         -> A singular Question discussion
+            Ex: http://www3.lrs.lt/pls/inter/w5_sale.klaus_stadija?p_svarst_kl_stad_id=-15596
+           -> A singular voting for this Question
+              Ex: http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-16591
+
+    The rules configured below are designed to resume scraping from where we last 
+    left off. We determine where we last left off using the unique, sequential IDs 
+    that lrs.lt uses when referencing documents. We take the most recent voting in 
+    our database and backtrack to identify the most recent Question, Sitting, and 
+    Session and use the QualifiedRangeSgmlLinkExtractor to limit scraping to documents
+    published after our most recent Voting.
     """
+
     name = 'sittings'
     allowed_domains = ['lrs.lt']
 
-    start_urls = [
-        # 'http://www3.lrs.lt/pls/inter/w5_sale.kad_ses',
+    def __init__(self, resume="yes", start_url='http://www3.lrs.lt/pls/inter/w5_sale.kad_ses'):
+        print "Arguments: Start_url: %s ; Resume? %s" % (start_url, resume)
 
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=96',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=95',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=94',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=93',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=92',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=91',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=90',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=89',
-        'http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=88',
-    ]
+        self.start_urls = [ start_url ]
 
-    rules = (
-        Rule(SgmlLinkExtractor(allow=[
-        # # List of days with early and late sessions
-        #     r'p_ses_id=\d+',
+        # By default, never earlier than Seimas sitting 88, which is Spring 2011. 
+        sitting_session_range = [ (88, None), (None, None) ]
+        question_range = None
+        voting_range = None
 
-        # Sessions log
-            r'p_fakt_pos_id=-?\d+',
-        ])),
+        if resume.lower() != "no":
+            # Resume spidering from the last stored Voting
+            voting = get_sequential_votings(limit=1)[0]
+            question = get_question(voting['question'])
+            session = question['session']
+            print "VOTING: [_id=%s, question=%s]" % (voting['_id'], voting['question'])
+            print "QUESTION: [_id=%s, session=%s]" % (question['_id'], question['session'])
 
-        # Discussion on a question
-        Rule(SgmlLinkExtractor(allow=[r'p_svarst_kl_stad_id=-?\d+']),
-                               'parse_question', follow=True),
+            # Note: We're incrementing range arguments by 1 because our
+            # range comparison expects a standard [a,b) interval, with 2nd-argument
+            # exclusivity, and we're dealing with negative numbers. 
+            sitting_session_range = [
+                    (int(session['id']), None),
+                     (None, 1+int(session['fakt_pos_id']))
+            ]
+            question_range = [ (None, 1+int(question['source']['id'])) ]
+            # Note: We increment (see above note) and then decrement in order to 
+            # reach the next voting. Net result is 0 offset.
+            voting_range = [ (None, int(voting['source']['id'])) ]
 
-        # Voting results by person
-        Rule(SgmlLinkExtractor(allow=[r'p_bals_id=-?\d+']),
-                               'parse_person_votes'),
-    )
+        self.rules = (
+            Rule(QualifiedRangeSgmlLinkExtractor(
+                 allow=[
+                        # List of Seimas sittings
+                        r'/pls/inter/w5_sale\.ses_pos\?p_ses_id=(\d+)',
+                        # List of days with early and late sessions
+                        r'/pls/inter/w5_sale\.fakt_pos\?p_fakt_pos_id=(-?\d+)'
+                     ],
+                 allow_range=sitting_session_range
+            )),
+
+            # Discussion on a question
+            Rule(QualifiedRangeSgmlLinkExtractor(
+                    allow=[r'p_svarst_kl_stad_id=(-?\d+)'], 
+                    allow_range=question_range
+                 ), 'parse_question', follow=True),
+
+            # Voting results by person
+            Rule(QualifiedRangeSgmlLinkExtractor(
+                    allow=[r'p_bals_id=(-?\d+)'], 
+                    allow_range=voting_range
+                ), 'parse_person_votes'),
+        )
+       
+        ManoSeimasSpider.__init__(self)
+
 
     def _get_session(self, response, hxs):
+        session_id = hxs.select('div[1]/a[1]').re(r'p_ses_id=(\d+)')
+
+        hxs = hxs.select("div[2]/b")
+
         session = Loader(self, response, Session(), hxs, required=(
-            'number', 'date', 'type',))
+            'id', 'fakt_pos_id', 'number', 'date', 'type',))
+
+        session.add_value('id', session_id)
+        session.add_value('fakt_pos_id', hxs.select('a[1]').re(r'p_fakt_pos_id=(-\d+)'))
         session.add_value('number', hxs.select('a[1]/text()').re(r'Nr. (\d+)'))
         session.add_xpath('date', 'a[2]/text()')
         session.add_xpath('type', 'a[3]/text()')
+
         return dict(session.load_item())
 
     def _parse_question_votes(self, voting, positions):
@@ -247,8 +303,7 @@ class SittingsSpider(ManoSeimasSpider):
 
         self._parse_question_documents(response, hxs, question)
 
-        question.add_value('session',
-                self._get_session(response, hxs.select('div[2]/b')))
+        question.add_value('session', self._get_session(response, hxs))
         question.add_value('source', source)
 
         yield question.load_item()
