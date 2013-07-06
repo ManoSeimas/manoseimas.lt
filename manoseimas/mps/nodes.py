@@ -160,8 +160,13 @@ class FractionView(GroupView):
         return nav
 
     def render(self, **overrides):
+        membership = dict()
+        for o in sorted(self.node.members(), key=attrgetter('last_name', 'first_name')):
+            membership.setdefault(o.parliament[0], []).append(o)
+
         context = {
-            'members': sorted(self.node.members(), key=attrgetter('last_name', 'first_name')),
+            'membership': sorted(membership.iteritems(), reverse=True),
+            #'members': dict( (o.parliament[0], o) for o in sorted(self.node.members(), key=attrgetter('last_name', 'first_name')) ),
             'positions': prepare_position_list(self.node),
         }
         context.update(overrides)

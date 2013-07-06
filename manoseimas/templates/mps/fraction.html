@@ -39,21 +39,24 @@
 
   {% endif %}
 
-  {% if members %}
+  {% if membership %}
   <hr>
   <h2 class="hr" id="nariai">Frakcijos nariai</h2>
-  <ul class="fraction-members">
-    {% for member in members %}
-    <li>
-      <a class="stealth" href="{% nodeurl member %}">
-        {% nodeimage member 50 %}
-        <span>
-          {{ member.title }}
-        </span>
-      </a>
-    </li>
+    {% for sitting,mps in membership %}
+    <ul class="fraction-members">
+        <h2>{{ sitting }}</h2>
+        {% for mp in mps %}
+        <li>
+          <a class="stealth" href="{% nodeurl mp %}">
+            {% nodeimage mp 50 %}
+            <span>
+                {{ mp.title }}
+            </span>
+          </a>
+        </li>
+        {% endfor %}
+     <div style="clear: both"></div>
+    </ul>
     {% endfor %}
-    <div style="clear: both"></div>
-  </ul>
   {% endif %}
 {% endblock %}
