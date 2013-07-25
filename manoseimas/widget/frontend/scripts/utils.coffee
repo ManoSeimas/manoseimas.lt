@@ -118,7 +118,7 @@ fetch_voting = (slug, callback) ->
 
         for own id,f of data.fractions 
             f.viso = Math.round( 100 * f.voting_score / (2*f.total_votes) )
-            f.supports = f.viso > 50
+            f.supports = f.viso >= 0
 
         callback data if callback?
 
