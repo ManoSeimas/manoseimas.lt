@@ -3,6 +3,7 @@
 {% load sboard %}
 
 {% block inlinejs %}
+<script src="//www.google.com/jsapi"></script>
 <script type="text/javascript">
 $(function () {
     $.plot($("#voting-chart"),
@@ -14,6 +15,48 @@ $(function () {
         ],
         {series: {pie: {show: true}}}
     );
+});
+
+google.load('feeds', '1');
+google.setOnLoadCallback(function () {
+    var title = "{{ node.title|escapejs }}";
+    var read_more_title;
+    var terms = title.match(/XIIP-\d+/);
+    if (terms) {
+        read_more_title = "Find More "+terms+" News...";
+    } else {
+        terms = title;
+        read_more_title = "Find More News...";
+    }
+    var feed = new google.feeds.Feed("http://news.google.com/?q="+encodeURIComponent(terms)+"&output=rss");
+    feed.setNumEntries(4);
+    feed.includeHistoricalEntries(); 
+    feed.load(function(result) {
+        if (result.error) {
+            alert("ERR:"+result.error);
+        }
+        if (result.feed.entries.length < 1) {
+            return;
+        }
+
+        function fmt_date (d) {
+            return ('0' + d.getDate()).slice(-2) + '/'
+                 + ('0' + (d.getMonth()+1)).slice(-2) + '/'
+                 + d.getFullYear();
+        }
+
+        var content = "<ul>";
+        for (var i = 0; i < result.feed.entries.length; i++) {
+            var entry = result.feed.entries[i];
+            var d = new Date(entry.publishedDate);
+            $("#google_news_results").append("<li><a target='_new' href='"+entry.link+"'>"+entry.title+"</a>  <i>["+fmt_date(new Date(entry.publishedDate))+"]</i></li>");
+        }
+        content += "</ul>";
+        $("#google_news_results").append(content);
+        
+        $("#google_news").append("<p><a target='_new' href='http://news.google.com/?q="+encodeURIComponent(terms)+"'>"+read_more_title+" </a></p>");
+        $("#google_news").show();
+    });
 });
 </script>
 {% endblock %}
@@ -74,16 +117,24 @@ $(function () {
 </ul>
 {% endif %}
 
+<div id='google_news' style='display:none'>
+<h3>Susijusios Naujienos (Google)</h3>
+<div id='google_news_results'></div>
+</div>
+
 {% endblock %}
 
 
 {% block node_actions %}
-<h2>{% trans "Susieti su tema" %}</h2>
+{% nodepermission node 'update' as can_update %}
+{% if can_update %}
+    <h2>{% trans "Susieti su tema" %}</h2>
 
-<form action="{% nodeurl node 'link-solution' %}" method="post">
-  {% csrf_token %}
-  {{ link_solution_form.non_field_errors }}
-  {{ link_solution_form.as_p }}
-  <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
-</form>
+    <form action="{% nodeurl node 'link-solution' %}" method="post">
+      {% csrf_token %}
+      {{ link_solution_form.non_field_errors }}
+      {{ link_solution_form.as_p }}
+      <p><button type="submit" class="btn btn-primary">{% trans "Save" %}</button></p>
+    </form>
+{% endif %}
 {% endblock %}
