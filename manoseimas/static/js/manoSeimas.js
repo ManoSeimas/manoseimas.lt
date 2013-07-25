@@ -53,7 +53,7 @@
 
   manoSeimas.activateFractionFilter = function () {
     $('#filter-fraction').change(function() {
-      showFractionMPs(this.value);
+      manoSeimas.showFractionMPs(this.value);
     });
 
     $('.fraction .result-description .percent').click(function () {
