@@ -272,6 +272,7 @@
       }
 
       .positive > a { color: lighten(desaturate(@positiveColor, 30%), 10%); }
+      .neutral > a { color: lighten(desaturate(@neutralColor, 30%), 10%); }
       .negative > a { color: lighten(desaturate(@negativeColor, 30%), 10%); }
 
       & > li.active {
@@ -365,6 +366,7 @@
   }
 
   .positive { color: @positiveColor; }
+  .neutral { color: @neutralColor; }
   .negative { color: @negativeColor; }
   .percent { font-weight: 600; }
 
@@ -483,6 +485,7 @@
     }
 
     .positive-header { .colored-table-header(@positiveColor); }
+    .neutral-header { .colored-table-header(@neutralColor); }
     .negative-header { .colored-table-header(@negativeColor); }
 
     .imprecise, .inactive {

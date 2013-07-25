@@ -94,6 +94,53 @@ class Voting(Node):
 
 provideNode(Voting, "voting")
 
+def get_full_voting(source_id, include_metrics=True):
+    """ 
+    Fetches a voting and all of its referenced Fractions and MPs, using an 
+    optimized query. Also calculates metrics for the voting.
+    """
+
+    fractions = {}
+    mps = {}
+    voting = None
+    nodes = couch.view("widget/voting-objects",  startkey=[source_id], endkey=[source_id, u'\ufff0'])
+    for n in nodes:
+        if n.doc_type == 'Fraction':
+            n.votes = {'aye':0, 'no':0, 'abstain': 0}
+            n.voting_score = 0
+            n.total_votes = 0
+            fractions[n._id] = n
+        elif n.doc_type == "MPProfile":
+            mps[n._id] = n
+        elif n.doc_type == "Voting":
+            voting = n
+
+    for vote_type,vote_list in voting.votes.iteritems():
+        for i,v in enumerate(vote_list):
+            mp = mps[ v[0] ]
+            fraction = fractions[ v[1] ]
+            vote_list[i] = mp
+
+            mp.fraction = fraction
+            mp.vote = vote_type
+
+            if include_metrics:
+                fraction.votes[vote_type] += 1
+                fraction.voting_score += voting.get_vote_value(vote_type)
+                fraction.total_votes += 1
+    
+    if (include_metrics):
+        for fraction in fractions.values():
+            fraction.viso = int( 100 * fraction.voting_score / (2*fraction.total_votes) )
+            fraction.supports = fraction.viso >= 0
+            # FIXME: Acquire no-vote values to calculate participation!
+            #fraction['participation'] = int( 100 * fraction['registered_for_voting'] / fraction['total_votes'] )
+            fraction.participation = 100;
+
+    voting.fractions = fractions.values()
+    voting.mps = mps.values()
+
+    return voting
 
 def get_voting_source_id_from_lrstl_url(url):
     url = urlparse.urlparse(url)
