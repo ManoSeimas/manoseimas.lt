@@ -1,23 +1,18 @@
 <table class="fractions_list">
 {{#each_value fractions }}
     <tr id="MSWidget-fraction-{{_id}}">
-        <td class="{{#if supports}}positive{{ else }}negative{{/if}}">{{viso}}%</td>
         <td><img src='{{image}}' /></td>
         <td>
-            {{ title }}<br/>
+            <a target='_blank' href='{{page_url slug}}' onClick="MSWidget.clickthrough('Fraction')">{{ title }}</a><br/>
             {{ abbreviation }}&nbsp;&nbsp;
-            {{#if source}}
-                <a target='_blank' href='{{ source.url }}' onClick="MSWidget.clickthrough('Fraction Source')">lrs.lt</a>&nbsp;&nbsp;
-            {{/if}}
-            <a target='_blank' href='{{page_url slug}}' onClick="MSWidget.clickthrough('Fraction')">manoSeimas.lt</a>
         </td>
         <td>
-            <label>UZ:</label>
-            {{ vote_data_bar 'aye' 75 }}
-            <label>SUSIL.:</label>
-            {{ vote_data_bar 'no' 75 }}
-            <label>PRIES:</label>
-            {{ vote_data_bar 'abstain' 75 }}
+            <label>Už: <b>{{ votes.aye }}</b></label>
+            {{ vote_data_bar 'aye' 100 }}
+            <label>Prieš: <b>{{ votes.no }}</b></label>
+            {{ vote_data_bar 'no' 100 }}
+            <label title='Susilaikė/nebalsavo'>Susilaikė: <b>{{ votes.abstain }}</b></label>
+            {{ vote_data_bar 'abstain' 100 }}
         </td>
     </tr>
 {{/each_value}}

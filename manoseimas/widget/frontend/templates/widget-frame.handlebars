@@ -1,42 +1,69 @@
 <div class='links'>
-    <a target='_blank' href='{{voting.source.voting.url}}' onClick="MSWidget.clickthrough('Voting Source')" >lrs.lt</a>&nbsp;&nbsp;
-    <a target='_blank' href='{{page_url voting._id}}' onClick="MSWidget.clickthrough('Voting')">manoSeimas.lt</a>
+    <a target='_blank' href='{{page_url voting._id}}' onClick="MSWidget.clickthrough('Voting')">Daugiau...</a>
 </div>
-<div class="votetitle">{{voting.title}}</div>
+<div class="votetitle">
+    <a target='_blank' href='{{page_url voting._id}}' onClick="MSWidget.clickthrough('Voting')">{{voting.title}}</a>
+    <span class='fulltitle'>{{voting.title}}</span>
+</div>
 <div class="button_bar">
-    <div id="MSWidget-fractions_button" class="mode_button fractions_button" onClick="MSWidget.show_fractions()">Fractions</div>
-    <div id="MSWidget-mps_button" class="mode_button mps_button" onClick="MSWidget.show_mps()">MPs</div>
+    <div class="spacer"></div>
+    <div id="MSWidget-fractions_button" class="mode_button fractions_button" onClick="MSWidget.show_fractions()">Frakcijų balsavimo rezultatai</div>
+    <div id="MSWidget-mps_button" class="mode_button mps_button" onClick="MSWidget.show_mps()">Seimo narių balsavimo rezultatai</div>
+    <div class="spacer"></div>
 </div>
 <div id="MSWidget-fractions" class="content_pane fractions_pane" style="display:none;">
-    {{render "arrow_bar" }}
-    <h3 style='font-style: italic; color: #444;'>Fraction Voting Results</h3>
+    <div id='MSWidget-positions' style='display:none'></div>
     {{render "fraction_list" }}
 </div>
 <div id="MSWidget-mps">
-    <div id="MSWidget-mps-buttons" class="button_bar">
-        <div id="MSWidget-mps-aye_button" class="mode_button" onClick="MSWidget.show_mps('aye')" style="background-color: #ccc;">UZ</div>
-        <div id="MSWidget-mps-no_button" class="mode_button" onClick="MSWidget.show_mps('no')">SUSILAIKE</div>
-        <div id="MSWidget-mps-abstain_button" class="mode_button" onClick="MSWidget.show_mps('abstain')">PRIES</div>
+    <div id="MSWidget-mps-buttons" class="mps_button_bar">
+        <div id="MSWidget-mps-aye_button" class="mps_mode_button active" onClick="MSWidget.show_mps('aye')">Už</div>
+        <div id="MSWidget-mps-no_button" class="mps_mode_button" onClick="MSWidget.show_mps('no')">Prieš</div>
+        <div id="MSWidget-mps-abstain_button" class="mps_mode_button" onClick="MSWidget.show_mps('abstain')">Susilaikė</div>
     </div>
     <div id="MSWidget-mps-content" class="content_pane mps_pane"></div>
 </div>
 <div class="vote_pane">
-    <div class="links">
-        <a target='_blank' href='#' onClick="MSWidget.clickthrough('Kas Tai')">kas tai?</a><br/>
-        <a target='_blank' href='http://www.manoSeimas.lt/' onClick="MSWidget.clickthrough('manoSeimas.lt')">manoSeimas.lt</a>
+    <label>Kokia jūsų nuomonė šiuo klausimu?</label>
+    <button id="yes" onClick="MSWidget.vote(1);">Pritariu</button>
+    <button id="no" onClick="MSWidget.vote(-1);">Nepritariu</button>
+    <div class='important'>
+        <input id='important' type='checkbox'>
+        <label for='important'>Man tai svarbu!</label>
     </div>
-    What do *you* think of this Resolution?<br/>
-    <button id="yes" onClick="MSWidget.vote(1);">Agree</button>
-    <button id="no" onClick="MSWidget.vote(-1);">Disagree</button>
-    <label>
-        <input id='important' type='checkbox'> Man tai svbaru!
-    </label>
+    <div class="links">
+        <a id='history_link' target='_blank' href='{{page_url "accounts/profile" }}' onClick="MSWidget.show_history(); return false">Mano balsavimo istorija</a><a href='#' onClick="MSWidget.show_overlay('about') && MSWidget.clickthrough('Kaip tai veikia?')">Kaip tai veikia?</a>
+    </div>
+    <div class='logos'><a target='_blank' href='http://www.manoSeimas.lt/' onClick="MSWidget.clickthrough('manoSeimas.lt')"><img src="/static/img/widget-logos.png" /></a></div>
 </div>
-<div id='MSWidget-thanks' class='overlay' style='display:none'></div>
-<div id='MSWidget-connect' class='overlay' style='display:none'>
-    {{render "connect-pane"}}
+<div class='overlay_backdrop' onClick="MSWidget.hide_overlays()" style='display:none'></div>
+<div class='overlay_container'>
+    <div id='MSWidget-thanks' class='overlay' style='display:none'></div>
+    <div id='MSWidget-connect' class='overlay' style='display:none'>
+        {{render "connect-pane"}}
+    </div>
+    <div id='MSWidget-viso' class='overlay' style='display:none'>
+        <div class='close' onClick='MSWidget.hide_overlays();'>✕</div>
+        <h2>Frakcijos (partijos) balsavimo rezultatų apskaičiavimas</h2>
+        <p>kcijos (partijos) balsavimo rezultatai apskaičiuojami taip:</p>
+
+        <p>(a) kiekvieno Seimo nario balsavimas yra konvertuojamas į skaitinę formą pagal tokią „taškų“ sistemą: „už“ = +2, „prieš“ = -2, „susilaikė / nebalsavo“ = -1;</p>
+
+        <p>(b) sudėjus visų frakcijos Seimo narių „taškus“ ir padalinus juos iš maksimalaus galimo taškų skaičiaus (maksimalus taškų skaičius = 2*[frakcijos Seimo narių skaičius]), gaunami frakcijos balsavimo rezultatai procentais.</p>
+
+        <p><em>Pavyzdžiui, trys frakcijos nariai dėl temos "Lietuva" balsavo "už" (+2), "už" (+2) ir "susilaikė" (-1). Tuomet frakcijos pozicija yra (2+2-1)/6 = 50%</em></p>
+    </div>
+    <div id='MSWidget-about' class='overlay' style='display:none'>
+        <div class='close' onClick='MSWidget.hide_overlays();'>✕</div>
+        <h2>Kaip tai veikia?</h2>
+
+        <p>Valdiklyje atvaizduojama, kaip Seimas balsavo dėl tam tikro teisės akto. Taip pat čia galite pareikšti savo nuomonę (patys "balsuoti") šiuo klausimu.</p>
+
+        <p>Jums prisijungus, valdiklis išsaugos jūsų atsakymus paskyroje, kuri leis jums kurti savo asmeninį politinių pažiūrų profilį tiesiog atsakinėjant į manoSeimas.lt valdiklio klausimus!</p>
+
+        <p style='font-size:.8em'>Seimo narių balsavimo rezultatai yra paimti iš oficialios Seimo svetainės <a target='_blank' href='http://lrs.lt'>lrs.lt</a>. Frakcijos (partijos) balsavimo rezultatai apskaičiuojami pagal Seimo narių balsavimus, naudojant manoSeimas.lt metodologiją (plačiau apie tai - čia <a target='_blank' href='http://manoseimas.lt/kaip-tai-veikia/'>http://manoseimas.lt/kaip-tai-veikia/</a>).</p>
+
+        <p style='font-size: .8em'>Atsakius į klausimą "Kokia jūsų nuomonė šiuo klausimu?", valdiklis palygina jūsų ir Seimo balsavimus. Pažymėjus "Man tai svarbu!", jūsų atsakymas įgis didesnį svorį nei kiti jūsų atsakymai. Sukaupti asmeniniai atsakymai-balsavimai leis išsamiai palyginti savo politinių pažiūrų profilį su Seimo narių ir partijų balsavimais, ir taip išsirinkti tuos Seimo narius ir partijas, kurios savo balsavimais Seime geriausiai atstovauja jūsų interesus!</p>
+    </div>
 </div>
-<div id='MSWidget-viso' class='overlay' style='display:none'>
-    <div class='close' onClick='MSWidget.hide_overlays();'>X</div>
-    Info goes here about wtf VISO is.
-</div>
+

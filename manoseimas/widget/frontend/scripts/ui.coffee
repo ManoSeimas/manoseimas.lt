@@ -18,9 +18,9 @@ ui_refresh = () ->
 
 # Automatically select section buttons based on context
 detect_mps_section = () ->
+    current = null
     # Note: the order here is important, as we intentionally give 
     # priority to sections positioned closer to the cutoff line (1/3 mark)
-    current = null
     for sp in ['abstain', 'no', 'aye']
         section = $("#MSWidget-mps-#{sp}")
         parent = section.offsetParent
@@ -31,6 +31,6 @@ detect_mps_section = () ->
         
     for sp in ['aye', 'no', 'abstain']
         if current is sp
-            $("#MSWidget-mps-#{sp}_button").style.backgroundColor = '#ccc'
-        else 
-            $("#MSWidget-mps-#{sp}_button").style.backgroundColor = '#fff'
+            addClass $("#MSWidget-mps-#{sp}_button"), 'active'
+        else
+            removeClass $("#MSWidget-mps-#{sp}_button"), 'active'

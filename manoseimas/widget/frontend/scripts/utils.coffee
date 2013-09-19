@@ -24,6 +24,16 @@ show = (elements...) ->
 hide = (elements...) ->
     e.style.display = 'none' for e in elements
 
+hasClass = (element, className) ->
+    (" "+element.className+" ").indexOf(" "+className+" ") != -1
+
+addClass = (element, className) ->
+    unless hasClass element, className
+        element.className += " "+className
+
+removeClass = (element, className) ->
+    re = new RegExp "(?:^|\\s)#{className}(?!\\S)", 'g'
+    element.className = element.className.replace re, ''
 
 # Convenience function for rendering partials. We're 
 # avoiding the built-in partials because they require a
@@ -55,9 +65,9 @@ Handlebars.registerHelper "fraction", (n, d, scale, options) ->
     
 Handlebars.registerHelper "vote_data_bar", (key, width) ->
     if this.votes[key] > 0
-        result = "<div class='#{key}_data_bar' style='width:#{ width * this.votes[key] / this.total_votes }px'>#{ this.votes[key] }</div>"
-    else 
-        result = "<div class='null_data_bar'>0</div>"
+        result = "<div class='data_bar' style='width: #{width}px'><div class='#{key}' style='width:#{ 100 * this.votes[key] / this.total_votes }%'></div></div>"
+    else
+        result = "<div class='data_bar' style='width: #{width}px'></div>"
 
     new Handlebars.SafeString result
 
@@ -121,6 +131,10 @@ fetch_voting = (slug, callback) ->
         for own id,f of data.fractions
             f.viso = Math.round( 100 * f.voting_score / (2*f.total_votes) )
             f.supports = f.viso >= 0
+
+        # Override title to show law act document titles
+        # HM 2013/09/05: This will later be fixed upstream
+        data.voting.title = (d.name for d in data.voting.documents).join '\n'
 
         callback data if callback?
 

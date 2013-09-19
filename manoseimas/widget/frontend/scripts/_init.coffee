@@ -9,7 +9,7 @@ do ->
     handle = $("#MSWidget")
     unless handle?
         handle = document.createElement "div"
-        handle.id = "MSWidget" 
+        handle.id = "MSWidget"
         show handle
 
         p = $("body")[0]

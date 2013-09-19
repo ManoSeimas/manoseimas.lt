@@ -32,13 +32,13 @@ task 'clean', "Cleanup package tree", (options) ->
 
 
 compile = (options, callback) ->
-    compile_scripts options, -> 
+    compile_scripts options, ->
         compile_stylesheets options, callback
 
 compile_stylesheets = (options, callback) ->
     tmp_dir   = options.tmp or 'tmp'
     console.log "Compiling down stylesheets..."
-    cmd "sass -t compressed stylesheets/*.scss #{tmp_dir}/widget.css", () ->
+    cmd "sass -t compressed stylesheets/widget.scss #{tmp_dir}/widget.css", () ->
         console.log "Compiling templates & CSS to Javascript..."
         cmd "handlebars -m -f #{tmp_dir}/templates.js #{tmp_dir}/*.css templates/*.handlebars", callback
 

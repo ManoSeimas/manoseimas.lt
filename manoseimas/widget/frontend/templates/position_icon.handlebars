@@ -1,0 +1,17 @@
+<div class='position_icon {{#if user}}user{{/if}}' 
+     {{#if image}}
+         style='background:url({{image}}) no-repeat center center' 
+     {{/if}}
+     {{#unless user}}
+         onClick="MSWidget.show_fraction('{{_id}}')"
+     {{/unless}}
+    >
+    {{#unless image}}
+        {{ abbreviation }}
+    {{/unless}}
+    {{#if user}}
+        <p>Jūs</p>
+    {{else}}
+        <p>{{viso}}%</p>
+    {{/if}}
+</div>

@@ -1,0 +1,18 @@
+<div class='positions_bar'>
+    <a href='#' onclick="MSWidget.show_overlay('viso')">[?]</a>
+    <div class='supports'>
+    {{#each_value positions sorting='viso' }}
+        {{#if supports}}
+            {{render "position_icon"}}
+        {{/if}}
+    {{/each_value}}
+    </div>
+    <div class='opposes'>
+    {{#each_value positions sorting='viso' }}
+        {{#unless supports}}
+            {{render "position_icon"}}
+        {{/unless}}
+    {{/each_value}}
+    </div>
+</div>
+<div class='harrow'></div>

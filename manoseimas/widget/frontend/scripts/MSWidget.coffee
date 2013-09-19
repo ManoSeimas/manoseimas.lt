@@ -4,6 +4,7 @@
 window.MSWidget = {
     content: undefined,
     profile: undefined,
+    position: undefined,
 
     load_voting: (voting_id) ->
         $("#MSWidget").innerHTML = render "loading-frame"
@@ -11,10 +12,10 @@ window.MSWidget = {
             if data.error
                 MSWidget.content = undefined
                 $("#MSWidget").innerHTML = render "error-pane", { message: "Problem loading voting `#{voting_id}`: #{data.error}" }
-            else 
+            else
                 MSWidget.content = data
                 $("#MSWidget").innerHTML = render "widget-frame", MSWidget.content
-                ui_refresh() 
+                ui_refresh()
                 MSWidget.show_fractions track: false
 
     load_profile: (profile_id, callback) ->
@@ -24,14 +25,25 @@ window.MSWidget = {
 
     vote: (position) ->
         position *= 2 if $("#important").checked
+        MSWidget.position = position
+
         update_position MSWidget.content.voting._id, position
 
         if position > 0
+            addClass $("#yes"), 'pressed'
+            removeClass $("#no"), 'pressed'
             track_event "Vote", "Support", position
         else
+            addClass $("#no"), 'pressed'
+            removeClass $("#yes"), 'pressed'
             track_event "Vote", "Oppose", position
-        
-        MSWidget.show_thanks()
+
+        MSWidget.show_positions()
+        $("#MSWidget-fractions").scrollTop = 0
+        MSWidget.show_fractions()
+
+        unless MSWidget.profile
+            MSWidget.show_thanks()
 
     connect: (service) ->
         track_event "Click", "Connect", service
@@ -54,10 +66,10 @@ window.MSWidget = {
     
     connected: (profile_id) ->
         track_event "Connected"
-        MSWidget.load_profile profile_id, (profile) ->
-            MSWidget.show_thanks true
+        MSWidget.hide_overlays()
+        MSWidget.load_profile profile_id
 
-    show_fractions: ({track} = {track:true}) -> 
+    show_fractions: ({track} = {track:true}) ->
         if track
             track_event "Click", "Fractions"
 
@@ -71,7 +83,7 @@ window.MSWidget = {
         # Because fraction rows are part of a table, we must also incorporate the parent table's offset
         $("#MSWidget-fractions").scrollTop = target.offsetTop + target.offsetParent.offsetTop
 
-    show_mps: (subpanel) -> 
+    show_mps: (subpanel) ->
         if subpanel?
             track_event "Click", "MP", subpanel
         else
@@ -81,42 +93,73 @@ window.MSWidget = {
         if $("#MSWidget-mps-content").innerHTML is ""
             $("#MSWidget-mps-content").innerHTML = render "mp_list", MSWidget.content
 
+            # Ensures a good default scroll offset
+            subpanel = 'aye'
+
         MSWidget.show_panel 'mps'
+
         if subpanel?
-            $("#MSWidget-mps-#{subpanel}").offsetParent.scrollTop = $("#MSWidget-mps-#{subpanel}").offsetTop
+            # Note: We're nudging just below the section header so it's out of sight. Section headers are mainly for scrolling.
+            section = $("#MSWidget-mps-#{subpanel}")
+            heading = $(".heading", section)[0]
+            section.offsetParent.scrollTop = heading.offsetTop + heading.offsetHeight
+             
             for sp in ['aye','no','abstain']
                 if subpanel is sp
-                    $("#MSWidget-mps-#{sp}_button").style.backgroundColor = '#ccc'
-                else 
-                    $("#MSWidget-mps-#{sp}_button").style.backgroundColor = '#fff'
+                    addClass $("#MSWidget-mps-#{sp}_button"), 'active'
+                else
+                    removeClass $("#MSWidget-mps-#{sp}_button"), 'active'
 
 
     show_panel: (panel) ->
         for p in ['fractions', 'mps']
             if panel is p
                 show $("#MSWidget-#{p}")
-                $("#MSWidget-#{p}_button").style.backgroundColor = '#ccc'
-            else 
+                addClass $("#MSWidget-#{p}_button"), 'active'
+            else
                 hide $("#MSWidget-#{p}")
-                $("#MSWidget-#{p}_button").style.backgroundColor = '#fff'
+                removeClass $("#MSWidget-#{p}_button"), 'active'
 
-    hide_overlays: () -> 
+    show_overlay: (name) ->
         hide o for o in $(".overlay")
+        show $(".overlay_backdrop")[0]
+        show $("#MSWidget-#{name}")
 
+    hide_overlays: () ->
+        hide o for o in $(".overlay")
+        hide $(".overlay_backdrop")[0]
+    
     show_thanks: (rerender=true) ->
-        MSWidget.hide_overlays()
         if rerender? or $("#MSWidget-thanks").innerHTML is ""
             $("#MSWidget-thanks").innerHTML = render "thanks-pane", { profile: MSWidget.profile }
 
-        show $("#MSWidget-thanks")
+        MSWidget.show_overlay('thanks')
 
-    show_overlay: (name) ->
-        MSWidget.hide_overlays();
-        show $("#MSWidget-#{name}")
+    show_positions: (rerender=true) ->
+        if rerender? or $("#MSWidget-positions").innerHTML is ""
+            positions = MSWidget.content.fractions
+            if MSWidget.position
+                positions.user = {
+                    user: true,
+                    supports: MSWidget.position >=0,
+                    viso: MSWidget.position*110,
+                    image: "/static/img/anonymous.png"
+                }
+                
+            $("#MSWidget-positions").innerHTML = render "positions_bar", { positions: positions }
+
+        show $("#MSWidget-positions")
+
+    show_history: () ->
+        unless MSWidget.profile
+            MSWidget.show_overlay('connect')
+            return false
+
+        window.open page_url 'accounts/profile'
+        MSWidget.clickthrough 'Voting History'
 
     clickthrough: (type) ->
         track_event "Link", type
-
     
 }
 

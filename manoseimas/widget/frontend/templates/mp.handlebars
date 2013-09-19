@@ -3,11 +3,7 @@
         <img height='50' alt='' class='lazy' src='{{image}}' />
     {{/if}}
     <div>
-        {{ first_name }} {{ last_name }}<br/>
+        <a target='_blank' href='{{page_url slug}}' onClick="MSWidget.clickthrough('MP')">{{ first_name }} {{ last_name }}</a><br/>
         {{ fraction.abbreviation }}&nbsp;&nbsp;
-        {{#if source}}
-            <a target='_blank' href='{{ source.url }}' onClick="MSWidget.clickthrough('MP Source')">lrs.lt</a>&nbsp;&nbsp;
-        {{/if}}
-        <a target='_blank' href='{{page_url slug}}' onClick="MSWidget.clickthrough('MP')">mS.lt</a>
     </div>
 </div>

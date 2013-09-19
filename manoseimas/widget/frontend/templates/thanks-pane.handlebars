@@ -1,14 +1,8 @@
-<div class='close' onClick='MSWidget.hide_overlays();'>X</div>
-{{#if profile.first_name}}
-    <h2 style='margin-top: 0px;'>Thanks, {{ profile.first_name }}!</h2>
-{{else}}
-    <h2 style='margin-top: 0px;'>Thanks!</h2>
-{{/if}}
+<div class='close' onClick='MSWidget.hide_overlays();'>✕</div>
+<h2>Dėkojame už jūsų nuomonę!</h2>
 
-{{#if profile}}
-    <p> Your vote has been recorded! A history of your preferences is available on manoSeimas.lt, including recommendations for Fractions and MPs that best match your preferences!</p>
-    <p><a target='_blank' href='{{page_url "accounts/profile" }}' onClick="MSWidget.clickthrough('Voting History')">Your Voting History</a></p>
-{{else}}
-    <p><b>Thanks for sharing your opinion!</b> Did you know - manoSeimas.lt can track your opinions and let you know which parlimentarians and fractions most closely match your preferences.</p>
-    <p>Connect now to start tracking your opinions! <button onClick='MSWidget.show_overlay("connect")'>Prisijungti &raquo;&raquo;</button>
-{{/if}}
+<p>Ar žinojote, kad <a target='_blank' href='http://manoSeimas.lt'>manoSeimas.lt</a> gali išsaugoti bei kaupti jūsų atsakymus ir padėti jums sužinoti, kurie Seimo nariai ir partijos geriausiai atstovauja jūsų interesus?</p>
+
+<p>Prisijunkite dabar ir pradėkite kurtis savo politinių pažiūrų profilį!</p>
+
+<p><button class='btn' onClick='MSWidget.show_overlay("connect")'>PRISIJUNGTI</button> arba <a href='#' onClick='MSWidget.hide_overlays();'>Tęsti neprisijungus</a></p>

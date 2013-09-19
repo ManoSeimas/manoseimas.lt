@@ -1,92 +1,260 @@
+$blueish: #3e6ba9;
+$header_height: 40px; 
+$button_height: 30px;
+$footer_height: 70px;
+$data_bar_height: 14px;
+
+@mixin gradient($color1, $color2, $type: 'vertical', $size: 100%) {
+  background: $color1;
+
+  @if $type == 'horizontal' {
+      background: -moz-linear-gradient(left, $color1 0%, $color2 $size);
+      background: -webkit-gradient(linear, left top, right top, color-stop(0%,$color1), color-stop($size,$color2)); 
+      background: -webkit-linear-gradient(left, $color1 0%,$color2 $size);
+      background: -o-linear-gradient(left, $color1 0%,$color2 $size);
+      background: -ms-linear-gradient(left, $color1 0%,$color2 $size);
+      background: linear-gradient(to right, $color1 0%,$color2 $size);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=1 );
+  } @else {
+      background: -moz-linear-gradient(top, $color1 0%, $color2 $size);
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$color1), color-stop($size,$color2));
+      background: -webkit-linear-gradient(top, $color1 0%,$color2 $size);
+      background: -o-linear-gradient(top, $color1 0%,$color2 $size);
+      background: -ms-linear-gradient(top, $color1 0%,$color2 $size);
+      background: linear-gradient(to bottom, $color1 0%,$color2 $size);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$color1', endColorstr='$color2',GradientType=0 );
+  }
+}
+
 .MSWidget {
   position: relative;
-  background-color: #fff;
-  color: black;
+  background-color: #f00; // Problem Indicator
   width: 100%;
   height: 100%;
-  font-family: Verdana;
-  font-size: 10px;
+  color: #666;
+  //font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+  //font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+  font-family: "Lucida Grande", sans-serif;
+  //font-family: Tahoma, Verdana, Geneva;
+  font-size: 12px;
   line-height: 20px;
+  border: 4px solid #dddddd;
+
+  // TODO: Move this into its own div, so that we can use percentages as dimensions. This should help us with IE6-9 support, where gradients always fill 100% 
+  @include gradient(#fff, #f2f2f2, 'vertical', 70px);
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: #666;
+
+    &:hover {
+        color: $blueish;
+        text-decoration: underline;
+    }
 }
 
 .votetitle {
   font-weight: bold;
+  font-size: 14px;
+  color: #333;
   white-space: nowrap;
-  padding-left: 5px;
+  padding: 10px;
+  margin-right: 90px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+
+  .fulltitle {
+      visibility: hidden;
+      position: absolute;
+      left: 10px;
+      top: 35px;
+      opacity: 0;
+
+      padding: 5px;
+      border: 1px solid #999;
+      background-color: #fff;
+      border-radius: 4px;
+      z-index: 2;
+      white-space: pre-wrap;
+      font-size: 0.9em;
+      font-weight: normal;
+
+      -webkit-transition: opacity .2s ease-out;
+      -moz-transition: opacity .2s ease-out;
+      -o-transition: opacity .2s ease-out;
+      transition: opacity .2s ease-out;
+  }
+
+  &:hover {
+      .fulltitle {
+          visibility: visible;
+          opacity: 1;
+          -webkit-transition-delay: .8s;
+          -moz-transition-delay: .8s;
+          -o-transition-delay: .8s;
+          transition-delay: .8s;
+      }
+  }
 }
 
 .links {
   clear: right;
   float: right;
-  margin-right: 10px;
+  margin-top: 10px;
+  margin-right: 15px;
+  color: $blueish;
+  font-size: 11px;
+
+  a {
+    color: $blueish;
+    text-decoration: none;
+    font-style: italic;
+  }
 }
+
 
 .button_bar {
   display: table;
   table-layout: fixed;
-  border-collapse: collapse;
   width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  height: $button_height - 2;
 }
 
-
 .mode_button {
-  border: 1px solid black;
+  border-bottom: 1px solid #dedede;
   display: table-cell;
   text-align: center;
-  text-decoration: underline;
+
+  font-size: 13px;
+  color: #6e6e6e;
+  line-height: $button_height - 2;
+
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
   &:hover {
-    background-color: #ccc !important;
     cursor: pointer;
+    color: $blueish;
+    font-weight: bold;
   }
+
+  &.active {
+      background-color: white;
+      color: $blueish;
+      font-weight: bold;
+      border: 1px solid #dedede;
+      border-bottom-color: white;
+  }
+}
+
+.button_bar .spacer {
+    display: table-cell;
+    width: 2.5%;
+    border-bottom: 1px solid #dedede;
+}
+
+.mps_button_bar {
+    @extend .button_bar;
+}
+
+.mps_mode_button {
+    @extend .mode_button;
+
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+
+    background-color: white;
+
+    &.active {
+        color: $blueish;
+        font-weight: bold;
+        border: 0;
+        border-bottom: 2px solid $blueish;
+
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
 }
 
 .content_pane {
   position: absolute;
   left: 0;
   right: 0;
-  top: 40px;
-  bottom: 70px;
-  border: 1px solid #999;
+  top: $header_height + $button_height;
+  bottom: $footer_height; 
+  background-color: #fff;
   overflow-y: scroll;
+}
+
+.overlay_backdrop {
+    position: fixed;
+    left: 0%;
+    top: 0%;
+    background-color: #ddd;
+    -moz-opacity: 0.5;
+    opacity: .5;
+    filter: alpha(opacity=50);
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+}
+
+.overlay_container {
+    position: absolute;
+    left: 50%;
+    top: 0;
 }
 
 .overlay {
-  position: absolute;
-  top: 20px;
-  bottom: 70px;
-  left: 0;
-  right: 0;
-  background-color: #fcf;
-  z-index: 2;
-  padding: 10px 15px 10px 15px;
-  font-size: 12px;
-  border: 1px solid #999;
-  overflow-y: scroll;
+    position: relative;
+    top: $header_height;
+    left: -50%;
+    height: 180px;
+    width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 100;
+    background-color: white;
+    padding: 10px 15px 10px 15px;
+    border-radius: 5px;
+    overflow-y: scroll;
+
+    h2, a {
+        color: $blueish;
+    }
+
 }
 
 .fractions_pane {
-  background-color: #faa;
-  
-  // More natural scrolling for end items
-  padding-bottom: 50px;
+  padding: 10px 10px 50px 10px;
 }
 
 .mps_pane {
-  background-color: #afa;
-  top: 62px;
+  top: $header_height + $button_height*2;
   .mode_button {
     border-top: 0;
   }
 
   // More natural scrolling for end items
-  padding-bottom: 50px;
+  padding-bottom: 20px;
 }
 
 .mp {
     display: inline-block;
 
     width: 200px;
-    border: 1px solid red;
+    border: 1px solid #eee;
     margin: 5px 0px 5px 15px;
 
     vertical-align: top;
@@ -94,6 +262,10 @@
     img {
         float: left;
         margin-right: 10px;
+    }
+
+    a {
+        font-weight: bold;
     }
     
     /* IE 6 & 7 */
@@ -103,28 +275,159 @@
 
 .mps_section {
     clear: left;
-    border-top: 1px solid #999;
+    margin-top: 20px;
+    margin-bottom: 40px;
     min-height: 40px;
+
+    .heading { 
+        margin: 0 0 15px 15px;
+        padding-bottom: 1px;
+
+        @include gradient(#ccc, #fff, 'horizontal', 50%);
+
+        h3 {
+            font-size: 13px;
+            background-color: #fff;
+            margin-bottom: 0;
+        }
+    }
+}
+
+.btn {
+    @include gradient(#5f87bb, #4067a4, 'vertical');
+    border: 1px solid rgba(0, 0, 0, 0.0980392);
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    padding: 4px 14px 4px 14px;
+    text-align: center;
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 1px 0px 0px inset, rgba(0, 0, 0, 0.0470588) 0px 1px 2px 0px;
+    text-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-weight: lighter;
+    font-size: 11px;
+    display: inline-block;
 }
 
 .vote_pane {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 60px;
-  padding: 10px 10px 0 10px;
-  background-color: #ff9;
-  font-size: 12px;
-  button {
-    margin-left: 20px;
-    width: 90px;
-    height: 25px;
-    font-size: 18px;
-  }
-  input[type=checkbox] {
-    vertical-align: middle;
-  }
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Note: subtracting padding from footer_height */
+    height: $footer_height - 10px;
+    padding: 10px 10px 0 10px;
+    background-color: #ddd;
+
+    >label {
+        position: absolute;
+        left: 10px;
+        top: 8px;
+        font-weight: bold;
+    }
+
+    button { 
+        position: absolute;
+        top: 30px;
+        width: 90px;
+        height: 20px;
+        padding: 0;
+        font-size: 18px;
+
+        color: #fff;
+        font-size: 11px;
+        text-transform: uppercase;
+        border-radius: 4px;
+        font-weight: lighter;
+
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+
+        border: 1px solid #696969;
+        border-top: 2px solid #bdbdbd;
+        border-left: 0;
+        
+        @include gradient(#a3a3a3, #898989);
+        background-color: #989898; // Older browsers
+
+        text-shadow: -1px 1px 0px #565656;
+        filter: dropshadow(color=#565656, offx=-1, offy=1);
+        
+        &#yes { 
+            left: 10px; 
+            border-bottom-right-radius: 0;
+            border-top-right-radius: 0;
+        }
+        &#no { 
+            left: 101px; 
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+        }
+
+        &.pressed {
+            @include gradient(#eee, #ddd);
+            background-color: #ddd;
+            color: #555;
+            text-shadow: -1px 1px 0px #ccc;
+        }
+
+    }
+
+    .important {
+        position: absolute;
+        left: 200px;
+        top: 36px;
+        width: 100px;
+
+        label {
+            position: absolute;
+            line-height: 10px;
+            font-size: 10px;
+            margin: 1px;
+            left: 15px;
+        }
+
+        input[type=checkbox] {
+            position: absolute;
+            height: 12px;
+        }
+    }
+
+    .logos {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+
+        img {
+            width: 194px;
+            height: 22px;
+        }
+    }
+
+    .links {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        margin: 0;
+
+        text-align: right;
+        border-bottom: 1px solid #ccc;
+        min-width: 194px;
+
+        a {
+            padding-left: 10px;
+            font-size: 10px;
+            font-style: normal;
+        }
+
+        a#history_link {
+            padding-left: 0px;
+            padding-right: 10px;
+            border-right: 1px solid #ccc;
+        }
+    }
+
 }
 
 .fraction_pane {
@@ -133,18 +436,43 @@
   width: 100%;
 }
 
-.position_bar {
-    min-height: 80px;
-    min-width: 530px;
-    margin: 10px 5px 5px 5px;
+#MSWidget-positions {
+    margin-bottom: 15px;
 }
 
-.iconified_fraction {
+.positions_bar {
+    min-height: 80px;
+    min-width: 500px;
+    margin: 10px 5px 20px 5px;
+    position: relative;
+
+    a {
+        position: absolute;
+        right: 0;
+        top: -15px;
+    }
+
+    .supports {
+        position: absolute;
+        left: 0;
+        text-align: left;
+        color: #1B9E34;
+    }
+    .opposes {
+        position: absolute;
+        right: 0;
+        text-align: right;
+        color: #c00;
+    }
+}
+
+.position_icon {
     display: inline-block;
     text-align: center;
     min-width: 60px;
     font-weight: bold;
     height: 50px;
+    margin: 2px;
     
     -moz-transition: all .2s ease-in-out;
     -webkit-transition: all .2s ease-in-out;
@@ -152,12 +480,21 @@
     -ms-transition: all .2s ease-in-out;
     transition: all .2s ease-in-out;
 
+    -webkit-box-shadow: 0px 2px 8px 1px #ddd;
+    -moz-box-shadow: 0px 2px 8px 1px #ddd;
+    box-shadow: 0px 2px 8px 1px #ddd;
+
     p {
         margin-top: 55px;
     }
 }
 
-.iconified_fraction:hover {
+.position_icon.user {
+    min-width: 50px;
+    border-radius: 25px;
+}
+
+.position_icon:hover {
     cursor: pointer;
     text-decoration: underline;
     
@@ -168,94 +505,161 @@
     transform: scale(1.1); 
 }
 
-.positive {
-    color: #1B9E34 !important;
-}
-.negative {
-    color: #c00 !important;
-}
-
-.pull-left {
-    float: left;
-}
-
-.pull-right {
-    float: right;
-}
-
 .content_row {
   border-bottom: 1px solid grey;
   clear: left;
   width: 100%;
 }
 
+// Cleaner look when widget is smaller
+@media (max-width: 650px) {
+    .positions_bar .supports, .positions_bar .opposes {
+        -moz-transform: scale(.9);
+        -webkit-transform: scale(.9);
+        -o-transform: scale(.9); 
+        -ms-transform: scale(.9); 
+        transform: scale(.9); 
+    }
+
+    .positions_bar {
+        min-height: 60px;
+        margin-left: -10px;
+
+        .opposes {
+            margin-right: -10px;
+        }
+    }
+}
+@media (max-width: 610px) {
+    .positions_bar .supports, .positions_bar .opposes {
+        -moz-transform: scale(.8);
+        -webkit-transform: scale(.8);
+        -o-transform: scale(.8); 
+        -ms-transform: scale(.8); 
+        transform: scale(.8); 
+    }
+
+    .position_icon {
+        margin: 0;
+    }
+
+    .positions_bar {
+        min-height: 60px;
+        
+        .opposes {
+            margin-right: -20px;
+        }
+    }
+}
+
 table.fractions_list {
     border: 0;
     width: 100%;
+    color: #666;
+
+    tr:last-child {
+        border-bottom: none;
+    }
 
     tr {
-        border-top: 1px solid gray;
+        border-bottom: 1px solid #eee;
 
         // VISO percentage
+        /*
         td:first-child {
             font-size: 28px;
             text-align: right;
         }
+        */
         // Fraction image
-        td:first-child + td {
+        td:first-child {
             text-align: center;
+            vertical-align: top;
+            padding: 10px 0 10px 0;
+            height: 45px;
         }
         // Fraction details
-        td:first-child + td + td {
+        td:first-child + td {
             max-width: 500px;
-            min-width: 250px;
-            padding: 5px 10px 5px 5px;
-            line-height: 1;
+            padding: 10px 10px 5px 5px;
+            line-height: 1.5;
             vertical-align: top;
+
+            a {
+                font-weight: bold;
+            }
         }
         // Fraction vote data
-        td:first-child + td + td + td {
-            padding: 5px 20px 5px 5px;
-            min-width: 145px;
+        td:first-child + td + td {
+            padding: 5px;
+            min-width: 190px;
 
             label {
                 display: inline-block;
-                font-weight: bold;
-                text-decoration: underline;
-                width: 40px;
+                width: 75px;
                 text-align: right;
                 clear: left;
                 float: left;
-                margin: 3px 10px 0px 0px;
+                margin: 3px 5px 0px 0px;
                 line-height: 1;
-                font-size: 10px;
+                white-space: nowrap;
+
+                b {
+                    display: inline-block;
+                    min-width: 15px;
+                }
             }
 
-            div {
+            >div {
                 display: inline-block;
-                font-weight: bold;
-                height: 10px;
-                line-height: 1;
-                font-size: 10px;
-                text-align: right;
                 float: left;
-                margin-top: 3px;
-                padding: 0px 10px 0px 5px;
-                border: 1px solid black;
+                margin-top: 2px;
             }
         }
     }
 }
 
-.aye_data_bar {
-    background-color: #1b9e33;
+.data_bar {
+    height: 12px;
+
+    background-color: #f8f8f8;
+    border: 1px solid #f6f6f6;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    padding: 0;
+
+    -moz-box-shadow: inset 1px 2px 3px 1px #f0f0f0;
+    -webkit-box-shadow: inset 1px 2px 3px 1px #f0f0f0;
+    box-shadow: inset 1px 2px 3px 1px #f0f0f0;
+
+    .data_bar_val {
+        @extend .data_bar;
+        border: none;
+        -moz-box-shadow: none;
+        -webki-box-shadow: none;
+        box-shadow: none;
+        margin: 0;
+    }
+
+    .aye {
+        @extend .data_bar_val;
+        background-color: #8cd28c;
+    }
+
+    .no {
+        @extend .data_bar_val;
+        border: none;
+        background-color: #f18a87;
+    }
+
+    .abstain {
+        @extend .data_bar_val;
+        border: none;
+        background-color: #fac77f;
+    }
 }
-.no_data_bar {
-    background-color: #c00;
-}
-.abstain_data_bar {
-    background-color: #cc9e33;
-}
+
 .null_data_bar {
     border: 0 !important;
     padding: 0 !important;
@@ -277,7 +681,6 @@ table.fractions_list {
 }
 
 .votetable {
-  font-size: 12px;
   border: 1px solid black;
   border-collapse: collapse;
   th {
@@ -298,14 +701,7 @@ table.fractions_list {
     right: 15px;
     font-size: 20px;
     cursor: pointer;
-}
-
-.connect_button {
-    height: 30px;
-    width: 100px;
-    float: left;
-    margin: 10px;
-    font-size: 16px;
+    color: #ccc;
 }
 
 .harrow {
@@ -313,13 +709,7 @@ table.fractions_list {
     margin:2px 12px 0px 12px;
     position: relative;
 
-    background: linear-gradient(to right, #1B9E34 0%, #CC0000 100%); /* W3C */
-    background: -moz-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* FF */
-    background: -o-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Opera */
-    background: -webkit-gradient(linear, left top, right top, color-stop(0, #1B9E34), color-stop(1, #CC0000)); /* Webkit (Safari/Chrome 10) */ 
-    background: -webkit-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* Webkit (Chrome 11+) */ 
-    background: -ms-linear-gradient(left, #1B9E34 0%, #CC0000 100%); /* IE10 */
-    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr='#1B9E34', endColorstr='#CC0000'); /* IE7-8-9 */ 
+    @include gradient(#018c07, #ee1212, 'horizontal');
     background-color: black; /* Older browsers */
 }
 
@@ -348,3 +738,34 @@ table.fractions_list {
     border-color: transparent transparent transparent #c00;
     -webkit-transform: rotate(360deg);
 }
+
+.tooltip{
+    display: inline;
+    position: relative;
+}
+
+.tooltip:hover:after{
+    background: #fff;
+    background: rgba(255,255,255,.8);
+    border: 1px solid #666;
+    border-radius: 5px;
+    bottom: 26px;
+    content: attr(title);
+    left: 20%;
+    padding: 5px 15px;
+    position: absolute;
+    z-index: 98;
+    width: 220px;
+}
+
+.tooltip:hover:before{
+    border: solid;
+    border-color: #fff transparent;
+    border-width: 6px 6px 0 6px;
+    bottom: 20px;
+    content: "";
+    left: 50%;
+    position: absolute;
+    z-index: 99;
+}
+
