@@ -46,3 +46,5 @@ syntax:regexp
 ^manoseimas/widget/frontend/build$
 ^manoseimas/widget/frontend/tmp$
 
+node_modules
+
