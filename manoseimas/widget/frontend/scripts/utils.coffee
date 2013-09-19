@@ -146,16 +146,17 @@ ajax_request = (url, method, params, callback) ->
         for v in ["MSXML2.XmlHttp.6.0", "MSXML2.XmlHttp.3.0", "Msxml2.XMLHTTP"]
             try xhr = new ActiveXObject v; break catch e
 
-    xhr.withCredentials = true
     xhr.onreadystatechange = ->
         if xhr.readyState is 4 # COMPLETE
             callback xhr if callback
 
     if method is "GET"
         xhr.open 'GET', encodeURI(url), true
+        xhr.withCredentials = true
         xhr.send()
     else
         xhr.open 'POST', encodeURI(url), true
+        xhr.withCredentials = true
         xhr.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
 
         matches = document.cookie.match /csrftoken=([^;]+)/i        
