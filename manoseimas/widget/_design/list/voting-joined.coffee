@@ -29,6 +29,7 @@
             _id: voting._id,
             title: voting.title,
             source: voting.source,
+            documents: voting.documents,
             registered_for_voting: voting.registered_for_voting,
             total_votes: voting.total_votes,
             vote_aye: voting.vote_aye,

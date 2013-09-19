@@ -1,45 +1,82 @@
 {% extends "sboard/base.html" %}
 
 {% block content %}
-<h1>Widget Builder</h1>
-<p>The manoSeimas Widget displays the voting behavior of Fractions and MPs for a specific Resolution from Seimas.  Use the following tool to configure the widget, including which Resolution you'd like it to display. After you've configured the widget, copy and paste the code snippet into your site.</p>
+<h1>Valdiklio Kūrimas</h1>
+<p>ManoSeimas.lt valdiklis atvaizduoja Seimo narių ir frakcijų (partijų) balsavimo rezultatus dėl vieno ar kelių įstatymų projektų. Naudodamiesi žemiau esančiu įrankiu, nusistatykite valdiklio parametrus (dydis) bei pasirinkite Seimo balsavimą, kurį norite atvaizduoti valdiklyje. Tuomet nukopijuokite valdiklio kodą į savo tinklalapį, ir viskas - Jūs susikūrėte savo valdiklį!</p>
+<p>Valdiklyje taip pat pateikiama galimybė Jūsų tinklalapio lankytojams patiems "nubalsuoti" dėl valdiklyje atvaizduoto balsavimo.</p>
 
 <form style='margin-bottom: 0'>
     <fieldset> 
-        <legend>Configure Widget</legend>
+        <legend>Valdiklio Nuostatos</legend>
 
         <div class='row'>
-            <div class='span6'>
-                <label>Voting (lrs.lt URL):</label>
-                <div class="input-append">
-                    <input style='width: 300px;' type='text' id='widget_voting_url' value='http://www.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-12994' onClick='this.select();' />
-                    <button class='btn btn-primary' onClick='update_source(); return false;'>Use &raquo;</button>
+            <div class='span4'>
+                <label>Select a recent Voting:</label>
+                <div class="form-horizontal">
+                    <select id='widget_recent_votings'>
+                        <option value=''>-- Select Voting --</option>
+                        {% for rv in recent_votings %}
+                            <option value='{{rv.value }}'>{{ rv.text }}</option>
+                        {% endfor %}
+                    </select>
+                    <button id="use-recent-voting" class='btn btn-primary'>Use &raquo;</button>
+                    <div id='votingdetails' style='display: none; margin-top: 10px; font-size: 12px; font-style: italic;'>Need to know more? <a target='_blank' href='#' class='voting-url'>View Selected Voting Details</a></div>
                 </div>
-                <span class="help-block">Note: This must be a voting url from lrs.lt.</span>
             </div>
-            <div class='span2'>
-                <label>Width:</label>
+            <div class='span1' style='margin-top: 30px'><i>arba</i></div>
+            <div class='span4'>
+                <label>Balsavimas (nuoroda iš <a href='http://lrs.lt'>lrs.lt</a>):</label>
+                <div class="input-append">
+                    <input style='width: 200px;' type='text' id='widget_source_url' value='http://www.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-12994' onClick='this.select();' />
+                    <button id="use-source-url" class='btn btn-primary'>Use &raquo;</button>
+                </div>
+                <p class='help-block'>
+                <small><em>
+                        Pastaba: Tai turi būti nuoroda iš <a href='http://lrs.lt'>lrs.lt</a> su balsavimo rezultatais. <a data-toggle="modal" data-target='#url_instructions' href='#'>Instructions</a><br/>
+                    Pavyzdžiui: http://www.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-12994</em>
+                </small>
+                </p>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='span3'>
+                <label><u>Plotis</u>: <span id='widget_width_display' style='float: right; font-size: 12px; font-style: italic;'></span></label>
                 <div class='slider' id='widget_width'></div>
-                <label>Height:</label>
+            </div>
+            <div class='span3'>
+                <label><u>Aukštis</u>: <span id='widget_height_display' style='float: right; font-size: 12px; font-style: italic;'></span></label>
                 <div class='slider' id='widget_height'></div>
             </div>
         </div>
-        <div class='row' style='border-top: 1px dashed gray; padding-top: 20px'>
+        <div class='row' style='border-top: 1px dashed gray; margin-top: 30px; padding-top: 20px'>
             <div style='text-align: center'>
-                <p style='font-weight: bold;'>Your Widget Snippet:</p>
-                <textarea id='code_snippet' style='background-color: #eee; width:400px;height:50px;font-size:10px;font-family: "Courier New";' onClick='this.select();'></textarea>
-                <label style='text-style: italic; font-size: 10px;'>(copy &amp; paste this!)</label>
+                <p style='font-weight: bold;'>Jūsų valdiklio kodas (nukopijuokite tai į savo tinklalapį!):</p>
+                <textarea id='code_snippet' style='background-color: #eee; width:450px;height:70px;font-size:9px;font-family: monospace;' onClick='this.select();'></textarea>
             </div>
         </div>
     </fieldset>
 </form>
 
 <div class="section" id="widget-preview">
-    <h1>Widget Preview</h1>
+    <h1>Valdiklio Peržiūra</h1>
     <div style='text-align:center'>
-        <iframe id='widget_container' src='/widget?source_url=http%3A%2F%2Fwww.lrs.lt%2Fpls%2Finter%2Fw5_sale.bals%3Fp_bals_id%3D-12994{{ dev|yesno:"&dev=1," }}' scrolling='no' style='border:1px solid black;width:575px;height:225px;overflow:hidden;'></iframe>
+        <iframe id='widget_container' src='/widget?source_url=http%3A%2F%2Fwww.lrs.lt%2Fpls%2Finter%2Fw5_sale.bals%3Fp_bals_id%3D-12994{{ dev|yesno:"&dev=1," }}' scrolling='no' style='border:0;width:575px;height:275px;overflow:hidden;'></iframe>
     </div>
 </div>
+
+<div id="url_instructions" class="modal hide fade" tabindex="-1">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Instructions for Finding Votings</h3>
+    </div>
+    <div class="modal-body">
+        <p>Content goes here.</p>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Got It!</button>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block inlinejs %}
@@ -47,44 +84,41 @@
 <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 <script>
     function update_dimensions() {
-      var w = $("#widget_width").slider("value");
-      var h = $("#widget_height").slider("value");
-      
-      $("#widget_container").width(w);
-      $("#widget_container").height(h);
+        var w = $("#widget_width").slider("value");
+        var h = $("#widget_height").slider("value");
 
-      update_snippet();
+        $("#widget_container").width(w);
+        $("#widget_container").height(h);
+
+        $("#widget_width_display").text(w+"px");
+        $("#widget_height_display").text(h+"px");
+
+        update_snippet();
     }
 
-    function mk_src_url(voting_url) {
-        return location.protocol + '//' + location.host + '/widget?source_url='+encodeURIComponent(voting_url);
+    function mk_src_url(params) {
+        return location.protocol + '//' + location.host + '/widget?'+$.param(params);
     } 
 
-    function update_source() {
-      var voting_url = $("#widget_voting_url").val();
-      $("#widget_container").attr('src', mk_src_url(voting_url));
+    function update_snippet(src_url) { 
+        if (!src_url) {
+            src_url = $("#widget_container").attr('src');
+        }
+        var w = $("#widget_width").slider("value");
+        var h = $("#widget_height").slider("value");
 
-      update_snippet();
-   }
-
-    function update_snippet() { 
-      var voting_url = $("#widget_voting_url").val();
-      var src_url = mk_src_url(voting_url);
-
-      var w = $("#widget_width").slider("value");
-      var h = $("#widget_height").slider("value");
-
-      var snippet = "<iframe src='"+src_url+"' scrolling='no' style='width:"+w+"px;height:"+h+"px;border:0;overflow:hidden;'></iframe>";
-      $("#code_snippet").val(snippet);
+        var snippet = "<iframe src='"+src_url+"' scrolling='no' style='width:"+w+"px;height:"+h+"px;border:0;overflow:hidden;'></iframe>";
+        $("#code_snippet").val(snippet);
     }
 
     $(function() {
         $( "#widget_width" ).slider({
             orientation: "horizontal",
             range: "min",
-            min: 425,
+            min: 535,
             max: 1000,
             value: 575,
+            step: 5,
             slide: update_dimensions,
             change: update_dimensions
         });
@@ -92,13 +126,36 @@
             orientation: "horizontal",
             range: "min",
             max: 1000,
-            min: 200,
-            value: 225,
+            min: 255,
+            value: 275,
+            step: 5,
             slide: update_dimensions,
             change: update_dimensions
         });
 
-        update_snippet();
+        $("#widget_recent_votings").change(function () {
+            var voting = $(this).val();
+            var anchor = $("#votingdetails .voting-url");
+            anchor.attr('href', "/"+voting);
+            $("#votingdetails").show();
+        });
+
+        $("#use-recent-voting").click(function (e) {
+            e.preventDefault();
+            var iframe_url = mk_src_url({voting_id: $("#widget_recent_votings").val()});
+            $("#widget_container").attr('src', iframe_url);
+            update_snippet(iframe_url);
+        });
+
+        $("#use-source-url").click(function (e) {
+            e.preventDefault();
+            var iframe_url = mk_src_url({source_url: $("#widget_source_url").val()});
+            $("#widget_container").attr('src', iframe_url);
+            update_snippet(iframe_url);
+        });
+
+        update_dimensions();
+
     });
 
   </script>

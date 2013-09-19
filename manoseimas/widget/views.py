@@ -9,7 +9,7 @@ from sboard.models import Node
 from sboard.models import get_node_by_slug
 from sboard.models import get_image_node_thumbnail
 
-from manoseimas.votings.models import get_voting_by_source_id, get_voting_by_lrslt_url
+from manoseimas.votings.models import get_voting_by_source_id, get_voting_by_lrslt_url, get_recent_votings
 
 from decorators import ajax_request
 
@@ -93,6 +93,22 @@ def auth_finish(request):
 
 
 def builder(request):
-    params = { 'dev': settings.DEBUG and 'dev' in request.GET }
+    recent = []
+    for v in get_recent_votings(10):
+        details = "\n".join([d['name'] for d in v.documents])
+        title = v.documents[0]['name'] if v.documents else v.title
+        if len(title) > 50:
+            title = title[:47]+"..."
+
+        recent.append({
+            'value': v._id,
+            'text': v.created.strftime("%d/%m/%Y %H:%M")+": "+title,
+            'details': details
+        })
+
+    params = { 
+        'recent_votings': recent,
+        'dev': settings.DEBUG and 'dev' in request.GET 
+    }
     return render(request, 'widget/builder.html', params)
 
