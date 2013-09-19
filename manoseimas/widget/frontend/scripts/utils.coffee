@@ -39,7 +39,7 @@ Handlebars.registerHelper "key_value", (obj, options) ->
 Handlebars.registerHelper "each_value", (obj, options) ->
     values = (v for own k,v of obj)
     if options.hash.sorting?
-        values = values.sort (a,b) -> a[options.hash.sorting] < b[options.hash.sorting]
+        values = values.sort (a,b) -> b[options.hash.sorting] - a[options.hash.sorting]
 
     (options.fn(v) for v in values).join('')
 
