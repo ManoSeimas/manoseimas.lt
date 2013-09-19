@@ -69,7 +69,7 @@ track_event = (params...) ->
 
 
 # Inject CSS into DOM from template
-inject_css = (target) -> 
+inject_css = (target) ->
     return if $("#MSWidget-style")
 
     style = document.createElement 'style'
@@ -79,7 +79,7 @@ inject_css = (target) ->
     if style.styleSheet
         # IE
         style.styleSheet.cssText = render("widget.css")
-    else 
+    else
         # Other browsers
         style.innerHTML = render("widget.css")
 
@@ -118,7 +118,7 @@ fetch_voting = (slug, callback) ->
                 fraction.voting_score += { aye: 2, no: -2, abstain: -1 }[type]
                 fraction.total_votes++
 
-        for own id,f of data.fractions 
+        for own id,f of data.fractions
             f.viso = Math.round( 100 * f.voting_score / (2*f.total_votes) )
             f.supports = f.viso >= 0
 
@@ -127,7 +127,7 @@ fetch_voting = (slug, callback) ->
 # Fetch a document from our couchdb instance
 fetch_data = (url, callback) ->
     get url, (xhr) ->
-        if xhr.status is 200 or xhr.status is 304  
+        if xhr.status is 200 or xhr.status is 304
             data = eval '(' + xhr.responseText + ')'
             callback data
         else
@@ -161,7 +161,7 @@ ajax_request = (url, method, params, callback) ->
         xhr.withCredentials = true
         xhr.setRequestHeader "Content-type", "application/x-www-form-urlencoded"
 
-        matches = document.cookie.match /csrftoken=([^;]+)/i        
+        matches = document.cookie.match /csrftoken=([^;]+)/i
         xhr.setRequestHeader "X-CSRFToken", decodeURIComponent(matches[1]) if matches?[1]?
 
         postdata = (k+"="+encodeURIComponent(v) for k,v of params).join '&'
