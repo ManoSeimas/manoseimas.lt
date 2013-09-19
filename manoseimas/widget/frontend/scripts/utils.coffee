@@ -14,6 +14,9 @@ $ = (selector, context = document) ->
 render = (template, data) ->
     Handlebars.templates[template](data)
 
+page_url = (slug) ->
+    SERVER_URL + "/" + slug
+
 # Basic display helpers
 show = (elements...) ->
     e.style.display = '' for e in elements
@@ -41,8 +44,7 @@ Handlebars.registerHelper "each_value", (obj, options) ->
     (options.fn(v) for v in values).join('')
 
 # Constructs a URL to webpage identified by the slug
-Handlebars.registerHelper "page_url", (slug) ->
-    SERVER_URL + "/" + slug
+Handlebars.registerHelper "page_url", page_url
 
 # Fractional math
 Handlebars.registerHelper "fraction", (n, d, scale, options) ->
