@@ -21,6 +21,8 @@ from manoseimas.scrapy.utils import Increment
 from manoseimas.scrapy.db import  get_sequential_votings, get_question
 
 
+# By default, never earlier than Seimas sitting 80, which is Fall 2008.
+MINIMUM_SITTING = 80
         
 class SittingsSpider(ManoSeimasSpider):
     """
@@ -56,8 +58,7 @@ class SittingsSpider(ManoSeimasSpider):
 
         self.start_urls = [ start_url ]
 
-        # By default, never earlier than Seimas sitting 88, which is Spring 2011. 
-        sitting_session_range = [ (88, None), (None, None) ]
+        sitting_session_range = [ (MINIMUM_SITTING, None), (None, None) ]
         question_range = None
         voting_range = None
 
