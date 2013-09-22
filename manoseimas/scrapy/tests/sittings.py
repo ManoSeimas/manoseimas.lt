@@ -9,11 +9,11 @@ from ..spiders.sittings import SittingsSpider
 from .utils import fixture
 
 
-def parse_question():
+def parse_question(question_id):
     spider = SittingsSpider()
     url = ('http://www3.lrs.lt/pls/inter/w5_sale_new.klaus_stadija?'
-           'p_svarst_kl_stad_id=-9211')
-    response = HtmlResponse(url, body=fixture('question_-9211.html'))
+           'p_svarst_kl_stad_id='+question_id)
+    response = HtmlResponse(url, body=fixture('questions/'+question_id+'.html'))
     return list(spider.parse_question(response))
 
 
@@ -21,23 +21,42 @@ def parse_voting(voting_id):
     spider = SittingsSpider()
     url = ('http://www3.lrs.lt/pls/inter/w5_sale_new.bals?'
            'p_bals_id='+voting_id)
-    response = HtmlResponse(url, body=fixture('sitting_'+voting_id+'.html'))
+    response = HtmlResponse(url, body=fixture('votings/'+voting_id+'.html'))
     return list(spider.parse_person_votes(response))
 
 
 class TestSittingsSpider(unittest.TestCase):
+
+    maxDiff = None
+
     def test_question(self):
-        items = parse_question()
+        questions = fixture('questions.json')
+        for q in questions:
+            items = parse_question(q[0])
+            # question
+            item = items[0]
+            self.assertEqual(item['_id'], q[0]+'q')
 
-        # question
-        item = items[0]
-        self.assertEqual(item['_id'], '-9211q')
+            # voting
+            if len(items) > 1:
+                item = items[1]
+                self.assertEqual(item['_id'], q[1]+'v')
+            else:
+                self.assertIsNone(q[1])
 
-        # voting
-        item = items[1]
-        self.assertEqual(item['_id'], '-10765v')
 
+    def test_votings(self):
+        votings = fixture('votings.json')
+        for v in votings:
+            print "Processing %s" % v['_id']
+            items = parse_voting(v['_id'])
 
+            item = items[0]
+            self.assertEqual(item['_id'], v['_id']+'v')
+            self.assertEqual(item['documents'], v['documents'])
+            self.assertEqual(item['votes'][0], v['votes'][0])
+
+"""
     def test_voting(self):
         items = parse_voting("-10765")
 
@@ -63,3 +82,4 @@ class TestSittingsSpider(unittest.TestCase):
             'person': u'48690p',
             'vote': u'abstain'
         })
+"""

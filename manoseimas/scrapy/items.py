@@ -157,11 +157,18 @@ class Voting(Item):
     formulation_b = Field()
     result = Field()
     question = Field()
-    documents = Field(output_processor=processor.Identity())
+    #documents = Field(output_processor=processor.Identity())
     registration = Field(input_processor=processor.Identity(),
                          output_processor=processor.TakeFirst())
     source = Field(input_processor=processor.Identity(),
                    output_processor=processor.TakeFirst())
+
+class VotingDocument(Item):
+    id = Field()
+    name = Field()
+    type = Field()
+    number = Field()
+
 
 class PersonVote(Item):
     name = Field()

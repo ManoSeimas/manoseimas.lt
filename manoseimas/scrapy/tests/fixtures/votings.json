@@ -1,0 +1,30 @@
+[
+    {
+        "_id": "-10765",
+        "documents_old": [ "XIP-2992", "XIP-2993" ],
+        "documents": [
+            { "id": "393905d", "type": "pateikimas", "number": "XIP-2992", "name": "Valstybės saugumo departamento įstatymo 10 straipsnio pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIP-2992)" },
+            { "id": "393907d", "type": "pateikimas", "number": "XIP-2993", "name": "Valstybės saugumo departamento statuto 20 ir 22 straipsnių pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIP-2993)" }
+        ],
+        "votes": [{ "fraction": "TTF", "name": "Ačas Remigijus", "person": "47852p", "vote": "aye" }]
+    },
+    {
+        "_id": "-11071",
+        "documents_old": [ "XIP-2779(2)", "XIP-2780(2)", "XIP-2781(2)" ],
+        "documents": [
+            { "id": "396103d", "type": "svarstymas", "number": "XIP-2779(2)", "name": "Išmokų vaikams įstatymo 1, 2 straipsnių pakeitimo ir papildymo ir Įstatymo papildymo priedu ĮSTATYMO PROJEKTAS (Nr. XIP-2779(2))" },
+            { "id": "396106d", "type": "svarstymas", "number": "XIP-2780(2)", "name": "Įstatymo \"Dėl paramos mirties atveju\" pakeitimo ĮSTATYMO PROJEKTAS (nauja redakcija) (Nr. XIP-2780(2))" },
+            { "id": "397054d", "type": "svarstymas", "number": "XIP-2781(2)", "name": "Valstybinių socialinio draudimo pensijų įstatymo 1, 2, 8, 43, 54 straipsnių pakeitimo ir papildymo bei Įstatymo papildymo 1(1) straipsniu ir priedu ĮSTATYMO PROJEKTAS (Nr. XIP-2781(2))" }
+        ],
+        "votes": [{ "fraction": "TSLKDF", "name": "Adomėnas Mantas", "person": "48690p", "vote": "abstain" }]
+    },
+    {
+        "_id": "-8053",
+        "documents": [
+            { "id": "368207d", "type": "pateikimas", "number": "XIP-1869", "name": "Seimo NUTARIMO \"Dėl Valstybinės kultūros paveldo komisijos 2009 metų veiklos ataskaitos\" PROJEKTAS (Nr. XIP-1869)" },
+            { "id": "368207d", "type": "svarstymas", "number": "XIP-1869", "name": "Seimo NUTARIMO \"Dėl Valstybinės kultūros paveldo komisijos 2009 metų veiklos ataskaitos\" PROJEKTAS (Nr. XIP-1869)" },
+            { "id": "368207d", "type": "priėmimas", "number": "XIP-1869", "name": "Seimo NUTARIMO \"Dėl Valstybinės kultūros paveldo komisijos 2009 metų veiklos ataskaitos\" PROJEKTAS (Nr. XIP-1869)" }
+        ],
+        "votes": [{ "fraction": "TTF", "name": "Ačas Remigijus", "person": "47852p", "vote": "abstain" }]
+    }
+]
