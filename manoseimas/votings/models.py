@@ -152,6 +152,9 @@ def get_voting_source_id_from_lrstl_url(url):
             return None
     return None
 
+def get_recent_votings(limit=5):
+    return couch.view('votings/by_source_id', limit=limit)
+
 
 def get_voting_by_source_id(source_id):
     return couch.view('votings/by_source_id', key=source_id).first()

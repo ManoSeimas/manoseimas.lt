@@ -163,25 +163,24 @@ class SyncProcessor(object):
         node.save()
 
     def process(self, doc, update_mode=False):
-        voting = self.get_voting_by_source_id(doc.source.id)
+        node = self.get_voting_by_source_id(doc.source.id)
 
-        # If the voting already exists, it means we've reached
-        # the end of our new nodes. We only proceed if we're in
-        # update mode.
-        if voting:
-            if not update_mode:
-                return False
-            
-            voting = Voting()
-            voting._id = get_new_id()
+        if node is None:
+            node = Voting()
+            node._id = get_new_id()
+        elif not update_mode:
+            # If the voting already exists, it means we've reached
+            # the end of our new nodes. We only proceed if we're in
+            # update mode.
+            return False
 
-        node = self.get_or_create_voting(doc)
         node.created = doc.datetime
 
-        # TODO: some times, when 'formulation' property does not exists,
-        # 'formulation_a' and 'formulation_b' can be provided.
+        # TODO: Replace this with title calculation based on legal acts.
         if 'formulation' in doc:
             node.title = doc.formulation
+        elif 'formulation_a' in doc:
+            node.title = doc.formulation_a
 
         # Number of people, that has voting right
         node.has_voting_right = len(doc.votes)
@@ -210,6 +209,9 @@ class SyncProcessor(object):
         (node.legal_acts,
          node.parent_legal_acts) = self.get_legal_acts(doc.documents)
 
+        # HM 2013-08-20: This is temporary, until we actually implement legal acts
+        node.documents = list(doc.documents)
+
         # Source information
         node.source = self.get_source(doc)
 
@@ -220,7 +222,9 @@ class SyncProcessor(object):
     def sync(self, view, update_mode):
         for doc in view:
             if not self.process(doc, update_mode):
-                return
+                return False
+
+        return True
             
 
 
@@ -258,10 +262,15 @@ class Command(BaseCommand):
         while has_docs:
             view = RawVoting.view('scrapy/sequential_votings_with_documents', **params)
             rows = list(view)
+
             if len(rows) == limit:
                 last = rows.pop()
             else:
                 has_docs = False
-            processor.sync(rows, update_mode)
+
+            if not processor.sync(rows, update_mode):
+                break
+
             if last is not None:
-                params['startkey'] = last._id
+                params['startkey'] = last.source.id
+
