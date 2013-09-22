@@ -13,6 +13,7 @@ from manoseimas.scrapy.items import QuestionDocumentSpeaker
 from manoseimas.scrapy.items import Registration
 from manoseimas.scrapy.items import Session
 from manoseimas.scrapy.items import Voting
+from manoseimas.scrapy.items import VotingDocument
 from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.loaders import absolute_url
 from manoseimas.scrapy.spiders import ManoSeimasSpider
@@ -239,12 +240,13 @@ class SittingsSpider(ManoSeimasSpider):
 
                 speaker_details = map(lambda x: urllib.unquote(x.strip()),
                                       speaker_details.split(','))
-                speaker_details = filter(None, speaker_details)
+                #speaker_details = filter(None, speaker_details)
 
                 dspeaker.reset_required('name', 'position',)
 
                 inc = Increment(-1)
-                dspeaker.add_value('position', speaker_details[inc()])
+                if len(speaker_details) > 0:
+                    dspeaker.add_value('position', speaker_details[inc()])
                 if len(speaker_details) == 3:
                     dspeaker.add_value('committee', speaker_details[inc()])
                 if len(speaker_details) > 1:
@@ -254,8 +256,12 @@ class SittingsSpider(ManoSeimasSpider):
     def _get_question_documents(self, response, hxs):
         qdoc = Loader(self, response, QuestionDocument(), hxs, required=(
             'id', 'name', 'type', 'number',))
-        d_id = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')[0]
-        qdoc.add_value('id', u'%sd' % d_id)
+
+        d_id = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')
+        if not d_id:
+            return None
+
+        qdoc.add_value('id', u'%sd' % d_id[0])
         qdoc.add_xpath('name', 'b[1]/text()')
         qdoc.add_value('type',
                 hxs.select('b[1]/following::text()[1]').re('^; (.+)'))
@@ -275,14 +281,16 @@ class SittingsSpider(ManoSeimasSpider):
         many_docs = hxs.select('ol/li')
         if many_docs:
             for d in many_docs:
-                question.add_value('documents',
-                        dict(self._get_question_documents(response, d)))
+                qdoc = self._get_question_documents(response, d)
+                if qdoc:
+                    question.add_value('documents',dict(qdoc))
 
         else:
             has_docs = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')
             if has_docs:
-                question.add_value('documents',
-                        dict(self._get_question_documents(response, hxs)))
+                qdoc = self._get_question_documents(response, hxs)
+                if qdoc:
+                    question.add_value('documents', dict(qdoc))
             else:
                 question.reset_required('_id', 'name', 'session',
                                         'source',)
@@ -333,19 +341,49 @@ class SittingsSpider(ManoSeimasSpider):
                 hxs.select('b[1]//text()').re(
                     r'\(Nr. (%s)\)' % number_re)[0])
 
+    def _get_voting_documents(self, response, hxs):
+        qdoc = Loader(self, response, VotingDocument(), hxs, required=(
+            'id', 'name', 'type', 'number',))
+
+        d_id = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')
+        if not d_id:
+            return None
+
+        qdoc.add_value('id', u'%sd' % d_id[0])
+        qdoc.add_xpath('name', 'b[1]/a/text()')
+        qdoc.add_value('type',
+                hxs.select('b[1]/following::text()[1]').re('^; (.+)'))
+        number_re = (r'[A-Z]{1,4}'
+                     r'-'
+                     r'\d+'
+                     r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
+        qdoc.add_value('number',
+                hxs.select('b[1]//text()').re(
+                    r'\(Nr. (%s)\)' % number_re)[0])
+
+        return qdoc.load_item()
+
     def _parse_voting_legal_acts(self, response, voting):
         xpath = '/html/body/div/table/tr[3]/td/table/tr/td/align'
         hxs = HtmlXPathSelector(response).select(xpath)[0]
 
         many_docs = hxs.select('ol/li')
+
         if many_docs:
             for d in many_docs:
-                self._add_voting_legal_act_number(d, voting)
+                #self._add_voting_legal_act_number(d, voting)
+                # Temporary stuff until legal acts complete
+                qdoc = self._get_voting_documents(response, d)
+                if qdoc:
+                    voting.add_value('documents',dict(qdoc))
 
         else:
             has_docs = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')
             if has_docs:
-                self._add_voting_legal_act_number(hxs, voting)
+                #self._add_voting_legal_act_number(hxs, voting)
+                qdoc = self._get_voting_documents(response, hxs)
+                if qdoc:
+                    voting.add_value('documents', dict(qdoc))
 
     def get_question_url(self, response):
         xpath = '/html/body/div/table/tr[3]/td/table/tr/td/align'
