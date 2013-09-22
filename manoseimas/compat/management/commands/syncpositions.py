@@ -29,5 +29,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for node in couch.iterchunks('sboard/by_type', skey='Solution'):
-            print('[ %s ]: %s' % (node.key, node.title))
+            print('[ %s ]: %s' % (node.key.encode('utf-8'), node.title.encode('utf-8')))
             update_parliament_positions(node.key)
