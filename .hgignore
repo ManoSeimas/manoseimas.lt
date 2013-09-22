@@ -35,7 +35,7 @@ syntax:regexp
 ^parts$
 ^tags$
 ^var$
-^logs$
+^log$
 ^node_modules$
 
 ^manoseimas/static/css/styles.css$
