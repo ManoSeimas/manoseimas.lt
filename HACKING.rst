@@ -9,18 +9,24 @@ To be able to build and run this project you will need:
 * working CouchDB server instance with created database, specified in
   conf/settings.py file
 
-* python
+* python 2.7
 
 * mercurial DVCS's
 
 * C/C++ compiler, python development headers for compiling python extension.
 
-System requirements can be installed all at once using this command::
+* NodeJS 0.10+
+
+System requirements can be installed all at once using this command:
 
     sudo apt-get install mercurial
     hg clone http://bitbucket.org/manoseimas/manoseimas
     cd manoseimas
     sudo ./waf setup
+
+Note: to customize project settings, you may pass additional parameters to waf. 
+See './waf --help' for details.
+
 
 Configuring development environment
 ===================================
