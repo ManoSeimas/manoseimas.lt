@@ -110,6 +110,11 @@ class SyncProcessor(object):
         node = self.get_image_node(profile)
         node.ext = os.path.splitext(url)[1][1:]
         path = node.path(fetch=False)
+
+        parent = os.path.dirname(path)
+        if not os.path.exists(parent):
+            os.makedirs(parent)
+
         urllib.urlretrieve(url, path)
         self.set_image_from_file(profile, path)
     
