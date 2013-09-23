@@ -7,9 +7,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="/css/widget/normalize.min.css">
-        <link rel="stylesheet" href="/css/widget/main.css">
-        <script src="/js/handlebars.runtime.js" language='javascript'></script>
+        <link rel="stylesheet" href="{{ STATIC_URL }}/css/widget/normalize.min.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}/css/widget/main.css">
+        <script src="{{ STATIC_URL }}/js/handlebars.runtime.js" language='javascript'></script>
     </head>
     <body>
         <script id="MSWidget-loader">
@@ -25,7 +25,7 @@
                 var s, id = 'MSWidget-js', p = d.getElementsByTagName(t)[0];
                 if (!d.getElementById(id)) {
                     s = d.createElement(t);
-                    s.id = id; s.async = true; s.src = '/js/manoSeimas-widget.debug.js';
+                    s.id = id; s.async = true; s.src = '{{ STATIC_URL }}/js/manoSeimas-widget.debug.js';
                     p.parentNode.insertBefore(s, p);}
             }(document,'script'));
         </script>
