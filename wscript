@@ -245,7 +245,7 @@ def build(ctx):
         after='buildout', target='var/db')
 
     if ctx.env.LESS:
-        bld(rule='npm --root parts/node --binroot bin install less',
+        bld(rule='mkdir -p parts/node_modules && npm --prefix parts install less@1.3.3 && ln -s ../parts/node_modules/less/bin/lessc bin',
             target='bin/lessc')
 
     bld(rule='bin/django collectstatic --noinput --verbosity=0',
@@ -372,9 +372,6 @@ def setup(ctx):
         # Python
         'python-dev',
         'python-virtualenv',
-
-        # Node.js package manager for LESS
-        'npm',
 
         # Other development headers
         'libfreetype6-dev',
