@@ -118,13 +118,19 @@ def get_full_voting(source_id, include_metrics=True):
     for vote_type,vote_list in voting.votes.iteritems():
         for i,v in enumerate(vote_list):
             mp = mps[ v[0] ]
-            fraction = fractions[ v[1] ]
+            if v[1] != None:
+                fraction = fractions[ v[1] ]
+            else:
+                # Some votings contain votes that occurred during an MPs transition between fractions.
+                # This produces NULL fraction data for the MP's vote at that time. We assign a blank Fraction
+                # for these votings.
+                fraction = None
             vote_list[i] = mp
 
             mp.fraction = fraction
             mp.vote = vote_type
 
-            if include_metrics:
+            if include_metrics and fraction != None:
                 fraction.votes[vote_type] += 1
                 fraction.voting_score += voting.get_vote_value(vote_type)
                 fraction.total_votes += 1
