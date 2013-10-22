@@ -1,40 +1,39 @@
 {% extends "sboard/base.html" %}
 
 {% block content %}
-<h1>Valdiklio Kūrimas</h1>
-<p>ManoSeimas.lt valdiklis atvaizduoja Seimo narių ir frakcijų (partijų) balsavimo rezultatus dėl vieno ar kelių įstatymų projektų. Naudodamiesi žemiau esančiu įrankiu, nusistatykite valdiklio parametrus (dydis) bei pasirinkite Seimo balsavimą, kurį norite atvaizduoti valdiklyje. Tuomet nukopijuokite valdiklio kodą į savo tinklalapį, ir viskas - Jūs susikūrėte savo valdiklį!</p>
-<p>Valdiklyje taip pat pateikiama galimybė Jūsų tinklalapio lankytojams patiems "nubalsuoti" dėl valdiklyje atvaizduoto balsavimo.</p>
+<h1>KURKITE VALDIKLĮ</h1>
+<p>manoSeimas.lt valdiklis atvaizduoja Seimo narių ir frakcijų balsavimo rezultatus dėl vieno ar kelių įstatymo projektų. Valdiklis taip pat suteikia skaitytojui galimybę patiems "nubalsuoti" dėl valdiklyje atvaizduoto balsavimo.</p>
+<p>Norėdami susikurti valdiklį, pasirinkite jus dominantį balsavimą, nustatykite valdiklio išvaizdą, ir sugeneruotą kodą nusikopijuokite į savo tinklalapį. Plačiau...[[hyperlink to instructions??]]</p>
 
 <form style='margin-bottom: 0'>
     <fieldset> 
-        <legend>Valdiklio Nuostatos</legend>
+        <legend>Valdiklio Nustatymai</legend>
 
         <div class='row'>
             <div class='span4'>
-                <label>Select a recent Voting:</label>
+                <label>Pasirinkite iš naujausių balsavimų:</label>
                 <div class="form-horizontal">
-                    <select id='widget_recent_votings'>
-                        <option value=''>-- Select Voting --</option>
+                    <select id='widget_recent_votings' style='width:200px'>
+                        <option value=''>-- Pasirinkite Balsavimų --</option>
                         {% for rv in recent_votings %}
                             <option value='{{rv.value }}'>{{ rv.text }}</option>
                         {% endfor %}
                     </select>
-                    <button id="use-recent-voting" class='btn btn-primary'>Use &raquo;</button>
-                    <div id='votingdetails' style='display: none; margin-top: 10px; font-size: 12px; font-style: italic;'>Need to know more? <a target='_blank' href='#' class='voting-url'>View Selected Voting Details</a></div>
+                    <button id="use-recent-voting" class='btn btn-primary'>Taikyti &raquo;</button>
+                    <div id='votingdetails' style='display: none; margin-top: 10px; font-size: 12px; font-style: italic;'><a target='_blank' href='#' class='voting-url'>Plačiau apie pasirinktą balsavimą</a></div>
                 </div>
             </div>
             <div class='span1' style='margin-top: 30px'><i>arba</i></div>
             <div class='span4'>
-                <label>Balsavimas (nuoroda iš <a href='http://lrs.lt'>lrs.lt</a>):</label>
+                <label>Pateikite savo balsavimą:</label>
                 <div class="input-append">
                     <input style='width: 200px;' type='text' id='widget_source_url' value='http://www.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-12994' onClick='this.select();' />
-                    <button id="use-source-url" class='btn btn-primary'>Use &raquo;</button>
+                    <button id="use-source-url" class='btn btn-primary'>Taikyti &raquo;</button>
                 </div>
                 <p class='help-block'>
                 <small><em>
-                        Pastaba: Tai turi būti nuoroda iš <a href='http://lrs.lt'>lrs.lt</a> su balsavimo rezultatais. <a data-toggle="modal" data-target='#url_instructions' href='#'>Instructions</a><br/>
-                    Pavyzdžiui: http://www.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-12994</em>
-                </small>
+                        Į laukelį įkopijuokite nuorodą su balsavimo rezultatais iš oficialios Seimo svetainės lrs.lt. <a data-toggle="modal" data-target='#url_instructions' href='#'>Plačiau...</a>
+                </em></small>
                 </p>
             </div>
         </div>
@@ -50,7 +49,7 @@
         </div>
         <div class='row' style='border-top: 1px dashed gray; margin-top: 30px; padding-top: 20px'>
             <div style='text-align: center'>
-                <p style='font-weight: bold;'>Jūsų valdiklio kodas (nukopijuokite tai į savo tinklalapį!):</p>
+                <p style='font-weight: bold;'>Jūsų valdiklio kodas:</p>
                 <textarea id='code_snippet' style='background-color: #eee; width:450px;height:70px;font-size:9px;font-family: monospace;' onClick='this.select();'></textarea>
             </div>
         </div>
