@@ -140,7 +140,7 @@ class SyncProcessor(object):
             if node.profile == profile:
                 return node
 
-    def process_groups(self, groups, profile):
+    def process_groups(self, groups, profile, update_mode=False):
         group_type_map = {
             "fraction": Fraction,
             "committee": Committee,
@@ -160,7 +160,7 @@ class SyncProcessor(object):
 
             first_time = (group_type.__name__, slug) not in self._nodes
 
-            if group_node_id:
+            if not update_mode and group_node_id:
                 group = self.get_node(group_node_id, group_type, slug)
                 if group.slug != slug:
                     group.slug = slug
@@ -186,7 +186,7 @@ class SyncProcessor(object):
 
             group.save()
 
-            if membership_node_id:
+            if not update_mode and membership_node_id:
                 membership = self.get_node(membership_node_id, MembershipNode)
             else:
                 membership = self.get_membership_node(group, profile)
@@ -209,11 +209,11 @@ class SyncProcessor(object):
             doc['group_node_id'] = group._id
             doc['membership_node_id'] = membership._id
 
-    def process(self, doc):
+    def process(self, doc, update_mode=False):
         if 'doc_type' not in doc or doc['doc_type'] != 'person':
             return
 
-        if doc.get('node_id'):
+        if doc.get('node_id') and not update_mode:
             node = self.get_node(doc.get('node_id'), MPProfile)
         else:
             node = self.get_profile_node( doc['source']['id'] )
@@ -237,7 +237,7 @@ class SyncProcessor(object):
         node.source = doc['source']
         self.set_image_from_url(node, doc['photo'])
 
-        self.process_groups(doc['groups'], node)
+        self.process_groups(doc['groups'], node, update_mode)
 
         node.save()
 
@@ -248,7 +248,7 @@ class SyncProcessor(object):
             print('OK')
 
 
-    def sync(self, view='_all_docs'):
+    def sync(self, view='_all_docs', update_mode=False):
         has_docs = True
         last = None
         limit = 100
@@ -262,7 +262,7 @@ class SyncProcessor(object):
                 has_docs = False
 
             for doc in rows:
-                self.process(doc['doc'])
+                self.process(doc['doc'], update_mode)
 
             if last is not None:
                 params['startkey'] = last['id']
@@ -272,11 +272,17 @@ class Command(BaseCommand):
     help = "Synchronize raw legal acts data with django-sboard nodes."
 
     def handle(self, *args, **options):
+        update_mode = "update" in args
+
         if "scrape" in args:
             print "Scraping all MPs from lrs.lt..."
             scrapy_path = os.path.abspath(os.path.join(settings.BUILDOUT_DIR, 'bin', 'scrapy'))
             call([scrapy_path, "crawl", "mps"])
 
+        if update_mode:
+            print "Update mode enabled. Re-syncing all MPs..."
+
         db = get_db('person')
         processor = SyncProcessor(db)
-        processor.sync()
+        processor.sync('_all_docs', update_mode)
+
