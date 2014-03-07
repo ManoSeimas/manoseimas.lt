@@ -4,42 +4,100 @@
 
 {% block middle %}
 <div id="middle" class="index">
-  <div class="container">
-    <h1>
-      Sužinok, kas Seime atstovavo <strong>tau</strong>!
-    </h1>
-
-    <div class="motto">
-      <p>Atlik testą, sudarytą iš svarbiausių 2008-2012 m. Seime vykusių
-      balsavimų, ir sužinok, kurie Seimo nariai ir partijos balsavo taip, kaip
-      balsuotum tu.</p>
+    <div class="splash-wide">
+        <p><img class="logo" src="{{ STATIC_URL }}img/logo-white.png" /></p>
+        <h2>Stebėk, kaip balsuoja Seimas</h2>
+        <p class='byline'>
+            Projekta rengia:<br/>
+            <a target="_blank" href="http://www.transparency.lt" class="tils-logo white"></a>
+        </p>
     </div>
-
-    <div class="icons">
-      <div>
-        <img src="{{ STATIC_URL }}img/icon1.png">
-        <p>Atsakyk į klausimus</p>
+  <div class="section">
+      <a href='#' class='video'>Prisatomasis klipas  <span class='play'><span></span></span></a>
+      <h2 class='heading'>Naujausi balsavimai</h2>
+      <div class='widget'>
+          <iframe id='widget-frame' src='/widget?voting_id={{ recent_votings.0.votings.0.id }}' scrolling='no'></iframe><!-- no space
+          --><div class="sidepanel">
+            <div class="accordion recent-votings" id="recent-votings-accordion">
+              {% for day in recent_votings %}
+              <div class="accordion-group">
+                    <div class="accordion-heading">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#recent-votings-accordion" href="#recent-day-{{ forloop.counter }}">
+                            {{ day.date|date:"l, Y F, j" }} d.
+                        </a>
+                    </div>
+                    <div id="recent-day-{{ forloop.counter }}" class="accordion-body collapse">
+                        <div class="accordion-inner">
+                            <ul class='listings'>
+                                {% for rv in day.votings %}
+                                <li {% if forloop.parentloop.first and forloop.first %}class="active"{% endif %} data-voting="{{rv.id}}"><div class='title'>{{rv.title }}</div><div class='time'>{{ rv.date|time:"H:i" }}</div></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+          </div>
+          <div class='url-container'>
+              <input type='text' placeholder='Pateikite savo balsavimą'> <a class='button green'>Taikyti &gt;</a>
+          </div>
       </div>
-      <img class="arrow" src="{{ STATIC_URL }}img/arrow.png">
-      <div>
-        <img src="{{ STATIC_URL }}img/icon2.png">
-        <p>Gauk rezultatus</p>
+    </div>
+  <h2 class='heading'>Įsidėkite valdiklį į savo svetainę!</h2>
+  <div class='instructions'>
+      <div class='step'>
+          <img src="{{ STATIC_URL }}img/home-icon-cursor.png" />
+          <p>Pasirinkite norimą balsavimą</p>
       </div>
-      <img class="arrow" src="{{ STATIC_URL }}img/arrow.png">
-      <div>
-        <img src="{{ STATIC_URL }}img/icon3.png" style="height: 134px; padding: 2px 0">
-        <p>Žiūrėk daugiau</p>
+      <div class='divider'></div>
+      <div class='step'>
+          <img src="{{ STATIC_URL }}img/home-icon-gear.png" />
+          <p>Nustatykite valdiklio išvaizdą</p>
       </div>
-    </div>
-
-    <div class="facebook-right">
-      <div class="fb-like" data-send="false" data-layout="button_count" data-href="http://manoseimas.lt"></div>
-    </div>
-    <div class="begin-test">
-      <a href="/testas/" class="btn btn-primary">
-        PRADĖTI TESTĄ
-      </a>
-    </div>
+      <div class='divider'></div>
+      <div class='step'>
+          <img src="{{ STATIC_URL }}img/home-icon-tag.png" />
+          <p>Įterpkite sugeneruotą kodą į savo tinklalapį</p>
+      </div>
+      <p>
+          <a class='button green strong' href='/widget/builder'>Tinklaraštininkams / Žurnalistams</a>
+      </p>
+  </div>
+  <h2 class='heading'>Testas</h2>
+  <div class='section testas'>
+      <p>Atlik testą, sudarytą iš svarbiausių <strong>2008-2012 m.</strong> Seime vykusių balsavimų, ir sužinok, kurie Seimo nariai ir partijos balsavo taip, kaip balsuotum tu.</p>
+      <p><a href="/testas/" class="button">Pradėti testą</a></p>
+  </div>
+  </div>
   </div>
 </div>
+{% endblock %}
+{% block inlinejs %}
+<script>
+    jQuery(function ($) {
+        $(".recent-votings .collapse").collapse();
+
+        $("ul.listings li").click(function (e) {
+            var voting = $(this).data("voting");
+            var widget_url = location.protocol + '//' + location.host + '/widget?voting_id=' + voting;
+            $("#widget-frame").attr('src', widget_url);
+
+            $("ul.listings li").removeClass('active');
+            $(this).addClass('active');
+
+        });
+
+        $(".url-container .button").click(function (e) {
+            e.preventDefault();
+            var source_url = $(".url-container input").val();
+            var widget_url = location.protocol + '//' + location.host + '/widget?source_url=' + source_url;
+            $("#widget-frame").attr('src', widget_url);
+
+            $("ul.listings li").removeClass('active');
+            $(".recent-votings .accordion-group").addClass("collapsed");
+            $(".recent-votings .accordion-body").removeClass("in");
+        });
+
+    });
+</script>
 {% endblock %}

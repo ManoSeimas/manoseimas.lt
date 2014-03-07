@@ -94,7 +94,7 @@ def auth_finish(request):
 
 def builder(request):
     recent = []
-    for v in get_recent_votings(10):
+    for v in get_recent_votings(25):
         details = "\n".join([d['name'] for d in v.documents])
         title = v.documents[0]['name'] if v.documents else v.title
         if len(title) > 50:

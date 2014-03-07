@@ -11,7 +11,7 @@ import manoseimas.docutils_roles
 import manoseimas.set_session_expiry
 
 urlpatterns = patterns('',
-    url(r'^$', 'sboard.views.node_view', {'slug': 'manoseimas'}, name='index'),
+    url(r'^$', 'views.index'),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
 

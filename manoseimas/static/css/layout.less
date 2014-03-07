@@ -138,7 +138,8 @@
 // ----------------------------
 
 #logo-bar-inner {
-  #gradient > .vertical(@white, #eee);
+  background-color: white;
+  //#gradient > .vertical(@white, #eee);
   border-bottom: 1px solid @wellBorder;
 
   #logo-bar {
@@ -147,6 +148,15 @@
     .brand {
       margin: 0;
       padding: 13px 0 13px 0;
+
+      .beta {
+        color: red;
+        font-weight: bold;
+        font-size: 12px;
+        position: relative;
+        top: -7px;
+        left: -4px;
+      }
     }
   }
 }
@@ -615,78 +625,282 @@
 // ----------------------------
 
 #middle.index {
-  background: url(../img/skies.jpg) no-repeat center top;
+   background-color: white;
+  
 
-  h1 {
+  .splash-wide { 
+    height: 300px;
+    background: url(../img/bg-cityscape.png) no-repeat center top;
+
     text-align: center;
-    font-size: 50px;
-    line-height: 44px;
-    margin: 44px 0;
-    font-weight: 300;
+    color: white;
 
-    strong {
-      font-weight: 400;
-    }
-  }
-
-  p {
-    font-size: 16px;
-    color: #777;
-    text-align: center;
-  }
-
-  .motto {
-    width: 600px;
-    margin: 30px auto;
-  }
-
-  .icons {
-    margin: 0 auto;
-    width: 788px;
-    height: 218px;
-
-    & > * {
-      float: left;
-      margin: 10px 30px;
-    }
-
-    & > * > img {
-      height: 138px;
-      width: 140px;
-    }
-
-    .arrow {
-      padding: 61px 0;
-      width: 23px;
+    .logo {
+      margin-top: 30px;
     }
 
     p {
-      line-height: 40px;
+        margin-top: 0;
+        color: white;
+    }
+
+    h2 {
+      color: white;
+      font-size: 36px;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 300;
+    }
+
+    .byline {
+        font-size: 12px;
+        margin-top: 40px;
+    }
+  }   
+
+  @grayish: #797979;
+  @blueish: #4d71a6;
+  @greenish: #46ad46;
+
+  text-align: center;
+  color: #666;
+
+  .section {
+    position: relative;
+    max-width: 940px;
+    margin: 30px auto;
+  }
+
+  .heading {
+      text-align: center;
+       color: @greenish;
+       font-size: 32px;
+       font-weight: 300;
+    margin: 20px 0;
+  }
+
+  p {
+      font-weight: 300;
+      margin: 20px auto;
+      font-size: 16px;
+      text-align: center;
+  }
+
+  .widget {
+    iframe, .sidepanel {
+        display: inline-block;
+        vertical-align: top;
+        border: 0;
+        height: 625px;
+        width: 535px;
+        overflow: hidden;
+    }
+
+    .sidepanel {
+        position: relative;
+        background-color: #ddd;
+        color: #707070;
+        width: 400px;
+    }
+
+    .recent-votings {
+        height: 575px;
+        margin-left: 0;
+        text-align: left;
+        border-left: 1px solid #ccc;
+
+        overflow-y: auto;
+
+        .accordion-inner {
+            margin: 0;
+            padding: 0;
+        }
+
+        .accordion-heading a {
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            background-color: #ccc;
+        }
+
+        .accordion-group {
+            border-radius: 0;
+            border: 0;
+            border-bottom: 1px solid #999;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul.listings {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            li {
+                padding: 0 0 0 20px;
+                border-bottom: 1px solid #ccc;
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #ccc;
+                }
+
+                &.active {
+                    background-color: @blueish;
+                    color: white;
+
+                    &:hover {
+                        background-color: @blueish;
+                    }
+                }
+                
+                div {
+                    display: inline-block;
+                    vertical-align: middle;
+                    overflow-x: hidden;
+                    white-space: nowrap; 
+                    line-height: 40px;
+                    margin: 0;
+
+                    font-size: 12px;
+                    font-weight: 300;
+                }
+
+                .title {
+                    width: 300px;
+                    padding: 0 15px 0 0;
+                    text-overflow: ellipsis; 
+                }
+
+            }
+        }
+    }
+
+    .url-container {
+        width: 390px;
+        height: 39px;
+        line-height: 39px;
+        position: absolute;
+        padding: 5px;
+        bottom: 0;
+
+        border-top: 1px solid #aaa;
+
+        input {
+            padding: 5px;
+            width: 275px;
+            height: 20px;
+            line-height: 20px;
+            margin: 0;
+        }
+
+        .button {
+            min-width: initial;
+            border: 0;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 28px;
+            vertical-align: middle;
+            padding: 0 5px;
+            margin: 0;
+        }
+            
     }
   }
 
-  .facebook-right {
-    margin: 24px 140px 0 0;
-  }
+    .instructions {
+        margin: 30px auto;
+        margin-top: 115px;
+        padding-bottom: 20px;
+        background-color: #f2f2f2;
 
-  .begin-test {
-    padding: 9px;
-    .border-radius(9px);
-    border: solid 1px #ddd;
-    width: 320px;
-    margin: 0 auto 35px auto;
+        div {
+            display: inline-block;
+            vertical-align: top;
 
-    .btn {
-      font-weight: 700;
-      font-size: 32px;
-      line-height: 55px;
-      width: 100%;
-      margin: 0;
-      padding: 0;
+            &.step {
+                width: 200px;
+                margin-top: -80px;
+                
+                p {
+                    max-width: 160px;
+                }
+            }
+            
+            &.divider {
+                width: 100px;
+                height: 14px;
+                margin-top: -7px;
+                background: url(../img/home-icon-gap.png) center no-repeat;
+            }
+        }
+        
+        .button {
+            margin-top: 15px;
+        }
     }
-  }
+
+    .testas {
+        max-width: 540px;
+    }
+
+    .button {
+        display: inline-block;
+        min-width: 400px;
+        background-color: @grayish;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        padding: 10px 0;
+        border-radius: 4px;
+        font-weight: 300;
+        margin-right: 15px;
+
+        border: 4px solid white;
+
+        &:hover {
+            background-color: lighten(@grayish, 10%);
+        }
+
+        &.green {
+            background-color: @greenish;
+            &:hover {
+                background-color: lighten(@greenish, 10%);
+            }
+        }
+
+        &.strong {
+            font-weight: 400;
+        }
+    }
+
+    a.video {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    /* Todo: replace with image or icon font sprite */
+
+    .play {
+        background-color: @blueish;
+        border-radius: 20px;
+        display: inline-block;
+        padding: 5px 5px;
+        position: relative;
+        top: 3px;
+
+        span {
+            display: block;
+            width: 0px;
+            height: 0px;
+            border-style: solid;
+            border-width: 5px 0 5px 10px;
+            border-color: transparent transparent transparent white;
+            position: relative;
+            left: 1px;
+        }
+    }
 }
-
 
 // footer
 // ----------------------------
@@ -701,24 +915,11 @@ footer {
     font-size: @baseFontSize;
     font-weight: 600;
     padding: 0;
-    line-height: @baseLineHeight;
+    line-height: 32px;
   }
 
   a {
     color: @gray;
-  }
-
-  .tils {
-    padding: 0;
-    margin: 5px 0;
-    display: block;
-    width: 189px;
-    height: 49px;
-    background: url("../img/tils-sprite.png") no-repeat 0px 0px;
-  }
-
-  .tils:hover {
-    background-position: 0px -49px;
   }
 
   .nav {
@@ -1039,3 +1240,22 @@ img.align-center {
   color: @linkColor;
   font-weight: 600;
 }
+
+.tils-logo {
+    padding: 0;
+    margin: 5px 0;
+    display: inline-block;
+    width: 189px;
+    height: 49px;
+    background: url("../img/tils-sprite.png") no-repeat 0px 0px;
+
+    &.white {
+        background-position: 0px -98px;
+    }
+
+    &:hover {
+        background-position: 0px -49px;
+    }
+}
+
+
