@@ -3,11 +3,13 @@
 {% block content %}
 <h1>KURKITE VALDIKLĮ</h1>
 <p>manoSeimas.lt valdiklis atvaizduoja Seimo narių ir frakcijų balsavimo rezultatus dėl vieno ar kelių įstatymo projektų. Valdiklis taip pat suteikia skaitytojui galimybę patiems "nubalsuoti" dėl valdiklyje atvaizduoto balsavimo.</p>
-<p>Norėdami susikurti valdiklį, pasirinkite jus dominantį balsavimą, nustatykite valdiklio išvaizdą, ir sugeneruotą kodą nusikopijuokite į savo tinklalapį. Plačiau...[[hyperlink to instructions??]]</p>
+<p>Norėdami susikurti valdiklį, pasirinkite jus dominantį balsavimą, nustatykite valdiklio išvaizdą, ir sugeneruotą kodą nusikopijuokite į savo tinklalapį. <a data-toggle="modal" data-target='#url_instructions' href='#'>Plačiau...</a></p>
 
-<form id="widget_form">
+<div class="section">
+<h1>VALDIKLIO NUSTATYMAI</h1>
+<form id="widget_form" class="widget-builder-form">
     <fieldset> 
-        <legend>Valdiklio Nustatymai</legend>
+        <h2>1. PASIRINKITE NORIMĄ BALSAVIMĄ</h2>
 
         <div class='row'>
             <div class='span4'>
@@ -35,8 +37,10 @@
                 </p>
             </div>
         </div>
+
+        <h2>2. NUSTATYKITE VALDIKLIO IŠVAIZDĄ</h2>
         <div class='row'>
-            <div class='span3'>
+            <div class='offset1 span3'>
                 <label><u>Plotis</u>: <input id='widget_width_field' class="dimension" /></label>
                 <div class='slider' id='widget_width'></div>
             </div>
@@ -45,7 +49,8 @@
                 <div class='slider' id='widget_height'></div>
             </div>
         </div>
-        <div id="snippet_row" class='row' >
+        <h2>3. ĮTERPKITE SUGENERUOTĄ VALDIKLIO KODĄ Į SAVO PUSLAPĮ!</h2>
+        <div id='snippet_row' class='row'>
             <div>
                 <p>Jūsų valdiklio kodas:</p>
                 <textarea id='code_snippet' onClick='this.select();'></textarea>
@@ -53,6 +58,7 @@
         </div>
     </fieldset>
 </form>
+</div>
 
 <div class="section" id="widget-preview">
     <h1>Valdiklio Peržiūra</h1>
@@ -77,6 +83,14 @@
 <style>
     #widget_form {
         margin-bottom: 0;
+    }
+
+    #widget_form h2 {
+        text-align: center;
+        font-weight: 300;
+        text-decoration: underline;
+        font-size: 18px;
+        margin: 25px 0;
     }
 
     #votingdetails {
@@ -114,9 +128,6 @@
     }
 
     #snippet_row {
-        border-top: 1px dashed gray; 
-        margin-top: 30px; 
-        padding-top: 20px;
     }
 
     #snippet_row div {
