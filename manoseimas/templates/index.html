@@ -30,7 +30,7 @@
                         <div class="accordion-inner">
                             <ul class='listings'>
                                 {% for rv in day.votings %}
-                                <li {% if forloop.parentloop.first and forloop.first %}class="active"{% endif %} data-voting="{{rv.id}}"><div class='title'>{{rv.title }}</div><div class='time'>{{ rv.date|time:"H:i" }}</div></li>
+                                <li title="{{ rv.title }}" {% if forloop.parentloop.first and forloop.first %}class="active"{% endif %} data-voting="{{rv.id}}"><div class='title'>{{rv.title }}</div><div class='time'>{{ rv.date|time:"H:i" }}</div></li>
                                 {% endfor %}
                             </ul>
                         </div>
