@@ -116,17 +116,19 @@ fetch_voting = (slug, callback) ->
                 vote_list[i] = mp
 
                 mp.vote = type
-                mp.fraction = fraction
-                fraction.votes ?= { aye: 0, no: 0, abstain: 0 }
-                fraction.votes[type]++
 
-                # FIXME: This neglects circumstance where an MP didn't vote
-                # (no-vote has weight -1)
-                fraction.total_votes ?= 0
-                fraction.voting_score ?= 0
+                if fraction
+                    mp.fraction = fraction
+                    fraction.votes ?= { aye: 0, no: 0, abstain: 0 }
+                    fraction.votes[type]++
 
-                fraction.voting_score += { aye: 2, no: -2, abstain: -1 }[type]
-                fraction.total_votes++
+                    # FIXME: This neglects circumstance where an MP didn't vote
+                    # (no-vote has weight -1)
+                    fraction.total_votes ?= 0
+                    fraction.voting_score ?= 0
+
+                    fraction.voting_score += { aye: 2, no: -2, abstain: -1 }[type]
+                    fraction.total_votes++
 
         for own id,f of data.fractions
             f.viso = Math.round( 100 * f.voting_score / (2*f.total_votes) )
