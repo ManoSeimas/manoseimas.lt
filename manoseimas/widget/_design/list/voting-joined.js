@@ -38,12 +38,12 @@ function(head, req) {
                 voting = row.doc;
                 break;
             case 'Fraction':
-                if (fractions[row.doc._id] == null) {
+                if (row.doc && fractions[row.doc._id] == null) {
                     fractions[row.doc._id] = filter_fraction(row.doc);
                 }
                 break;
             case 'MPProfile':
-                if (mps[row.doc._id] == null) {
+                if (row.doc && mps[row.doc._id] == null) {
                     mps[row.doc._id] = filter_mp(row.doc);
                 }
                 break;
