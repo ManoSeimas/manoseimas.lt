@@ -706,12 +706,26 @@
     }
 
     .recent-votings {
-        height: 575px;
+        height: 555px;
         margin-left: 0;
         text-align: left;
         border-left: 1px solid #ccc;
 
         overflow-y: auto;
+
+        .accordion-toggle:before {
+            content: "\25BE";
+            position: relative;
+            top: -2px;
+            font-size: 0.9em;
+        }
+
+        .accordion-toggle.collapsed:before {
+            content: "\25B8";
+            position: relative;
+            top: -2px;
+            font-size: 0.9em;
+        }
 
         .accordion-inner {
             margin: 0;
@@ -780,8 +794,8 @@
 
     .url-container {
         width: 390px;
-        height: 39px;
-        line-height: 39px;
+        height: 59px;
+        line-height: 29px;
         position: absolute;
         padding: 5px;
         bottom: 0;
@@ -805,6 +819,11 @@
             vertical-align: middle;
             padding: 0 5px;
             margin: 0;
+        }
+
+        p {
+            margin: 0;
+            font-size: 14px;
         }
             
     }

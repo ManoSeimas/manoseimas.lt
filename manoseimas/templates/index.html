@@ -39,7 +39,8 @@
             {% endfor %}
           </div>
           <div class='url-container'>
-              <input type='text' placeholder='Pateikite savo balsavimą'> <a class='button green'>Taikyti &gt;</a>
+              <input type='text' placeholder='Pateikite savo balsavimą'> <a class='button green'>Taikyti &gt;</a><br/>
+              <p>Raskite balsavimą patys! <a data-toggle="modal" data-target='#url_instructions' href='#'>Plačiau...</a></p>
           </div>
       </div>
     </div>
@@ -70,6 +71,28 @@
   </div>
   </div>
   </div>
+</div>
+
+<div id="url_instructions" class="modal hide fade" tabindex="-1">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Suraskite Norimą Balsavimą</h3>
+    </div>
+    <div class="modal-body">
+        <p>Jei nežinote, kaip rasti norimą balsavimą Seimo svetainėje, žiūrėkite žemiau.</p>
+        <ul class="simple">
+            <li>Atvėrę pradinį Seimo svetainės puslapį, spauskite nuorodą &quot;Informacija apie Seimo posėdžius&quot;. [<a href="/static/img/pages/widget-guide/1e.png" target="_blank">1e paveikslėlis</a>]</li>
+            <li>Čia rasite Seimo sesijos posėdžių sąrašą (Seimas turi dvi metines sesijas, rudens ir pavasario). Pasirinkite norimą posėdį, kuriame vyko Jus dominantis balsavimas. [<a href="/static/img/pages/widget-guide/1f.png" target="_blank">1f paveikslėlis</a>]</li>
+            <li>Jei nerandate norimo posėdžio šioje Seimo sesijoje, spauskite &quot;Sesijos pasirinkimas&quot; (2).</li>
+            <li>Seimo posėdžio puslapyje rasite svarstytų klausimų sąrašą. Pasirinkite jus dominantį klausimą. [<a href="/static/img/pages/widget-guide/1g.png" target="_blank">1g paveikslėlis</a>]</li>
+            <li>Dabar tereikia pasirinkti Jus sudominusį balsavimą... [<a href="/static/img/pages/widget-guide/1h.png" target="_blank">1h paveikslėlis</a>]</li>
+            <li>...ir nukopijuoti balsavimo nuorodą... [<a href="/static/img/pages/widget-guide/1i.png" target="_blank">1i paveikslėlis</a>]</li>
+            <li>...į manoSeimas.lt pateikimo langelį. Viskas! [<a href="/static/img/pages/widget-guide/1j.png" target="_blank">1j paveikslėlis</a>]</li>
+        </ul>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" data-dismiss="modal">Supratau!</button>
+    </div>
 </div>
 {% endblock %}
 {% block inlinejs %}
