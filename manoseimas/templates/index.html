@@ -18,6 +18,19 @@
       <div class='widget'>
           <iframe id='widget-frame' src='/widget?voting_id={{ recent_votings.0.votings.0.id }}' scrolling='no'></iframe><!-- no space
           --><div class="sidepanel">
+          <div class='search-container'>
+            <form>
+              <input type='text' placeholder='Ieškokite balsavimų'>
+              <input type="submit" class="submit icon-search" value="">
+            </form>
+          </div>
+          <div class="search-results">
+              <div class='close'>✕</div>
+              <h2>Search Results</h2>
+              <ul class='listings'>
+                  <li class="loading">Loading...</li>
+              </ul>
+          </div>
             <div class="accordion recent-votings" id="recent-votings-accordion">
               {% for day in recent_votings %}
               <div class="accordion-group">
@@ -37,10 +50,6 @@
                     </div>
                 </div>
             {% endfor %}
-          </div>
-          <div class='url-container'>
-              <input type='text' placeholder='Pateikite savo balsavimą'> <a class='button green'>Taikyti &gt;</a><br/>
-              <p>Raskite balsavimą patys! <a data-toggle="modal" data-target='#url_instructions' href='#'>Plačiau...</a></p>
           </div>
       </div>
     </div>
@@ -100,7 +109,7 @@
     jQuery(function ($) {
         $(".recent-votings .collapse").collapse();
 
-        $("ul.listings li").click(function (e) {
+        $("ul.listings").on('click', 'li', function (e) {
             var voting = $(this).data("voting");
             var widget_url = location.protocol + '//' + location.host + '/widget?voting_id=' + voting;
             $("#widget-frame").attr('src', widget_url);
@@ -110,17 +119,30 @@
 
         });
 
-        $(".url-container .button").click(function (e) {
+        $(".search-container form").submit(function (e) {
             e.preventDefault();
-            var source_url = $(".url-container input").val();
-            var widget_url = location.protocol + '//' + location.host + '/widget?source_url=' + source_url;
-            $("#widget-frame").attr('src', widget_url);
 
-            $("ul.listings li").removeClass('active');
-            $(".recent-votings .accordion-group").addClass("collapsed");
-            $(".recent-votings .accordion-body").removeClass("in");
+            $(".search-results").show();
+            $(".recent-votings").hide();
+
+            var val = $(".search-container input[type=text]").val();
+            $.getJSON("/search.json?q="+val, function (results) {
+                var container = $(".search-results .listings");
+                container.empty();
+                $.each(results, function (i, r) {
+                    if (r.type == 'Voting' && r.documents && r.documents.length > 0) {
+                        var matches = r.created.match(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})/);
+                        container.append("<li title='"+r.documents[0].name+"' data-voting='"+r.id+"'><div class='title'>"+r.documents[0].name+"</div><div class='time'>"+(matches?matches[1]+"<br/>"+matches[2]:"")+"</div></li>");
+                    }
+                });
+
+            });
         });
 
+        $(".search-results .close").click(function (e) {
+            $(".search-results").hide();
+            $(".recent-votings").show();
+        });
     });
 </script>
 {% endblock %}

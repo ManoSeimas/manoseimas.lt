@@ -705,7 +705,7 @@
         width: 400px;
     }
 
-    .recent-votings {
+    .recent-votings, .search-results {
         height: 555px;
         margin-left: 0;
         text-align: left;
@@ -792,40 +792,72 @@
         }
     }
 
-    .url-container {
-        width: 390px;
-        height: 59px;
-        line-height: 29px;
-        position: absolute;
-        padding: 5px;
-        bottom: 0;
-
-        border-top: 1px solid #aaa;
-
-        input {
-            padding: 5px;
-            width: 275px;
-            height: 20px;
-            line-height: 20px;
+    .search-results {
+        display: none;
+        h2 {
+            padding: 0 10px;
             margin: 0;
-        }
-
-        .button {
-            min-width: initial;
-            border: 0;
-            font-size: 14px;
+            color: @blueish;
+            font-size: 18px;
             font-weight: bold;
-            line-height: 28px;
-            vertical-align: middle;
-            padding: 0 5px;
+            text-decoration: none;
+            background-color: #ccc;
+        }
+
+        .close {
+            float: right;
+            margin: 10px;
+        }
+
+        ul.listings {
+            li.loading {
+                font-style: italic;
+                padding: 20px;
+            }
+
+
+            li {
+                padding: 0 5px 0 10px;
+            }
+
+            li .time {
+                line-height: 14px;
+            }
+        }
+
+    }
+
+    .search-container {
+        padding: 0 10px;
+        margin: 0;
+        line-height: 50px;
+
+        border-bottom: 1px solid #aaa;
+
+        form {
             margin: 0;
         }
 
-        p {
+        input[type=text] {
+            width: 340px;
             margin: 0;
-            font-size: 14px;
+            padding: 4px 28px 4px 8px;
         }
-            
+
+        .submit {
+            display: block;
+            border: none;
+            background-color: transparent;
+            .size(20px, 20px);
+            position: absolute;
+            top: 19px;
+            right: 10px;
+            opacity: 0.5;
+
+             &:hover {
+                opacity: 0.8;
+             }
+        }
     }
   }
 
