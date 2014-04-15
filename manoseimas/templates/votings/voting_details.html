@@ -1,6 +1,7 @@
 {% extends "sboard/node_details.html" %}
 {% load i18n %}
 {% load sboard %}
+{% load manoseimas %}
 
 {% block inlinejs %}
 <script src="//www.google.com/jsapi"></script>
@@ -17,6 +18,10 @@ $(function () {
     );
 });
 </script>
+{% endblock %}
+
+{% block node_title %}
+<h1>{% trans "Balsavimo Apžvalga" %}</h1>
 {% endblock %}
 
 {% block node_body %}
@@ -55,7 +60,16 @@ $(function () {
 </table>
 
 <h3>{% trans "Šaltinis" %}</h3>
-<ul><li><a href="{{ node.source.voting.url }}">{{ node.source.voting.url }}</a></li></ul>
+<ul><li><a target="_blank" href="{{ node.source.voting.url }}">{{ node.source.voting.url }}</a></li></ul>
+
+{% if node.documents %}
+<h3>{% trans "Dokumentai" %}</h3>
+<ul>
+    {% for doc in node.documents %}
+    <li><a target="_blank" href="http://www3.lrs.lt/pls/inter/dokpaieska.showdoc_l?p_id={{ doc.id|parse_int }}">{{ doc.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 {% if related_legal_acts %}
 <h3>{% trans "Susiję teisiniai aktai" %}</h3>
