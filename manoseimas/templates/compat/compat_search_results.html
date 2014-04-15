@@ -1,0 +1,27 @@
+{% extends "sboard/base.html" %}
+{% load i18n %}
+{% load manoseimas %}
+
+{% block content %}
+  {% if children %}
+    {% for child in children %}
+    <div class="list-entry">
+      {% if child.doc_type == "Voting" %}
+          <h3><a href="{{ child.permalink }}">Balsavimas ({{ child.created|date:"SHORT_DATE_FORMAT" }})</a></h3>
+          {% if child.documents %}
+              <p><strong>{% trans "Dokumentas" %}:</strong></p>
+              {{ child.documents|matching_documents:query }}
+          {% endif %}
+      {% elif child.doc_type == "MPProfile" %}
+      <h3><a href="{{ child.permalink }}">{{ child.title }} (Seimo narys)</a></h3>
+      <p>{{ child.fraction.ref.title }}</p>
+      {% endif %}
+      <hr />
+    </div>
+    {% endfor %}
+  {% else %}
+    <p>{% trans "No entries found." %}</p>
+  {% endif %}
+  <style>
+  </style>
+{% endblock %}

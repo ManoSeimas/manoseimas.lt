@@ -437,7 +437,7 @@ SBOARD_NODES = (
 
 SBOARD_SEARCH_HANDLERS = (
     'manoseimas.votings.nodes.search_lrs_url',
-    'sboard.nodes.SearchView',
+    'manoseimas.compat.nodes.CompatSearchView',
 )
 
 SBOARD_PAGE_TEMPLATES = (

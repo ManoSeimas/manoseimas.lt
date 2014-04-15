@@ -18,6 +18,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import itertools
+import unidecode
 from operator import attrgetter
 
 from zope.component import adapts
@@ -37,6 +38,8 @@ from sboard.nodes import ListView
 from sboard.nodes import NodeView
 from sboard.nodes import UpdateView
 from sboard.nodes import clone_view
+from sboard.nodes import search_words_re
+from sboard.models import couch
 
 from manoseimas.solutions.interfaces import ISolution
 
@@ -347,3 +350,32 @@ class CompatResultsView(DetailsView):
         return super(CompatResultsView, self).render(**context)
 
 provideAdapter(CompatResultsView, name='rezultatai')
+
+class CompatSearchView(NodeView):
+    def __init__(self, query):
+        self.query = query
+
+    def render(self, **overrides):
+        nodes = []
+        sanitized_query = ""
+
+        qry = unidecode.unidecode(self.query)
+        qry = qry.lower()
+        qry = search_words_re.split(qry)
+        qry = filter(None, qry)
+        if len(qry):
+            key = qry[0]
+            sanitized_query = key
+            args = dict(startkey=[key, 'Z'], endkey=[key])
+            nodes = couch.view('compat/search', descending=True, limit=50, **args)
+
+        context = {
+            'title': _('Search results'),
+            'view': self,
+            'children': nodes,
+            'query': sanitized_query
+        }
+
+        return render(self.request, 'compat/compat_search_results.html', context)
+
+
