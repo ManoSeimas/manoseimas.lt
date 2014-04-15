@@ -12,6 +12,7 @@ import manoseimas.set_session_expiry
 
 urlpatterns = patterns('',
     url(r'^$', 'views.index'),
+    url(r'^search.json$', 'views.ajax_search'),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
 
