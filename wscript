@@ -391,7 +391,7 @@ def setup(ctx):
 
     if name == 'ubuntu' or name == 'debian':
         packages.replace('git', 'git-core')
-        sh('apt-get install %s' % ' '.join(packages))
+        sh('apt-get install -y %s' % ' '.join(packages))
 
     elif name == 'fedora':
         packages.remove('build-essential')

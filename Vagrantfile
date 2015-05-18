@@ -65,9 +65,12 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
+    set -e
     sudo apt-get update
     sudo apt-get install -y default-jre couchdb
+    (cd /vagrant && sudo ./waf setup)
     # PIL is awful
-    sudo ln -s /usr/include/freetype2 /usr/include/freetype
+    sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
+    grep "cd /vagrant" /home/vagrant/.bashrc || echo "cd /vagrant" >> /home/vagrant/.bashrc
   SHELL
 end
