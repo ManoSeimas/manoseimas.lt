@@ -15,7 +15,7 @@ Get involved!
 
 If you found a bug, report it here:
 
-    https://bitbucket.org/manoseimas/manoseimas/issues/new
+    https://github.com/ManoSeimas/manoseimas.lt/issues/new
 
 If you want to contribute with development, read HACKING.rst file. Source code
-is hosted at https://bitbucket.org/manoseimas/manoseimas
+is hosted at https://github.com/ManoSeimas/manoseimas.lt/
