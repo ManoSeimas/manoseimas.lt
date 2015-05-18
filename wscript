@@ -233,7 +233,7 @@ def build(ctx):
     bld(rule=_subst, source='config/initial_data.json c4che/_cache.py',
         target='initial_data.json')
 
-    bld(rule='env/bin/python bootstrap.py --distribute', target='bin/buildout')
+    bld(rule='env/bin/python bootstrap.py --version 1.5.2', target='bin/buildout')
 
     bld(rule='bin/buildout -N', name='buildout',
         target='bin/django',
@@ -373,11 +373,17 @@ def setup(ctx):
         'python-dev',
         'python-virtualenv',
 
+        # Node
+        'nodejs',
+        'nodejs-legacy',  # For node executable
+        'npm',
+
         # Other development headers
         'libfreetype6-dev',
         'libicu-dev',
         'libjpeg62-dev',
         'libxslt1-dev',
+        'libssl-dev',
     ])
 
     if ctx.options.production:

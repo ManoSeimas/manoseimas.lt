@@ -10,7 +10,7 @@ all: c4che/_cache.py env
 
 .PHONY: run
 run: all
-	bin/django runserver
+	bin/django runserver 0.0.0.0:8000
 
 .PHONY: pull
 pull:
