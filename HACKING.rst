@@ -11,7 +11,7 @@ To be able to build and run this project you will need:
 
 * python 2.7
 
-* mercurial DVCS's
+* git DVCS's
 
 * C/C++ compiler, python development headers for compiling python extension.
 
@@ -19,17 +19,39 @@ To be able to build and run this project you will need:
 
 System requirements can be installed all at once using this command:
 
-    sudo apt-get install mercurial
-    hg clone http://bitbucket.org/manoseimas/manoseimas
-    cd manoseimas
+    sudo apt-get install git
+    git clone https://github.com/ManoSeimas/manoseimas.lt.git
+    cd manoseimas.lt
     sudo ./waf setup
 
-Note: to customize project settings, you may pass additional parameters to waf. 
+Note: to customize project settings, you may pass additional parameters to waf.
 See './waf --help' for details.
 
 
 Configuring development environment
 ===================================
+
+Vagrant
+-------
+
+Vagrant is a quick way to setup development environment. Download Vagrant from
+`https://www.vagrantup.com/downloads.html` and optionally download Oracle
+Virtualbox if it is not shipped with Vagrant.
+
+Then in the project directory do::
+
+    vagrant up
+    vagrant ssh
+    make run
+
+This should set up all the dependencies for the project. To test the project open the
+browser and navigate to::
+
+    http://127.0.0.1:8000
+
+
+Manual
+------
 
 Install CouchDB database. You can install it using your package manager, but
 most package managers provides old 1.0.x version of CouchDB which has some
