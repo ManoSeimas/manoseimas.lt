@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils.translation import ugettext as _
+# from django.utils.translation import ugettext as _
 
 
 class CrawledItem(models.Model):
@@ -13,7 +13,8 @@ class CrawledItem(models.Model):
 
 class ParliamentMember(CrawledItem):
     source_id = models.CharField(max_length=16)
-    full_name = models.CharField(max_length=128)
+    first_name = models.CharField(max_length=128)
+    last_name = models.CharField(max_length=128)
     date_of_birth = models.CharField(max_length=16)
     email = models.EmailField()
     phone = models.CharField(max_length=32)
@@ -27,6 +28,12 @@ class ParliamentMember(CrawledItem):
     party_candidate = models.BooleanField(default=True)
     groups = models.ManyToManyField('Group', through='GroupMembership')
 
+    biography = models.TextField()
+
+    @property
+    def full_name(self):
+        return ' '.join([self.first_name, self.last_name])
+
 
 class PoliticalParty(CrawledItem):
     name = models.CharField(max_length=128, unique=True)
@@ -34,11 +41,11 @@ class PoliticalParty(CrawledItem):
 
 class Group(CrawledItem):
     GROUP_TYPES = (
-        ('group', _('Group')),
-        ('committee', _('Committee')),
-        ('commission', _('Commission')),
-        ('fraction', _('Fraction')),
-        ('parliament', _('Parliament')),
+        ('group', ('Group')),
+        ('committee', ('Committee')),
+        ('commission', ('Commission')),
+        ('fraction', ('Fraction')),
+        ('parliament', ('Parliament')),
     )
 
     name = models.CharField(max_length=128, unique=True)
