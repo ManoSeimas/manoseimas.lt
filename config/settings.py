@@ -250,6 +250,7 @@ INSTALLED_APPS = (
     'manoseimas.legislation',
     'manoseimas.votings',
     'manoseimas.mps',
+    'manoseimas.mps_v2',
 
     'manoseimas.solutions',         # depends on: votings
 
