@@ -136,7 +136,7 @@ def configure(ctx):
 
     ctx.load('compiler_c python')
 
-    ctx.check_python_version((2,6))
+    ctx.check_python_version((2, 6))
     ctx.check_python_headers()
 
     ctx.env.TOP = ctx.path.abspath()
