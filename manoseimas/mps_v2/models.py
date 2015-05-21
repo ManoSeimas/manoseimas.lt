@@ -37,6 +37,10 @@ class ParliamentMember(CrawledItem):
     def __unicode__(self):
         return self.full_name
 
+    @property
+    def fraction(self):
+        return self.groups.get(type='fraction')
+
 
 class PoliticalParty(CrawledItem):
     name = models.CharField(max_length=128, unique=True)

@@ -4,6 +4,6 @@ from manoseimas.mps_v2 import views
 
 
 urlpatterns = patterns('',
-    url('^$', views.mp_list),  # noqa
-    url('^/?P<mp-slug>/', views.mp_profile),
+    url(r'^$', views.mp_list),  # noqa
+    url(r'^(\d+)/', views.mp_profile, name='mp_profile'),
 )
