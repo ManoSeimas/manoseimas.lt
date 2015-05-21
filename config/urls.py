@@ -14,21 +14,23 @@ sboard.factory.autodiscover()
 
 import manoseimas.docutils_roles
 
-import manoseimas.set_session_expiry
+import manoseimas.set_session_expiry  # noqa
+
 
 urlpatterns = patterns('',
-    url(r'^$', 'views.index'),
+    url(r'^$', 'views.index'),  # noqa
     url(r'^search.json$', 'views.ajax_search'),
     url(r'^accounts/', include('social_auth.urls')),
     url(r'^accounts/', include('sboard.profiles.urls')),
 
     url(r'^widget/', include('widget.urls')),
+    url(r'^mp/', include('mps_v2.urls')),
 )
 
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
     urlpatterns += patterns('',
-            url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {  # noqa
                 'document_root': settings.MEDIA_ROOT,
             }),
        )
