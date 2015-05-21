@@ -15,17 +15,19 @@ class Migration(SchemaMigration):
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
             ('source_id', self.gf('django.db.models.fields.CharField')(max_length=16)),
-            ('full_name', self.gf('django.db.models.fields.CharField')(max_length=128)),
-            ('date_of_birth', self.gf('django.db.models.fields.CharField')(max_length=16)),
-            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75)),
-            ('phone', self.gf('django.db.models.fields.CharField')(max_length=32)),
-            ('candidate_page', self.gf('django.db.models.fields.URLField')(max_length=200)),
-            ('raised_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mps_v2.PoliticalParty'])),
-            ('photo', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
-            ('term_of_office', self.gf('django.db.models.fields.CharField')(max_length=32)),
-            ('office_address', self.gf('django.db.models.fields.TextField')()),
-            ('constituency', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('date_of_birth', self.gf('django.db.models.fields.CharField')(max_length=16, null=True, blank=True)),
+            ('email', self.gf('django.db.models.fields.EmailField')(max_length=75, null=True, blank=True)),
+            ('phone', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
+            ('candidate_page', self.gf('django.db.models.fields.URLField')(max_length=200, null=True, blank=True)),
+            ('raised_by', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mps_v2.PoliticalParty'], null=True, blank=True)),
+            ('photo', self.gf('django.db.models.fields.files.ImageField')(max_length=100, null=True, blank=True)),
+            ('term_of_office', self.gf('django.db.models.fields.CharField')(max_length=32, null=True, blank=True)),
+            ('office_address', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
+            ('constituency', self.gf('django.db.models.fields.CharField')(max_length=128, null=True, blank=True)),
             ('party_candidate', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('biography', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
         db.send_create_signal('mps_v2', ['ParliamentMember'])
 
@@ -35,7 +37,7 @@ class Migration(SchemaMigration):
             ('source', self.gf('django.db.models.fields.URLField')(max_length=200)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
         ))
         db.send_create_signal('mps_v2', ['PoliticalParty'])
 
@@ -45,10 +47,13 @@ class Migration(SchemaMigration):
             ('source', self.gf('django.db.models.fields.URLField')(max_length=200)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('modified_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=128)),
             ('type', self.gf('django.db.models.fields.CharField')(max_length=16)),
         ))
         db.send_create_signal('mps_v2', ['Group'])
+
+        # Adding unique constraint on 'Group', fields ['name', 'type']
+        db.create_unique('mps_v2_group', ['name', 'type'])
 
         # Adding model 'GroupMembership'
         db.create_table('mps_v2_groupmembership', (
@@ -66,6 +71,9 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Removing unique constraint on 'Group', fields ['name', 'type']
+        db.delete_unique('mps_v2_group', ['name', 'type'])
+
         # Deleting model 'ParliamentMember'
         db.delete_table('mps_v2_parliamentmember')
 
@@ -81,11 +89,11 @@ class Migration(SchemaMigration):
 
     models = {
         'mps_v2.group': {
-            'Meta': {'object_name': 'Group'},
+            'Meta': {'unique_together': "(('name', 'type'),)", 'object_name': 'Group'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'}),
             'source': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
             'type': ('django.db.models.fields.CharField', [], {'max_length': '16'})
         },
@@ -103,30 +111,32 @@ class Migration(SchemaMigration):
         },
         'mps_v2.parliamentmember': {
             'Meta': {'object_name': 'ParliamentMember'},
-            'candidate_page': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
-            'constituency': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'biography': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'candidate_page': ('django.db.models.fields.URLField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'constituency': ('django.db.models.fields.CharField', [], {'max_length': '128', 'null': 'True', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'date_of_birth': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75'}),
-            'full_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'date_of_birth': ('django.db.models.fields.CharField', [], {'max_length': '16', 'null': 'True', 'blank': 'True'}),
+            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'null': 'True', 'blank': 'True'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['mps_v2.Group']", 'through': "orm['mps_v2.GroupMembership']", 'symmetrical': 'False'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'office_address': ('django.db.models.fields.TextField', [], {}),
+            'office_address': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'party_candidate': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'phone': ('django.db.models.fields.CharField', [], {'max_length': '32'}),
-            'photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100'}),
-            'raised_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['mps_v2.PoliticalParty']"}),
+            'phone': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'}),
+            'photo': ('django.db.models.fields.files.ImageField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'raised_by': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['mps_v2.PoliticalParty']", 'null': 'True', 'blank': 'True'}),
             'source': ('django.db.models.fields.URLField', [], {'max_length': '200'}),
             'source_id': ('django.db.models.fields.CharField', [], {'max_length': '16'}),
-            'term_of_office': ('django.db.models.fields.CharField', [], {'max_length': '32'})
+            'term_of_office': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True', 'blank': 'True'})
         },
         'mps_v2.politicalparty': {
             'Meta': {'object_name': 'PoliticalParty'},
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'}),
             'source': ('django.db.models.fields.URLField', [], {'max_length': '200'})
         }
     }

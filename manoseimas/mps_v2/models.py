@@ -15,20 +15,20 @@ class ParliamentMember(CrawledItem):
     source_id = models.CharField(max_length=16)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
-    date_of_birth = models.CharField(max_length=16)
-    email = models.EmailField()
-    phone = models.CharField(max_length=32)
-    candidate_page = models.URLField()
-    raised_by = models.ForeignKey('PoliticalParty')
-    photo = models.ImageField(upload_to='/tmp/images')  # FIXME
-    term_of_office = models.CharField(max_length=32)
+    date_of_birth = models.CharField(max_length=16, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=32, blank=True, null=True)
+    candidate_page = models.URLField(blank=True, null=True)
+    raised_by = models.ForeignKey('PoliticalParty', blank=True, null=True)
+    photo = models.ImageField(upload_to='/tmp/images', blank=True, null=True)
+    term_of_office = models.CharField(max_length=32, blank=True, null=True)
 
-    office_address = models.TextField()
-    constituency = models.CharField(max_length=128)
+    office_address = models.TextField(blank=True, null=True)
+    constituency = models.CharField(max_length=128, blank=True, null=True)
     party_candidate = models.BooleanField(default=True)
     groups = models.ManyToManyField('Group', through='GroupMembership')
 
-    biography = models.TextField()
+    biography = models.TextField(blank=True, null=True)
 
     @property
     def full_name(self):
