@@ -32,11 +32,17 @@ class ParliamentMember(CrawledItem):
 
     @property
     def full_name(self):
-        return ' '.join([self.first_name, self.last_name])
+        return u' '.join([self.first_name, self.last_name])
+
+    def __unicode__(self):
+        return self.full_name
 
 
 class PoliticalParty(CrawledItem):
     name = models.CharField(max_length=128, unique=True)
+
+    def __unicode__(self):
+        return self.name
 
 
 class Group(CrawledItem):
@@ -55,6 +61,9 @@ class Group(CrawledItem):
     class Meta:
         unique_together = (('name', 'type'))
 
+    def __unicode__(self):
+        return u'{} ({})'.format(self.name, self.type)
+
 
 class GroupMembership(CrawledItem):
     member = models.ForeignKey(ParliamentMember)
@@ -62,3 +71,8 @@ class GroupMembership(CrawledItem):
     position = models.CharField(max_length=64)
     since = models.DateField(blank=True, null=True)
     until = models.DateField(blank=True, null=True)
+
+    def __unicode__(self):
+        return u'{} - {} ({})'.format(self.group.name,
+                                      self.member.full_name,
+                                      self.position)

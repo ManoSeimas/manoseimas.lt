@@ -423,7 +423,9 @@ AUTHENTICATION_BACKENDS = (
     #'social_auth.backends.contrib.dropbox.DropboxBackend',
     #'social_auth.backends.contrib.flickr.FlickrBackend',
     'social_auth.backends.OpenIDBackend',
+    # if $DEVELOPMENT
     'django.contrib.auth.backends.ModelBackend',
+    # end if
 )
 
 FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
