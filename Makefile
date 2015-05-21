@@ -24,8 +24,13 @@ c4che/_cache.py:
 	    ./waf configure --project-name=$(PROJECT) ; \
 	fi
 
-env:
+.PHONY: env
+env: env/.done
+
+
+env/.done:
 	./waf virtualenv
+	touch env/.done
 
 
 # Helpers
