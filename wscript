@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import sys
+import pwd
 
 from waflib import Context, Logs
 
@@ -169,6 +170,8 @@ def configure(ctx):
 
     ctx.env.COUCHDB_URL = ctx.options.couchdb_url
     ctx.env.COUCHDB_SERVER_NAME = ctx.options.couchdb_server_name
+
+    ctx.env.VAGRANT = (pwd.getpwuid(os.getuid())[0] == 'vagrant')
 
     if ctx.env.PRODUCTION:
         ctx.env.DEVELOPMENT = False
