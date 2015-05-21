@@ -187,12 +187,12 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.transaction.TransactionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     #if $DEVELOPMENT
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django_pdb.middleware.PdbMiddleware',
@@ -214,6 +214,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
+    # if $DEVELOPMENT
+    'django.contrib.messages.context_processors.messages',
+    # end if
     'django.core.context_processors.request',
     '${PROJECT_NAME}.context_processors.settings_for_context',
 )
@@ -245,6 +248,7 @@ INSTALLED_APPS = (
     'test_utils',
     'django_pdb',
     'django_nose',
+    'django.contrib.admin',
     #end if
 
     'manoseimas.legislation',
@@ -419,7 +423,7 @@ AUTHENTICATION_BACKENDS = (
     #'social_auth.backends.contrib.dropbox.DropboxBackend',
     #'social_auth.backends.contrib.flickr.FlickrBackend',
     'social_auth.backends.OpenIDBackend',
-    #'django.contrib.auth.backends.ModelBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'

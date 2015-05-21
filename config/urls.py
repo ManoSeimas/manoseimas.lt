@@ -1,6 +1,12 @@
 from django.conf import settings
 from django.conf.urls.defaults import patterns, include, url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+# if $DEVELOPMENT
+from django.contrib import admin
+
+
+admin.autodiscover()
+# end if
 
 import sboard.factory
 
@@ -26,5 +32,8 @@ if settings.DEBUG:
                 'document_root': settings.MEDIA_ROOT,
             }),
        )
+    # if $DEVELOPMENT
+    urlpatterns += patterns('', (r'^admin/', include(admin.site.urls)))
+    # end if
 
 urlpatterns += patterns('', url(r'', include('sboard.urls')))
