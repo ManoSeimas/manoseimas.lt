@@ -72,6 +72,6 @@ Vagrant.configure(2) do |config|
     # PIL is awful
     sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
     grep "cd /vagrant" /home/vagrant/.bashrc || echo "cd /vagrant" >> /home/vagrant/.bashrc
-    sudo -u vagrant && mkdir -p /home/vagrant/manoseimas
+    sudo -u vagrant mkdir -p /home/vagrant/manoseimas
   SHELL
 end
