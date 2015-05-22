@@ -11,7 +11,7 @@ BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 # if $VAGRANT
 BUILDOUT_PARTS = os.path.join(BUILDOUT_DIR, 'parts')
 # else
-BUILDOUT_PARTS = '/home/vagrant/parts'
+BUILDOUT_PARTS = '/home/vagrant/manoseimas/parts'
 # end if
 
 
