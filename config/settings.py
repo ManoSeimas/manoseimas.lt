@@ -8,6 +8,12 @@ import os
 PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 
+# if $VAGRANT
+BUILDOUT_PARTS = os.path.join(BUILDOUT_DIR, 'parts')
+# else
+BUILDOUT_PARTS = '/home/vagrant/parts'
+# end if
+
 
 ugettext = lambda s: s
 
@@ -64,7 +70,7 @@ LANGUAGE_CODE = '$LANGUAGE_CODE'
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_DIR, 'locale'),
-    os.path.join(BUILDOUT_DIR, 'parts/django-sboard/sboard/locale'),
+    os.path.join(BUILDOUT_PARTS, 'django-sboard/sboard/locale'),
 )
 
 SITE_ID = 1
@@ -93,15 +99,15 @@ STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'modernizr'),
+    os.path.join(BUILDOUT_PARTS, 'flot'),
+    os.path.join(BUILDOUT_PARTS, 'modernizr'),
     #if $JQUERY_VERSION
-    os.path.join(BUILDOUT_DIR, 'parts', 'jquery'),
+    os.path.join(BUILDOUT_PARTS, 'jquery'),
     #end if
     #if $TWITTER_BOOTSTRAP
-    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
+    os.path.join(BUILDOUT_PARTS, 'twitter-bootstrap'),
     #end if
-    os.path.join(BUILDOUT_DIR, 'parts', 'history.js'),
+    os.path.join(BUILDOUT_PARTS, 'history.js'),
 )
 
 #if $DJANGO_PIPELINE
@@ -164,7 +170,7 @@ PIPELINE_COMPILERS = (
 #if $LESS
 LESS_PATH = ':'.join([
     os.path.join(PROJECT_DIR, 'manoseimas', 'static', 'css'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap', 'less'),
+    os.path.join(BUILDOUT_PARTS, 'twitter-bootstrap', 'less'),
 ])
 PIPELINE_LESS_BINARY = os.path.join(BUILDOUT_DIR, 'bin', 'lessc')
 PIPELINE_LESS_ARGUMENTS = '--compress --include-path=%s' % LESS_PATH
@@ -379,7 +385,7 @@ TEST_RUNNER = 'sboard.testrunner.SboardTestSuiteRunner'
 NOSE_ARGS = [
     '-w${PROJECT_NAME}',     # working dir
     '-w.',                   # project dir (relative to working dir)
-    '-w../parts/django-sboard/sboard',
+    '-w%s/django-sboard/sboard' % BUILDOUT_PARTS,
     '--all-modules',         # search tests in all modules
     '--with-doctest',        # search doctests
     '--no-path-adjustment',  # do no adjust sys.path, it is already do by
