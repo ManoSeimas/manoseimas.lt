@@ -1,0 +1,8 @@
+- extends "mps_v2/base.html"
+- load manoseimas
+- load sboard
+
+- block content
+  ul
+    for mp in mps
+      li: a(href="{% url mp_profile mp.id %}") {{mp.full_name}}

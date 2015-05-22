@@ -12,21 +12,24 @@ from .models import ParliamentMember
 
 
 def mp_list(request):
-    mps = ParliamentMember.objects.all()
-    mp_links = [u'<a href="{}">{}</a>'.format(reverse('mp_profile',
-                                                      args=[mp.id]),
-                                              mp.full_name)
-                for mp in mps]
-    return HttpResponse(u'<br/>'.join(mp_links))
+    def extract(mp):
+        return {
+            'id': mp.id,
+            'full_name': mp.full_name
+        }
+
+    mps = map(extract, ParliamentMember.objects.all())
+    return render(request, 'mps_v2/mp_catalog.jade', {'mps': mps})
 
 
 def mp_profile(request, mp_id):
     mp = ParliamentMember.objects.get(id=mp_id)
-    fraction = mp.fraction
-    profile = {
-        'full_name': mp.full_name,
-        'fraction': fraction.name,
-    }
+
+    profile = {'full_name': mp.full_name}
+    if mp.current_fraction:
+        profile["fraction_name"] = mp.current_fraction.name
+    else:
+        profile["fraction_name"] = None
 
     try:
         mp_node = couch.get(mp.source_id)
@@ -38,4 +41,4 @@ def mp_profile(request, mp_id):
         'profile': profile,
         'positions': positions,
     }
-    return render(request, 'mps_v2/profile.html', context)
+    return render(request, 'mps_v2/profile.jade', context)
