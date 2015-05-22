@@ -165,8 +165,7 @@ class PersonPositionManager(models.Manager):
 class PersonPosition(models.Model):
     node = NodeForeignKey(db_index=True)
     profile = NodeForeignKey()
-    profile_type = models.IntegerField(choices=PROFILE_TYPES,
-                                       default=USER_PROFILE)
+    profile_type = models.IntegerField(choices=PROFILE_TYPES, default=USER_PROFILE)
     position = models.DecimalField(max_digits=7, decimal_places=4, db_index=True)
     participation = models.DecimalField(max_digits=7, decimal_places=4, db_index=True, default=dc(1))
 

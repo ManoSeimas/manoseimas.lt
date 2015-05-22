@@ -1,6 +1,6 @@
 {% extends "root.html" %}
 {% load i18n %}
-{% load compressed %}
+{% load pipeline %}
 {% load sboard %}
 
 {% block all %}
@@ -33,7 +33,7 @@
 
   <!-- CSS: implied media=all -->
   <!-- CSS concatenated and minified via ant build script-->
-  {% compressed_css 'styles' %}
+  {% stylesheet 'styles' %}
   <!-- end CSS-->
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
@@ -41,7 +41,7 @@
   <!-- All JavaScript at the bottom, except for Modernizr / Respond.
        Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
        For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
-  {% compressed_js 'modernizr' %}
+  {% javascript 'modernizr' %}
 </head>
 
 <body>
@@ -148,7 +148,7 @@
   <!-- JavaScript at the bottom for fast page loading -->
   
   <!-- scripts concatenated and minified via ant build script-->
-  {% compressed_js 'scripts' %}
+  {% javascript 'scripts' %}
   {% block inlinejs %}{% endblock %}
   <!-- end scripts-->
 	

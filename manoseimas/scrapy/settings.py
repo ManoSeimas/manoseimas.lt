@@ -1,9 +1,7 @@
 # import os.path
-# 
 # from django.core.management import setup_environ
 # import manoseimas.settings
 # setup_environ(manoseimas.settings)
-# 
 # from django.conf import settings
 
 
@@ -26,8 +24,8 @@ ITEM_PIPELINES = [
 ]
 
 COUCHDB_DATABASES = (
-    ('legalact', '$COUCHDB_URL', 'legalacts',),
-    ('question', '$COUCHDB_URL', 'sittings',),
-    ('voting', '$COUCHDB_URL', 'sittings',),
-    ('person', '$COUCHDB_URL', 'mps',),
+    ('legalact', 'http://127.0.0.1:5984', 'legalacts',),
+    ('question', 'http://127.0.0.1:5984', 'sittings',),
+    ('voting', 'http://127.0.0.1:5984', 'sittings',),
+    ('person', 'http://127.0.0.1:5984', 'mps',),
 )

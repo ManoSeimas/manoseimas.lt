@@ -1,66 +1,41 @@
-#encoding: utf-8
 # coding: utf-8
 
-# $NOTE
+import os.path
+import exportrecipe
 
-import os
+from django.utils.translation import ugettext_lazy as _
 
-PROJECT_DIR = os.path.realpath(os.path.dirname(__file__))
+
+PROJECT_DIR = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
 
+config = exportrecipe.load(os.path.join(BUILDOUT_DIR, 'settings.json'))
 
-ugettext = lambda s: s
-
-#if $DEVELOPMENT
-DEBUG = True
-#else
 DEBUG = False
-#end if
-TEMPLATE_DEBUG = DEBUG
-THUMBNAIL_DEBUG = DEBUG
 
 ADMINS = (
-    #if $PRODUCTION
-    ('Server Admin', '$SERVER_ADMIN'),
-    #end if
+    ('Server Admin', 'manoseimas@doublemarked.com'),
 )
 
 MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        #if $USE_SQLITE or $DEVELOPMENT
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BUILDOUT_DIR, 'var', 'db'),
-        #else
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'init_command': 'SET storage_engine=INNODB',
-            'read_default_file': os.path.join(BUILDOUT_DIR, 'var', 'etc',
-                                              'my.cnf'),
+            'read_default_file': os.path.join(BUILDOUT_DIR, 'var', 'etc', 'my.cnf'),
         },
-        #end if
     }
 }
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
 TIME_ZONE = 'Europe/Vilnius'
 
 LANGUAGES = (
-    #for $lang in $LANGUAGES
-    ('$lang', ugettext(u'$LANG_NAMES[$lang]')),
-    #end for
+    ('lt', _('Lithianian')),
 )
 
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = '$LANGUAGE_CODE'
+LANGUAGE_CODE = 'lt'
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_DIR, 'locale'),
@@ -95,16 +70,10 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_DIR, 'static'),
     os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
     os.path.join(BUILDOUT_DIR, 'parts', 'modernizr'),
-    #if $JQUERY_VERSION
     os.path.join(BUILDOUT_DIR, 'parts', 'jquery'),
-    #end if
-    #if $TWITTER_BOOTSTRAP
     os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
-    #end if
     os.path.join(BUILDOUT_DIR, 'parts', 'history.js'),
 )
-
-#if $DJANGO_PIPELINE
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
@@ -123,7 +92,6 @@ PIPELINE_JS = {
     'scripts': {
         'source_filenames': (
             'js/jquery.js',
-            #if $TWITTER_BOOTSTRAP
             'js/bootstrap-transition.js',
             'js/bootstrap-alert.js',
             'js/bootstrap-button.js',
@@ -137,7 +105,6 @@ PIPELINE_JS = {
             'js/bootstrap-tab.js',
             'js/bootstrap-typeahead.js',
             'js/bootstrap-affix.js',
-            #end if
             'js/flot/jquery.flot.js',
             'js/flot/jquery.flot.pie.js',
             'js/csrf.js',
@@ -157,26 +124,20 @@ PIPELINE_JS = {
 }
 
 PIPELINE_COMPILERS = (
-    #if $LESS
     'pipeline.compilers.less.LessCompiler',
-    #end if
 )
-#if $LESS
 LESS_PATH = ':'.join([
     os.path.join(PROJECT_DIR, 'manoseimas', 'static', 'css'),
     os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap', 'less'),
 ])
 PIPELINE_LESS_BINARY = os.path.join(BUILDOUT_DIR, 'bin', 'lessc')
 PIPELINE_LESS_ARGUMENTS = '--compress --include-path=%s' % LESS_PATH
-#end if
 
 PIPELINE_CSS_COMPRESSOR = None
 PIPELINE_JS_COMPRESSOR = None
 
-#end if
-
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '$SECRET_KEY'
+SECRET_KEY = config.secret_key
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -193,13 +154,9 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    #if $DEVELOPMENT
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'django_pdb.middleware.PdbMiddleware',
-    #end if
 )
 
-ROOT_URLCONF = '${PROJECT_NAME}.urls'
+ROOT_URLCONF = 'manoseimas.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -214,11 +171,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
-    # if $DEVELOPMENT
     'django.contrib.messages.context_processors.messages',
-    # end if
     'django.core.context_processors.request',
-    '${PROJECT_NAME}.context_processors.settings_for_context',
+    'manoseimas.context_processors.settings_for_context',
 )
 
 INSTALLED_APPS = (
@@ -229,39 +184,26 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.markup',
-    'south',
     'social_auth',
     'sorl.thumbnail',
-    'couchdbkit.ext.django',
-    #if $DJANGO_PIPELINE
+    # 'couchdbkit.ext.django',
     'pipeline',
-    #end if
 
     'sboard',
     'sboard.profiles',
     'sboard.categories',
 
-    #if $DEVELOPMENT
-    'debug_toolbar',
     'django_extensions',
     'test_utils',
-    'django_pdb',
     'django_nose',
-    'django.contrib.admin',
-    #end if
 
     'manoseimas.legislation',
     'manoseimas.votings',
     'manoseimas.mps',
     'manoseimas.mps_v2',
-
     'manoseimas.solutions',         # depends on: votings
-
     'manoseimas.compat',            # depends on: solutions
-
     'manoseimas',                   # depends on: votings
-    
     'manoseimas.widget',
 )
 
@@ -317,121 +259,60 @@ LOGGING = {
             'propagate': True,
             'level':'INFO',
         },
-        'south': {
-            'handlers':['null'],
-            'propagate': True,
-            'level':'INFO',
-        },
     }
 }
 
-PUBLIC_COUCHDB_SERVER = '$COUCHDB_SERVER_NAME'
+PUBLIC_COUCHDB_SERVER = 'http://couchdb.manoseimas.lt/'
 
-COUCHDB_SERVER = '$COUCHDB_URL'
+COUCHDB_SERVER = 'http://127.0.0.1:5984/'
 COUCHDB_DATABASES = (
-    ('sboard', '$COUCHDB_URL/nodes'),
-    ('sboard.profiles', '$COUCHDB_URL/nodes'),
+    ('sboard', COUCHDB_SERVER + 'nodes'),
+    ('sboard.profiles', COUCHDB_SERVER + 'nodes'),
 
     # XXX: do some thing, that adding these settings should not be necessary.
-    ('manoseimas.compat', '$COUCHDB_URL/nodes'),
-    ('manoseimas.legislation', '$COUCHDB_URL/nodes'),
-    ('manoseimas.mps', '$COUCHDB_URL/nodes'),
-    ('manoseimas.solutions', '$COUCHDB_URL/nodes'),
-    ('manoseimas.votings', '$COUCHDB_URL/nodes'),
+    ('manoseimas.compat', COUCHDB_SERVER + 'nodes'),
+    ('manoseimas.legislation', COUCHDB_SERVER + 'nodes'),
+    ('manoseimas.mps', COUCHDB_SERVER + 'nodes'),
+    ('manoseimas.solutions', COUCHDB_SERVER + 'nodes'),
+    ('manoseimas.votings', COUCHDB_SERVER + 'nodes'),
 )
 
 ELASTICSEARCH_SERVERS = (
     '127.0.0.1:9200',
 )
 
-#if $DEVELOPMENT
-INTERNAL_IPS = (
-    '127.0.0.1',
-)
-
-EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
-EMAIL_FILE_PATH = os.path.join(BUILDOUT_DIR, 'var', 'mail')
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
-
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-}
-
-DEBUG_TOOLBAR_PANELS = (
-    'debug_toolbar.panels.version.VersionDebugPanel',
-    'debug_toolbar.panels.timer.TimerDebugPanel',
-    'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-    'debug_toolbar.panels.headers.HeaderDebugPanel',
-    'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-    'debug_toolbar.panels.template.TemplateDebugPanel',
-    'debug_toolbar.panels.sql.SQLDebugPanel',
-    'debug_toolbar.panels.signals.SignalDebugPanel',
-    'debug_toolbar.panels.logger.LoggingPanel',
-    'sboard.debugtoolbar.NodeDebugPanel',
-)
-
-TEST_RUNNER = 'sboard.testrunner.SboardTestSuiteRunner'
-NOSE_ARGS = [
-    '-w${PROJECT_NAME}',     # working dir
-    '-w.',                   # project dir (relative to working dir)
-    '-w../parts/django-sboard/sboard',
-    '--all-modules',         # search tests in all modules
-    '--with-doctest',        # search doctests
-    '--no-path-adjustment',  # do no adjust sys.path, it is already do by
-                             # zc.buildout
-    '--nocapture',           # do no capture output
-    '--id-file=%s' % os.path.join(BUILDOUT_DIR, 'var', 'noseids'),
-                             # store node id file in var direcotory
-]
-
-#else
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.PyLibMCCache',
         'LOCATION': '127.0.0.1:11211',
     }
 }
-#end if
-
-
-JQUERY_VERSION = '$JQUERY_VERSION'
 
 PROTOCOL = 'http'
-DEFAULT_FROM_EMAIL = '$SERVER_ADMIN'
+DEFAULT_FROM_EMAIL = 'manoseimas@doublemarked.com'
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 AUTHENTICATION_BACKENDS = (
-    #'social_auth.backends.twitter.TwitterBackend',
-    #if $FACEBOOK_APP_ID
+    # 'social_auth.backends.twitter.TwitterBackend',
     'social_auth.backends.facebook.FacebookBackend',
-    #end if
-    #'social_auth.backends.google.GoogleOAuthBackend',
-    #'social_auth.backends.google.GoogleOAuth2Backend',
+    # 'social_auth.backends.google.GoogleOAuthBackend',
+    # 'social_auth.backends.google.GoogleOAuth2Backend',
     'social_auth.backends.google.GoogleBackend',
-    #'social_auth.backends.yahoo.YahooBackend',
-    #'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    #'social_auth.backends.contrib.livejournal.LiveJournalBackend',
-    #'social_auth.backends.contrib.orkut.OrkutBackend',
-    #'social_auth.backends.contrib.foursquare.FoursquareBackend',
-    #'social_auth.backends.contrib.github.GithubBackend',
-    #'social_auth.backends.contrib.dropbox.DropboxBackend',
-    #'social_auth.backends.contrib.flickr.FlickrBackend',
+    # 'social_auth.backends.yahoo.YahooBackend',
+    # 'social_auth.backends.contrib.linkedin.LinkedinBackend',
+    # 'social_auth.backends.contrib.livejournal.LiveJournalBackend',
+    # 'social_auth.backends.contrib.orkut.OrkutBackend',
+    # 'social_auth.backends.contrib.foursquare.FoursquareBackend',
+    # 'social_auth.backends.contrib.github.GithubBackend',
+    # 'social_auth.backends.contrib.dropbox.DropboxBackend',
+    # 'social_auth.backends.contrib.flickr.FlickrBackend',
     'social_auth.backends.OpenIDBackend',
-    # if $DEVELOPMENT
-    'django.contrib.auth.backends.ModelBackend',
-    # end if
 )
 
-FACEBOOK_APP_ID = '$FACEBOOK_APP_ID'
-FACEBOOK_API_SECRET = '$FACEBOOK_API_SECRET'
-
-GOOGLE_ANALYTICS_KEY = '$GOOGLE_ANALYTICS_KEY'
+FACEBOOK_APP_ID = config.facebook_app_id
+FACEBOOK_API_SECRET = config.facebook_api_secret
+GOOGLE_ANALYTICS_KEY = config.google_analytics_key
 
 SBOARD_NODES = (
     'sboard.categories.nodes.CategoryNode',

@@ -1,8 +1,9 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 slug = r'[a-z0-9~+-]+'
 
-urlpatterns = patterns('widget.views',
+urlpatterns = patterns(
+    'manoseimas.widget.views',
     url(r'^$', 'index'),
     url(r'^builder$', 'builder'),
     url(r'^data/voting/(?P<slug>%s)$' % slug, 'voting_data'),

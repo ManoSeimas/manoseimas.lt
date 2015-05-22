@@ -9,30 +9,29 @@
 .mr.developer.cfg
 .sass-cache
 .waf*
+.ropeproject
 config.log
 
 .vagrant
 
-manoseimas/scrapy/settings.py
-manoseimas/settings.py
-manoseimas/urls.py
-
 bin
 buildout.cfg
 c4che
-configure
 develop-eggs
 docs/build
 downloads
 eggs
 env
-initial_data.json
 parts
 tags
 var
 log
 node_modules
+lib
+local
+include
 
+settings.json
 manoseimas/static/css/styles.css
 manoseimas/static/fonts/open-sans/stylesheet.css
 
@@ -40,6 +39,3 @@ manoseimas/static/fonts/open-sans/stylesheet.css
 manoseimas/static/js/manoSeimas-widget.*.js
 manoseimas/widget/frontend/build
 manoseimas/widget/frontend/tmp
-
-node_modules
-

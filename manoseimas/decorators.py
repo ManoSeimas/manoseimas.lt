@@ -15,21 +15,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 from functools import wraps
 
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.utils import simplejson
 from django.views.decorators.csrf import csrf_exempt
 
 
 class JsonResponse(HttpResponse):
     def __init__(self, data):
-        super(JsonResponse, self).__init__(content=simplejson.dumps(data),
-                                           mimetype='application/json')
+        super(JsonResponse, self).__init__(content=json.dumps(data), mimetype='application/json')
 
 
 def ajax_request(*allowed_methods):
     allowed_methods = allowed_methods or ('POST',)
+
     def decorator(view_func):
         @wraps(view_func)
         def wrapper(request, *args, **kwargs):
@@ -42,5 +42,3 @@ def ajax_request(*allowed_methods):
                 return JsonResponse(response)
         return wrapper
     return csrf_exempt(decorator)
-
-

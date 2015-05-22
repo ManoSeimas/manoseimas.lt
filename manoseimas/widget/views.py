@@ -11,7 +11,7 @@ from sboard.models import get_image_node_thumbnail
 
 from manoseimas.votings.models import get_voting_by_source_id, get_voting_by_lrslt_url, get_recent_votings
 
-from decorators import ajax_request
+from manoseimas.decorators import ajax_request
 
 from social_auth.views import auth
 
@@ -30,9 +30,9 @@ def index(request):
         voting = get_voting_by_lrslt_url( request.GET.get('source_url') )
     else:
         return HttpResponseBadRequest("One of voting_id, source_id or source_url are required.")
-    
+
     if not voting or voting.doc_type != 'Voting':
-        raise Http404("Voting Not Found.") 
+        raise Http404("Voting Not Found.")
 
     if request.user.is_anonymous():
         profile_id = None
@@ -52,11 +52,11 @@ def voting_data(request, slug):
 
     if 'error' in content:
         return { 'error': content['error']}
-    
+
     # NOTE: This is still somewhat slow.
     for k in ['fractions','mps']:
         for slug in content[k]:
-            image_slug = content[k][slug]['image'] 
+            image_slug = content[k][slug]['image']
             content[k][slug]['image'] = get_image_node_thumbnail(image_slug, geometry='50x50').url
             if not content[k][slug]['image']:
                 logger.error("Problem fetching image for slug: "+image_slug)
@@ -71,8 +71,8 @@ def voting_data(request, slug):
 def google_openid_mode_hack(request):
     response = auth(request, 'google')
     response.content = response.content.replace("</form>", "<input type='hidden' name='openid.ui.mode' value='popup'/><input type='hidden' name='openid.ns.ui' value='http://specs.openid.net/extensions/ui/1.0'/></form>")
-    
-    return response 
+
+    return response
 
 
 def auth_finish(request):
@@ -106,9 +106,9 @@ def builder(request):
             'details': details
         })
 
-    params = { 
+    params = {
         'recent_votings': recent,
-        'dev': settings.DEBUG and 'dev' in request.GET 
+        'dev': settings.DEBUG and 'dev' in request.GET
     }
     return render(request, 'widget/builder.html', params)
 
