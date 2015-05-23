@@ -202,7 +202,7 @@ LOGGING = {
 
 PUBLIC_COUCHDB_SERVER = 'http://couchdb.manoseimas.lt/'
 
-COUCHDB_SERVER = 'http://127.0.0.1:5984/'
+COUCHDB_SERVER = config.couchdb_server
 COUCHDB_DATABASES = (
     ('sboard', COUCHDB_SERVER + 'nodes'),
     ('sboard.profiles', COUCHDB_SERVER + 'nodes'),

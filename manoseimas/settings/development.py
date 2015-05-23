@@ -59,5 +59,3 @@ DATABASES = {
         'NAME': os.path.join(BUILDOUT_DIR, 'var', 'db.sqlite3'),
     }
 }
-
-COUCHDB_SERVER = PUBLIC_COUCHDB_SERVER
