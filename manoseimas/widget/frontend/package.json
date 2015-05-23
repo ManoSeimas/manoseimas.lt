@@ -1,0 +1,11 @@
+{
+  "name": "mansoseimas-widget",
+  "version": "1.0.0",
+  "dependencies": {
+    "cake": "0.1.1",
+    "coffee-script": "1.9.2",
+    "handlebars": "1.0.12",
+    "uglifyjs": "2.4.10",
+    "rehab": "^0.0.3"
+  }
+}

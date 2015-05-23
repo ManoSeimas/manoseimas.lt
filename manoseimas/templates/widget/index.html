@@ -8,8 +8,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width">
 
-        <link rel="stylesheet" href="{% static "/css/widget/normalize.min.css" %}">
-        <link rel="stylesheet" href="{% static "/css/widget/main.css" %}">
+        <link rel="stylesheet" href="{% static "css/widget/normalize.min.css" %}">
+        <link rel="stylesheet" href="{% static "css/widget/main.css" %}">
     </head>
     <body>
         <script id="MSWidget-loader">
@@ -25,7 +25,7 @@
                 var s, id = 'MSWidget-js', p = d.getElementsByTagName(t)[0];
                 if (!d.getElementById(id)) {
                     s = d.createElement(t);
-                    s.id = id; s.async = true; s.src = '{% static "/js/manoSeimas-widget.min.js" %}';
+                    s.id = id; s.async = true; s.src = '{% static "js/manoSeimas-widget.min.js" %}';
                     p.parentNode.insertBefore(s, p);}
             }(document,'script'));
         </script>

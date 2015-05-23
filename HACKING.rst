@@ -35,9 +35,18 @@ Run migrations::
 
     bin/django migrate
 
+Install nvm (https://github.com/creationix/nvm) and build frontend files::
+
+    cd manoseimas/widget/frontend
+    nvm install v0.12.4 
+    nvm use v0.12.4 
+    npm install -g .
+    cake build
+    cd -
+
 And run the project::
 
-    make rup
+    make run
 
 Vagrant
 -------

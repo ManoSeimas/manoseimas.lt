@@ -30,6 +30,6 @@
 /manoseimas/static/fonts/open-sans/stylesheet.css
 
 # Widget build files and output
-/manoseimas/static/js/manoSeimas-widget.*.js
+/manoseimas/widget/frontend/node_modules
 /manoseimas/widget/frontend/build
 /manoseimas/widget/frontend/tmp
