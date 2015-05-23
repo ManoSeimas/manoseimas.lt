@@ -34,4 +34,9 @@ setup(
         'libsass',
         'django-libsass',
     ],
+    entry_points={
+        'console_scripts': [
+            'couch = manoseimas.scripts.couch:main',
+        ],
+    }
 )

@@ -123,7 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'social_auth',
     'sorl.thumbnail',
-    # 'couchdbkit.ext.django',
+    'couchdbkit.ext.django',
     'compressor',
 
     'sboard',

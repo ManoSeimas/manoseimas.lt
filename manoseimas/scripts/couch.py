@@ -17,13 +17,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import argparse
 
-from couchdbkit import Server
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'manoseimas.settings.development')
 
-from django.core.management import setup_environ
-from manoseimas import settings
-setup_environ(settings)
+from couchdbkit import Server
 
 from django.conf import settings
 
@@ -48,6 +47,7 @@ def replicate(args):
     server = Server(settings.COUCHDB_SERVER)
     for source, target in replications:
         print('Replicating: %s -> %s' % (source, target))
+        server.get_db(target, create=True)
         server.replicate(source, target)
 
 
