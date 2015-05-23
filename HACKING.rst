@@ -39,15 +39,6 @@ And run the project::
 
     make rup
 
-If everything works so far, you can fill in your database with real data using
-this command::
-
-    bin/couch replicate
-
-.. note::
-
-    Database replication can take some tame, be patient.
-
 Vagrant
 -------
 
