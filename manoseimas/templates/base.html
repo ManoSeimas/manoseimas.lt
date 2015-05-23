@@ -1,6 +1,7 @@
 {% extends "root.html" %}
+{% load static from staticfiles %}
+{% load compress from compress %}
 {% load i18n %}
-{% load pipeline %}
 {% load sboard %}
 
 {% block all %}
@@ -31,17 +32,12 @@
 
   <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.png">
 
-  <!-- CSS: implied media=all -->
-  <!-- CSS concatenated and minified via ant build script-->
-  {% stylesheet 'styles' %}
-  <!-- end CSS-->
+  {% compress css %}
+  <link rel="stylesheet" type="text/x-scss" href="{% static "css/styles.scss" %}">
+  <link rel="stylesheet" type="text/x-scss" href="{% static "fonts/open-sans/stylesheet.scss" %}">
+  {% endcompress %}
 
-  <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
-
-  <!-- All JavaScript at the bottom, except for Modernizr / Respond.
-       Modernizr enables HTML5 elements & feature detects; Respond is a polyfill for min/max-width CSS3 Media Queries
-       For optimal performance, use a custom Modernizr build: www.modernizr.com/download/ -->
-  {% javascript 'modernizr' %}
+  <script src="{% static "modernizr.js" %}" type="text/javascript" charset="utf-8"></script>
 </head>
 
 <body>
@@ -137,7 +133,7 @@
           </div>
           <div class="row">
               <div class="span12">
-                  <p class="copyright"><small>Kai kurios teisės saugomos (ↄ) 2012 manoSeimas.lt</small></p>
+                  <p class="copyright"><small>Kai kurios teisės saugomos (ↄ) 2012-2015 manoSeimas.lt</small></p>
               </div>
           </div>
         </div>
@@ -145,10 +141,19 @@
     </div>
   </footer>
 
-  <!-- JavaScript at the bottom for fast page loading -->
-  
-  <!-- scripts concatenated and minified via ant build script-->
-  {% javascript 'scripts' %}
+  <script src="{% static "jquery.min.js" %}"></script>
+  <script src="{% static "bootstrap.min.js" %}"></script>
+
+  {% compress js %}
+  <script src="{% static "js/flot/jquery.flot.js" %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static "js/flot/jquery.flot.pie.js" %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static "js/csrf.js" %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static "scripts/uncompressed/history.adapter.jquery.js" %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static "scripts/uncompressed/history.js" %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static "js/manoSeimas.js" %}" type="text/javascript" charset="utf-8"></script>
+  <script src="{% static "js/bootstrap-tab-history.js" %}" type="text/javascript" charset="utf-8"></script>
+  {% endcompress %}
+
   {% block inlinejs %}{% endblock %}
   <!-- end scripts-->
 	

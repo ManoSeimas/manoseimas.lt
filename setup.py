@@ -16,7 +16,7 @@ setup(
         'CouchDB',
         'twisted',
         'pycrypto',
-        'django-pipeline',
+        'django_compressor',
         'MySQL-python',
         'pylibmc',
         'mock',
@@ -32,5 +32,6 @@ setup(
         'ipdbplugin',
         'exportrecipe',
         'libsass',
+        'django-libsass',
     ],
 )

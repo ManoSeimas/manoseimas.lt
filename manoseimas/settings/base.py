@@ -47,94 +47,38 @@ SITE_ID = 1
 # Django-registration settings.
 ACCOUNT_ACTIVATION_DAYS = 7
 
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = True
-
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale
 USE_L10N = True
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/home/media/media.lawrence.com/media/"
 MEDIA_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'media')
-
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
 STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_DIR, 'static'),
     os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
     os.path.join(BUILDOUT_DIR, 'parts', 'modernizr'),
     os.path.join(BUILDOUT_DIR, 'parts', 'jquery'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap'),
     os.path.join(BUILDOUT_DIR, 'parts', 'history.js'),
+    os.path.join(BUILDOUT_DIR, 'parts', 'bootstrap'),
+    os.path.join(BUILDOUT_DIR, 'parts', 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-
-PIPELINE_CSS = {
-    'styles': {
-        'source_filenames': (
-          'fonts/open-sans/stylesheet.less',
-          'css/styles.less',
-        ),
-        'output_filename': 'css/styles.css',
-        'variant': 'datauri',
-    },
-}
-
-PIPELINE_JS = {
-    'scripts': {
-        'source_filenames': (
-            'js/jquery.js',
-            'js/bootstrap-transition.js',
-            'js/bootstrap-alert.js',
-            'js/bootstrap-button.js',
-            'js/bootstrap-carousel.js',
-            'js/bootstrap-collapse.js',
-            'js/bootstrap-dropdown.js',
-            'js/bootstrap-modal.js',
-            'js/bootstrap-tooltip.js',
-            'js/bootstrap-popover.js',
-            'js/bootstrap-scrollspy.js',
-            'js/bootstrap-tab.js',
-            'js/bootstrap-typeahead.js',
-            'js/bootstrap-affix.js',
-            'js/flot/jquery.flot.js',
-            'js/flot/jquery.flot.pie.js',
-            'js/csrf.js',
-            'scripts/uncompressed/history.adapter.jquery.js',
-            'scripts/uncompressed/history.js',
-            'js/manoSeimas.js',
-        ),
-        'output_filename': 'js/scripts.min.js',
-    },
-
-    'modernizr': {
-        'source_filenames': (
-            'js/modernizr.js',
-        ),
-        'output_filename': 'js/modernizr.min.js',
-    },
-}
-
-PIPELINE_COMPILERS = (
-    'pipeline.compilers.less.LessCompiler',
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
-LESS_PATH = ':'.join([
-    os.path.join(PROJECT_DIR, 'manoseimas', 'static', 'css'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'twitter-bootstrap', 'less'),
-])
-PIPELINE_LESS_BINARY = os.path.join(BUILDOUT_DIR, 'bin', 'lessc')
-PIPELINE_LESS_ARGUMENTS = '--compress --include-path=%s' % LESS_PATH
 
-PIPELINE_CSS_COMPRESSOR = None
-PIPELINE_JS_COMPRESSOR = None
+# Django compressor settings
+# http://django-compressor.readthedocs.org/en/latest/settings/
+
+STATICFILES_FINDERS += (
+    'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = config.secret_key
@@ -158,13 +102,6 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'manoseimas.urls'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_DIR, 'templates'),
-)
-
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
@@ -187,7 +124,7 @@ INSTALLED_APPS = (
     'social_auth',
     'sorl.thumbnail',
     # 'couchdbkit.ext.django',
-    'pipeline',
+    'compressor',
 
     'sboard',
     'sboard.profiles',

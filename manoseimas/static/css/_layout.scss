@@ -1,51 +1,3 @@
-// mixins
-// ----------------------------
-
-.border-top-left-radius(@radius) {
-     -moz-border-radius-topleft: @radius;
-  -webkit-border-top-left-radius: @radius;
-          border-top-left-radius: @radius;
-}
-
-.border-top-right-radius(@radius) {
-     -moz-border-radius-topright: @radius;
-  -webkit-border-top-right-radius: @radius;
-          border-top-right-radius: @radius;
-}
-
-.border-bottom-left-radius(@radius) {
-     -moz-border-radius-bottomleft: @radius;
-  -webkit-border-bottom-left-radius: @radius;
-          border-bottom-left-radius: @radius;
-}
-
-.border-bottom-right-radius(@radius) {
-     -moz-border-radius-bottomright: @radius;
-  -webkit-border-bottom-right-radius: @radius;
-          border-bottom-right-radius: @radius;
-}
-
-
-.border-radius-top(@radius) {
-  .border-top-left-radius(@radius);
-  .border-top-right-radius(@radius);
-}
-
-.border-radius-bottom(@radius) {
-  .border-bottom-left-radius(@radius);
-  .border-bottom-right-radius(@radius);
-}
-
-.border-radius-left(@radius) {
-  .border-top-left-radius(@radius);
-  .border-bottom-left-radius(@radius);
-}
-
-.border-radius-right(@radius) {
-  .border-top-right-radius(@radius);
-  .border-bottom-right-radius(@radius);
-}
-
 // white caret
 // ----------------------------
 
@@ -53,7 +5,7 @@
   display: inline-block;
   height: 4px;
   width: 7px;
-  background: url(../img/embed/white-caret.png);
+  background: url(#{$staticRoot}/img/embed/white-caret.png);
   margin: 4px 2px 4px 2px;
 }
 
@@ -67,27 +19,27 @@
   .navbar-inner {
     padding-left:  0;
     padding-right: 0;
-    .border-radius(0);
-    .box-shadow(none);
+    @include border-radius(0);
+    @include box-shadow(none);
     background: none;
     border: none;
   }
 
   .container {
-    #grid > .core > .span(@gridColumns);
+    @include grid-core-span($gridColumns, $gridColumnWidth, $gridGutterWidth);
   }
 
   .nav {
     & > li > a {
       padding-top: 16px;
       text-shadow: none;
-      font-size: @baseFontSize + 2;
+      font-size: $baseFontSize + 2;
     }
 
     li.dropdown .dropdown-toggle .caret,
     li.dropdown.open .caret {
-      border-top-color: @black;
-      border-bottom-color: @black;
+      border-top-color: $black;
+      border-bottom-color: $black;
     }
 
     li.dropdown.open > a {
@@ -103,7 +55,7 @@
 #top-menu-inner {
   height: 32px;
   min-height: 32px;
-  background: @msBlue;
+  background: $msBlue;
   filter: none;
 
   #top-menu .nav {
@@ -122,11 +74,11 @@
       padding: 0;
       line-height: 32px;
       text-decoration: none;
-      color: @white;
-      font-size: @baseFontSize + 2;
+      color: $white;
+      font-size: $baseFontSize + 2;
 
       &:hover {
-        color: @white;
+        color: $white;
         background-color: transparent;
       }
     }
@@ -139,8 +91,8 @@
 
 #logo-bar-inner {
   background-color: white;
-  //#gradient > .vertical(@white, #eee);
-  border-bottom: 1px solid @wellBorder;
+  //@include gradient-vertical($white, #eee);
+  border-bottom: 1px solid $wellBorder;
 
   #logo-bar {
     height: 58px;
@@ -158,7 +110,7 @@
         background-color: lightblue;
         color: white;
         padding: 0 5px;
-        border-radius: 8px;
+        @include border-radius(8px);
       }
     }
   }
@@ -172,9 +124,9 @@
 
   .search-query {
     padding: 4px 28px 4px 8px;
-    .border-radius(@borderRadius);
-    .box-shadow(inset 1px 2px 7px #e0e0e0);
-    #gradient > .vertical(#fafafa, @white);
+    @include border-radius($borderRadius);
+    @include box-shadow(inset 1px 2px 7px #e0e0e0);
+    @include gradient-vertical(#fafafa, $white);
     width: 240px;
   }
 
@@ -182,7 +134,7 @@
     display: block;
     border: none;
     background-color: transparent;
-    .size(20px, 20px);
+    @include size(20px, 20px);
     position: absolute;
     top: 21px;
     right: 4px;
@@ -198,12 +150,12 @@
 // ----------------------------
 
 #middle {
-  background-color: @mainBgColor;
+  background-color: $mainBgColor;
 
   .content {
-    background-color: @white;
-    border-left: 1px solid @wellBorder;
-    border-right: 1px solid @wellBorder;
+    background-color: $white;
+    border-left: 1px solid $wellBorder;
+    border-right: 1px solid $wellBorder;
 
     margin-left: 6px;
 
@@ -224,30 +176,30 @@
         margin: 20px -40px -40px -40px;
       }
 
-      .node-image {
+      @mixin node-image {
         float: left;
       }
 
       .node-image-normal {
-        .node-image;
+        @include node-image;
         margin-right: 8px;
       }
 
       .node-image-large {
-        .node-image;
+        @include node-image;
       }
     }
   }
 
-  .header-bar-mixin {
-    border-top: 1px solid @wellBorder;
-    border-bottom: 1px solid @wellBorder;
-    #gradient > .vertical(#F8FAFC, #F1F3F7);
+  @mixin header-bar-mixin {
+    border-top: 1px solid $wellBorder;
+    border-bottom: 1px solid $wellBorder;
+    @include gradient-vertical(#F8FAFC, #F1F3F7);
     padding: 0;
     display: block;
     font-size: 16px;
     text-align: center;
-    color: @msBlue;
+    color: $msBlue;
     font-weight: 600;
     line-height: 31px;
     text-transform: uppercase;
@@ -266,14 +218,14 @@
 
     .nav-list {
       width: 156px;
-      background-color: @wellBg;
-      border: 1px solid @wellBorder;
+      background-color: $wellBg;
+      border: 1px solid $wellBorder;
       margin: -1px 0 20px -1px;
       padding-bottom: 7px;
 
       & > li > a {
         padding: 4px 7px 4px 15px;
-        color: @gray;
+        color: $gray;
         line-height: 18px;
         white-space: nowrap;
         overflow: hidden;
@@ -284,17 +236,17 @@
         padding-right: 6px;
       }
 
-      .positive > a { color: lighten(desaturate(@positiveColor, 30%), 10%); }
-      .neutral > a { color: lighten(desaturate(@neutralColor, 30%), 10%); }
-      .negative > a { color: lighten(desaturate(@negativeColor, 30%), 10%); }
+      .positive > a { color: lighten(desaturate($positiveColor, 30%), 10%); }
+      .neutral > a { color: lighten(desaturate($neutralColor, 30%), 10%); }
+      .negative > a { color: lighten(desaturate($negativeColor, 30%), 10%); }
 
       & > li.active {
         a {
-          color: @white;
+          color: $white;
         }
           position: relative;
           &:before {
-            content: url(../img/embed/active-menuitem-arrow.png);
+            content: url(#{$staticRoot}/img/embed/active-menuitem-arrow.png);
             position: absolute;
             left: -26px;
             top: 0px;
@@ -306,7 +258,7 @@
       }
 
       .nav-header {
-        .header-bar-mixin;
+        @include header-bar-mixin;
         margin: 0 -15px 7px -15px;
         padding-left: 15px;
         text-align: left;
@@ -320,20 +272,20 @@
   }
 
   .content-inner > h1:first-child, .section:first-child h1:first-child {
-    .header-bar-mixin;
+    @include header-bar-mixin;
     margin: -20px -40px 20px -40px;
     border-top: none;
   }
 
   .section h1:first-child {
-    .header-bar-mixin;
+    @include header-bar-mixin;
     margin: 20px -40px 20px -40px;
   }
 
   h2.argument {
     text-align: center;
     margin-top: 0;
-    font-size: @baseFontSize + 2px;
+    font-size: $baseFontSize + 2px;
     font-weight: 700;
     color: #333;
 
@@ -343,8 +295,8 @@
   }
 
   .bar {
-    border-top: 1px solid @wellBorder;
-    border-bottom: 1px solid @wellBorder;
+    border-top: 1px solid $wellBorder;
+    border-bottom: 1px solid $wellBorder;
     margin: 10px -40px 20px -40px;
     padding: 5px;
     background: #f8fafc;
@@ -378,9 +330,9 @@
     }
   }
 
-  .positive { color: @positiveColor; }
-  .neutral { color: @neutralColor; }
-  .negative { color: @negativeColor; }
+  .positive { color: $positiveColor; }
+  .neutral { color: $neutralColor; }
+  .negative { color: $negativeColor; }
   .percent { font-weight: 600; }
 
   #filter-fraction {
@@ -396,7 +348,7 @@
       margin-bottom: 5px;
       a {
         font-weight: 600;
-        font-size: @baseFontSize;
+        font-size: $baseFontSize;
       }
     }
 
@@ -411,7 +363,7 @@
 
     .percent {
       font-weight: 700;
-      font-size: @baseFontSize + 2px;
+      font-size: $baseFontSize + 2px;
     }
 
     .fraction .percent:hover {
@@ -425,7 +377,7 @@
 
     td, .result {
       vertical-align: top;
-      border-bottom: 1px solid @wellBorder;
+      border-bottom: 1px solid $wellBorder;
       padding: 16px 8px;
     }
 
@@ -483,26 +435,26 @@
 
       .sub-title {
         color: #777;
-        font-size: @baseFontSize - 2px;
+        font-size: $baseFontSize - 2px;
       }
     }
 
-    .colored-table-header(@color) {
-      color: @color;
-      border-bottom: solid 1px @color;
+    @mixin colored-table-header($color) {
+      color: $color;
+      border-bottom: solid 1px $color;
       text-align: center;
       font-weight: 400;
-      font-size: @baseFontSize + 4px;
+      font-size: $baseFontSize + 4px;
       padding: 8px 0 8px 0;
-      h2 { color: @color }
+      h2 { color: $color }
     }
 
-    .positive-header { .colored-table-header(@positiveColor); }
-    .neutral-header { .colored-table-header(@neutralColor); }
-    .negative-header { .colored-table-header(@negativeColor); }
+    .positive-header { @include colored-table-header($positiveColor); }
+    .neutral-header { @include colored-table-header($neutralColor); }
+    .negative-header { @include colored-table-header($negativeColor); }
 
     .imprecise, .inactive {
-      .opacity(50);
+      opacity: 50;
       .positive-percent, .negative-percent {
         font-weight: 400;
       }
@@ -521,7 +473,7 @@
       .icon-remove {
         margin-left: 10px;
         vertical-align: middle;
-        .opacity(40);
+        opacity: 40;
         visibility: hidden;
       }
 
@@ -529,7 +481,7 @@
         visibility: visible;
 
         &:hover {
-          .opacity(90);
+          opacity: 90;
         }
       }
     }
@@ -559,7 +511,7 @@
     margin: 0;
 
     li {
-      border-top: 1px solid @wellBorder;
+      border-top: 1px solid $wellBorder;
       padding-top: 20px;
       margin-bottom: 20px;
     }
@@ -580,7 +532,7 @@
       display: block;
       float: left;
       vertical-align: middle;
-      line-height: @baseLineHeight;
+      line-height: $baseLineHeight;
       width: 32%;
       height: 50px;
       margin: 6px 6px 6px 0;
@@ -612,14 +564,14 @@
   list-style: none;
   li {
     display: inline-block;
-    .ie7-inline-block();
+    @include ie7-inline-block;
   }
   .divider {
     padding: 0 5px;
-    color: @grayLight;
+    color: $grayLight;
   }
   .active a {
-    color: @grayDark;
+    color: $grayDark;
   }
 }
 
@@ -633,7 +585,7 @@
 
   .splash-wide { 
     height: 300px;
-    background: url(../img/bg-cityscape.png) no-repeat center top;
+    background: url(#{$staticRoot}/img/bg-cityscape.png) no-repeat center top;
 
     text-align: center;
     color: white;
@@ -660,9 +612,9 @@
     }
   }   
 
-  @grayish: #797979;
-  @blueish: #4d71a6;
-  @greenish: #46ad46;
+  $grayish: #797979;
+  $blueish: #4d71a6;
+  $greenish: #46ad46;
 
   text-align: center;
   color: #666;
@@ -675,7 +627,7 @@
 
   .heading {
       text-align: center;
-       color: @greenish;
+       color: $greenish;
        font-size: 32px;
        font-weight: 300;
     margin: 20px 0;
@@ -740,7 +692,7 @@
         }
 
         .accordion-group {
-            border-radius: 0;
+            @include border-radius(0);
             border: 0;
             border-bottom: 1px solid #999;
             padding: 0;
@@ -762,11 +714,11 @@
                 }
 
                 &.active {
-                    background-color: @blueish;
+                    background-color: $blueish;
                     color: white;
 
                     &:hover {
-                        background-color: @blueish;
+                        background-color: $blueish;
                     }
                 }
                 
@@ -797,7 +749,7 @@
         h2 {
             padding: 0 10px;
             margin: 0;
-            color: @blueish;
+            color: $blueish;
             font-size: 18px;
             font-weight: bold;
             text-decoration: none;
@@ -848,7 +800,7 @@
             display: block;
             border: none;
             background-color: transparent;
-            .size(20px, 20px);
+            @include size(20px, 20px);
             position: absolute;
             top: 19px;
             right: 10px;
@@ -884,7 +836,7 @@
                 width: 100px;
                 height: 14px;
                 margin-top: -7px;
-                background: url(../img/home-icon-gap.png) center no-repeat;
+                background: url(#{$staticRoot}/img/home-icon-gap.png) center no-repeat;
             }
         }
         
@@ -900,25 +852,25 @@
     .button {
         display: inline-block;
         min-width: 400px;
-        background-color: @grayish;
+        background-color: $grayish;
         font-size: 18px;
         color: white;
         text-decoration: none;
         padding: 10px 0;
-        border-radius: 4px;
+        @include border-radius(4px);
         font-weight: 300;
         margin-right: 15px;
 
         border: 4px solid white;
 
         &:hover {
-            background-color: lighten(@grayish, 10%);
+            background-color: lighten($grayish, 10%);
         }
 
         &.green {
-            background-color: @greenish;
+            background-color: $greenish;
             &:hover {
-                background-color: lighten(@greenish, 10%);
+                background-color: lighten($greenish, 10%);
             }
         }
 
@@ -942,7 +894,7 @@
         color: white;
         padding: 6px 15px;
         cursor: pointer;
-        border-radius: 4px;
+        @include border-radius(4px);
         font-size: 18px;
         &:hover {
             background-color: darken(lightblue, 10%);
@@ -953,8 +905,8 @@
     /* Todo: replace with image or icon font sprite */
 
     .play {
-        background-color: @blueish;
-        border-radius: 20px;
+        background-color: $blueish;
+        @include border-radius(20px);
         display: inline-block;
         padding: 5px 5px;
         position: relative;
@@ -978,19 +930,19 @@
 
 footer {
   padding: 20px 20px 20px 20px;
-  background: @white;
-  border-top: 1px solid @wellBorder;
+  background: $white;
+  border-top: 1px solid $wellBorder;
 
   h2, h2 a, h2 a:hover {
     color: #2A4C96;
-    font-size: @baseFontSize;
+    font-size: $baseFontSize;
     font-weight: 600;
     padding: 0;
     line-height: 32px;
   }
 
   a {
-    color: @gray;
+    color: $gray;
   }
 
   .nav {
@@ -1018,12 +970,12 @@ footer {
 
 [class^="icon-soc"],
 [class*=" icon-soc"] {
-  @size: 18px;
-  width: @size;
-  height: @size;
-  line-height: @size;
-  background-position: @size @size;
-  background-image: url("../img/social-networks-sprite.png");
+  $size: 18px;
+  width: $size;
+  height: $size;
+  line-height: $size;
+  background-position: $size $size;
+  background-image: url("#{$staticRoot}/img/social-networks-sprite.png");
 }
 
 .icon-soc-facebook { background-position: 0      0; }
@@ -1035,8 +987,6 @@ footer {
 // ----------------------------
 
 .btn-show-results {
-  .btn-success;
-  .btn-large;
   font-weight: 800;
   font-size: 16px;
   line-height: 20px;
@@ -1046,7 +996,7 @@ footer {
   padding: 6px;
 
   &:hover {
-    .btn-success;
+    @include buttonBackground($btnSuccessBackground, $btnSuccessBackgroundHighlight);
   }
 }
 
@@ -1058,7 +1008,7 @@ footer {
 
   width: 174px;
   font-weight: 600;
-  .border-radius-left(0);
+  @include border-left-radius(0);
   margin: 20px 0;
   border-left: none;
 }
@@ -1086,7 +1036,7 @@ footer {
   margin: 16px 0 0 0;
 
   .btn {
-    line-height: @baseLineHeight - 4px;
+    line-height: $baseLineHeight - 4px;
     min-width: 90px;
     font-weight: 600;
   }
@@ -1107,7 +1057,7 @@ footer {
   text-align: center;
   display: table;
   margin: 0;
-  .size(135px, 470px);
+  @include size(135px, 470px);
 
   div {
     display: table-cell;
@@ -1118,7 +1068,7 @@ footer {
     }
 
     a.fraction, a.fraction:hover {
-      color: @gray;
+      color: $gray;
     }
   }
 }
@@ -1127,7 +1077,7 @@ footer {
   clear: both;
   margin: 0 -20px 0 -20px;
   padding: 14px 10px 20px 10px;
-  background: url(../img/position-scale.png) no-repeat 0px 0px;
+  background: url(#{$staticRoot}/img/position-scale.png) no-repeat 0px 0px;
   font-weight: 600px;
 
   .positive { float: left; }
@@ -1139,14 +1089,14 @@ footer {
   float: right;
   margin: 2px 0 0 10px;
 
-  .size(16px, 16px);
-  background: url(../img/help.png) no-repeat;
+  @include size(16px, 16px);
+  background: url(#{$staticRoot}/img/help.png) no-repeat;
 
   &.inline {
-    .size(12px, 12px);
-    background: url(../img/help-small.png) no-repeat;
+    @include size(12px, 12px);
+    background: url(#{$staticRoot}/img/help-small.png) no-repeat;
     display: inline-block;
-    .ie7-inline-block();
+    @include ie7-inline-block;
     float: none;
   }
 }
@@ -1161,9 +1111,9 @@ footer {
 // ----------------------------
 
 h1, h2, h3, h4, h5 {
-  color: @headerColor;
-  margin-top: @baseLineHeight;
-  margin-bottom: @baseLineHeight/2;
+  color: $headerColor;
+  margin-top: $baseLineHeight;
+  margin-bottom: $baseLineHeight/2;
   font-weight: 600;
 
   &:first-child {
@@ -1186,7 +1136,7 @@ h4 { font-size: 14px; }
 h5 { font-size: 14px; }
 h6 { font-size: 14px; }
 
-.arrow-content() {
+@mixin arrow-content {
   content: url(../img/embed/inline-header-arrow.png);
   padding: 0 8px 0 7px;
   position: relative;
@@ -1195,39 +1145,39 @@ h6 { font-size: 14px; }
 }
 
 .inline-header {
-  color: @msGreen;
+  color: $msGreen;
   float: left;
-  font-size: @baseFontSize + 2px;
-  line-height: @baseLineHeight - 1px;
+  font-size: $baseFontSize + 2px;
+  line-height: $baseLineHeight - 1px;
   padding: 0;
   margin: 0;
   font-weight: 600;
 
   a {
-    color: @msGreen;
+    color: $msGreen;
   }
 }
 
 .profile-solution-title {
-  color: @textColor;
+  color: $textColor;
   font-weight: 600;
   display: inline-block;
-  .ie7-inline-block();
+  @include ie7-inline-block;
   float: none;
-  font-size: @baseFontSize;
+  font-size: $baseFontSize;
 
   &:hover, a {
-    color: @textColor;
+    color: $textColor;
   }
 }
 
 
 .arrow-after:after {
-  .arrow-content();
+  @include arrow-content;
 }
 
 .arrow-before:before {
-  .arrow-content();
+  @include arrow-content;
 }
 
 a {
@@ -1235,7 +1185,7 @@ a {
 }
 
 a.stealth {
-  color: @headerColor;
+  color: $headerColor;
 }
 
 a.more {
@@ -1246,13 +1196,13 @@ a.more {
 
 h2.hr {
   color: #333;
-  border-bottom: 1px solid @wellBorder;
+  border-bottom: 1px solid $wellBorder;
 }
 
 hr {
   margin: 24px -40px;
   border-top: none;
-  border-bottom: 1px solid @wellBorder;
+  border-bottom: 1px solid $wellBorder;
 }
 
 .description {
@@ -1281,7 +1231,7 @@ img.align-center {
 .test-heading {
   font-weight: 600;
   text-align: center;
-  font-size: @baseFontSize + 4px;
+  font-size: $baseFontSize + 4px;
 }
 
 .test-checklist {
@@ -1303,12 +1253,12 @@ img.align-center {
 }
 
 .topic-title {
-  color: @msGreen;
+  color: $msGreen;
   font-weight: 600;
 }
 
 .argument-title {
-  color: @linkColor;
+  color: $linkColor;
   font-weight: 600;
 }
 
@@ -1318,7 +1268,7 @@ img.align-center {
     display: inline-block;
     width: 189px;
     height: 49px;
-    background: url("../img/tils-sprite.png") no-repeat 0px 0px;
+    background: url("#{$staticRoot}/img/tils-sprite.png") no-repeat 0px 0px;
 
     &.white {
         background-position: 0px -98px;
