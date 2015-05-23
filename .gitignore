@@ -10,32 +10,26 @@
 .sass-cache
 .waf*
 .ropeproject
-config.log
-
 .vagrant
 
-bin
-buildout.cfg
-c4che
-develop-eggs
-docs/build
-downloads
-eggs
-env
-parts
-tags
-var
-log
-node_modules
-lib
-local
-include
+/bin
+/buildout.cfg
+/develop-eggs
+/downloads
+/eggs
+/parts
+/tags
+/var
+/log
+/lib
+/local
+/include
 
-settings.json
-manoseimas/static/css/styles.css
-manoseimas/static/fonts/open-sans/stylesheet.css
+/settings.json
+/manoseimas/static/css/styles.css
+/manoseimas/static/fonts/open-sans/stylesheet.css
 
 # Widget build files and output
-manoseimas/static/js/manoSeimas-widget.*.js
-manoseimas/widget/frontend/build
-manoseimas/widget/frontend/tmp
+/manoseimas/static/js/manoSeimas-widget.*.js
+/manoseimas/widget/frontend/build
+/manoseimas/widget/frontend/tmp
