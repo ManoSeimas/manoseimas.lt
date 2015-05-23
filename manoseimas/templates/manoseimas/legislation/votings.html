@@ -46,7 +46,7 @@ $(function () {
                     >{{ document.datetime }}</a>]</td>
             <td>
                 {% for doc in document.documents %}
-                <a href="{% url manoseimas-legislation doc %}">{{ doc }}</a>
+                <a href="{% url 'manoseimas-legislation' doc %}">{{ doc }}</a>
                 {% if not forloop.last %}, {% endif %}
                 {% endfor %}
             </td>

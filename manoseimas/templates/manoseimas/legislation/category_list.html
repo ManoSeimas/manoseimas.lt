@@ -7,7 +7,7 @@
     <strong>{% trans "Įstatymų kategorijos" %}</strong>
     {% endblock %} |
     {% block nav_legislation_legislation_s %}
-    <a href="{% url manoseimas-legislation-list %}"
+    <a href="{% url 'manoseimas-legislation-list' %}"
         >{% trans "Įstatymai" %}</a>
     {% endblock %}
 {% endblock %}
@@ -16,7 +16,7 @@
 {% block content %}
     {% for node in categories %}
         {% for level in node.open_levels %}<ul><li>{% empty %}</li><li>{% endfor %}
-            <a href="{% url manoseimas-legislation node.id %}">{{ node.doc.name }}</a>
+            <a href="{% url 'manoseimas-legislation' node.id %}">{{ node.doc.name }}</a>
         {% for level in node.close_levels %}</li></ul>{% endfor %}
     {% endfor %}
 {% endblock %}

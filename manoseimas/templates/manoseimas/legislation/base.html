@@ -9,19 +9,19 @@
 
 {% block nav_legislation %}
     {% block nav_legislation_legislation %}
-    <a href="{% url manoseimas-legislation legislation.id %}"
+    <a href="{% url 'manoseimas-legislation' legislation.id %}"
         >{% trans "Įstatymas" %}</a>
     {% endblock %} |
     {% block nav_legislation_amendments %}
-    <a href="{% url manoseimas-legislation-amendments legislation.id %}"
+    <a href="{% url 'manoseimas-legislation-amendments' legislation.id %}"
         >{% trans "Pataisos" %}</a>
     {% endblock %} |
     {% block nav_legislation_drafts %}
-    <a href="{% url manoseimas-legislation-drafts legislation.id %}"
+    <a href="{% url 'manoseimas-legislation-drafts' legislation.id %}"
         >{% trans "Projektai" %}</a>
     {% endblock %} |
     {% block nav_legislation_votings %}
-    <a href="{% url manoseimas-legislation-votings legislation.id %}"
+    <a href="{% url 'manoseimas-legislation-votings' legislation.id %}"
         >{% trans "Balsavimai" %}</a>
     {% endblock %}
 {% endblock %}

@@ -12,11 +12,11 @@
     <tr>
         <td>[{{ document.date|date:"SHORT_DATE_FORMAT" }}]</td>
         <td>
-            <a href="{% url manoseimas-legislation document.number %}"
+            <a href="{% url 'manoseimas-legislation' document.number %}"
                 >{{ document.name }}</a>
         </td>
         <td>
-            (<a href="{% url manoseimas-legislation-votings document.number  %}">{% trans "balsavimai" %}</a>)</li>
+            (<a href="{% url 'manoseimas-legislation-votings' document.number  %}">{% trans "balsavimai" %}</a>)</li>
         </td>
     <tr>
     {% endfor %}

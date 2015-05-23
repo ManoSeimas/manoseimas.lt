@@ -4,7 +4,7 @@
 
 {% block nav_legislation %}
     {% block nav_legislation_categories %}
-    <a href="{% url manoseimas-category-list %}">{% trans "Įstatymų kategorijos" %}</a>
+    <a href="{% url 'manoseimas-category-list' %}">{% trans "Įstatymų kategorijos" %}</a>
     {% endblock %} |
     {% block nav_legislation_legislation_s %}
     <strong>{% trans "Įstatymai" %}</strong>
@@ -15,7 +15,7 @@
 {% block content %}
     <ul>
     {% for legislation in legislations %}
-        <li><a href="{% url manoseimas-legislation legislation.id %}"
+        <li><a href="{% url 'manoseimas-legislation' legislation.id %}"
             >{{ legislation.name }}</a></li>
     {% endfor %}
     </ul>

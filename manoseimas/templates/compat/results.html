@@ -1,6 +1,7 @@
 {% extends "sboard/node_details.html" %}
 {% load i18n %}
 {% load sboard %}
+{% load static from staticfiles %}
 
 {% block node_body %}
   {% if groups %}
@@ -103,8 +104,6 @@
 {% endblock %}
 
 {% block inlinejs %}
-<script src="{{ STATIC_URL }}js/bootstrap-tab-history.js"></script>
-
 <script type="text/javascript">
 $(manoSeimas.activateFractionFilter);
 </script>
@@ -114,12 +113,12 @@ $(manoSeimas.activateFractionFilter);
 <ul class="nav nav-list">
   <li class="nav-header ">Aplankyk</li>
   <li>Ką žada kandidatai?</li>
-  <li class="no-hover"><a target="_blank" href="http://manobalsas.lt"><img alt="Manobalsas.lt" src="{{ STATIC_URL }}img/manobalsas.png"></a></li>
+  <li class="no-hover"><a target="_blank" href="http://manobalsas.lt"><img alt="Manobalsas.lt" src="{% static "img/manobalsas.png" %}"></a></li>
 </ul>
 
 <ul class="nav nav-list">
   <li class="nav-header ">Paremk</li>
   <li>Patiko testas?</li>
-  <li class="no-hover"><a target="_blank" href="https://www.aukok.lt/Projektai/Padekime-rinkejams-atsakingai-pasiruosti-Seimo-rinkimams"><img alt="Aukok.lt" src="{{ STATIC_URL }}img/aukoklt.png"> mums!</a></li>
+  <li class="no-hover"><a target="_blank" href="https://www.aukok.lt/Projektai/Padekime-rinkejams-atsakingai-pasiruosti-Seimo-rinkimams"><img alt="Aukok.lt" src="{% static "img/aukoklt.png" %}"> mums!</a></li>
 </ul>
 {% endblock %}

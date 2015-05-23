@@ -15,7 +15,7 @@
   
   <div>
     {% for tag in node.tags %}
-    <a href="{% url node tag %}"><i class="icon-tag"></i>{{ tag }}</a>
+    <a href="{% url 'node' tag %}"><i class="icon-tag"></i>{{ tag }}</a>
     {% endfor %}
   </div>
   

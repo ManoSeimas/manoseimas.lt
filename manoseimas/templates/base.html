@@ -14,23 +14,16 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-
-  <!-- Use the .htaccess and remove these lines to avoid edge case issues.
-       More info: h5bp.com/b/378 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-  <title>{% block title %}{{ title }}{% endblock %}</title>
-
   <meta property="og:type" content="website">
   <meta property="og:title" content="manoSeimas">
   <meta property="og:description" content="Atlik testą, sudarytą iš svarbiausių 2008-2012 m. Seime vykusių balsavimų, ir sužinok, kurie Seimo nariai ir partijos geriausiai atstovavo tavo interesams.">
   <meta property="og:image" content="http://manoseimas.lt/static/img/logo_square.jpg">
   <meta property="og:url" content="http://manoseimas.lt">
-
-  <!-- Mobile viewport optimized: j.mp/bplateviewport -->
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}{{ title }}{% endblock %}</title>
 
-  <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_URL }}favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="{% static "favicon.png" %}">
 
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static "css/styles.scss" %}">
@@ -45,7 +38,7 @@
     <div class="navbar-inner" id="logo-bar-inner">
       <div class="container" id="logo-bar">
         <a href="/" class="brand">
-          <img src="{{ STATIC_URL }}img/logo-updated.png" />
+          <img src="{% static "img/logo-updated.png" %}" />
           <span class='beta'>BETA</span>
         </a>
 
@@ -59,7 +52,7 @@
               <ul class="dropdown-menu">
                 <li><a href="{{ request.user.get_profile.get_node.permalink }}">
                   <i class="icon-user"></i> {% trans "Profile" %}</a></li>
-                <li><a href="{% url logout %}">
+                <li><a href="{% url 'logout' %}">
                   <i class="icon-off"></i> {% trans "Log out" %}</a></li>
               </ul>
             </li>
@@ -69,18 +62,18 @@
                 <i style="margin-top: 3px" class="icon-user"></i> {% trans "Log in" %}
                 <i class="caret"></i></a>
               <ul class="dropdown-menu">
-                <li><a href="{% url socialauth_begin 'google' %}">{% trans "Google" %}</a></li>
+                <li><a href="{% url 'socialauth_begin' 'google' %}">{% trans "Google" %}</a></li>
                 {% if FACEBOOK_APP_ID %}
-                <li><a href="{% url socialauth_begin 'facebook' %}">{% trans "Facebook" %}</a></li>
+                <li><a href="{% url 'socialauth_begin' 'facebook' %}">{% trans "Facebook" %}</a></li>
                 {% endif %}
-                <li><a href="{% url login %}">{% trans "OpenID" %}</a></li>
+                <li><a href="{% url 'login' %}">{% trans "OpenID" %}</a></li>
               </ul>
             </li>
             {% endif %}
           </ul>
         </div>
 
-        <form action="{% url search %}" method="get" id="search-box">
+        <form action="{% url 'search' %}" method="get" id="search-box">
           <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
                  placeholder="{% trans "Ieškok politikų, temų, argumentų&hellip;" %}" class="search-query">
           <input type="submit" class="submit icon-search" value="">
@@ -116,7 +109,7 @@
     <div class="container">
       <div class="row">
         <div class="span6">
-            <a target="_blank" href="http://www.transparency.lt"><img src='{{ STATIC_URL }}img/tils-logo-updated.png' /></a>
+            <a target="_blank" href="http://www.transparency.lt"><img src="{% static "img/tils-logo-updated.png" %}" /></a>
         </div>
         <div class="span6">
           <div class="row">
@@ -127,8 +120,8 @@
               <h2><a href="/prisijunk/">Prisijunk</a></h2>
             </div>
             <div class="span2">
-                <a target="_blank" href="http://www.facebook.com/tilietuva"><img src='{{ STATIC_URL }}img/fb-icon-32.png' /></a>
-                <a target="_blank" href="http://www.twitter.com/#!/ManoSeimas"><img src='{{ STATIC_URL }}img/twitter-icon-32.png' /></a>
+                <a target="_blank" href="http://www.facebook.com/tilietuva"><img src="{% static "img/fb-icon-32.png" %}" /></a>
+                <a target="_blank" href="http://www.twitter.com/#!/ManoSeimas"><img src="{% static "img/twitter-icon-32.png" %}" /></a>
             </div>
           </div>
           <div class="row">
