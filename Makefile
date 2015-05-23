@@ -8,7 +8,7 @@ help:
 
 ubuntu:
 	sudo apt-get update
-	sudo apt-get -y build-dep python-imaging python-mysqldb
+	sudo apt-get -y build-dep python-imaging python-mysqldb python-pylibmc
 	sudo apt-get -y install build-essential python-dev python-virtualenv git gettext exuberant-ctags
 
 run: bin/django ; bin/django runserver
