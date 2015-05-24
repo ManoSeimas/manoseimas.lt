@@ -26,7 +26,6 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
             'init_command': 'SET storage_engine=INNODB',
-            'read_default_file': os.path.join(BUILDOUT_DIR, 'var', 'etc', 'my.cnf'),
         },
     }
 }
