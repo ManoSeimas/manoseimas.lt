@@ -38,8 +38,8 @@ Run migrations::
 Install nvm (https://github.com/creationix/nvm) and build frontend files::
 
     cd manoseimas/widget/frontend
-    nvm install v0.12.4 
-    nvm use v0.12.4 
+    nvm install v0.12.4
+    nvm use v0.12.4
     npm install -g .
     cake build
     cd -
@@ -59,11 +59,6 @@ Then in the project directory do::
 
     vagrant up
     vagrant ssh
-    make ubuntu
-    mkdir parts
-    hg clone ssh://hg@bitbucket.org/sirex/django-sboard parts/django-sboard
-    git clone -b django-1.8 git@github.com:sirex/couchdbkit.git parts/couchdbkit
-    scripts/genconfig.py config/env/vagrant.cfg
     make run
 
 This should set up all the dependencies for the project. To test the project open the

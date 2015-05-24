@@ -73,5 +73,6 @@ Vagrant.configure(2) do |config|
     sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
     grep "cd /vagrant" /home/vagrant/.bashrc || echo "cd /vagrant" >> /home/vagrant/.bashrc
     sudo -u vagrant mkdir -p /home/vagrant/manoseimas
+    (cd /vagrant && sudo -u vagrant scripts/genconfig.py config/env/vagrant.cfg)
   SHELL
 end
