@@ -68,6 +68,7 @@ Vagrant.configure(2) do |config|
     set -e
     sudo apt-get update
     sudo apt-get install -y default-jre couchdb
+    sudo apt-get install -y nodejs nodejs-legacy npm
     (cd /vagrant && make ubuntu)
     # PIL is awful
     sudo ln -s /usr/include/freetype2 /usr/include/freetype || true

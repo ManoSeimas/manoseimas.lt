@@ -28,7 +28,11 @@ mkdirs: var/log var/www/static var/www/media
 
 var/log var/www/static var/www/media: ; mkdir -p $@
 
-bin/django: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) mkdirs ; $<
+widget: manoseimas/widget/frontend/.done
 
+manoseimas/widget/frontend/.done:
+	$(MAKE) -C manoseimas/widget/frontend
+
+bin/django: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) mkdirs widget ; $<
 
 .PHONY: all help run mkdirs tags
