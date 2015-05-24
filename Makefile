@@ -13,7 +13,7 @@ ubuntu:
 		git mercurial gettext exuberant-ctags libxml2-dev libxslt1-dev \
 		libffi-dev libssl-dev
 
-run: bin/django ; bin/django runserver
+run: bin/django ; bin/django runserver 0.0.0.0:8000
 
 tags: bin/django ; bin/ctags -v --tag-relative
 
