@@ -1,0 +1,5 @@
+[client]
+database = {{ name }}
+user = {{ name }}
+password = {{ lookup('password', 'credentials/mysql_user_password') }}
+default-character-set = utf8

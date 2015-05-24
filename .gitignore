@@ -34,3 +34,5 @@
 /manoseimas/widget/frontend/build
 /manoseimas/widget/frontend/tmp
 /manoseimas/widget/frontend/.done
+
+/deployment/credentials
