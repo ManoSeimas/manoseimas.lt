@@ -9,9 +9,11 @@ help:
 ubuntu:
 	sudo apt-get update
 	sudo apt-get -y build-dep python-imaging python-mysqldb python-pylibmc
-	sudo apt-get -y install build-essential python-dev python-virtualenv git gettext exuberant-ctags
+	sudo apt-get -y install build-essential python-dev python-virtualenv \
+		git mercurial gettext exuberant-ctags libxml2-dev libxslt1-dev \
+		libffi-dev libssl-dev
 
-run: bin/django ; bin/django runserver
+run: bin/django ; bin/django runserver 0.0.0.0:8000
 
 tags: bin/django ; bin/ctags -v --tag-relative
 
@@ -26,7 +28,11 @@ mkdirs: var/log var/www/static var/www/media
 
 var/log var/www/static var/www/media: ; mkdir -p $@
 
-bin/django: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) mkdirs ; $<
+widget: manoseimas/widget/frontend/.done
 
+manoseimas/widget/frontend/.done:
+	$(MAKE) -C manoseimas/widget/frontend
+
+bin/django: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) mkdirs widget ; $<
 
 .PHONY: all help run mkdirs tags

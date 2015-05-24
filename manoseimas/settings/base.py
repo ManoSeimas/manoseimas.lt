@@ -41,7 +41,7 @@ LANGUAGE_CODE = 'lt'
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_DIR, 'locale'),
-    os.path.join(BUILDOUT_DIR, 'parts/django-sboard/sboard/locale'),
+    os.path.join(config.buildout_parts_dir, 'django-sboard/sboard/locale'),
 )
 
 SITE_ID = 1
@@ -58,12 +58,12 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-    os.path.join(BUILDOUT_DIR, 'parts', 'flot'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'modernizr'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'jquery'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'history.js'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'bootstrap'),
-    os.path.join(BUILDOUT_DIR, 'parts', 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
+    os.path.join(config.buildout_parts_dir, 'flot'),
+    os.path.join(config.buildout_parts_dir, 'modernizr'),
+    os.path.join(config.buildout_parts_dir, 'jquery'),
+    os.path.join(config.buildout_parts_dir, 'history.js'),
+    os.path.join(config.buildout_parts_dir, 'bootstrap'),
+    os.path.join(config.buildout_parts_dir, 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
     os.path.join(PROJECT_DIR, 'widget', 'frontend', 'build'),
 )
 
