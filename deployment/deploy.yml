@@ -9,7 +9,7 @@
     home: /opt/{{ name }}
     path: "{{ home }}/app"
     repo: https://github.com/manoseimas/manoseimas.lt
-    vars: production
+    vars: staging
 
   vars_files:
     - vars/{{ vars }}.yml
@@ -20,11 +20,13 @@
   - fail: msg="Ansible version 1.9 or greater required."
     when: ansible_version.full | version_compare('1.9', '<')
 
-  - name: update locale
-    locale_gen: name={{ item }} state=present
+  # Locales
+
+  - name: install locales
+    apt: pkg={{ item }} state=latest
     with_items:
-    - en_US.UTF-8
-    - lt_LT.UTF-8
+    - language-pack-en
+    - language-pack-lt
 
   # apt-get packages
 
@@ -37,6 +39,7 @@
     - build-essential
     - mysql-server
     - couchdb
+    - memcached
     - python-mysqldb
     - python-dev
     - python-pip
@@ -58,6 +61,11 @@
 
   - name: ensure couchdb is running and starts on boot
     service: name=couchdb state=started enabled=true
+
+  # Set up Memcached
+
+  - name: ensure memcached is running and starts on boot
+    service: name=memcached state=started enabled=true
 
   # Set up MySQL
 
@@ -110,7 +118,7 @@
   # Set up the app
 
   - name: clone repository
-    git: repo={{ repo }} dest={{ path }} version=major-refactoring force=yes
+    git: repo={{ repo }} dest={{ path }} version=master force=yes
     notify: reload source code
     sudo_user: "{{ name }}"
 
@@ -141,6 +149,12 @@
 
   # Set up Apache
 
+  - name: enable apache modules
+    apache2_module: state=present name={{ item }}
+    with_items:
+    - alias
+    - proxy
+
   - name: set up apache virtual host for the app
     template: src=templates/apache.conf dest=/etc/apache2/sites-enabled/{{ name }}.conf
     notify: reload apache
@@ -154,6 +168,10 @@
     with_items:
     - "{{ name }}"
     - "{{ name }}-couchdb"
+
+  - name: remove default apache vhost
+    file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
+    notify: reload apache
 
   - name: ensure apache is running and starts on boot
     service: name=apache2 state=started enabled=true
