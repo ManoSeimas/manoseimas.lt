@@ -1,0 +1,5 @@
+ul.nav.nav-list
+  li.nav-header {{title}}
+
+  for item in items
+    li: a(href="{% url url_name item.slug %}") {{item.name}}

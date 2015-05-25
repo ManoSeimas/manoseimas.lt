@@ -6,18 +6,30 @@ from sboard.models import couch
 
 from manoseimas.mps.nodes import prepare_position_list
 
-from .models import ParliamentMember
+from .models import ParliamentMember, GroupMembership, Group
 
 
-def mp_list(request):
+def mp_list(request, fraction_slug=None):
     def extract(mp):
         return {
             'id': mp.id,
             'full_name': mp.full_name
         }
 
-    mps = map(extract, ParliamentMember.objects.all())
-    return render(request, 'mp_catalog.jade', {'mps': mps})
+    fractions = Group.objects.filter(type='fraction')
+
+    if fraction_slug:
+        selected_fraction = GroupMembership.objects.filter(group__type='fraction', group__slug=fraction_slug)
+        if selected_fraction:
+            selected_fraction = selected_fraction[0].group
+        else:
+            selected_fraction = None
+
+        mps = map(extract, ParliamentMember.objects.filter(groups=selected_fraction))
+    else:
+        mps = map(extract, ParliamentMember.objects.all())
+
+    return render(request, 'mp_catalog.jade', {'mps': mps, 'fractions': fractions})
 
 
 def mp_profile(request, mp_id):

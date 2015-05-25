@@ -2,7 +2,13 @@
 - load manoseimas
 - load sboard
 
+- block sidebar
+  //- - include 'snippets/navbar.jade' with
+  | {% include "snippets/navbar.jade" with title="Frakcijos" url_name="mp_list_fraction" items=fractions only %}
+
 - block content
+  h1 Parlamentarai
+
   ul
     for mp in mps
       li: a(href="{% url 'mp_profile' mp.id %}") {{mp.full_name}}
