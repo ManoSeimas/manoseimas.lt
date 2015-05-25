@@ -74,3 +74,13 @@ In short, CouchDB can be installed using these commands::
 After building CouchDB, run it using this command::
 
     ./build/bin/couchdb
+
+
+CouchDB
+=======
+
+To access CouchDB web ui run this command::
+
+    ssh -L 9000:localhost:5984 manoseimas.lt
+
+And visit http://localhost:9000/_utils/
