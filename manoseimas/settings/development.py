@@ -32,7 +32,7 @@ MIDDLEWARE_CLASSES += (
 
 TEST_RUNNER = 'sboard.testrunner.SboardTestSuiteRunner'
 NOSE_ARGS = [
-    '-w${PROJECT_NAME}',     # working dir
+    '-w%s' % PROJECT_DIR,    # working dir
     '-w.',                   # project dir (relative to working dir)
     '-w../parts/django-sboard/sboard',
     '--all-modules',         # search tests in all modules
