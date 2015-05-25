@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-from django.core.urlresolvers import reverse
 from django.shortcuts import render
 
 from couchdbkit.exceptions import ResourceNotFound
@@ -19,7 +17,7 @@ def mp_list(request):
         }
 
     mps = map(extract, ParliamentMember.objects.all())
-    return render(request, 'mps_v2/mp_catalog.jade', {'mps': mps})
+    return render(request, 'mp_catalog.jade', {'mps': mps})
 
 
 def mp_profile(request, mp_id):
@@ -41,4 +39,5 @@ def mp_profile(request, mp_id):
         'profile': profile,
         'positions': positions,
     }
-    return render(request, 'mps_v2/profile.jade', context)
+    return render(request, 'profile.jade', context)
+

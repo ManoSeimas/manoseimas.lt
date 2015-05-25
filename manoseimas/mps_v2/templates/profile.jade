@@ -7,9 +7,9 @@
 - block content
   a(href="{% url 'mp_list' %}") Atgal į sąrašą
 
-  h1 Seimo narys
   .profile-box
     div
+      img(src="/static/img/photo-default.png" title="{{profile.full_name}}").photo.pull-left
       h1
         - block title
           {{ profile.full_name }}
