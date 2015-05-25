@@ -1,0 +1,168 @@
+---
+- hosts: all
+  sudo: yes
+  gather_facts: yes
+
+
+  vars:
+    name: manoseimas
+    home: /opt/{{ name }}
+    path: "{{ home }}/app"
+    repo: https://github.com/manoseimas/manoseimas.lt
+    vars: production
+
+  vars_files:
+    - vars/{{ vars }}.yml
+
+
+  tasks:
+
+  - fail: msg="Ansible version 1.9 or greater required."
+    when: ansible_version.full | version_compare('1.9', '<')
+
+  - name: update locale
+    locale_gen: name={{ item }} state=present
+    with_items:
+    - en_US.UTF-8
+    - lt_LT.UTF-8
+
+  # apt-get packages
+
+  - name: apt repositories
+    apt_repository: repo='deb-src http://ubuntu-archive.mirror.serveriai.lt/ trusty main restricted universe' state=present
+
+  - name: apt packages
+    apt: pkg={{ item }} state=latest
+    with_items:
+    - build-essential
+    - mysql-server
+    - couchdb
+    - python-mysqldb
+    - python-dev
+    - python-pip
+    - python-virtualenv
+    - apache2
+    - libapache2-mod-wsgi
+    - npm
+    - nodejs
+    - nodejs-legacy
+    - git
+    - mercurial
+
+  # Create app user
+
+  - name: create {{ name }} user
+    user: name={{ name }} system=yes group=www-data home={{ home }}
+
+  # Set up CouchDB
+
+  - name: ensure couchdb is running and starts on boot
+    service: name=couchdb state=started enabled=true
+
+  # Set up MySQL
+
+  - name: ensure mysql is running and starts on boot
+    service: name=mysql state=started enabled=true
+
+  - name: check /root/.my.cnf
+    stat: path=/root/.my.cnf
+    register: root_my_cnf
+
+  - name: mysql root user
+    mysql_user:
+      name=root
+      host=localhost
+      password={{ lookup('password', 'credentials/mysql_root_password') }}
+      state=present
+    when: not root_my_cnf.stat.exists
+
+  - template: src=templates/root_my.cnf dest=/root/.my.cnf owner=root mode=0600
+    when: not root_my_cnf.stat.exists
+
+  - name: ensure anonymous users are not in the database
+    mysql_user: name='' host=localhost state=absent
+
+  # MySQL database and user
+
+  - name: mysql database
+    mysql_db: >
+      name={{ name }}
+      encoding=utf8
+      collation=utf8_general_ci
+
+  - name: check {{ home }}/.my.cnf
+    stat: path={{ home }}/.my.cnf
+    register: user_my_cnf
+
+  - name: mysql user
+    mysql_user: >
+      name={{ name }}
+      host=localhost
+      password={{ lookup('password', 'credentials/mysql_user_password') }}
+      priv={{ name }}.*:ALL,GRANT
+      state=present
+    when: not user_my_cnf.stat.exists
+
+  - template: src=templates/user_my.cnf dest={{ home }}/.my.cnf owner={{ name }} mode=0600
+    when: not user_my_cnf.stat.exists
+    sudo_user: "{{ name }}"
+
+  # Set up the app
+
+  - name: clone repository
+    git: repo={{ repo }} dest={{ path }} version=major-refactoring force=yes
+    notify: reload source code
+    sudo_user: "{{ name }}"
+
+  - name: install app dependencies
+    command: make ubuntu chdir={{ path }}
+
+  - name: init buildout
+    command: python2.7 scripts/genconfig.py config/env/production.cfg chdir={{ path }} creates={{ path }}/buildout.cfg
+    sudo_user: "{{ name }}"
+
+  - name: build project
+    command: make chdir={{ path }}
+    sudo_user: "{{ name }}"
+
+  - name: migrate database
+    command: bin/django migrate --noinput chdir={{ path }}
+    sudo_user: "{{ name }}"
+
+  - name: build widget frontend assets
+    shell: "{{ path }}/manoseimas/widget/frontend/node_modules/.bin/cake build chdir={{ path }}/manoseimas/widget/frontend"
+    environment:
+      PATH: "{{ path }}/manoseimas/widget/frontend/node_modules/.bin:{{ ansible_env.PATH }}"
+    sudo_user: "{{ name }}"
+
+  - name: collectstatic
+    command: bin/django collectstatic --noinput chdir={{ path }}
+    sudo_user: "{{ name }}"
+
+  # Set up Apache
+
+  - name: set up apache virtual host for the app
+    template: src=templates/apache.conf dest=/etc/apache2/sites-enabled/{{ name }}.conf
+    notify: reload apache
+
+  - name: set up apache virtual host for couchdb
+    template: src=templates/apache_couchdb.conf dest=/etc/apache2/sites-enabled/{{ name }}_couchdb.conf
+    notify: reload apache
+
+  - name: create log dirs
+    file: path=/var/log/apache2/{{ item }} state=directory
+    with_items:
+    - "{{ name }}"
+    - "{{ name }}-couchdb"
+
+  - name: ensure apache is running and starts on boot
+    service: name=apache2 state=started enabled=true
+
+
+  handlers:
+
+  - name: reload source code
+    command: touch --no-create {{ path }}/bin/django.wsgi
+
+  - name: reload apache
+    service: name=apache2 state=reloaded

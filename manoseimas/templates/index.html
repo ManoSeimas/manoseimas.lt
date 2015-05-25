@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load sboard %}
+{% load static from staticfiles %}
 
 {% block middle %}
 <div id="middle" class="index">
     <div class="splash-wide">
-        <p><img class="logo" src="{{ STATIC_URL }}img/logo-white.png" /></p>
+        <p><img class="logo" src="{% static "img/logo-white.png" %}" /></p>
         <h2>Stebėk, kaip balsuoja Seimas</h2>
         <p class='byline'>
             Projekta rengia:<br/>
@@ -16,7 +17,7 @@
       <a target='_blank' href='https://www.aukok.lt/Projektai/Manoseimas-lt' class='donate'>Paremk!</a>
       <h2 class='heading'>Naujausi balsavimai</h2>
       <div class='widget'>
-          <iframe id='widget-frame' src='/widget?voting_id={{ recent_votings.0.votings.0.id }}' scrolling='no'></iframe><!-- no space
+          <iframe id='widget-frame' src='{% url 'widget_index' %}?voting_id={{ recent_votings.0.votings.0.id }}' scrolling='no'></iframe><!-- no space
           --><div class="sidepanel">
           <div class='search-container'>
             <form>
@@ -56,17 +57,17 @@
   <h2 class='heading'>Įsidėkite valdiklį į savo svetainę!</h2>
   <div class='instructions'>
       <div class='step'>
-          <img src="{{ STATIC_URL }}img/home-icon-cursor.png" />
+          <img src="{% static "img/home-icon-cursor.png" %}" />
           <p>Pasirinkite norimą balsavimą</p>
       </div>
       <div class='divider'></div>
       <div class='step'>
-          <img src="{{ STATIC_URL }}img/home-icon-gear.png" />
+          <img src="{% static "img/home-icon-gear.png" %}" />
           <p>Nustatykite valdiklio išvaizdą</p>
       </div>
       <div class='divider'></div>
       <div class='step'>
-          <img src="{{ STATIC_URL }}img/home-icon-tag.png" />
+          <img src="{% static "img/home-icon-tag.png" %}" />
           <p>Įterpkite sugeneruotą kodą į savo tinklalapį</p>
       </div>
       <p>

@@ -68,10 +68,12 @@ Vagrant.configure(2) do |config|
     set -e
     sudo apt-get update
     sudo apt-get install -y default-jre couchdb
-    (cd /vagrant && sudo ./waf setup)
+    sudo apt-get install -y nodejs nodejs-legacy npm
+    (cd /vagrant && make ubuntu)
     # PIL is awful
     sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
     grep "cd /vagrant" /home/vagrant/.bashrc || echo "cd /vagrant" >> /home/vagrant/.bashrc
     sudo -u vagrant mkdir -p /home/vagrant/manoseimas
+    (cd /vagrant && sudo -u vagrant scripts/genconfig.py config/env/vagrant.cfg)
   SHELL
 end

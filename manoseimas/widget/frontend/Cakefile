@@ -38,15 +38,15 @@ compile = (options, callback) ->
 compile_stylesheets = (options, callback) ->
     tmp_dir   = options.tmp or 'tmp'
     console.log "Compiling down stylesheets..."
-    cmd "sass -t compressed stylesheets/widget.scss #{tmp_dir}/widget.css", () ->
+    cmd "../../../bin/sassc -s compressed stylesheets/widget.scss #{tmp_dir}/widget.css", () ->
         console.log "Compiling templates & CSS to Javascript..."
         cmd "handlebars -m -f #{tmp_dir}/templates.js #{tmp_dir}/*.css templates/*.handlebars", callback
 
 compile_scripts = (options, callback) ->
     tmp_dir   = options.tmp or 'tmp'
     files = new Rehab().process 'scripts'
-    console.log "Compiling Coffeescript to Javascript..."
-    cmd "coffee -b -o tmp -j widget.js -c #{ files.join ' ' }", callback
+    console.log "Compiling Coffeescript to Javascript... #{ files.join ' ' }"
+    cmd "cat #{ files.join ' ' } | coffee -b -c --stdio > tmp/widget.js", callback
 
 
 pack = (options, callback) ->

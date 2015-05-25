@@ -9,37 +9,30 @@
 .mr.developer.cfg
 .sass-cache
 .waf*
-config.log
-
+.ropeproject
 .vagrant
 
-manoseimas/scrapy/settings.py
-manoseimas/settings.py
-manoseimas/urls.py
+/bin
+/buildout.cfg
+/develop-eggs
+/downloads
+/eggs
+/parts
+/tags
+/var
+/log
+/lib
+/local
+/include
 
-bin
-buildout.cfg
-c4che
-configure
-develop-eggs
-docs/build
-downloads
-eggs
-env
-initial_data.json
-parts
-tags
-var
-log
-node_modules
-
-manoseimas/static/css/styles.css
-manoseimas/static/fonts/open-sans/stylesheet.css
+/settings.json
+/manoseimas/static/css/styles.css
+/manoseimas/static/fonts/open-sans/stylesheet.css
 
 # Widget build files and output
-manoseimas/static/js/manoSeimas-widget.*.js
-manoseimas/widget/frontend/build
-manoseimas/widget/frontend/tmp
+/manoseimas/widget/frontend/node_modules
+/manoseimas/widget/frontend/build
+/manoseimas/widget/frontend/tmp
+/manoseimas/widget/frontend/.done
 
-node_modules
-
+/deployment/credentials

@@ -62,7 +62,7 @@
               <ul class="dropdown-menu">
                 <li><a href="{{ request.user.get_profile.get_node.permalink }}">
                   <i class="icon-user"></i> {% trans "Profile" %}</a></li>
-                <li><a href="{% url logout %}">
+                <li><a href="{% url 'logout' %}">
                   <i class="icon-off"></i> {% trans "Log out" %}</a></li>
               </ul>
             </li>
@@ -72,18 +72,18 @@
                 <i style="margin-top: 3px" class="icon-user"></i> {% trans "Log in" %}
                 <i class="caret"></i></a>
               <ul class="dropdown-menu">
-                <li><a href="{% url socialauth_begin 'google' %}">{% trans "Google" %}</a></li>
+                <li><a href="{% url 'socialauth_begin' 'google' %}">{% trans "Google" %}</a></li>
                 {% if FACEBOOK_APP_ID %}
-                <li><a href="{% url socialauth_begin 'facebook' %}">{% trans "Facebook" %}</a></li>
+                <li><a href="{% url 'socialauth_begin' 'facebook' %}">{% trans "Facebook" %}</a></li>
                 {% endif %}
-                <li><a href="{% url login %}">{% trans "OpenID" %}</a></li>
+                <li><a href="{% url 'login' %}">{% trans "OpenID" %}</a></li>
               </ul>
             </li>
             {% endif %}
           </ul>
         </div>
 
-        <form action="{% url search %}" method="get" id="search-box">
+        <form action="{% url 'search' %}" method="get" id="search-box">
           <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
                  placeholder="{% trans "Ieškok politikų, temų, argumentų&hellip;" %}" class="search-query">
           <input type="submit" class="submit icon-search" value="">

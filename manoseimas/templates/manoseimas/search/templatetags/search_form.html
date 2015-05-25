@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<form action="{% url manoseimas-search-results %}" method="GET">
+<form action="{% url 'manoseimas-search-results' %}" method="GET">
     Search:
     {{ search_form.query }}
     <input type="submit" value="{% trans "Ieškoti" %}" />

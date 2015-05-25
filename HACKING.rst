@@ -1,35 +1,43 @@
 Here are instructions how you can build and run this project on your own
-computer to get started with development.
-
-Requirements
-============
-
-To be able to build and run this project you will need:
-
-* working CouchDB server instance with created database, specified in
-  conf/settings.py file
-
-* python 2.7
-
-* git DVCS's
-
-* C/C++ compiler, python development headers for compiling python extension.
-
-* NodeJS 0.10+
-
-System requirements can be installed all at once using this command:
-
-    sudo apt-get install git
-    git clone https://github.com/ManoSeimas/manoseimas.lt.git
-    cd manoseimas.lt
-    sudo ./waf setup
-
-Note: to customize project settings, you may pass additional parameters to waf.
-See './waf --help' for details.
-
+computer to get started with the development.
 
 Configuring development environment
 ===================================
+
+Ubuntu 14.04
+------------
+
+Before starting, install system dependencies (this will require ``sudo``)::
+
+    make ubuntu
+
+Run CouchDB using Docker::
+
+    docker run -d -p 5984:5984 --name couchdb klaemo/couchdb:1.6.1
+
+If you don't have Docker, you can install CouchDB using the manual way (see
+`Manual CouchDB install`_) also you can install CouchDB using your package
+manager. It's up to you how you get CouchDB running.
+
+By default ``config/env/development.cfg`` configuration is used and it expect
+you to have ``django-sboard`` and ``couchdbkit`` in ``parts`` directory. So you
+have to clone those repositories manually::
+
+    mkdir parts
+    hg clone ssh://hg@bitbucket.org/sirex/django-sboard parts/django-sboard
+    git clone -b django-1.8 git@github.com:sirex/couchdbkit.git parts/couchdbkit
+
+Build the project::
+
+    make
+
+Run migrations::
+
+    bin/django migrate
+
+And run the project::
+
+    make run
 
 Vagrant
 -------
@@ -49,17 +57,10 @@ browser and navigate to::
 
     http://127.0.0.1:8000
 
+Manual CouchDB install
+----------------------
 
-Manual
-------
-
-Install CouchDB database. You can install it using your package manager, but
-most package managers provides old 1.0.x version of CouchDB which has some
-problems with database replication. To avoid these problems, it is recommended
-to install 1.2 version. If your package manager has old version, you can
-install newes version using:
-
-    https://github.com/iriscouch/build-couchdb
+https://github.com/iriscouch/build-couchdb
 
 In short, CouchDB can be installed using these commands::
 
@@ -73,16 +74,3 @@ In short, CouchDB can be installed using these commands::
 After building CouchDB, run it using this command::
 
     ./build/bin/couchdb
-
-To prepare and run development environment, only single command is needed::
-
-    make run
-
-If everything works so far, you can fill your database with real data using
-this command::
-
-    bin/couch replicate
-
-.. note::
-
-    Database replication can take some tame, be patient.

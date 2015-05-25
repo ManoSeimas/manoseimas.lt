@@ -10,7 +10,7 @@
     <ul>
     {% for document in amendments %}
         <li>[{{ document.date|date:"SHORT_DATE_FORMAT" }}]
-            <a href="{% url manoseimas-legislation document.number %}"
+            <a href="{% url 'manoseimas-legislation' document.number %}"
                 >{{ document.name }}</a></li>
     {% endfor %}
     </ul>

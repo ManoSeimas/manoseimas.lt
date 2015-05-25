@@ -113,7 +113,7 @@
   {% endfor %}
 
   <div class="bar" style="margin-bottom: -21px">
-    <a href="{% nodeurl node 'rezultatai' %}" class="btn btn-show-results">
+    <a href="{% nodeurl node 'rezultatai' %}" class="btn btn-success btn-large btn-show-results">
       {% trans "BAIGTI TESTĄ" %}
     </a>
   </div>
@@ -141,7 +141,7 @@ $(function() {
 {% endblock %}
 
 {% block additional_sidebar %}
-<a href="{% nodeurl node 'rezultatai' %}" class="btn btn-show-results">
+<a href="{% nodeurl node 'rezultatai' %}" class="btn btn-success btn-large btn-show-results">
   {% trans "BAIGTI TESTĄ" %}
 </a>
 {% endblock %}

@@ -12,7 +12,7 @@ Viso rasta {{ total }} atitikmenys.
 </p>
 
 {% for doc in documents %}
-<p><a href="{% url manoseimas-document doc.id %}"
+<p><a href="{% url 'manoseimas-document' doc.id %}"
     >[{{doc.number}}] {{ doc.name }}</a></p>
 {% endfor %}
 {% endblock %}
