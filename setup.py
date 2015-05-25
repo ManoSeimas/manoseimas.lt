@@ -33,6 +33,7 @@ setup(
         'exportrecipe',
         'libsass',
         'django-libsass',
+        'pyjade',
     ],
     entry_points={
         'console_scripts': [
