@@ -1,4 +1,6 @@
 from django.db import models
+from autoslug import AutoSlugField
+
 # from django.utils.translation import ugettext as _
 
 
@@ -71,6 +73,7 @@ class Group(CrawledItem):
     )
 
     name = models.CharField(max_length=128, unique=True)
+    slug = AutoSlugField(populate_from='name')
     type = models.CharField(max_length=16,
                             choices=GROUP_TYPES)
 

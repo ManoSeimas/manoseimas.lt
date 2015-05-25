@@ -34,6 +34,7 @@ setup(
         'libsass',
         'django-libsass',
         'pyjade',
+        'django-autoslug',
     ],
     entry_points={
         'console_scripts': [
