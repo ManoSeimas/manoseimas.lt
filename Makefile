@@ -36,3 +36,7 @@ manoseimas/widget/frontend/.done: bin/sassc
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) mkdirs ; $<
 
 .PHONY: all help run mkdirs widget tags
+
+.PHONY: migrate
+migrate: bin/django
+	bin/django migrate
