@@ -5,3 +5,13 @@ INTERNAL_IPS = (
     '127.0.0.1',
     '10.0.2.2',  # Vagrant host IP in default config
 )
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {
+            'init_command': 'SET storage_engine=INNODB',
+            'read_default_file': os.path.expanduser('~/.my.cnf'),
+        },
+    }
+}

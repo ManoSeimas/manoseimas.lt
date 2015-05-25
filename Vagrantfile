@@ -68,12 +68,20 @@ Vagrant.configure(2) do |config|
     set -e
     sudo apt-get update
     sudo apt-get install -y default-jre couchdb
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password password '
+    debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password '
+    apt-get install -y mysql-server libmysqlclient-dev
+    mysql -e "create database if not exists manoseimas charset=utf8;
+      create user 'manoseimas'@'localhost';
+      grant all privileges on manoseimas.* to 'manoseimas'@'localhost';
+      flush privileges;"
     sudo apt-get install -y nodejs nodejs-legacy npm
     (cd /vagrant && make ubuntu)
     # PIL is awful
     sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
     grep "cd /vagrant" /home/vagrant/.bashrc || echo "cd /vagrant" >> /home/vagrant/.bashrc
     sudo -u vagrant mkdir -p /home/vagrant/manoseimas
+    printf "[client]\ndatabase = manoseimas\nuser = manoseimas\npassword =\nefault-character-set = utf8\n" | sudo -u vagrant tee ~/.my.cnf
     (cd /vagrant && sudo -u vagrant scripts/genconfig.py config/env/vagrant.cfg)
   SHELL
 end
