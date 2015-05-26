@@ -1,4 +1,4 @@
-all: bin/django widget
+all: bin/django widget mkdirs
 
 help:
 	@echo 'make ubuntu     install the necessary system packages (requires sudo)'
@@ -33,7 +33,10 @@ widget: manoseimas/widget/frontend/.done
 manoseimas/widget/frontend/.done: bin/sassc
 	$(MAKE) -C manoseimas/widget/frontend
 
-bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) mkdirs ; $<
+bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg)
+	$<
+	touch -c bin/django
+	touch -c bin/sassc
 
 migrate: bin/django ; bin/django migrate
 
