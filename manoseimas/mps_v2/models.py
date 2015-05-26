@@ -13,7 +13,11 @@ class CrawledItem(models.Model):
         abstract = True
 
 
+def get_mp_full_name(mp):
+    return mp.full_name
+
 class ParliamentMember(CrawledItem):
+    slug = AutoSlugField(populate_from=get_mp_full_name)
     source_id = models.CharField(max_length=16)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)

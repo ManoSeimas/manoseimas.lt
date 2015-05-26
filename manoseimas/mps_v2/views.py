@@ -13,7 +13,8 @@ def mp_list(request, fraction_slug=None):
     def extract(mp):
         return {
             'id': mp.id,
-            'full_name': mp.full_name
+            'full_name': mp.full_name,
+            'slug': mp.slug
         }
 
     fractions = Group.objects.filter(type='fraction')
@@ -29,11 +30,13 @@ def mp_list(request, fraction_slug=None):
     else:
         mps = map(extract, ParliamentMember.objects.all())
 
-    return render(request, 'mp_catalog.jade', {'mps': mps, 'fractions': fractions})
+    return render(request, 'mp_catalog.jade', {
+                                               'mps': mps,
+                                               'fractions': fractions})
 
 
-def mp_profile(request, mp_id):
-    mp = ParliamentMember.objects.get(id=mp_id)
+def mp_profile(request, mp_slug):
+    mp = ParliamentMember.objects.get(slug=mp_slug)
 
     profile = {'full_name': mp.full_name}
     if mp.current_fraction:

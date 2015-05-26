@@ -11,4 +11,4 @@
 
   ul
     for mp in mps
-      li: a(href="{% url 'mp_profile' mp.id %}") {{mp.full_name}}
+      li: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
