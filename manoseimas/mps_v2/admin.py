@@ -8,7 +8,16 @@ class GroupAdmin(admin.ModelAdmin):
     list_filter = ('type',)
 
 
-admin.site.register(ParliamentMember)
+class MpMembershipAdmin(admin.TabularInline):
+    model = ParliamentMember.groups.through
+    fk_name = 'member'
+
+
+class ParliamentMemberAdmin(admin.ModelAdmin):
+    inlines = (MpMembershipAdmin,)
+
+
+admin.site.register(ParliamentMember, ParliamentMemberAdmin)
 admin.site.register(GroupMembership)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(PoliticalParty)
