@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.utils.safestring import mark_safe
 
 from couchdbkit.exceptions import ResourceNotFound
 
@@ -53,6 +54,8 @@ def mp_profile(request, mp_slug):
     context = {
         'profile': profile,
         'positions': positions,
+        'memberships': mp.other_group_memberships,
+        'biography': mark_safe(mp.biography),
     }
     return render(request, 'profile.jade', context)
 

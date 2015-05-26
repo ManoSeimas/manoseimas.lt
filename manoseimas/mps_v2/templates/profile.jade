@@ -11,13 +11,34 @@
 
   .profile-box
     div
-      img(src="/static/img/photo-default.png" title="{{profile.full_name}}").photo.pull-left
-      h1
-        - block title
-          {{ profile.full_name }}
+      .row-fluid
+        .span4
+          img(src="/static/img/photo-default.png" title="{{profile.full_name}}").photo
+        .span8
+          h1
+            - block title
+              {{ profile.full_name }}
 
-      if profile.fraction_name
-        p {{ profile.fraction_name }}
+          if profile.fraction_name
+            p {{ profile.fraction_name }}
+
+          h3 List of Groups
+          table.table.table-striped
+            thead
+              tr
+                th Group name
+                th Type
+                th Position
+            tbody
+              for membership in memberships
+                tr
+                  td {{membership.group.name}}
+                  td {{membership.group.type}}
+                  td {{membership.position}}
+
+  .biography
+    {{biography}}
+
 
   if positions
     hr(style="clear: both")
