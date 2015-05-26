@@ -21,18 +21,14 @@ def mp_list(request, fraction_slug=None):
     fractions = Group.objects.filter(type='fraction')
 
     if fraction_slug:
-        selected_fraction = GroupMembership.objects.filter(group__type='fraction', group__slug=fraction_slug)
-        if selected_fraction:
-            selected_fraction = selected_fraction[0].group
-        else:
-            selected_fraction = None
-
-        mps = map(extract, ParliamentMember.objects.filter(groups=selected_fraction))
+        fraction = GroupMembership.objects.filter(group__type='fraction',
+                                                  group__slug=fraction_slug)
+        fraction = fraction[0].group if fraction else None
+        mps = map(extract, ParliamentMember.objects.filter(groups=fraction))
     else:
         mps = map(extract, ParliamentMember.objects.all())
 
-    return render(request, 'mp_catalog.jade', {
-                                               'mps': mps,
+    return render(request, 'mp_catalog.jade', {'mps': mps,
                                                'fractions': fractions})
 
 
@@ -58,4 +54,3 @@ def mp_profile(request, mp_slug):
         'biography': mark_safe(mp.biography),
     }
     return render(request, 'profile.jade', context)
-
