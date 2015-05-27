@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+import autoslug.fields
+import manoseimas.mps_v2.models
 
 
 class Migration(migrations.Migration):
@@ -17,8 +19,9 @@ class Migration(migrations.Migration):
                 ('source', models.URLField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('modified_at', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(unique=True, max_length=128)),
-                ('type', models.CharField(max_length=16, choices=[(b'group', b'Group'), (b'committee', b'Committee'), (b'commission', b'Commission'), (b'fraction', b'Fraction'), (b'parliament', b'Parliament')])),
+                ('name', models.CharField(unique=True, max_length=255)),
+                ('slug', autoslug.fields.AutoSlugField(populate_from=b'name', editable=False)),
+                ('type', models.CharField(max_length=64, choices=[(b'group', 'Group'), (b'committee', 'Committee'), (b'commission', 'Commission'), (b'fraction', 'Fraction'), (b'parliament', 'Parliament')])),
             ],
         ),
         migrations.CreateModel(
@@ -28,7 +31,7 @@ class Migration(migrations.Migration):
                 ('source', models.URLField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('modified_at', models.DateTimeField(auto_now=True)),
-                ('position', models.CharField(max_length=64)),
+                ('position', models.CharField(max_length=128)),
                 ('since', models.DateField(null=True, blank=True)),
                 ('until', models.DateField(null=True, blank=True)),
                 ('group', models.ForeignKey(to='mps_v2.Group')),
@@ -44,6 +47,7 @@ class Migration(migrations.Migration):
                 ('source', models.URLField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('modified_at', models.DateTimeField(auto_now=True)),
+                ('slug', autoslug.fields.AutoSlugField(populate_from=manoseimas.mps_v2.models.get_mp_full_name, editable=False)),
                 ('source_id', models.CharField(max_length=16)),
                 ('first_name', models.CharField(max_length=128)),
                 ('last_name', models.CharField(max_length=128)),

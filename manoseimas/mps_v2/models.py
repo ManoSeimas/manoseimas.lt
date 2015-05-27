@@ -1,7 +1,7 @@
 from django.db import models
 from autoslug import AutoSlugField
 
-# from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _
 
 
 class CrawledItem(models.Model):
@@ -51,8 +51,8 @@ class ParliamentMember(CrawledItem):
     @property
     def current_fraction(self):
         membership = GroupMembership.objects.filter(member=self.id,
-                                           group__type='fraction',
-                                           until=None)[:]
+                                                    group__type='fraction',
+                                                    until=None)[:]
 
         if membership:
             return membership[0].group
@@ -62,7 +62,8 @@ class ParliamentMember(CrawledItem):
     @property
     def other_group_memberships(self):
         # Not fraction groups
-        return GroupMembership.objects.filter(member=self).exclude(group__type='fraction')
+        return GroupMembership.objects.filter(member=self)\
+            .exclude(group__type='fraction')
 
 
 class PoliticalParty(CrawledItem):
@@ -74,16 +75,16 @@ class PoliticalParty(CrawledItem):
 
 class Group(CrawledItem):
     GROUP_TYPES = (
-        ('group', ('Group')),
-        ('committee', ('Committee')),
-        ('commission', ('Commission')),
-        ('fraction', ('Fraction')),
-        ('parliament', ('Parliament')),
+        ('group', _('Group')),
+        ('committee', _('Committee')),
+        ('commission', _('Commission')),
+        ('fraction', _('Fraction')),
+        ('parliament', _('Parliament')),
     )
 
-    name = models.CharField(max_length=128, unique=True)
+    name = models.CharField(max_length=255, unique=True)
     slug = AutoSlugField(populate_from='name')
-    type = models.CharField(max_length=16,
+    type = models.CharField(max_length=64,
                             choices=GROUP_TYPES)
 
     class Meta:
@@ -96,7 +97,7 @@ class Group(CrawledItem):
 class GroupMembership(CrawledItem):
     member = models.ForeignKey(ParliamentMember)
     group = models.ForeignKey(Group)
-    position = models.CharField(max_length=64)
+    position = models.CharField(max_length=128)
     since = models.DateField(blank=True, null=True)
     until = models.DateField(blank=True, null=True)
 
