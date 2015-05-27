@@ -33,7 +33,7 @@ widget: manoseimas/widget/frontend/.done
 manoseimas/widget/frontend/.done: bin/sassc
 	$(MAKE) -C manoseimas/widget/frontend
 
-bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg)
+bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
 	$<
 	touch -c bin/django
 	touch -c bin/sassc
