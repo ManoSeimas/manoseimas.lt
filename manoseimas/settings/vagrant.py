@@ -10,7 +10,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'init_command': 'SET storage_engine=INNODB',
+            'init_command': ('SET storage_engine=INNODB; '
+                             'SET GLOBAL sql_mode=STRICT_ALL_TABLES;'),
             'read_default_file': os.path.expanduser('~/.my.cnf'),
         },
     }
