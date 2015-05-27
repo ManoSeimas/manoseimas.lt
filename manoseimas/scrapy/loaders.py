@@ -2,11 +2,11 @@ import string
 
 from urlparse import urljoin
 
-from scrapy.contrib.loader import processor, XPathItemLoader
-from scrapy.selector import HtmlXPathSelector
+from scrapy.contrib.loader import processor, ItemLoader
+from scrapy.selector import Selector
 
 
-class Loader(XPathItemLoader):
+class Loader(ItemLoader):
     default_input_processor = processor.MapCompose(string.strip)
     default_output_processor = processor.Join()
 
@@ -32,17 +32,18 @@ class Loader(XPathItemLoader):
         item = super(Loader, self).load_item()
 
         if missing:
-            self.spider.error(self.response,
-                    "Missing fields: '%s' in %s" % ("', '".join(missing),
-                                                    item))
+            self.spider.error(
+                self.response,
+                "Missing fields: '%s' in %s" % ("', '".join(missing), item)
+            )
 
         return item
 
 
 def absolute_url(value, loader_context=None):
     response = loader_context['response']
-    xs = HtmlXPathSelector(response)
-    base_url = xs.select('//base/@href').extract()
+    xs = Selector(response)
+    base_url = xs.xpath('//base/@href').extract()
     base_url = (urljoin(response.url, base_url[0].encode(response.encoding))
                 if base_url else response.url)
     return urljoin(base_url, ''.join(value))

@@ -1,6 +1,7 @@
 import datetime
 
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
+from manoseimas.scrapy.items import Person
 
 from manoseimas.mps_v2.models import ParliamentMember, PoliticalParty
 from manoseimas.mps_v2.models import Group, GroupMembership
@@ -91,7 +92,10 @@ class ManoSeimasModelPersistPipeline(object):
         return item
 
     def process_item(self, item, spider):
-        return self.process_mp(item, spider)
+        if isinstance(item, Person):
+            return self.process_mp(item, spider)
+        else:
+            return item
 
     def open_spider(self, spider):
         pass

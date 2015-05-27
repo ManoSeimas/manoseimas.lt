@@ -31,7 +31,6 @@ from sboard.models import couch
 from manoseimas.scrapy.pipelines import ManoseimasPipeline
 from manoseimas.scrapy.db import get_db
 from manoseimas.scrapy.db import set_db_from_settings
-from manoseimas.scrapy.settings import COUCHDB_DATABASES
 from manoseimas.scrapy.spiders.sittings import SittingsSpider
 
 from .interfaces import IVoting
@@ -181,6 +180,7 @@ def fetch_lrslt_url(url):
 
 def fetch_voting_by_lrslt_url(url):
     # Avoiding circular imports
+    from manoseimas.scrapy.settings import COUCHDB_DATABASES
     import manoseimas.legislation.management. \
            commands.syncsittings as syncsittings
 

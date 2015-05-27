@@ -4,7 +4,6 @@ from couchdbkit import ResourceNotFound
 from couchdbkit import Server
 from couchdbkit import schema
 
-from manoseimas.scrapy.settings import COUCHDB_DATABASES
 
 class DateTimeProperty(schema.DateTimeProperty):
     def to_python(self, value):
@@ -72,6 +71,7 @@ def set_db_from_settings(settings, item_name, cache=True):
 def get_db(item_name, cache=True):
     global _servers, _dbs
     if not cache or item_name not in _dbs:
+        from manoseimas.scrapy.settings import COUCHDB_DATABASES
         set_db_from_settings(COUCHDB_DATABASES, item_name)
     return _dbs[item_name]
 
