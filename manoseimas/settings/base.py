@@ -172,6 +172,11 @@ INSTALLED_APPS = (
     'manoseimas.widget',
 )
 
+MIGRATION_MODULES = {
+    'social_auth': 'manoseimas.migrations.social_auth',
+    'profiles': 'manoseimas.migrations.sboard_profiles',
+}
+
 
 LOGGING = {
     'version': 1,
