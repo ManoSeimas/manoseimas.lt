@@ -1,8 +1,12 @@
-# import os.path
-# from django.core.management import setup_environ
-# import manoseimas.settings
-# setup_environ(manoseimas.settings)
-# from django.conf import settings
+# Initialize django
+import os.path
+import exportrecipe
+BUILDOUT_DIR = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '../..')
+)
+config = exportrecipe.load(os.path.join(BUILDOUT_DIR, 'settings.json'))
+os.environ['DJANGO_SETTINGS_MODULE'] = config.django_settings
+from django.conf import settings
 
 
 BOT_NAME = 'manoseimas.lt'
@@ -13,15 +17,21 @@ DEFAULT_ITEM_CLASS = 'manoseimas.scrapy.items.Person'
 USER_AGENT = '%s/1.1' % (BOT_NAME)
 
 LOG_ENABLED = True
-LOG_LEVEL = 'WARNING' # CRITICAL, ERROR, WARNING, INFO, DEBUG
+LOG_LEVEL = 'WARNING'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
 # LOG_FILE = os.path.join(settings.BUILDOUT_DIR, 'var', 'log', 'scrapy.log')
-
-# HTTPCACHE_ENABLED = True
-# HTTPCACHE_DIR = os.path.join(settings.BUILDOUT_DIR, 'var', 'httpcache')
 
 ITEM_PIPELINES = [
     'manoseimas.scrapy.pipelines.ManoseimasPipeline',
 ]
+
+DOWNLOADER_MIDDLEWARES = {
+    'mp_crawler.downloadermiddleware.NoCacheInitialURLMiddleware': 1
+}
+
+HTTPCACHE_ENABLED = True
+HTTPCACHE_POLICY = 'manoseimas.scrapy.httpcache.NoCacheFlagPolicy'
+HTTPCACHE_STORAGE = 'scrapy.contrib.httpcache.LeveldbCacheStorage'
+HTTPCACHE_DIR = os.path.join(settings.BUILDOUT_DIR, 'var', 'httpcache')
 
 COUCHDB_DATABASES = (
     ('legalact', 'http://127.0.0.1:5984', 'legalacts',),

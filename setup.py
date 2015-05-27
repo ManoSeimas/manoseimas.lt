@@ -35,6 +35,8 @@ setup(
         'django-libsass',
         'pyjade',
         'django-autoslug',
+        'six',
+        'leveldb',
     ],
     entry_points={
         'console_scripts': [

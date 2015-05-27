@@ -4,9 +4,8 @@ import unittest
 
 from scrapy.http import HtmlResponse
 
-from ..spiders.mps import MpsSpider
-
-from .utils import fixture
+from manoseimas.scrapy.spiders.mps import MpsSpider
+from manoseimas.scrapy.tests import fixture
 
 
 def parse_mp():
@@ -25,6 +24,7 @@ class TestMpsSpider(unittest.TestCase):
                'p_r=6113&p_k=1&p_a=5&p_asm_id=53911&p_kade_id=6')
         response = HtmlResponse(url, body=fixture('mp_53911.html'))
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
         self.assertEqual(item['_id'], '53911p')
         self.assertEqual(item['first_name'], 'Antanas')
@@ -34,12 +34,14 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['phone'], ['2396694'])
         self.assertEqual(item['raised_by'], u'Tautos prisikėlimo partija')
         self.assertEqual(item['candidate_page'],
-                ('http://www.vrk.lt/rinkimai/400_lt/Kandidatai/'
-                 'Kandidatas22997/Kandidato22997Anketa.html'))
-        self.assertEqual(item['photo'],
-                ('http://www3.lrs.lt/home'
-                 '/seimo_nariu_nuotraukos/2008/antanas_nedzinskas.jpg'))
+                         ('http://www.vrk.lt/rinkimai/400_lt/Kandidatai/'
+                          'Kandidatas22997/Kandidato22997Anketa.html'))
+        self.assertEqual(
+            item['photo'],
+            ('http://www3.lrs.lt/home'
+             '/seimo_nariu_nuotraukos/2008/antanas_nedzinskas.jpg'))
         self.assertEqual(len(item['groups']), 13)
+        self.assertTrue(len(item['biography']) > 0)
 
     def test_adomenas(self):
         spider = MpsSpider()
@@ -48,6 +50,7 @@ class TestMpsSpider(unittest.TestCase):
         response = HtmlResponse(url, body=fixture('mp_48690.html'))
 
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
         self.assertEqual(item['_id'], '48690p')
         self.assertEqual(item['parliament'], ['2008-2012'])
@@ -64,13 +67,13 @@ class TestMpsSpider(unittest.TestCase):
                                              u'krikščionys demokratai'))
         self.assertEqual(item['home_page'], 'http://www.adomenas.lt')
         self.assertEqual(item['candidate_page'],
-                ('http://www.vrk.lt/rinkimai/400_lt/Kandidatai/'
-                 'Kandidatas19624/Kandidato19624Anketa.html'))
+                         ('http://www.vrk.lt/rinkimai/400_lt/Kandidatai/'
+                          'Kandidatas19624/Kandidato19624Anketa.html'))
         self.assertEqual(item['photo'],
-                ('http://www3.lrs.lt/home'
-                 '/seimo_nariu_nuotraukos/2008/mantas_adomenas.jpg'))
+                         ('http://www3.lrs.lt/home'
+                          '/seimo_nariu_nuotraukos/2008/mantas_adomenas.jpg'))
         self.assertEqual(len(item['groups']), 32)
-
+        self.assertTrue(len(item['biography']) > 0)
 
     def test_jukneviciene(self):
         spider = MpsSpider()
@@ -79,6 +82,7 @@ class TestMpsSpider(unittest.TestCase):
         response = HtmlResponse(url, body=fixture('mp_178.html'))
 
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
 
         self.assertEqual(item['dob'], '1958-01-26')
@@ -86,6 +90,7 @@ class TestMpsSpider(unittest.TestCase):
                                               '2000-2004', '1996-2000',
                                               '1990-1992'])
         self.assertEqual(len(item['groups']), 10)
+        self.assertTrue(len(item['biography']) > 0)
 
     def test_abramikiene(self):
         spider = MpsSpider()
@@ -94,12 +99,15 @@ class TestMpsSpider(unittest.TestCase):
         response = HtmlResponse(url, body=fixture('mp_7229.html'))
 
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
 
         self.assertEqual(item['first_name'], u'Vilija')
         self.assertEqual(item['last_name'], u'Aleknaitė Abramikienė')
         self.assertEqual(item['dob'], '1957-05-04')
         self.assertEqual(len(item['groups']), 21)
+
+        self.assertTrue(len(item['biography']) > 0)
 
     def test_rutkelyte(self):
         spider = MpsSpider()
@@ -108,6 +116,7 @@ class TestMpsSpider(unittest.TestCase):
         response = HtmlResponse(url, body=fixture('mp_7259.html'))
 
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
 
         self.assertEqual(item['first_name'], u'Rūta')
@@ -115,6 +124,7 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['constituency'], u'pagal sąrašą')
         self.assertEqual(item['office_address'], u'')
 
+        self.assertTrue(len(item['biography']) > 0)
 
     def test_alekna(self):
         spider = MpsSpider()
@@ -123,16 +133,16 @@ class TestMpsSpider(unittest.TestCase):
         response = HtmlResponse(url, body=fixture('mp_7404.html'))
 
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
 
         self.assertEqual(item['first_name'], u'Raimundas')
         self.assertEqual(item['last_name'], u'Alekna')
         self.assertEqual(item['constituency'], u'pagal sąrašą')
         self.assertEqual(item['candidate_page'],
-                ('http://www.vrk.lt/rinkimai/400_lt/Kandidatai/'
-                 'Kandidatas19638/Kandidato19638Anketa.html'))
+                         ('http://www.vrk.lt/rinkimai/400_lt/Kandidatai/'
+                          'Kandidatas19638/Kandidato19638Anketa.html'))
         self.assertEqual(item['parliament'], ['2008-2012', '1996-2000'])
-
 
     def test_baltraitiene(self):
         spider = MpsSpider()
@@ -141,11 +151,13 @@ class TestMpsSpider(unittest.TestCase):
         response = HtmlResponse(url, body=fixture('mp_48114.html'))
 
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
 
         self.assertEqual(item['first_name'], u'Virginija')
         self.assertEqual(item['last_name'], u'Baltraitienė')
 
+        self.assertTrue(len(item['biography']) > 0)
 
     def test_jursenas(self):
         spider = MpsSpider()
@@ -154,6 +166,7 @@ class TestMpsSpider(unittest.TestCase):
         response = HtmlResponse(url, body=fixture('mp_110.html'))
 
         items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
         item = items[0]
 
         self.assertEqual(item['first_name'], u'Česlovas')
@@ -161,5 +174,7 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['email'], [u'Ceslovas.Jursenas@lrs.lt',
                                          u'cejurs@lrs.lt'])
         self.assertEqual(item['home_page'],
-                'http://www3.lrs.lt/pls/inter/w5_show?p_r=4487&p_k=1')
+                         'http://www3.lrs.lt/pls/inter/w5_show?p_r=4487&p_k=1')
         self.assertEqual(item['phone'], ['2396025', '2396626'])
+
+        self.assertTrue(len(item['biography']) > 0)
