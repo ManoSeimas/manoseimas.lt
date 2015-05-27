@@ -40,6 +40,9 @@ bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildc
 
 migrate: bin/django ; bin/django migrate
 
+reset_mysql:
+	mysql -e 'drop database manoseimas; create database manoseimas character set utf8 collate utf8_bin;'
+
 import_backup: bin/django
 	mysql -u manoseimas < backup/manoseimas.sql
 	bin/django migrate --fake-initial
