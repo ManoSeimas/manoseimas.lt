@@ -113,7 +113,6 @@ class TestSyncSittings(NodesTestsMixin, TestCase):
         profile_id = processor.get_profile_id('47852')
         self.assertEqual(node.votes['aye'][0][0], profile_id)
 
-
     def test_get_profile_by_source_id(self):
         pipeline = FakePipeline()
         pipeline.process_item(parse_mp(), None)

@@ -19,12 +19,11 @@ class FakePipeline(ManoseimasPipeline):
         self._stored_items = {}
         super(FakePipeline, self).__init__(*args, **kwargs)
 
-    def get_doc(self, item_name, item):
+    def get_doc(self, db, item):
         return self._stored_items.get(item['_id'], None)
 
-    def store_item(self, item_name, doc, item):
+    def store_item(self, db, doc, item):
         self._stored_items[item['_id']] = doc
-
 
 
 class TestPipeline(unittest.TestCase):
