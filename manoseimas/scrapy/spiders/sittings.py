@@ -1,6 +1,8 @@
 # coding: utf-8
 import urllib
 
+from six import text_type
+
 from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
 
 from scrapy.contrib.spiders import Rule
@@ -18,21 +20,22 @@ from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.loaders import absolute_url
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.utils import Increment
-from manoseimas.scrapy.db import  get_sequential_votings, get_question
+from manoseimas.scrapy.db import get_sequential_votings, get_question
 
 
 # By default, never earlier than Seimas sitting 80, which is Fall 2008.
 MINIMUM_SITTING = 80
-        
+
+
 class SittingsSpider(ManoSeimasSpider):
     """
     This spider walks through all sittings of Seimas and extracts information
     about questions and documents discussed during sittings. Also it collects
     voting results.
-    
+
     LRS.LT PAGE HIERARCHY:
     All Seimas Sessions
-    http://www3.lrs.lt/pls/inter/w5_sale.kad_ses 
+    http://www3.lrs.lt/pls/inter/w5_sale.kad_ses
      -> List of Seimas sittings, organized by date, broken into morning and afternoon sittings
         Ex: http://www3.lrs.lt/pls/inter/w5_sale.ses_pos?p_ses_id=96
        -> List of events for a particular sitting, including Question discussions
@@ -42,23 +45,24 @@ class SittingsSpider(ManoSeimasSpider):
            -> A singular voting for this Question
               Ex: http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=-16591
 
-    The rules configured below are designed to resume scraping from where we last 
-    left off. We determine where we last left off using the unique, sequential IDs 
-    that lrs.lt uses when referencing documents. We take the most recent voting in 
-    our database and backtrack to identify the most recent Question, Sitting, and 
+    The rules configured below are designed to resume scraping from where we last
+    left off. We determine where we last left off using the unique, sequential IDs
+    that lrs.lt uses when referencing documents. We take the most recent voting in
+    our database and backtrack to identify the most recent Question, Sitting, and
     Session and use the QualifiedRangeSgmlLinkExtractor to limit scraping to documents
     published after our most recent Voting.
-    """
+    """  # noqa
 
     name = 'sittings'
     allowed_domains = ['lrs.lt']
 
-    def __init__(self, resume="yes", start_url='http://www3.lrs.lt/pls/inter/w5_sale.kad_ses'):
-        #print "Arguments: Start_url: %s ; Resume? %s" % (start_url, resume)
+    def __init__(self, resume="yes",
+                 start_url='http://www3.lrs.lt/pls/inter/w5_sale.kad_ses'):
+        # print "Arguments: Start_url: %s ; Resume? %s" % (start_url, resume)
 
-        self.start_urls = [ start_url ]
+        self.start_urls = [start_url]
 
-        sitting_session_range = [ (MINIMUM_SITTING, None), (None, None) ]
+        sitting_session_range = [(MINIMUM_SITTING, None), (None, None)]
         question_range = None
         voting_range = None
 
@@ -67,47 +71,43 @@ class SittingsSpider(ManoSeimasSpider):
             voting = get_sequential_votings(limit=1)[0]
             question = get_question(voting['question'])
             session = question['session']
-            #print "VOTING: [_id=%s, question=%s]" % (voting['_id'], voting['question'])
-            #print "QUESTION: [_id=%s, session=%s]" % (question['_id'], question['session'])
-
             # Note: We're incrementing range arguments by 1 because our
-            # range comparison expects a standard [a,b) interval, with 2nd-argument
-            # exclusivity, and we're dealing with negative numbers. 
+            # range comparison expects a standard [a,b) interval,
+            # with 2nd-argument exclusivity, and we're dealing with
+            # negative numbers.
             sitting_session_range = [
-                    (int(session['id']), None),
-                     (None, 1+int(session['fakt_pos_id']))
+                (int(session['id']), None),
+                (None, 1+int(session['fakt_pos_id']))
             ]
-            question_range = [ (None, 1+int(question['source']['id'])) ]
-            # Note: We increment (see above note) and then decrement in order to 
-            # reach the next voting. Net result is 0 offset.
-            voting_range = [ (None, int(voting['source']['id'])) ]
+            question_range = [(None, 1+int(question['source']['id']))]
+            # Note: We increment (see above note) and then decrement in order
+            # to reach the next voting. Net result is 0 offset.
+            voting_range = [(None, int(voting['source']['id']))]
 
         self.rules = (
             Rule(QualifiedRangeSgmlLinkExtractor(
                  allow=[
-                        # List of Seimas sittings
-                        r'/pls/inter/w5_sale\.ses_pos\?p_ses_id=(\d+)',
-                        # List of days with early and late sessions
-                        r'/pls/inter/w5_sale\.fakt_pos\?p_fakt_pos_id=(-?\d+)'
-                     ],
-                 allow_range=sitting_session_range
-            )),
+                     # List of Seimas sittings
+                     r'/pls/inter/w5_sale\.ses_pos\?p_ses_id=(\d+)',
+                     # List of days with early and late sessions
+                     r'/pls/inter/w5_sale\.fakt_pos\?p_fakt_pos_id=(-?\d+)'
+                 ],
+                 allow_range=sitting_session_range)),
 
             # Discussion on a question
             Rule(QualifiedRangeSgmlLinkExtractor(
-                    allow=[r'p_svarst_kl_stad_id=(-?\d+)'], 
-                    allow_range=question_range
-                 ), 'parse_question', follow=True),
+                allow=[r'p_svarst_kl_stad_id=(-?\d+)'],
+                allow_range=question_range
+            ), 'parse_question', follow=True),
 
             # Voting results by person
             Rule(QualifiedRangeSgmlLinkExtractor(
-                    allow=[r'p_bals_id=(-?\d+)'], 
-                    allow_range=voting_range
-                ), 'parse_person_votes'),
+                allow=[r'p_bals_id=(-?\d+)'],
+                allow_range=voting_range
+            ), 'parse_person_votes'),
         )
-       
-        ManoSeimasSpider.__init__(self)
 
+        ManoSeimasSpider.__init__(self)
 
     def _get_session(self, response, hxs):
         session_id = hxs.select('div[1]/a[1]').re(r'p_ses_id=(\d+)')
@@ -118,7 +118,8 @@ class SittingsSpider(ManoSeimasSpider):
             'id', 'fakt_pos_id', 'number', 'date', 'type',))
 
         session.add_value('id', session_id)
-        session.add_value('fakt_pos_id', hxs.select('a[1]').re(r'p_fakt_pos_id=(-\d+)'))
+        session.add_value('fakt_pos_id',
+                          hxs.select('a[1]').re(r'p_fakt_pos_id=(-\d+)'))
         session.add_value('number', hxs.select('a[1]/text()').re(r'Nr. (\d+)'))
         session.add_xpath('date', 'a[2]/text()')
         session.add_xpath('type', 'a[3]/text()')
@@ -198,7 +199,7 @@ class SittingsSpider(ManoSeimasSpider):
                                       required=('datetime',))
 
                 url = item.select('td[2]/a[1]/@href').extract()[0]
-                _id = unicode(self._get_query_attr(url, 'p_reg_id'))
+                _id = text_type(self._get_query_attr(url, 'p_reg_id'))
 
                 registration.add_value('id', _id)
                 registration.add_value('datetime', date)
@@ -210,12 +211,12 @@ class SittingsSpider(ManoSeimasSpider):
                 voting = self._get_question_voting(response, item, question)
                 votes = sum([int(voting.get_output_value('vote_%s' % f))
                              for f in ('aye', 'no', 'abstain')])
-                voting.add_value('total_votes', unicode(votes))
+                voting.add_value('total_votes', text_type(votes))
 
                 if registration:
                     registration = dict(registration.load_item())
                     joined = int(registration['joined'])
-                    voting.add_value('no_vote', unicode(joined - votes))
+                    voting.add_value('no_vote', text_type(joined - votes))
                     voting.add_value('registration', registration)
 
                 registration = None
@@ -228,20 +229,20 @@ class SittingsSpider(ManoSeimasSpider):
                               speaker, required=('name',))
             dspeaker.add_xpath('name', 'text()')
             speaker_details = (speaker.select('following::text()').
-                                       extract()[0])
+                               extract()[0])
             if (speaker_details and speaker_details.startswith(', ') and
-                len(speaker_details) > 4):
+                    len(speaker_details) > 4):
 
                 # This is a workaround for situations, where some names has
                 # comma. This whay commas are replaced with urlquotes, then all
                 # string is splitted by commans and resulting list is unquoted
                 # back.
                 speaker_details = speaker_details.replace(
-                        u'Švietimo, mokslo', u'Švietimo%2c mokslo')
+                    u'Švietimo, mokslo', u'Švietimo%2c mokslo')
 
                 speaker_details = map(lambda x: urllib.unquote(x.strip()),
                                       speaker_details.split(','))
-                #speaker_details = filter(None, speaker_details)
+                # speaker_details = filter(None, speaker_details)
 
                 dspeaker.reset_required('name', 'position',)
 
@@ -265,14 +266,15 @@ class SittingsSpider(ManoSeimasSpider):
         qdoc.add_value('id', u'%sd' % d_id[0])
         qdoc.add_xpath('name', 'b[1]/text()')
         qdoc.add_value('type',
-                hxs.select('b[1]/following::text()[1]').re('^; (.+)'))
+                       hxs.select('b[1]/following::text()[1]').re('^; (.+)'))
         number_re = (r'[A-Z]{1,4}'
                      r'-'
                      r'\d+'
                      r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
-        qdoc.add_value('number',
-                hxs.select('b[1]//text()').re(
-                    r'\(Nr. (%s)\)' % number_re)[0])
+        qdoc.add_value(
+            'number',
+            hxs.select('b[1]//text()').re(r'\(Nr. (%s)\)' % number_re)[0]
+        )
 
         self._parse_question_speakers(response, hxs, qdoc, position=2)
 
@@ -284,7 +286,7 @@ class SittingsSpider(ManoSeimasSpider):
             for d in many_docs:
                 qdoc = self._get_question_documents(response, d)
                 if qdoc:
-                    question.add_value('documents',dict(qdoc))
+                    question.add_value('documents', dict(qdoc))
 
         else:
             has_docs = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')
@@ -338,9 +340,10 @@ class SittingsSpider(ManoSeimasSpider):
                      r'-'
                      r'\d+'
                      r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
-        voting.add_value('documents',
-                hxs.select('b[1]//text()').re(
-                    r'\(Nr. (%s)\)' % number_re)[0])
+        voting.add_value(
+            'documents',
+            hxs.select('b[1]//text()').re(r'\(Nr. (%s)\)' % number_re)[0]
+        )
 
     def _get_voting_documents(self, response, hxs):
         qdoc = Loader(self, response, VotingDocument(), hxs, required=(
@@ -352,15 +355,18 @@ class SittingsSpider(ManoSeimasSpider):
 
         qdoc.add_value('id', u'%sd' % d_id[0])
         qdoc.add_xpath('name', 'b[1]/a/text()')
-        qdoc.add_value('type',
-                hxs.select('b[1]/following::text()[1]').re('^; (.+)'))
+        qdoc.add_value(
+            'type',
+            hxs.select('b[1]/following::text()[1]').re('^; (.+)')
+        )
         number_re = (r'[A-Z]{1,4}'
                      r'-'
                      r'\d+'
                      r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
-        qdoc.add_value('number',
-                hxs.select('b[1]//text()').re(
-                    r'\(Nr. (%s)\)' % number_re)[0])
+        qdoc.add_value(
+            'number',
+            hxs.select('b[1]//text()').re(r'\(Nr. (%s)\)' % number_re)[0]
+        )
 
         return qdoc.load_item()
 
@@ -372,16 +378,16 @@ class SittingsSpider(ManoSeimasSpider):
 
         if many_docs:
             for d in many_docs:
-                #self._add_voting_legal_act_number(d, voting)
+                # self._add_voting_legal_act_number(d, voting)
                 # Temporary stuff until legal acts complete
                 qdoc = self._get_voting_documents(response, d)
                 if qdoc:
-                    voting.add_value('documents',dict(qdoc))
+                    voting.add_value('documents', dict(qdoc))
 
         else:
             has_docs = hxs.select('b[2]/a[1]/@href').re(r'p_id=(-?\d+)')
             if has_docs:
-                #self._add_voting_legal_act_number(hxs, voting)
+                # self._add_voting_legal_act_number(hxs, voting)
                 qdoc = self._get_voting_documents(response, hxs)
                 if qdoc:
                     voting.add_value('documents', dict(qdoc))
@@ -413,7 +419,7 @@ class SittingsSpider(ManoSeimasSpider):
 
         for person in hxs.select('tr'):
             if person.select('th'):
-                continue # Skip header
+                continue  # Skip header
 
             p_vote = Loader(self, response, PersonVote(), person, required=(
                 'person', 'fraction', 'vote',))
