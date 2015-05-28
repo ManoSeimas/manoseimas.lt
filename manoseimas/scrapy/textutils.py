@@ -3,6 +3,9 @@
 import re
 import string
 
+import lxml.html.clean
+import lxml.html.defs
+
 words_re = re.compile(r'\w+', re.UNICODE)
 clean_chunk_re = re.compile(
         r'(^%(chars)s)|(%(chars)s$)' % {'chars': r'(\s|[:,.])+'}, re.UNICODE)
@@ -11,6 +14,13 @@ split_by_comma_re = re.compile(r'\s*,\s*')
 
 def clean_chunk(chunk):
     return clean_chunk_re.sub('', chunk)
+
+
+def clean_html(content):
+    # See http://lxml.de/api/lxml.html.clean.Cleaner-class.html
+    attrs = lxml.html.defs.safe_attrs - {'class'}
+    cleaner = lxml.html.clean.Cleaner(style=True, safe_attrs=attrs)
+    return cleaner.clean_html(content)
 
 
 def split_by_comma(text):
