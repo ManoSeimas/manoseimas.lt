@@ -2,6 +2,7 @@
 
 import re
 
+
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import Rule
 from scrapy.selector import Selector
@@ -13,6 +14,7 @@ from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.textutils import mapwords
 from manoseimas.scrapy.textutils import split_by_comma
 from manoseimas.scrapy.textutils import str2dict
+from manoseimas.scrapy import textutils
 
 group_meta_re = re.compile(r'.*, ([^(]+)(?:\(([^)]+)\))?')
 date_re = re.compile(r'\d{4}-\d\d-\d\d')
@@ -87,9 +89,10 @@ class MpsSpider(ManoSeimasSpider):
     def _parse_biography(self, response, person, hxs):
         try:
             biography = hxs.extract()[0]
-            person.add_value('biography', biography)
         except IndexError:
             pass
+        else:
+            person.add_value('biography', textutils.clean_html(biography))
 
     def _parse_groups(self, response, hxs, person):
         group_type_map = {
