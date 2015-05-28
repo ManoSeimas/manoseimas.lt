@@ -34,7 +34,7 @@ TEST_RUNNER = 'sboard.testrunner.SboardTestSuiteRunner'
 NOSE_ARGS = [
     '-w%s' % PROJECT_DIR,    # working dir
     '-w.',                   # project dir (relative to working dir)
-    '-w../parts/django-sboard/sboard',
+    '-w%s/django-sboard/sboard' % config.buildout_parts_dir,
     '--all-modules',         # search tests in all modules
     '--with-doctest',        # search doctests
     '--no-path-adjustment',  # do no adjust sys.path, it is already do by
