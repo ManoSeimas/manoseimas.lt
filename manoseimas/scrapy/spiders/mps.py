@@ -4,7 +4,7 @@ import re
 
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import Rule
-from scrapy.selector import HtmlXPathSelector
+from scrapy.selector import Selector
 
 from manoseimas.scrapy.items import Group
 from manoseimas.scrapy.items import Person
@@ -16,7 +16,7 @@ from manoseimas.scrapy.textutils import str2dict
 
 group_meta_re = re.compile(r'.*, ([^(]+)(?:\(([^)]+)\))?')
 date_re = re.compile(r'\d{4}-\d\d-\d\d')
-bio_re = re.compile(ur'Gim\u0117 (\d{4}) m\. (\w+) (\d+) d\.', re.UNICODE)
+dob_re = re.compile(u'Gim\u0117 (\d{4}) m\. (\w+) (\d+) d\.', re.UNICODE)
 
 month_names_map = {
     u'sausio':     1,
@@ -38,6 +38,7 @@ seimas_version_map = {
     6113: 10,
     8801: 11
 }
+
 
 class MpsSpider(ManoSeimasSpider):
     name = 'mps'
@@ -72,7 +73,7 @@ class MpsSpider(ManoSeimasSpider):
             group.add_xpath('name', 'a/text()')
             group.add_xpath('source', 'a/@href')
 
-            meta = ''.join(group_hxs.select('text() | */text()').extract())
+            meta = ''.join(group_hxs.xpath('text() | */text()').extract())
             position, membership = group_meta_re.match(meta).groups()
             group.add_value('position', position)
 
@@ -83,6 +84,13 @@ class MpsSpider(ManoSeimasSpider):
 
             person.add_value('groups', [dict(group.load_item())])
 
+    def _parse_biography(self, response, person, hxs):
+        try:
+            biography = hxs.extract()[0]
+            person.add_value('biography', biography)
+        except IndexError:
+            pass
+
     def _parse_groups(self, response, hxs, person):
         group_type_map = {
             u'Seimo komitetuose': 'committee',
@@ -90,35 +98,34 @@ class MpsSpider(ManoSeimasSpider):
             u'Seimo frakcijose': 'fraction',
         }
         group_type = None
-        for item in hxs.select('tr[5]/td/*'):
-            tag = item.select('name()').extract()[0]
+        for item in hxs.xpath('tr[5]/td/*'):
+            tag = item.xpath('name()').extract()[0]
             tag = tag.lower()
             if tag == 'b':
-                name = item.select('text()').extract()[0]
+                name = item.xpath('text()').extract()[0]
                 group_type = group_type_map[name]
             elif group_type and tag == 'ul':
-                items = item.select('li')
+                items = item.xpath('li')
                 self._parse_group_items(response, person, items, group_type)
 
-        items = hxs.select(u'tr[contains(td/b/text(), '
-                           u'"Parlamentinėse grupėse")]'
-                           u'/following-sibling::tr/td/ul/li')
+        items = hxs.xpath(u'tr[contains(td/b/text(), '
+                          u'"Parlamentinėse grupėse")]'
+                          u'/following-sibling::tr/td/ul/li')
         self._parse_group_items(response, person, items, 'group')
 
     def _parse_person_details(self, response):
         xpath = '//table[@summary="Seimo narys"]'
-        hxs = HtmlXPathSelector(response).select(xpath)[0]
+        hxs = Selector(response).xpath(xpath)[0]
 
         source = self._get_source(response.url, 'p_asm_id')
-        
+
         seimas_code = self._get_query_attr(response.url, 'p_r')
         if seimas_code:
             source['version'] = seimas_version_map[int(seimas_code)]
 
-
         _id = source['id']
 
-        person_hxs = hxs.select('tr/td/table/tr/td[2]/table/tr[2]/td[2]')
+        person_hxs = hxs.xpath('tr/td/table/tr/td[2]/table/tr[2]/td[2]')
         person = Loader(self, response, Person(), person_hxs,
                         required=('first_name', 'last_name'))
         person.add_value('_id', '%sp' % _id)
@@ -137,7 +144,7 @@ class MpsSpider(ManoSeimasSpider):
             u'padėjėja sekretorė',
             u'seimo narys',
         ]
-        details = ' '.join(person_hxs.select('descendant::text()').extract())
+        details = ' '.join(person_hxs.xpath('descendant::text()').extract())
         details = str2dict(split, details, normalize=mapwords({
             u'išrinkta': u'išrinktas',
             u'seimo narė': u'seimo narys',
@@ -153,21 +160,23 @@ class MpsSpider(ManoSeimasSpider):
         person.add_value('phone', split_by_comma(phone))
         person.add_value('office_address', [details.get(u'biuro adresas', '')])
 
-        person.add_xpath('home_page',
-                'a[contains(font/text(), "Asmeniniai puslapiai")]/@href')
+        person.add_xpath(
+            'home_page',
+            'a[contains(font/text(), "Asmeniniai puslapiai")]/@href'
+        )
         person.add_xpath('candidate_page',
-                'a[contains(text(), "Kandidato puslapis")]/@href')
+                         'a[contains(text(), "Kandidato puslapis")]/@href')
 
         person.add_value('source', source)
 
         # photo
-        photo = hxs.select('tr/td/table/tr/td/div/img/@src').extract()[0]
+        photo = hxs.xpath('tr/td/table/tr/td/div/img/@src').extract()[0]
         person.add_value('photo', photo)
 
-        header_hxs = hxs.select('tr/td/table/tr/td[2]/table/tr/td[2]')
+        header_hxs = hxs.xpath('tr/td/table/tr/td[2]/table/tr/td[2]')
 
         # parliament
-        parliament = header_hxs.select('div/b/font/text()')
+        parliament = header_hxs.xpath('div/b/font/text()')
         parliament = parliament.re(r'(\d{4}-\d{4})')
         parliament = ''.join(parliament)
         person.add_value('parliament', parliament)
@@ -183,34 +192,43 @@ class MpsSpider(ManoSeimasSpider):
             person.add_value('groups', [parliament_group])
 
         # name (first name, last name)
-        name = header_hxs.select('div/b/font[2]/text()').extract()[0]
+        name = header_hxs.xpath('div/b/font[2]/text()').extract()[0]
         self._parse_name(person, name)
 
         # groups
         party_name = person.get_output_value('raised_by')
         if party_name:
-            person.add_value('groups', [{'type': 'party', 'name': party_name}])
+            person.add_value('groups', [{'type': 'party',
+                                         'name': party_name,
+                                         'position': 'narys'}])
 
         self._parse_groups(response, hxs, person)
 
-        # biography
+        # date of birth
         xpath = (u'tr/td/table/'
                  u'tr[contains(descendant::text(), "Biografija")]/'
                  u'following-sibling::tr/td/'
                  u'descendant::*[contains(text(), "Gimė")]/text()')
-        bio_hxs = hxs.select(u'translate(%s, "\xa0", " ")' % xpath)
-        bio = bio_hxs.re(bio_re)
-        if bio:
-            year, month, day = bio
+        dob_hxs = hxs.xpath(u'translate(%s, "\xa0", " ")' % xpath)
+        dob_match = dob_hxs.re(dob_re)
+        if dob_match:
+            year, month, day = dob_match
             month = month_names_map[month]
             dob = u'%s-%02d-%s' % (year, month, day.zfill(2))
             person.add_value('dob', dob)
+
+        # biography
+        xpath = (u'tr/td/table/'
+                 u'tr[contains(descendant::text(), "Biografija")]/'
+                 u'following-sibling::tr/td/div')
+        bio_hxs = hxs.xpath(xpath)
+        self._parse_biography(response, person, bio_hxs)
 
         # parliamentary history
         xpath = (u'//table[@summary="Istorija"]/'
                  u'tr/td/a[starts-with(b/text(), "Buvo išrinkta")]/'
                  u'following-sibling::text()')
-        history_hxs = hxs.select(xpath)
+        history_hxs = hxs.xpath(xpath)
         if history_hxs:
             for item in history_hxs:
                 parliament = ''.join(item.re(r'(\d{4}) (-) (\d{4})'))

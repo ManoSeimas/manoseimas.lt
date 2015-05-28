@@ -1,5 +1,7 @@
 import urlparse
 
+from six import text_type
+
 from scrapy import log
 from scrapy.contrib.spiders import CrawlSpider
 
@@ -10,8 +12,8 @@ class ManoSeimasSpider(CrawlSpider):
 
     def _get_source(self, url, key):
         return {
-            'id': unicode(self._get_query_attr(url, key)),
-            'url': unicode(url),
+            'id': text_type(self._get_query_attr(url, key)),
+            'url': text_type(url),
             'name': u'lrslt',
         }
 

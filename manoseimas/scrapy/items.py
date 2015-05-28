@@ -1,3 +1,4 @@
+from six import text_type
 from scrapy.contrib.loader import processor
 from scrapy.item import Field
 from scrapy.item import Item
@@ -47,6 +48,7 @@ class Person(Item):
                    output_processor=processor.TakeFirst())
     _attachments = Field(input_processor=processor.Identity(),
                          output_processor=processor.Identity())
+    biography = Field()
 
 
 class Group(Item):
@@ -101,8 +103,8 @@ class DocumentInvolved(Item):
 class Document(Item):
     _id = Field()
     name = Field()
-    type = Field(input_processor=processor.MapCompose(unicode.strip,
-                                                      unicode.lower))
+    type = Field(input_processor=processor.MapCompose(text_type.strip,
+                                                      text_type.lower))
     number = Field()
     date = Field()
     language = Field()
@@ -115,8 +117,8 @@ class Document(Item):
 class LegalAct(Item):
     _id = Field()
     name = Field()
-    kind = Field(input_processor=processor.MapCompose(unicode.strip,
-                                                      unicode.lower))
+    kind = Field(input_processor=processor.MapCompose(text_type.strip,
+                                                      text_type.lower))
     number = Field()
     date = Field()
     relations = Field(input_processor=processor.Identity(),
@@ -157,11 +159,12 @@ class Voting(Item):
     formulation_b = Field()
     result = Field()
     question = Field()
-    #documents = Field(output_processor=processor.Identity())
+    # documents = Field(output_processor=processor.Identity())
     registration = Field(input_processor=processor.Identity(),
                          output_processor=processor.TakeFirst())
     source = Field(input_processor=processor.Identity(),
                    output_processor=processor.TakeFirst())
+
 
 class VotingDocument(Item):
     id = Field()
