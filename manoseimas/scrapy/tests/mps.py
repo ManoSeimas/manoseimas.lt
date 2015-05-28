@@ -5,7 +5,7 @@ import unittest
 from scrapy.http import HtmlResponse
 
 from manoseimas.scrapy.spiders.mps import MpsSpider
-from manoseimas.scrapy.tests import fixture
+from manoseimas.scrapy.tests.utils import fixture
 
 
 def parse_mp():
