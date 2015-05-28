@@ -46,13 +46,15 @@ class ParliamentMember(CrawledItem):
 
     @property
     def fractions(self):
-        return self.groups.filter(type='fraction')
+        return self.groups.filter(type=Group.TYPE_FRACTION)
 
     @property
     def current_fraction(self):
-        membership = GroupMembership.objects.filter(member=self.id,
-                                                    group__type='fraction',
-                                                    until=None)[:]
+        membership = GroupMembership.objects.filter(
+            member=self.id,
+            group__type=Group.TYPE_FRACTION,
+            until=None
+        )[:]
 
         if membership:
             return membership[0].group
@@ -63,7 +65,7 @@ class ParliamentMember(CrawledItem):
     def other_group_memberships(self):
         # Not fraction groups
         return GroupMembership.objects.filter(member=self)\
-            .exclude(group__type='fraction')
+            .exclude(group__type=Group.TYPE_FRACTION)
 
 
 class PoliticalParty(CrawledItem):
@@ -74,12 +76,18 @@ class PoliticalParty(CrawledItem):
 
 
 class Group(CrawledItem):
+    TYPE_GROUP = 'group'
+    TYPE_COMMITTEE = 'committee'
+    TYPE_COMMISSION = 'commission'
+    TYPE_FRACTION = 'fraction'
+    TYPE_PARLIAMENT = 'parliament'
+
     GROUP_TYPES = (
-        ('group', _('Group')),
-        ('committee', _('Committee')),
-        ('commission', _('Commission')),
-        ('fraction', _('Fraction')),
-        ('parliament', _('Parliament')),
+        (TYPE_GROUP, _('Group')),
+        (TYPE_COMMITTEE, _('Committee')),
+        (TYPE_COMMISSION, _('Commission')),
+        (TYPE_FRACTION, _('Fraction')),
+        (TYPE_PARLIAMENT, _('Parliament')),
     )
 
     name = models.CharField(max_length=255, unique=True)

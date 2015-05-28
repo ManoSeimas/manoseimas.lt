@@ -18,11 +18,13 @@ def mp_list(request, fraction_slug=None):
             'slug': mp.slug
         }
 
-    fractions = Group.objects.filter(type='fraction')
+    fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
 
     if fraction_slug:
-        fraction = GroupMembership.objects.filter(group__type='fraction',
-                                                  group__slug=fraction_slug)
+        fraction = GroupMembership.objects.filter(
+            group__type=Group.TYPE_FRACTION,
+            group__slug=fraction_slug
+        )
         fraction = fraction[0].group if fraction else None
         mps = map(extract, ParliamentMember.objects.filter(groups=fraction))
     else:
