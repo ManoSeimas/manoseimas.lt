@@ -3,6 +3,7 @@
 import re
 import string
 
+from six import text_type
 import lxml.html.clean
 import lxml.html.defs
 
@@ -165,3 +166,20 @@ def str2dict(keys, text, stack_size=3, normalize=string.lower,
     chunk = clean_chunk(chunk)
     if next_key or chunk:
         yield (next_key, chunk)
+
+
+cleanup_re = re.compile(u'\u00AD')
+newline_re = re.compile(u'(\r\n|\n)')
+
+
+def clean_text(text):
+    """Removes markup soft hyphens and replaces newlines with whitespace
+    """
+    text = cleanup_re.sub('', text)
+    text = newline_re.sub(' ', text)
+    return text
+
+
+def extract_text(xs):
+    return clean_text(u' '.join(map(text_type.strip,
+                                    xs.extract())).strip().lstrip('.')).strip()
