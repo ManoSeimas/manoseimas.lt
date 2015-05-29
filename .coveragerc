@@ -1,0 +1,6 @@
+[run]
+omit =
+    manoseimas/settings/*
+    */migrations/*
+    */tests/*
+    */__init__.py
