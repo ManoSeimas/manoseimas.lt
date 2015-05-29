@@ -7,13 +7,19 @@ from scrapy.selector import Selector
 
 from manoseimas.scrapy.tests.utils import fixture
 
-
 from manoseimas.scrapy.textutils import strip_tags, extract_text
 from manoseimas.scrapy.spiders.stenograms import StenogramSpider
+from manoseimas.scrapy.spiders.stenograms import as_statement
 
 
 source_text = u"""<p class="Roman"><b>
 <span style="font-size:9.0pt">PIRMININKĖ.</span></b> Ačiū.
+Pas&shy;ku&shy;ti&shy;nis klau&shy;sia <span style="letter-spacing:-.1pt">
+M.&nbsp;Za&shy;s&shy;čiu&shy;rins&shy;kas.
+Pri&shy;me&shy;nu, kad klau&shy;si&shy;mui – 1&nbsp;min.</span></p>"""
+
+statement_source_text = u"""<p class="Roman"><b>
+<span style="font-size:9.0pt">PIRMININKĖ.</span></b>(<i>LSF</i>) Ačiū.
 Pas&shy;ku&shy;ti&shy;nis klau&shy;sia <span style="letter-spacing:-.1pt">
 M.&nbsp;Za&shy;s&shy;čiu&shy;rins&shy;kas.
 Pri&shy;me&shy;nu, kad klau&shy;si&shy;mui – 1&nbsp;min.</span></p>"""
@@ -42,6 +48,13 @@ class StenogramUtilsTestCase(unittest.TestCase):
     def test_clean_text(self):
         xs = Selector(text=source_text)
         text = extract_text(xs.xpath('//p'), kill_tags=['b'])
+        self. assertEqual((u'Ačiū. Paskutinis klausia M.\xa0Zasčiurinskas. '
+                           u'Primenu, kad klausimui – 1\xa0min.'),
+                          text)
+
+    def test_as_statement(self):
+        xs = Selector(text=statement_source_text)
+        text = as_statement(xs.xpath('//p'))
         self. assertEqual((u'Ačiū. Paskutinis klausia M.\xa0Zasčiurinskas. '
                            u'Primenu, kad klausimui – 1\xa0min.'),
                           text)

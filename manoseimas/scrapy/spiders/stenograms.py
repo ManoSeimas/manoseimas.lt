@@ -1,4 +1,6 @@
 # coding: utf-8
+import re
+
 from scrapy.contrib.linkextractors.lxmlhtml import LxmlLinkExtractor
 from scrapy.contrib.spiders import Rule
 from scrapy.selector import Selector
@@ -12,10 +14,11 @@ MINIMUM_SESSION = 95
 
 
 def as_statement(paragraph):
-    return extract_text(
+    text = extract_text(
         paragraph.xpath('self::p'),
         kill_tags=['b'],
     )
+    return re.sub(r'^\([A-Z-]+\)', '', text).lstrip('.').strip()
 
 
 class StenogramSpider(ManoSeimasSpider):
