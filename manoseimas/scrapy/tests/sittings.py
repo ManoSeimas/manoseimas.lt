@@ -29,7 +29,6 @@ class TestSittingsSpider(unittest.TestCase):
 
     maxDiff = None
 
-    @unittest.skip('FIXME: no fixtures for CouchDB')
     def test_question(self):
         questions = fixture('questions.json')
         for q in questions:
@@ -45,7 +44,7 @@ class TestSittingsSpider(unittest.TestCase):
             else:
                 self.assertIsNone(q[1])
 
-    @unittest.skip('FIXME: no fixtures for CouchDB')
+
     def test_votings(self):
         votings = fixture('votings.json')
         for v in votings:

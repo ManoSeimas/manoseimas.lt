@@ -262,7 +262,6 @@ PROTOCOL = 'http'
 DEFAULT_FROM_EMAIL = 'manoseimas@doublemarked.com'
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
-AUTH_USER_MODEL = 'manoseimas.ManoSeimasUser'
 
 AUTHENTICATION_BACKENDS = (
     # 'social_auth.backends.twitter.TwitterBackend',

@@ -1,8 +1,0 @@
-[run]
-omit =
-    manoseimas/settings/*
-    */migrations/*
-    */tests/*
-    */__init__.py
-    */tests.py
-    */urls.py
