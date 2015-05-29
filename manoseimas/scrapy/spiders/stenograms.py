@@ -13,7 +13,8 @@ MINIMUM_SESSION = 95
 
 def as_statement(paragraph):
     return extract_text(
-        paragraph.xpath('self::p/text()[normalize-space()]')
+        paragraph.xpath('self::p'),
+        kill_tags=['b'],
     )
 
 
@@ -80,15 +81,15 @@ class StenogramSpider(ManoSeimasSpider):
             elif extract_text(paragraph.xpath('self::p/text()')):
                 yield self._extract_statement_fragment(paragraph)
 
-    def _group_topics(self, response, paragraph_xs):
+    def _group_topics(self, response, paragraph_xs, meta_dict):
         """Structure:
         {
             topics: [
                 {
                     topic: title
                     time: time
+                    date: date (retrieved separately)
                     sitting: sitting
-                    date: date
                     statements: [
                         {
                             speaker: speaker (abbriavated)
@@ -111,4 +112,4 @@ class StenogramSpider(ManoSeimasSpider):
     def parse_stenogram(self, response):
         sel = Selector(response)
         paragraphs = sel.xpath('/html/body/div[@class="WordSection2"]/p')
-        return self._group_topics(response, paragraphs)
+        return self._group_topics(response, paragraphs, {})
