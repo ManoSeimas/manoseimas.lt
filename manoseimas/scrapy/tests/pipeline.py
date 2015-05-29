@@ -108,7 +108,7 @@ class TestPipeline(unittest.TestCase):
 
 
 class TestPipelineGetDB(unittest.TestCase):
-    @patch('manoseimas.scrapy.db.COUCHDB_DATABASES', (
+    @patch('manoseimas.scrapy.settings.COUCHDB_DATABASES', (
         ('legalacts', 'http://127.0.0.1:5984', 'my_legalacts_testdb',),
         ('person', 'http://127.0.0.1:5984', 'my_person_testdb',),
     ))
