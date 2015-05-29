@@ -34,7 +34,7 @@ class TestPipeline(unittest.TestCase):
     def tearDown(self):
         self.server.delete_db(self.db.dbname)
 
-    @patch('manoseimas.scrapy.db.get_db')
+    @patch('manoseimas.scrapy.pipelines.get_db')
     def test_pipline(self, mock_get_db):
         mock_get_db.return_value = self.db
 
