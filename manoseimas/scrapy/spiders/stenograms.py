@@ -1,5 +1,6 @@
 # coding: utf-8
 import re
+from datetime import time
 
 from scrapy.contrib.linkextractors.lxmlhtml import LxmlLinkExtractor
 from scrapy.contrib.spiders import Rule
@@ -50,12 +51,12 @@ class StenogramSpider(ManoSeimasSpider):
         return {'type': 'title',
                 'title': extract_text(
                     paragraph.xpath('self::p//text()[normalize-space()]')
-                ),
-                'para': paragraph}
+                )}
 
     def _extract_time(self, paragraph):
+        time_parts = map(int, paragraph.re(r'(\d{1,2})\.(\d{2})'))
         return {'type': 'time',
-                'para': paragraph}
+                'time': time(time_parts[0], time_parts[1])}
 
     def _extract_statement_start(self, paragraph):
         return {'type': 'statement_start',
@@ -63,15 +64,13 @@ class StenogramSpider(ManoSeimasSpider):
                     paragraph.xpath('b/span/text()')
                 ).strip('.'),
                 'fraction': extract_text(
-                    paragraph.xpath('i/text()')
+                    paragraph.xpath('b/following-sibling::i/span/text()')
                 ) or None,
-                'statement': as_statement(paragraph),
-                'para': paragraph}
+                'statement': as_statement(paragraph)}
 
     def _extract_statement_fragment(self, paragraph):
         return {'type': 'statement_fragment',
-                'statement': as_statement(paragraph),
-                'para': paragraph}
+                'statement': as_statement(paragraph)}
 
     def _parse_paragraphs(self, paragraph_xs):
         for paragraph in paragraph_xs:
@@ -79,40 +78,70 @@ class StenogramSpider(ManoSeimasSpider):
                 yield self._extract_title(paragraph)
             elif paragraph.xpath('self::p[@class="Laikas"]'):
                 yield self._extract_time(paragraph)
-            elif paragraph.xpath('self::p/b'):
+            elif extract_text(paragraph.xpath('self::p/b')):
                 yield self._extract_statement_start(paragraph)
             elif extract_text(paragraph.xpath('self::p/text()')):
                 yield self._extract_statement_fragment(paragraph)
 
-    def _group_topics(self, response, paragraph_xs, meta_dict):
+    def _group_topics(self, parsed_paragraphs):
         """Structure:
-        {
-            topics: [
-                {
-                    topic: title
-                    time: time
-                    date: date (retrieved separately)
-                    sitting: sitting
-                    statements: [
-                        {
-                            speaker: speaker (abbriavated)
-                            fraction: fraction or None
-                            statement: assembled statement
-                        }
-                    ]
-                }
-            ]
-        }
+        [
+            {
+                topic: title
+                time: time
+                statements: [
+                    {
+                        speaker: speaker (abbriavated)
+                        fraction: fraction or None
+                        statement: assembled statement
+                    }
+                ]
+            }
+        ]
 
         """
-        for p in self._parse_paragraphs(paragraph_xs):
-            if p['type'] == 'statement_start':
-                print(p['speaker'])
-                print(p['statement'])
+        topics = []
+        topic = None
+        speaker = None
+        for p in parsed_paragraphs:
+            if p['type'] == 'time':
+                if topic:
+                    topics.append(topic)
+                topic = {
+                    'time': p['time'],
+                    'statements': [],
+                }
+            elif p['type'] == 'title':
+                topic['title'] = p['title']
+            elif p['type'] == 'statement_start':
+                speaker = {'speaker': p['speaker'],
+                           'fraction': p['fraction']}
+
+                # XXX Drop initial speech for now
+                if topic:
+                    topic['statements'].append(
+                        {'speaker': speaker['speaker'],
+                         'fraction': speaker['fraction'],
+                         'statement': [p['statement']]}
+                    )
             elif p['type'] == 'statement_fragment':
-                print(p['statement'])
+                # Sometimes spekaer is omitted in stenograms
+                # when starting a new topic. Assume it's the last speaker of
+                # previous topic (likely the chair of meeting)
+                if not topic['statements']:
+                    topic['statements'].append(
+                        {'speaker': speaker['speaker'],
+                         'fraction': speaker['fraction'],
+                         'statement': [p['statement']]}
+                    )
+                else:
+                    topic['statements'][-1]['statement'].append(p['statement'])
+        if topic:
+            topics.append(topic)
+        return topics
 
     def parse_stenogram(self, response):
         sel = Selector(response)
         paragraphs = sel.xpath('/html/body/div[@class="WordSection2"]/p')
-        return self._group_topics(response, paragraphs, {})
+        topics = self._group_topics(self._parse_paragraphs(paragraphs))
+        return topics
