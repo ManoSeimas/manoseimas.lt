@@ -188,3 +188,7 @@ class StenogramCrawlerTestCase(unittest.TestCase):
     def test_group_topics(self):
         topics = self.spider._group_topics(self.parsed_paras)
         self.assertEqual(self.grouped_topics, topics)
+
+    def test_parse_stenogram(self):
+        items = list(self.spider.parse_stenogram(self.response))
+        self.assertEqual(20, len(items))

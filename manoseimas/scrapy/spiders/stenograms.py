@@ -1,6 +1,6 @@
 # coding: utf-8
 import re
-from datetime import time
+from datetime import time, date, datetime
 
 from scrapy.contrib.linkextractors.lxmlhtml import LxmlLinkExtractor
 from scrapy.contrib.spiders import Rule
@@ -8,10 +8,31 @@ from scrapy.selector import Selector
 
 from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
 from manoseimas.scrapy.spiders import ManoSeimasSpider
+from manoseimas.scrapy.loaders import Loader
+from manoseimas.scrapy.items import StenogramTopic
 from manoseimas.scrapy.textutils import extract_text
 
 
 MINIMUM_SESSION = 95
+
+month_names_map = {
+    u'sausio':     1,
+    u'vasario':    2,
+    u'kovo':       3,
+    u'balandžio':  4,
+    u'gegužės':    5,
+    u'birželio':   6,
+    u'liepos':     7,
+    u'rugpjūčio':  8,
+    u'rugsėjo':    9,
+    u'spalio':    10,
+    u'lapkričio': 11,
+    u'gruodžio':  12,
+}
+
+date_re = re.compile(r'(\d{4})\s+m\.\s+(\w+)\s+(\d{1,2})\s+d\.',
+                     re.UNICODE)
+sitting_no_re = re.compile(r'.*NR.\s(\d+)', re.UNICODE)
 
 
 def as_statement(paragraph):
@@ -105,10 +126,10 @@ class StenogramSpider(ManoSeimasSpider):
             elif extract_text(paragraph.xpath('self::p/text()')):
                 yield self._extract_statement_fragment(paragraph)
 
-    def create_mp_processors(self):
+    def _create_mp_processors(self):
         self.mp_processors = [cls() for cls in self.mp_processor_classes]
 
-    def process_mp(self, name, fraction):
+    def _process_mp(self, name, fraction):
         for mp_processor in self.mp_processors:
             name, fraction = mp_processor.process_mp(name, fraction)
         return name, fraction
@@ -130,7 +151,7 @@ class StenogramSpider(ManoSeimasSpider):
         ]
 
         """
-        self.create_mp_processors()
+        self._create_mp_processors()
         topics = []
         topic = None
         speaker = None
@@ -145,11 +166,11 @@ class StenogramSpider(ManoSeimasSpider):
             elif p['type'] == 'title':
                 topic['title'] = p['title']
             elif p['type'] == 'statement_start':
-                name, fraction = self.process_mp(p['speaker'], p['fraction'])
+                name, fraction = self._process_mp(p['speaker'], p['fraction'])
                 speaker = {'speaker': name,
                            'fraction': fraction}
 
-                # XXX Drop initial speech for now
+                # XXX Drop initial statement for now
                 if topic:
                     topic['statements'].append(
                         {'speaker': speaker['speaker'],
@@ -172,8 +193,37 @@ class StenogramSpider(ManoSeimasSpider):
             topics.append(topic)
         return topics
 
+    def _parse_stenogram_meta(self, response, meta_xs):
+        meta = {}
+        source = self._get_source(response.url, 'p_id')
+        meta['source'] = source
+        meta['_id'] = source['id']
+        date_match = meta_xs.re(date_re)
+        if date_match:
+            year = int(date_match[0])
+            month = month_names_map[date_match[1]]
+            day = int(date_match[2])
+            meta['date'] = date(year, month, day)
+        sitting_no_match = meta_xs.re(sitting_no_re)
+        if sitting_no_match:
+            meta['sitting_no'] = sitting_no_match[0]
+        return meta
+
     def parse_stenogram(self, response):
         sel = Selector(response)
+        meta_xs = sel.xpath('/html/body/div[@class="WordSection1"]')
+        meta = self._parse_stenogram_meta(response, meta_xs)
         paragraphs = sel.xpath('/html/body/div[@class="WordSection2"]/p')
         topics = self._group_topics(self._parse_paragraphs(paragraphs))
-        return topics
+        for topic in topics:
+            loader = Loader(self, response, StenogramTopic(),
+                            required=('_id', 'title', 'date' 'sitting_no',
+                                      'statements'))
+            loader.add_value('title', topic['title'])
+            loader.add_value('date', datetime.combine(meta['date'],
+                                                      topic['time']))
+            loader.add_value('sitting_no', meta['sitting_no'])
+            loader.add_value('statements', topic['statements'])
+            loader.add_value('source', meta['source'])
+            loader.add_value('_id', meta['_id'])
+            yield loader.load_item()

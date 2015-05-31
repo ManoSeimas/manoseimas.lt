@@ -184,3 +184,18 @@ class Registration(Item):
     id = Field()
     datetime = Field()
     joined = Field()
+
+
+class StenogramTopic(Item):
+    _id = Field()
+    date = Field(input_processor=processor.Identity(),
+                 output_processor=processor.Identity())
+    title = Field()
+    sitting_no = Field()
+
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
+    statements = Field(input_processor=processor.Identity(),
+                       output_processor=processor.Identity())
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
