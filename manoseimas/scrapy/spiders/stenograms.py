@@ -22,6 +22,26 @@ def as_statement(paragraph):
     return re.sub(r'^\([A-Z-]+\)', '', text).lstrip('.').strip()
 
 
+class SittingChairpersonProcessor(object):
+    """Stateful Chair -> MP name converter
+    """
+
+    def __init__(self):
+        self.name = None
+        self.fraction = None
+
+    def process_mp(self, name, fraction):
+        if name.lower().startswith((u'pirmininkas', u'pirmininkė')):
+            name_match = re.match(r'.*\(([^,]+)(?:,\s([^)]+)|)\)', name)
+            if name_match:
+                self.name = name_match.group(1).strip()
+                self.fraction = name_match.group(2) or None
+            if self.name:
+                name = self.name
+                fraction = self.fraction
+        return name, fraction
+
+
 class StenogramSpider(ManoSeimasSpider):
 
     name = 'stenograms'
@@ -46,6 +66,8 @@ class StenogramSpider(ManoSeimasSpider):
         ),
         Rule(stenogram_link_extractor, 'parse_stenogram'),
     )
+
+    mp_processor_classes = (SittingChairpersonProcessor,)
 
     def _extract_title(self, paragraph):
         return {'type': 'title',
@@ -83,6 +105,14 @@ class StenogramSpider(ManoSeimasSpider):
             elif extract_text(paragraph.xpath('self::p/text()')):
                 yield self._extract_statement_fragment(paragraph)
 
+    def create_mp_processors(self):
+        self.mp_processors = [cls() for cls in self.mp_processor_classes]
+
+    def process_mp(self, name, fraction):
+        for mp_processor in self.mp_processors:
+            name, fraction = mp_processor.process_mp(name, fraction)
+        return name, fraction
+
     def _group_topics(self, parsed_paragraphs):
         """Structure:
         [
@@ -100,6 +130,7 @@ class StenogramSpider(ManoSeimasSpider):
         ]
 
         """
+        self.create_mp_processors()
         topics = []
         topic = None
         speaker = None
@@ -114,8 +145,9 @@ class StenogramSpider(ManoSeimasSpider):
             elif p['type'] == 'title':
                 topic['title'] = p['title']
             elif p['type'] == 'statement_start':
-                speaker = {'speaker': p['speaker'],
-                           'fraction': p['fraction']}
+                name, fraction = self.process_mp(p['speaker'], p['fraction'])
+                speaker = {'speaker': name,
+                           'fraction': fraction}
 
                 # XXX Drop initial speech for now
                 if topic:
