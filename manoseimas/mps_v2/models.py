@@ -140,5 +140,8 @@ class StenogramStatement(CrawledItem):
     speaker_name = models.CharField(max_length=64)
     text = models.TextField()
 
+    def get_speaker_name(self):
+        return self.speaker.full_name if self.speaker else self.speaker_name
+
     def __unicode__(self):
-        return u'{}: {}'.format(self.speaker_name, self.text[:160])
+        return u'{}: {}'.format(self.get_speaker_name(), self.text[:160])

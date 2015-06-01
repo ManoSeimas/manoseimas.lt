@@ -54,6 +54,18 @@ class ManoseimasPipeline(object):
         return item
 
 
+class MPNameMatcher(object):
+
+    def __init__(self):
+        self.mp_names = {u'{}. {}'.format(mp.first_name[:1].upper(),
+                                          mp.last_name.upper()): mp
+                         for mp in ParliamentMember.objects.all()}
+
+    def get_mp_by_name(self, mp_name, fraction=None):
+        mp = self.mp_names.get(mp_name)
+        return mp
+
+
 class ManoSeimasModelPersistPipeline(object):
 
     @transaction.atomic
@@ -68,17 +80,17 @@ class ManoSeimasModelPersistPipeline(object):
             }
         )
 
-        mp.first_name = item['first_name'],
-        mp.last_name = item['last_name'],
-        mp.date_of_birth = item.get('dob'),
-        mp.email = item.get('email', [None])[0],
-        mp.phone = item.get('phone', [None])[0],
-        mp.candidate_page = item.get('home_page'),
-        mp.term_of_office = item.get('parliament', [None])[0],
-        mp.office_address = item['office_address'],
-        mp.constituency = item['constituency'],
-        mp.party_candidate = item.get('party_candidate', True),
-        mp.biography = item.get('biography'),
+        mp.first_name = item['first_name']
+        mp.last_name = item['last_name']
+        mp.date_of_birth = item.get('dob')
+        mp.email = item.get('email', [None])[0]
+        mp.phone = item.get('phone', [None])[0]
+        mp.candidate_page = item.get('home_page')
+        mp.term_of_office = item.get('parliament', [None])[0]
+        mp.office_address = item['office_address']
+        mp.constituency = item['constituency']
+        mp.party_candidate = item.get('party_candidate', True)
+        mp.biography = item.get('biography')
         mp.source = source_url
 
         if item['raised_by']:
@@ -135,8 +147,10 @@ class ManoSeimasModelPersistPipeline(object):
         # identify statements in the database now
         topic.statements.all().delete()
         for statement in item['statements']:
+            speaker = self.mp_matcher.get_mp_by_name(statement['speaker'])
             statement = StenogramStatement(
                 topic=topic,
+                speaker=speaker,
                 speaker_name=statement['speaker'],
                 text=u' '.join(statement['statement']),
                 source=source_url,
@@ -154,7 +168,7 @@ class ManoSeimasModelPersistPipeline(object):
             return item
 
     def open_spider(self, spider):
-        pass
+        self.mp_matcher = MPNameMatcher()
 
     def close_spider(self, spider):
         pass

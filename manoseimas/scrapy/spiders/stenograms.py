@@ -102,10 +102,12 @@ class StenogramSpider(ManoSeimasSpider):
                 'time': time(time_parts[0], time_parts[1])}
 
     def _extract_statement_start(self, paragraph):
+        speaker = re.sub(
+            u'\xa0', ' ',
+            extract_text(paragraph.xpath('b/span/text()')).strip('.')
+        )
         return {'type': 'statement_start',
-                'speaker': extract_text(
-                    paragraph.xpath('b/span/text()')
-                ).strip('.'),
+                'speaker': speaker,
                 'fraction': extract_text(
                     paragraph.xpath('b/following-sibling::i/span/text()')
                 ) or None,
