@@ -154,6 +154,8 @@ INSTALLED_APPS = (
     'couchdbkit.ext.django',
     'compressor',
 
+    'manoseimas',
+
     'sboard',
     'sboard.profiles',
     'sboard.categories',
@@ -168,7 +170,6 @@ INSTALLED_APPS = (
     'manoseimas.mps_v2',
     'manoseimas.solutions',         # depends on: votings
     'manoseimas.compat',            # depends on: solutions
-    'manoseimas',                   # depends on: votings
     'manoseimas.widget',
 )
 

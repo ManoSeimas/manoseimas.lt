@@ -24,6 +24,7 @@
 /lib
 /local
 /include
+/backup
 
 /settings.json
 /manoseimas/static/css/styles.css

@@ -41,9 +41,4 @@ INSTALLED_APPS += (
     'debug_toolbar',
 )
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BUILDOUT_DIR, 'var', 'db.sqlite3'),
-    }
-}
+DATABASES['default']['NAME'] = 'manoseimas'
