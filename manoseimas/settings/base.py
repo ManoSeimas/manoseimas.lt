@@ -154,7 +154,7 @@ INSTALLED_APPS = (
     'couchdbkit.ext.django',
     'compressor',
 
-    'manoseimas',                   # depends on: votings
+    'manoseimas',
 
     'sboard',
     'sboard.profiles',
