@@ -2,6 +2,8 @@ from django.contrib import admin
 
 from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
 from manoseimas.mps_v2.models import PoliticalParty
+from manoseimas.mps_v2.models import Stenogram, StenogramTopic
+from manoseimas.mps_v2.models import StenogramStatement
 
 
 class GroupAdmin(admin.ModelAdmin):
@@ -21,3 +23,6 @@ admin.site.register(ParliamentMember, ParliamentMemberAdmin)
 admin.site.register(GroupMembership)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(PoliticalParty)
+admin.site.register(Stenogram)
+admin.site.register(StenogramTopic)
+admin.site.register(StenogramStatement)
