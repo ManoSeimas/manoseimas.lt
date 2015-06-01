@@ -115,6 +115,8 @@ class ManoSeimasModelPersistPipeline(object):
             }
         )
 
+        # TODO: need a robust mechanism to uniquely identify topics
+        # inside a stenogam. Or maybe just drop it entirely
         topic, created = StenogramTopicModel.objects.get_or_create(
             stenogram=stenogram,
             title=item['title'],
@@ -130,7 +132,8 @@ class ManoSeimasModelPersistPipeline(object):
             statement = StenogramStatement(
                 topic=topic,
                 speaker_name=statement['speaker'],
-                text=u' '.join(statement['statement'])
+                text=u' '.join(statement['statement']),
+                source=source_url,
             )
             statement.save()
 
