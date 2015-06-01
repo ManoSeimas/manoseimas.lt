@@ -35,9 +35,11 @@ HTTPCACHE_POLICY = 'manoseimas.scrapy.httpcache.NoCacheFlagPolicy'
 HTTPCACHE_STORAGE = 'scrapy.contrib.httpcache.LeveldbCacheStorage'
 HTTPCACHE_DIR = '/tmp/manoseimas_httpcache'
 
+COUCHDB_URL = 'http://127.0.0.1:5984'
+
 COUCHDB_DATABASES = (
-    ('legalact', 'http://127.0.0.1:5984', 'legalacts',),
-    ('question', 'http://127.0.0.1:5984', 'sittings',),
-    ('voting', 'http://127.0.0.1:5984', 'sittings',),
-    ('person', 'http://127.0.0.1:5984', 'mps',),
+    ('legalact', COUCHDB_URL, 'legalacts',),
+    ('question', COUCHDB_URL, 'sittings',),
+    ('voting', COUCHDB_URL, 'sittings',),
+    ('person', COUCHDB_URL, 'mps',),
 )
