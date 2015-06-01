@@ -313,3 +313,7 @@ THUMBNAIL_QUALITY = 100
 
 # This is only for anonymous users and is overriden when a user logs in.
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Django-social-auth does not support JSON serializer.
+# See: https://docs.djangoproject.com/en/1.8/topics/http/sessions/#session-serialization
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
