@@ -15,7 +15,7 @@ ubuntu:
 
 run: bin/django ; bin/django runserver 0.0.0.0:8000
 
-test: bin/django ; bin/django test
+test: bin/django ; scripts/runtests.py
 
 tags: bin/django ; bin/ctags -v --tag-relative
 
@@ -43,7 +43,7 @@ bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildc
 migrate: bin/django ; bin/django migrate
 
 reset_mysql:
-	mysql -e 'drop database manoseimas; create database manoseimas character set utf8 collate utf8_bin;'
+	mysql -e 'drop database if exists manoseimas; create database manoseimas character set utf8 collate utf8_bin;'
 
 import_backup: bin/django
 	mysql -u manoseimas < backup/manoseimas.sql

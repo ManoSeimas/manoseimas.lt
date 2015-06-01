@@ -18,6 +18,12 @@ def is_latest_version(item, doc):
 
 class ManoseimasPipeline(object):
 
+    def store_item(self, db, doc, item):
+        store_doc(db, doc)
+
+    def get_doc(self, db, item):
+        return get_doc(db, item['_id'])
+
     def process_item(self, item, spider):
         if '_id' not in item or not item['_id']:
             raise Exception('Missing doc _id. Doc: %s' % item)
@@ -25,7 +31,7 @@ class ManoseimasPipeline(object):
         item_name = item.__class__.__name__.lower()
         db = get_db(item_name)
 
-        doc = get_doc(db, item['_id'])
+        doc = self.get_doc(db, item)
         if doc is None:
             doc = dict(item)
             doc['doc_type'] = item_name
@@ -39,7 +45,7 @@ class ManoseimasPipeline(object):
             doc.update(item)
 
         doc['updated'] = datetime.datetime.now().isoformat()
-        store_doc(db, doc)
+        self.store_item(db, doc, item)
 
         return item
 

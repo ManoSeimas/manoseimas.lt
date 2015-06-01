@@ -19,12 +19,11 @@ class FakePipeline(ManoseimasPipeline):
         self._stored_items = {}
         super(FakePipeline, self).__init__(*args, **kwargs)
 
-    def get_doc(self, item_name, item):
+    def get_doc(self, db, item):
         return self._stored_items.get(item['_id'], None)
 
-    def store_item(self, item_name, doc, item):
+    def store_item(self, db, doc, item):
         self._stored_items[item['_id']] = doc
-
 
 
 class TestPipeline(unittest.TestCase):
@@ -35,7 +34,7 @@ class TestPipeline(unittest.TestCase):
     def tearDown(self):
         self.server.delete_db(self.db.dbname)
 
-    @patch('manoseimas.scrapy.db.get_db')
+    @patch('manoseimas.scrapy.pipelines.get_db')
     def test_pipline(self, mock_get_db):
         mock_get_db.return_value = self.db
 
@@ -109,7 +108,7 @@ class TestPipeline(unittest.TestCase):
 
 
 class TestPipelineGetDB(unittest.TestCase):
-    @patch('manoseimas.scrapy.db.COUCHDB_DATABASES', (
+    @patch('manoseimas.scrapy.settings.COUCHDB_DATABASES', (
         ('legalacts', 'http://127.0.0.1:5984', 'my_legalacts_testdb',),
         ('person', 'http://127.0.0.1:5984', 'my_person_testdb',),
     ))
