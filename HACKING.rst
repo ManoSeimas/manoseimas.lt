@@ -35,6 +35,10 @@ Run migrations::
 
     bin/django migrate
 
+Sync CouchDB views for scrapy::
+
+    bin/initscrapy
+
 And run the project::
 
     make run

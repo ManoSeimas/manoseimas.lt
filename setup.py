@@ -41,6 +41,7 @@ setup(
     entry_points={
         'console_scripts': [
             'couch = manoseimas.scripts.couch:main',
+            'initscrapy = manoseimas.scrapy.main:main',
         ],
     }
 )
