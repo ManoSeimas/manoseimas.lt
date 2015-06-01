@@ -19,10 +19,30 @@ class ParliamentMemberAdmin(admin.ModelAdmin):
     inlines = (MpMembershipAdmin,)
 
 
+class StenogramStatementInline(admin.TabularInline):
+    model = StenogramStatement
+    readonly_fields = ('source', 'speaker', 'speaker_name', 'text')
+    extra = 0
+
+
+class StenogramTopicInline(admin.TabularInline):
+    model = StenogramTopic
+    readonly_fields = ('source', 'title')
+    extra = 0
+
+
+class StenogramAdmin(admin.ModelAdmin):
+    inlines = (StenogramTopicInline,)
+
+
+class StenogramTopicAdmin(admin.ModelAdmin):
+    inlines = (StenogramStatementInline,)
+
+
 admin.site.register(ParliamentMember, ParliamentMemberAdmin)
 admin.site.register(GroupMembership)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(PoliticalParty)
-admin.site.register(Stenogram)
-admin.site.register(StenogramTopic)
+admin.site.register(Stenogram, StenogramAdmin)
+admin.site.register(StenogramTopic, StenogramTopicAdmin)
 admin.site.register(StenogramStatement)
