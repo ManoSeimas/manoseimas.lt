@@ -1137,7 +1137,7 @@ h5 { font-size: 14px; }
 h6 { font-size: 14px; }
 
 @mixin arrow-content {
-  content: url(../img/embed/inline-header-arrow.png);
+  content: url(#{$staticRoot}/img/embed/inline-header-arrow.png);
   padding: 0 8px 0 7px;
   position: relative;
   top: -2px;
@@ -1241,14 +1241,14 @@ img.align-center {
   li {
     margin: 10px 0;
     padding: 0 0 0 28px;
-    background: url(../img/check.png) no-repeat 2px 2px;
+    background: url(#{$staticRoot}/img/check.png) no-repeat 2px 2px;
   }
 }
 
 .test-note {
   margin: 10px 0;
   padding: 0 0 0 28px;
-  background: url(../img/warning.png) no-repeat 2px 0px;
+  background: url(#{$staticRoot}/img/warning.png) no-repeat 2px 0px;
   font-style: italic;
 }
 
