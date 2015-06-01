@@ -157,28 +157,36 @@ class StenogramSpider(ManoSeimasSpider):
         speaker = None
         for p in parsed_paragraphs:
             if p['type'] == 'time':
-                if topic:
+                if topic and topic.get('time'):
                     topics.append(topic)
+                if not topic:
+                    topic = None
                 topic = {
-                    'time': p['time'],
                     'statements': [],
                 }
+                topic['time'] = p['time']
             elif p['type'] == 'title':
+                if topic and topic.get('title'):
+                    topics.append(topic)
+                    topic = None
+                if not topic:
+                    topic = {
+                        'statements': [],
+                    }
                 topic['title'] = p['title']
             elif p['type'] == 'statement_start':
                 name, fraction = self._process_mp(p['speaker'], p['fraction'])
                 speaker = {'speaker': name,
                            'fraction': fraction}
 
-                # XXX Drop initial statement for now
                 if topic:
                     topic['statements'].append(
                         {'speaker': speaker['speaker'],
                          'fraction': speaker['fraction'],
                          'statement': [p['statement']]}
                     )
-            elif p['type'] == 'statement_fragment':
-                # Sometimes spekaer is omitted in stenograms
+            elif p['type'] == 'statement_fragment' and topic is not None:
+                # Sometimes speaker is omitted in stenograms
                 # when starting a new topic. Assume it's the last speaker of
                 # previous topic (likely the chair of meeting)
                 if not topic['statements']:
@@ -217,7 +225,7 @@ class StenogramSpider(ManoSeimasSpider):
         topics = self._group_topics(self._parse_paragraphs(paragraphs))
         for topic in topics:
             loader = Loader(self, response, StenogramTopic(),
-                            required=('_id', 'title', 'date' 'sitting_no',
+                            required=('_id', 'title', 'date', 'sitting_no',
                                       'statements'))
             loader.add_value('title', topic['title'])
             loader.add_value('date', datetime.combine(meta['date'],
