@@ -22,7 +22,7 @@ LOG_LEVEL = 'WARNING'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
 # LOG_FILE = os.path.join(settings.BUILDOUT_DIR, 'var', 'log', 'scrapy.log')
 
 ITEM_PIPELINES = [
-    'manoseimas.scrapy.pipelines.ManoseimasPipeline',
+    # 'manoseimas.scrapy.pipelines.ManoseimasPipeline',
     'manoseimas.scrapy.pipelines.ManoSeimasModelPersistPipeline',
 ]
 

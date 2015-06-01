@@ -1,10 +1,14 @@
 import datetime
 
+from django.db import transaction
+
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
-from manoseimas.scrapy.items import Person
+from manoseimas.scrapy.items import Person, StenogramTopic
 
 from manoseimas.mps_v2.models import ParliamentMember, PoliticalParty
 from manoseimas.mps_v2.models import Group, GroupMembership
+from manoseimas.mps_v2.models import Stenogram, StenogramStatement
+from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
 
 
 def is_latest_version(item, doc):
@@ -52,24 +56,31 @@ class ManoseimasPipeline(object):
 
 class ManoSeimasModelPersistPipeline(object):
 
+    @transaction.atomic
     def process_mp(self, item, spider):
         source_url = item['source']['url']
 
-        mp = ParliamentMember(
+        mp, created = ParliamentMember.objects.get_or_create(
             source_id=item['_id'],
-            first_name=item['first_name'],
-            last_name=item['last_name'],
-            date_of_birth=item.get('dob'),
-            email=item.get('email', [None])[0],
-            phone=item.get('phone', [None])[0],
-            candidate_page=item.get('home_page'),
-            term_of_office=item.get('parliament', [None])[0],
-            office_address=item['office_address'],
-            constituency=item['constituency'],
-            party_candidate=item.get('party_candidate', True),
-            biography=item.get('biography'),
-            source=source_url
+            defaults={
+                'first_name': item['first_name'],
+                'last_name': item['last_name'],
+            }
         )
+
+        mp.first_name = item['first_name'],
+        mp.last_name = item['last_name'],
+        mp.date_of_birth = item.get('dob'),
+        mp.email = item.get('email', [None])[0],
+        mp.phone = item.get('phone', [None])[0],
+        mp.candidate_page = item.get('home_page'),
+        mp.term_of_office = item.get('parliament', [None])[0],
+        mp.office_address = item['office_address'],
+        mp.constituency = item['constituency'],
+        mp.party_candidate = item.get('party_candidate', True),
+        mp.biography = item.get('biography'),
+        mp.source = source_url
+
         if item['raised_by']:
             party, __ = PoliticalParty.objects.get_or_create(
                 name=item['raised_by'],
@@ -97,9 +108,48 @@ class ManoSeimasModelPersistPipeline(object):
             membership.save()
         return item
 
+    @transaction.atomic
+    def process_stenogram_topic(self, item, spider):
+        source_url = item['source']['url']
+
+        stenogram, created = Stenogram.objects.get_or_create(
+            source_id=item['_id'],
+            defaults={
+                'date': item['date'],
+                'sitting_no': item['sitting_no'],
+                'source': source_url,
+            }
+        )
+
+        # TODO: need a robust mechanism to uniquely identify topics
+        # inside a stenogam. Or maybe just drop it entirely
+        topic, created = StenogramTopicModel.objects.get_or_create(
+            stenogram=stenogram,
+            title=item['title'],
+            defaults={
+                'source': source_url,
+            }
+        )
+
+        # Recreate all the statements since we can't reliably
+        # identify statements in the database now
+        topic.statements.all().delete()
+        for statement in item['statements']:
+            statement = StenogramStatement(
+                topic=topic,
+                speaker_name=statement['speaker'],
+                text=u' '.join(statement['statement']),
+                source=source_url,
+            )
+            statement.save()
+
+        return item
+
     def process_item(self, item, spider):
         if isinstance(item, Person):
             return self.process_mp(item, spider)
+        elif isinstance(item, StenogramTopic):
+            return self.process_stenogram_topic(item, spider)
         else:
             return item
 

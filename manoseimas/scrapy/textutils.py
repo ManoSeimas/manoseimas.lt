@@ -2,9 +2,13 @@
 
 import re
 import string
+from functools import partial
 
+from six import text_type
 import lxml.html.clean
 import lxml.html.defs
+import lxml.html
+from lxml.html import soupparser
 
 words_re = re.compile(r'\w+', re.UNICODE)
 clean_chunk_re = re.compile(
@@ -21,6 +25,14 @@ def clean_html(content):
     attrs = lxml.html.defs.safe_attrs - {'class'}
     cleaner = lxml.html.clean.Cleaner(style=True, safe_attrs=attrs)
     return cleaner.clean_html(content)
+
+
+def strip_tags(content, remove_tags=lxml.html.defs.tags, kill_tags=[]):
+    html = soupparser.fromstring(content)
+    cleaner = lxml.html.clean.Cleaner(remove_tags=remove_tags,
+                                      kill_tags=kill_tags)
+    cleaned_html = cleaner.clean_html(html)
+    return cleaned_html.text
 
 
 def split_by_comma(text):
@@ -165,3 +177,29 @@ def str2dict(keys, text, stack_size=3, normalize=string.lower,
     chunk = clean_chunk(chunk)
     if next_key or chunk:
         yield (next_key, chunk)
+
+
+cleanup_re = re.compile(u'\u00AD')
+newline_re = re.compile(u'(\r\n|\n)')
+multispace_re = re.compile(u' +')
+
+
+def clean_text(text):
+    """Removes markup soft hyphens and replaces newlines with whitespace
+    """
+    text = cleanup_re.sub('', text)
+    text = newline_re.sub(' ', text)
+    text = multispace_re.sub(' ', text)
+    return text
+
+
+def extract_text(xs, kill_tags=[]):
+    lines = map(text_type.strip, xs.extract())
+    tag_stripping_fn = partial(strip_tags, kill_tags=kill_tags)
+    tagless = map(tag_stripping_fn, lines)
+    nonempty = filter(lambda l: bool(l), tagless)
+    if nonempty:
+        joined = u' '.join(nonempty).strip().lstrip('.')
+        return clean_text(joined)
+    else:
+        return ''

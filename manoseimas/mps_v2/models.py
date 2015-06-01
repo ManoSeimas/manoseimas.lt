@@ -113,3 +113,32 @@ class GroupMembership(CrawledItem):
         return u'{} - {} ({})'.format(self.group.name,
                                       self.member.full_name,
                                       self.position)
+
+
+class Stenogram(CrawledItem):
+    source_id = models.CharField(max_length=16, db_index=True)
+    date = models.DateField()
+    sitting_no = models.IntegerField()
+    sitting_name = models.TextField(blank=True, null=True)
+
+    def __unicode__(self):
+        return u'{} Nr. {}'.format(self.date, self.sitting_no)
+
+
+class StenogramTopic(CrawledItem):
+    stenogram = models.ForeignKey(Stenogram, related_name='topics')
+    title = models.TextField()
+
+    def __unicode__(self):
+        return self.title[:160]
+
+
+class StenogramStatement(CrawledItem):
+    topic = models.ForeignKey(StenogramTopic, related_name='statements')
+    speaker = models.ForeignKey(ParliamentMember, related_name='statements',
+                                blank=True, null=True)
+    speaker_name = models.CharField(max_length=64)
+    text = models.TextField()
+
+    def __unicode__(self):
+        return u'{}: {}'.format(self.speaker_name, self.text[:160])
