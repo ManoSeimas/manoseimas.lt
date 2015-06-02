@@ -3,8 +3,12 @@
 
 from __future__ import unicode_literals
 
+import os.path
 import unittest
 import datetime
+
+import mock
+import couchdbkit
 
 from scrapy.http import HtmlResponse
 from scrapy.link import Link
@@ -12,6 +16,7 @@ from scrapy.selector import Selector
 
 from manoseimas.scrapy.tests.utils import fixture
 
+from manoseimas.scrapy.settings import COUCHDB_URL, BUILDOUT_DIR
 from manoseimas.scrapy.textutils import strip_tags, extract_text
 from manoseimas.scrapy.spiders.stenograms import StenogramSpider
 from manoseimas.scrapy.spiders.stenograms import as_statement
@@ -198,6 +203,41 @@ class StenogramCrawlerTestCase(unittest.TestCase):
 
 
 class VotingByTitleTests(unittest.TestCase):
+    def setUp(self):
+        self.server = couchdbkit.Server(COUCHDB_URL)
+        self.db = self.server.get_or_create_db('test_nodes')
+        path = os.path.join(BUILDOUT_DIR, 'manoseimas', 'scrapy', 'couchdb',
+                            'nodes')
+        couchdbkit.push(path, self.db, force=True, docid='_design/scrapy')
+
+        self.get_db_patch = mock.patch('manoseimas.scrapy.helpers.stenograms.get_db')
+        get_db = self.get_db_patch.start()
+        get_db.return_value = self.db
+
+    def tearDown(self):
+        self.get_db_patch.stop()
+        self.server.delete_db('test_nodes')
+
+    def test_get_votings_by_date(self):
+        self.db.save_doc(FIXTURES['sitting_245_1'])
+        self.db.save_doc(FIXTURES['sitting_245_2'])
+        docs = stenogram_helpers.get_votings_by_date(datetime.date(2015, 5,
+                                                                     14))
+        ids = [d['_id'] for d in docs]
+        self.assertEqual(ids, ['000oz6', '000oz7'])
+
+        dt = datetime.datetime(2015, 5, 14, 15, 4, 3)
+        title = (
+            'Kūno kultūros ir sporto įstatymo Nr. I-1151 41 straipsnio '
+            'pakeitimo įstatymo projektas Nr. XIIP-2468(2) (svarstymas ir '
+            'priėmimas)'
+        )
+        docs = stenogram_helpers.get_voting_for_stenogram(docs, title, dt)
+        ids = [d['_id'] for d in docs]
+        self.assertEqual(ids, ['000oz6'])
+
+
+class VotingForStenogramTests(unittest.TestCase):
     def test_single_documents(self):
         votings = [
             FIXTURES['sitting_245_1'],
@@ -209,8 +249,9 @@ class VotingByTitleTests(unittest.TestCase):
             'pakeitimo įstatymo projektas Nr. XIIP-2468(2) (svarstymas ir '
             'priėmimas)'
         )
-        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        self.assertEqual(doc_id, '000oz6')
+        docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        ids = [d['_id'] for d in docs]
+        self.assertEqual(ids, ['000oz6'])
 
     def test_many_documents(self):
         votings = [
@@ -249,8 +290,9 @@ class VotingByTitleTests(unittest.TestCase):
             'straipsnių pakeitimo įstatymo projektas Nr. XIIP-3020 '
             '( pateikimas )'
         )
-        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        self.assertEqual(doc_id, '000oz7')
+        docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        ids = [d['_id'] for d in docs]
+        self.assertEqual(ids, ['000oz7'])
 
     def test_date_check(self):
         data = FIXTURES['sitting_245_1']
@@ -266,22 +308,25 @@ class VotingByTitleTests(unittest.TestCase):
             dict(data, _id='b', created='2015-05-14T15:30:00Z'),
             dict(data, _id='c', created='2015-05-14T14:00:00Z'),
         ]
-        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        self.assertEqual(doc_id, 'a')
+        docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        ids = [d['_id'] for d in docs]
+        self.assertEqual(ids, ['a', 'b'])
 
         votings = [
             dict(data, _id='a', created='2015-05-14T13:00:00Z'),
             dict(data, _id='b', created='2015-05-14T15:10:00Z'),
             dict(data, _id='c', created='2015-05-14T14:00:00Z'),
         ]
-        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        self.assertEqual(doc_id, 'b')
+        docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        ids = [d['_id'] for d in docs]
+        self.assertEqual(ids, ['b'])
 
 
 FIXTURES = {
     'sitting_245_1': {
         # Source: http://www3.lrs.lt/pls/inter/w5_sale.klaus_stadija?p_svarst_kl_stad_id=-20469
         '_id': '000oz6',
+        'doc_type': 'Voting',
         'created': '2015-05-14T15:04:03Z',
         'documents': [
             {
@@ -293,6 +338,7 @@ FIXTURES = {
     'sitting_245_2': {
         # Source: http://www3.lrs.lt/pls/inter/w5_sale.klaus_stadija?p_svarst_kl_stad_id=-20472
         '_id': '000oz7',
+        'doc_type': 'Voting',
         'created': '2015-05-14T15:51:20Z',
         'documents': [
             {

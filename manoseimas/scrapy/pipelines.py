@@ -4,11 +4,14 @@ from django.db import transaction
 
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
 from manoseimas.scrapy.items import Person, StenogramTopic
+from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
+from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
 
 from manoseimas.mps_v2.models import ParliamentMember, PoliticalParty
 from manoseimas.mps_v2.models import Group, GroupMembership
 from manoseimas.mps_v2.models import Stenogram, StenogramStatement
 from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
+from manoseimas.mps_v2.models import Voting
 
 
 def is_latest_version(item, doc):
@@ -149,6 +152,21 @@ class ManoSeimasModelPersistPipeline(object):
                 'timestamp': item['date'],
             }
         )
+
+        if not created:
+            topic.votings.all().delete()
+
+        # Find voting for this stenogram topic
+        votings = get_votings_by_date(item['date'].date())
+        docs = get_voting_for_stenogram(votings, item['title'], item['date'])
+
+        for doc in docs:
+            Voting.objects.create(
+                stenogram_topic=topic,
+                node=doc['_id'],
+                timestamp=datetime.datetime.strptime(doc['created'],
+                                                     '%Y-%m-%dT%H:%M:%SZ'),
+            )
 
         # Recreate all the statements since we can't reliably
         # identify statements in the database now

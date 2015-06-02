@@ -3,6 +3,8 @@ from autoslug import AutoSlugField
 
 from django.utils.translation import ugettext_lazy as _
 
+from sboard.models import NodeForeignKey
+
 
 class CrawledItem(models.Model):
     source = models.URLField()
@@ -146,3 +148,12 @@ class StenogramStatement(CrawledItem):
 
     def __unicode__(self):
         return u'{}: {}'.format(self.get_speaker_name(), self.text[:160])
+
+
+class Voting(models.Model):
+    stenogram_topic = models.ForeignKey(StenogramTopic, related_name='votings')
+    node = NodeForeignKey()
+    timestamp = models.DateTimeField()
+
+    class Meta:
+        unique_together = ('stenogram_topic', 'node')

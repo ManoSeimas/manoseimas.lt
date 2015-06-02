@@ -42,4 +42,5 @@ COUCHDB_DATABASES = (
     ('question', COUCHDB_URL, 'sittings',),
     ('voting', COUCHDB_URL, 'sittings',),
     ('person', COUCHDB_URL, 'mps',),
+    ('nodes_voting', COUCHDB_URL, 'nodes',),
 )
