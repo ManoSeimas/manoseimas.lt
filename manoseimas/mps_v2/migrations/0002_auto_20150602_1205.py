@@ -50,6 +50,7 @@ class Migration(migrations.Migration):
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('modified_at', models.DateTimeField(auto_now=True)),
                 ('title', models.TextField()),
+                ('timestamp', models.DateTimeField()),
                 ('stenogram', models.ForeignKey(related_name='topics', to='mps_v2.Stenogram')),
             ],
             options={
