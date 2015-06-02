@@ -1,6 +1,8 @@
 # coding: utf-8
 # flake8: noqa
 
+from __future__ import unicode_literals
+
 import unittest
 import datetime
 
@@ -14,6 +16,8 @@ from manoseimas.scrapy.textutils import strip_tags, extract_text
 from manoseimas.scrapy.spiders.stenograms import StenogramSpider
 from manoseimas.scrapy.spiders.stenograms import as_statement
 from manoseimas.scrapy.spiders.stenograms import SittingChairpersonProcessor
+
+import manoseimas.scrapy.helpers.stenograms as stenogram_helpers
 
 
 source_text = u"""<p class="Roman"><b>
@@ -191,3 +195,150 @@ class StenogramCrawlerTestCase(unittest.TestCase):
     def test_parse_stenogram(self):
         items = list(self.spider.parse_stenogram(self.response))
         self.assertEqual(20, len(items))
+
+
+class VotingByTitleTests(unittest.TestCase):
+    def test_single_documents(self):
+        votings = [
+            FIXTURES['sitting_245_1'],
+            FIXTURES['sitting_245_2'],
+        ]
+        dt = datetime.datetime(2015, 5, 14, 15, 4, 3)
+        title = (
+            'Kūno kultūros ir sporto įstatymo Nr. I-1151 41 straipsnio '
+            'pakeitimo įstatymo projektas Nr. XIIP-2468(2) (svarstymas ir '
+            'priėmimas)'
+        )
+        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        self.assertEqual(doc_id, '000oz6')
+
+    def test_many_documents(self):
+        votings = [
+            FIXTURES['sitting_245_1'],
+            FIXTURES['sitting_245_2'],
+        ]
+        dt = datetime.datetime(2015, 5, 14, 15, 51, 20)
+        title = (
+            'Seimo nutarimo „Dėl teismų reorganizavimo“ projektas Nr. '
+            'XIIP-3010, Teismų reorganizavimo įstatymo projektas Nr. '
+            'XIIP-3011, Teismų įstatymo Nr. I-480 14, 28, 34, 36, 41, 45, '
+            '55 1 , 56, 63, 65, 70, 80, 101, 107, 114, 120 straipsnių, '
+            'trečiojo skirsnio pavadinimo pakeitimo ir Įstatymo papildymo '
+            '114 1 straipsniu įstatymo projektas Nr. XIIP-3012, Apylinkių '
+            'teismų įsteigimo įstatymo Nr. I-2375 pakeitimo įstatymo '
+            'projektas Nr. XIIP-3013, Į statymo „Dėl Lietuvos Aukščiausiojo '
+            'Teismo, Lietuvos apeliacinio teismo, apygardų teismų įsteigimo, '
+            'apygardų ir apylinkių teismų veiklos teritorijų nustatymo bei '
+            'Lietuvos Respublikos prokuratūros reformavimo“ Nr. I-497 '
+            'pavadinimo ir 6 straipsnio pakeitimo bei 7 straipsnio '
+            'pripažinimo netekusiu galios įstatymo projektas Nr. XIIP-3014, '
+            'Administracinių teismų įsteigimo įstatymo Nr. VIII-1030 2 '
+            'straipsnio pakeitimo ir 3 straipsnio pripažinimo netekusiu '
+            'galios įstatymo projektas Nr. XIIP-3015, Civilinio proceso '
+            'kodekso 34, 62, 111, 130, 134, 154, 220 1 , 220 2 , 258, 268, '
+            '269, 325 ir 590 straipsnių pakeitimo įstatymo projektas Nr. '
+            'XIIP-3016, Administracinių bylų teisenos įstatymo Nr. VIII-1029 '
+            '17, 34, 35, 46, 64, 69, 70, 78, 73, 74, 85 ir 139 straipsnių '
+            'pakeitimo įstatymo projektas Nr. XIIP-3017, Baudžiamojo proceso '
+            'kodekso 40, 59, 60, 123, 124 ir 221 straipsnių pakeitimo ir '
+            'Kodekso papildymo 11 1 straipsniu įstatymo projektas Nr. '
+            'XIIP-3018, Administracinių teisės pažeidimų kodekso 21, 29, '
+            '29 1 , 37, 216, 217, 224, 255, 261, 271, 282, 288, 292, 300, '
+            '302 4 , 302 9 , 314, 337 ir 338 1 straipsnių pakeitimo įstatymo '
+            'projektas Nr. XIIP-3019, Antstolių įstatymo Nr. IX-876 20 ir 26 '
+            'straipsnių pakeitimo įstatymo projektas Nr. XIIP-3020 '
+            '( pateikimas )'
+        )
+        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        self.assertEqual(doc_id, '000oz7')
+
+    def test_date_check(self):
+        data = FIXTURES['sitting_245_1']
+        dt = datetime.datetime(2015, 5, 14, 15, 4, 3)
+        title = (
+            'Kūno kultūros ir sporto įstatymo Nr. I-1151 41 straipsnio '
+            'pakeitimo įstatymo projektas Nr. XIIP-2468(2) (svarstymas ir '
+            'priėmimas)'
+        )
+
+        votings = [
+            dict(data, _id='a', created='2015-05-14T15:00:00Z'),
+            dict(data, _id='b', created='2015-05-14T15:30:00Z'),
+            dict(data, _id='c', created='2015-05-14T14:00:00Z'),
+        ]
+        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        self.assertEqual(doc_id, 'a')
+
+        votings = [
+            dict(data, _id='a', created='2015-05-14T13:00:00Z'),
+            dict(data, _id='b', created='2015-05-14T15:10:00Z'),
+            dict(data, _id='c', created='2015-05-14T14:00:00Z'),
+        ]
+        doc_id = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
+        self.assertEqual(doc_id, 'b')
+
+
+FIXTURES = {
+    'sitting_245_1': {
+        # Source: http://www3.lrs.lt/pls/inter/w5_sale.klaus_stadija?p_svarst_kl_stad_id=-20469
+        '_id': '000oz6',
+        'created': '2015-05-14T15:04:03Z',
+        'documents': [
+            {
+                'type': 'svarstymas',
+                'name': 'Kūno kultūros ir sporto įstatymo Nr. I-1151 41 straipsnio pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIIP-2468(2))',
+            },
+        ],
+    },
+    'sitting_245_2': {
+        # Source: http://www3.lrs.lt/pls/inter/w5_sale.klaus_stadija?p_svarst_kl_stad_id=-20472
+        '_id': '000oz7',
+        'created': '2015-05-14T15:51:20Z',
+        'documents': [
+            {
+                'type': 'pateikimas',
+                'name': 'Seimo NUTARIMO "Dėl teismų reorganizavimo" PROJEKTAS (Nr. XIIP-3010)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Teismų reorganizavimo ĮSTATYMO PROJEKTAS (Nr. XIIP-3011)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Teismų įstatymo Nr. I-480 14, 28, 34, 36, 41, 45, 55(1), 56, 63, 65, 70, 80, 101, 107, 114, 120 straipsnių, trečiojo skirsnio pavadinimo pakeitimo ir įstatymo papildymo 114(1) straipsniu ĮSTATYMO PROJEKTAS (Nr. XIIP-3012)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Apylinkių teismų įsteigimo įstatymo Nr. I-2375 pakeitimo ĮSTATYMO PROJEKTAS (nauja redakcija) (Nr. XIIP-3013)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Įstatymo "Dėl Lietuvos Aukščiausiojo Teismo, Lietuvos apeliacinio teismo, apygardų teismų įsteigimo, apygardų ir apylinkių teismų veiklos teritorijų nustatymo bei Lietuvos Respublikos prokuratūros reformavimo" Nr. I-497 pavadinimo ir 6 straipsnio pakeitimo bei 7 straipsnio pripažinimo netekusiu galios ĮSTATYMO PROJEKTAS (Nr. XIIP-3014)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Administracinių teismų įsteigimo įstatymo Nr. VIII-1030 2 straipsnio pakeitimo ir 3 straipsnio pripažinimo netekusiu galios ĮSTATYMO PROJEKTAS (Nr. XIIP-3015)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Civilinio proceso kodekso 34, 62, 111, 130, 134, 154, 220(1), 220(2), 258, 268, 269, 325 ir 590 straipsnių pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIIP-3016)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Administracinių bylų teisenos įstatymo Nr. VIII-1029 17, 34, 35, 46, 64, 69, 70, 78, 73, 74, 85 ir 139 straipsnių pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIIP-3017)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Baudžiamojo proceso kodekso 40, 59, 60, 123, 124 ir 221 straipsnių pakeitimo ir Kodekso papildymo 11(1) straipsniu ĮSTATYMO PROJEKTAS (Nr. XIIP-3018)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Administracinių teisės pažeidimų kodekso 21, 29, 29(1), 37, 216, 217, 224, 255, 261, 271, 282, 288, 292, 300, 302(4), 302(9), 314, 337 ir 338(1) straipsnių pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIIP-3019)',
+            },
+            {
+                'type': 'pateikimas',
+                'name': 'Antstolių įstatymo Nr. IX-876 20 ir 26 straipsnių pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIIP-3020)',
+            },
+        ],
+    },
+}
