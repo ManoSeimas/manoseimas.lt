@@ -10,7 +10,9 @@ from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.items import StenogramTopic
+from manoseimas.scrapy.textutils import clean_text
 from manoseimas.scrapy.textutils import extract_text
+from manoseimas.scrapy.textutils import strip_tags
 
 
 MINIMUM_SESSION = 95
@@ -41,6 +43,46 @@ def as_statement(paragraph):
         kill_tags=['b'],
     )
     return re.sub(r'^\([A-Z-]+\)', '', text).lstrip('.').strip()
+
+
+mp_name_regexps = (
+    # PIRMININKĖ (N. SURNAME, FRACT)
+    # PIRMININKAS (N. SURNAME, FRACT)
+    re.compile(ur'((?:PIRMININKĖ|PIRMININKAS)\s\(\w\.\s[\w-]+,\s*[\w-]+[\W]*\))',
+               re.UNICODE),
+    # PIRMININKĖ (N. SURNAME)
+    # PIRMININKAS (N. SURNAME)
+    re.compile(ur'((?:PIRMININKĖ|PIRMININKAS)\s\(\w\.\s[\w-]+\))',
+               re.UNICODE),
+    # PIRMININKĖ
+    # PIRMININKAS
+    re.compile(ur'(PIRMININKĖ|PIRMININKAS)\s*\.?', re.UNICODE),
+
+    # N. N. SURNAME (FRACT)
+    re.compile(ur'^(\w\.\s\w\.\s[\w-]+)\s*\([\w-]+[\W]*\)', re.UNICODE),
+    # N. SURNAME (FRACT)
+    re.compile(ur'^(\w\.\s[\w-]+)\s*\([\w-]+[\W]*\)', re.UNICODE),
+
+    # N. N. SURNAME.
+    re.compile(ur'^(\w\.\s\w\.\s[\w-]+)\s*\.', re.UNICODE),
+    # N. SURNAME.
+    re.compile(ur'^(\w\.\s[\w-]+)\s*\.', re.UNICODE),
+
+    # N. SURNAME (TEXT TEXT). - some title or explanation
+    re.compile(ur'^(\w\.\s[\w-]+)\s*\([^)]+\)', re.UNICODE),
+)
+
+
+def extract_mp_name(paragraph):
+    """MP name formats:
+    """
+    text = clean_text(strip_tags(paragraph)).strip()
+    for rule in mp_name_regexps:
+        match = rule.match(text)
+        if match:
+            return match.group(1)
+    else:
+        return None
 
 
 class SittingChairpersonProcessor(object):
@@ -104,7 +146,7 @@ class StenogramSpider(ManoSeimasSpider):
     def _extract_statement_start(self, paragraph):
         speaker = re.sub(
             u'\xa0', ' ',
-            extract_text(paragraph.xpath('b/span/text()')).strip('.')
+            extract_mp_name(paragraph.extract())
         )
         return {'type': 'statement_start',
                 'speaker': speaker,
@@ -123,7 +165,8 @@ class StenogramSpider(ManoSeimasSpider):
                 yield self._extract_title(paragraph)
             elif paragraph.xpath('self::p[@class="Laikas"]'):
                 yield self._extract_time(paragraph)
-            elif extract_text(paragraph.xpath('self::p/b')):
+            elif (extract_text(paragraph.xpath('self::p/b'))
+                  and extract_mp_name(paragraph.extract())):
                 yield self._extract_statement_start(paragraph)
             elif extract_text(paragraph.xpath('self::p/text()')):
                 yield self._extract_statement_fragment(paragraph)
