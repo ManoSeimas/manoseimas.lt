@@ -128,6 +128,7 @@ class Stenogram(CrawledItem):
 class StenogramTopic(CrawledItem):
     stenogram = models.ForeignKey(Stenogram, related_name='topics')
     title = models.TextField()
+    timestamp = models.DateTimeField()
 
     def __unicode__(self):
         return self.title[:160]

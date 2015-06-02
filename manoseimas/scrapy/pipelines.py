@@ -140,6 +140,7 @@ class ManoSeimasModelPersistPipeline(object):
             title=item['title'],
             defaults={
                 'source': source_url,
+                'timestamp': item['date'],
             }
         )
 
