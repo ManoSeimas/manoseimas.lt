@@ -48,8 +48,10 @@ def as_statement(paragraph):
 mp_name_regexps = (
     # PIRMININKĖ (N. SURNAME, FRACT)
     # PIRMININKAS (N. SURNAME, FRACT)
-    re.compile(ur'((?:PIRMININKĖ|PIRMININKAS)\s\(\w\.\s[\w-]+,\s*[\w-]+[\W]*\))',
-               re.UNICODE),
+    re.compile(
+        ur'((?:PIRMININKĖ|PIRMININKAS)\s\(\w\.\s[\w-]+,\s*[\w-]+[\W]*\))',
+        re.UNICODE
+    ),
     # PIRMININKĖ (N. SURNAME)
     # PIRMININKAS (N. SURNAME)
     re.compile(ur'((?:PIRMININKĖ|PIRMININKAS)\s\(\w\.\s[\w-]+\))',
@@ -139,7 +141,9 @@ class StenogramSpider(ManoSeimasSpider):
                 )}
 
     def _extract_time(self, paragraph):
-        time_parts = map(int, paragraph.re(r'(\d{1,2})\.(\d{2})'))
+        time_parts = map(int, paragraph.re(r'(\d{1,2})\s*\.\s*(\d{2})'))
+        if len(time_parts) < 2:
+            import pdb; pdb.set_trace()
         return {'type': 'time',
                 'time': time(time_parts[0], time_parts[1])}
 
@@ -161,14 +165,16 @@ class StenogramSpider(ManoSeimasSpider):
 
     def _parse_paragraphs(self, paragraph_xs):
         for paragraph in paragraph_xs:
-            if paragraph.xpath('self::p[@class="Roman12"]'):
+            if (paragraph.xpath('self::p[@class="Roman12"]')
+                    or paragraph.xpath('a[starts-with(@class, "klausimas")]')):
                 yield self._extract_title(paragraph)
-            elif paragraph.xpath('self::p[@class="Laikas"]'):
+            elif (paragraph.xpath('self::p[@class="Laikas"]')
+                  and extract_text(paragraph.xpath('text()'))):
                 yield self._extract_time(paragraph)
             elif (extract_text(paragraph.xpath('self::p/b'))
                   and extract_mp_name(paragraph.extract())):
                 yield self._extract_statement_start(paragraph)
-            elif extract_text(paragraph.xpath('self::p/text()')):
+            elif as_statement(paragraph):
                 yield self._extract_statement_fragment(paragraph)
 
     def _create_mp_processors(self):
@@ -211,9 +217,6 @@ class StenogramSpider(ManoSeimasSpider):
                 }
                 topic['time'] = p['time']
             elif p['type'] == 'title':
-                if topic and topic.get('title'):
-                    topics.append(topic)
-                    topic = None
                 if not topic:
                     topic = {
                         'statements': [],
@@ -269,14 +272,18 @@ class StenogramSpider(ManoSeimasSpider):
         paragraphs = sel.xpath('/html/body/div[@class="WordSection2"]/p')
         topics = self._group_topics(self._parse_paragraphs(paragraphs))
         for topic in topics:
-            loader = Loader(self, response, StenogramTopic(),
-                            required=('_id', 'title', 'date', 'sitting_no',
-                                      'statements'))
-            loader.add_value('title', topic['title'])
-            loader.add_value('date', datetime.combine(meta['date'],
-                                                      topic['time']))
-            loader.add_value('sitting_no', meta['sitting_no'])
-            loader.add_value('statements', topic['statements'])
-            loader.add_value('source', meta['source'])
-            loader.add_value('_id', meta['_id'])
-            yield loader.load_item()
+            try:
+                loader = Loader(self, response, StenogramTopic(),
+                                required=('_id', 'title', 'date', 'sitting_no',
+                                          'statements'))
+                loader.add_value('title', topic['title'])
+                loader.add_value('date', datetime.combine(meta['date'],
+                                                          topic['time']))
+                loader.add_value('sitting_no', meta['sitting_no'])
+                loader.add_value('statements', topic['statements'])
+                loader.add_value('source', meta['source'])
+                loader.add_value('_id', meta['_id'])
+            except KeyError:
+                pass
+            else:
+                yield loader.load_item()
