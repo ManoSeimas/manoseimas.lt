@@ -140,10 +140,9 @@ class ManoSeimasModelPersistPipeline(object):
             title=item['title'],
             defaults={
                 'source': source_url,
+                'timestamp': item['date'],
             }
         )
-        topic.timestamp = item['date']
-        topic.save()
 
         # Recreate all the statements since we can't reliably
         # identify statements in the database now
