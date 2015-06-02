@@ -62,7 +62,13 @@ class MPNameMatcher(object):
                          for mp in ParliamentMember.objects.all()}
 
     def get_mp_by_name(self, mp_name, fraction=None):
+        mp_name = mp_name.upper()
         mp = self.mp_names.get(mp_name)
+        if not mp:
+            parts = mp_name.split(' ')
+            if len(parts) >= 2:
+                mp_name = ' '.join((parts[0], parts[-1]))
+                mp = self.mp_names.get(mp_name.upper())
         return mp
 
 

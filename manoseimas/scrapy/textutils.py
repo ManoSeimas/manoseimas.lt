@@ -12,7 +12,9 @@ from lxml.html import soupparser
 
 words_re = re.compile(r'\w+', re.UNICODE)
 clean_chunk_re = re.compile(
-        r'(^%(chars)s)|(%(chars)s$)' % {'chars': r'(\s|[:,.])+'}, re.UNICODE)
+    r'(^%(chars)s)|(%(chars)s$)' % {'chars': r'(\s|[:,.])+'},
+    re.UNICODE
+)
 split_by_comma_re = re.compile(r'\s*,\s*')
 
 
