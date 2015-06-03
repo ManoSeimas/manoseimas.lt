@@ -142,8 +142,6 @@ class StenogramSpider(ManoSeimasSpider):
 
     def _extract_time(self, paragraph):
         time_parts = map(int, paragraph.re(r'(\d{1,2})\s*\.\s*(\d{2})'))
-        if len(time_parts) < 2:
-            import pdb; pdb.set_trace()
         return {'type': 'time',
                 'time': time(time_parts[0], time_parts[1])}
 
