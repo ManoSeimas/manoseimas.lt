@@ -4,14 +4,14 @@ from __future__ import unicode_literals
 
 import unittest
 
-from manoseimas.scrapy import textutils
+from manoseimas.common.utils import words
 
 
 class WordCountTest(unittest.TestCase):
     def test_get_word_count(self):
-        word_count = textutils.get_word_count('Žodžiai, lietuviškai.')
+        word_count = words.get_word_count('Žodžiai, lietuviškai.')
         self.assertEqual(word_count, 2)
 
     def test_get_words(self):
-        words = textutils.get_words('Žodžiai, lietuviškai.')
-        self.assertEqual(words, ['Žodžiai', 'lietuviškai'])
+        words_list = words.get_words('Žodžiai, lietuviškai.')
+        self.assertEqual(words_list, ['Žodžiai', 'lietuviškai'])
