@@ -142,6 +142,7 @@ class StenogramStatement(CrawledItem):
                                 blank=True, null=True)
     speaker_name = models.CharField(max_length=64)
     text = models.TextField()
+    word_count = models.PositiveIntegerField(default=0)
 
     def get_speaker_name(self):
         return self.speaker.full_name if self.speaker else self.speaker_name

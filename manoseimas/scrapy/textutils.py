@@ -1,5 +1,7 @@
 # coding: utf-8
 
+from __future__ import unicode_literals
+
 import re
 import string
 from functools import partial
@@ -41,11 +43,11 @@ def split_by_comma(text):
     """
 
     >>> split_by_comma('Ceslovas.Jursenas@lrs.lt ,  cejurs@lrs.lt')
-    ['Ceslovas.Jursenas@lrs.lt', 'cejurs@lrs.lt']
+    [u'Ceslovas.Jursenas@lrs.lt', u'cejurs@lrs.lt']
     >>> split_by_comma('2396025 ,   2396626')
-    ['2396025', '2396626']
+    [u'2396025', u'2396626']
     >>> split_by_comma('2396025')
-    ['2396025']
+    [u'2396025']
 
     """
     return split_by_comma_re.split(text)
@@ -58,13 +60,13 @@ def find_key(keys, words, normalize=string.lower):
     and normalized.
 
     >>> find_key(['a b c', 'a b', 'a'], ['a'])
-    'a'
+    u'a'
     >>> find_key(['a b c', 'a b', 'a'], ['a', 'b'])
-    'a b'
+    u'a b'
     >>> find_key(['a b c', 'a b', 'a'], ['a', 'b', 'c'])
-    'a b c'
+    u'a b c'
     >>> find_key(['a b c', 'a b', 'a'], ['a', 'b', 'c', 'd'])
-    'a b c'
+    u'a b c'
     >>> find_key(['a b c', 'a b', 'a'], ['x', 'a'])
 
 
@@ -123,17 +125,17 @@ def str2dict(keys, text, stack_size=3, normalize=string.lower,
     u"""Returns dict from given text, by splitting it with given keys.
 
     >>> list(str2dict(['A', 'b', 'c'], 'a 1 B 2 c 3'))
-    [('a', '1'), ('b', '2'), ('c', '3')]
+    [(u'a', u'1'), (u'b', u'2'), (u'c', u'3')]
 
     >>> list(str2dict(['a', 'b', 'b c'], '0 a 1 b 2 C 3 b C 23'))
-    [('', '0'), ('a', '1'), ('b', '2 C 3'), ('b c', '23')]
+    [(u'', u'0'), (u'a', u'1'), (u'b', u'2 C 3'), (u'b c', u'23')]
 
     >>> list(str2dict(['a', 'B', 'C'], '0 a 1 b 2 c 3 b c 23'))
-    [('', '0'), ('a', '1'), ('b', '2'), ('c', '3'), ('b', ''), ('c', '23')]
+    [(u'', u'0'), (u'a', u'1'), (u'b', u'2'), (u'c', u'3'), (u'b', u''), (u'c', u'23')]
 
     >>> list(str2dict(['x'], 'a 1 b 2 c 3',
     ...               normalize=mapwords({'a': 'x', 'b': 'x'})))
-    [('x', '1'), ('x', '2 c 3')]
+    [(u'x', u'1'), (u'x', u'2 c 3')]
 
     Real world example:
 
@@ -150,7 +152,7 @@ def str2dict(keys, text, stack_size=3, normalize=string.lower,
      u'seimo narys': u'nuo  2008-11-17  iki  2008-11-18'}
     >>> r2 = dict(str2dict(['nuo', 'iki'], r1['seimo narys']))
     >>> print(unicode(pprint.pformat(r2), 'unicode_escape'))
-    {'iki': u'2008-11-18', 'nuo': u'2008-11-17'}
+    {u'iki': u'2008-11-18', u'nuo': u'2008-11-17'}
 
     """
     keys = (normalize(key) for key in keys)
@@ -181,9 +183,9 @@ def str2dict(keys, text, stack_size=3, normalize=string.lower,
         yield (next_key, chunk)
 
 
-cleanup_re = re.compile(u'\u00AD')
-newline_re = re.compile(u'(\r\n|\n)')
-multispace_re = re.compile(u' +')
+cleanup_re = re.compile('\u00AD')
+newline_re = re.compile('(\r\n|\n)')
+multispace_re = re.compile(' +')
 
 
 def clean_text(text):
@@ -201,7 +203,7 @@ def extract_text(xs, kill_tags=[]):
     tagless = map(tag_stripping_fn, lines)
     nonempty = filter(lambda l: bool(l), tagless)
     if nonempty:
-        joined = u' '.join(nonempty).strip().lstrip('.')
+        joined = ' '.join(nonempty).strip().lstrip('.')
         return clean_text(joined)
     else:
         return ''

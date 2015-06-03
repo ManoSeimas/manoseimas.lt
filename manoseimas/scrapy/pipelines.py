@@ -2,6 +2,8 @@ import datetime
 
 from django.db import transaction
 
+import manoseimas.common.utils.words as words_utils
+
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
 from manoseimas.scrapy.items import Person, StenogramTopic
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
@@ -173,12 +175,14 @@ class ManoSeimasModelPersistPipeline(object):
         topic.statements.all().delete()
         for statement in item['statements']:
             speaker = self.mp_matcher.get_mp_by_name(statement['speaker'])
+            text = u' '.join(statement['statement'])
             statement = StenogramStatement(
                 topic=topic,
                 speaker=speaker,
                 speaker_name=statement['speaker'],
-                text=u' '.join(statement['statement']),
+                text=text,
                 source=source_url,
+                word_count=words_utils.get_word_count(text)
             )
             statement.save()
 

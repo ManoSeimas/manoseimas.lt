@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from urlparse import urljoin
 
 from scrapy.utils.response import get_base_url
@@ -58,11 +60,11 @@ def split_by_words(s, idx):
     Splits string of words at specified word index to split.
 
     >>> split_by_words('a b c', 1)
-    ('a', 'b c')
+    (u'a', u'b c')
     >>> split_by_words('a b c', -1)
-    ('a b', 'c')
+    (u'a b', u'c')
     >>> split_by_words('a', -2)
-    ('', 'a')
+    (u'', u'a')
 
     """
     words = s.split()
