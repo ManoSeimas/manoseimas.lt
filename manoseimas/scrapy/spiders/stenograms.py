@@ -221,14 +221,18 @@ class StenogramSpider(ManoSeimasSpider):
                     }
                 topic['title'] = p['title']
             elif p['type'] == 'statement_start':
+                as_chair = p['speaker'].upper().startswith((u'PIRMININKAS',
+                                                            u'PIRMININKĖ'))
                 name, fraction = self._process_mp(p['speaker'], p['fraction'])
                 speaker = {'speaker': name,
-                           'fraction': fraction}
+                           'fraction': fraction,
+                           'as_chair': as_chair}
 
                 if topic:
                     topic['statements'].append(
                         {'speaker': speaker['speaker'],
                          'fraction': speaker['fraction'],
+                         'as_chair': speaker['as_chair'],
                          'statement': [p['statement']]}
                     )
             elif p['type'] == 'statement_fragment' and topic is not None:
@@ -239,6 +243,7 @@ class StenogramSpider(ManoSeimasSpider):
                     topic['statements'].append(
                         {'speaker': speaker['speaker'],
                          'fraction': speaker['fraction'],
+                         'as_chair': speaker['as_chair'],
                          'statement': [p['statement']]}
                     )
                 else:

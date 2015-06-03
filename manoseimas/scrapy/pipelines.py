@@ -182,6 +182,7 @@ class ManoSeimasModelPersistPipeline(object):
                 speaker_name=statement['speaker'],
                 text=text,
                 source=source_url,
+                as_chairperson=statement['as_chair'],
                 word_count=words_utils.get_word_count(text)
             )
             statement.save()

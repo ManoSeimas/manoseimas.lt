@@ -141,6 +141,7 @@ class StenogramStatement(CrawledItem):
     speaker = models.ForeignKey(ParliamentMember, related_name='statements',
                                 blank=True, null=True)
     speaker_name = models.CharField(max_length=64)
+    as_chairperson = models.BooleanField(default=False)
     text = models.TextField()
     word_count = models.PositiveIntegerField(default=0)
 
