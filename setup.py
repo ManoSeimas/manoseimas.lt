@@ -37,6 +37,7 @@ setup(
         'django-autoslug',
         'six',
         'leveldb',
+        'tqdm',
     ],
     entry_points={
         'console_scripts': [
