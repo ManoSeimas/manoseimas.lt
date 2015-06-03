@@ -29,7 +29,8 @@ class ParliamentMember(CrawledItem):
     phone = models.CharField(max_length=32, blank=True, null=True)
     candidate_page = models.URLField(blank=True, null=True)
     raised_by = models.ForeignKey('PoliticalParty', blank=True, null=True)
-    photo = models.ImageField(upload_to='/tmp/images', blank=True, null=True)
+    photo = models.ImageField(upload_to='profile_images',
+                              blank=True, null=True)
     term_of_office = models.CharField(max_length=32, blank=True, null=True)
 
     office_address = models.TextField(blank=True, null=True)

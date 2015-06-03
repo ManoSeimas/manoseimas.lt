@@ -38,6 +38,8 @@ class Person(Item):
     candidate_page = Field()
     raised_by = Field()
     photo = Field()
+    image_urls = Field(output_processor=processor.Identity())
+    images = Field(output_processor=processor.Identity())
     office_address = Field()
     parliament = Field(output_processor=unique)
     constituency = Field()

@@ -175,6 +175,7 @@ class MpsSpider(ManoSeimasSpider):
         # photo
         photo = hxs.xpath('tr/td/table/tr/td/div/img/@src').extract()[0]
         person.add_value('photo', photo)
+        person.add_value('image_urls', photo)
 
         header_hxs = hxs.xpath('tr/td/table/tr/td[2]/table/tr/td[2]')
 

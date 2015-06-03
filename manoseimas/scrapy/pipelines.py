@@ -1,6 +1,8 @@
 import datetime
+import os
 
 from django.db import transaction
+from django.core.files.base import ContentFile
 
 import manoseimas.common.utils.words as words_utils
 
@@ -103,6 +105,13 @@ class ManoSeimasModelPersistPipeline(object):
         mp.party_candidate = item.get('party_candidate', True)
         mp.biography = item.get('biography')
         mp.source = source_url
+
+        image = item.get('images', [None])[0]
+        if image:
+            image_base = spider.settings['IMAGES_STORE']
+            photo_path = os.path.join(image_base, image['path'])
+            data = ContentFile(open(photo_path, 'rb').read())
+            mp.photo.save(os.path.basename(image['path']), data)
 
         if item['raised_by']:
             party, __ = PoliticalParty.objects.get_or_create(

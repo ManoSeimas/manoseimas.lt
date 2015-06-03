@@ -22,6 +22,7 @@ LOG_LEVEL = 'WARNING'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
 # LOG_FILE = os.path.join(settings.BUILDOUT_DIR, 'var', 'log', 'scrapy.log')
 
 ITEM_PIPELINES = [
+    'scrapy.contrib.pipeline.images.ImagesPipeline',
     # 'manoseimas.scrapy.pipelines.ManoseimasPipeline',
     'manoseimas.scrapy.pipelines.ManoSeimasModelPersistPipeline',
 ]
@@ -34,6 +35,8 @@ HTTPCACHE_ENABLED = True
 HTTPCACHE_POLICY = 'manoseimas.scrapy.httpcache.NoCacheFlagPolicy'
 HTTPCACHE_STORAGE = 'scrapy.contrib.httpcache.LeveldbCacheStorage'
 HTTPCACHE_DIR = '/tmp/manoseimas_httpcache'
+
+IMAGES_STORE = '/tmp/manoseimas_images'
 
 COUCHDB_URL = 'http://127.0.0.1:5984'
 
