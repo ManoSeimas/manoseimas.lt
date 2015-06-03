@@ -47,8 +47,8 @@ class MpsSpider(ManoSeimasSpider):
     allowed_domains = ['lrs.lt']
 
     start_urls = [
-        'http://www3.lrs.lt/pls/inter/w5_show?p_r=6113&p_k=1',
         'http://www3.lrs.lt/pls/inter/w5_show?p_r=8801&p_k=1',
+        # 'http://www3.lrs.lt/pls/inter/w5_show?p_r=6113&p_k=1',
     ]
 
     rules = (
