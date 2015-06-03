@@ -13,7 +13,7 @@
     div
       .row-fluid
         .span4
-          img(src="/static/img/photo-default.png" title="{{profile.full_name}}").photo
+          img(src="{{photo_url}}" title="{{profile.full_name}}").photo
         .span8
           h1
             - block title
@@ -35,7 +35,6 @@
                   td {{membership.group.name}}
                   td {{membership.group.type}}
                   td {{membership.position}}
-
   .biography
     {{biography}}
 
@@ -50,4 +49,7 @@
         li Balsavo
           strong.very(title=position.percent) {{ position.position|lower }}
           a(href="{% nodeurl position.solution.ref %}").profile-solution-title.arrow-before {{ position.solution.ref.title }}
-
+  .statistics
+    p Pasisakymai: {{stats.statement_count}}
+    p Ilgi pasisakymai: {{stats.long_statement_count}}
+    p Dalyvavo diskusijų: {{stats.contributed_discussion_percentage|floatformat:1}}%

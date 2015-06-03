@@ -49,10 +49,19 @@ def mp_profile(request, mp_slug):
     except ResourceNotFound:
         positions = None
 
+    stats = {
+        'statement_count': mp.get_statement_count(),
+        'long_statement_count': mp.get_long_statement_count(),
+        'contributed_discussion_percentage':
+            mp.get_discussion_contribution_percentage(),
+    }
+
     context = {
         'profile': profile,
         'positions': positions,
         'memberships': mp.other_group_memberships,
         'biography': mark_safe(mp.biography),
+        'stats': stats,
+        'photo_url': mp.photo.url,
     }
     return render(request, 'profile.jade', context)
