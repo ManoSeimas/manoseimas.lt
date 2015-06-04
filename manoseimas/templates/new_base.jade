@@ -17,7 +17,6 @@ html(lang=en)
     title {% block title %}{{ title }}{% endblock %}
 
     link(rel="shortcut icon", type="image/x-icon", href="{% static 'favicon.png' %}")
-    //- link(rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}")
     link(rel="stylesheet" href="{% static 'semantic/semantic.min.css' %}")
     - compress css
       link(rel="stylesheet", type="text/x-scss", href="{% static 'fonts/open-sans/stylesheet.scss'%}")
@@ -25,8 +24,7 @@ html(lang=en)
       link(rel="stylesheet", type="text/x-scss", href="{% static 'main.scss' %}")
 
     script(src="http://code.jquery.com/jquery.js")
-    script(src="{% static 'bootstrap/js/bootstrap.min.js' %}")
-    script(src="{% static 'semantic/semantic.js' %}")
+    script(src="{% static 'semantic/semantic.min.js' %}")
     script(src="{% static 'javascript/main.js' %}")
 
   body
