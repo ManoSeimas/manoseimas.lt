@@ -73,7 +73,7 @@ Vagrant.configure(2) do |config|
     apt-get install -y mysql-server libmysqlclient-dev
     mysql -u root -proot -e "create database if not exists manoseimas charset=utf8;
       create user 'manoseimas'@'localhost';
-      grant all privileges on manoseimas.* to 'manoseimas'@'localhost';
+      grant all privileges on *.* to 'manoseimas'@'localhost';
       flush privileges;" || true
     sudo apt-get install -y nodejs nodejs-legacy npm
     (cd /vagrant && make ubuntu)
