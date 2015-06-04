@@ -16,6 +16,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import contextlib
+import re
 import urllib2
 import urlparse
 
@@ -221,3 +222,17 @@ def fetch_voting_by_lrslt_url(url):
 
     # Return
     return get_voting_by_lrslt_url(url)
+
+
+def get_mp_votes_by_internal_id(mp_node_id):
+    return couch.view('votings/votes_by_mp', key=mp_node_id,
+                      reduce=True, group=True,
+                      include_docs=False).first()
+
+
+def get_mp_votes(source_id):
+    source_id = re.match(r'^\d+', source_id).group(0)
+    node = couch.view('mps/by_source_id', key=source_id).first()
+    node_id = node._id
+    votes = get_mp_votes_by_internal_id(node_id)['value']
+    return votes

@@ -87,6 +87,12 @@ class ParliamentMember(CrawledItem):
                 / all_discussions * 100.0)
 
     @property
+    def votes(self):
+        # Avoiding circular imports
+        from manoseimas.votings.models import get_mp_votes
+        return get_mp_votes(self.source_id)
+
+    @property
     def all_statements(self):
         return self.statements.all()
 

@@ -58,6 +58,7 @@ def mp_profile(request, mp_slug):
         'long_statement_count': mp.get_long_statement_count(),
         'contributed_discussion_percentage':
             mp.get_discussion_contribution_percentage(),
+        'votes': mp.votes
     }
 
     context = {
