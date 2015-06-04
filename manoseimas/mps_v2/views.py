@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.utils.safestring import mark_safe
+from django.db.models import Prefetch
 
 from couchdbkit.exceptions import ResourceNotFound
 
@@ -15,28 +16,38 @@ def mp_list(request, fraction_slug=None):
         return {
             'id': mp.id,
             'full_name': mp.full_name,
-            'slug': mp.slug
+            'slug': mp.slug,
+            'photo_url': mp.photo.url,
+            'fraction': mp.current_fraction[0] if mp.current_fraction else None,
         }
 
     fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
 
+    mps = ParliamentMember.objects.prefetch_related(
+        Prefetch('groups',
+                 queryset=Group.objects.filter(groupmembership__until=None,
+                    type=Group.TYPE_FRACTION),
+                 to_attr='current_fraction')
+    ).all()
+
     if fraction_slug:
-        fraction = GroupMembership.objects.filter(
+        fraction = GroupMembership.objects.get(
             group__type=Group.TYPE_FRACTION,
             group__slug=fraction_slug
         )
-        fraction = fraction[0].group if fraction else None
-        mps = map(
-            extract,
-            ParliamentMember.objects.filter(groups=fraction,
-                                            groupmembership__until=None)
-        )
-    else:
-        mps = map(extract, ParliamentMember.objects.all())
+        mps = mps.filter(groups=fraction, groupmembership__until=None)
+
+    mps = map(extract, mps)
 
     return render(request, 'mp_catalog.jade', {'mps': mps,
                                                'fractions': fractions})
 
+
+def mp_fraction(request, fraction_slug):
+    pass
+
+def mp_fraction_list(request):
+    pass
 
 def mp_profile(request, mp_slug):
     mp = ParliamentMember.objects.get(slug=mp_slug)

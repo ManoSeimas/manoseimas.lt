@@ -1,14 +1,34 @@
-- extends "base.html"
-- load manoseimas
-- load sboard
+- extends "new_base.jade"
+- load static from staticfiles
 
-- block sidebar
-  //- - include 'snippets/navbar.jade' with
-  | {% include "snippets/navbar.jade" with title="Frakcijos" url_name="mp_list_fraction" items=fractions only %}
+- block title
+  | Parlamentarai
 
-- block content
-  h1 Parlamentarai
+- block middle
+  .photo-box.single-title
+      .transparent-bg: .title: h1 Seimo nariai
 
-  ul
-    for mp in mps
-      li: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
+  .ui.zero.margin.center.aligned.grid
+    .switcher
+      a(href="{% url 'mp_fraction_list' %}").item Fracijos
+      a.item.active Parlamentarai
+
+  .ui.zero.margin.page.grid
+    .fourteen.wide.column
+      .parliamentarians
+        for mp in mps
+          .parliamentarian.box
+            img(src="{{ mp.photo_url }}")
+            .info
+              h2: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
+              if mp.fraction
+                a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
+
+    .zero.paddings.two.wide.column
+      .ui.sticky
+        .sidebar
+          a(href="{% url 'mp_list_all' %}").item.selected: h4 Visi parlamentarai
+          for fraction in fractions
+            a(href="{% url 'mp_fraction' fraction.slug%}").item
+              img(src="{% static 'img/fractions/lsdp.png' %}").logo
+              .title: h4 {{fraction.name}}

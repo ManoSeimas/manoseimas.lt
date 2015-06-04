@@ -51,18 +51,18 @@ class ParliamentMember(CrawledItem):
     def fractions(self):
         return self.groups.filter(type=Group.TYPE_FRACTION)
 
-    @property
-    def current_fraction(self):
-        membership = GroupMembership.objects.filter(
-            member=self.id,
-            group__type=Group.TYPE_FRACTION,
-            until=None
-        )[:]
+    # @property
+    # def current_fraction(self):
+    #     membership = GroupMembership.objects.filter(
+    #         member=self,
+    #         group__type=Group.TYPE_FRACTION,
+    #         until=None
+    #     )[:]
 
-        if membership:
-            return membership[0].group
-        else:
-            return None
+    #     if membership:
+    #         return membership[0].group
+    #     else:
+    #         return None
 
     @property
     def other_group_memberships(self):
