@@ -1,57 +1,194 @@
-- extends "base.html"
-- load i18n
-- load thumbnail
-- load manoseimas
-- load sboard
+- extends "new_base.jade"
+- load static from staticfiles
 
-- block content
-  h1 Parlamentaras
-
-  a(href="{% url 'mp_list_all' %}") Atgal į sąrašą
-
-  .profile-box
-    div
-      .row-fluid
-        .span4
-          img(src="{{photo_url}}" title="{{profile.full_name}}").photo
-        .span8
-          h1
-            - block title
-              {{ profile.full_name }}
-
-          if profile.fraction_name
-            p {{ profile.fraction_name }}
-
-          h3 List of Groups
-          table.table.table-striped
-            thead
-              tr
-                th Group name
-                th Type
-                th Position
-            tbody
-              for membership in memberships
-                tr
-                  td {{membership.group.name}}
-                  td {{membership.group.type}}
-                  td {{membership.position}}
-  .biography
-    {{biography}}
+- block title
+  | Petras Gražulis
 
 
-  if positions
-    hr(style="clear: both")
-    {% include "mps/help_partial.html" %}
-    h2.hr Politiniai sprendimai
+- block middle
+  .photo-box.parliamentarian
+    .ui.zero.margin.page.grid
+      .center.aligned.four.wide.column
+        .logo-box
+          img(src="{% static 'img/tmp/petras.jpg' %}")
+      .twelve.wide.column
+        .title
+          h1 Petras GRAŽULIS
+          h2.fraction-name: a(href="{% url 'fraction' %}") Tvarka ir Teisingumas
 
-    ul.positions
-      for position in positions
-        li Balsavo
-          strong.very(title=position.percent) {{ position.position|lower }}
-          a(href="{% nodeurl position.solution.ref %}").profile-solution-title.arrow-before {{ position.solution.ref.title }}
-  .statistics
-    h2 Stats
-    p Pasisakymai: {{stats.statement_count}}
-    p Ilgi pasisakymai: {{stats.long_statement_count}}
-    p Pasisakė {{stats.contributed_discussion_percentage|floatformat:1}}% diskusijų
-    p Balsai: už {{stats.votes.aye}}, prieš {{stats.votes.no}}, susilaikė {{stats.votes.abstain}}
+        .ui.two.column.stackable.grid
+          .column.info
+            .ui.four.item.tabular.menu
+              .item(data-tab="groups").active Grupės
+              .item(data-tab="comittees") Komitetai
+              .item(data-tab="commission") Komisijos
+              .item(data-tab="general") Bendra
+
+            .ui.tab(data-tab="groups").active
+              - include "includes/group_tmp.jade"
+            .ui.tab(data-tab="comittees")
+              - include "includes/group_tmp.jade"
+            .ui.tab(data-tab="commission")
+              - include "includes/group_tmp.jade"
+            .ui.tab(data-tab="general")
+              .info-block
+                .name Išrinktas:
+                .info Gargždų (Nr. 31) apygardoje
+              .info-block
+                .name Iškėlė:
+                .info: b Partija Tvarka ir Teisingumas
+              .info-block
+                .name Frakcijos:
+                .info
+                  div
+                    a(href="{% url 'fraction' %}") Partija Tvarka ir Teisingumas
+                    | &nbsp; (nuo 2013-02-15)
+                  div
+                    a(href="{% url 'fraction' %}") Partija Tvarka ir Teisingumas
+                    | &nbsp; (nuo 2013-02-15)
+              .info-block
+                .name Biuro adresas:
+                .info Maironio g. 12-8, Raseiniai m., tel. 861201080. Vytauto g. 105, Ariogala m., 861201081.
+
+          .column.biography
+            h2 Biografija
+
+            .bio-text
+              - include "includes/bio.jade"
+
+  .colored-bg
+    .ui.zero.margin.page.grid
+      .stats-box
+        .pie
+          .graph
+            img(src="{% static 'img/pie.png' %}")
+          .info
+            .title: h3 Dalyvavimas balsavimuose
+        .rating: .ui.indicating.progress(data-percent="74"): .bar
+
+      .stats-box
+        .two-numbers
+          h3 Aktyvumas diskusijuose
+          .block
+            h4.number 652
+            p.explanation pasisakymai (vid.)
+          .block
+            h4.number 89%
+            .explanation pasiūlytuose projektuose
+        .rating: .ui.indicating.progress(data-percent="74"): .bar
+
+      .stats-box
+        .three-numbers
+          h3 Įstatymų projetai
+          .block
+            h4.number 105
+            p.explanation pasiūlyti
+          .block
+            h4.number 5
+            .explanation priimti
+          .block
+            h4.number 8%
+            .explanation palaikymas
+        .rating: .ui.indicating.progress(data-percent="74"): .bar
+
+      .stats-box.total
+        .stats
+          h3 40%
+          .explanation bendras aktyvumas
+        .vertical-progress: .bar: .text
+
+  .decisions
+    .ui.page.grid
+      h2 Politiniai sprendimai
+        small (DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!)
+
+    .ui.stackable.three.column.center.aligned.page.grid
+        .column
+          h3.supports UŽ
+
+          .decision.support
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
+          .decision.support
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
+              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
+          .decision.lite-support
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+
+        .column
+          h3.abstention nei už nei prieš
+
+          .decision.abstention
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
+          .decision.abstention
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
+              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
+          .decision.abstention
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+
+        .column
+          h3.against PRIEŠ
+
+          .decision.against Šilumos ūkio pertvarka
+          .decision.lite-against
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+
+  .transcripts
+    .ui.stackable.page.grid
+      .nine.wide.column
+        h2 Seimo posedžių stenogramos
+        .ui.checkbox
+          input(name="fun" type="checkbox")
+          label Rodyti tik tas kalbos kur parlamentaras yra teikėjas
+
+      .seven.wide.column
+        .stats-box.horisontal
+          .three-numbers
+            .block
+              h4.number 652
+              p.explanation pasisakymai (vid.)
+            .block
+              h4.number 89%
+              .explanation pasiūlytuose projektuose
+            .block
+              h4.number 89%
+              .explanation pasiūlytuose projektuose
+
+    .ui.stackable.page.grid
+      .twelve.wide.column
+        .transcription
+          .text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.
+          .meta
+            a.show-all Rodyti visą diskusiją
+            .document-title Kažkoks projekto pavadinimas kur yra daug žodžiųr ir teksto. 7, 8, 9, XXXII-19865
+            .date 2015-03-26 11:35
+
+        .transcription
+          .text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.
+          .meta
+            a.show-all Rodyti visą diskusiją
+            .document-title Kažkoks projekto pavadinimas kur yra daug žodžiųr ir teksto. 7, 8, 9, XXXII-19865
+            .date 2015-03-26 11:35
+
+        .ui.zero.margin.center.aligned.grid: .ui.pagination.menu
+          a.item
+            i.left.arrow.icon
+            | Previous
+          a.item 1
+          a.item 2
+          .disabled.item ...
+          a.item 10
+          a.item 11
+          a.item 12
+          a.item 13
+          a.item
+            | Next
+            i.icon.right.arrow
+
+      .four.wide.column
+        .sidebar
+          a(href="{% url 'mps' %}").item.selected: h4 Pavasario sesija 2015
+          a(href="{% url 'mps' %}").item: h4 Rudens sesija 2014
+          a(href="{% url 'mps' %}").item: h4 Pavasario sesija 2014
+          a(href="{% url 'mps' %}").item: h4 Rudens sesija 2013
+          a(href="{% url 'mps' %}").item: h4 Pavasario sesija 2013
+

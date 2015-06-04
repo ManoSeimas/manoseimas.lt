@@ -1,0 +1,148 @@
+- extends "base.jade"
+- load static from staticfiles
+
+- block title
+  | Socialdemokratų partijos frakcija
+
+
+- block middle
+  .photo-box.fraction
+    .ui.page.grid
+      .center.aligned.four.wide.column
+        .logo-box
+          img(src="{% static 'img/fractions/lsdp.png' %}")
+      .twelve.wide.column
+        .title
+          h1 Lietuvos Socialdemokratų partijos frakcija
+
+
+  .colored-bg
+    .ui.zero.margin.page.grid
+      .stats-box
+        .pie
+          .graph
+            img(src="{% static 'img/pie.png' %}")
+          .info
+            .title: h3 Dalyvavimas balsavimuose
+        .rating: .ui.indicating.progress(data-percent="74"): .bar
+
+      .stats-box
+        .two-numbers
+          h3 Aktyvumas diskusijuose
+          .block
+            h4.number 652
+            p.explanation pasisakymai (vid.)
+          .block
+            h4.number 89%
+            .explanation pasiūlytuose projektuose
+        .rating: .ui.indicating.progress(data-percent="74"): .bar
+
+      .stats-box
+        .three-numbers
+          h3 Įstatymų projetai
+          .block
+            h4.number 105
+            p.explanation pasiūlyti
+          .block
+            h4.number 5
+            .explanation priimti
+          .block
+            h4.number 8%
+            .explanation palaikymas
+        .rating: .ui.indicating.progress(data-percent="74"): .bar
+
+      .stats-box.total
+        .stats
+          h3 40%
+          .explanation bendras aktyvumas
+        .vertical-progress: .bar: .text
+
+  .parliamentarians.wide
+    .ui.page.grid
+      h2 Frakcijos nariai
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/petras.jpg' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
+          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/milda.png' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
+          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/petras.jpg' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
+          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/milda.png' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
+          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/petras.jpg' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
+          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/milda.png' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
+          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/petras.jpg' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
+          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
+
+      .parliamentarian.box
+        img(src="{% static 'img/tmp/milda.png' %}")
+        .info
+          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
+          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
+
+
+  .colored-bg.decisions
+    .ui.page.grid
+      h2 Politiniai sprendimai
+        small (DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!)
+
+    .ui.stackable.three.column.center.aligned.page.grid
+        .column
+          h3.supports UŽ
+
+          .decision.support
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
+          .decision.support
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
+              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
+          .decision.lite-support
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+
+        .column
+          h3.abstention nei už nei prieš
+
+          .decision.abstention
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
+          .decision.abstention
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
+              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
+          .decision.abstention
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+
+        .column
+          h3.against PRIEŠ
+
+          .decision.against Šilumos ūkio pertvarka
+          .decision.lite-against
+            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+
+
