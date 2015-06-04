@@ -8,6 +8,7 @@ from manoseimas.mps_v2.models import StenogramStatement
 
 class GroupAdmin(admin.ModelAdmin):
     list_filter = ('type',)
+    readonly_fields = ('slug',)
 
 
 class MpMembershipAdmin(admin.TabularInline):
