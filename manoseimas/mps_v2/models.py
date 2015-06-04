@@ -68,22 +68,23 @@ class ParliamentMember(CrawledItem):
     def other_group_memberships(self):
         # Not fraction groups
         return GroupMembership.objects.filter(member=self)\
-            .exclude(group__type=Group.TYPE_FRACTION)
+            .exclude(group__type=Group.TYPE_FRACTION).select_related('group')
 
     def get_statement_count(self):
         return self.statements.filter(as_chairperson=False).count()
 
     def get_long_statement_count(self):
-        return self.statements.filter(as_chairperson=False)\
-            .filter(word_count__gte=50).count()
+        return self.statements.filter(as_chairperson=False).\
+            filter(word_count__gte=50).count()
 
     def get_discussion_contribution_percentage(self):
         all_discussions = StenogramTopic.objects.count()
         contributed_discusions = StenogramStatement.objects.\
-            filter(speaker=self).aggregate(models.Count('topic_id',
-                                                        distinct=True))
-        return float(contributed_discusions['topic_id__count'])\
-            / all_discussions * 100.0
+            filter(speaker=self, as_chairperson=False).\
+            aggregate(topics=models.Count('topic_id',
+                                          distinct=True))
+        return (float(contributed_discusions['topics'])
+                / all_discussions * 100.0)
 
     @property
     def all_statements(self):
