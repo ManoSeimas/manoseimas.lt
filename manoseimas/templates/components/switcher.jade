@@ -1,0 +1,6 @@
+- load static from staticfiles
+
+.switcher
+  for item in items
+    a(href="{{ item.url }}" class="{{ item.active }}").item {{item.name}}
+

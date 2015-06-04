@@ -1,0 +1,23 @@
+.parliamentarians {
+  margin: 0;
+  border-right: 1px dashed $grayLite;
+  padding-top: 0 !important;
+  margin-bottom: 1em;
+}
+.parliamentarians.wide {
+  margin: 3em 0;
+  .parliamentarian.box {
+    // width: 280px;
+    margin: 10px 15px;
+
+    .info {
+      // width: 168px;
+      a.fraction-name {
+        font-size: $small;
+        line-height: 0.5;
+        color: $greenDark;
+      }
+      h2 { margin-bottom: 0.3em; }
+    }
+  }
+}

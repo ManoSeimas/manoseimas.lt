@@ -1,0 +1,21 @@
+- load static from staticfiles
+
+header.ui.pointing.menu.fixed
+  .ui.page.grid
+    .row
+      a(href="/"): img(src="{% static 'img/logo.png' %}").logo
+
+      .right.menu
+        .item
+          .ui.icon.input
+            input(placeholder="Search..." type="search")
+            i.search.link.icon
+
+        .ui.dropdown.item
+          i.user.icon
+          | Prisijungti
+          i.dropdown.icon
+          .menu
+            a.item Google
+            a.item Facebook
+            a.item OpenID

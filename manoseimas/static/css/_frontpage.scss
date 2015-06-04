@@ -1,0 +1,84 @@
+// Front page styles
+// -----------------
+.index {
+  .column {
+    padding: 2em;
+  }
+}
+
+.ui.page.grid.fraction {
+  margin: 1rem 0;
+}
+
+.widget {
+  margin: 1em auto 5em auto;
+  top: 40px;
+  position: relative;
+  text-align: center;
+
+}
+
+.widget-box {
+  margin: -1em auto 1.8rem auto;
+  min-height: 21rem;
+  display: block;
+  position: relative;
+  text-align: center;
+  border-radius: 0 0 5px 5px;
+  border: 1px dashed $grayLite;
+  border-top: none;
+  width: 67em;
+  padding: 2em;
+
+  h3 {
+    font-size: 24px;
+    font-weight: normal;
+    color: $msGreen;
+    margin-bottom: 20px;
+  }
+
+  img {
+    width: 500px;
+    display: inline-block;
+
+  }
+}
+
+.test-box {
+  margin: 2em 0;
+  p {
+    margin: auto;
+    width: 35em;
+  }
+}
+
+.ui.sticky.fixed.top > .sidebar { margin-top: 70px; }
+.sidebar {
+  margin-top: 1em;
+  .item {
+    display: inline-block;
+    background-color: $white;
+    border: 1px solid $grayLite;
+    padding: 0.5rem !important;
+    padding-left: 1rem !important;
+    margin-bottom: 0.5em;
+    width: 13em;
+    cursor: pointer;
+
+    img { height: 40px; width: 40px; margin-right: 5px; cursor: inherit; }
+    h4 { font-size: $small; line-height: 1.2; cursor: inherit; }
+
+    .title {
+      float: right;
+      width: 8em;
+      cursor: inherit;
+    }
+  }
+
+  .item:hover, .item.selected {
+    border-color: $greenDark;
+    background-color: $greenDark;
+    h4 { color: $white; }
+  }
+  .item.selected { padding: 0.8rem 1rem !important; }
+}
