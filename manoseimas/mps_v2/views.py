@@ -26,7 +26,11 @@ def mp_list(request, fraction_slug=None):
             group__slug=fraction_slug
         )
         fraction = fraction[0].group if fraction else None
-        mps = map(extract, ParliamentMember.objects.filter(groups=fraction))
+        mps = map(
+            extract,
+            ParliamentMember.objects.filter(groups=fraction,
+                                            groupmembership__until=None)
+        )
     else:
         mps = map(extract, ParliamentMember.objects.all())
 
