@@ -209,11 +209,31 @@ class PersonPosition(models.Model):
 
         return u'%s %s' % (quantifier, sign)
 
+    def format_position(self):
+        if self.position >= 0:
+            return _(u'Palaiko %d%%') % self.position_percent()
+        else:
+            return _(u'Nepalaiko %d%%') % self.position_percent()
+
     def active(self):
         return self.participation >= PARTICIPATION_ACTIVE_TRESHOLD
 
     def positive(self):
         return self.position > 0
+
+    @property
+    def klass(self):
+        abspos = abs(self.position)
+        if abspos > 1.4:
+            strength = 'strong-'
+        elif abspos > 0.8:
+            strength = ''
+        else:
+            strength = 'lite-'
+        if self.positive():
+            return '{}support'.format(strength)
+        else:
+            return '{}against'.format(strength)
 
     def __key__(self):
         if self.active():

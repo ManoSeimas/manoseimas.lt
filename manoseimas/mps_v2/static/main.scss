@@ -95,9 +95,11 @@
       color: lighten($textColor, 30%);
     }
   }
-  .decision.support { border-color: $greenDark; border-left: 7px solid $greenDark; }
+  .decision.strong-support { border-color: $greenDark; border-left: 7px solid $greenDark; }
+  .decision.support { border-color: $green; border-left: 7px solid $green; }
   .decision.lite-support { border-color: $greenLite; border-left: 7px solid $greenLite; }
   .decision.abstention { border-color: $yellow; border-left: 7px solid $yellow; }
-  .decision.against { border-color: $redDark; border-left: 7px solid $redDark; }
+  .decision.strong-against { border-color: $redDark; border-left: 7px solid $redDark; }
+  .decision.against { border-color: $red; border-left: 7px solid $red; }
   .decision.lite-against { border-color: $redLite; border-left: 7px solid $redLite; }
 }

@@ -1,5 +1,6 @@
-- extends "base.jade"
+- extends "new_base.jade"
 - load static from staticfiles
+- load nodeurl from sboard
 
 - block title
   | Socialdemokratų partijos frakcija
@@ -13,7 +14,7 @@
           img(src="{% static 'img/fractions/lsdp.png' %}")
       .twelve.wide.column
         .title
-          h1 Lietuvos Socialdemokratų partijos frakcija
+          h1 {{ fraction.name }}
 
 
   .colored-bg
@@ -61,53 +62,12 @@
     .ui.page.grid
       h2 Frakcijos nariai
 
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/petras.jpg' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
-          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
-
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/milda.png' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
-          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
-
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/petras.jpg' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
-          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
-
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/milda.png' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
-          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
-
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/petras.jpg' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
-          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
-
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/milda.png' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
-          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
-
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/petras.jpg' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Petras GRAŽULIS
-          a(href="{% url 'fraction' %}").fraction-name Tvarka ir Teisingumas
-
-      .parliamentarian.box
-        img(src="{% static 'img/tmp/milda.png' %}")
-        .info
-          h2: a(href="{% url 'parliamentarian' %}") Milda PETRAUSKIENĖ
-          a(href="{% url 'fraction' %}").fraction-name Lietuvos socialdemokratų partijos frakcija
+      for member in members
+        .parliamentarian.box
+          img(src="{{ member.photo.url }}")
+          .info
+            h2: a(href="{% url 'mp_profile' member.slug %}") {{member.full_name}}
+            a(href="{% url 'mp_fraction' fraction.slug %}").fraction-name {{fraction.name}}
 
 
   .colored-bg.decisions
@@ -119,30 +79,20 @@
         .column
           h3.supports UŽ
 
-          .decision.support
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
-          .decision.support
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
-              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
-          .decision.lite-support
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+          for position in positions.for
+            .decision(class=position.klass)
+              a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
         .column
           h3.abstention nei už nei prieš
 
-          .decision.abstention
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
-          .decision.abstention
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
-              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
-          .decision.abstention
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+          for position in positions.neutral
+            .decision.abstention
+              a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
         .column
           h3.against PRIEŠ
 
-          .decision.against Šilumos ūkio pertvarka
-          .decision.lite-against
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
-
-
+          for position in positions.against
+            .decision(class=position.klass)
+              a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}

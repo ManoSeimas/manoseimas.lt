@@ -47,13 +47,6 @@ def search_lrs_url(query):
     pass
 
 
-def format_position_percent(personposition):
-    if personposition.position >= 0:
-        return _(u'Palaiko %d%%') % personposition.position_percent()
-    else:
-        return _(u'Nepalaiko %d%%') % personposition.position_percent()
-
-
 def prepare_position_list(node):
     """Returns list of positions of a person or fraction to be passed to a
     template."""
@@ -62,7 +55,7 @@ def prepare_position_list(node):
     return [{
         'solution': pp.node,
         'position': pp.classify,
-        'percent': format_position_percent(pp),
+        'percent': pp.format_position,
     } for pp in positions]
 
 
@@ -181,6 +174,7 @@ class FractionView(GroupView):
             #'members': dict( (o.parliament[0], o) for o in sorted(self.node.members(), key=attrgetter('last_name', 'first_name')) ),
             'positions': prepare_position_list(self.node),
         }
+
         context.update(overrides)
         return super(FractionView, self).render(**context)
 
