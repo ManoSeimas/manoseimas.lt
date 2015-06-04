@@ -26,7 +26,7 @@ def clean_chunk(chunk):
 
 def clean_html(content):
     # See http://lxml.de/api/lxml.html.clean.Cleaner-class.html
-    attrs = lxml.html.defs.safe_attrs - {'class'}
+    attrs = lxml.html.defs.safe_attrs - {'class', 'align'}
     cleaner = lxml.html.clean.Cleaner(style=True, safe_attrs=attrs)
     return cleaner.clean_html(content)
 
