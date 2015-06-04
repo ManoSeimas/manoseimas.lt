@@ -1,0 +1,23 @@
+- extends "new_base.jade"
+- load lt_pluralize
+- load static from staticfiles
+
+- block title
+  | Frakcijos
+
+- block middle
+  .photo-box.single-title
+    .transparent-bg: .title: h1 Frakcijos
+
+  .ui.zero.margin.center.aligned.grid
+    .switcher
+      a.item.active Frakcijos
+      a(href="{% url 'mp_list_all' %}").item Parlamentarai
+
+  .ui.zero.margin.page.grid
+    for fraction in fractions
+      .fraction.box
+        img(src="{% static 'img/fractions/lsdp.png' %}")
+        .info
+          h2: a(href="{% url 'mp_fraction' fraction.slug %}") {{fraction.name}}
+          p {{fraction.members.count}} {% lt_pluralize fraction.members.count 'narys' 'nariai' 'narių' %}

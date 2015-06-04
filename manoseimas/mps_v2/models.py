@@ -36,7 +36,7 @@ class ParliamentMember(CrawledItem):
     office_address = models.TextField(blank=True, null=True)
     constituency = models.CharField(max_length=128, blank=True, null=True)
     party_candidate = models.BooleanField(default=True)
-    groups = models.ManyToManyField('Group', through='GroupMembership')
+    groups = models.ManyToManyField('Group', through='GroupMembership', related_name='members')
 
     biography = models.TextField(blank=True, null=True)
 

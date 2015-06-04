@@ -42,12 +42,14 @@ def mp_list(request, fraction_slug=None):
     return render(request, 'mp_catalog.jade', {'mps': mps,
                                                'fractions': fractions})
 
+def mp_fraction_list(request):
+    fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
+    return render(request, 'fraction_list.jade', {'fractions': fractions})
+
 
 def mp_fraction(request, fraction_slug):
     pass
 
-def mp_fraction_list(request):
-    pass
 
 def mp_profile(request, mp_slug):
     mp = ParliamentMember.objects.get(slug=mp_slug)
