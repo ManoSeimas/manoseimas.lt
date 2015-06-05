@@ -94,14 +94,15 @@ def mp_profile(request, mp_slug):
     mp = ParliamentMember.objects.get(slug=mp_slug)
 
     profile = {'full_name': mp.full_name}
-    if mp.current_fraction:
-        profile["fraction_name"] = mp.current_fraction.name
+    if mp.fraction:
+        profile["fraction_name"] = mp.fraction.name
+        profile["fraction_slug"] = mp.fraction.slug
     else:
         profile["fraction_name"] = None
 
     try:
-        mp_node = couch.get(mp.source_id)
-        positions = prepare_position_list(mp_node)
+        mp_node = couch.view('sboard/by_slug', key=mp.slug).one()
+        positions = prepare_positions(mp_node)
     except ResourceNotFound:
         positions = None
 
@@ -117,6 +118,9 @@ def mp_profile(request, mp_slug):
         'profile': profile,
         'positions': positions,
         'memberships': mp.other_group_memberships,
+        'groups': mp.other_groups,
+        'committees': mp.committees,
+        'commissions': mp.commissions,
         'biography': mark_safe(mp.biography),
         'stats': stats,
         'photo_url': mp.photo.url,

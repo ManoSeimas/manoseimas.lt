@@ -52,11 +52,52 @@ class ParliamentMember(CrawledItem):
     def fractions(self):
         return self.groups.filter(type=Group.TYPE_FRACTION)
 
+<<<<<<< HEAD
+=======
+    @property
+    def fraction(self):
+        ''' Current parliamentarian's fraction. '''
+        membership = GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_FRACTION,
+            until=None
+        )[:]
+
+        if membership:
+            return membership[0].group
+        else:
+            return None
+
+>>>>>>> Parliamentarian’s profile design.
     @property
     def other_group_memberships(self):
-        # Not fraction groups
+        # All not fraction groups
         return GroupMembership.objects.filter(member=self)\
             .exclude(group__type=Group.TYPE_FRACTION).select_related('group')
+
+    @property
+    def committees(self):
+        return GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_COMMITTEE,
+            until=None
+        )
+
+    @property
+    def commissions(self):
+        return GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_COMMISSION,
+            until=None
+        )
+
+    @property
+    def other_groups(self):
+        return GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_GROUP,
+            until=None
+        )
 
     def get_statement_count(self):
         return self.statements.filter(as_chairperson=False).count()

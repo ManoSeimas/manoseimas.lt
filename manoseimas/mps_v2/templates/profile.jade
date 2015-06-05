@@ -1,5 +1,6 @@
 - extends "new_base.jade"
 - load static from staticfiles
+- load nodeurl from sboard
 
 - block title
   | Petras Gražulis
@@ -10,26 +11,35 @@
     .ui.zero.margin.page.grid
       .center.aligned.four.wide.column
         .logo-box
-          img(src="{% static 'img/tmp/petras.jpg' %}")
+          img(src="{{photo_url}}" title="{{profile.full_name}}")
       .twelve.wide.column
         .title
-          h1 Petras GRAŽULIS
-          h2.fraction-name: a(href="{% url 'fraction' %}") Tvarka ir Teisingumas
+          h1 {{profile.full_name}}
+          h2.fraction-name: a(href="{% url 'mp_fraction' profile.fraction_slug %}") {{profile.fraction_name}}
 
         .ui.two.column.stackable.grid
           .column.info
             .ui.four.item.tabular.menu
-              .item(data-tab="groups").active Grupės
-              .item(data-tab="comittees") Komitetai
+              .item(data-tab="committees").active Komitetai
               .item(data-tab="commission") Komisijos
+              .item(data-tab="groups") Grupės
               .item(data-tab="general") Bendra
 
-            .ui.tab(data-tab="groups").active
-              - include "includes/group_tmp.jade"
-            .ui.tab(data-tab="comittees")
-              - include "includes/group_tmp.jade"
+            .ui.tab(data-tab="committees").active
+              for membership in committees
+                .group
+                  a.name {{membership.group.name}}
+                  .membership-type {{membership.position}}
+            .ui.tab(data-tab="groups")
+              for membership in groups
+                .group
+                  a.name {{membership.group.name}}
+                  .membership-type {{membership.position}}
             .ui.tab(data-tab="commission")
-              - include "includes/group_tmp.jade"
+              for membership in commissions
+                .group
+                  a.name {{membership.group.name}}
+                  .membership-type {{membership.position}}
             .ui.tab(data-tab="general")
               .info-block
                 .name Išrinktas:
@@ -41,10 +51,10 @@
                 .name Frakcijos:
                 .info
                   div
-                    a(href="{% url 'fraction' %}") Partija Tvarka ir Teisingumas
+                    a(href="{% url 'mp_fraction' profile.fraction_slug %}") Partija Tvarka ir Teisingumas
                     | &nbsp; (nuo 2013-02-15)
                   div
-                    a(href="{% url 'fraction' %}") Partija Tvarka ir Teisingumas
+                    a(href="{% url 'mp_fraction' profile.fraction_slug %}") Partija Tvarka ir Teisingumas
                     | &nbsp; (nuo 2013-02-15)
               .info-block
                 .name Biuro adresas:
@@ -54,7 +64,7 @@
             h2 Biografija
 
             .bio-text
-              - include "includes/bio.jade"
+              | {{biography}}
 
   .colored-bg
     .ui.zero.margin.page.grid
@@ -97,40 +107,33 @@
           .explanation bendras aktyvumas
         .vertical-progress: .bar: .text
 
-  .decisions
-    .ui.page.grid
-      h2 Politiniai sprendimai
-        small (DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!)
+  if positions
+    .decisions
+      .ui.page.grid
+        h2 Politiniai sprendimai
+          small (DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!)
 
-    .ui.stackable.three.column.center.aligned.page.grid
-        .column
-          h3.supports UŽ
+      .ui.stackable.three.column.center.aligned.page.grid
+          .column
+            h3.supports UŽ
 
-          .decision.support
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
-          .decision.support
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
-              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
-          .decision.lite-support
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+            for position in positions.for
+              .decision(class=position.klass)
+                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
-        .column
-          h3.abstention nei už nei prieš
+          .column
+            h3.abstention nei už nei prieš
 
-          .decision.abstention
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Asmenvardžių rašymas nelietuvių kalba
-          .decision.abstention
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/")
-              | 3-oji ES direktyva: gamtinės dujos ES direktyva: gamtinės dujos
-          .decision.abstention
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+            for position in positions.neutral
+              .decision.abstention
+                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
-        .column
-          h3.against PRIEŠ
+          .column
+            h3.against PRIEŠ
 
-          .decision.against Šilumos ūkio pertvarka
-          .decision.lite-against
-            a(href="http://manoseimas.lt/3-oji-es-direktyva-gamtines-dujos/") Pridėtinės vertės mokesčio (PVM) didinimas
+            for position in positions.against
+              .decision(class=position.klass)
+                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
   .transcripts
     .ui.stackable.page.grid
@@ -186,9 +189,9 @@
 
       .four.wide.column
         .sidebar
-          a(href="{% url 'mps' %}").item.selected: h4 Pavasario sesija 2015
-          a(href="{% url 'mps' %}").item: h4 Rudens sesija 2014
-          a(href="{% url 'mps' %}").item: h4 Pavasario sesija 2014
-          a(href="{% url 'mps' %}").item: h4 Rudens sesija 2013
-          a(href="{% url 'mps' %}").item: h4 Pavasario sesija 2013
+          a(href="#").item.selected: h4 Pavasario sesija 2015
+          a(href="#").item: h4 Rudens sesija 2014
+          a(href="#").item: h4 Pavasario sesija 2014
+          a(href="#").item: h4 Rudens sesija 2013
+          a(href="#").item: h4 Pavasario sesija 2013
 
