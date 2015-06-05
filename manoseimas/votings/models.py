@@ -234,5 +234,6 @@ def get_mp_votes(source_id):
     source_id = re.match(r'^\d+', source_id).group(0)
     node = couch.view('mps/by_source_id', key=source_id).first()
     node_id = node._id
-    votes = get_mp_votes_by_internal_id(node_id)['value']
-    return votes
+    votes_node = get_mp_votes_by_internal_id(node_id)
+    if votes_node:
+        return votes_node['value']

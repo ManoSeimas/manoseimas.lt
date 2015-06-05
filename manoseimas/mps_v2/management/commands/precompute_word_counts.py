@@ -7,7 +7,7 @@ import manoseimas.mps_v2.models as mpsv2_models
 
 
 class Command(BaseCommand):
-    help = 'Procompute word counts for stenogram statements'
+    help = 'Precompute word counts for stenogram statements'
 
     def handle(self, **options):
         total = mpsv2_models.StenogramStatement.objects.count()
