@@ -147,7 +147,7 @@
         .stats-box.horisontal
           .three-numbers
             .block
-              h4.number 652
+              h4.number {{statment.word_count}}
               p.explanation pasisakymai (vid.)
             .block
               h4.number 89%
@@ -158,19 +158,13 @@
 
     .ui.stackable.page.grid
       .twelve.wide.column
-        .transcription
-          .text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.
-          .meta
-            a.show-all Rodyti visą diskusiją
-            .document-title Kažkoks projekto pavadinimas kur yra daug žodžiųr ir teksto. 7, 8, 9, XXXII-19865
-            .date 2015-03-26 11:35
-
-        .transcription
-          .text Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at porttitor sem. Aliquam erat volutpat. Donec placerat nisl magna, et faucibus arcu condimentum sed.
-          .meta
-            a.show-all Rodyti visą diskusiją
-            .document-title Kažkoks projekto pavadinimas kur yra daug žodžiųr ir teksto. 7, 8, 9, XXXII-19865
-            .date 2015-03-26 11:35
+        for statment in statments
+          .transcription
+            .text {{statment.text}}
+            .meta
+              a.show-all Rodyti visą diskusiją
+              .document-title {{statment.topic}}
+              .date {{statment.topic.timestamp}}
 
         .ui.zero.margin.center.aligned.grid: .ui.pagination.menu
           a.item
@@ -194,4 +188,3 @@
           a(href="#").item: h4 Pavasario sesija 2014
           a(href="#").item: h4 Rudens sesija 2013
           a(href="#").item: h4 Pavasario sesija 2013
-

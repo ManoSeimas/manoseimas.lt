@@ -124,5 +124,6 @@ def mp_profile(request, mp_slug):
         'biography': mark_safe(mp.biography),
         'stats': stats,
         'photo_url': mp.photo.url,
+        'statments': mp.all_statements,
     }
     return render(request, 'profile.jade', context)
