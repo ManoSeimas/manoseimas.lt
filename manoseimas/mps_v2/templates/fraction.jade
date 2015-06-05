@@ -3,7 +3,7 @@
 - load nodeurl from sboard
 
 - block title
-  | Socialdemokratų partijos frakcija
+  | {{ fraction.name }}
 
 
 - block middle
@@ -25,18 +25,18 @@
             img(src="{% static 'img/pie.png' %}")
           .info
             .title: h3 Dalyvavimas balsavimuose
-        .rating: .ui.indicating.progress(data-percent="74"): .bar
+        .rating: .ui.indicating.progress(data-percent=fraction.ranking.votes_percentile): .bar
 
       .stats-box
         .two-numbers
           h3 Aktyvumas diskusijuose
           .block
-            h4.number 652
+            h4.number {{fraction.get_avg_statement_count|floatformat:0}}
             p.explanation pasisakymai (vid.)
           .block
-            h4.number 89%
-            .explanation pasiūlytuose projektuose
-        .rating: .ui.indicating.progress(data-percent="74"): .bar
+            h4.number {{fraction.get_avg_long_statement_count|floatformat:0}}
+            .explanation ilgi pasisakymai (vid.)
+        .rating: .ui.indicating.progress(data-percent=fraction.ranking.statement_count_percentile): .bar
 
       .stats-box
         .three-numbers
