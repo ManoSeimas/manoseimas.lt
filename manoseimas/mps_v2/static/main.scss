@@ -39,7 +39,8 @@
     width: 165px;
     a.fraction-name {
       font-size: $small;
-      line-height: 0.5;
+      line-height: 1.2;
+      display: block;
       color: $greenDark;
     }
     h2 { margin-bottom: 0.1em;}

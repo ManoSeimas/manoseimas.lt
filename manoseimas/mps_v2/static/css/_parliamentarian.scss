@@ -46,9 +46,9 @@
 
         .name, .membership-type { display: table-cell; }
         .name {color: $textColor; width: auto; }
-        .name:hover { color: $linkColor;}
+        a:hover { color: $linkColor;}
         .membership-type {
-          width: 6em;
+          width: 8em;
           text-align: right;
         }
       }

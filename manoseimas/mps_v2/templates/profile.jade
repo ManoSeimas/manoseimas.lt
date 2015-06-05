@@ -28,17 +28,17 @@
             .ui.tab(data-tab="committees").active
               for membership in committees
                 .group
-                  a.name {{membership.group.name}}
+                  .name {{membership.group.name}}
                   .membership-type {{membership.position}}
             .ui.tab(data-tab="groups")
               for membership in groups
                 .group
-                  a.name {{membership.group.name}}
+                  .name {{membership.group.name}}
                   .membership-type {{membership.position}}
             .ui.tab(data-tab="commission")
               for membership in commissions
                 .group
-                  a.name {{membership.group.name}}
+                  .name {{membership.group.name}}
                   .membership-type {{membership.position}}
             .ui.tab(data-tab="general")
               .info-block
