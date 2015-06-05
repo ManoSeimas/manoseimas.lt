@@ -122,6 +122,24 @@ class Group(CrawledItem):
     def active_members(self):
         return self.members.filter(groupmembership__until=None)
 
+    def get_avg_statement_count(self):
+        agg = self.active_members.annotate(
+            models.Count('statements')
+        ).aggregate(
+            avg_statements=models.Avg('statements__count')
+        )
+        return agg['avg_statements']
+
+    def get_avg_long_statement_count(self):
+        agg = self.active_members.filter(
+            statements__word_count__gte=50
+        ).annotate(
+            models.Count('statements')
+        ).aggregate(
+            avg_statements=models.Avg('statements__count')
+        )
+        return agg['avg_statements']
+
 
 class GroupMembership(CrawledItem):
     member = models.ForeignKey(ParliamentMember)
@@ -183,8 +201,8 @@ class Voting(models.Model):
 def percentile_property(attr):
     def inner_fn(self):
         total = self.__class__.objects.count()
-        return int((total - getattr(self, attr) + 1 + 0.5)
-                   / total * 100)
+        return int((total - getattr(self, attr) + 1.0)
+                   / total * 100 + 0.5)
     return property(inner_fn)
 
 
