@@ -21,26 +21,34 @@ def mp_list(request, fraction_slug=None):
             'fraction': mp.current_fraction[0] if mp.current_fraction else None,
         }
 
-    fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
+    def set_klass(fraction):
+        fraction._klass = 'selected' if fraction_slug == fraction.slug else None
+        return fraction
+
+    fractions = map(set_klass, Group.objects.filter(type=Group.TYPE_FRACTION))
 
     mps = ParliamentMember.objects.prefetch_related(
         Prefetch('groups',
                  queryset=Group.objects.filter(groupmembership__until=None,
-                    type=Group.TYPE_FRACTION),
+                                               type=Group.TYPE_FRACTION),
                  to_attr='current_fraction')
-    ).all()
+    )
 
     if fraction_slug:
-        fraction = GroupMembership.objects.get(
-            group__type=Group.TYPE_FRACTION,
-            group__slug=fraction_slug
-        )
+        fraction = Group.objects.get(
+            type=Group.TYPE_FRACTION,
+            slug=fraction_slug)
         mps = mps.filter(groups=fraction, groupmembership__until=None)
 
     mps = map(extract, mps)
 
-    return render(request, 'mp_catalog.jade', {'mps': mps,
-                                               'fractions': fractions})
+    context = {
+        'mps': mps,
+        'fractions': fractions,
+        'all_klass': False if fraction_slug else 'selected'
+    }
+
+    return render(request, 'mp_catalog.jade', context)
 
 
 def mp_fraction_list(request):

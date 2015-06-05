@@ -27,8 +27,8 @@
     .zero.paddings.two.wide.column
       .ui.sticky
         .sidebar
-          a(href="{% url 'mp_list_all' %}").item.selected: h4 Visi parlamentarai
+          a(href="{% url 'mp_list_all' %}" class=all_klass).item: h4 Visi parlamentarai
           for fraction in fractions
-            a(href="{% url 'mp_fraction' fraction.slug%}").item
+            a(href="{% url 'mp_list_fraction' fraction.slug %}" class=fraction._klass).item
               img(src="{% static 'img/fractions/lsdp.png' %}").logo
               .title: h4 {{fraction.name}}
