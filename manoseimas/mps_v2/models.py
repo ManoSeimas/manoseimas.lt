@@ -180,6 +180,14 @@ class Voting(models.Model):
         unique_together = ('stenogram_topic', 'node')
 
 
+def percentile_property(attr):
+    def inner_fn(self):
+        total = self.__class__.objects.count()
+        return int((total - getattr(self, attr) + 1 + 0.5)
+                   / total * 100)
+    return property(inner_fn)
+
+
 class Ranking(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -190,6 +198,15 @@ class Ranking(models.Model):
 
     class Meta:
         abstract = True
+
+    votes_percentile = percentile_property(
+        'votes_rank')
+    statement_count_percentile = percentile_property(
+        'statement_count_rank')
+    long_statement_count_percentile = percentile_property(
+        'long_statement_count_rank')
+    discusion_contribution_percentage_percentile = percentile_property(
+        'discusion_contribution_percentage_rank')
 
 
 class MPRanking(Ranking):
