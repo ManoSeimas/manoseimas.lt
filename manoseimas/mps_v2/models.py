@@ -36,7 +36,8 @@ class ParliamentMember(CrawledItem):
     office_address = models.TextField(blank=True, null=True)
     constituency = models.CharField(max_length=128, blank=True, null=True)
     party_candidate = models.BooleanField(default=True)
-    groups = models.ManyToManyField('Group', through='GroupMembership', related_name='members')
+    groups = models.ManyToManyField('Group', through='GroupMembership',
+                                    related_name='members')
 
     biography = models.TextField(blank=True, null=True)
 
@@ -50,19 +51,6 @@ class ParliamentMember(CrawledItem):
     @property
     def fractions(self):
         return self.groups.filter(type=Group.TYPE_FRACTION)
-
-    # @property
-    # def current_fraction(self):
-    #     membership = GroupMembership.objects.filter(
-    #         member=self,
-    #         group__type=Group.TYPE_FRACTION,
-    #         until=None
-    #     )[:]
-
-    #     if membership:
-    #         return membership[0].group
-    #     else:
-    #         return None
 
     @property
     def other_group_memberships(self):
@@ -84,7 +72,7 @@ class ParliamentMember(CrawledItem):
             aggregate(topics=models.Count('topic_id',
                                           distinct=True))
         return (float(contributed_discusions['topics'])
-                / all_discussions * 100.0)
+                / all_discussions * 100.0) if all_discussions else 0.0
 
     @property
     def votes(self):
@@ -129,6 +117,10 @@ class Group(CrawledItem):
 
     def __unicode__(self):
         return u'{} ({})'.format(self.name, self.type)
+
+    @property
+    def active_members(self):
+        return self.members.filter(groupmembership__until=None)
 
 
 class GroupMembership(CrawledItem):
@@ -186,3 +178,25 @@ class Voting(models.Model):
 
     class Meta:
         unique_together = ('stenogram_topic', 'node')
+
+
+class Ranking(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    votes_rank = models.IntegerField(default=0)
+    statement_count_rank = models.IntegerField(default=0)
+    long_statement_count_rank = models.IntegerField(default=0)
+    discusion_contribution_percentage_rank = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+
+class MPRanking(Ranking):
+    target = models.OneToOneField(ParliamentMember,
+                                  related_name='ranking')
+
+
+class GroupRanking(Ranking):
+    target = models.OneToOneField(Group,
+                                  related_name='ranking')
