@@ -52,8 +52,6 @@ class ParliamentMember(CrawledItem):
     def fractions(self):
         return self.groups.filter(type=Group.TYPE_FRACTION)
 
-<<<<<<< HEAD
-=======
     @property
     def fraction(self):
         ''' Current parliamentarian's fraction. '''
@@ -68,7 +66,6 @@ class ParliamentMember(CrawledItem):
         else:
             return None
 
->>>>>>> Parliamentarian’s profile design.
     @property
     def other_group_memberships(self):
         # All not fraction groups
