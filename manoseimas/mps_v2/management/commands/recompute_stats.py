@@ -52,17 +52,17 @@ class Command(BaseCommand):
         fraction_stats = [
             ItemStats(
                 fraction.id,
-                sum(map(models.ParliamentMember.get_statement_count,
-                        fraction.active_members)),
-                sum(map(models.ParliamentMember.get_long_statement_count,
-                        fraction.active_members)),
+                mean(map(models.ParliamentMember.get_statement_count,
+                         fraction.active_members)),
+                mean(map(models.ParliamentMember.get_long_statement_count,
+                         fraction.active_members)),
                 mean(map(
-                    models.ParliamentMember.get_discussion_contribution_percentage,  # noqa
-                    fraction.active_members
+                     models.ParliamentMember.get_discussion_contribution_percentage,  # noqa
+                     fraction.active_members
                 )),
-                sum(map(lambda mp: sum(mp.votes.values()
-                                       if mp.votes else 0),
-                        fraction.active_members))
+                mean(map(lambda mp: sum(mp.votes.values()
+                                        if mp.votes else 0),
+                         fraction.active_members))
             ) for fraction in fractions
         ]
         self.save_rankings(models.GroupRanking, fractions, fraction_stats)
