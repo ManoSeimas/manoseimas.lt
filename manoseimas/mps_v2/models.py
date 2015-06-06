@@ -55,16 +55,20 @@ class ParliamentMember(CrawledItem):
     @property
     def fraction(self):
         ''' Current parliamentarian's fraction. '''
-        membership = GroupMembership.objects.filter(
-            member=self,
-            group__type=Group.TYPE_FRACTION,
-            until=None
-        )[:]
-
-        if membership:
-            return membership[0].group
+        if hasattr(self, '_fraction'):
+            return self._fraction[0].group
         else:
-            return None
+            membership = GroupMembership.objects.filter(
+                member=self,
+                group__type=Group.TYPE_FRACTION,
+                until=None
+            )[:]
+
+            if membership:
+                self._fraction = [membership]
+                return membership[0].group
+            else:
+                return None
 
     @property
     def other_group_memberships(self):
