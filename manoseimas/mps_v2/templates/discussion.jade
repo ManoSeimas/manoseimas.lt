@@ -10,4 +10,7 @@
             a(href="{% url 'mp_profile' statement.speaker_slug %}") {{ statement.speaker_name }}
         else
           .speaker {{ statement.speaker_name }}
-        .text {{ statement.text }}
+        if statement.highlighted
+          .text.highlighted {{ statement.text }}
+        else
+          .text. {{ statement.text }}

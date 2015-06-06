@@ -173,17 +173,18 @@ def mp_profile(request, mp_slug):
     return render(request, 'profile.jade', context)
 
 
-def statement_context(statement):
+def statement_context(statement, highlighted=False):
     return {
         'id': statement.id,
         'speaker_id': statement.speaker.id if statement.speaker else None,
         'speaker_slug': statement.speaker.slug if statement.speaker else None,
         'speaker_name': statement.get_speaker_name(),
         'text': statement.text,
+        'selected': highlighted,
     }
 
 
-def build_discussion_context(request, statement_id):
+def build_discussion_context(request, statement_id, selected_id=None):
     statement_qs = StenogramStatement.objects.select_related(
         'topic',
         'speaker').prefetch_related('topic__votings')
@@ -198,7 +199,9 @@ def build_discussion_context(request, statement_id):
             'timestamp': statement.topic.timestamp,
         },
         'selected_statement': statement_context(statement),
-        'statements': [statement_context(stmt) for stmt in statements],
+        'statements': [statement_context(stmt,
+                                         highlighted=(stmt.id == statement.id))
+                       for stmt in statements],
     }
     return context
 
