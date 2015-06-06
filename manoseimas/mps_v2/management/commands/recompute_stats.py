@@ -31,6 +31,7 @@ class Command(BaseCommand):
                 setattr(ranking, key, rank[item.id])
             ranking.save()
 
+    # XXX Might be a bad idea to hold a xact with write locks for a minute.
     @transaction.atomic
     def handle(self, **options):
 
