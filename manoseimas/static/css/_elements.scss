@@ -1,0 +1,215 @@
+// Switcher
+// -----------
+.switcher {
+  border: 1px solid $msBlue;
+  border-radius: $borderRadius;
+  display: inline-block;
+  margin: 2em auto 1em auto;
+  overflow: hidden;
+  font-size: $small;
+  padding: 0 !important;
+
+  .item {
+    padding: 0.3em 4em;
+    position: relative;
+    display: inline-block;
+    color: $msBlue;
+  }
+
+  .active,
+  :hover {
+    background-color: $msBlue;
+    color: $white;
+    text-decoration: none;
+  }
+}
+.switcher.small {
+  font-size: $tiny;
+  margin-top: 1em;
+  float: right;
+
+  .item { padding: 0.3em 2em; }
+}
+
+
+// Decisions
+// -----------
+.decisions {
+  padding-top: 3em;
+
+  h3.supports { color: $greenDark; }
+  h3.abstention { color: $yellow; }
+  h3.against {color: $redDark; }
+
+  .decision {
+    background-color: $white;
+    width: 19em;
+    height: max-content;
+    margin-bottom: 1em;
+    display: table;
+    padding: 0.5em 0.7em;
+    border: 1px dashed #EBEDFB;
+
+    a {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: $normal;
+      color: $textColor;
+    }
+
+    a:hover {
+      color: lighten($textColor, 30%);
+    }
+  }
+  .decision.strong-support { border-color: $greenDark; border-left: 7px solid $greenDark; }
+  .decision.support { border-color: $green; border-left: 7px solid $green; }
+  .decision.lite-support { border-color: $greenLite; border-left: 7px solid $greenLite; }
+  .decision.abstention { border-color: $yellow; border-left: 7px solid $yellow; }
+  .decision.strong-against { border-color: $redDark; border-left: 7px solid $redDark; }
+  .decision.against { border-color: $red; border-left: 7px solid $red; }
+  .decision.lite-against { border-color: $redLite; border-left: 7px solid $redLite; }
+}
+
+// Stats
+// -----------
+.stats-box {
+  background-color: $white;
+  border: 1px dashed $grayLite;
+  border-radius: $borderRadius;
+  width: 220px;
+  display: inline-block;
+  margin: 15px 10px;
+  padding: 0 10px 10px;
+
+  h3 {
+    font-size: $normal;
+    text-align: center;
+    margin-bottom: 0;
+  }
+
+  .graph, .info, .block {
+    display: inline-block;
+    position: relative;
+  }
+
+  .pie { padding: 12px 0 5px; }
+
+  .two-numbers {
+    .block { width: 50%; }
+  }
+
+  .three-numbers {
+    .block { width: 32%; }
+  }
+
+  .block {
+    .number {
+      text-align: center;
+      font-size: $medium;
+      margin-bottom: 3px;
+    }
+    .explanation {
+      text-align: center;
+      font-size: $tiny;
+      line-height: 1.1;
+      min-height: 34px;
+    }
+  }
+
+  .graph {
+    width: 44%;
+    h4 {
+      font-size: $big;
+      text-align: center;
+    }
+
+  }
+  .info {
+    width: 55%;
+    padding-left: 10px;
+    height: 20px;
+
+    .title {
+      display: table;
+
+      h3 {
+        line-height: 1.2;
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .rating {
+    margin-top: 0.3rem;
+    .progress {
+      padding: 0;
+      background-color: $grayLite;
+      border-radius: $borderRadius;
+
+      .bar {
+        background-color: $greenDark !important;
+        font-size: 5px;
+      }
+    }
+  }
+
+  .progress:last-child { margin: 0; }
+}
+
+.stats-box.horisontal {
+  width: 300px;
+  font-size: $small;
+  padding: .5em 1em .2em 1em;
+}
+
+.stats-box.total {
+  background-color: transparent;
+  padding: 10px 15px;
+  width: 180px;
+  float: right;
+
+  h3 {
+    font-size: $big;
+    font-weight: bold;
+    color: $msBlue;
+  }
+  .explanation {
+    text-align: center;
+    font-size: $small;
+    font-weight: normal;
+    color: $textColor;
+  }
+
+  .stats,
+  .vertical-progress { display: inline-block; }
+  .stats { width: 100px; padding-top: 10px; }
+
+  .vertical-progress {
+    margin-left: 10px;
+    font-size: $normal;
+    background-color: $grayLite;
+    width: 24px;
+    height: 100px;
+    line-height: 1px;
+    float: right;
+
+    .bar {
+      background-color: $msBlue;
+      color: $white;
+
+      display: table;
+
+      height: 40px;      // Percents
+      margin-top: 60px;  // 100 - height
+
+      .text {
+        font-size: 10px;
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0 5px;
+        width: 5em;
+      }
+    }
+  }
+}

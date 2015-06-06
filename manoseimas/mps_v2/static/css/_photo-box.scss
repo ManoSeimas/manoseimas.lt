@@ -1,0 +1,123 @@
+// Photo boxes
+// -----------
+.photo-box {
+  margin-top: -2rem;
+
+  .title {
+    color: $white;
+    font-weight: normal;
+    font-size: $medium;
+    margin-top: 0.5em;
+
+    h1 {
+      font-size: $huge;
+      font-weight: normal;
+      text-shadow: 2px 2px $grayDark;
+      line-height: 1.2;
+      color: $white;
+    }
+  }
+
+  .stats-box {
+    min-height: 10em;
+    max-width: 25em;
+    padding: 2em;
+    margin: auto;
+  }
+}
+
+.photo-box.single-title {
+  background: url(#{$staticRoot}/img/seimas.jpg);
+  background-repeat: no-repeat;
+  background-position: -00px -240px;
+  min-height: 18em;
+  margin-top: -1.1em;
+
+  .transparent-bg {
+    margin: auto;
+    display: table;
+    height: 16em;
+  }
+
+  .title {
+    display: table-cell;
+    vertical-align: middle;
+
+    h1 {
+      background-color: rgba(255, 255, 255, 0.4);
+      padding: 0.5em 3em !important;
+      // letter-spacing: 0.1em;
+      border-radius: $borderRadius
+    }
+  }
+}
+
+.photo-box.index {
+  background: url(#{$staticRoot}/img/frontpage-bg.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 21.4em;
+
+  .title {
+    margin-right: 1em;
+  }
+}
+
+.photo-box.parliamentarian {
+  background: url(#{$staticRoot}/img/seimas.jpg);
+  background-position: center;
+  min-height: 35em;
+  margin-top: -1.1em;
+
+  .logo-box {
+    padding-top: 3.5em;
+    img {height: 300px;}
+  }
+
+  .title {
+    padding-top: 0.5em;
+    text-align: center;
+    margin-bottom: 1.5em;
+    h1 { font-size: 60px; margin-bottom: 0; }
+    h2 {
+      font-size: $medium;
+      text-shadow: 1px 1px $gray;
+      margin-top: -.3em;
+      a { color: $black; }
+      a:hover { color: $linkColor; text-shadow: 1px 1px $textColor; }
+    }
+  }
+  .column.biography { margin-left: 1em; margin-right: -1em; }
+  .biography, .info {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 2px;
+    margin-bottom: 1.5em;
+  }
+  .twelve.wide.column { margin-left: 2em; margin-right: -2em;}
+}
+
+.photo-box.fraction {
+  background: url(#{$staticRoot}/img/hall.png);
+  background-position: top;
+  min-height: 20em;
+
+  .logo-box {
+    background-color:rgba(255, 255, 255, 0.4);
+    border-radius: 5px;
+    padding: 1.2em 2em;
+    display: inline-block;
+    margin-top: 1.5em;
+
+    img { width: 160px;}
+  }
+
+  .title {
+    display: table;
+    height: 8.5em;
+
+    h1 {
+      display: table-cell;
+      vertical-align: middle;
+    }
+  }
+}

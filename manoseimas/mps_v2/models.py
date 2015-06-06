@@ -36,7 +36,8 @@ class ParliamentMember(CrawledItem):
     office_address = models.TextField(blank=True, null=True)
     constituency = models.CharField(max_length=128, blank=True, null=True)
     party_candidate = models.BooleanField(default=True)
-    groups = models.ManyToManyField('Group', through='GroupMembership')
+    groups = models.ManyToManyField('Group', through='GroupMembership',
+                                    related_name='members')
 
     biography = models.TextField(blank=True, null=True)
 
@@ -52,9 +53,10 @@ class ParliamentMember(CrawledItem):
         return self.groups.filter(type=Group.TYPE_FRACTION)
 
     @property
-    def current_fraction(self):
+    def fraction(self):
+        ''' Current parliamentarian's fraction. '''
         membership = GroupMembership.objects.filter(
-            member=self.id,
+            member=self,
             group__type=Group.TYPE_FRACTION,
             until=None
         )[:]
@@ -66,9 +68,33 @@ class ParliamentMember(CrawledItem):
 
     @property
     def other_group_memberships(self):
-        # Not fraction groups
+        # All not fraction groups
         return GroupMembership.objects.filter(member=self)\
             .exclude(group__type=Group.TYPE_FRACTION).select_related('group')
+
+    @property
+    def committees(self):
+        return GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_COMMITTEE,
+            until=None
+        )
+
+    @property
+    def commissions(self):
+        return GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_COMMISSION,
+            until=None
+        )
+
+    @property
+    def other_groups(self):
+        return GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_GROUP,
+            until=None
+        )
 
     def get_statement_count(self):
         return self.statements.filter(as_chairperson=False).count()
@@ -77,6 +103,12 @@ class ParliamentMember(CrawledItem):
         return self.statements.filter(as_chairperson=False).\
             filter(word_count__gte=50).count()
 
+    def get_long_statement_percentage(self):
+        statements = self.get_statement_count()
+        long_statements = self.get_long_statement_count()
+        return (float(long_statements) / statements * 100
+                if statements else 0.0)
+
     def get_discussion_contribution_percentage(self):
         all_discussions = StenogramTopic.objects.count()
         contributed_discusions = StenogramStatement.objects.\
@@ -84,13 +116,20 @@ class ParliamentMember(CrawledItem):
             aggregate(topics=models.Count('topic_id',
                                           distinct=True))
         return (float(contributed_discusions['topics'])
-                / all_discussions * 100.0)
+                / all_discussions * 100.0) if all_discussions else 0.0
 
     @property
     def votes(self):
         # Avoiding circular imports
         from manoseimas.votings.models import get_mp_votes
         return get_mp_votes(self.source_id)
+
+    def get_vote_percentage(self):
+        from manoseimas.votings.models import get_total_votes
+        votes = sum(self.votes.values()) if self.votes else 0
+        total_votes = get_total_votes()
+        vote_percentage = float(votes) / total_votes * 100.0
+        return vote_percentage
 
     @property
     def all_statements(self):
@@ -129,6 +168,34 @@ class Group(CrawledItem):
 
     def __unicode__(self):
         return u'{} ({})'.format(self.name, self.type)
+
+    @property
+    def active_members(self):
+        return self.members.filter(groupmembership__until=None)
+
+    def get_avg_statement_count(self):
+        agg = self.active_members.annotate(
+            models.Count('statements')
+        ).aggregate(
+            avg_statements=models.Avg('statements__count')
+        )
+        return agg['avg_statements']
+
+    def get_avg_long_statement_count(self):
+        agg = self.active_members.filter(
+            statements__word_count__gte=50
+        ).annotate(
+            models.Count('statements')
+        ).aggregate(
+            avg_statements=models.Avg('statements__count')
+        )
+        return agg['avg_statements']
+
+    def get_avg_vote_percentage(self):
+        total_percentage = 0.0
+        for member in self.active_members:
+            total_percentage += member.get_vote_percentage()
+        return total_percentage / self.active_members.count()
 
 
 class GroupMembership(CrawledItem):
@@ -186,3 +253,42 @@ class Voting(models.Model):
 
     class Meta:
         unique_together = ('stenogram_topic', 'node')
+
+
+def percentile_property(attr):
+    def inner_fn(self):
+        total = self.__class__.objects.count()
+        return int((total - getattr(self, attr) + 1.0)
+                   / total * 100 + 0.5)
+    return property(inner_fn)
+
+
+class Ranking(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    votes_rank = models.IntegerField(default=0)
+    statement_count_rank = models.IntegerField(default=0)
+    long_statement_count_rank = models.IntegerField(default=0)
+    discusion_contribution_percentage_rank = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+    votes_percentile = percentile_property(
+        'votes_rank')
+    statement_count_percentile = percentile_property(
+        'statement_count_rank')
+    long_statement_count_percentile = percentile_property(
+        'long_statement_count_rank')
+    discusion_contribution_percentage_percentile = percentile_property(
+        'discusion_contribution_percentage_rank')
+
+
+class MPRanking(Ranking):
+    target = models.OneToOneField(ParliamentMember,
+                                  related_name='ranking')
+
+
+class GroupRanking(Ranking):
+    target = models.OneToOneField(Group,
+                                  related_name='ranking')

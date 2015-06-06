@@ -4,10 +4,12 @@ from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
 from manoseimas.mps_v2.models import PoliticalParty
 from manoseimas.mps_v2.models import Stenogram, StenogramTopic
 from manoseimas.mps_v2.models import StenogramStatement
+from manoseimas.mps_v2.models import MPRanking, GroupRanking
 
 
 class GroupAdmin(admin.ModelAdmin):
     list_filter = ('type',)
+    readonly_fields = ('slug',)
 
 
 class MpMembershipAdmin(admin.TabularInline):
@@ -46,3 +48,5 @@ admin.site.register(PoliticalParty)
 admin.site.register(Stenogram, StenogramAdmin)
 admin.site.register(StenogramTopic, StenogramTopicAdmin)
 admin.site.register(StenogramStatement)
+admin.site.register(MPRanking)
+admin.site.register(GroupRanking)

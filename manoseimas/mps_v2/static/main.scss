@@ -1,0 +1,65 @@
+@import 'css/variables';
+@import 'css/parliamentarians';
+@import 'css/parliamentarian';
+@import 'css/transcripts';
+
+// Elements
+// -----------
+
+.box {
+  margin: 10px;
+  display: inline-block;
+  background-color: $white;
+  border: 1px dashed $grayLite;
+  padding: 0.7rem 0.5rem 0.5rem 1rem !important;
+  min-height: 110px;
+
+  img { height: 80px; width: 80; margin-right: 5px; }
+
+  .info {
+    float: right;
+    width: 175px;
+
+    h2 {
+      font-size: $normal;
+      line-height: 1.2;
+      font-weight: normal;
+      margin-bottom: 0.3em;
+
+      a { color: $textColor; }
+      a:hover { color: $linkColor; text-decoration: none; }
+    }
+  }
+}
+.parliamentarian.box {
+  width: 260px;
+  margin: 0 7px 15px 7px;
+
+  .info {
+    width: 165px;
+    a.fraction-name {
+      font-size: $small;
+      line-height: 1.2;
+      display: block;
+      color: $greenDark;
+    }
+    h2 { margin-bottom: 0.1em;}
+  }
+}
+.fraction.box {
+  width: 300px;
+
+  .info p {
+    font-size: $small;
+    color: $grayLite;
+    margin-bottom: 0;
+  }
+}
+
+
+.ui.green.wide.button {
+  width: 20em;
+  color: $white;
+  margin-top: 1em;
+  font-weight: bold;
+}

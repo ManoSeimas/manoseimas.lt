@@ -1,0 +1,32 @@
+// Fixtures needed for Semantic UI to deal with bootstrap
+// and older ManoSeimas css files.
+
+.ui {
+  input[type="search"], input[type="text"] {
+    height: inherit;
+  }
+
+  .progress { height: inherit;}
+  .pagination { height: inherit; }
+
+  .bordered.twelve.wide.column {
+    border-right: 1px dashed $grayLite;
+  }
+}
+
+.ui.checkbox label { padding-left: .7em; }
+
+.zero.paddings { padding: 0 !important; }
+.ui.zero.margin.page.grid,
+.ui.zero.margin.center.aligned.grid {
+  margin-top: 0 !important;
+  margin-bottom: 0;
+}
+
+.ui.pagination.menu {
+  padding: 0;
+  .item {
+    font-size: $small;
+    padding: 0.7em 1em;
+  }
+}

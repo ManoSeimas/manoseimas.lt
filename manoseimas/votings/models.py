@@ -16,6 +16,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import contextlib
+import datetime
 import re
 import urllib2
 import urlparse
@@ -224,15 +225,29 @@ def fetch_voting_by_lrslt_url(url):
     return get_voting_by_lrslt_url(url)
 
 
-def get_mp_votes_by_internal_id(mp_node_id):
-    return couch.view('votings/votes_by_mp', key=mp_node_id,
-                      reduce=True, group=True,
+def get_mp_votes_by_internal_id(mp_node_id, start_date, end_date):
+    return couch.view('votings/votes_by_mp', startkey=[mp_node_id, start_date],
+                      endkey=[mp_node_id, end_date],
+                      reduce=True, group=False,
                       include_docs=False).first()
 
 
-def get_mp_votes(source_id):
+# 2012-11-16 - start of 2012-2016 parliament term
+def get_mp_votes(source_id, start_date='2012-11-16', end_date=None):
+    if end_date is None:
+        end_date = datetime.date.today().isoformat()
     source_id = re.match(r'^\d+', source_id).group(0)
     node = couch.view('mps/by_source_id', key=source_id).first()
     node_id = node._id
-    votes = get_mp_votes_by_internal_id(node_id)['value']
-    return votes
+    votes_node = get_mp_votes_by_internal_id(node_id, start_date, end_date)
+    if votes_node:
+        return votes_node['value']
+
+
+def get_total_votes(start_date='2012-11-16', end_date=None):
+    if end_date is None:
+        end_date = datetime.date.today().isoformat()
+    result = couch.view('votings/voting_count', reduce=True, group=False,
+                        include_docs=False, startkey=start_date,
+                        endkey=end_date).one()
+    return result['value']

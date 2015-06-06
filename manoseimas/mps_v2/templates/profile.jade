@@ -1,57 +1,190 @@
-- extends "base.html"
-- load i18n
-- load thumbnail
-- load manoseimas
-- load sboard
+- extends "new_base.jade"
+- load static from staticfiles
+- load nodeurl from sboard
 
-- block content
-  h1 Parlamentaras
+- block title
+  | {{ profile.full_name }}
 
-  a(href="{% url 'mp_list_all' %}") Atgal į sąrašą
 
-  .profile-box
-    div
-      .row-fluid
-        .span4
-          img(src="{{photo_url}}" title="{{profile.full_name}}").photo
-        .span8
-          h1
-            - block title
-              {{ profile.full_name }}
+- block middle
+  .photo-box.parliamentarian
+    .ui.zero.margin.page.grid
+      .center.aligned.four.wide.column
+        .logo-box
+          img(src="{{photo_url}}" title="{{profile.full_name}}")
+      .twelve.wide.column
+        .title
+          h1 {{profile.full_name}}
+          h2.fraction-name: a(href="{% url 'mp_fraction' profile.fraction_slug %}") {{profile.fraction_name}}
 
-          if profile.fraction_name
-            p {{ profile.fraction_name }}
+        .ui.two.column.stackable.grid
+          .column.info
+            .ui.four.item.tabular.menu
+              .item(data-tab="committees").active Komitetai
+              .item(data-tab="commission") Komisijos
+              .item(data-tab="groups") Grupės
+              .item(data-tab="general") Bendra
 
-          h3 List of Groups
-          table.table.table-striped
-            thead
-              tr
-                th Group name
-                th Type
-                th Position
-            tbody
-              for membership in memberships
-                tr
-                  td {{membership.group.name}}
-                  td {{membership.group.type}}
-                  td {{membership.position}}
-  .biography
-    {{biography}}
+            .ui.tab(data-tab="committees").active
+              for membership in committees
+                .group
+                  .name {{membership.group.name}}
+                  .membership-type {{membership.position}}
+            .ui.tab(data-tab="groups")
+              for membership in groups
+                .group
+                  .name {{membership.group.name}}
+                  .membership-type {{membership.position}}
+            .ui.tab(data-tab="commission")
+              for membership in commissions
+                .group
+                  .name {{membership.group.name}}
+                  .membership-type {{membership.position}}
+            .ui.tab(data-tab="general")
+              .info-block
+                .name Išrinktas:
+                .info Gargždų (Nr. 31) apygardoje
+              .info-block
+                .name Iškėlė:
+                .info: b Partija Tvarka ir Teisingumas
+              .info-block
+                .name Frakcijos:
+                .info
+                  div
+                    a(href="{% url 'mp_fraction' profile.fraction_slug %}") Partija Tvarka ir Teisingumas
+                    | &nbsp; (nuo 2013-02-15)
+                  div
+                    a(href="{% url 'mp_fraction' profile.fraction_slug %}") Partija Tvarka ir Teisingumas
+                    | &nbsp; (nuo 2013-02-15)
+              .info-block
+                .name Biuro adresas:
+                .info Maironio g. 12-8, Raseiniai m., tel. 861201080. Vytauto g. 105, Ariogala m., 861201081.
 
+          .column.biography
+            h2 Biografija
+
+            .bio-text
+              | {{biography}}
+
+  .colored-bg
+    .ui.zero.margin.page.grid
+      .stats-box
+        .pie
+          .graph
+            h4.number {{stats.vote_percent|floatformat:0}}%
+          .info
+            .title: h3 Dalyvavimas balsavimuose
+        .rating: .ui.indicating.progress(data-percent=ranking.votes_percentile): .bar
+
+      .stats-box
+        .two-numbers
+          h3 Aktyvumas diskusijuose
+          .block
+            h4.number {{ stats.statement_count }}
+            p.explanation pasisakymai
+          .block
+            h4.number {{ stats.long_statement_percentage|floatformat:0 }}%
+            .explanation Ilgi pasisakymai (kalbos)
+        .rating: .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
+
+      .stats-box
+        .three-numbers
+          h3 Įstatymų projetai
+          .block
+            h4.number 105
+            p.explanation pasiūlyti
+          .block
+            h4.number 5
+            .explanation priimti
+          .block
+            h4.number 8%
+            .explanation palaikymas
+        .rating: .ui.indicating.progress(data-percent="74"): .bar
+
+      .stats-box.total
+        .stats
+          h3 40%
+          .explanation bendras aktyvumas
+        .vertical-progress: .bar: .text
 
   if positions
-    hr(style="clear: both")
-    {% include "mps/help_partial.html" %}
-    h2.hr Politiniai sprendimai
+    .decisions
+      .ui.page.grid
+        h2 Politiniai sprendimai
+          small (DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!)
 
-    ul.positions
-      for position in positions
-        li Balsavo
-          strong.very(title=position.percent) {{ position.position|lower }}
-          a(href="{% nodeurl position.solution.ref %}").profile-solution-title.arrow-before {{ position.solution.ref.title }}
-  .statistics
-    h2 Stats
-    p Pasisakymai: {{stats.statement_count}}
-    p Ilgi pasisakymai: {{stats.long_statement_count}}
-    p Pasisakė {{stats.contributed_discussion_percentage|floatformat:1}}% diskusijų
-    p Balsai: už {{stats.votes.aye}}, prieš {{stats.votes.no}}, susilaikė {{stats.votes.abstain}}
+      .ui.stackable.three.column.center.aligned.page.grid
+          .column
+            h3.supports UŽ
+
+            for position in positions.for
+              .decision(class=position.klass)
+                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+
+          .column
+            h3.abstention nei už nei prieš
+
+            for position in positions.neutral
+              .decision.abstention
+                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+
+          .column
+            h3.against PRIEŠ
+
+            for position in positions.against
+              .decision(class=position.klass)
+                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+
+  .transcripts
+    .ui.stackable.page.grid
+      .nine.wide.column
+        h2 Seimo posedžių stenogramos
+        .ui.checkbox
+          input(name="fun" type="checkbox")
+          label Rodyti tik tas kalbos kur parlamentaras yra teikėjas
+
+      .seven.wide.column
+        .stats-box.horisontal
+          .three-numbers
+            .block
+              h4.number {{statment.word_count}}
+              p.explanation pasisakymai (vid.)
+            .block
+              h4.number 89%
+              .explanation pasiūlytuose projektuose
+            .block
+              h4.number 89%
+              .explanation pasiūlytuose projektuose
+
+    .ui.stackable.page.grid
+      .twelve.wide.column
+        for statment in statments
+          .transcription
+            .text {{statment.text}}
+            .meta
+              a.show-all Rodyti visą diskusiją
+              .document-title {{statment.topic}}
+              .date {{statment.topic.timestamp}}
+
+        .ui.zero.margin.center.aligned.grid: .ui.pagination.menu
+          a.item
+            i.left.arrow.icon
+            | Previous
+          a.item 1
+          a.item 2
+          .disabled.item ...
+          a.item 10
+          a.item 11
+          a.item 12
+          a.item 13
+          a.item
+            | Next
+            i.icon.right.arrow
+
+      .four.wide.column
+        .sidebar
+          a(href="#").item.selected: h4 Pavasario sesija 2015
+          a(href="#").item: h4 Rudens sesija 2014
+          a(href="#").item: h4 Pavasario sesija 2014
+          a(href="#").item: h4 Rudens sesija 2013
+          a(href="#").item: h4 Pavasario sesija 2013

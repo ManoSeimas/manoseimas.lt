@@ -1,0 +1,42 @@
+.transcripts {
+  border-top: 1px solid $grayLite;
+  margin-top: 2em;
+  padding-top: 2em;
+  padding-bottom: 2em;
+
+  .transcription {
+    margin-bottom: 1rem ;
+    padding: 1rem;
+    border: 1px solid $grayLite;
+    border-radius: $borderRadius;
+    background-color: $coloredBgColor;
+
+
+    .text { font-size: $normal; }
+    .meta {
+      font-size: $tiny;
+      display: table;
+      width: 100%;
+      margin-top: .5em;
+
+      .show-all, .document-title, .date { display: table-cell; }
+      .show-all { width: 12em; }
+    }
+  }
+
+  .stats-box  {
+    float: right;
+    margin: 0;
+  }
+
+  .sidebar {
+    text-align: right;
+    margin-top: 0;
+    .item {
+      padding: .8em !important;
+      border-style: dashed;
+      text-align: center;
+    }
+  }
+
+}

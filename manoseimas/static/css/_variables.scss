@@ -1,12 +1,26 @@
 // Bootstrap overrides
 // -------------------
 
+$white:                 #fff;
+$black:                 #333;
 $grayDark:              #555;
-$gray:                  #666;
+$gray:                  #777;
+$grayLite:              #c8c8c8;
 
 $mainBgColor:           #F8FBFF;
+$coloredBgColor:        #f2f1f0;
+
 $msBlue:                #4E78B2;
 $msGreen:               #4db036;
+
+$green:                 $msGreen;
+$greenDark:             #2A8039;
+$greenLite:             #8AD198;
+$yellow:                #E89C30;
+$red:                   #CC352D;
+$redDark:               #A83333;
+$redLite:               #D9B4B2;
+
 $wellBg:                #F8F8F8;
 $wellBorder:            #DDDDDD;
 $headerColor:           $grayDark;
@@ -36,3 +50,13 @@ $staticRoot: "/static";
 // ---------------
 
 $borderRadius:          4px;
+
+
+// Font sizes
+// -----------
+$tiny:                  12px;
+$small:                 14px;
+$normal:                16px;
+$medium:                22px;
+$big:                   2rem;
+$huge:                  2.5rem;
