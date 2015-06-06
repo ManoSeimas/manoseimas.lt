@@ -170,3 +170,20 @@ def mp_profile(request, mp_slug):
     }
 
     return render(request, 'profile.jade', context)
+
+
+def mp_discussion(request, statement_id):
+    statement_qs = StenogramStatement.objects.select_related(
+        'topic',
+        'speaker').prefetch_related('topic__votings')
+    statement = statement_qs.get(pk=statement_id)
+
+    statements = statement.topic.statements.select_related('speaker').all()
+
+    context = {
+        'topic': statement.topic,
+        'selected_statement': statement,
+        'statements': statements,
+    }
+
+    return render(request, 'discussion.jade', context)
