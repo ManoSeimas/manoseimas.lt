@@ -179,7 +179,8 @@ class Group(CrawledItem):
 
 
 class GroupMembership(CrawledItem):
-    member = models.ForeignKey(ParliamentMember, related_name='memberships')
+    member = models.ForeignKey(ParliamentMember,
+                               related_name='groupmembership')
     group = models.ForeignKey(Group)
     position = models.CharField(max_length=128)
     since = models.DateField(blank=True, null=True)

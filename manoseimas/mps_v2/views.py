@@ -100,7 +100,7 @@ def mp_profile(request, mp_slug):
 
     mp_qs = mp_qs.prefetch_related(
         Prefetch(
-            'memberships',
+            'groupmembership',
             queryset=GroupMembership.objects.select_related('group').filter(
                 until=None,
                 group__type__in=(Group.TYPE_COMMITTEE,
@@ -109,14 +109,14 @@ def mp_profile(request, mp_slug):
             to_attr='committees'))
     mp_qs = mp_qs.prefetch_related(
         Prefetch(
-            'memberships',
+            'groupmembership',
             queryset=GroupMembership.objects.select_related('group').filter(
                 until=None,
                 group__type=Group.TYPE_GROUP),
             to_attr='other_groups'))
     mp_qs = mp_qs.prefetch_related(
         Prefetch(
-            'memberships',
+            'groupmembership',
             queryset=GroupMembership.objects.select_related('group').filter(
                 until=None,
                 group__type=Group.TYPE_FRACTION),
