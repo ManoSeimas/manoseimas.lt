@@ -91,7 +91,20 @@ def mp_fraction(request, fraction_slug):
 
 
 def mp_profile(request, mp_slug):
-    mp = ParliamentMember.objects.select_related('ranking').get(slug=mp_slug)
+    mp_qs = ParliamentMember.objects.select_related('ranking')
+
+    mp_qs = mp_qs.prefetch_related(Prefetch('memberships',
+                                   queryset=GroupMembership.objects.select_related('group').filter(
+                                       until=None,
+                                       group__type__in=(Group.TYPE_COMMITTEE,
+                                                        Group.TYPE_COMMISSION)),
+                                   to_attr='committees'))
+    mp_qs = mp_qs.prefetch_related(Prefetch('memberships',
+                                   queryset=GroupMembership.objects.select_related('group').filter(
+                                       until=None,
+                                       group__type=Group.TYPE_GROUP),
+                                   to_attr='other_groups'))
+    mp = mp_qs.get(slug=mp_slug)
 
     profile = {'full_name': mp.full_name}
     if mp.fraction:
@@ -122,7 +135,6 @@ def mp_profile(request, mp_slug):
         'memberships': mp.other_group_memberships,
         'groups': mp.other_groups,
         'committees': mp.committees,
-        'commissions': mp.commissions,
         'biography': mark_safe(mp.biography),
         'stats': stats,
         'photo_url': mp.photo.url,
@@ -130,5 +142,4 @@ def mp_profile(request, mp_slug):
         'ranking': mp.ranking,
     }
 
-    import pdb; pdb.set_trace()
     return render(request, 'profile.jade', context)
