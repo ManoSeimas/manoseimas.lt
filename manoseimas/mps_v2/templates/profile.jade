@@ -142,14 +142,14 @@
         .stats-box.horisontal
           .three-numbers
             .block
-              h4.number {{statment.word_count}}
-              p.explanation pasisakymai (vid.)
+              h4.number {{stats.statement_count}}
+              p.explanation pasisakymai
             .block
-              h4.number 89%
-              .explanation pasiūlytuose projektuose
+              h4.number {{stats.long_statement_count}}
+              .explanation ilgi pasisakymai
             .block
-              h4.number 89%
-              .explanation pasiūlytuose projektuose
+              h4.number {{stats.contributed_discussion_percentage|floatformat:2}}%
+              .explanation dalyvavimas diskusijuose
 
     .ui.stackable.page.grid
       .twelve.wide.column
