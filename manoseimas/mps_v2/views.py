@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import JsonResponse
 from django.utils.safestring import mark_safe
 from django.db.models import Prefetch
 
@@ -172,7 +173,17 @@ def mp_profile(request, mp_slug):
     return render(request, 'profile.jade', context)
 
 
-def mp_discussion(request, statement_id):
+def statement_context(statement):
+    return {
+        'id': statement.id,
+        'speaker_id': statement.speaker.id if statement.speaker else None,
+        'speaker_slug': statement.speaker.slug if statement.speaker else None,
+        'speaker_name': statement.get_speaker_name(),
+        'text': statement.text,
+    }
+
+
+def build_discussion_context(request, statement_id):
     statement_qs = StenogramStatement.objects.select_related(
         'topic',
         'speaker').prefetch_related('topic__votings')
@@ -181,9 +192,23 @@ def mp_discussion(request, statement_id):
     statements = statement.topic.statements.select_related('speaker').all()
 
     context = {
-        'topic': statement.topic,
-        'selected_statement': statement,
-        'statements': statements,
+        'topic': {
+            'id': statement.topic.id,
+            'title': statement.topic.title,
+            'timestamp': statement.topic.timestamp,
+        },
+        'selected_statement': statement_context(statement),
+        'statements': [statement_context(stmt) for stmt in statements],
     }
+    return context
+
+
+def mp_discussion(request, statement_id):
+    context = build_discussion_context(request, statement_id)
 
     return render(request, 'discussion.jade', context)
+
+
+def mp_discussion_json(request, statement_id):
+    context = build_discussion_context(request, statement_id)
+    return JsonResponse(context)

@@ -10,6 +10,8 @@ urlpatterns = patterns(
         views.mp_fraction_list, name='mp_fraction_list'),
     url(r'^discussion/(?P<statement_id>\d+)$',
         views.mp_discussion, name='mp_discussion'),
+    url(r'^discussion_json/(?P<statement_id>\d+)$',
+        views.mp_discussion_json, name='mp_discussion_json'),
     url(r'^fractions/(?P<fraction_slug>[-_\w]+)/$',
         views.mp_fraction, name='mp_fraction'),
     url(r'^parliamentarian/(?P<mp_slug>.+)/$',

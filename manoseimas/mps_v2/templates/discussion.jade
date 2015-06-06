@@ -1,5 +1,3 @@
-
-
 .discussion
   .topic {{ topic.title}}
   .date {{ topic.timestamp }}
@@ -7,9 +5,9 @@
   .statements
     for statement in statements
       .statement
-        if statement.speaker
+        if statement.speaker_slug
           .speaker
-            a(href="{% url 'mp_profile' statement.speaker.slug %}") {{ statement.get_speaker_name }}
+            a(href="{% url 'mp_profile' statement.speaker_slug %}") {{ statement.speaker_name }}
         else
-          .speaker {{ statement.get_speaker_name }}
+          .speaker {{ statement.speaker_name }}
         .text {{ statement.text }}
