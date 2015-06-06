@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.safestring import mark_safe
 from django.db.models import Prefetch
 
@@ -134,8 +135,16 @@ def mp_profile(request, mp_slug):
     except ResourceNotFound:
         positions = None
 
-    statements = StenogramStatement.objects.select_related(
+    all_statements = StenogramStatement.objects.select_related(
         'topic').filter(speaker=mp)
+    statement_paginator = Paginator(all_statements, 10)
+    statement_page = request.GET.get('page')
+    try:
+        statements = statement_paginator.page(statement_page)
+    except PageNotAnInteger:
+        statements = statement_paginator.page(1)
+    except EmptyPage:
+        statements = statement_paginator.page(statement_paginator.num_pages)
 
     stats = {
         'statement_count': mp.get_statement_count(),
@@ -156,7 +165,7 @@ def mp_profile(request, mp_slug):
         'biography': mark_safe(mp.biography),
         'stats': stats,
         'photo_url': mp.photo.url,
-        'statments': statements,
+        'statements': statements,
         'ranking': mp.ranking,
     }
 
