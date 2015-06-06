@@ -103,6 +103,12 @@ class ParliamentMember(CrawledItem):
         return self.statements.filter(as_chairperson=False).\
             filter(word_count__gte=50).count()
 
+    def get_long_statement_percentage(self):
+        statements = self.get_statement_count()
+        long_statements = self.get_long_statement_count()
+        return (float(long_statements) / statements * 100
+                if statements else 0.0)
+
     def get_discussion_contribution_percentage(self):
         all_discussions = StenogramTopic.objects.count()
         contributed_discusions = StenogramStatement.objects.\
@@ -117,6 +123,13 @@ class ParliamentMember(CrawledItem):
         # Avoiding circular imports
         from manoseimas.votings.models import get_mp_votes
         return get_mp_votes(self.source_id)
+
+    def get_vote_percentage(self):
+        from manoseimas.votings.models import get_total_votes
+        votes = sum(self.votes.values()) if self.votes else 0
+        total_votes = get_total_votes()
+        vote_percentage = float(votes) / total_votes * 100.0
+        return vote_percentage
 
     @property
     def all_statements(self):
@@ -177,6 +190,12 @@ class Group(CrawledItem):
             avg_statements=models.Avg('statements__count')
         )
         return agg['avg_statements']
+
+    def get_avg_vote_percentage(self):
+        total_percentage = 0.0
+        for member in self.active_members:
+            total_percentage += member.get_vote_percentage()
+        return total_percentage / self.active_members.count()
 
 
 class GroupMembership(CrawledItem):

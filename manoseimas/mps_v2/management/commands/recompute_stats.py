@@ -42,8 +42,8 @@ class Command(BaseCommand):
         stats = [ItemStats(mp.id,
                            mp.get_statement_count(),
                            mp.get_long_statement_count(),
-                           mp.get_discussion_contribution_percentage(),
-                           sum(mp.votes.values()) if mp.votes else 0)
+                           mp.get_vote_percentage(),
+                           mp.get_discussion_contribution_percentage())
                  for mp in mps]
         self.save_rankings(models.MPRanking, mps, stats)
 
@@ -61,8 +61,7 @@ class Command(BaseCommand):
                      models.ParliamentMember.get_discussion_contribution_percentage,  # noqa
                      fraction.active_members
                 )),
-                mean(map(lambda mp: sum(mp.votes.values()
-                                        if mp.votes else 0),
+                mean(map(lambda mp: mp.get_vote_percentage(),
                          fraction.active_members))
             ) for fraction in fractions
         ]
