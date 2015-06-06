@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils.safestring import mark_safe
 from django.db.models import Prefetch
 
@@ -8,7 +9,8 @@ from sboard.models import couch
 
 from manoseimas.compat.models import PersonPosition
 
-from .models import ParliamentMember, GroupMembership, Group
+from .models import (ParliamentMember, GroupMembership, Group,
+                     StenogramStatement)
 
 
 def mp_list(request, fraction_slug=None):
@@ -18,11 +20,13 @@ def mp_list(request, fraction_slug=None):
             'full_name': mp.full_name,
             'slug': mp.slug,
             'photo_url': mp.photo.url,
-            'fraction': mp.current_fraction[0] if mp.current_fraction else None,
+            'fraction': (mp.current_fraction[0]
+                         if mp.current_fraction else None),
         }
 
     def set_klass(fraction):
-        fraction._klass = 'selected' if fraction_slug == fraction.slug else None
+        fraction._klass = ('selected'
+                           if fraction_slug == fraction.slug else None)
         return fraction
 
     fractions = map(set_klass, Group.objects.filter(type=Group.TYPE_FRACTION))
@@ -91,7 +95,32 @@ def mp_fraction(request, fraction_slug):
 
 
 def mp_profile(request, mp_slug):
-    mp = ParliamentMember.objects.select_related('ranking').get(slug=mp_slug)
+    mp_qs = ParliamentMember.objects.select_related('ranking')
+
+    mp_qs = mp_qs.prefetch_related(
+        Prefetch(
+            'memberships',
+            queryset=GroupMembership.objects.select_related('group').filter(
+                until=None,
+                group__type__in=(Group.TYPE_COMMITTEE,
+                                 Group.TYPE_COMMISSION)
+            ),
+            to_attr='committees'))
+    mp_qs = mp_qs.prefetch_related(
+        Prefetch(
+            'memberships',
+            queryset=GroupMembership.objects.select_related('group').filter(
+                until=None,
+                group__type=Group.TYPE_GROUP),
+            to_attr='other_groups'))
+    mp_qs = mp_qs.prefetch_related(
+        Prefetch(
+            'memberships',
+            queryset=GroupMembership.objects.select_related('group').filter(
+                until=None,
+                group__type=Group.TYPE_FRACTION),
+            to_attr='_fraction'))
+    mp = mp_qs.get(slug=mp_slug)
 
     profile = {'full_name': mp.full_name}
     if mp.fraction:
@@ -105,6 +134,17 @@ def mp_profile(request, mp_slug):
         positions = prepare_positions(mp_node)
     except ResourceNotFound:
         positions = None
+
+    all_statements = StenogramStatement.objects.select_related(
+        'topic').filter(speaker=mp)
+    statement_paginator = Paginator(all_statements, 10)
+    statement_page = request.GET.get('page')
+    try:
+        statements = statement_paginator.page(statement_page)
+    except PageNotAnInteger:
+        statements = statement_paginator.page(1)
+    except EmptyPage:
+        statements = statement_paginator.page(statement_paginator.num_pages)
 
     stats = {
         'statement_count': mp.get_statement_count(),
@@ -122,13 +162,11 @@ def mp_profile(request, mp_slug):
         'memberships': mp.other_group_memberships,
         'groups': mp.other_groups,
         'committees': mp.committees,
-        'commissions': mp.commissions,
         'biography': mark_safe(mp.biography),
         'stats': stats,
         'photo_url': mp.photo.url,
-        'statments': mp.all_statements,
+        'statements': statements,
         'ranking': mp.ranking,
     }
 
-    import pdb; pdb.set_trace()
     return render(request, 'profile.jade', context)

@@ -55,46 +55,26 @@ class ParliamentMember(CrawledItem):
     @property
     def fraction(self):
         ''' Current parliamentarian's fraction. '''
-        membership = GroupMembership.objects.filter(
-            member=self,
-            group__type=Group.TYPE_FRACTION,
-            until=None
-        )[:]
-
-        if membership:
-            return membership[0].group
+        if hasattr(self, '_fraction'):
+            return self._fraction[0].group
         else:
-            return None
+            membership = GroupMembership.objects.filter(
+                member=self,
+                group__type=Group.TYPE_FRACTION,
+                until=None
+            )[:]
+
+            if membership:
+                self._fraction = [membership]
+                return membership[0].group
+            else:
+                return None
 
     @property
     def other_group_memberships(self):
         # All not fraction groups
         return GroupMembership.objects.filter(member=self)\
             .exclude(group__type=Group.TYPE_FRACTION).select_related('group')
-
-    @property
-    def committees(self):
-        return GroupMembership.objects.filter(
-            member=self,
-            group__type=Group.TYPE_COMMITTEE,
-            until=None
-        )
-
-    @property
-    def commissions(self):
-        return GroupMembership.objects.filter(
-            member=self,
-            group__type=Group.TYPE_COMMISSION,
-            until=None
-        )
-
-    @property
-    def other_groups(self):
-        return GroupMembership.objects.filter(
-            member=self,
-            group__type=Group.TYPE_GROUP,
-            until=None
-        )
 
     def get_statement_count(self):
         return self.statements.filter(as_chairperson=False).count()
@@ -199,7 +179,7 @@ class Group(CrawledItem):
 
 
 class GroupMembership(CrawledItem):
-    member = models.ForeignKey(ParliamentMember)
+    member = models.ForeignKey(ParliamentMember, related_name='memberships')
     group = models.ForeignKey(Group)
     position = models.CharField(max_length=128)
     since = models.DateField(blank=True, null=True)

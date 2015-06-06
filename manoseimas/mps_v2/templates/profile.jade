@@ -19,9 +19,8 @@
 
         .ui.two.column.stackable.grid
           .column.info
-            .ui.four.item.tabular.menu
-              .item(data-tab="committees").active Komitetai
-              .item(data-tab="commission") Komisijos
+            .ui.three.item.tabular.menu
+              .item(data-tab="committees").active Komitetai/Komisijos
               .item(data-tab="groups") Grupės
               .item(data-tab="general") Bendra
 
@@ -32,11 +31,6 @@
                   .membership-type {{membership.position}}
             .ui.tab(data-tab="groups")
               for membership in groups
-                .group
-                  .name {{membership.group.name}}
-                  .membership-type {{membership.position}}
-            .ui.tab(data-tab="commission")
-              for membership in commissions
                 .group
                   .name {{membership.group.name}}
                   .membership-type {{membership.position}}
@@ -136,6 +130,7 @@
                 a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
   .transcripts
+    a(name='stenogram_section')
     .ui.stackable.page.grid
       .nine.wide.column
         h2 Seimo posedžių stenogramos
@@ -158,28 +153,26 @@
 
     .ui.stackable.page.grid
       .twelve.wide.column
-        for statment in statments
+        for statement in statements.object_list
           .transcription
-            .text {{statment.text}}
+            .text {{statement.text}}
             .meta
               a.show-all Rodyti visą diskusiją
-              .document-title {{statment.topic}}
-              .date {{statment.topic.timestamp}}
+              .document-title {{statement.topic}}
+              .date {{statement.topic.timestamp}}
 
         .ui.zero.margin.center.aligned.grid: .ui.pagination.menu
-          a.item
-            i.left.arrow.icon
-            | Previous
-          a.item 1
-          a.item 2
-          .disabled.item ...
-          a.item 10
-          a.item 11
-          a.item 12
-          a.item 13
-          a.item
-            | Next
-            i.icon.right.arrow
+          if statements.has_previous
+            a.item(href="?page={{ statements.previous_page_number }}#stenogram_section")
+              i.left.arrow.icon
+              | Atgal
+
+            .item {{ statements.number }} iš {{ statements.paginator.num_pages }}
+
+          if statements.has_next
+            a.item(href="?page={{ statements.next_page_number }}#stenogram_section")
+              | Pirmyn
+              i.icon.right.arrow
 
       .four.wide.column
         .sidebar
