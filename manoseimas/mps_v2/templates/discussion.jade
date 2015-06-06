@@ -1,0 +1,16 @@
+.discussion
+  .topic {{ topic.title}}
+  .date {{ topic.timestamp }}
+
+  .statements
+    for statement in statements
+      .statement
+        if statement.speaker_slug
+          .speaker
+            a(href="{% url 'mp_profile' statement.speaker_slug %}") {{ statement.speaker_name }}
+        else
+          .speaker {{ statement.speaker_name }}
+        if statement.highlighted
+          .text.highlighted {{ statement.text }}
+        else
+          .text {{ statement.text }}
