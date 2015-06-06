@@ -21,7 +21,7 @@ Main deployment script is ``deploy.yml``. In addition, you can specify
 deployment profile by specifying vars file, like this::
 
     ansible-playbook deploy.yml -e vars=vagrant
-    
+
 With this, ``vars/vagrant.yml`` file will be used with some overrides.
 
 By default, ``inventory.cfg`` file is used as Ansible inventory file. This is
