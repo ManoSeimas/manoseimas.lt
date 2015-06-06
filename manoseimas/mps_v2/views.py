@@ -183,6 +183,7 @@ def _statement_context(statement, highlighted=False):
         'speaker_id': statement.speaker.id if statement.speaker else None,
         'speaker_slug': statement.speaker.slug if statement.speaker else None,
         'speaker_name': statement.get_speaker_name(),
+        'as_chairperson': statement.as_chairperson,
         'text': statement.text,
         'selected': highlighted,
     }

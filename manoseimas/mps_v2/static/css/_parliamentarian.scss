@@ -110,5 +110,18 @@
     flex: 1;
   }
   // END of scrollable div
+}
 
+.ui.modal .description {
+  border-bottom: none;
+  .statement {
+    margin-bottom: 1em;
+
+    .highlighted {
+      padding: .5em;
+      margin: -.5em;
+      background-color: $yellow;
+      font-weight: italic;
+    }
+  }
 }

@@ -157,7 +157,7 @@
           .transcription
             .text {{statement.text}}
             .meta
-              a.show-all Rodyti visą diskusiją
+              a.show-all(data-id=statement.id) Rodyti visą diskusiją
               .document-title {{statement.topic}}
               .date {{statement.topic.timestamp}}
 
@@ -167,7 +167,7 @@
               i.left.arrow.icon
               | Atgal
 
-            .item {{ statements.number }} iš {{ statements.paginator.num_pages }}
+          .item {{ statements.number }} iš {{ statements.paginator.num_pages }}
 
           if statements.has_next
             a.item(href="?page={{ statements.next_page_number }}#stenogram_section")
@@ -181,3 +181,43 @@
           a(href="#").item: h4 Pavasario sesija 2014
           a(href="#").item: h4 Rudens sesija 2013
           a(href="#").item: h4 Pavasario sesija 2013
+
+
+  script(type='text/javascript')
+    $(document).ready(function() {
+      $('.show-all').click(function() {
+        var content = [];
+        var url = '/mp/discussion_json/'+$(this).attr("data-id");
+
+        $.getJSON(url, function (data) {
+          $('.ui.modal .header').text(data.topic.title);
+
+          data.statements.forEach(function(statement) {
+            content.push('<div class="statement">');
+            if (statement.selected) {
+              content.push('<p class="highlighted">');
+            } else {
+              content.push('<p>');
+            }
+            if (statement.as_chairperson) {
+              content.push('<i class="spy icon" title="Pirmininkas"></i>');
+            }
+            content.push('<b>'+statement.speaker_name+' </b>');
+            content.push(statement.text);
+            content.push('</p>');
+            content.push('</div>');
+            });
+          $('.ui.modal .description').html(content.join(""));
+
+          $('.ui.modal').modal('show', 'show dimmer');
+        });
+      });
+    });
+
+  .ui.modal
+    .header Header Is here
+    .content
+      .description Hello
+    .actions
+      .ui.black.button
+        | Close
