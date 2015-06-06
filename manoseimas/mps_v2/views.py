@@ -30,12 +30,14 @@ def mp_list(request, fraction_slug=None):
                            if fraction_slug == fraction.slug else None)
         return fraction
 
-    fractions = map(set_klass, Group.objects.filter(type=Group.TYPE_FRACTION))
+    fractions = map(set_klass, Group.objects.filter(type=Group.TYPE_FRACTION,
+                                                    displayed=True))
 
     mps = ParliamentMember.objects.prefetch_related(
         Prefetch('groups',
                  queryset=Group.objects.filter(groupmembership__until=None,
-                                               type=Group.TYPE_FRACTION),
+                                               type=Group.TYPE_FRACTION,
+                                               displayed=True),
                  to_attr='current_fraction')
     )
 
@@ -104,7 +106,8 @@ def mp_profile(request, mp_slug):
             queryset=GroupMembership.objects.select_related('group').filter(
                 until=None,
                 group__type__in=(Group.TYPE_COMMITTEE,
-                                 Group.TYPE_COMMISSION)
+                                 Group.TYPE_COMMISSION),
+                group__displayed=True
             ),
             to_attr='committees'))
     mp_qs = mp_qs.prefetch_related(
@@ -112,14 +115,16 @@ def mp_profile(request, mp_slug):
             'groupmembership',
             queryset=GroupMembership.objects.select_related('group').filter(
                 until=None,
-                group__type=Group.TYPE_GROUP),
+                group__type=Group.TYPE_GROUP,
+                group__displayed=True),
             to_attr='other_groups'))
     mp_qs = mp_qs.prefetch_related(
         Prefetch(
             'groupmembership',
             queryset=GroupMembership.objects.select_related('group').filter(
                 until=None,
-                group__type=Group.TYPE_FRACTION),
+                group__type=Group.TYPE_FRACTION,
+                group__displayed=True),
             to_attr='_fraction'))
     mp = mp_qs.get(slug=mp_slug)
 
@@ -160,7 +165,6 @@ def mp_profile(request, mp_slug):
     context = {
         'profile': profile,
         'positions': positions,
-        'memberships': mp.other_group_memberships,
         'groups': mp.other_groups,
         'committees': mp.committees,
         'biography': mark_safe(mp.biography),

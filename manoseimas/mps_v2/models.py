@@ -55,7 +55,7 @@ class ParliamentMember(CrawledItem):
     @property
     def fraction(self):
         ''' Current parliamentarian's fraction. '''
-        if hasattr(self, '_fraction'):
+        if getattr(self, '_fraction'):
             return self._fraction[0].group
         else:
             membership = GroupMembership.objects.filter(
@@ -65,16 +65,10 @@ class ParliamentMember(CrawledItem):
             )[:]
 
             if membership:
-                self._fraction = [membership]
+                self._fraction = membership
                 return membership[0].group
             else:
                 return None
-
-    @property
-    def other_group_memberships(self):
-        # All not fraction groups
-        return GroupMembership.objects.filter(member=self)\
-            .exclude(group__type=Group.TYPE_FRACTION).select_related('group')
 
     def get_statement_count(self):
         return self.statements.filter(as_chairperson=False).count()
@@ -142,6 +136,7 @@ class Group(CrawledItem):
     slug = AutoSlugField(populate_from='name')
     type = models.CharField(max_length=64,
                             choices=GROUP_TYPES)
+    displayed = models.BooleanField(default=True)
 
     class Meta:
         unique_together = (('name', 'type'))
