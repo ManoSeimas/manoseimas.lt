@@ -116,7 +116,14 @@
     }
   }
 
-  .graph { width: 44%;}
+  .graph {
+    width: 44%;
+    h4 {
+      font-size: $big;
+      text-align: center;
+    }
+
+  }
   .info {
     width: 55%;
     padding-left: 10px;

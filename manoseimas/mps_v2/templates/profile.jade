@@ -3,7 +3,7 @@
 - load nodeurl from sboard
 
 - block title
-  | Petras Gražulis
+  | {{ profile.full_name }}
 
 
 - block middle
@@ -71,21 +71,21 @@
       .stats-box
         .pie
           .graph
-            img(src="{% static 'img/pie.png' %}")
+            h4.number {{stats.vote_percent|floatformat:0}}%
           .info
             .title: h3 Dalyvavimas balsavimuose
-        .rating: .ui.indicating.progress(data-percent="74"): .bar
+        .rating: .ui.indicating.progress(data-percent=ranking.votes_percentile): .bar
 
       .stats-box
         .two-numbers
           h3 Aktyvumas diskusijuose
           .block
-            h4.number 652
-            p.explanation pasisakymai (vid.)
+            h4.number {{ stats.statement_count }}
+            p.explanation pasisakymai
           .block
-            h4.number 89%
-            .explanation pasiūlytuose projektuose
-        .rating: .ui.indicating.progress(data-percent="74"): .bar
+            h4.number {{ stats.long_statement_percentage|floatformat:0 }}%
+            .explanation Ilgi pasisakymai (kalbos)
+        .rating: .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
 
       .stats-box
         .three-numbers

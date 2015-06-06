@@ -91,7 +91,7 @@ def mp_fraction(request, fraction_slug):
 
 
 def mp_profile(request, mp_slug):
-    mp = ParliamentMember.objects.get(slug=mp_slug)
+    mp = ParliamentMember.objects.select_related('ranking').get(slug=mp_slug)
 
     profile = {'full_name': mp.full_name}
     if mp.fraction:
@@ -109,9 +109,11 @@ def mp_profile(request, mp_slug):
     stats = {
         'statement_count': mp.get_statement_count(),
         'long_statement_count': mp.get_long_statement_count(),
+        'long_statement_percentage': mp.get_long_statement_percentage(),
         'contributed_discussion_percentage':
             mp.get_discussion_contribution_percentage(),
-        'votes': mp.votes
+        'votes': mp.votes,
+        'vote_percent': mp.get_vote_percentage(),
     }
 
     context = {
@@ -125,5 +127,8 @@ def mp_profile(request, mp_slug):
         'stats': stats,
         'photo_url': mp.photo.url,
         'statments': mp.all_statements,
+        'ranking': mp.ranking,
     }
+
+    import pdb; pdb.set_trace()
     return render(request, 'profile.jade', context)
