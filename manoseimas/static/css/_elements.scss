@@ -94,6 +94,21 @@
 
   .pie { padding: 12px 0 5px; }
 
+  .one-number {
+    height: 100px;
+    display: table;
+    .block {
+      display: table-cell;
+      vertical-align: middle;
+      width: 50%;
+      h4.number {
+        font-size: $big;
+        text-align: center;
+      }
+      .explanation { line-height: 1.3; font-size: $normal; }
+    }
+  }
+
   .two-numbers {
     .block { width: 50%; }
   }
@@ -103,6 +118,7 @@
   }
 
   .block {
+    vertical-align: middle;
     .number {
       text-align: center;
       font-size: $medium;
@@ -116,14 +132,7 @@
     }
   }
 
-  .graph {
-    width: 44%;
-    h4 {
-      font-size: $big;
-      text-align: center;
-    }
-
-  }
+  .graph { width: 44%; }
   .info {
     width: 55%;
     padding-left: 10px;

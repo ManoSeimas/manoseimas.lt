@@ -63,11 +63,9 @@
   .colored-bg
     .ui.zero.margin.page.grid
       .stats-box
-        .pie
-          .graph
-            h4.number {{stats.vote_percent|floatformat:0}}%
-          .info
-            .title: h3 Dalyvavimas balsavimuose
+        .one-number
+          .block: h4.number {{stats.vote_percent|floatformat:0}}%
+          .block: .explanation Dalyvavimas balsavimuose
         .rating: .ui.indicating.progress(data-percent=ranking.votes_percentile): .bar
 
       .stats-box
@@ -176,7 +174,8 @@
 
       .four.wide.column
         .sidebar
-          a(href="#").item.selected: h4 Pavasario sesija 2015
+          a(href="#").item.selected: h4 Visos sesijos
+          a(href="#").item: h4 Pavasario sesija 2015
           a(href="#").item: h4 Rudens sesija 2014
           a(href="#").item: h4 Pavasario sesija 2014
           a(href="#").item: h4 Rudens sesija 2013
