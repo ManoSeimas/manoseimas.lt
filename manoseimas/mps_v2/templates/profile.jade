@@ -37,22 +37,24 @@
             .ui.tab(data-tab="general")
               .info-block
                 .name Išrinktas:
-                .info Gargždų (Nr. 31) apygardoje
+                .info {{ profile.constituency }}
               .info-block
                 .name Iškėlė:
-                .info: b Partija Tvarka ir Teisingumas
+                .info: b {{ profile.raised_by }}
               .info-block
                 .name Frakcijos:
                 .info
-                  div
-                    a(href="{% url 'mp_fraction' profile.fraction_slug %}") Partija Tvarka ir Teisingumas
-                    | &nbsp; (nuo 2013-02-15)
-                  div
-                    a(href="{% url 'mp_fraction' profile.fraction_slug %}") Partija Tvarka ir Teisingumas
-                    | &nbsp; (nuo 2013-02-15)
-              .info-block
-                .name Biuro adresas:
-                .info Maironio g. 12-8, Raseiniai m., tel. 861201080. Vytauto g. 105, Ariogala m., 861201081.
+                  for fraction in all_fractions
+                    div
+                      a(href="{% url 'mp_fraction' fraction.group.slug %}") {{ fraction.group.name }}
+                      | &nbsp; (nuo {{ fraction.since }}
+                      if fraction.until
+                        | iki {{ fraction.until }}
+                      |)
+              if profile.office_address
+                .info-block
+                  .name Biuro adresas:
+                  .info {{ profile.office_address }}
 
           .column.biography
             h2 Biografija

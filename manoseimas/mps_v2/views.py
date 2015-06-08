@@ -98,7 +98,7 @@ def mp_fraction(request, fraction_slug):
 
 
 def mp_profile(request, mp_slug):
-    mp_qs = ParliamentMember.objects.select_related('ranking')
+    mp_qs = ParliamentMember.objects.select_related('ranking', 'raised_by')
 
     mp_qs = mp_qs.prefetch_related(
         Prefetch(
@@ -128,12 +128,25 @@ def mp_profile(request, mp_slug):
             to_attr='_fraction'))
     mp = mp_qs.get(slug=mp_slug)
 
+    mp_qs = mp_qs.prefetch_related(
+        Prefetch(
+            'groupmembership',
+            queryset=GroupMembership.objects.select_related('group').filter(
+                group__type=Group.TYPE_FRACTION,
+                group__displayed=True).order_by('-since'),
+            to_attr='all_fractions'))
+    mp = mp_qs.get(slug=mp_slug)
+
     profile = {'full_name': mp.full_name}
     if mp.fraction:
         profile["fraction_name"] = mp.fraction.name
         profile["fraction_slug"] = mp.fraction.slug
     else:
         profile["fraction_name"] = None
+
+    profile['raised_by'] = mp.raised_by.name
+    profile['office_address'] = mp.office_address
+    profile['constituency'] = mp.constituency
 
     try:
         mp_node = couch.view('sboard/by_slug', key=mp.slug).one()
@@ -166,6 +179,7 @@ def mp_profile(request, mp_slug):
         'profile': profile,
         'positions': positions,
         'groups': mp.other_groups,
+        'all_fractions': mp.all_fractions,
         'committees': mp.committees,
         'biography': mark_safe(mp.biography),
         'stats': stats,
