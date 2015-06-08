@@ -48,6 +48,14 @@ def mp_list(request, fraction_slug=None):
         mps = mps.filter(groups=fraction, groupmembership__until=None)
 
     mps = map(extract, mps)
+    mps_paginator = Paginator(mps, 24)
+    mps_page = request.GET.get('page')
+    try:
+        mps = mps_paginator.page(mps_page)
+    except PageNotAnInteger:
+        mps = mps_paginator.page(1)
+    except EmptyPage:
+        mps = mps_paginator.page(mps_paginator.num_pages)
 
     context = {
         'mps': mps,
