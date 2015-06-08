@@ -39,6 +39,7 @@ def index(request):
         })
 
     fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
+    fractions = sorted(fractions, key=lambda f: f.active_member_count, reverse=True)
     context = {
         'recent_votings': recent,
         'fractions': fractions
