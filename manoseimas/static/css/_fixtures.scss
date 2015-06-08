@@ -12,6 +12,9 @@
   .bordered.twelve.wide.column {
     border-right: 1px dashed $grayLite;
   }
+
+  a.dropdown-toggle { color: $textColor;}
+
 }
 
 .ui.checkbox label { padding-left: .7em; }

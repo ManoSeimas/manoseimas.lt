@@ -1,4 +1,6 @@
 - load static from staticfiles
+- load i18n
+- load sboard
 
 header.ui.page.grid
   .computer.tablet.only.row
@@ -13,13 +15,26 @@ header.ui.page.grid
               i.search.link.icon
 
           .ui.dropdown.item
-            i.user.icon
-            | Prisijungti
-            i.dropdown.icon
-            .menu
-              a.item Google
-              a.item Facebook
-              a.item OpenID
+            if request.user.is_authenticated
+              - nodeimage request.user.get_profile.get_node 'small'
+              | {{ request.user|truncatechars:26 }}
+              i.dropdown.icon
+              .menu
+                a(href="{{ request.user.get_profile.get_node.permalink }}")
+                  i.icon-user
+                  | {% trans "Profile" %}
+                a(href="{% url 'logout' %}")
+                  i.icon-off
+                  | {% trans "Log out" %}
+            else
+              i.user.icon
+              | Prisijungti
+              i.dropdown.icon
+              .menu
+                a.item(href="{% url 'socialauth_begin' 'google' %}") Google
+                if FACEBOOK_APP_ID
+                  a.item(href="{% url 'socialauth_begin' 'facebook' %}") Facebook
+                a.item(href="{% url 'login' %}") OpenID
 
   .mobile.only.row
     .ui.pointing.small.menu.fixed

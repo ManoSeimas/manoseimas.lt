@@ -1,0 +1,58 @@
+- load static from staticfiles
+- load i18n
+- load sboard
+
+header.ui.page.grid
+  .computer.tablet.only.row
+    .row
+      .ui.pointing.menu.fixed
+        a(href="/"): img(src="{% static 'img/logo.png' %}").logo
+
+        .right.menu
+          .item
+            .ui.icon.input
+              input(placeholder="Search..." type="search")
+              i.search.link.icon
+
+          .ui.item
+            if request.user.is_authenticated
+              .dropdown
+                a(href="#" data-toggle="dropdown").dropdown-toggle
+                  - nodeimage request.user.get_profile.get_node 'small'
+                  | {{ request.user|truncatechars:26 }}
+                  i.caret
+              ul.dropdown-menu
+                li
+                  a(href="{{ request.user.get_profile.get_node.permalink }}")
+                    i.icon-user
+                    | {% trans "Profile" %}
+                li
+                  a(href="{% url 'logout' %}")
+                    i.icon-off
+                    | {% trans "Log out" %}
+            else
+              .dropdown
+                a(data-toggle="dropdown").dropdown-toggle
+                  i.user.icon
+                  | {% trans "Log in" %}
+                  i.caret
+
+                ul.dropdown-menu
+                  li: a(href="{% url 'socialauth_begin' 'google' %}")
+                    | {% trans "Google" %}
+                  if FACEBOOK_APP_ID
+                    li: a(href="{% url 'socialauth_begin' 'facebook' %}")
+                      | {% trans "Facebook" %}
+                  li: a(href="{% url 'login' %}")
+                    | {% trans "OpenID" %}
+
+  .mobile.only.row
+    .ui.pointing.small.menu.fixed
+      a(href="/"): img(src="{% static 'img/logo.png' %}").logo-small
+      .right.menu
+        .ui.dropdown.item
+          i.content.icon
+          .menu
+            a.item Google
+            a.item Facebook
+            a.item OpenID

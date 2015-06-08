@@ -30,7 +30,8 @@ html(lang=en)
       script(src="{% static 'js/semantic_initializers.js' %}")
 
   body
-    - include "snippets/header.jade" with title="Home"
+    - block header
+      - include "snippets/header.jade"
 
     div#main-block
       - block middle
@@ -45,7 +46,5 @@ html(lang=en)
                 | {% endblock %}
 
     - include "snippets/footer.jade" with title="Home"
-
-
 
   | {% block inlinejs %}{% endblock %}
