@@ -26,10 +26,10 @@ from sboard.tests import NodesTestsMixin
 
 from manoseimas.legislation.management.commands.syncsittings import RawVoting
 from manoseimas.mps.models import MPProfile
-from manoseimas.scrapy.tests.mps import parse_mp
-from manoseimas.scrapy.tests.pipeline import FakePipeline
-from manoseimas.scrapy.tests.sittings import parse_question
-from manoseimas.scrapy.tests.sittings import parse_voting
+from manoseimas.scrapy.tests.test_mps import parse_mp
+from manoseimas.scrapy.tests.test_pipeline import FakePipeline
+from manoseimas.scrapy.tests.test_sittings import parse_question
+from manoseimas.scrapy.tests.test_sittings import parse_voting
 
 import manoseimas.legislation.management.commands.syncsittings as syncsittings
 import manoseimas.mps.management.commands.syncmps as syncmps
