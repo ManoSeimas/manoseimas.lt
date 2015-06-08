@@ -68,6 +68,7 @@ def mp_list(request, fraction_slug=None):
 
 def mp_fraction_list(request):
     fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
+    fractions = sorted(fractions, key=lambda f: f.active_member_count, reverse=True)
     return render(request, 'fraction_list.jade', {'fractions': fractions})
 
 
