@@ -194,6 +194,10 @@ class StenogramTopic(Item):
                  output_processor=processor.TakeFirst())
     title = Field()
     sitting_no = Field()
+    sitting_name = Field()
+
+    session = Field(input_processor=processor.Identity(),
+                    output_processor=processor.TakeFirst())
 
     source = Field(input_processor=processor.Identity(),
                    output_processor=processor.TakeFirst())

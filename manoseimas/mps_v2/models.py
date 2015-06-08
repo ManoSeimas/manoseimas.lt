@@ -200,6 +200,7 @@ class Stenogram(CrawledItem):
     date = models.DateField()
     sitting_no = models.IntegerField()
     sitting_name = models.TextField(blank=True, null=True)
+    session = models.CharField(max_length=64, blank=True, null=True)
 
     def __unicode__(self):
         return u'{} Nr. {}'.format(self.date, self.sitting_no)

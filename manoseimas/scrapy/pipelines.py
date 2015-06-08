@@ -149,6 +149,8 @@ class ManoSeimasModelPersistPipeline(object):
             defaults={
                 'date': item['date'],
                 'sitting_no': item['sitting_no'],
+                'sitting_name': item.get('sitting_name'),
+                'session': item.get('session'),
                 'source': source_url,
             }
         )

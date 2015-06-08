@@ -282,6 +282,10 @@ class StenogramSpider(ManoSeimasSpider):
             meta['session_no'] = roman.fromRoman(session_match[0])
             meta['session_season'] = session_match[1].title()
 
+            if 'date' in meta:
+                meta['session'] = '{} {}'.format(meta['date'].year,
+                                                 meta['session_season'])
+
         return meta
 
     def parse_stenogram(self, response):
@@ -299,9 +303,11 @@ class StenogramSpider(ManoSeimasSpider):
                 loader.add_value('date', datetime.combine(meta['date'],
                                                           topic['time']))
                 loader.add_value('sitting_no', meta['sitting_no'])
+
                 loader.add_value('statements', topic['statements'])
                 loader.add_value('source', meta['source'])
                 loader.add_value('_id', meta['_id'])
+                loader.add_value('session', meta.get('session'))
             except KeyError:
                 pass
             else:

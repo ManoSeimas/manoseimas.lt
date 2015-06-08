@@ -220,6 +220,7 @@ class StenogramCrawlerTestCase(unittest.TestCase):
             'sitting_time': 'Rytinio',
             'session_no': 6,
             'session_season': 'Pavasario',
+            'session': '2015 Pavasario',
         }, parsed)
 
     def test_parse_stenogram(self):
