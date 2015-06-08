@@ -23,11 +23,9 @@
   .colored-bg
     .ui.zero.margin.page.grid
       .stats-box
-        .pie
-          .graph
-            img(src="{% static 'img/pie.png' %}")
-          .info
-            .title: h3 Dalyvavimas balsavimuose
+        .one-number
+          .block: h4.number {{fraction.get_avg_vote_percentage|floatformat:0}}%
+          .block: .explanation Dalyvavimas balsavimuose
         .rating: .ui.indicating.progress(data-percent=fraction.ranking.votes_percentile): .bar
 
       .stats-box
