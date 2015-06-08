@@ -30,5 +30,8 @@
           a(href="{% url 'mp_list_all' %}" class=all_klass).item: h4 Visi parlamentarai
           for fraction in fractions
             a(href="{% url 'mp_list_fraction' fraction.slug %}" class=fraction._klass).item
-              img(src="{% static 'img/fractions/lsdp.png' %}").logo
+              if fraction.logo
+                img(src="{{ fraction.logo.url }}")
+              else
+                img(src="{% static 'img/fractions/lsdp.png' %}")
               .title: h4 {{fraction.name}}

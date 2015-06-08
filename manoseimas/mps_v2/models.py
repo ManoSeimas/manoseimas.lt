@@ -5,6 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from sboard.models import NodeForeignKey
 
+from manoseimas.utils import reify
+
 
 class CrawledItem(models.Model):
     source = models.URLField()
@@ -137,6 +139,8 @@ class Group(CrawledItem):
     type = models.CharField(max_length=64,
                             choices=GROUP_TYPES)
     displayed = models.BooleanField(default=True)
+    logo = models.ImageField(upload_to='fraction_logos',
+                             blank=True, null=True)
 
     class Meta:
         unique_together = (('name', 'type'))
@@ -147,6 +151,10 @@ class Group(CrawledItem):
     @property
     def active_members(self):
         return self.members.filter(groupmembership__until=None)
+
+    @reify
+    def active_member_count(self):
+        return self.active_members.count()
 
     def get_avg_statement_count(self):
         agg = self.active_members.annotate(

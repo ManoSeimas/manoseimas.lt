@@ -11,7 +11,10 @@
     .ui.page.grid
       .center.aligned.four.wide.column
         .logo-box
-          img(src="{% static 'img/fractions/lsdp.png' %}")
+          if fraction.logo
+            img(src="{{ fraction.logo.url }}")
+          else
+            img(src="{% static 'img/fractions/lsdp.png' %}")
       .twelve.wide.column
         .title
           h1 {{ fraction.name }}
