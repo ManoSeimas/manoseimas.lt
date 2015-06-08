@@ -37,19 +37,14 @@ class reify(object):
     replacing the function it decorates with an instance variable.  It is, in
     Python parlance, a non-data descriptor.  An example:
 
-    .. code-block:: python
-
-       class Foo(object):
-           @reify
-           def jammy(self):
-               print('jammy called')
-               return 1
-
-    And usage of Foo:
-
+    >>> class Foo(object):
+    ...     @reify
+    ...     def jammy(self):
+    ...         print('jammy called')
+    ...         return 1
     >>> f = Foo()
     >>> v = f.jammy
-    'jammy called'
+    jammy called
     >>> print(v)
     1
     >>> f.jammy
