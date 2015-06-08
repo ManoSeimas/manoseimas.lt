@@ -142,7 +142,7 @@ def mp_profile(request, mp_slug):
         positions = None
 
     all_statements = StenogramStatement.objects.select_related(
-        'topic').filter(speaker=mp)
+        'topic').filter(speaker=mp).order_by('-topic__timestamp', '-pk')
     statement_paginator = Paginator(all_statements, 10)
     statement_page = request.GET.get('page')
     try:
