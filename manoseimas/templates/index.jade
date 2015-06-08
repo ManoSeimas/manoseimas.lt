@@ -24,7 +24,10 @@
     .ui.page.grid.fraction
       for fraction in fractions
         .fraction.box
-          img(src="{% static 'img/fractions/fraction-default.png' %}")
+          if fraction.logo
+            img(src="{{ fraction.logo.url }}")
+          else
+            img(src="{% static 'img/fractions/fraction-default.png' %}")
           .info
             h2: a(href="{% url 'mp_fraction' fraction.slug %}") {{fraction.name}}
             p {{fraction.members.count}} {% lt_pluralize fraction.members.count 'narys' 'nariai' 'narių' %}
