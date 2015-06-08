@@ -1,0 +1,127 @@
+- extends "new_base.jade"
+- load i18n
+- load lt_pluralize
+- load sboard
+- load static from staticfiles
+
+- block title
+  | Mano Seimas - stebėk seimo narių veiklą.
+
+- block middle
+  .photo-box.index
+    .ui.page.grid
+      .doubling.one.column.row
+        .column.center.aligned
+          img(src="{% static 'img/logo-white.png' %}").logo
+          h1.title Stebėk kaip dirba seimo nariai
+
+  .colored-bg
+    .ui.zero.margin.center.aligned.grid
+      .switcher
+        a.item.active Frakcijos
+        a(href="{% url 'mp_list_all' %}").item Parlamentarai
+
+    .ui.page.grid.fraction
+      for fraction in fractions
+        .fraction.box
+          img(src="{% static 'img/fractions/fraction-default.png' %}")
+          .info
+            h2: a(href="{% url 'mp_fraction' fraction.slug %}") {{fraction.name}}
+            p {{fraction.members.count}} {% lt_pluralize fraction.members.count 'narys' 'nariai' 'narių' %}
+
+
+  #middle.index: .section
+    a(target='_blank' href='https://www.aukok.lt/Projektai/Manoseimas-lt').donate Paremk!
+    h2.heading Naujausi balsavimai
+
+    .widget
+      iframe#widget-frame(src="{% url 'widget_index' %}?voting_id={{ recent_votings.0.votings.0.id }}", scrolling='no')
+
+      .sidepanel
+        .search-container
+          form
+            input(type='text', placeholder='Ieškokite balsavimų')
+            input.submit.icon-search(type='submit', value='')
+        .search-results
+          .close ✕
+          h2 Search Results
+          ul.listings
+            li.loading Loading...
+
+        #recent-votings-accordion.accordion.recent-votings
+          for day in recent_votings
+            .accordion-group
+              .accordion-heading
+                a.accordion-toggle(data-toggle="collapse", data-parent="#recent-votings-accordion", href="#recent-day-{{ forloop.counter }}")
+                  | {{ day.date|date:"l, Y F, j" }} d.
+
+              div(id="recent-day-{{ forloop.counter }}").accordion-body.collapse
+                .accordion-inner
+                  ul.listings
+                    for rv in day.votings
+                      if forloop.parentloop.first and forloop.first
+                        li(title="{{rv.title}}" data-voting="{{rv.id}}").active
+                          .title {{ rv.title }}
+                          .time {{ rv.date|time:"H:i" }}
+                      else
+                        li(title="{{rv.title}}" data-voting="{{rv.id}}")
+                          .title {{ rv.title }}
+                          .time {{ rv.date|time:"H:i" }}
+
+
+      .widget-box
+        h3 Įsidėkite šį valdiklį (widget) į savo svetainę!
+        img(src="{% static 'img/widget_include.png' %}")
+        div: a(href="/widget/builder").ui.green.wide.button Skaityti instrukciją
+
+
+  .colored-bg
+    .ui.center.aligned.stackable.page.grid
+      .twelve.wide.column
+        .test-box
+          h2 Politinio suderinamumo testas
+          p.text-muted Atlik testą, sudarytą iš svarbiausių 2008-2012 m. Seime vykusių   balsavimų, ir sužinok, kurie Seimo nariai ir partijos balsavo taip, kaip   balsuotum tu.
+          a(href="/testas/").ui.green.wide.button Pradėti testą
+
+
+
+  script(src="{% static 'bootstrap.min.js' %}")
+  script(type='text/javascript')
+    jQuery(function ($) {
+        $(".recent-votings .collapse").collapse();
+
+        $("ul.listings").on('click', 'li', function (e) {
+            var voting = $(this).data("voting");
+            var widget_url = location.protocol + '//' + location.host + '/widget?voting_id=' + voting;
+            $("#widget-frame").attr('src', widget_url);
+
+            $("ul.listings li").removeClass('active');
+            $(this).addClass('active');
+
+        });
+
+        $(".search-container form").submit(function (e) {
+            e.preventDefault();
+
+            $(".search-results").show();
+            $(".recent-votings").hide();
+
+            var val = $(".search-container input[type=text]").val();
+            $.getJSON("/search.json?q="+val, function (results) {
+                var container = $(".search-results .listings");
+                container.empty();
+                $.each(results, function (i, r) {
+                    if (r.type == 'Voting' && r.documents && r.documents.length > 0) {
+                        var matches = r.created.match(/^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2})/);
+                        container.append("<li title='"+r.documents[0].name+"' data-voting='"+r.id+"'><div class='title'>"+r.documents[0].name+"</div><div class='time'>"+(matches?matches[1]+"<br/>"+matches[2]:"")+"</div></li>");
+                    }
+                });
+
+            });
+        });
+
+        $(".search-results .close").click(function (e) {
+            $(".search-results").hide();
+            $(".recent-votings").show();
+        });
+    });

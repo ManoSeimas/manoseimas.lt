@@ -6,6 +6,7 @@ from django.shortcuts import render
 from decorators import ajax_request
 
 from manoseimas.votings.models import get_recent_votings
+from manoseimas.mps_v2.models import Group
 
 from sboard.nodes import search_words_re
 from sboard.models import couch
@@ -14,17 +15,18 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def index(request):
     day = None
     recent = []
-    last_date = "";
+    last_date = ""
     for v in get_recent_votings(100):
         date = v.created.date()
         if date != last_date:
             if len(recent) >= 7:
                 break
 
-            day = { 'date': date, 'votings': [] }
+            day = {'date': date, 'votings': []}
             recent.append(day)
 
         last_date = date
@@ -36,18 +38,22 @@ def index(request):
             'date': v.created
         })
 
-    params = { 
-        'recent_votings': recent
+    fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
+    context = {
+        'recent_votings': recent,
+        'fractions': fractions
     }
-    return render(request, 'index.html', params)
+    return render(request, 'index.jade', context)
+
 
 def normalize_search(value):
     r = unidecode.unidecode(value)
     return r.lower()
 
+
 @ajax_request('GET')
 def ajax_search(request):
-    qry = normalize_search( request.GET.get('q'))
+    qry = normalize_search(request.GET.get('q'))
     qry = search_words_re.split(qry)
     qry = filter(None, qry)
     if len(qry):
@@ -68,10 +74,10 @@ def ajax_search(request):
                      docs.append(doc)
 
                r['documents'] = docs
-           
+
             results.append(r)
         return results
-            
+
     else:
         return []
 

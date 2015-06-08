@@ -10,45 +10,14 @@
   margin: 1rem 0;
 }
 
-.widget {
-  margin: 1em auto 5em auto;
-  top: 40px;
-  position: relative;
-  text-align: center;
-
-}
-
-.widget-box {
-  margin: -1em auto 1.8rem auto;
-  min-height: 21rem;
-  display: block;
-  position: relative;
-  text-align: center;
-  border-radius: 0 0 5px 5px;
-  border: 1px dashed $grayLite;
-  border-top: none;
-  width: 67em;
-  padding: 2em;
-
-  h3 {
-    font-size: 24px;
-    font-weight: normal;
-    color: $msGreen;
-    margin-bottom: 20px;
-  }
-
-  img {
-    width: 500px;
-    display: inline-block;
-
-  }
-}
-
 .test-box {
-  margin: 2em 0;
+  margin: 3em 0;
   p {
     margin: auto;
     width: 35em;
+  }
+  .ui.green.wide.button {
+    margin-top: 1.5em;
   }
 }
 

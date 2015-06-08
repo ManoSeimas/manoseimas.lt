@@ -647,7 +647,7 @@ header {
 
   .section {
     position: relative;
-    max-width: 940px;
+    max-width: 990px;
     margin: 30px auto;
   }
 
@@ -672,7 +672,7 @@ header {
         vertical-align: top;
         border: 0;
         height: 625px;
-        width: 535px;
+        width: 560px;
         overflow: hidden;
     }
 
@@ -765,9 +765,33 @@ header {
                     padding: 0 15px 0 0;
                     text-overflow: ellipsis;
                 }
-
             }
         }
+    }
+
+    .widget-box {
+      margin: -1em auto 1.8rem auto;
+      min-height: 21rem;
+      display: block;
+      position: relative;
+      text-align: center;
+      border-radius: 0 0 5px 5px;
+      border: 1px dashed $grayLite;
+      border-top: none;
+      width: 964px;
+      padding: 2em;
+
+      h3 {
+        font-size: 24px;
+        font-weight: normal;
+        color: $msGreen;
+        margin-bottom: 20px;
+      }
+
+      img {
+        width: 500px;
+        display: inline-block;
+      }
     }
 
     .search-results {
@@ -875,35 +899,7 @@ header {
         max-width: 540px;
     }
 
-    .button {
-        display: inline-block;
-        min-width: 400px;
-        background-color: $grayish;
-        font-size: 18px;
-        color: white;
-        text-decoration: none;
-        padding: 10px 0;
-        @include border-radius(4px);
-        font-weight: 300;
-        margin-right: 15px;
-
-        border: 4px solid white;
-
-        &:hover {
-            background-color: lighten($grayish, 10%);
-        }
-
-        &.green {
-            background-color: $greenish;
-            &:hover {
-                background-color: lighten($greenish, 10%);
-            }
-        }
-
-        &.strong {
-            font-weight: 400;
-        }
-    }
+    .button { min-width: 400px; }
 
     a.video {
         position: absolute;

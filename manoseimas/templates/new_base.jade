@@ -23,9 +23,11 @@ html(lang=en)
       link(rel="stylesheet", type="text/x-scss", href="{% static 'css/styles.scss' %}")
       link(rel="stylesheet", type="text/x-scss", href="{% static 'main.scss' %}")
 
-    script(src="http://code.jquery.com/jquery.js")
+    script(src="{% static 'jquery.min.js' %}")
     script(src="{% static 'semantic/semantic.min.js' %}")
-    script(src="{% static 'js/semantic_initializers.js' %}")
+    - compress js
+      script(src="{% static 'js/manoSeimas.js' %}", type="text/javascript", charset="utf-8")
+      script(src="{% static 'js/semantic_initializers.js' %}")
 
   body
     - include "snippets/header.jade" with title="Home"
@@ -43,5 +45,7 @@ html(lang=en)
                 | {% endblock %}
 
     - include "snippets/footer.jade" with title="Home"
+
+
 
   | {% block inlinejs %}{% endblock %}
