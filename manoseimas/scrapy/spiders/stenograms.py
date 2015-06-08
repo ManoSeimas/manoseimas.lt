@@ -6,6 +6,8 @@ from scrapy.contrib.linkextractors.lxmlhtml import LxmlLinkExtractor
 from scrapy.contrib.spiders import Rule
 from scrapy.selector import Selector
 
+import roman
+
 from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.loaders import Loader
@@ -35,6 +37,8 @@ month_names_map = {
 date_re = re.compile(r'(\d{4})\s+m\.\s+(\w+)\s+(\d{1,2})\s+d\.',
                      re.UNICODE)
 sitting_no_re = re.compile(r'.*NR.\s(\d+)', re.UNICODE)
+session_re = re.compile(r'\s*([IXV]+)\s+\((\w+)\)\s*SESIJOS',
+                        re.UNICODE)
 
 
 def as_statement(paragraph):
@@ -266,6 +270,11 @@ class StenogramSpider(ManoSeimasSpider):
         sitting_no_match = meta_xs.re(sitting_no_re)
         if sitting_no_match:
             meta['sitting_no'] = sitting_no_match[0]
+        session_match = meta_xs.re(session_re)
+        if session_match:
+            meta['session_no'] = roman.fromRoman(session_match[0])
+            meta['session_season'] = session_match[1].title()
+
         return meta
 
     def parse_stenogram(self, response):

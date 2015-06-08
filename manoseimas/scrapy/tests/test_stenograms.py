@@ -204,6 +204,23 @@ class StenogramCrawlerTestCase(unittest.TestCase):
         topics = self.spider._group_topics(self.parsed_paras)
         self.assertEqual(self.grouped_topics, topics)
 
+    def test_parse_meta(self):
+        sel = Selector(self.partial_response)
+        meta_xs = sel.xpath('/html/body/div[@class="WordSection1"]')
+        parsed = self.spider._parse_stenogram_meta(self.partial_response, meta_xs)
+        self.assertEqual({
+            'source': {
+                'url': 'http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=1034324',
+                'id': '1034324',
+                'name': 'lrslt',
+            },
+            '_id': '1034324',
+            'date': datetime.date(2015, 5, 21),
+            'sitting_no': '248',
+            'session_no': 6,
+            'session_season': 'Pavasario',
+        }, parsed)
+
     def test_parse_stenogram(self):
         items = list(self.spider.parse_stenogram(self.response))
         self.assertEqual(20, len(items))

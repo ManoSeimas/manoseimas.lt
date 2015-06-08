@@ -38,6 +38,7 @@ setup(
         'six',
         'leveldb',
         'tqdm',
+        'roman',
     ],
     entry_points={
         'console_scripts': [
