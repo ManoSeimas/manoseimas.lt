@@ -36,6 +36,8 @@ month_names_map = {
 
 date_re = re.compile(r'(\d{4})\s+m\.\s+(\w+)\s+(\d{1,2})\s+d\.',
                      re.UNICODE)
+sitting_re = re.compile(ur'\s*(\w+)\s+POSĖDŽIO.*NR.\s(\d+)',
+                        re.UNICODE | re.IGNORECASE)
 sitting_no_re = re.compile(r'.*NR.\s(\d+)', re.UNICODE)
 session_re = re.compile(r'\s*([IXV]+)\s+\((\w+)\)\s*SESIJOS',
                         re.UNICODE)
@@ -267,9 +269,14 @@ class StenogramSpider(ManoSeimasSpider):
             month = month_names_map[date_match[1]]
             day = int(date_match[2])
             meta['date'] = date(year, month, day)
-        sitting_no_match = meta_xs.re(sitting_no_re)
-        if sitting_no_match:
-            meta['sitting_no'] = sitting_no_match[0]
+        sitting_match = meta_xs.re(sitting_re)
+        if sitting_match:
+            meta['sitting_time'] = sitting_match[0].title()
+            meta['sitting_no'] = sitting_match[1]
+        else:
+            sitting_no_match = meta_xs.re(sitting_no_re)
+            if sitting_no_match:
+                meta['sitting_no'] = sitting_no_match[0]
         session_match = meta_xs.re(session_re)
         if session_match:
             meta['session_no'] = roman.fromRoman(session_match[0])

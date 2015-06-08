@@ -217,6 +217,7 @@ class StenogramCrawlerTestCase(unittest.TestCase):
             '_id': '1034324',
             'date': datetime.date(2015, 5, 21),
             'sitting_no': '248',
+            'sitting_time': 'Rytinio',
             'session_no': 6,
             'session_season': 'Pavasario',
         }, parsed)
