@@ -10,9 +10,11 @@ header.ui.page.grid
 
         .right.menu
           .item
-            .ui.icon.input
-              input(placeholder="Search..." type="search")
-              i.search.link.icon
+            form(action="{% url 'search' %}" method="get")
+              .ui.icon.input
+                input(placeholder="Ieškok politikų, temų, argumentų", type="text", name="q").long-search-box
+                i.search.link.icon
+
 
           .ui.dropdown.item
             if request.user.is_authenticated
@@ -43,6 +45,7 @@ header.ui.page.grid
         .ui.dropdown.item
           i.content.icon
           .menu
-            a.item Google
-            a.item Facebook
-            a.item OpenID
+            a.item(href="{% url 'socialauth_begin' 'google' %}") Google
+            if FACEBOOK_APP_ID
+              a.item(href="{% url 'socialauth_begin' 'facebook' %}") Facebook
+            a.item(href="{% url 'login' %}") OpenID

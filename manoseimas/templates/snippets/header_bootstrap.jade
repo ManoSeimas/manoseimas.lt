@@ -10,9 +10,10 @@ header.ui.page.grid
 
         .right.menu
           .item
-            .ui.icon.input
-              input(placeholder="Search..." type="search")
-              i.search.link.icon
+            form(action="{% url 'search' %}" method="get")
+              .ui.icon.input
+                input(placeholder="Ieškok politikų, temų, argumentų", type="text", name="q").long-search-box
+                i.search.link.icon
 
           .ui.item
             if request.user.is_authenticated
