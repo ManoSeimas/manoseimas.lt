@@ -15,7 +15,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'manoseimas.views.index'),  # noqa
     url(r'^search.json$', 'manoseimas.views.ajax_search'),
-    url(r'^accounts/', include('social_auth.urls')),
+    url(r'^accounts/', include('social.apps.django_app.urls',
+                               namespace='social')),
     url(r'^accounts/', include('sboard.profiles.urls')),
 
     url(r'^widget/', include('manoseimas.widget.urls')),

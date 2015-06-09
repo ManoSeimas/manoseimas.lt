@@ -8,7 +8,7 @@ setup(
     install_requires=[
         'Pillow',
         'django',
-        'django-social-auth',
+        'python-social-auth',
         'sorl-thumbnail',
         'couchdbkit',
         'django-sboard',
