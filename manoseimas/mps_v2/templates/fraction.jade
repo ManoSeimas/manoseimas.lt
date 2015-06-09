@@ -26,7 +26,8 @@
         .one-number
           .block: h4.number {{fraction.get_avg_vote_percentage|floatformat:0}}%
           .block: .explanation Dalyvavimas balsavimuose
-        .rating: .ui.indicating.progress(data-percent=fraction.ranking.votes_percentile): .bar
+        .rating(data-title="Geriau negu {{fraction.ranking.votes_percentile}}%" data-content="Palyginimas su kitom seimo frakcijom. Kuo daugiau procentų tuo geriau.")
+          .ui.indicating.progress(data-percent=fraction.ranking.votes_percentile): .bar
 
       .stats-box
         .two-numbers

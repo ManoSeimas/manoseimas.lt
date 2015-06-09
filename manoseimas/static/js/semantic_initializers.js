@@ -4,7 +4,8 @@ $(document).ready(function() {
   $('.ui.indicating.progress').progress({showActivity: false});
   $('.ui.sticky').sticky({context: '.parliamentarians'});
   $('.tabular.menu .item').tab();
-
+  $('.rating').popup();
+;
 
   $('.photo-box').visibility({
     once       : false,
