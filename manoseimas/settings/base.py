@@ -149,6 +149,7 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admin',
     'social_auth',
     'sorl.thumbnail',
     'couchdbkit.ext.django',

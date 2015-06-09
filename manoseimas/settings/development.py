@@ -37,7 +37,6 @@ AUTHENTICATION_BACKENDS += (
 )
 
 INSTALLED_APPS += (
-    'django.contrib.admin',
     'debug_toolbar',
 )
 
