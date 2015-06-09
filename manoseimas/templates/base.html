@@ -62,9 +62,9 @@
                 <i style="margin-top: 3px" class="icon-user"></i> {% trans "Log in" %}
                 <i class="caret"></i></a>
               <ul class="dropdown-menu">
-                <li><a href="{% url 'socialauth_begin' 'google' %}">{% trans "Google" %}</a></li>
+                <li><a href="{% url 'social:begin' 'google-oauth2' %}">{% trans "Google" %}</a></li>
                 {% if FACEBOOK_APP_ID %}
-                <li><a href="{% url 'socialauth_begin' 'facebook' %}">{% trans "Facebook" %}</a></li>
+                <li><a href="{% url 'social:begin' 'facebook-oauth2' %}">{% trans "Facebook" %}</a></li>
                 {% endif %}
                 <li><a href="{% url 'login' %}">{% trans "OpenID" %}</a></li>
               </ul>

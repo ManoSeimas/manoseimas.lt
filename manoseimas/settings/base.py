@@ -175,7 +175,7 @@ INSTALLED_APPS = (
 )
 
 MIGRATION_MODULES = {
-    'default': 'manoseimas.migrations.social_auth',
+    'default': 'manoseimas.migrations.python_social_auth',
     'profiles': 'manoseimas.migrations.sboard_profiles',
 }
 
