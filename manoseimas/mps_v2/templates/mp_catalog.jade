@@ -25,15 +25,15 @@
                 a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
 
         .ui.zero.margin.center.aligned.grid: .ui.pagination.menu
-          if mps.has_previous
-            a.item(href="?page={{ mps.previous_page_number }}")
+          if mp_page.has_previous
+            a.item(href="?page={{ mp_page.previous_page_number }}")
               i.left.arrow.icon
               | Atgal
 
-          .item {{ mps.number }} iš {{ mps.paginator.num_pages }}
+          .item {{ mp_page.number }} iš {{ mp_page.paginator.num_pages }}
 
-          if mps.has_next
-            a.item(href="?page={{ mps.next_page_number }}")
+          if mp_page.has_next
+            a.item(href="?page={{ mp_page.next_page_number }}")
               | Pirmyn
               i.icon.right.arrow
 

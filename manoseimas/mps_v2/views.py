@@ -47,18 +47,20 @@ def mp_list(request, fraction_slug=None):
             slug=fraction_slug)
         mps = mps.filter(groups=fraction, groupmembership__until=None)
 
-    mps = map(extract, mps)
     mps_paginator = Paginator(mps, 24)
-    mps_page = request.GET.get('page')
+    mps_page_num = request.GET.get('page')
     try:
-        mps = mps_paginator.page(mps_page)
+        mp_page = mps_paginator.page(mps_page_num)
     except PageNotAnInteger:
-        mps = mps_paginator.page(1)
+        mp_page = mps_paginator.page(1)
     except EmptyPage:
-        mps = mps_paginator.page(mps_paginator.num_pages)
+        mp_page = mps_paginator.page(mps_paginator.num_pages)
+
+    mps = map(extract, mp_page.object_list)
 
     context = {
         'mps': mps,
+        'mp_page': mp_page,
         'fractions': fractions,
         'all_klass': False if fraction_slug else 'selected'
     }
