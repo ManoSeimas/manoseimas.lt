@@ -153,7 +153,7 @@ def mp_profile(request, mp_slug):
     else:
         profile["fraction_name"] = None
 
-    profile['raised_by'] = mp.raised_by.name
+    profile['raised_by'] = mp.raised_by.name if mp.raised_by else None
     profile['office_address'] = mp.office_address
     profile['constituency'] = mp.constituency
 
