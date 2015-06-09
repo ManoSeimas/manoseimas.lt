@@ -10,6 +10,7 @@
     path: "{{ home }}/app"
     repo: https://github.com/manoseimas/manoseimas.lt
     vars: staging
+    git_ref: master
 
   vars_files:
     - vars/{{ vars }}.yml
@@ -122,7 +123,7 @@
   # Set up the app
 
   - name: clone repository
-    git: repo={{ repo }} dest={{ path }} version=master force=yes
+    git: repo={{ repo }} dest={{ path }} version={{ git_ref }} force=yes
     notify: reload source code
     sudo_user: "{{ name }}"
 
