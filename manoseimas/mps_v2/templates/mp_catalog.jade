@@ -30,7 +30,11 @@
               i.left.arrow.icon
               | Atgal
 
-          .item {{ mp_page.number }} iš {{ mp_page.paginator.num_pages }}
+          for page_num in mp_page.paginator.page_range
+            if page_num = mp_page.number
+              a.item.active(href="?page={{ page_num }}") {{ page_num }}
+            else
+              a.item(href="?page={{ page_num }}") {{ page_num }}
 
           if mp_page.has_next
             a.item(href="?page={{ mp_page.next_page_number }}")
