@@ -147,6 +147,10 @@
       PATH: "{{ path }}/manoseimas/widget/frontend/node_modules/.bin:{{ ansible_env.PATH }}"
     sudo_user: "{{ name }}"
 
+  - name: django compress
+    command: bin/django compress --extension=html,jade --force chdir={{ path }}
+    sudo_user: "{{ name }}"
+
   - name: collectstatic
     command: bin/django collectstatic --noinput chdir={{ path }}
     sudo_user: "{{ name }}"
