@@ -35,6 +35,12 @@ header {
   }
   form { margin: -9px 0;}
   input.long-search-box { width: 20em; }
+  .pointing.menu {
+    background-image: none;
+    background-color: rgba(255, 255, 255, 0.2);
+
+    input { background-color: inherit; }
+  }
 }
 
 

@@ -1,7 +1,8 @@
 // Photo boxes
 // -----------
 .photo-box {
-  margin-top: -2rem;
+  margin-top: -6rem;
+  padding-top: 6em;
 
   .title {
     color: $white;
@@ -30,7 +31,7 @@
   background: url(#{$staticRoot}/img/seimas.jpg);
   background-repeat: no-repeat;
   background-position: -00px -240px;
-  min-height: 18em;
+  min-height: 22em;
 
   .transparent-bg {
     margin: auto;
@@ -54,17 +55,33 @@
   background: url(#{$staticRoot}/img/frontpage-bg.png);
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 21.4em;
+  min-height: 25em;
+  padding-top: 5.5em;
 
   .title {
     margin-right: 1em;
+    font-weight: 300;
+    font-family: "Open Sans",sans-serif;
+    font-size: $big;
   }
+
+  .byline {
+    margin-top: 3em;
+    p {
+      font-size: $tiny;
+      color: $white;
+      margin-left: -2em;
+      margin-bottom: 0;
+    }
+  }
+  .column.center.aligned { padding-bottom: 1em; }
 }
 
 .photo-box.parliamentarian {
   background: url(#{$staticRoot}/img/seimas.jpg);
   background-position: center;
-  min-height: 35em;
+  min-height: 40em;
+  padding-top: 5em;
 
   .logo-box {
     padding-top: 3.5em;
@@ -96,7 +113,7 @@
 .photo-box.fraction {
   background: url(#{$staticRoot}/img/hall.png);
   background-position: top;
-  min-height: 20em;
+  min-height: 25em;
 
   .logo-box {
     background-color:rgba(255, 255, 255, 0.4);
