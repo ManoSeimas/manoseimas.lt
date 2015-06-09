@@ -150,7 +150,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    'social_auth',
+    'social.apps.django_app.default',
     'sorl.thumbnail',
     'couchdbkit.ext.django',
     'compressor',
@@ -175,7 +175,6 @@ INSTALLED_APPS = (
 )
 
 MIGRATION_MODULES = {
-    'social_auth': 'manoseimas.migrations.social_auth',
     'profiles': 'manoseimas.migrations.sboard_profiles',
 }
 
@@ -267,20 +266,9 @@ AUTH_PROFILE_MODULE = 'profiles.Profile'
 AUTH_USER_MODEL = 'manoseimas.ManoSeimasUser'
 
 AUTHENTICATION_BACKENDS = (
-    # 'social_auth.backends.twitter.TwitterBackend',
-    'social_auth.backends.facebook.FacebookBackend',
-    # 'social_auth.backends.google.GoogleOAuthBackend',
-    # 'social_auth.backends.google.GoogleOAuth2Backend',
-    'social_auth.backends.google.GoogleBackend',
-    # 'social_auth.backends.yahoo.YahooBackend',
-    # 'social_auth.backends.contrib.linkedin.LinkedinBackend',
-    # 'social_auth.backends.contrib.livejournal.LiveJournalBackend',
-    # 'social_auth.backends.contrib.orkut.OrkutBackend',
-    # 'social_auth.backends.contrib.foursquare.FoursquareBackend',
-    # 'social_auth.backends.contrib.github.GithubBackend',
-    # 'social_auth.backends.contrib.dropbox.DropboxBackend',
-    # 'social_auth.backends.contrib.flickr.FlickrBackend',
-    'social_auth.backends.OpenIDBackend',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.open_id.OpenIdAuth',
 )
 
 FACEBOOK_APP_ID = config.facebook_app_id

@@ -13,7 +13,7 @@ from manoseimas.votings.models import get_voting_by_source_id, get_voting_by_lrs
 
 from manoseimas.decorators import ajax_request
 
-from social_auth.views import auth
+from social.apps.django_app.views import auth
 
 import logging
 logger = logging.getLogger(__name__)

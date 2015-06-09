@@ -33,9 +33,9 @@ header.ui.page.grid
               | Prisijungti
               i.dropdown.icon
               .menu
-                a.item(href="{% url 'socialauth_begin' 'google' %}") Google
+                a.item(href="{% url 'social:begin' 'google-oauth2' %}") Google
                 if FACEBOOK_APP_ID
-                  a.item(href="{% url 'socialauth_begin' 'facebook' %}") Facebook
+                  a.item(href="{% url 'social:begin' 'facebook-oauth2' %}") Facebook
                 a.item(href="{% url 'login' %}") OpenID
 
   .mobile.only.row
@@ -45,7 +45,7 @@ header.ui.page.grid
         .ui.dropdown.item
           i.content.icon
           .menu
-            a.item(href="{% url 'socialauth_begin' 'google' %}") Google
+            a.item(href="{% url 'social:begin' 'google-oauth2' %}") Google
             if FACEBOOK_APP_ID
-              a.item(href="{% url 'socialauth_begin' 'facebook' %}") Facebook
+              a.item(href="{% url 'social:begin' 'facebook-oauth2' %}") Facebook
             a.item(href="{% url 'login' %}") OpenID

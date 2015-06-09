@@ -38,10 +38,10 @@ header.ui.page.grid
                   i.caret
 
                 ul.dropdown-menu
-                  li: a(href="{% url 'socialauth_begin' 'google' %}")
+                  li: a(href="{% url 'social:begin' 'google-oauth2' %}")
                     | {% trans "Google" %}
                   if FACEBOOK_APP_ID
-                    li: a(href="{% url 'socialauth_begin' 'facebook' %}")
+                    li: a(href="{% url 'social:begin' 'facebook-oauth2' %}")
                       | {% trans "Facebook" %}
                   li: a(href="{% url 'login' %}")
                     | {% trans "OpenID" %}
