@@ -41,10 +41,10 @@
             .ui.tab(data-tab="general")
               .info-block
                 .name Išrinktas:
-                .info {{ profile.constituency }}
+                .info {{ profile.constituency|default_if_none:'-' }}
               .info-block
                 .name Iškėlė:
-                .info: b {{ profile.raised_by }}
+                .info: b {{ profile.raised_by|default_if_none:'-' }}
               .info-block
                 .name Frakcijos:
                 .info
@@ -64,7 +64,7 @@
             h2 Biografija
 
             .bio-text
-              | {{biography}}
+              | {{ biography|default_if_none:'-' }}
 
   .colored-bg
     .ui.zero.margin.page.grid
