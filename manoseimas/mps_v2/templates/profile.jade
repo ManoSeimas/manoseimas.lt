@@ -91,11 +91,11 @@
         .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Palyginimas su kitų parlamentarų pasisakymų skaičiumi. 100% surenka šnekiausias parlamentaras.")
           .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
 
-      .stats-box.total
-        .stats
-          h3 40%
-          .explanation bendras aktyvumas
-        .vertical-progress: .bar: .text
+      //- .stats-box.total
+      //-   .stats
+      //-     h3 40%
+      //-     .explanation bendras aktyvumas
+      //-   .vertical-progress: .bar: .text
 
   if positions.for or positions.against or positions.neutral
     .decisions
@@ -130,10 +130,15 @@
     a(name="transcripts")
     a(name='stenogram_section')
     .ui.stackable.page.grid
-      .nine.wide.column
+      .eight.wide.column
         h2 Seimo posedžių stenogramos
 
-      .seven.wide.column
+      .eight.wide.column
+        .stats-box.transcripts-total
+          h4.explanation Pasisako dažniau negu
+          .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Palyginimas su kitų parlamentarų pasisakymų skaičiumi. 100% surenka šnekiausias parlamentaras.")
+            .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar {{ranking.statement_count_percentile}}%
+
         .stats-box.horisontal
           .three-numbers
             .block

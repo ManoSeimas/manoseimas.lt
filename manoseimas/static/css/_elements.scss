@@ -167,9 +167,36 @@
 }
 
 .stats-box.horisontal {
-  width: 300px;
+  width: 270px;
   font-size: $small;
   padding: .5em 1em .2em 1em;
+  float: right;
+}
+
+.stats-box.transcripts-total {
+  width: 160px;
+  border: 0;
+  padding-right: 0;
+  padding-left: 0;
+  padding-top: .5em;
+  margin: 0 0 0 1em;
+
+  h4.explanation {
+    font-size: $small;
+    line-height: 1.2;
+    margin-bottom: .1em;
+  }
+
+  .rating {
+    .progress {
+      .bar {
+        background-color: $msBlue !important;
+        color: $white;
+        font-size: $small;
+        padding-top: .3em;
+      }
+    }
+  }
 }
 
 .stats-box.total {
