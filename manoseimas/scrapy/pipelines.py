@@ -154,6 +154,9 @@ class ManoSeimasModelPersistPipeline(object):
                 'source': source_url,
             }
         )
+        if not created and not stenogram.session and item.get('session'):
+            stenogram.session = item['session']
+            stenogram.save()
 
         # TODO: need a robust mechanism to uniquely identify topics
         # inside a stenogam. Or maybe just drop it entirely
