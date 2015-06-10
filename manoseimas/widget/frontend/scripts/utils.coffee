@@ -17,6 +17,12 @@ render = (template, data) ->
 page_url = (slug) ->
     SERVER_URL + "/" + slug
 
+mp_url = (slug) ->
+    SERVER_URL + "/mp/parliamentarian/" + slug.slice(0, 50)
+
+fraction_url = (slug) ->
+    SERVER_URL + "/mp/" + slug.slice(0, 50)
+
 # Basic display helpers
 show = (elements...) ->
     e.style.display = '' for e in elements
@@ -55,6 +61,8 @@ Handlebars.registerHelper "each_value", (obj, options) ->
 
 # Constructs a URL to webpage identified by the slug
 Handlebars.registerHelper "page_url", page_url
+Handlebars.registerHelper "mp_url", mp_url
+Handlebars.registerHelper "fraction_url", fraction_url
 
 # Fractional math
 Handlebars.registerHelper "fraction", (n, d, scale, options) ->
