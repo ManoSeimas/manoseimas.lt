@@ -152,7 +152,7 @@
               .explanation dalyvavimas diskusijuose
 
     .ui.stackable.page.grid
-      .twelve.wide.column
+      .twelve.wide.column: .transcriptions
         for statement in statements.object_list
           .transcription
             .text {{statement.text}}
@@ -175,7 +175,7 @@
               i.icon.right.arrow
 
       .four.wide.column
-        .sidebar
+        .ui.sticky: .sidebar
           a(href="#").item.selected: h4 Visos sesijos
           a(href="#").item: h4 Pavasario sesija 2015
           a(href="#").item: h4 Rudens sesija 2014
@@ -186,6 +186,8 @@
 
   script(type='text/javascript')
     $(document).ready(function() {
+      $('.ui.sticky').sticky({context: '.transcriptions', offset: 70});
+
       $('.show-all').click(function() {
         var content = [];
         var url = '/mp/discussion_json/'+$(this).attr("data-id");
