@@ -34,10 +34,12 @@ class StenogramTopicInline(admin.TabularInline):
 
 
 class StenogramAdmin(admin.ModelAdmin):
+    list_filter = ('session',)
     inlines = (StenogramTopicInline,)
 
 
 class StenogramTopicAdmin(admin.ModelAdmin):
+    list_filter = ('stenogram__session',)
     inlines = (StenogramStatementInline,)
 
 
