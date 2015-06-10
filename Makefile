@@ -32,7 +32,7 @@ var/log var/www/static var/www/media: ; mkdir -p $@
 
 widget: manoseimas/widget/frontend/.done
 
-manoseimas/widget/frontend/.done: bin/sassc
+manoseimas/widget/frontend/.done: bin/sassc manoseimas/widget/frontend/scripts/*.coffee manoseimas/widget/frontend/templates/*.handlebars
 	$(MAKE) -C manoseimas/widget/frontend
 
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
