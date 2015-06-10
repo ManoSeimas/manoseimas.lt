@@ -19,7 +19,10 @@
         .title
           a(name="bio")
           h1 {{profile.full_name}}
-          h2.fraction-name: a(href="{% url 'mp_fraction' profile.fraction_slug %}") {{profile.fraction_name}}
+          if profile.fraction_slug and profile.fraction_name
+            h2.fraction-name: a(href="{% url 'mp_fraction' profile.fraction_slug %}") {{profile.fraction_name}}
+          else:
+            h2.fraction-name: &nbsp;
 
         .ui.two.column.stackable.grid
           .column.info
