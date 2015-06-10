@@ -5,6 +5,9 @@
 - block title
   | {{ profile.full_name }}
 
+- block header
+  - include "snippets/header_bootstrap.jade"
+  - include "header_scrooled.jade"
 
 - block middle
   .photo-box.parliamentarian
@@ -14,6 +17,7 @@
           img(src="{{photo_url}}" title="{{profile.full_name}}")
       .twelve.wide.column
         .title
+          a(name="bio")
           h1 {{profile.full_name}}
           h2.fraction-name: a(href="{% url 'mp_fraction' profile.fraction_slug %}") {{profile.fraction_name}}
 
@@ -64,6 +68,7 @@
 
   .colored-bg
     .ui.zero.margin.page.grid
+      a(name="stats")
       .stats-box
         .one-number
           .block: h4.number {{stats.vote_percent|floatformat:0}}%
@@ -92,6 +97,7 @@
   if positions.for or positions.against or positions.neutral
     .decisions
       .ui.page.grid
+        a(name="decisions")
         h2 Politiniai sprendimai
           small (DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!)
 
@@ -118,6 +124,7 @@
                 a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
   .transcripts
+    a(name="transcripts")
     a(name='stenogram_section')
     .ui.stackable.page.grid
       .nine.wide.column

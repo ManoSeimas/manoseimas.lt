@@ -1,0 +1,32 @@
+- load static from staticfiles
+- load i18n
+- load sboard
+
+header.ui.grid.scrooled
+  .computer.tablet.only.row
+    .row
+      .ui.pointing.menu.fixed
+        a(href="/"): img(src="{% static 'img/logo.png' %}").logo
+
+        .item.parliamentarian
+          .name {{profile.full_name}}
+          .fraction-name {{profile.fraction_name}}
+
+
+
+        .right.menu
+          .item: a(href="#bio") Biografija
+          .item: a(href="#decisions") Sprendimai
+          .item: a(href="#transcripts") Stenogramos
+
+  .mobile.only.row
+    .ui.pointing.small.menu.fixed
+      a(href="/"): img(src="{% static 'img/logo.png' %}").logo-small
+      .right.menu
+        .ui.dropdown.item
+          i.content.icon
+          .menu
+            a.item(href="{% url 'social:begin' 'google-oauth2' %}") Google
+            if FACEBOOK_APP_ID
+              a.item(href="{% url 'social:begin' 'facebook-oauth2' %}") Facebook
+            a.item(href="{% url 'login' %}") OpenID
