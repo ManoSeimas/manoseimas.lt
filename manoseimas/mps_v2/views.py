@@ -39,7 +39,7 @@ def mp_list(request, fraction_slug=None):
                                                type=Group.TYPE_FRACTION,
                                                displayed=True),
                  to_attr='current_fraction')
-    )
+    ).filter(groupmembership__until=None).distinct()
 
     if fraction_slug:
         fraction = Group.objects.get(
