@@ -25,8 +25,10 @@
 
   <link rel="shortcut icon" type="image/x-icon" href="{% static "favicon.png" %}">
 
+  <link rel="stylesheet" type="text/css" href="{% static 'semantic/semantic.min.css' %}">
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static "css/styles.scss" %}">
+  <link rel="stylesheet" type="text/x-scss" href="{% static "main.scss" %}">
   <link rel="stylesheet" type="text/x-scss" href="{% static "fonts/open-sans/stylesheet.scss" %}">
   {% endcompress %}
 
@@ -34,53 +36,9 @@
 </head>
 
 <body>
-  <header class="navbar navbar-manoseimas">
-    <div class="navbar-inner" id="logo-bar-inner">
-      <div class="container" id="logo-bar">
-        <a href="/" class="brand">
-          <img src="{% static "img/logo-updated.png" %}" />
-          <span class='beta'>BETA</span>
-        </a>
-
-        <div class="pull-right">
-          <ul class="nav pull-right">
-            {% if request.user.is_authenticated %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                {% nodeimage request.user.get_profile.get_node 'small' %}
-                {{ request.user|truncatechars:26 }} <i class="caret"></i></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{ request.user.get_profile.get_node.permalink }}">
-                  <i class="icon-user"></i> {% trans "Profile" %}</a></li>
-                <li><a href="{% url 'logout' %}">
-                  <i class="icon-off"></i> {% trans "Log out" %}</a></li>
-              </ul>
-            </li>
-            {% else %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i style="margin-top: 3px" class="icon-user"></i> {% trans "Log in" %}
-                <i class="caret"></i></a>
-              <ul class="dropdown-menu">
-                <li><a href="{% url 'social:begin' 'google-oauth2' %}">{% trans "Google" %}</a></li>
-                {% if FACEBOOK_APP_ID %}
-                <li><a href="{% url 'social:begin' 'facebook-oauth2' %}">{% trans "Facebook" %}</a></li>
-                {% endif %}
-                <li><a href="{% url 'login' %}">{% trans "OpenID" %}</a></li>
-              </ul>
-            </li>
-            {% endif %}
-          </ul>
-        </div>
-
-        <form action="{% url 'search' %}" method="get" id="search-box">
-          <input type="text" name="q"{% if request.GET.q %} value="{{ request.GET.q }}"{% endif %}
-                 placeholder="{% trans "Ieškok politikų, temų, argumentų&hellip;" %}" class="search-query">
-          <input type="submit" class="submit icon-search" value="">
-        </form>
-      </div>
-    </div>
-  </header>
+  <div class="old">
+  {% include "snippets/header_bootstrap.jade" %}
+  </div>
 
   {% block middle %}
   <div id="middle">
@@ -149,7 +107,7 @@
 
   {% block inlinejs %}{% endblock %}
   <!-- end scripts-->
-	
+
   {% if GOOGLE_ANALYTICS_KEY %}
   <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -178,7 +136,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
     <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
   <![endif]-->
-  
+
 </body>
 </html>
 {% endblock %}

@@ -18,16 +18,16 @@ header.ui.page.grid
 
           .ui.dropdown.item
             if request.user.is_authenticated
-              - nodeimage request.user.get_profile.get_node 'small'
+              i.user.icon
               | {{ request.user|truncatechars:26 }}
               i.dropdown.icon
               .menu
-                a(href="{{ request.user.get_profile.get_node.permalink }}")
+                a.item(href="{{ request.user.get_profile.get_node.permalink }}")
                   i.icon-user
-                  | {% trans "Profile" %}
-                a(href="{% url 'logout' %}")
+                  | Profilis
+                a.item(href="{% url 'logout' %}")
                   i.icon-off
-                  | {% trans "Log out" %}
+                  | Atsijungti
             else
               i.user.icon
               | Prisijungti

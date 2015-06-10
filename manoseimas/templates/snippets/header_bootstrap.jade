@@ -4,7 +4,8 @@
 
 header.ui.page.grid
   .computer.tablet.only.row
-    .ui.pointing.menu.fixed
+    .row
+      .ui.pointing.menu.fixed
         a(href="/"): img(src="{% static 'img/logo.png' %}").logo
 
         .right.menu
@@ -18,32 +19,28 @@ header.ui.page.grid
             if request.user.is_authenticated
               .dropdown
                 a(href="#" data-toggle="dropdown").dropdown-toggle
-                  - nodeimage request.user.get_profile.get_node 'small'
+                  i.user.icon
                   | {{ request.user|truncatechars:26 }}
                   i.caret
-              ul.dropdown-menu
-                li
-                  a(href="{{ request.user.get_profile.get_node.permalink }}")
-                    i.icon-user
+                .dropdown-menu.menu
+                  a(href="{{ request.user.get_profile.get_node.permalink }}").item
                     | {% trans "Profile" %}
-                li
-                  a(href="{% url 'logout' %}")
-                    i.icon-off
+                  a(href="{% url 'logout' %}").item
                     | {% trans "Log out" %}
             else
               .dropdown
-                a(data-toggle="dropdown").dropdown-toggle
+                a(href="#" data-toggle="dropdown").dropdown-toggle
                   i.user.icon
                   | {% trans "Log in" %}
                   i.caret
 
-                ul.dropdown-menu
-                  li: a(href="{% url 'social:begin' 'google-oauth2' %}")
+                .dropdown-menu.menu
+                  a(href="{% url 'social:begin' 'google-oauth2' %}").item
                     | {% trans "Google" %}
                   if FACEBOOK_APP_ID
-                    li: a(href="{% url 'social:begin' 'facebook-oauth2' %}")
+                    a(href="{% url 'social:begin' 'facebook-oauth2' %}").item
                       | {% trans "Facebook" %}
-                  li: a(href="{% url 'login' %}")
+                  a(href="{% url 'login' %}").item
                     | {% trans "OpenID" %}
 
   .mobile.only.row
