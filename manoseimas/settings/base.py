@@ -272,9 +272,13 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.open_id.OpenIdAuth',
 )
 
-FACEBOOK_APP_ID = config.facebook_app_id
-FACEBOOK_API_SECRET = config.facebook_api_secret
 GOOGLE_ANALYTICS_KEY = config.google_analytics_key
+
+SOCIAL_AUTH_FACEBOOK_KEY = config.facebook_app_id
+SOCIAL_AUTH_FACEBOOK_SECRET = config.facebook_api_secret
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.google_oauth2_key
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.google_oauth2_secret
 
 SBOARD_NODES = (
     'sboard.categories.nodes.CategoryNode',
@@ -308,3 +312,4 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Django-social-auth does not support JSON serializer.
 # See: https://docs.djangoproject.com/en/1.8/topics/http/sessions/#session-serialization
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
