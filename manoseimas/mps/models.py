@@ -18,6 +18,7 @@
 from zope.interface import implements
 
 from couchdbkit.ext.django import schema
+from django.core.urlresolvers import reverse
 
 from sboard.factory import provideNode
 from sboard.models import NodeProperty
@@ -50,6 +51,9 @@ class MPProfile(ProfileNode):
         if self.fraction:
             return self.fraction.ref.abbreviation
 
+    def permalink(self):
+        return reverse('mp_profile', kwargs={'mp_slug': self.slug[:50]})
+
 provideNode(MPProfile, "mpprofile")
 
 
@@ -78,6 +82,9 @@ class Fraction(PoliticalGroup):
     def members(self):
         memberships = query_group_membership(self._id)
         return set(m.profile.ref for m in memberships)
+
+    def permalink(self):
+        return reverse('mp_fraction', kwargs={'fraction_slug': self.slug[:50]})
 
 provideNode(Fraction, "fraction")
 
