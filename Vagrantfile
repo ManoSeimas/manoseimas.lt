@@ -78,6 +78,7 @@ Vagrant.configure(2) do |config|
       grant all privileges on *.* to 'manoseimas'@'localhost';
       flush privileges;" || true
     sudo apt-get install -y nodejs nodejs-legacy npm
+    sudo apt-get install -y coffeescript
     (cd /vagrant && make ubuntu)
     # PIL is awful
     sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
