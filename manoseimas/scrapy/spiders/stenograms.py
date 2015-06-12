@@ -15,6 +15,7 @@ from manoseimas.scrapy.items import StenogramTopic
 from manoseimas.scrapy.textutils import clean_text
 from manoseimas.scrapy.textutils import extract_text
 from manoseimas.scrapy.textutils import strip_tags
+from manoseimas.scrapy import pipelines
 
 
 MINIMUM_SESSION = 95
@@ -139,6 +140,10 @@ class StenogramSpider(ManoSeimasSpider):
     )
 
     mp_processor_classes = (SittingChairpersonProcessor,)
+
+    pipelines = (
+        pipelines.ManoSeimasModelPersistPipeline,
+    )
 
     def _extract_title(self, paragraph):
         return {'type': 'title',

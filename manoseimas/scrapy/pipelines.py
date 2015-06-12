@@ -1,4 +1,5 @@
 import datetime
+import functools
 import os
 
 from django.db import transaction
@@ -27,6 +28,19 @@ def is_latest_version(item, doc):
     return item_version >= doc_version
 
 
+def check_spider_pipeline(process_item_method):
+
+    @functools.wraps(process_item_method)
+    def wrapper(self, item, spider):
+
+        # if class is in the spider's pipeline, then use the
+        # process_item method normally.
+        if self.__class__ in getattr(spider, 'pipelines', []) or spider is None:
+            return process_item_method(self, item, spider)
+
+    return wrapper
+
+
 class ManoseimasPipeline(object):
 
     def store_item(self, db, doc, item):
@@ -35,6 +49,7 @@ class ManoseimasPipeline(object):
     def get_doc(self, db, item):
         return get_doc(db, item['_id'])
 
+    @check_spider_pipeline
     def process_item(self, item, spider):
         if '_id' not in item or not item['_id']:
             raise Exception('Missing doc _id. Doc: %s' % item)
@@ -203,6 +218,7 @@ class ManoSeimasModelPersistPipeline(object):
 
         return item
 
+    @check_spider_pipeline
     def process_item(self, item, spider):
         if isinstance(item, Person):
             return self.process_mp(item, spider)
@@ -213,6 +229,3 @@ class ManoSeimasModelPersistPipeline(object):
 
     def open_spider(self, spider):
         self.mp_matcher = MPNameMatcher()
-
-    def close_spider(self, spider):
-        pass

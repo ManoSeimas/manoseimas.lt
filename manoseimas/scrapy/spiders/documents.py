@@ -18,6 +18,8 @@ from manoseimas.scrapy.utils import get_absolute_url
 from manoseimas.scrapy.utils import get_all
 from manoseimas.scrapy.utils import get_first
 from manoseimas.scrapy.utils import split_by_words
+from manoseimas.scrapy import pipelines
+
 
 DOCUMENT_INVOLVED_PARTS = re.compile(ur'(\d+-\d+-\d+) ([^-]+)- (.+)')
 REQUIRED_FIELDS = ('_id', 'name', 'kind', 'number', 'date', 'source',)
@@ -56,6 +58,10 @@ class LegalActsSpider(ManoSeimasSpider):
         Rule(SgmlLinkExtractor(allow=r'dokpaieska.showdoc_l\?p_id=-?\d+.*',
                                deny=r'p_daug=[1-9]'),
              'parse_document'),
+    )
+
+    pipelines = (
+        pipelines.ManoseimasPipeline,
     )
 
     def _fix_name_case(self, act):

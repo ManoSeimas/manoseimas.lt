@@ -6,6 +6,7 @@ import re
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.contrib.spiders import Rule
 from scrapy.selector import Selector
+from scrapy.contrib.pipeline.images import ImagesPipeline
 
 from manoseimas.scrapy.items import Group
 from manoseimas.scrapy.items import Person
@@ -15,6 +16,8 @@ from manoseimas.scrapy.textutils import mapwords
 from manoseimas.scrapy.textutils import split_by_comma
 from manoseimas.scrapy.textutils import str2dict
 from manoseimas.scrapy import textutils
+
+from manoseimas.scrapy import pipelines
 
 group_meta_re = re.compile(r'.*, ([^(]+)(?:\(([^)]+)\))?')
 date_re = re.compile(r'\d{4}-\d\d-\d\d')
@@ -53,6 +56,12 @@ class MpsSpider(ManoSeimasSpider):
 
     rules = (
         Rule(SgmlLinkExtractor(allow=['p_asm_id=\d+']), 'parse_person'),
+    )
+
+    pipelines = (
+        ImagesPipeline,
+        pipelines.ManoseimasPipeline,
+        pipelines.ManoSeimasModelPersistPipeline,
     )
 
     def _parse_name(self, person, whole_name):

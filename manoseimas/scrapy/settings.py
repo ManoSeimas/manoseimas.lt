@@ -23,7 +23,7 @@ LOG_LEVEL = 'WARNING'  # CRITICAL, ERROR, WARNING, INFO, DEBUG
 
 ITEM_PIPELINES = [
     'scrapy.contrib.pipeline.images.ImagesPipeline',
-    # 'manoseimas.scrapy.pipelines.ManoseimasPipeline',
+    'manoseimas.scrapy.pipelines.ManoseimasPipeline',
     'manoseimas.scrapy.pipelines.ManoSeimasModelPersistPipeline',
 ]
 

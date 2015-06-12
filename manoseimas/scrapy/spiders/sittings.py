@@ -21,6 +21,7 @@ from manoseimas.scrapy.loaders import absolute_url
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.utils import Increment
 from manoseimas.scrapy.db import get_sequential_votings, get_question
+from manoseimas.scrapy import pipelines
 
 
 # By default, never earlier than Seimas sitting 80, which is Fall 2008.
@@ -55,6 +56,10 @@ class SittingsSpider(ManoSeimasSpider):
 
     name = 'sittings'
     allowed_domains = ['lrs.lt']
+
+    pipelines = (
+        pipelines.ManoseimasPipeline,
+    )
 
     def __init__(self, resume="yes",
                  start_url='http://www3.lrs.lt/pls/inter/w5_sale.kad_ses'):
