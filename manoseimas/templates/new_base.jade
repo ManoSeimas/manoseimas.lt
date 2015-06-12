@@ -28,7 +28,7 @@ html(lang=en)
     - compress js
       script(src="{% static 'js/manoSeimas.js' %}", type="text/javascript", charset="utf-8")
       script(src="{% static 'js/semantic_initializers.js' %}")
-      script(src="{% static 'header.coffee' %}", type="text/coffeescript", charset="utf-8")
+      script(src="{% static 'js/header.coffee' %}", type="text/coffeescript", charset="utf-8")
 
   body
     - block header
@@ -48,4 +48,5 @@ html(lang=en)
 
     - include "snippets/footer.jade" with title="Home"
 
-  | {% block inlinejs %}{% endblock %}
+  - block inlinejs
+    //- Additional coffee/js scripts can be loaded here

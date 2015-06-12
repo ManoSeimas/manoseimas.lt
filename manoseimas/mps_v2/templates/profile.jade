@@ -1,9 +1,16 @@
 - extends "new_base.jade"
 - load static from staticfiles
 - load nodeurl from sboard
+- load compress from compress
 
 - block title
   | {{ profile.full_name }}
+
+-block inlinejs
+  script(src="{% static 'js/jquery.scrollTo-1.4.3.1-min.js' %}")
+  - compress js
+    script(src="{% static 'coffee/statements.coffee' %}", type="text/coffeescript", charset="utf-8")
+
 
 - block header
   - include "snippets/header_bootstrap.jade"
@@ -21,7 +28,7 @@
           h1 {{profile.full_name}}
           if profile.fraction_slug and profile.fraction_name
             h2.fraction-name: a(href="{% url 'mp_fraction' profile.fraction_slug %}") {{profile.fraction_name}}
-          else:
+          else
             h2.fraction-name: &nbsp;
 
         .ui.two.column.stackable.grid
@@ -127,7 +134,6 @@
                 a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
 
   .transcripts
-    a(name="transcripts")
     a(name='stenogram_section')
     .ui.stackable.page.grid
       .eight.wide.column
@@ -151,76 +157,4 @@
               h4.number {{stats.contributed_discussion_percentage|floatformat:2}}%
               .explanation dalyvavimas diskusijuose
 
-    .ui.stackable.page.grid
-      .twelve.wide.column: .transcriptions
-        for statement in statements.object_list
-          .transcription
-            .text {{statement.text}}
-            .meta
-              a.show-all(data-id=statement.id) Rodyti visą diskusiją
-              .document-title {{statement.topic}}
-              .date {{statement.topic.timestamp}}
-
-        .ui.zero.margin.center.aligned.grid: .ui.pagination.menu
-          if statements.has_previous
-            a.item(href="?page={{ statements.previous_page_number }}#stenogram_section")
-              i.left.arrow.icon
-              | Atgal
-
-          .item {{ statements.number }} iš {{ statements.paginator.num_pages }}
-
-          if statements.has_next
-            a.item(href="?page={{ statements.next_page_number }}#stenogram_section")
-              | Pirmyn
-              i.icon.right.arrow
-
-      .four.wide.column
-        .ui.sticky: .sidebar
-          a(href="#").item.selected: h4 Visos sesijos
-          a(href="#").item: h4 Pavasario sesija 2015
-          a(href="#").item: h4 Rudens sesija 2014
-          a(href="#").item: h4 Pavasario sesija 2014
-          a(href="#").item: h4 Rudens sesija 2013
-          a(href="#").item: h4 Pavasario sesija 2013
-
-
-  script(type='text/javascript')
-    $(document).ready(function() {
-      $('.ui.sticky').sticky({context: '.transcriptions', offset: 70});
-
-      $('.show-all').click(function() {
-        var content = [];
-        var url = '/mp/discussion_json/'+$(this).attr("data-id");
-
-        $.getJSON(url, function (data) {
-          $('.ui.modal .header').text(data.topic.title);
-
-          data.statements.forEach(function(statement) {
-            content.push('<div class="statement">');
-            if (statement.selected) {
-              content.push('<p class="highlighted">');
-            } else {
-              content.push('<p>');
-            }
-            if (statement.as_chairperson) {
-              content.push('<i class="spy icon" title="Pirmininkas"></i>');
-            }
-            content.push('<b>'+statement.speaker_name+' </b>');
-            content.push(statement.text);
-            content.push('</p>');
-            content.push('</div>');
-            });
-          $('.ui.modal .description').html(content.join(""));
-
-          $('.ui.modal').modal('show', 'show dimmer');
-        });
-      });
-    });
-
-  .ui.modal
-    .header Header Is here
-    .content
-      .description Hello
-    .actions
-      .ui.black.button
-        | Close
+    .statements-component(data-slug="{{profile.slug}}")
