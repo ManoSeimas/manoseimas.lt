@@ -39,6 +39,7 @@ setup(
         'leveldb',
         'tqdm',
         'roman',
+        'toposort',
     ],
     entry_points={
         'console_scripts': [

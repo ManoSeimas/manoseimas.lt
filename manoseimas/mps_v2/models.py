@@ -43,6 +43,21 @@ class ParliamentMember(CrawledItem):
 
     biography = models.TextField(blank=True, null=True)
 
+    # Precomputed stats fields
+    statement_count = models.PositiveIntegerField(blank=True, null=True)
+    long_statement_count = models.PositiveIntegerField(blank=True, null=True)
+    vote_percentage = models.FloatField(blank=True, null=True)
+    discussion_contribution_percentage = models.FloatField(blank=True,
+                                                           null=True)
+
+    precomputed_fields = (
+        ('statement_count', 'get_statement_count'),
+        ('long_statement_count', 'get_long_statement_count'),
+        ('vote_percentage', 'get_vote_percentage'),
+        ('discussion_contribution_percentage',
+         'get_discussion_contribution_percentage'),
+    )
+
     @property
     def full_name(self):
         return u' '.join([self.first_name, self.last_name])
@@ -142,6 +157,21 @@ class Group(CrawledItem):
     logo = models.ImageField(upload_to='fraction_logos',
                              blank=True, null=True)
 
+    # Precomputed stats fields
+    avg_statement_count = models.FloatField(blank=True, null=True)
+    avg_long_statement_count = models.FloatField(blank=True, null=True)
+    avg_vote_percentage = models.FloatField(blank=True, null=True)
+
+    precomputed_fields = (
+        ('avg_statement_count', 'get_avg_statement_count'),
+        ('avg_long_statement_count', 'get_avg_long_statement_count'),
+        ('avg_vote_percentage', 'get_avg_vote_percentage'),
+    )
+    precomputation_filter = {
+        'type': TYPE_FRACTION,
+    }
+    precomputation_depends_on = ('ParliamentMember',)
+
     class Meta:
         unique_together = (('name', 'type'))
 
@@ -177,8 +207,9 @@ class Group(CrawledItem):
     def get_avg_vote_percentage(self):
         total_percentage = 0.0
         for member in self.active_members:
-            total_percentage += member.get_vote_percentage()
-        return total_percentage / self.active_members.count()
+            total_percentage += member.vote_percentage
+        return (total_percentage / self.active_member_count
+                if self.active_member_count else 0.0)
 
 
 class GroupMembership(CrawledItem):

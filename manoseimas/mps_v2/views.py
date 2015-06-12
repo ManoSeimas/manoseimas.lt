@@ -70,7 +70,8 @@ def mp_list(request, fraction_slug=None):
 
 def mp_fraction_list(request):
     fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
-    fractions = sorted(fractions, key=lambda f: f.active_member_count, reverse=True)
+    fractions = sorted(fractions, key=lambda f: f.active_member_count,
+                       reverse=True)
     return render(request, 'fraction_list.jade', {'fractions': fractions})
 
 
@@ -177,13 +178,13 @@ def mp_profile(request, mp_slug):
         statements = statement_paginator.page(statement_paginator.num_pages)
 
     stats = {
-        'statement_count': mp.get_statement_count(),
-        'long_statement_count': mp.get_long_statement_count(),
-        'long_statement_percentage': mp.get_long_statement_percentage(),
+        'statement_count': mp.statement_count,
+        'long_statement_count': mp.long_statement_count,
+        'long_statement_percentage': mp.get_long_statement_percentage,
         'contributed_discussion_percentage':
-            mp.get_discussion_contribution_percentage(),
+            mp.discussion_contribution_percentage,
         'votes': mp.votes,
-        'vote_percent': mp.get_vote_percentage(),
+        'vote_percent': mp.vote_percentage,
     }
 
     context = {

@@ -1,7 +1,12 @@
 from collections import namedtuple
+from operator import attrgetter
+
+from tqdm import tqdm
+from toposort import toposort_flatten
 
 from django.core.management.base import BaseCommand
 from django.db import transaction
+from django.apps import apps
 
 from manoseimas.mps_v2 import models
 
@@ -31,6 +36,46 @@ class Command(BaseCommand):
                 setattr(ranking, key, rank[item.id])
             ranking.save()
 
+    def sort_precomp_models(self, model_classes):
+        reverse = {cls.__name__: cls for cls in model_classes}
+        deps = {cls.__name__: set(getattr(cls,
+                                          'precomputation_depends_on',
+                                          tuple()))
+                for cls in model_classes}
+        ordered = toposort_flatten(deps)
+        return map(lambda name: reverse[name], ordered)
+
+    def compute_precomputed_fields(self):
+        model_classes = self.sort_precomp_models(filter(
+            lambda model_cls: getattr(model_cls, 'precomputed_fields', None),
+            apps.get_models()
+        ))
+        for model_cls in model_classes:
+            if hasattr(model_cls, 'precomputation_filter'):
+                objects = model_cls.objects.filter(
+                    **model_cls.precomputation_filter
+                )
+            else:
+                objects = model_cls.objects.all()
+            print('Computing fields for {}'.format(model_cls.__name__))
+            for object in tqdm(objects):
+                for field, compute_fn in model_cls.precomputed_fields:
+                    if callable(compute_fn):
+                        value = compute_fn()
+                    else:
+                        compute_fn_callable = getattr(object, compute_fn)
+                        if not callable(compute_fn_callable):
+                            raise ValueError(
+                                'Compute function {} for {}.{}'
+                                ' does not exist.'.format(compute_fn,
+                                                          model_cls,
+                                                          field)
+                            )
+                        value = compute_fn_callable()
+
+                    setattr(object, field, value)
+                object.save()
+
     # XXX Might be a bad idea to hold a xact with write locks for a minute.
     @transaction.atomic
     def handle(self, **options):
@@ -38,31 +83,35 @@ class Command(BaseCommand):
         def mean(items):
             return float(sum(items)) / len(items) if items else 0.0
 
+        print('Computing precomputed model fields')
+        self.compute_precomputed_fields()
+
+        print('Computing MP rankings...')
         mps = models.ParliamentMember.objects.all()
         stats = [ItemStats(mp.id,
-                           mp.get_statement_count(),
-                           mp.get_long_statement_count(),
-                           mp.get_vote_percentage(),
-                           mp.get_discussion_contribution_percentage())
-                 for mp in mps]
+                           mp.statement_count,
+                           mp.long_statement_count,
+                           mp.vote_percentage,
+                           mp.discussion_contribution_percentage)
+                 for mp in tqdm(mps)]
         self.save_rankings(models.MPRanking, mps, stats)
 
+        print('Computing Fraction rankings...')
         fractions = models.Group.objects.filter(
             type=models.Group.TYPE_FRACTION
         )
         fraction_stats = [
             ItemStats(
                 fraction.id,
-                mean(map(models.ParliamentMember.get_statement_count,
+                mean(map(attrgetter('statement_count'),
                          fraction.active_members)),
-                mean(map(models.ParliamentMember.get_long_statement_count,
+                mean(map(attrgetter('long_statement_count'),
                          fraction.active_members)),
                 mean(map(
-                     models.ParliamentMember.get_discussion_contribution_percentage,  # noqa
-                     fraction.active_members
-                )),
-                mean(map(lambda mp: mp.get_vote_percentage(),
+                     attrgetter('discussion_contribution_percentage'),
+                     fraction.active_members)),
+                mean(map(attrgetter('vote_percentage'),
                          fraction.active_members))
-            ) for fraction in fractions
+            ) for fraction in tqdm(fractions)
         ]
         self.save_rankings(models.GroupRanking, fractions, fraction_stats)
