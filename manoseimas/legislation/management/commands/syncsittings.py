@@ -82,8 +82,9 @@ class SyncProcessor(object):
         except ResourceNotFound:
             return None
 
-    def get_question(self):
-        pass
+    def get_question(self, doc):
+        question = get_db('question').get(doc.question)
+        return question
 
     def get_or_create_voting(self, doc):
         voting = self.get_voting_by_source_id(doc.source.id)
@@ -210,7 +211,8 @@ class SyncProcessor(object):
          node.parent_legal_acts) = self.get_legal_acts(doc.documents)
 
         # HM 2013-08-20: This is temporary, until we actually implement legal acts
-        node.documents = list(doc.documents)
+        question = self.get_question(doc)
+        node.documents = list(question['documents'])
 
         # Source information
         node.source = self.get_source(doc)
@@ -225,16 +227,25 @@ class SyncProcessor(object):
                 return False
 
         return True
-            
 
 
 class Command(BaseCommand):
     help = "Synchronize raw legal acts data with django-sboard nodes."
 
-    def handle(self, *args, **options):
-        update_mode = "update" in args
+    def add_arguments(self, parser):
+        parser.add_argument('--update',
+                            action='store_true',
+                            default=False,
+                            help='Resync all sittings')
+        parser.add_argument('--scrape',
+                            action='store_true',
+                            default=False,
+                            help='Scrape sittings from lrs.lt')
 
-        if "scrape" in args:
+    def handle(self, *args, **options):
+        update_mode = options['update']
+
+        if options['scrape']:
             scrapy_path = os.path.abspath(os.path.join(settings.BUILDOUT_DIR, 'bin', 'scrapy'))
             scrapy_cmd = [scrapy_path, "crawl", "sittings"]
             if update_mode:
