@@ -44,6 +44,7 @@ from manoseimas.mps.models import Parliament
 from manoseimas.mps.models import ParliamentaryGroup
 from manoseimas.mps.models import Party
 from manoseimas.scrapy.db import get_db
+from manoseimas.scrapy import settings as scrapy_settings
 from manoseimas.utils import todate
 
 
@@ -217,7 +218,7 @@ class SyncProcessor(object):
             node = self.get_node(doc.get('node_id'), MPProfile)
         else:
             node = self.get_profile_node( doc['source']['id'] )
-        
+
         if not node:
             node = self.make_node(MPProfile)
 
@@ -235,7 +236,12 @@ class SyncProcessor(object):
         node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
-        if 'photo' in doc:
+        if 'images' in doc:
+            photo_path = os.path.join(scrapy_settings.IMAGES_STORE,
+                                      doc['images'][0]['path'])
+            self.set_image_from_file(node, photo_path)
+        elif 'photo' in doc:
+            print('downloading photo')
             self.set_image_from_url(node, doc['photo'])
 
         self.process_groups(doc['groups'], node, update_mode)
