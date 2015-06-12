@@ -166,7 +166,7 @@ class SyncProcessor(object):
                     group.slug = slug
             else:
                 group = self.get_group_by_slug(slug)
-                
+
             if not group:
                 group = self.make_node(group_type)
                 group.slug = slug
@@ -235,7 +235,8 @@ class SyncProcessor(object):
         node.home_page = doc.get('home_page')
         node.parliament = doc['parliament']
         node.source = doc['source']
-        self.set_image_from_url(node, doc['photo'])
+        if 'photo' in doc:
+            self.set_image_from_url(node, doc['photo'])
 
         self.process_groups(doc['groups'], node, update_mode)
 
