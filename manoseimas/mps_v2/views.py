@@ -11,7 +11,7 @@ from sboard.models import couch
 from manoseimas.compat.models import PersonPosition
 
 from .models import (ParliamentMember, GroupMembership, Group,
-                     StenogramStatement)
+                     Stenogram, StenogramStatement)
 
 
 def mp_list(request, fraction_slug=None):
@@ -239,12 +239,22 @@ def mp_discussion_json(request, statement_id):
     return JsonResponse(context)
 
 
-def mp_statements(request, mp_slug):
+def mp_statements(request, mp_slug, statement_page=None):
     mp = ParliamentMember.objects.get(slug=mp_slug)
+
+    selected_session = request.GET.get('session')
+    # all_sessions = Stenogram.objects.distinct().values('session')
+    # all_sessions = [s['session'] for s in all_sessions]
+    sessions = Stenogram.objects.distinct().values_list('session', flat=True)
+
     all_statements = StenogramStatement.objects.select_related(
         'topic').filter(speaker=mp).order_by('-topic__timestamp', '-pk')
+    if selected_session:
+        all_statements = all_statements.filter(
+            topic__stenogram__session=selected_session)
+
     statement_paginator = Paginator(all_statements, 10)
-    statement_page = request.GET.get('page')
+    # statement_page = request.GET.get('page')
     try:
         statements = statement_paginator.page(statement_page)
     except PageNotAnInteger:
@@ -254,6 +264,8 @@ def mp_statements(request, mp_slug):
 
     context = {
         'statements': statements,
+        'sessions': sessions,
+        'selected_session': selected_session
     }
 
     return render(request, 'statments.jade', context)

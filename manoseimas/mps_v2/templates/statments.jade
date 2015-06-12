@@ -1,17 +1,18 @@
 .ui.stackable.page.grid
   .twelve.wide.column: .transcriptions
-    .center.aligned.aligned.grid: .ui.pagination.menu
-      if statements.has_previous
-        a.item.prev(data-prev-page="{{ statements.previous_page_number }}")
-          i.left.arrow.icon
-          | Atgal
+    if statements.paginator.num_pages > 1
+      .center.aligned.aligned.grid: .ui.pagination.menu
+        if statements.has_previous
+          a.item.prev(data-prev-page="{{ statements.previous_page_number }}")
+            i.left.arrow.icon
+            | Atgal
 
-      .item {{ statements.number }} iš {{ statements.paginator.num_pages }}
+        .item {{ statements.number }} iš {{ statements.paginator.num_pages }}
 
-      if statements.has_next
-        a.item.next(data-next-page="{{ statements.next_page_number }}")
-          | Pirmyn
-          i.icon.right.arrow
+        if statements.has_next
+          a.item.next(data-next-page="{{ statements.next_page_number }}")
+            | Pirmyn
+            i.icon.right.arrow
 
     for statement in statements.object_list
       .transcription
@@ -35,13 +36,11 @@
           i.icon.right.arrow
 
   .four.wide.column
-    .ui.sticky: .sidebar
-      a(href="#").item.selected: h4 Visos sesijos
-      a(href="#").item: h4 Pavasario sesija 2015
-      a(href="#").item: h4 Rudens sesija 2014
-      a(href="#").item: h4 Pavasario sesija 2014
-      a(href="#").item: h4 Rudens sesija 2013
-      a(href="#").item: h4 Pavasario sesija 2013
+    .ui.sticky: .sidebar(data-selected-session="{{ selected_session }}")
+      a(data-session="None").item: h4 Visos sesijos
+      for session in sessions
+        if session
+          a(data-session="{{ session }}").item: h4 {{session}}
 
 
 .ui.modal

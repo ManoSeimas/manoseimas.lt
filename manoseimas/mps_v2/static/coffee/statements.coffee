@@ -1,23 +1,23 @@
-loadStatments = (data, slug) ->
+loadStatments = (data, url) ->
   $('.statements-component').html(data)
-  loadStatementEvents(slug)
-  $('.ui.sticky').sticky({context: '.transcriptions', offset: 70});
-  console.log  "Load was performed."
+  loadStatementEvents(url)
 
-$(document).ready ->
-  ## Initial Load
-  slug = $('.statements-component').attr("data-slug")
-  $.get "/mp/statements/#{slug}", (data) ->
-    loadStatments(data, slug)
-    console.log  "Load was performed."
+  # Set selected sidebar item + make sidebar sticky
+  selected_session = $('.sidebar').attr("data-selected-session")
+  $("[data-session='#{selected_session}']").addClass("selected")
+  $('.ui.sticky').sticky({context: '.transcriptions', offset: 70});
+
+  console.log  "Load was performed."
 
 
 ## EVENTS
-loadStatementEvents = (slug) ->
+search_params = $(location).attr('search')
+loadStatementEvents = (url) ->
   $('.show-all').click ->
     content = []
-    url = '/mp/discussion_json/'+$(this).attr("data-id")
-    $.getJSON url, (data) ->
+    discussion_url = '/mp/discussion_json/'+$(this).attr("data-id")
+
+    $.getJSON discussion_url, (data) ->
       for statement in data.statements
         content.push('<div class="statement">');
         if statement.selected
@@ -40,17 +40,33 @@ loadStatementEvents = (slug) ->
   $('.ui.pagination.menu .next').click  (e) ->
     e.preventDefault()
     next_page = $(this).attr("data-next-page")
-    console.log "Loading"
-    $.get "/mp/statements/#{slug}?page=#{next_page}", (data) ->
+    $.get "#{url}/#{next_page}#{search_params}", (data) ->
       # Scroll to top of statments.
       $.scrollTo('.transcripts', 10, {offset: -40})
-      loadStatments(data, slug)
+      loadStatments(data, url)
 
-  $('.ui.pagination.menu .prev').click  (e) ->
+  $('.ui.pagination.menu .prev').click (e) ->
     prev_page = $(this).attr("data-prev-page")
-    $.get "/mp/statements/#{slug}?page=#{prev_page}", (data) ->
+    $.get "#{url}/#{prev_page}#{search_params}", (data) ->
       $.scrollTo('.transcripts', 100, {offset: -40})
-      loadStatments(data, slug)
+      loadStatments(data, url)
+
+  $('.sidebar .item').click (e) ->
+    e.preventDefault()
+    session = $(this).attr("data-session")
+    if session and session isnt 'None'
+      search_params = "?session=#{session}"
+    else
+      search_params = ""
+    $.get "#{url}#{search_params}", (data) ->
+      loadStatments(data, url)
+      $.scrollTo('.transcripts', 100, {offset: -40})
 
 
-
+$(document).ready ->
+  ## Initial Load
+  slug = $('.statements-component').attr("data-slug")
+  url = "/mp/statements/#{slug}"
+  # $(location).attr 'pathname'
+  $.get url, (data) ->
+    loadStatments(data, url)
