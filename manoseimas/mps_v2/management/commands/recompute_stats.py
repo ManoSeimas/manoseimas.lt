@@ -1,5 +1,4 @@
 from collections import namedtuple
-from operator import attrgetter
 
 from tqdm import tqdm
 from toposort import toposort_flatten
@@ -80,9 +79,6 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, **options):
 
-        def mean(items):
-            return float(sum(items)) / len(items) if items else 0.0
-
         print('Computing precomputed model fields')
         self.compute_precomputed_fields()
 
@@ -103,15 +99,10 @@ class Command(BaseCommand):
         fraction_stats = [
             ItemStats(
                 fraction.id,
-                mean(map(attrgetter('statement_count'),
-                         fraction.active_members)),
-                mean(map(attrgetter('long_statement_count'),
-                         fraction.active_members)),
-                mean(map(
-                     attrgetter('discussion_contribution_percentage'),
-                     fraction.active_members)),
-                mean(map(attrgetter('vote_percentage'),
-                         fraction.active_members))
+                fraction.avg_statement_count,
+                fraction.avg_long_statement_count,
+                fraction.avg_vote_percentage,
+                fraction.avg_discussion_contribution_percentage,
             ) for fraction in tqdm(fractions)
         ]
         self.save_rankings(models.GroupRanking, fractions, fraction_stats)

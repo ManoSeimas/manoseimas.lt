@@ -7,6 +7,8 @@ from sboard.models import NodeForeignKey
 
 from manoseimas.utils import reify
 
+import manoseimas.common.utils.words as words_utils
+
 
 class CrawledItem(models.Model):
     source = models.URLField()
@@ -49,7 +51,6 @@ class ParliamentMember(CrawledItem):
     vote_percentage = models.FloatField(blank=True, null=True)
     discussion_contribution_percentage = models.FloatField(blank=True,
                                                            null=True)
-
     precomputed_fields = (
         ('statement_count', 'get_statement_count'),
         ('long_statement_count', 'get_long_statement_count'),
@@ -57,6 +58,7 @@ class ParliamentMember(CrawledItem):
         ('discussion_contribution_percentage',
          'get_discussion_contribution_percentage'),
     )
+    precomputation_depends_on = ('StenogramStatement',)
 
     @property
     def full_name(self):
@@ -161,11 +163,15 @@ class Group(CrawledItem):
     avg_statement_count = models.FloatField(blank=True, null=True)
     avg_long_statement_count = models.FloatField(blank=True, null=True)
     avg_vote_percentage = models.FloatField(blank=True, null=True)
+    avg_discussion_contribution_percentage = models.FloatField(blank=True,
+                                                               null=True)
 
     precomputed_fields = (
         ('avg_statement_count', 'get_avg_statement_count'),
         ('avg_long_statement_count', 'get_avg_long_statement_count'),
         ('avg_vote_percentage', 'get_avg_vote_percentage'),
+        ('avg_discussion_contribution_percentage',
+         'get_avg_discussion_contribution_percentage'),
     )
     precomputation_filter = {
         'type': TYPE_FRACTION,
@@ -187,7 +193,9 @@ class Group(CrawledItem):
         return self.active_members.count()
 
     def get_avg_statement_count(self):
-        agg = self.active_members.annotate(
+        agg = self.active_members.filter(
+            statements__as_chairperson=False,
+        ).annotate(
             models.Count('statements')
         ).aggregate(
             avg_statements=models.Avg('statements__count')
@@ -196,7 +204,8 @@ class Group(CrawledItem):
 
     def get_avg_long_statement_count(self):
         agg = self.active_members.filter(
-            statements__word_count__gte=50
+            statements__word_count__gte=50,
+            statements__as_chairperson=False,
         ).annotate(
             models.Count('statements')
         ).aggregate(
@@ -210,6 +219,12 @@ class Group(CrawledItem):
             total_percentage += member.vote_percentage
         return (total_percentage / self.active_member_count
                 if self.active_member_count else 0.0)
+
+    def get_avg_discussion_contribution_percentage(self):
+        agg = self.active_members.aggregate(
+            avg_contrib=models.Avg('discussion_contribution_percentage')
+        )
+        return agg['avg_contrib']
 
 
 class GroupMembership(CrawledItem):
@@ -255,11 +270,18 @@ class StenogramStatement(CrawledItem):
     text = models.TextField()
     word_count = models.PositiveIntegerField(default=0)
 
+    precomputed_fields = (
+        ('word_count', 'get_word_count'),
+    )
+
     def get_speaker_name(self):
         return self.speaker.full_name if self.speaker else self.speaker_name
 
     def __unicode__(self):
         return u'{}: {}'.format(self.get_speaker_name(), self.text[:160])
+
+    def get_word_count(self):
+        return words_utils.get_word_count(self.text)
 
 
 class Voting(models.Model):
