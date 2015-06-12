@@ -355,6 +355,12 @@ class CompatSearchView(NodeView):
     def __init__(self, query):
         self.query = query
 
+    def filter_by_existing_mps(self, nodes):
+        # XXX HAX
+        from manoseimas.mps_v2.models import ParliamentMember
+        existing_mp_slugs = set(ParliamentMember.objects.values_list('slug', flat=True))
+        return filter(lambda node: node.slug in existing_mp_slugs, nodes)
+
     def render(self, **overrides):
         nodes = []
         sanitized_query = ""
@@ -372,10 +378,8 @@ class CompatSearchView(NodeView):
         context = {
             'title': _('Search results'),
             'view': self,
-            'children': nodes,
+            'children': self.filter_by_existing_mps(nodes),
             'query': sanitized_query
         }
 
         return render(self.request, 'compat/compat_search_results.html', context)
-
-
