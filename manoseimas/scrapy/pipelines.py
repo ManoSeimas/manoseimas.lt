@@ -79,9 +79,13 @@ class ManoseimasPipeline(object):
 class MPNameMatcher(object):
 
     def __init__(self):
+        all_mps = ParliamentMember.objects.all()
         self.mp_names = {u'{}. {}'.format(mp.first_name[:1].upper(),
                                           mp.last_name.upper()): mp
-                         for mp in ParliamentMember.objects.all()}
+                         for mp in all_mps}
+        full_names = {mp.full_name: mp
+                      for mp in all_mps}
+        self.mp_names.update(full_names)
 
     def get_mp_by_name(self, mp_name, fraction=None):
         mp_name = mp_name.upper()
@@ -191,13 +195,19 @@ class ManoSeimasModelPersistPipeline(object):
         votings = get_votings_by_date(item['date'].date())
         docs = get_voting_for_stenogram(votings, item['title'], item['date'])
 
+        presenter_names = set()
         for doc in docs:
+            for speaker in doc['speakers']:
+                presenter_names.add(speaker['name'])
             Voting.objects.create(
                 stenogram_topic=topic,
                 node=doc['_id'],
                 timestamp=datetime.datetime.strptime(doc['created'],
                                                      '%Y-%m-%dT%H:%M:%SZ'),
             )
+        topic.presenters = map(self.mp_matcher.get_mp_by_name,
+                               list(presenter_names))
+        topic.save()
 
         # Recreate all the statements since we can't reliably
         # identify statements in the database now
