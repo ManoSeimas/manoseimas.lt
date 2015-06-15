@@ -37,7 +37,8 @@ def get_voting_for_stenogram(votings, title, dt):
     votings_by_ratio = []
     for doc in votings:
         _dt = datetime.datetime.strptime(doc['created'], '%Y-%m-%dT%H:%M:%SZ')
-        _title = clean_title(' '.join([d['name'] for d in doc['documents']]))
+        _title = clean_title(' '.join([d['name'] for d in doc.get('documents',
+                                                                  [])]))
         ratio = difflib.SequenceMatcher(None, title, _title).ratio()
         votings_by_ratio.append((ratio, abs(_dt - dt), doc))
 
