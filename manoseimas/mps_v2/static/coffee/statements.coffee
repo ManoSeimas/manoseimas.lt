@@ -5,13 +5,27 @@ loadStatments = (data, url) ->
   # Set selected sidebar item + make sidebar sticky
   selected_session = $('.sidebar').attr("data-selected-session")
   $("[data-session='#{selected_session}']").addClass("selected")
-  $('.ui.sticky').sticky({context: '.transcriptions', offset: 70});
+  $('.ui.sticky').sticky({context: '.transcriptions', offset: 70})
 
   console.log  "Load was performed."
 
 
 ## EVENTS
 search_params = $(location).attr('search')
+global_session = null
+
+buildSearchParams = (session) ->
+  session = global_session
+  console.log(session)
+  only_as_presenter = $('#only_as_presenter').checkbox('is checked')
+  console.log(only_as_presenter)
+  params = []
+  if session and session isnt 'None'
+    params.push "session=#{session}"
+  if only_as_presenter
+    params.push "only_as_presenter=1"
+  return "?#{params.join('&')}"
+
 loadStatementEvents = (url) ->
   $('.show-all').click ->
     content = []
@@ -19,7 +33,7 @@ loadStatementEvents = (url) ->
 
     $.getJSON discussion_url, (data) ->
       for statement in data.statements
-        content.push('<div class="statement">');
+        content.push('<div class="statement">')
         if statement.selected
           content.push '<p class="highlighted">'
         else
@@ -53,14 +67,19 @@ loadStatementEvents = (url) ->
 
   $('.sidebar .item').click (e) ->
     e.preventDefault()
-    session = $(this).attr("data-session")
-    if session and session isnt 'None'
-      search_params = "?session=#{session}"
-    else
-      search_params = ""
+    global_session = $(this).attr('data-session')
+    search_params = buildSearchParams()
     $.get "#{url}#{search_params}", (data) ->
       loadStatments(data, url)
       $.scrollTo('.transcripts', 100, {offset: -40})
+
+  $('#only_as_presenter').change (e) ->
+    search_params = buildSearchParams()
+    $.get "#{url}#{search_params}", (data) ->
+      loadStatments(data, url)
+      $.scrollTo('.transcripts', 100, {offset: -40})
+
+
 
 
 $(document).ready ->

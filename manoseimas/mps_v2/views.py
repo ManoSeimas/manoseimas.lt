@@ -244,8 +244,7 @@ def mp_statements(request, mp_slug, statement_page=None):
     mp = ParliamentMember.objects.get(slug=mp_slug)
 
     selected_session = request.GET.get('session')
-    # all_sessions = Stenogram.objects.distinct().values('session')
-    # all_sessions = [s['session'] for s in all_sessions]
+    only_as_presenter = request.GET.get('only_as_presenter')
     sessions = Stenogram.objects.distinct().values_list('session', flat=True)
 
     all_statements = StenogramStatement.objects.select_related(
@@ -253,6 +252,8 @@ def mp_statements(request, mp_slug, statement_page=None):
     if selected_session:
         all_statements = all_statements.filter(
             topic__stenogram__session=selected_session)
+    if only_as_presenter:
+        all_statements = all_statements.filter(topic__presenters=mp)
 
     statement_paginator = Paginator(all_statements, 10)
     # statement_page = request.GET.get('page')
