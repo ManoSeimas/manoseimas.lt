@@ -109,8 +109,6 @@ def mp_fraction(request, fraction_slug):
     return render(request, 'fraction.jade', context)
 
 
-
-
 def mp_profile(request, mp_slug):
     mp_qs = ParliamentMember.objects.select_related('ranking', 'raised_by')
 
@@ -256,7 +254,6 @@ def mp_statements(request, mp_slug, statement_page=None):
         all_statements = all_statements.filter(topic__presenters=mp)
 
     statement_paginator = Paginator(all_statements, 10)
-    # statement_page = request.GET.get('page')
     try:
         statements = statement_paginator.page(statement_page)
     except PageNotAnInteger:
