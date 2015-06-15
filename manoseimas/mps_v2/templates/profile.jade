@@ -116,22 +116,22 @@
             h3.supports UŽ
 
             for position in positions.for
-              .decision(class=position.klass)
-                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+              .decision(class=position['klass'])
+                a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
 
           .column
             h3.abstention nei už nei prieš
 
             for position in positions.neutral
               .decision.abstention
-                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+                a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
 
           .column
             h3.against PRIEŠ
 
             for position in positions.against
-              .decision(class=position.klass)
-                a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+              .decision(class=position['klass'])
+                a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
 
   .transcripts
     a(name='stenogram_section')

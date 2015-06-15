@@ -3,7 +3,12 @@ from autoslug import AutoSlugField
 
 from django.utils.translation import ugettext_lazy as _
 
+from jsonfield import JSONField
+
 from sboard.models import NodeForeignKey
+from sboard.models import couch
+from couchdbkit.exceptions import ResourceNotFound
+
 
 from manoseimas.utils import reify
 
@@ -21,6 +26,33 @@ class CrawledItem(models.Model):
 
 def get_mp_full_name(mp):
     return mp.full_name
+
+
+def prepare_positions(node):
+    from manoseimas.compat.models import PersonPosition
+
+    def position_to_dict(position):
+        return {
+            'node_ref': position.node.ref,
+            'permalink': position.node.ref.permalink(),
+            'formatted': position.format_position(),
+            'title': position.node.ref.title,
+            'position': position.position,
+            'klass': position.klass,
+        }
+
+    position_list = list(PersonPosition.objects.filter(profile=node))
+    position_list.sort(key=lambda pp: abs(pp.position), reverse=True)
+
+    positions = {'for': [], 'against': [], 'neutral': []}
+    for position in position_list:
+        if abs(position.position) < 0.2:
+            positions['neutral'].append(position_to_dict(position))
+        elif position.position > 0:
+            positions['for'].append(position_to_dict(position))
+        else:
+            positions['against'].append(position_to_dict(position))
+    return positions
 
 
 class ParliamentMember(CrawledItem):
@@ -51,12 +83,15 @@ class ParliamentMember(CrawledItem):
     vote_percentage = models.FloatField(blank=True, null=True)
     discussion_contribution_percentage = models.FloatField(blank=True,
                                                            null=True)
+    positions = JSONField(default=None, blank=True, null=True)
+
     precomputed_fields = (
         ('statement_count', 'get_statement_count'),
         ('long_statement_count', 'get_long_statement_count'),
         ('vote_percentage', 'get_vote_percentage'),
         ('discussion_contribution_percentage',
          'get_discussion_contribution_percentage'),
+        ('positions', 'get_positions'),
     )
     precomputation_depends_on = ('StenogramStatement',)
 
@@ -124,6 +159,13 @@ class ParliamentMember(CrawledItem):
         vote_percentage = float(votes) / total_votes * 100.0
         return vote_percentage
 
+    def get_positions(self):
+        try:
+            mp_node = couch.view('sboard/by_slug', key=self.slug).one()
+            return prepare_positions(mp_node)
+        except ResourceNotFound:
+            return None
+
     @property
     def all_statements(self):
         return self.statements.all()
@@ -165,6 +207,7 @@ class Group(CrawledItem):
     avg_vote_percentage = models.FloatField(blank=True, null=True)
     avg_discussion_contribution_percentage = models.FloatField(blank=True,
                                                                null=True)
+    positions = JSONField(default=None, blank=True, null=True)
 
     precomputed_fields = (
         ('avg_statement_count', 'get_avg_statement_count'),
@@ -172,6 +215,7 @@ class Group(CrawledItem):
         ('avg_vote_percentage', 'get_avg_vote_percentage'),
         ('avg_discussion_contribution_percentage',
          'get_avg_discussion_contribution_percentage'),
+        ('positions', 'get_positions'),
     )
     precomputation_filter = {
         'type': TYPE_FRACTION,
@@ -225,6 +269,10 @@ class Group(CrawledItem):
             avg_contrib=models.Avg('discussion_contribution_percentage')
         )
         return agg['avg_contrib']
+
+    def get_positions(self):
+        fraction_node = couch.view('sboard/by_slug', key=self.slug).one()
+        return prepare_positions(fraction_node)
 
 
 class GroupMembership(CrawledItem):

@@ -4,12 +4,6 @@ from django.http import JsonResponse
 from django.utils.safestring import mark_safe
 from django.db.models import Prefetch
 
-from couchdbkit.exceptions import ResourceNotFound
-
-from sboard.models import couch
-
-from manoseimas.compat.models import PersonPosition
-
 from .models import (ParliamentMember, GroupMembership, Group,
                      Stenogram, StenogramStatement)
 
@@ -75,21 +69,6 @@ def mp_fraction_list(request):
     return render(request, 'fraction_list.jade', {'fractions': fractions})
 
 
-def prepare_positions(node):
-    position_list = list(PersonPosition.objects.filter(profile=node))
-    position_list.sort(key=lambda pp: abs(pp.position), reverse=True)
-
-    positions = {'for': [], 'against': [], 'neutral': []}
-    for position in position_list:
-        if abs(position.position) < 0.2:
-            positions['neutral'].append(position)
-        elif position.position > 0:
-            positions['for'].append(position)
-        else:
-            positions['against'].append(position)
-    return positions
-
-
 def mp_fraction(request, fraction_slug):
     fraction = Group.objects.get(
         type=Group.TYPE_FRACTION,
@@ -98,13 +77,10 @@ def mp_fraction(request, fraction_slug):
 
     members = fraction.members.filter(groupmembership__until=None)
 
-    fraction_node = couch.view('sboard/by_slug', key=fraction.slug).one()
-
-    positions = prepare_positions(fraction_node)
     context = {
         'fraction': fraction,
         'members': members,
-        'positions': positions,
+        'positions': fraction.positions,
     }
     return render(request, 'fraction.jade', context)
 
@@ -161,12 +137,6 @@ def mp_profile(request, mp_slug):
     profile['constituency'] = mp.constituency
     profile['slug'] = mp_slug
 
-    try:
-        mp_node = couch.view('sboard/by_slug', key=mp.slug).one()
-        positions = prepare_positions(mp_node)
-    except ResourceNotFound:
-        positions = None
-
     stats = {
         'statement_count': mp.statement_count,
         'long_statement_count': mp.long_statement_count,
@@ -179,7 +149,7 @@ def mp_profile(request, mp_slug):
 
     context = {
         'profile': profile,
-        'positions': positions,
+        'positions': mp.positions,
         'groups': mp.other_groups,
         'all_fractions': mp.all_fractions,
         'committees': mp.committees,

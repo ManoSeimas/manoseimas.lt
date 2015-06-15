@@ -24,7 +24,7 @@
     .ui.zero.margin.page.grid
       .stats-box
         .one-number
-          .block: h4.number {{fraction.get_avg_vote_percentage|floatformat:0}}%
+          .block: h4.number {{fraction.avg_vote_percentage|floatformat:0}}%
           .block: .explanation Dalyvavimas balsavimuose
         .rating(data-title="Geriau negu {{fraction.ranking.votes_percentile}}%" data-content="Palyginimas su kitom seimo frakcijom. Kuo daugiau procentų tuo geriau.")
           .ui.indicating.progress(data-percent=fraction.ranking.votes_percentile): .bar
@@ -33,10 +33,10 @@
         .two-numbers
           h3 Aktyvumas diskusijuose
           .block
-            h4.number {{fraction.get_avg_statement_count|floatformat:0}}
+            h4.number {{fraction.avg_statement_count|floatformat:0}}
             p.explanation pasisakymai (vid.)
           .block
-            h4.number {{fraction.get_avg_long_statement_count|floatformat:0}}
+            h4.number {{fraction.avg_long_statement_count|floatformat:0}}
             .explanation ilgi pasisakymai (vid.)
         .rating: .ui.indicating.progress(data-percent=fraction.ranking.statement_count_percentile): .bar
 
@@ -68,19 +68,19 @@
           h3.supports UŽ
 
           for position in positions.for
-            .decision(class=position.klass)
-              a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+            .decision(class=position['klass'])
+              a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
 
         .column
           h3.abstention nei už nei prieš
 
           for position in positions.neutral
             .decision.abstention
-              a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+              a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
 
         .column
           h3.against PRIEŠ
 
           for position in positions.against
-            .decision(class=position.klass)
-              a(href="{% nodeurl position.node.ref %}" title=position.format_position()) {{ position.node.ref.title }}
+            .decision(class=position['klass'])
+              a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}

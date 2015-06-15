@@ -40,6 +40,7 @@ setup(
         'tqdm',
         'roman',
         'toposort',
+        'django-jsonfield',
     ],
     entry_points={
         'console_scripts': [
