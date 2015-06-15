@@ -16,6 +16,10 @@ urlpatterns = patterns(
         views.mp_fraction, name='mp_fraction'),
     url(r'^parliamentarian/(?P<mp_slug>.+)/$',
         views.mp_profile, name='mp_profile'),
+    url(r'^statements/(?P<mp_slug>[-_\w]+)/(?P<statement_page>.+)/$',
+        views.mp_statements, name='mp_statements_paged'),
+    url(r'^statements/(?P<mp_slug>.+)/$',
+        views.mp_statements, name='mp_statements'),
     url(r'^(?P<fraction_slug>[-_\w]+)/$',
         views.mp_list, name='mp_list_fraction'),
 )

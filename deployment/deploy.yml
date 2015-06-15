@@ -54,6 +54,7 @@
     - npm
     - nodejs
     - nodejs-legacy
+    - coffeescript
     - git
     - mercurial
 

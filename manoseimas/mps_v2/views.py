@@ -11,7 +11,7 @@ from sboard.models import couch
 from manoseimas.compat.models import PersonPosition
 
 from .models import (ParliamentMember, GroupMembership, Group,
-                     StenogramStatement)
+                     Stenogram, StenogramStatement)
 
 
 def mp_list(request, fraction_slug=None):
@@ -109,6 +109,8 @@ def mp_fraction(request, fraction_slug):
     return render(request, 'fraction.jade', context)
 
 
+
+
 def mp_profile(request, mp_slug):
     mp_qs = ParliamentMember.objects.select_related('ranking', 'raised_by')
 
@@ -159,23 +161,13 @@ def mp_profile(request, mp_slug):
     profile['raised_by'] = mp.raised_by.name if mp.raised_by else None
     profile['office_address'] = mp.office_address
     profile['constituency'] = mp.constituency
+    profile['slug'] = mp_slug
 
     try:
         mp_node = couch.view('sboard/by_slug', key=mp.slug).one()
         positions = prepare_positions(mp_node)
     except ResourceNotFound:
         positions = None
-
-    all_statements = StenogramStatement.objects.select_related(
-        'topic').filter(speaker=mp).order_by('-topic__timestamp', '-pk')
-    statement_paginator = Paginator(all_statements, 10)
-    statement_page = request.GET.get('page')
-    try:
-        statements = statement_paginator.page(statement_page)
-    except PageNotAnInteger:
-        statements = statement_paginator.page(1)
-    except EmptyPage:
-        statements = statement_paginator.page(statement_paginator.num_pages)
 
     stats = {
         'statement_count': mp.statement_count,
@@ -196,7 +188,6 @@ def mp_profile(request, mp_slug):
         'biography': mark_safe(mp.biography),
         'stats': stats,
         'photo_url': mp.photo.url,
-        'statements': statements,
         'ranking': mp.ranking,
     }
 
@@ -247,3 +238,35 @@ def mp_discussion(request, statement_id):
 def mp_discussion_json(request, statement_id):
     context = _build_discussion_context(request, statement_id)
     return JsonResponse(context)
+
+
+def mp_statements(request, mp_slug, statement_page=None):
+    mp = ParliamentMember.objects.get(slug=mp_slug)
+
+    selected_session = request.GET.get('session')
+    # all_sessions = Stenogram.objects.distinct().values('session')
+    # all_sessions = [s['session'] for s in all_sessions]
+    sessions = Stenogram.objects.distinct().values_list('session', flat=True)
+
+    all_statements = StenogramStatement.objects.select_related(
+        'topic').filter(speaker=mp).order_by('-topic__timestamp', '-pk')
+    if selected_session:
+        all_statements = all_statements.filter(
+            topic__stenogram__session=selected_session)
+
+    statement_paginator = Paginator(all_statements, 10)
+    # statement_page = request.GET.get('page')
+    try:
+        statements = statement_paginator.page(statement_page)
+    except PageNotAnInteger:
+        statements = statement_paginator.page(1)
+    except EmptyPage:
+        statements = statement_paginator.page(statement_paginator.num_pages)
+
+    context = {
+        'statements': statements,
+        'sessions': sessions,
+        'selected_session': selected_session
+    }
+
+    return render(request, 'statments.jade', context)
