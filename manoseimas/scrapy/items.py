@@ -203,3 +203,28 @@ class StenogramTopic(Item):
                    output_processor=processor.TakeFirst())
     statements = Field(input_processor=processor.Identity(),
                        output_processor=processor.Identity())
+
+
+class ProposedLawProjectProposer(Item):
+    id = Field()
+    date = Field(input_processor=processor.Identity(),
+                 output_processor=processor.TakeFirst())
+    proposer_name = Field()
+    project_name = Field()
+    project_number = Field()
+    project_url = Field()
+    date = Field(input_processor=processor.Identity(),
+                 output_processor=processor.TakeFirst())
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())
+
+
+class PassedLawProjectProposer(Item):
+    id = Field()
+    date = Field(input_processor=processor.Identity(),
+                 output_processor=processor.TakeFirst())
+    proposer_name = Field()
+    passing_number = Field()
+    passing_url = Field()
+    source = Field(input_processor=processor.Identity(),
+                   output_processor=processor.TakeFirst())

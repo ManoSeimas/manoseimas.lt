@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import unicode_literals
 
+import datetime
+
 from urllib import urlencode
 from urlparse import urlparse, parse_qs, urlunparse
 
@@ -9,6 +11,10 @@ from scrapy.contrib.spiders import Rule
 from scrapy.selector import Selector
 from scrapy.utils.url import canonicalize_url
 
+from manoseimas.scrapy import pipelines
+from manoseimas.scrapy.items import ProposedLawProjectProposer
+from manoseimas.scrapy.items import PassedLawProjectProposer
+from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 
 
@@ -77,5 +83,49 @@ class LawProjectSpider(ManoSeimasSpider):
         Rule(mp_projects_link_extractor, 'parse_mp_project_index'),
     ]
 
-    def parse_mp_project_index(self, response, spider):
+    pipelines = (
+        pipelines.ManoSeimasModelPersistPipeline,
+    )
+
+    def _extract_passed_no(self, xs):
         pass
+
+    def _parse_project_row(self, xs, response):
+
+        loader = Loader(self, item=ProposedLawProjectProposer(), selector=xs,
+                        response=response)
+        doc_id = self._get_query_attr(xs.xpath('td[3]/a/@href').extract()[0],
+                                      'p_id')
+        loader.add_value('id', doc_id)
+        isodate = xs.xpath('td[2]/text()').extract()[0]
+        proposal_date = datetime.date(*map(int, isodate.split('-')))
+        loader.add_value('date', proposal_date)
+        loader.add_xpath('project_name', 'td[3]/text()')
+        loader.add_xpath('project_url', 'td[3]/a/@href')
+        loader.add_value('source', self._get_source(response.url, 'p_asm_id'))
+        # TODO Add extract and add proposal number
+        yield loader.load_item()
+        passed_xs = xs.xpath('td[4]/a')
+        if passed_xs:
+            loader = Loader(self, item=PassedLawProjectProposer(),
+                            selector=passed_xs, response=response)
+            doc_id = self._get_query_attr(
+                passed_xs.xpath('@href').extract()[0], 'p_id'
+            )
+            loader.add_value('id', doc_id)
+            # TODO Add extract and add passing number
+            loader.add_xpath('passing_url', '@href')
+            loader.add_value('date', proposal_date)
+            loader.add_value('source', self._get_source(response.url,
+                                                        'p_asm_id'))
+            yield loader.load_item()
+
+    def parse_mp_project_index(self, response):
+        sel = Selector(response)
+        main_xs = sel.xpath('/html/body/div/table/tr[3]/td/table/tr/td/*')
+        mp_name = main_xs.xpath('h4/text()').extract()
+        xs = main_xs.xpath('div/table/tr/td/table[@class="basic"]/tr[td]')
+        for row_xs in xs:
+            for item in self._parse_project_row(row_xs, response):
+                item['proposer_name'] = mp_name
+                yield item
