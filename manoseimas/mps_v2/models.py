@@ -256,6 +256,8 @@ class StenogramTopic(CrawledItem):
     stenogram = models.ForeignKey(Stenogram, related_name='topics')
     title = models.TextField()
     timestamp = models.DateTimeField()
+    presenters = models.ManyToManyField(ParliamentMember,
+                                        related_name='presented_topics')
 
     def __unicode__(self):
         return self.title[:160]
