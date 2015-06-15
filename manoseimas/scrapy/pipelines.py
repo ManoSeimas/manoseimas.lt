@@ -85,7 +85,7 @@ class MPNameMatcher(object):
         self.mp_names = {u'{}. {}'.format(mp.first_name[:1].upper(),
                                           mp.last_name.upper()): mp
                          for mp in all_mps}
-        full_names = {mp.full_name: mp
+        full_names = {mp.full_name.upper(): mp
                       for mp in all_mps}
         self.mp_names.update(full_names)
 
@@ -208,8 +208,10 @@ class ManoSeimasModelPersistPipeline(object):
                 timestamp=datetime.datetime.strptime(doc['created'],
                                                      '%Y-%m-%dT%H:%M:%SZ'),
             )
-        topic.presenters = filter(bool, map(self.mp_matcher.get_mp_by_name,
-                                            list(presenter_names)))
+        presenters = filter(bool,
+                            map(self.mp_matcher.get_mp_by_name,
+                                list(presenter_names)))
+        topic.presenters = presenters
         topic.save()
 
         # Recreate all the statements since we can't reliably
