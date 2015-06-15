@@ -18,10 +18,10 @@ page_url = (slug) ->
     SERVER_URL + "/" + slug
 
 mp_url = (slug) ->
-    SERVER_URL + "/mp/parliamentarian/" + slug.slice(0, 50)
+    SERVER_URL + "/mp/parliamentarian/" + slug.slice(0, 120)
 
 fraction_url = (slug) ->
-    SERVER_URL + "/mp/" + slug.slice(0, 50)
+    SERVER_URL + "/mp/" + slug.slice(0, 120)
 
 # Basic display helpers
 show = (elements...) ->

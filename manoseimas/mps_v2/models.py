@@ -1,5 +1,5 @@
 from django.db import models
-from autoslug import AutoSlugField
+from django_extensions.db.fields import AutoSlugField
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -56,7 +56,7 @@ def prepare_positions(node):
 
 
 class ParliamentMember(CrawledItem):
-    slug = AutoSlugField(populate_from=get_mp_full_name)
+    slug = AutoSlugField(populate_from='full_name', max_length=120)
     source_id = models.CharField(max_length=16)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
@@ -194,7 +194,7 @@ class Group(CrawledItem):
     )
 
     name = models.CharField(max_length=255, unique=True)
-    slug = AutoSlugField(populate_from='name')
+    slug = AutoSlugField(populate_from='name', max_length=120)
     type = models.CharField(max_length=64,
                             choices=GROUP_TYPES)
     displayed = models.BooleanField(default=True)

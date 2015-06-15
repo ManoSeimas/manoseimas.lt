@@ -84,7 +84,7 @@ class Fraction(PoliticalGroup):
         return set(m.profile.ref for m in memberships)
 
     def permalink(self):
-        return reverse('mp_fraction', kwargs={'fraction_slug': self.slug[:50]})
+        return reverse('mp_fraction', kwargs={'fraction_slug': self.slug[:120]})
 
 provideNode(Fraction, "fraction")
 

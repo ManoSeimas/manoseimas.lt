@@ -143,11 +143,12 @@ class ManoSeimasModelPersistPipeline(object):
         mp.save()
 
         for item_group in item['groups']:
-            group, __ = Group.objects.get_or_create(
+            group, created = Group.objects.get_or_create(
                 name=item_group['name'],
                 type=item_group['type'],
                 defaults={'source': source_url}
             )
+            group.save()
             membership, __ = GroupMembership.objects.get_or_create(
                 member=mp,
                 group=group,
