@@ -25,12 +25,12 @@ def process_mp_page_url(url):
     ...                     'w5_smn_akt_new.seim_nar_proj'
     ...                     '?p_start=2012-11-16&p_end=&p_kad_ses='
     ...                     '&p_asm_id=7198&p_grup_id=8&p_forma=')
-    'http://www3.lrs.lt/pls/inter/w5_smn_akt_new.seim_nar_proj?p_asm_id=7198&p_end=&p_forma=&p_grup_id=8&p_kad_ses=&p_no=1&p_start=2012-11-16'
+    'http://www3.lrs.lt/pls/inter/w5_smn_akt_new.seim_nar_proj?p_asm_id=7198&p_end=&p_forma=&p_grup_id=8&p_kad_ses=&p_no=1&p_rus=&p_start=2012-11-16'
     >>> process_mp_page_url('http://www3.lrs.lt/pls/inter/'
     ...                     'w5_smn_akt_new.seim_nar_proj'
     ...                     '?p_start=2012-11-16&p_end=&p_kad_ses='
     ...                     '&p_asm_id=7198&p_grup_id=8&p_forma=&p_no=2')
-    'http://www3.lrs.lt/pls/inter/w5_smn_akt_new.seim_nar_proj?p_asm_id=7198&p_end=&p_forma=&p_grup_id=8&p_kad_ses=&p_no=2&p_start=2012-11-16'
+    'http://www3.lrs.lt/pls/inter/w5_smn_akt_new.seim_nar_proj?p_asm_id=7198&p_end=&p_forma=&p_grup_id=8&p_kad_ses=&p_no=2&p_rus=&p_start=2012-11-16'
     """  # noqa
     parts = urlparse(url)
     qs = parse_qs(parts.query, keep_blank_values=True)
