@@ -37,6 +37,8 @@ def check_spider_pipeline(process_item_method):
         # process_item method normally.
         if self.__class__ in getattr(spider, 'pipelines', []) or spider is None:
             return process_item_method(self, item, spider)
+        else:
+            return item
 
     return wrapper
 
