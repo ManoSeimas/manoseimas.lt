@@ -21,6 +21,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='parliamentmember',
             name='slug',
-            field=django_extensions.db.fields.AutoSlugField(populate_from=manoseimas.mps_v2.models.get_mp_full_name, max_length=120, editable=False, blank=True),
+            field=django_extensions.db.fields.AutoSlugField(populate_from=('first_name', 'last_name'), max_length=120, editable=False, blank=True),
         ),
     ]

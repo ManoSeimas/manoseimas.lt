@@ -56,7 +56,8 @@ def prepare_positions(node):
 
 
 class ParliamentMember(CrawledItem):
-    slug = AutoSlugField(populate_from='full_name', max_length=120)
+    slug = AutoSlugField(populate_from=('first_name', 'last_name'),
+                         max_length=120)
     source_id = models.CharField(max_length=16)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
