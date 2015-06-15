@@ -212,7 +212,9 @@ class SyncProcessor(object):
 
         # HM 2013-08-20: This is temporary, until we actually implement legal acts
         question = self.get_question(doc)
-        node.documents = list(question['documents'])
+        node.documents = (list(question['documents'])
+                          if question['documents']
+                          else list(doc.documents))
 
         # Source information
         node.source = self.get_source(doc)
