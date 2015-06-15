@@ -199,16 +199,17 @@ class ManoSeimasModelPersistPipeline(object):
 
         presenter_names = set()
         for doc in docs:
-            for speaker in doc['speakers']:
-                presenter_names.add(speaker['name'])
+            for document in doc.get('documents', []):
+                for speaker in document.get('speakers', []):
+                    presenter_names.add(speaker['name'])
             Voting.objects.create(
                 stenogram_topic=topic,
                 node=doc['_id'],
                 timestamp=datetime.datetime.strptime(doc['created'],
                                                      '%Y-%m-%dT%H:%M:%SZ'),
             )
-        topic.presenters = map(self.mp_matcher.get_mp_by_name,
-                               list(presenter_names))
+        topic.presenters = filter(bool, map(self.mp_matcher.get_mp_by_name,
+                                            list(presenter_names)))
         topic.save()
 
         # Recreate all the statements since we can't reliably
