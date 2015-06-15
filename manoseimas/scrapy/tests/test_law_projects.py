@@ -30,4 +30,4 @@ class LawProjectUtilsTestCase(TestCase):
         links = LawProjectSpider.mp_projects_link_extractor.extract_links(
             response
         )
-        self.assertEqual(2, len(links))
+        self.assertEqual(1, len(links))

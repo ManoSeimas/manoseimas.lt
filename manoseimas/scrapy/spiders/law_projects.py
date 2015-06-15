@@ -29,6 +29,8 @@ def process_mp_page_url(url):
     qs = parse_qs(parts.query, keep_blank_values=True)
     if 'p_no' not in qs:
         qs['p_no'] = 1
+    if 'p_rus' not in qs:
+        qs['p_rus'] = ''
     new_url = urlunparse([
         parts.scheme,
         parts.netloc,
@@ -51,35 +53,24 @@ class LawProjectSpider(ManoSeimasSpider):
     ]
 
     mp_projects_link_extractor = LxmlLinkExtractor(
-        allow=[(r'http://www3.lrs.lt/pls/inter/w5_smn_akt_new.seim_nar_proj'
+        allow=[(r'http://www3.lrs.lt/pls/inter/w5_smn_akt_new\.seim_nar_proj'
                 '\?p_asm_id=\d+'
                 '&p_end='
                 '&p_forma='
                 '&p_grup_id=8'
                 '&p_kad_ses='
                 '&p_start=2012-11-16'),
-               (r'http://www3.lrs.lt/pls/inter/w5_smn_akt_new.seim_nar_proj'
+               (r'http://www3.lrs.lt/pls/inter/w5_smn_akt_new\.seim_nar_proj'
                 '\?p_asm_id=\d+'
                 '&p_end=[^&]*'
                 '&p_forma=[^&]*'
                 '&p_grup_id=[^&]*'
                 '&p_kad_ses=[^&]*'
                 '&p_no=\d+'
-                '&p_start=2012-11-16'),
+                '&p_rus=[^&]*'
+                '&p_start=[^&]*'),
                ],
-        process_value=canonicalize_url,
-    )
-
-    mp_project_page_link_extractor = LxmlLinkExtractor(
-        allow=[(r'http://www3.lrs.lt/pls/inter/w5_smn_akt_new.seim_nar_proj'
-                '\?p_asm_id=\d+'
-                '&p_end=[^&]*'
-                '&p_forma=[^&]*'
-                '&p_grup_id=[^&]*'
-                '&p_kad_ses=[^&]*'
-                '&p_no=\d+'
-                '&p_start=2012-11-16')],
-        process_value=canonicalize_url,
+        process_value=process_mp_page_url,
     )
 
     rules = [
