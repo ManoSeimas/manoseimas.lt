@@ -1,5 +1,6 @@
 # coding: utf-8
 from __future__ import unicode_literals
+import re
 
 import datetime
 
@@ -87,8 +88,15 @@ class LawProjectSpider(ManoSeimasSpider):
         pipelines.ManoSeimasModelPersistPipeline,
     )
 
+    def _extract_proposal_no(self, xs):
+        match = xs.xpath('td[2]/a/text()').re(r'(XI{1,3}P-\d+)')
+        if match:
+            return match[0]
+
     def _extract_passed_no(self, xs):
-        pass
+        match = xs.xpath('text()').re(r'.*(XI{1,3}-\d+)')
+        if match:
+            return match[0]
 
     def _parse_project_row(self, xs, response):
 
@@ -102,9 +110,10 @@ class LawProjectSpider(ManoSeimasSpider):
         loader.add_value('date', proposal_date)
         loader.add_xpath('project_name', 'td[3]/text()')
         loader.add_xpath('project_url', 'td[3]/a/@href')
+        loader.add_value('project_number', self._extract_proposal_no(xs))
         loader.add_value('source', self._get_source(response.url, 'p_asm_id'))
-        # TODO Add extract and add proposal number
-        yield loader.load_item()
+        loader.add_value('project_number', self._extract_proposal_no(xs))
+        yield loader
         passed_xs = xs.xpath('td[4]/a')
         if passed_xs:
             loader = Loader(self, item=PassedLawProjectProposer(),
@@ -113,19 +122,20 @@ class LawProjectSpider(ManoSeimasSpider):
                 passed_xs.xpath('@href').extract()[0], 'p_id'
             )
             loader.add_value('id', doc_id)
-            # TODO Add extract and add passing number
+            doc_number = self._extract_passed_no(passed_xs)
+            loader.add_value('passing_number', doc_number)
             loader.add_xpath('passing_url', '@href')
             loader.add_value('date', proposal_date)
             loader.add_value('source', self._get_source(response.url,
                                                         'p_asm_id'))
-            yield loader.load_item()
+            yield loader
 
     def parse_mp_project_index(self, response):
         sel = Selector(response)
         main_xs = sel.xpath('/html/body/div/table/tr[3]/td/table/tr/td/*')
-        mp_name = main_xs.xpath('h4/text()').extract()
+        mp_name = main_xs.xpath('h4/text()').extract()[0]
         xs = main_xs.xpath('div/table/tr/td/table[@class="basic"]/tr[td]')
         for row_xs in xs:
-            for item in self._parse_project_row(row_xs, response):
-                item['proposer_name'] = mp_name
-                yield item
+            for loader in self._parse_project_row(row_xs, response):
+                loader.add_value('proposer_name', mp_name)
+                yield loader.load_item()
