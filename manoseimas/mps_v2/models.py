@@ -413,6 +413,7 @@ class Ranking(models.Model):
     statement_count_rank = models.IntegerField(default=0)
     long_statement_count_rank = models.IntegerField(default=0)
     discusion_contribution_percentage_rank = models.IntegerField(default=0)
+    passed_law_project_ratio_rank = models.IntegerField(default=0)
 
     class Meta:
         abstract = True
@@ -425,6 +426,8 @@ class Ranking(models.Model):
         'long_statement_count_rank')
     discusion_contribution_percentage_percentile = percentile_property(
         'discusion_contribution_percentage_rank')
+    passed_law_project_ratio_percentile = percentile_property(
+        'passed_law_project_ratio_rank')
 
 
 class MPRanking(Ranking):
