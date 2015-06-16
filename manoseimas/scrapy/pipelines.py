@@ -118,7 +118,9 @@ class ManoSeimasModelPersistPipeline(object):
         mp.last_name = item['last_name']
         mp.date_of_birth = item.get('dob')
         mp.email = item.get('email', [None])[0]
-        mp.phone = item.get('phone', [None])[0]
+        phone = item.get('phone', [None])[0]
+        if phone:
+            mp.phone = phone[:32]
         mp.candidate_page = item.get('home_page')
         mp.term_of_office = item.get('parliament', [None])[0]
         mp.office_address = item['office_address']
