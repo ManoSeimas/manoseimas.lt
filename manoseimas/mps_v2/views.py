@@ -145,6 +145,9 @@ def mp_profile(request, mp_slug):
             mp.discussion_contribution_percentage,
         'votes': mp.votes,
         'vote_percent': mp.vote_percentage,
+        'proposed_projects': mp.proposed_law_project_count,
+        'passed_projects': mp.passed_law_project_count,
+        'passed_project_percentage': mp.passed_law_project_ratio * 100.0,
     }
 
     context = {
