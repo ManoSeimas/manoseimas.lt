@@ -7,21 +7,16 @@ loadStatments = (data, url) ->
   $("[data-session='#{selected_session}']").addClass("selected")
   $('.ui.sticky').sticky({context: '.transcriptions', offset: 70})
 
-  console.log  "Load was performed."
-
 
 ## EVENTS
 search_params = $(location).attr('search')
 global_session = null
 
-buildSearchParams = (session) ->
-  session = global_session
-  console.log(session)
+buildSearchParams = ->
   only_as_presenter = $('#only_as_presenter').checkbox('is checked')
-  console.log(only_as_presenter)
   params = []
   if session and session isnt 'None'
-    params.push "session=#{session}"
+    params.push "session=#{global_session}"
   if only_as_presenter
     params.push "only_as_presenter=1"
   return "?#{params.join('&')}"
@@ -73,12 +68,6 @@ loadStatementEvents = (url) ->
       loadStatments(data, url)
       $.scrollTo('.transcripts', 100, {offset: -40})
 
-  $('#only_as_presenter').change (e) ->
-    search_params = buildSearchParams()
-    $.get "#{url}#{search_params}", (data) ->
-      loadStatments(data, url)
-      $.scrollTo('.transcripts', 100, {offset: -40})
-
 
 
 
@@ -89,3 +78,9 @@ $(document).ready ->
   # $(location).attr 'pathname'
   $.get url, (data) ->
     loadStatments(data, url)
+
+  $('#only_as_presenter input').change (e) ->
+    e.preventDefault()
+    search_params = buildSearchParams()
+    $.get "#{url}#{search_params}", (data) ->
+      loadStatments(data, url)
