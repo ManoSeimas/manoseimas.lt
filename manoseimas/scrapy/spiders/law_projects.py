@@ -1,6 +1,5 @@
 # coding: utf-8
 from __future__ import unicode_literals
-import re
 
 import datetime
 
@@ -9,6 +8,7 @@ from urlparse import urlparse, parse_qs, urlunparse
 
 from scrapy.contrib.linkextractors.lxmlhtml import LxmlLinkExtractor
 from scrapy.contrib.spiders import Rule
+from scrapy.http import Request
 from scrapy.selector import Selector
 from scrapy.utils.url import canonicalize_url
 
@@ -90,7 +90,7 @@ class LawProjectSpider(ManoSeimasSpider):
     )
 
     def _extract_proposal_no(self, xs):
-        match = xs.xpath('td[2]/a/text()').re(r'(XI{1,3}P-\d+)')
+        match = xs.xpath('td[3]/a/text()').re(r'(XI{1,3}P-\d+)')
         if match:
             return match[0]
 
@@ -100,7 +100,6 @@ class LawProjectSpider(ManoSeimasSpider):
             return match[0]
 
     def _parse_project_row(self, xs, response):
-
         loader = Loader(self, item=ProposedLawProjectProposer(), selector=xs,
                         response=response)
         doc_id = self._get_query_attr(xs.xpath('td[3]/a/@href').extract()[0],
@@ -111,7 +110,6 @@ class LawProjectSpider(ManoSeimasSpider):
         loader.add_value('date', proposal_date)
         loader.add_xpath('project_name', 'td[3]/text()')
         loader.add_xpath('project_url', 'td[3]/a/@href')
-        loader.add_value('project_number', self._extract_proposal_no(xs))
         loader.add_value('source', self._get_source(response.url, 'p_asm_id'))
         loader.add_value('project_number', self._extract_proposal_no(xs))
         passed_xs = xs.xpath('td[4]/a')
@@ -125,7 +123,6 @@ class LawProjectSpider(ManoSeimasSpider):
             doc_number = self._extract_passed_no(passed_xs)
             passed.add_value('passing_number', doc_number)
             passed.add_xpath('passing_url', '@href')
-            passed.add_value('date', proposal_date)
             passed.add_value('source', self._get_source(response.url,
                                                         'p_asm_id'))
             loader.add_value('passed', passed.load_item())
@@ -139,4 +136,23 @@ class LawProjectSpider(ManoSeimasSpider):
         for row_xs in xs:
             for loader in self._parse_project_row(row_xs, response):
                 loader.add_value('proposer_name', mp_name)
-                yield loader.load_item()
+                item = loader.load_item()
+                if 'passed' in item:
+                    req = Request(
+                        url=item['passed']['passing_url'],
+                        callback=self.parse_passing_document,
+                    )
+                    req.meta['proposal_item'] = item
+                    yield req
+                else:
+                    yield item
+
+    def parse_passing_document(self, response):
+        proposal_item = response.meta['proposal_item']
+        sel = Selector(response)
+        isodate = sel.xpath(
+            '/html/body/table[@class="basic"]/tr[1]/td[3]/b/text()'
+        ).extract()[0].strip()
+        passing_date = datetime.date(*map(int, isodate.split('-')))
+        proposal_item['passed']['passing_date'] = passing_date
+        yield proposal_item

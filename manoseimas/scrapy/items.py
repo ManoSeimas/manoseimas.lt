@@ -221,8 +221,8 @@ class ProposedLawProjectProposer(Item):
 
 class PassedLawProjectProposer(Item):
     id = Field()
-    date = Field(input_processor=processor.Identity(),
-                 output_processor=processor.TakeFirst())
+    passing_date = Field(input_processor=processor.Identity(),
+                         output_processor=processor.TakeFirst())
     proposer_name = Field()
     passing_number = Field()
     passing_url = Field()
