@@ -15,7 +15,7 @@ global_session = null
 buildSearchParams = ->
   only_as_presenter = $('#only_as_presenter').checkbox('is checked')
   params = []
-  if session and session isnt 'None'
+  if global_session and global_session isnt 'None'
     params.push "session=#{global_session}"
   if only_as_presenter
     params.push "only_as_presenter=1"
