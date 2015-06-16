@@ -85,6 +85,11 @@ class ParliamentMember(CrawledItem):
     discussion_contribution_percentage = models.FloatField(blank=True,
                                                            null=True)
     positions = JSONField(default=None, blank=True, null=True)
+    proposed_law_project_count = models.PositiveIntegerField(blank=True,
+                                                             null=True)
+    passed_law_project_count = models.PositiveIntegerField(blank=True,
+                                                           null=True)
+    passed_law_project_ratio = models.FloatField(blank=True, null=True)
 
     precomputed_fields = (
         ('statement_count', 'get_statement_count'),
@@ -93,6 +98,9 @@ class ParliamentMember(CrawledItem):
         ('discussion_contribution_percentage',
          'get_discussion_contribution_percentage'),
         ('positions', 'get_positions'),
+        ('proposed_law_project_count', 'get_proposed_law_project_count'),
+        ('passed_law_project_count', 'get_passed_law_project_count'),
+        ('passed_law_project_ratio', 'get_passed_law_project_ratio'),
     )
     precomputation_depends_on = ('StenogramStatement',)
 
@@ -160,6 +168,19 @@ class ParliamentMember(CrawledItem):
         vote_percentage = float(votes) / total_votes * 100.0
         return vote_percentage
 
+    def get_proposed_law_project_count(self):
+        return self.law_projects.count()
+
+    def get_passed_law_project_count(self):
+        return self.law_projects.filter(date_passed__isnull=False).count()
+
+    def get_passed_law_project_ratio(self):
+        proposed_count = self.get_proposed_law_project_count()
+        if proposed_count:
+            return float(self.get_passed_law_project_count()) / proposed_count
+        else:
+            return 0.0
+
     def get_positions(self):
         try:
             mp_node = couch.view('sboard/by_slug', key=self.slug).one()
@@ -209,6 +230,9 @@ class Group(CrawledItem):
     avg_discussion_contribution_percentage = models.FloatField(blank=True,
                                                                null=True)
     positions = JSONField(default=None, blank=True, null=True)
+    avg_law_project_count = models.FloatField(blank=True, null=True)
+    avg_passed_law_project_count = models.FloatField(blank=True, null=True)
+    avg_passed_law_project_ratio = models.FloatField(blank=True, null=True)
 
     precomputed_fields = (
         ('avg_statement_count', 'get_avg_statement_count'),
@@ -217,6 +241,12 @@ class Group(CrawledItem):
         ('avg_discussion_contribution_percentage',
          'get_avg_discussion_contribution_percentage'),
         ('positions', 'get_positions'),
+        ('avg_law_project_count',
+         'get_avg_proposed_law_project_count'),
+        ('avg_passed_law_project_count',
+         'get_avg_passed_law_project_count'),
+        ('avg_passed_law_project_ratio',
+         'get_avg_passed_law_project_ratio'),
     )
     precomputation_filter = {
         'type__in': (TYPE_FRACTION, TYPE_PARLIAMENT),
@@ -274,6 +304,30 @@ class Group(CrawledItem):
     def get_positions(self):
         fraction_node = couch.view('sboard/by_slug', key=self.slug).one()
         return prepare_positions(fraction_node)
+
+    def get_avg_proposed_law_project_count(self):
+        agg = self.active_members.annotate(
+            models.Count('law_projects')
+        ).aggregate(
+            avg_law_projects=models.Avg('law_projects__count')
+        )
+        return agg['avg_law_projects']
+
+    def get_avg_passed_law_project_count(self):
+        agg = self.active_members.filter(
+            law_projects__date_passed__isnull=False
+        ).annotate(
+            models.Count('law_projects')
+        ).aggregate(
+            avg_passed_projects=models.Avg('law_projects__count')
+        )
+        return agg['avg_passed_projects']
+
+    def get_avg_passed_law_project_ratio(self):
+        agg = self.active_members.aggregate(
+            avg_passed_ratio=models.Avg('passed_law_project_ratio')
+        )
+        return agg['avg_passed_ratio']
 
 
 class GroupMembership(CrawledItem):
@@ -398,3 +452,10 @@ class LawProject(CrawledItem):
                                          null=True, db_index=True)
     passing_doc_number = models.CharField(max_length=32, blank=True, null=True)
     passing_doc_url = models.URLField(blank=True, null=True)
+
+    def __unicode__(self):
+        if self.date_passed:
+            return u'{} ({}) - passed {}'.format(self.project_number,
+                                                 self.date, self.date_passed)
+        else:
+            return u'{} ({})'.format(self.project_number, self.date)
