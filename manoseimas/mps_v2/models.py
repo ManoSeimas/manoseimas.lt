@@ -381,3 +381,20 @@ class MPRanking(Ranking):
 class GroupRanking(Ranking):
     target = models.OneToOneField(Group,
                                   related_name='ranking')
+
+
+class LawProject(CrawledItem):
+    source_id = models.CharField(max_length=16, db_index=True, unique=True)
+    date = models.DateField()
+    project_name = models.TextField()
+    project_number = models.CharField(max_length=32)
+    project_url = models.URLField()
+
+    proposers = models.ManyToManyField(ParliamentMember,
+                                       related_name='law_projects')
+
+    date_passed = models.DateField(blank=True, null=True)
+    passing_source_id = models.CharField(max_length=16, blank=True,
+                                         null=True, db_index=True)
+    passing_doc_number = models.CharField(max_length=32, blank=True, null=True)
+    passing_doc_url = models.URLField(blank=True, null=True)

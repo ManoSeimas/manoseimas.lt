@@ -241,7 +241,6 @@ class SyncProcessor(object):
                                       doc['images'][0]['path'])
             self.set_image_from_file(node, photo_path)
         elif 'photo' in doc:
-            print('downloading photo')
             self.set_image_from_url(node, doc['photo'])
 
         self.process_groups(doc['groups'], node, update_mode)

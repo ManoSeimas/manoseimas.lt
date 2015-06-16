@@ -8,7 +8,7 @@ from django.core.files.base import ContentFile
 import manoseimas.common.utils.words as words_utils
 
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
-from manoseimas.scrapy.items import Person, StenogramTopic
+from manoseimas.scrapy.items import Person, StenogramTopic, ProposedLawProjectProposer
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
 from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
 
@@ -16,7 +16,7 @@ from manoseimas.mps_v2.models import ParliamentMember, PoliticalParty
 from manoseimas.mps_v2.models import Group, GroupMembership
 from manoseimas.mps_v2.models import Stenogram, StenogramStatement
 from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
-from manoseimas.mps_v2.models import Voting
+from manoseimas.mps_v2.models import Voting, LawProject
 
 
 def is_latest_version(item, doc):
@@ -88,6 +88,9 @@ class MPNameMatcher(object):
         full_names = {mp.full_name.upper(): mp
                       for mp in all_mps}
         self.mp_names.update(full_names)
+        reversed_names = {' '.join([mp.last_name, mp.first_name]).upper(): mp
+                          for mp in all_mps}
+        self.mp_names.update(reversed_names)
 
     def get_mp_by_name(self, mp_name, fraction=None):
         mp_name = mp_name.upper()
@@ -118,7 +121,9 @@ class ManoSeimasModelPersistPipeline(object):
         mp.last_name = item['last_name']
         mp.date_of_birth = item.get('dob')
         mp.email = item.get('email', [None])[0]
-        mp.phone = item.get('phone', [None])[0]
+        phone = item.get('phone', [None])[0]
+        if phone:
+            mp.phone = phone[:32]
         mp.candidate_page = item.get('home_page')
         mp.term_of_office = item.get('parliament', [None])[0]
         mp.office_address = item['office_address']
@@ -234,12 +239,43 @@ class ManoSeimasModelPersistPipeline(object):
 
         return item
 
+    @transaction.atomic
+    def process_proposed_law_project(self, item, spider):
+        source_url = item['source']['url']
+        mp = self.mp_matcher.get_mp_by_name(item['proposer_name'])
+        if not mp:
+            # If we dont know this MP there is nothing we can do.
+            # We will receive this project with another MP
+            print(u'Bailing because no mp: {}'.format(item['proposer_name']))
+            return item
+        proposal, created = LawProject.objects.get_or_create(
+            source_id=item['id'],
+            defaults={'date': item['date'],
+                      'project_name': item['project_name'],
+                      'project_number': item['project_number'],
+                      'project_url': item['project_url'],
+                      'source': source_url}
+        )
+        proposal.proposers.add(mp)
+        passing = item.get('passed')
+        if passing:
+            proposal.date_passed = passing['passing_date']
+            proposal.passing_source_id = passing['id']
+            proposal.passing_number = passing.get('passing_number')
+            proposal.passing_url = passing['source']['url']
+
+        proposal.save()
+
+        return item
+
     @check_spider_pipeline
     def process_item(self, item, spider):
         if isinstance(item, Person):
             return self.process_mp(item, spider)
         elif isinstance(item, StenogramTopic):
             return self.process_stenogram_topic(item, spider)
+        elif isinstance(item, ProposedLawProjectProposer):
+            return self.process_proposed_law_project(item, spider)
         else:
             return item
 

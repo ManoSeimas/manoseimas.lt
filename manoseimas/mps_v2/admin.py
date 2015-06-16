@@ -3,7 +3,7 @@ from django.contrib import admin
 from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
 from manoseimas.mps_v2.models import PoliticalParty
 from manoseimas.mps_v2.models import Stenogram, StenogramTopic
-from manoseimas.mps_v2.models import StenogramStatement, Voting
+from manoseimas.mps_v2.models import StenogramStatement, Voting, LawProject
 from manoseimas.mps_v2.models import MPRanking, GroupRanking
 
 
@@ -55,3 +55,4 @@ admin.site.register(StenogramStatement)
 admin.site.register(Voting)
 admin.site.register(MPRanking)
 admin.site.register(GroupRanking)
+admin.site.register(LawProject)
