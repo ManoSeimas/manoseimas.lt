@@ -177,7 +177,8 @@ class ParliamentMember(CrawledItem):
     def get_passed_law_project_ratio(self):
         proposed_count = self.get_proposed_law_project_count()
         if proposed_count:
-            return float(self.get_passed_law_project_count()) / proposed_count
+            return (float(self.get_passed_law_project_count())
+                    / proposed_count * 100.0)
         else:
             return 0.0
 

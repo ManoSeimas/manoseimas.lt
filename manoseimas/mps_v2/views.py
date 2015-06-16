@@ -75,7 +75,7 @@ def mp_fraction(request, fraction_slug):
         slug=fraction_slug
     )
 
-    members = fraction.members.filter(groupmembership__until=None)
+    members = fraction.active_members
 
     context = {
         'fraction': fraction,
@@ -147,7 +147,7 @@ def mp_profile(request, mp_slug):
         'vote_percent': mp.vote_percentage,
         'proposed_projects': mp.proposed_law_project_count,
         'passed_projects': mp.passed_law_project_count,
-        'passed_project_percentage': mp.passed_law_project_ratio * 100.0,
+        'passed_project_percentage': mp.passed_law_project_ratio,
     }
 
     context = {

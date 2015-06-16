@@ -40,6 +40,22 @@
             .explanation ilgi pasisakymai (vid.)
         .rating: .ui.indicating.progress(data-percent=fraction.ranking.statement_count_percentile): .bar
 
+      .stats-box
+        .three-numbers
+          h3 Įstatymų projetai
+          .block
+            h4.number {{fraction.avg_law_project_count|floatformat:0}}
+            p.explanation pasiūlyti	(vid.)
+          .block
+            h4.number {{fraction.avg_passed_law_project_count|floatformat:0}}
+            .explanation priimti (vid.)
+          .block
+            h4.number {{fraction.avg_passed_law_project_ratio|floatformat:0}}%
+            .explanation palaikymas (vid.)
+        .rating(data-title="Priimtų/pasiūlytų įstatymų santykis geresnis negu {{ranking.passed_law_project_ratio_percentile}}%" data-content="Palyginimas su kitų frakcijų priimtų ir pasiūlytų įstatymų santykiu.")
+          .ui.indicating.progress(data-percent="{{ ranking.avg_passed_law_project_ratio_percentile }}"): .bar
+
+
       .stats-box.total
         .stats
           h3 40%
