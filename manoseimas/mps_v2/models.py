@@ -219,7 +219,7 @@ class Group(CrawledItem):
         ('positions', 'get_positions'),
     )
     precomputation_filter = {
-        'type': TYPE_FRACTION,
+        'type__in': (TYPE_FRACTION, TYPE_PARLIAMENT),
     }
     precomputation_depends_on = ('ParliamentMember',)
 
