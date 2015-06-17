@@ -112,6 +112,12 @@
   // END of scrollable div
 }
 
+.law-projects {
+  td, th {
+    font-size: $small !important;
+  }
+}
+
 .ui.modal .description { border-bottom: none; }
 .statement {
   margin-bottom: 1em;
