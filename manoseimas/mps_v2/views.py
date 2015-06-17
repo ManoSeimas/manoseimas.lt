@@ -219,7 +219,9 @@ def mp_statements(request, mp_slug, statement_page=None):
     sessions = Stenogram.objects.distinct().values_list('session', flat=True)
 
     all_statements = StenogramStatement.objects.select_related(
-        'topic').filter(speaker=mp).order_by('-topic__timestamp', '-pk')
+        'topic').filter(speaker=mp,
+                        as_chairperson=False).order_by('-topic__timestamp',
+                                                       '-pk')
     if selected_session:
         all_statements = all_statements.filter(
             topic__stenogram__session=selected_session)
