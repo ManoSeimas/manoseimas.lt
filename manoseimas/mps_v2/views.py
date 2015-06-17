@@ -138,18 +138,17 @@ def mp_profile(request, mp_slug):
     profile['slug'] = mp_slug
 
     project_qs = mp.law_projects.order_by('-date')
-    project_qs.annotate(proposer_count=Count('proposers'))
+    project_qs = project_qs.annotate(proposer_count=Count('proposers'))
 
     law_projects = [{
         'title': project.project_name,
         'date': project.date,
-        'passed': project.date_passed is not None,
+        'date_passed': project.date_passed,
         'number': project.project_number,
         'url': project.project_url,
-        # 'proposer_count': project.proposer_count
+        'proposer_count': project.proposer_count,
 
-        } for project in project_qs
-    ]
+    } for project in project_qs]
 
     stats = {
         'statement_count': mp.statement_count,

@@ -187,14 +187,17 @@
             th Projekto numeris
             th Pavadinimas
             th Teikimo data
+            th Viso teikėjų
             th Priėmimas
         tbody
           for project in law_projects
             tr
-              td {{ project.number }}
+              td
+                a(href=project['url']) {{ project.number }}
               td {{ project.title }}
               td {{ project.date }}
-              if project.passed
-                td.positive Priimtas
+              td {{ project.proposer_count }}
+              if project.date_passed
+                td Priimtas {{ project.date_passed }}
               else
-                td.negative Nepriimtas
+                td Nepriimtas
