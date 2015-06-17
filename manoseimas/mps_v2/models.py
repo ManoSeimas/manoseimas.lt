@@ -401,7 +401,7 @@ class Voting(models.Model):
 
 def percentile_property(attr):
     def inner_fn(self):
-        total = self.__class__.objects.count()
+        total = self.total
         return int((total - getattr(self, attr) + 1.0)
                    / total * 100 + 0.5)
     return property(inner_fn)
@@ -418,6 +418,10 @@ class Ranking(models.Model):
 
     class Meta:
         abstract = True
+
+    @reify
+    def total(self):
+        return self.__class__.objects.count()
 
     votes_percentile = percentile_property(
         'votes_rank')
@@ -439,6 +443,10 @@ class MPRanking(Ranking):
 class GroupRanking(Ranking):
     target = models.OneToOneField(Group,
                                   related_name='ranking')
+
+    @reify
+    def total(self):
+        return self.__class__.objects.filter(type=self.type).count()
 
 
 class LawProject(CrawledItem):
