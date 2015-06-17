@@ -1,0 +1,15 @@
+- extends "new_base.jade"
+- load static from staticfiles
+- load compress from compress
+
+- block title
+  | JSX test
+
+-block inlinejs
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
+  - compress js
+    script(src="{% static 'jsx/test2.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'jsx/test.jsx' %}", type="text/jsx", charset="utf-8")
+
+-block content
+  #example

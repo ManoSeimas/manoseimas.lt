@@ -208,6 +208,11 @@ def mp_discussion_json(request, statement_id):
     return JsonResponse(context)
 
 
+def jsx_test_view(request):
+    context = {}
+    return render(request, 'jsx.jade', context)
+
+
 def mp_statements(request, mp_slug, statement_page=None):
     mp = ParliamentMember.objects.get(slug=mp_slug)
 
