@@ -446,7 +446,9 @@ class GroupRanking(Ranking):
 
     @reify
     def total(self):
-        return self.__class__.objects.filter(type=self.type).count()
+        return self.__class__.objects.filter(
+            target__type=self.target.type
+        ).count()
 
 
 class LawProject(CrawledItem):
