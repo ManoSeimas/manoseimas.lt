@@ -176,3 +176,25 @@
               .explanation dalyvavimas diskusijuose
 
     .statements-component(data-slug="{{profile.slug}}")
+
+  .law-projects
+    .ui.page.grid
+      a(name="law-projects")
+      h2 Įstatymų projektai
+      table.ui.table
+        thead
+          tr
+            th Projekto numeris
+            th Pavadinimas
+            th Teikimo data
+            th Priėmimas
+        tbody
+          for project in law_projects
+            tr
+              td {{ project.number }}
+              td {{ project.title }}
+              td {{ project.date }}
+              if project.passed
+                td.positive Priimtas
+              else
+                td.negative Nepriimtas

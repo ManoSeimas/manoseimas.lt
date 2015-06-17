@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
 
 from .models import (ParliamentMember, GroupMembership, Group,
                      Stenogram, StenogramStatement)
@@ -137,6 +137,20 @@ def mp_profile(request, mp_slug):
     profile['constituency'] = mp.constituency
     profile['slug'] = mp_slug
 
+    project_qs = mp.law_projects.order_by('-date')
+    project_qs.annotate(proposer_count=Count('proposers'))
+
+    law_projects = [{
+        'title': project.project_name,
+        'date': project.date,
+        'passed': project.date_passed is not None,
+        'number': project.project_number,
+        'url': project.project_url,
+        # 'proposer_count': project.proposer_count
+
+        } for project in project_qs
+    ]
+
     stats = {
         'statement_count': mp.statement_count,
         'long_statement_count': mp.long_statement_count,
@@ -160,6 +174,7 @@ def mp_profile(request, mp_slug):
         'stats': stats,
         'photo_url': mp.photo.url,
         'ranking': mp.ranking,
+        'law_projects': law_projects,
     }
 
     return render(request, 'profile.jade', context)
