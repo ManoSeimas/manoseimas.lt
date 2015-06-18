@@ -146,7 +146,7 @@ def mp_profile(request, mp_slug):
         'url': project.project_url,
         'proposer_count': project.proposer_count,
 
-    } for project in project_qs]
+    } for project in project_qs[:10]]
 
     stats = {
         'statement_count': mp.statement_count,
