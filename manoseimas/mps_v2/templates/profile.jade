@@ -197,3 +197,28 @@
               td
                 a(href="{% url 'mp_fraction' mp.fraction.slug %}") {{ mp.fraction.name }}
               td {{ mp.project_count }}
+
+  .law-projects
+    .ui.page.grid
+      a(name="law-projects")
+      h2 Įstatymų projektai
+      table.ui.table
+        thead
+          tr
+            th Projekto numeris
+            th Pavadinimas
+            th Teikimo data
+            th Viso teikėjų
+            th Priėmimas
+        tbody
+          for project in law_projects
+            tr
+              td
+                a(href=project['url']) {{ project.number }}
+              td {{ project.title }}
+              td {{ project.date }}
+              td {{ project.proposer_count }}
+              if project.date_passed
+                td Priimtas {{ project.date_passed }}
+              else
+                td Nepriimtas
