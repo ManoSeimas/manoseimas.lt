@@ -1,3 +1,5 @@
+from collections import Counter
+
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
 
@@ -188,6 +190,25 @@ class ParliamentMember(CrawledItem):
             return prepare_positions(mp_node)
         except ResourceNotFound:
             return None
+
+    def get_collaborators_qs(self):
+        collaborators = ParliamentMember.objects.filter(
+            law_projects__in=self.law_projects.all()
+        ).exclude(
+            pk=self.pk
+        )
+        return collaborators
+
+    def get_top_collaborators(self, count=5):
+        collaborators_qs = self.get_collaborators_qs()
+        collaborators = collaborators_qs.annotate(
+            project_count=models.Count('*')
+        ).distinct().order_by('-project_count')[:count]
+        return collaborators
+
+    @property
+    def top_collaborators(self):
+        return self.get_top_collaborators()
 
     @property
     def all_statements(self):
