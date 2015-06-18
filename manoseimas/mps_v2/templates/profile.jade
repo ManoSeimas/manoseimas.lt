@@ -195,7 +195,8 @@
               td
                 a(href="{% url 'mp_profile' mp.slug %}") {{ mp.full_name }}
               td
-                a(href="{% url 'mp_fraction' mp.fraction.slug %}") {{ mp.fraction.name }}
+                if mp.fraction
+                  a(href="{% url 'mp_fraction' mp.fraction.slug %}") {{ mp.fraction.name }}
               td {{ mp.project_count }}
 
   .law-projects
