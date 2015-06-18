@@ -156,8 +156,21 @@ class ParliamentMember(CrawledItem):
     def get_vote_percentage(self):
         from manoseimas.votings.models import get_total_votes
         votes = sum(self.votes.values()) if self.votes else 0
-        total_votes = get_total_votes()
-        vote_percentage = float(votes) / total_votes * 100.0
+        # Get total votes during the time MP was in fractions
+        fraction_memberships = GroupMembership.objects.filter(
+            member=self,
+            group__type=Group.TYPE_FRACTION)
+        total_votes = 0
+        for membership in fraction_memberships:
+            start_date = membership.since.isoformat()
+            end_date = (membership.until.isoformat()
+                        if membership.until else None)
+            total_votes += get_total_votes(start_date=start_date,
+                                           end_date=end_date)
+        if total_votes:
+            vote_percentage = float(votes) / total_votes * 100.0
+        else:
+            vote_percentage = 0.0
         return vote_percentage
 
     def get_positions(self):
