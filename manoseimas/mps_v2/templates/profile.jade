@@ -176,3 +176,24 @@
               .explanation dalyvavimas diskusijuose
 
     .statements-component(data-slug="{{profile.slug}}")
+
+  .law-project-collaborators
+    .ui.page.grid
+      a(name="law-project-collaborators")
+      h2 Įstatymų projektus teikia kartu su
+      table.ui.table
+        thead
+          tr
+            th Nr.
+            th Parlamentaras
+            th Frakcija
+            th Viso projektų
+        tbody
+          for mp in top_collaborating_mps
+            tr
+              td {{ forloop.counter }}
+              td
+                a(href="{% url 'mp_profile' mp.slug %}") {{ mp.full_name }}
+              td
+                a(href="{% url 'mp_fraction' mp.fraction.slug %}") {{ mp.fraction.name }}
+              td {{ mp.project_count }}

@@ -1,5 +1,3 @@
-from collections import Counter
-
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
 
@@ -214,6 +212,17 @@ class ParliamentMember(CrawledItem):
     def all_statements(self):
         return self.statements.all()
 
+    @classmethod
+    def FractionPrefetch(cls):
+        return models.Prefetch(
+            'groupmembership',
+            queryset=GroupMembership.objects.select_related('group').filter(
+                until=None,
+                group__type=Group.TYPE_FRACTION,
+                group__displayed=True),
+            to_attr='_fraction'
+        )
+
 
 class PoliticalParty(CrawledItem):
     name = models.CharField(max_length=128, unique=True)
@@ -350,6 +359,22 @@ class Group(CrawledItem):
             avg_passed_ratio=models.Avg('passed_law_project_ratio')
         )
         return agg['avg_passed_ratio']
+
+    def get_top_collaborating_fractions(self):
+        member_projects = LawProject.objects.filter(
+            proposers__in=self.active_members)
+        collab = Group.objects.filter(
+            members__law_projects__in=member_projects,
+            groupmembership__until__isnull=True,
+            type=self.TYPE_FRACTION,
+        ).exclude(pk=self.pk).annotate(
+            project_count=models.Count('*')
+        ).distinct().order_by('-project_count')
+        return collab[:5]
+
+    @property
+    def top_collaborating_fractions(self):
+        return self.get_top_collaborating_fractions()
 
 
 class GroupMembership(CrawledItem):

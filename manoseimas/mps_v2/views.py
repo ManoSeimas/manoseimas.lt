@@ -75,11 +75,13 @@ def mp_fraction(request, fraction_slug):
         slug=fraction_slug
     )
 
+    collaborating_fractions = fraction.top_collaborating_fractions
     members = fraction.active_members
 
     context = {
         'fraction': fraction,
         'members': members,
+        'collaborating_fractions': collaborating_fractions,
         'positions': fraction.positions,
     }
     return render(request, 'fraction.jade', context)
@@ -106,14 +108,7 @@ def mp_profile(request, mp_slug):
                 group__type=Group.TYPE_GROUP,
                 group__displayed=True),
             to_attr='other_groups'))
-    mp_qs = mp_qs.prefetch_related(
-        Prefetch(
-            'groupmembership',
-            queryset=GroupMembership.objects.select_related('group').filter(
-                until=None,
-                group__type=Group.TYPE_FRACTION,
-                group__displayed=True),
-            to_attr='_fraction'))
+    mp_qs = mp_qs.prefetch_related(ParliamentMember.FractionPrefetch())
     mp = mp_qs.get(slug=mp_slug)
 
     mp_qs = mp_qs.prefetch_related(
@@ -136,6 +131,10 @@ def mp_profile(request, mp_slug):
     profile['office_address'] = mp.office_address
     profile['constituency'] = mp.constituency
     profile['slug'] = mp_slug
+
+    top_collaborators = mp.top_collaborators.prefetch_related(
+        ParliamentMember.FractionPrefetch()
+    )
 
     stats = {
         'statement_count': mp.statement_count,
@@ -160,6 +159,7 @@ def mp_profile(request, mp_slug):
         'stats': stats,
         'photo_url': mp.photo.url,
         'ranking': mp.ranking,
+        'top_collaborating_mps': top_collaborators,
     }
 
     return render(request, 'profile.jade', context)
