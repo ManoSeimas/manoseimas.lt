@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.files.storage import default_storage
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
@@ -263,7 +264,7 @@ def index_view(request):
     return render(request, 'jsx.jade', {})
 
 
-def _fraction_json(fraction):
+def _fraction_dict(fraction):
     return {
         'name': fraction.name,
         'slug': fraction.slug,
@@ -278,8 +279,42 @@ def _fraction_json(fraction):
         'avg_passed_law_project_ratio': int(fraction.avg_passed_law_project_ratio),
     }
 
+
 def fractions_json(request):
     fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
     fractions = filter(lambda f: bool(f.active_member_count), fractions)
-    fractions = map(_fraction_json, fractions)
+    fractions = map(_fraction_dict, fractions)
     return JsonResponse({'fractions': fractions})
+
+
+def _mp_dict(mp):
+    return {
+        'first_name': mp['first_name'],
+        'last_name': mp['last_name'],
+        'full_name': ' '.join([mp['first_name'], mp['last_name']]),
+        'slug': mp['slug'],
+        'url': reverse('mp_profile', kwargs={'mp_slug': mp['slug']}),
+        'photo': default_storage.url(mp['photo']),
+        'statement_count': mp['statement_count'],
+        'long_statement_count': mp['long_statement_count'],
+        'vote_percentage': mp['vote_percentage'],
+        'proposed_law_project_count': mp['proposed_law_project_count'],
+        'passed_law_project_count': mp['passed_law_project_count'],
+        'passed_law_project_ratio': mp['passed_law_project_ratio'],
+    }
+
+
+def mps_json(request):
+    mps = ParliamentMember.objects.prefetch_related(
+        Prefetch('groups',
+                 queryset=Group.objects.filter(groupmembership__until=None,
+                                               type=Group.TYPE_FRACTION,
+                                               displayed=True),
+                 to_attr='current_fraction')
+    ).filter(
+        groupmembership__until=None
+    ).distinct().values('first_name', 'last_name', 'slug',
+                        'photo', 'statement_count', 'long_statement_count',
+                        'vote_percentage', 'proposed_law_project_count',
+                        'passed_law_project_count', 'passed_law_project_ratio')
+    return JsonResponse({'items': map(_mp_dict, mps)})
