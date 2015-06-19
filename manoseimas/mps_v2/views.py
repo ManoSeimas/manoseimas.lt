@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
 from django.db.models import Prefetch
@@ -208,11 +209,6 @@ def mp_discussion_json(request, statement_id):
     return JsonResponse(context)
 
 
-def jsx_test_view(request):
-    context = {}
-    return render(request, 'jsx.jade', context)
-
-
 def mp_statements(request, mp_slug, statement_page=None):
     mp = ParliamentMember.objects.get(slug=mp_slug)
 
@@ -243,3 +239,28 @@ def mp_statements(request, mp_slug, statement_page=None):
     }
 
     return render(request, 'statments.jade', context)
+
+
+def index_view(request):
+    return render(request, 'jsx.jade', {})
+
+
+def _fraction_json(fraction):
+    return {
+        'name': fraction.name,
+        'slug': fraction.slug,
+        'type': fraction.type,
+        'logo_url': fraction.logo.url if fraction.logo else None,
+        'url': reverse('mp_fraction', kwargs={'fraction_slug': fraction.slug}),
+        'member_count': fraction.active_member_count,
+        'avg_statement_count': fraction.avg_statement_count,
+        'avg_long_statement_count': fraction.avg_long_statement_count,
+        'avg_vote_percentage': fraction.avg_vote_percentage,
+        'avg_discussion_contribution_percentage': fraction.avg_discussion_contribution_percentage,
+    }
+
+def fractions_json(request):
+    fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
+    fractions = filter(lambda f: bool(f.active_member_count), fractions)
+    fractions = map(_fraction_json, fractions)
+    return JsonResponse({'fractions': fractions})

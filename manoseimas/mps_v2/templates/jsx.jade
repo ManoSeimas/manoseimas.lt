@@ -3,13 +3,30 @@
 - load compress from compress
 
 - block title
-  | JSX test
+  | Stebėk kaip dirba seimas
 
 -block inlinejs
   script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
   - compress js
-    script(src="{% static 'jsx/test2.jsx' %}", type="text/jsx", charset="utf-8")
-    script(src="{% static 'jsx/test.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/filter_component.jsx' %}", type="text/jsx", charset="utf-8")
 
--block content
-  #example
+-block middle
+  .photo-box.index
+    .ui.page.grid
+      .doubling.one.column.row
+        .column.center.aligned
+          img(src="{% static 'img/logo-white.png' %}").logo
+          h1.title Stebėk, kaip dirba Seimo nariai
+
+          .byline
+            p Projektą rengia
+            a(href="" target="_blank").tils-logo.white
+
+  .colored-bg
+    .ui.zero.margin.center.aligned.grid
+      .switcher
+        a.item.active Frakcijos
+        a(href="{% url 'mp_list_all' %}").item Parlamentarai
+
+  .ui.page.grid
+    #fraction-filter-component
