@@ -98,6 +98,21 @@
         .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Palyginimas su kitų parlamentarų pasisakymų skaičiumi. 100% surenka šnekiausias parlamentaras.")
           .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
 
+      .stats-box
+        .three-numbers
+          h3 Įstatymų projetai
+          .block
+            h4.number {{ stats.proposed_projects }}
+            p.explanation pasiūlyti
+          .block
+            h4.number {{ stats.passed_projects }}
+            .explanation priimti
+          .block
+            h4.number {{stats.passed_project_percentage|floatformat:0 }}%
+            .explanation palaikymas
+        .rating(data-title="Priimtų/pasiūlytų įstatymų santykis geresnis negu {{ranking.passed_law_project_ratio_percentile}}%" data-content="Palyginimas su kitų parlamentarų priimtų ir pasiūlytų įstatymų santykiu.")
+          .ui.indicating.progress(data-percent="{{ ranking.passed_law_project_ratio_percentile }}"): .bar
+
       //- .stats-box.total
       //-   .stats
       //-     h3 40%
@@ -161,3 +176,50 @@
               .explanation dalyvavimas diskusijuose
 
     .statements-component(data-slug="{{profile.slug}}")
+
+  .law-project-collaborators
+    .ui.page.grid
+      a(name="law-project-collaborators")
+      h2 Įstatymų projektus teikia kartu su
+      table.ui.table
+        thead
+          tr
+            th Nr.
+            th Parlamentaras
+            th Frakcija
+            th Viso projektų
+        tbody
+          for mp in top_collaborating_mps
+            tr
+              td {{ forloop.counter }}
+              td
+                a(href="{% url 'mp_profile' mp.slug %}") {{ mp.full_name }}
+              td
+                if mp.fraction
+                  a(href="{% url 'mp_fraction' mp.fraction.slug %}") {{ mp.fraction.name }}
+              td {{ mp.project_count }}
+
+  .law-projects
+    .ui.page.grid
+      a(name="law-projects")
+      h2 Įstatymų projektai
+      table.ui.table
+        thead
+          tr
+            th Projekto numeris
+            th Pavadinimas
+            th Teikimo data
+            th Viso teikėjų
+            th Priėmimas
+        tbody
+          for project in law_projects
+            tr
+              td
+                a(href=project['url']) {{ project.number }}
+              td {{ project.title }}
+              td {{ project.date }}
+              td {{ project.proposer_count }}
+              if project.date_passed
+                td Priimtas {{ project.date_passed }}
+              else
+                td Nepriimtas

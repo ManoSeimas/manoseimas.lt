@@ -12,7 +12,8 @@ from manoseimas.mps_v2 import models
 
 ItemStats = namedtuple('ItemStats',
                        ('id', 'statement_count', 'long_statement_count',
-                        'votes', 'discusion_contribution_percentage'))
+                        'votes', 'discusion_contribution_percentage',
+                        'passed_law_project_ratio'))
 
 
 class Command(BaseCommand):
@@ -88,7 +89,8 @@ class Command(BaseCommand):
                            mp.statement_count,
                            mp.long_statement_count,
                            mp.vote_percentage,
-                           mp.discussion_contribution_percentage)
+                           mp.discussion_contribution_percentage,
+                           mp.passed_law_project_ratio)
                  for mp in tqdm(mps)]
         self.save_rankings(models.MPRanking, mps, stats)
 
@@ -103,6 +105,7 @@ class Command(BaseCommand):
                 fraction.avg_long_statement_count,
                 fraction.avg_vote_percentage,
                 fraction.avg_discussion_contribution_percentage,
+                fraction.avg_passed_law_project_ratio,
             ) for fraction in tqdm(fractions)
         ]
         self.save_rankings(models.GroupRanking, fractions, fraction_stats)
