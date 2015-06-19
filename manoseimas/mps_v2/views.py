@@ -271,11 +271,11 @@ def _fraction_json(fraction):
         'logo_url': fraction.logo.url if fraction.logo else None,
         'url': reverse('mp_fraction', kwargs={'fraction_slug': fraction.slug}),
         'member_count': fraction.active_member_count,
-        'avg_statement_count': fraction.avg_statement_count,
+        'avg_statement_count': int(fraction.avg_statement_count),
         'avg_long_statement_count': fraction.avg_long_statement_count,
-        'avg_vote_percentage': fraction.avg_vote_percentage,
+        'avg_vote_percentage': int(fraction.avg_vote_percentage),
         'avg_discussion_contribution_percentage': fraction.avg_discussion_contribution_percentage,
-        'avg_passed_law_project_ratio': fraction.avg_passed_law_project_ratio,
+        'avg_passed_law_project_ratio': int(fraction.avg_passed_law_project_ratio),
     }
 
 def fractions_json(request):
