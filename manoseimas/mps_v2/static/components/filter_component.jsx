@@ -33,15 +33,21 @@ var Filter = React.createClass({
   },
 
   render: function() {
+    var sortkeys = [
+      {key: 'name', title: 'Pavadinimas', icon: undefined},
+      {key: 'member_count', title: 'Frakcijos dydis', icon: 'users icon'},
+      {key: 'avg_statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
+      {key: 'avg_passed_law_project_ratio', title: 'Projektai', icon: ''},
+      {key: 'avg_vote_percentage', title: 'Balsavimai', icon: ''}
+    ]
     return (
       <div>
-        <div className="filter">
-          <ul>
-            <li><a onClick={this.sortElements('name')}>Pavadinimas</a></li>
-            <li><a onClick={this.sortElements('avg_statement_count')}>Pasisakymai</a></li>
-            <li><a onClick={this.sortElements('avg_vote_percentage')}>Balsavimai</a></li>
-            <li><a onClick={this.sortElements('avg_passed_law_project_ratio')}>Projektai</a></li>
-          </ul>
+        <div className="sort-keys">
+          {sortkeys.forEach(function(sortkey) {
+            return (
+              <SortKeySelector params={sortkey}/>
+            )
+          })}
         </div>
         <FractionList fractions={this.state.fractions} />
       </div>
@@ -49,10 +55,20 @@ var Filter = React.createClass({
   }
 });
 
+var SortKeySelector = React.createClass({
+  render: function() {
+    return (
+      <div onClick={this.props.params.handler} className={this.props.params.active}>
+        <i className={this.props.params.icon}></i>{this.props.params.title}
+      </div>
+    )
+  }
+});
+
 var FractionList = React.createClass({
   render: function() {
     return (
-      <div>
+      <div className="ui page grid">
       {this.props.fractions.map(function (fraction) {
         return (
           <Fraction obj={fraction} />
@@ -65,11 +81,21 @@ var FractionList = React.createClass({
 
 var Fraction = React.createClass({
   render: function() {
+    var fraction = this.props.obj;
     return (
       <div className="fraction">
-        Hello, {this.props.obj.name}!
+        <div className="name four wide column">
+          <img className="logo" src={fraction.logo_url}></img>
+          {fraction.name}
+        </div>
+        <div className="two wide column">
+          <div className="ui members statistics">
+            <div className="value">{fraction.member_count}</div>
+            <div className="label">narių</div>
+          </div>
+        </div>
       </div>
-    );
+    )
   }
 });
 
