@@ -40,16 +40,17 @@ var Filter = React.createClass({
       {key: 'avg_passed_law_project_ratio', title: 'Projektai', icon: ''},
       {key: 'avg_vote_percentage', title: 'Balsavimai', icon: ''}
     ]
+    var self = this;
     return (
       <div>
         <div className="sort-keys">
-          {sortkeys.forEach(function(sortkey) {
+          {sortkeys.map(function(sortkey) {
             return (
-              <SortKeySelector params={sortkey}/>
+              <SortKeySelector params={sortkey} handler={self.sortElements(sortkey.key)} />
             )
           })}
         </div>
-        <FractionList fractions={this.state.fractions} />
+        <FractionList fractions={this.state.fractions}/>
       </div>
     );
   }
@@ -58,8 +59,10 @@ var Filter = React.createClass({
 var SortKeySelector = React.createClass({
   render: function() {
     return (
-      <div onClick={this.props.params.handler} className={this.props.params.active}>
-        <i className={this.props.params.icon}></i>{this.props.params.title}
+      <div className={this.props.params.active}>
+        <a onClick={this.props.handler}>
+          <i className={this.props.params.icon}></i>{this.props.params.title}
+        </a>
       </div>
     )
   }
