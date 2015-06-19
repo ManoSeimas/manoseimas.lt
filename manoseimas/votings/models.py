@@ -250,4 +250,5 @@ def get_total_votes(start_date='2012-11-16', end_date=None):
     result = couch.view('votings/voting_count', reduce=True, group=False,
                         include_docs=False, startkey=start_date,
                         endkey=end_date).one()
-    return result['value']
+
+    return result['value'] if result else 0
