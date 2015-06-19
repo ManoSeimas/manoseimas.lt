@@ -275,6 +275,7 @@ def _fraction_json(fraction):
         'avg_long_statement_count': fraction.avg_long_statement_count,
         'avg_vote_percentage': fraction.avg_vote_percentage,
         'avg_discussion_contribution_percentage': fraction.avg_discussion_contribution_percentage,
+        'avg_passed_law_project_ratio': fraction.avg_passed_law_project_ratio,
     }
 
 def fractions_json(request):
