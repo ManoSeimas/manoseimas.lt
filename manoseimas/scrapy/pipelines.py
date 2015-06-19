@@ -154,14 +154,14 @@ class ManoSeimasModelPersistPipeline(object):
                 defaults={'source': source_url}
             )
             group.save()
+            item_membership = item_group.get('membership')
             membership, __ = GroupMembership.objects.get_or_create(
                 member=mp,
                 group=group,
-                position=item_group['position']
+                position=item_group['position'],
+                since=item_membership[0] if item_membership else None,
             )
-            item_membership = item_group.get('membership')
             if item_membership:
-                membership.since = item_membership[0]
                 membership.until = item_membership[1]
             membership.source = source_url
             membership.save()

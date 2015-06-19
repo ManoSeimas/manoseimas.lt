@@ -3,7 +3,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.utils.safestring import mark_safe
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Count
 
 from .models import (ParliamentMember, GroupMembership, Group,
                      Stenogram, StenogramStatement)
@@ -76,11 +76,13 @@ def mp_fraction(request, fraction_slug):
         slug=fraction_slug
     )
 
-    members = fraction.members.filter(groupmembership__until=None)
+    collaborating_fractions = fraction.top_collaborating_fractions
+    members = fraction.active_members
 
     context = {
         'fraction': fraction,
         'members': members,
+        'collaborating_fractions': collaborating_fractions,
         'positions': fraction.positions,
     }
     return render(request, 'fraction.jade', context)
@@ -107,14 +109,7 @@ def mp_profile(request, mp_slug):
                 group__type=Group.TYPE_GROUP,
                 group__displayed=True),
             to_attr='other_groups'))
-    mp_qs = mp_qs.prefetch_related(
-        Prefetch(
-            'groupmembership',
-            queryset=GroupMembership.objects.select_related('group').filter(
-                until=None,
-                group__type=Group.TYPE_FRACTION,
-                group__displayed=True),
-            to_attr='_fraction'))
+    mp_qs = mp_qs.prefetch_related(ParliamentMember.FractionPrefetch())
     mp = mp_qs.get(slug=mp_slug)
 
     mp_qs = mp_qs.prefetch_related(
@@ -138,6 +133,22 @@ def mp_profile(request, mp_slug):
     profile['constituency'] = mp.constituency
     profile['slug'] = mp_slug
 
+    top_collaborators = mp.top_collaborators.prefetch_related(
+        ParliamentMember.FractionPrefetch()
+    )
+
+    project_qs = mp.law_projects.order_by('-date')
+    project_qs = project_qs.annotate(proposer_count=Count('proposers'))
+    law_projects = [{
+        'title': project.project_name,
+        'date': project.date,
+        'date_passed': project.date_passed,
+        'number': project.project_number,
+        'url': project.project_url,
+        'proposer_count': project.proposer_count,
+
+    } for project in project_qs[:10]]
+
     stats = {
         'statement_count': mp.statement_count,
         'long_statement_count': mp.long_statement_count,
@@ -146,6 +157,9 @@ def mp_profile(request, mp_slug):
             mp.discussion_contribution_percentage,
         'votes': mp.votes,
         'vote_percent': mp.vote_percentage,
+        'proposed_projects': mp.proposed_law_project_count,
+        'passed_projects': mp.passed_law_project_count,
+        'passed_project_percentage': mp.passed_law_project_ratio,
     }
 
     context = {
@@ -158,6 +172,8 @@ def mp_profile(request, mp_slug):
         'stats': stats,
         'photo_url': mp.photo.url,
         'ranking': mp.ranking,
+        'top_collaborating_mps': top_collaborators,
+        'law_projects': law_projects,
     }
 
     return render(request, 'profile.jade', context)
@@ -217,7 +233,9 @@ def mp_statements(request, mp_slug, statement_page=None):
     sessions = Stenogram.objects.distinct().values_list('session', flat=True)
 
     all_statements = StenogramStatement.objects.select_related(
-        'topic').filter(speaker=mp).order_by('-topic__timestamp', '-pk')
+        'topic').filter(speaker=mp,
+                        as_chairperson=False).order_by('-topic__timestamp',
+                                                       '-pk')
     if selected_session:
         all_statements = all_statements.filter(
             topic__stenogram__session=selected_session)
