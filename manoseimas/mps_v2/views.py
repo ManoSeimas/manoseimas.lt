@@ -283,8 +283,7 @@ def _fraction_dict(fraction):
 def fractions_json(request):
     fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
     fractions = filter(lambda f: bool(f.active_member_count), fractions)
-    fractions = map(_fraction_dict, fractions)
-    return JsonResponse({'fractions': fractions})
+    return JsonResponse({'items': map(_fraction_dict, fractions)})
 
 
 def _mp_dict(mp):
@@ -295,12 +294,12 @@ def _mp_dict(mp):
         'slug': mp['slug'],
         'url': reverse('mp_profile', kwargs={'mp_slug': mp['slug']}),
         'photo': default_storage.url(mp['photo']),
-        'statement_count': mp['statement_count'],
+        'statement_count': int(mp['statement_count']),
         'long_statement_count': mp['long_statement_count'],
-        'vote_percentage': mp['vote_percentage'],
+        'vote_percentage': int(mp['vote_percentage']),
         'proposed_law_project_count': mp['proposed_law_project_count'],
         'passed_law_project_count': mp['passed_law_project_count'],
-        'passed_law_project_ratio': mp['passed_law_project_ratio'],
+        'passed_law_project_ratio': int(mp['passed_law_project_ratio']),
     }
 
 
