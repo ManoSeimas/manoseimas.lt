@@ -48,7 +48,7 @@ var FractionRow = React.createClass({
         <div className="two wide column">
           <div className="ui discussion statistic">
             <div className="value">{fraction.avg_statement_count}</div>
-            <div className="label">pasisaktmai</div>
+            <div className="label">pasisakymai</div>
           </div>
         </div>
         <div className="four wide column">
