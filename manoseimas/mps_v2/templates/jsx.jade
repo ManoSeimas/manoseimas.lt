@@ -7,7 +7,9 @@
 
 -block inlinejs
   script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
+
   - compress js
+    script(src="{% static 'components/react_loader.jsx' %}", type="text/jsx", charset="utf-8")
     script(src="{% static 'components/row_components.jsx' %}", type="text/jsx", charset="utf-8")
     script(src="{% static 'components/filter_component.jsx' %}", type="text/jsx", charset="utf-8")
     script(src="{% static 'components/switcher_component.jsx' %}", type="text/jsx", charset="utf-8")

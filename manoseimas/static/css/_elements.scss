@@ -32,6 +32,17 @@
 }
 
 
+// React Loader styling
+// --------------------
+.loader {
+  min-height: 100px;
+  background: white;
+  background-image: url(#{$staticRoot}/img/loader.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
 // Decisions
 // -----------
 .decisions {

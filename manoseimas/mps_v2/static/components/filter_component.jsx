@@ -2,7 +2,8 @@ var Filter = React.createClass({
   getInitialState: function() {
     return {
       items: [],
-      active_filter: null
+      active_filter: null,
+      loaded: false
     };
   },
 
@@ -12,11 +13,12 @@ var Filter = React.createClass({
 
   loadData: function(endpoint) {
     $.get(endpoint, function(result) {
-      this.setState({items: result.items});
+      this.setState({items: result.items, loaded: true});
     }.bind(this))
   },
 
   componentWillReceiveProps: function (nextProps) {
+    this.setState({loaded: false});
     this.loadData(nextProps.endpoint);
   },
 
@@ -58,7 +60,9 @@ var Filter = React.createClass({
             )
           })}
         </div>
-        <ElementList items={this.state.items} rowComponent={this.props.rowComponent} />
+        <Loader loaded={this.state.loaded}>
+          <ElementList items={this.state.items} rowComponent={this.props.rowComponent} />
+        </Loader>
       </div>
     );
   }
