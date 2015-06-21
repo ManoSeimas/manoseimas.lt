@@ -2,14 +2,12 @@ var PaliamentarianRow = React.createClass({
   render: function() {
     var parliamentarian = this.props.obj;
     return (
-      <div className="ui parliamentarian-row page grid">
+      <div className="ui parliamentarian-row zero margin page grid">
         <div className="name eight wide column">
-          <div>
-            <img className="photo" src={parliamentarian.photo}></img>
-          </div>
-          <div>
-            <div>{parliamentarian.full_name}</div>
-            <div><a href={parliamentarian.fraction_url}>{parliamentarian.fraction_name}</a></div>
+          <img className="photo" src={parliamentarian.photo}></img>
+          <div className="info">
+            <h2><a href={parliamentarian.url}>{parliamentarian.full_name}</a></h2>
+            <p><a href={parliamentarian.fraction_url}>{parliamentarian.fraction_name}</a></p>
           </div>
         </div>
         <div className="two wide column">
@@ -18,13 +16,13 @@ var PaliamentarianRow = React.createClass({
             <div className="label">pasisaktmai</div>
           </div>
         </div>
-        <div className="three wide column">
+        <div className="two wide column">
           <div className="ui projects statistic">
             <div className="value">{parliamentarian.passed_law_project_ratio}%</div>
             <div className="label">sėkmingų projektų</div>
           </div>
         </div>
-        <div className="three wide column">
+        <div className="two wide column">
           <div className="ui voting statistic">
             <div className="value">{parliamentarian.vote_percentage}%</div>
             <div className="label">balsavimų</div>
@@ -39,10 +37,12 @@ var FractionRow = React.createClass({
   render: function() {
     var fraction = this.props.obj;
     return (
-      <div className="ui fraction-row page grid">
+      <div className="ui fraction-row zero margin page grid">
         <div className="name eight wide column">
           <img className="logo" src={fraction.logo_url}></img>
-          {fraction.name}
+          <div className="info">
+            <h2><a href={fraction.url}>{fraction.name}</a></h2>
+          </div>
         </div>
         <div className="two wide column">
           <div className="ui member statistic">
@@ -56,7 +56,7 @@ var FractionRow = React.createClass({
             <div className="label">pasisakymai</div>
           </div>
         </div>
-        <div className="four wide column">
+        <div className="two wide column">
           <div className="ui projects statistic">
             <div className="value">{fraction.avg_passed_law_project_ratio}%</div>
             <div className="label">sėkmingų projektų</div>

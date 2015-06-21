@@ -266,11 +266,12 @@ def index_view(request):
 
 
 def _fraction_dict(fraction):
+    default_logo = '/static/img/fractions/fraction-default.png'
     return {
         'name': fraction.name,
         'slug': fraction.slug,
         'type': fraction.type,
-        'logo_url': fraction.logo.url if fraction.logo else None,
+        'logo_url': fraction.logo.url if fraction.logo else default_logo,
         'url': reverse('mp_fraction', kwargs={'fraction_slug': fraction.slug}),
         'member_count': fraction.active_member_count,
         'avg_statement_count': int(fraction.avg_statement_count),

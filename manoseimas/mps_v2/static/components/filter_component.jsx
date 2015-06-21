@@ -1,73 +1,9 @@
-var Switcher = React.createClass({
-  getInitialState: function () {
-    return {
-      active_tab: 'fractions'
-    }
-  },
-
-  setActiveTab: function (tab_name) {
-    var self = this;
-    return function () {
-      self.setState({ active_tab: tab_name })
-    }
-  },
-
-  render: function () {
-    var self = this;
-    var tabs = {
-      fractions: {
-        row_component: FractionRow,
-        endpoint: '/mp/fractions_json',
-        keys: [
-          {key: 'name', title: 'Pavadinimas', icon: undefined},
-          {key: 'member_count', title: 'Frakcijos dydis', icon: 'users icon'},
-          {key: 'avg_statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
-          {key: 'avg_passed_law_project_ratio', title: 'Projektai', icon: ''},
-          {key: 'avg_vote_percentage', title: 'Balsavimai', icon: ''}
-        ],
-        name: 'Frakcijos'
-      },
-      mps: {
-        row_component: PaliamentarianRow,
-        endpoint: '/mp/mps_json',
-        keys: [
-          {key: 'second_name', title: 'Pavardė', icon: undefined},
-          {key: 'statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
-          {key: 'passed_law_project_ratio', title: 'Projektai', icon: ''},
-          {key: 'vote_percentage', title: 'Balsavimai', icon: ''}
-        ],
-        name: 'Parlamentarai'
-      }
-    };
-    var tab = tabs[this.state.active_tab];
-
-    return (
-      <div>
-        <div className="colored-bg">
-          <div className="ui zero margin center aligned grid">
-            <div className="switcher">
-              {Object.keys(tabs).map(function (key) {
-                var selected = (self.state.active_tab === key) ? 'active' : '';
-                var class_names = 'item ' + selected;
-                return (
-                  <a className={class_names} onClick={self.setActiveTab(key)}>{tabs[key].name}</a>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-        <div className='ui page grid active_tab'>
-          <Filter endpoint={tab.endpoint} rowComponent={tab.row_component} keys={tab.keys} />
-        </div>
-      </div>
-    )
-  }
-});
-
-
 var Filter = React.createClass({
   getInitialState: function() {
-    return {items: []};
+    return {
+      items: [],
+      active_filter: null
+    };
   },
 
   componentDidMount: function() {
@@ -96,7 +32,8 @@ var Filter = React.createClass({
           } else {
             return 0
           }
-        })
+        }),
+        active_filter: param
       })
     }
   },
@@ -107,10 +44,17 @@ var Filter = React.createClass({
 
     return (
       <div>
-        <div className="sort-keys">
-          {sortkeys.map(function(sortkey) {
+        <div className="ui zero margin page grid sort-keys">
+          {sortkeys.map(function(sortkey, index) {
+            // Creating proper class for sort keys using Semantic UI framework.
+            column_count = (index === 0) ? 'eight' : 'two';
+            active = (self.state.active_filter === sortkey.key) ? 'active ' : '';
+            class_name = active + column_count + ' wide center aligned column'
+
             return (
-              <SortKeySelector params={sortkey} handler={self.sortElements(sortkey.key)} />
+              <SortKeySelector params={sortkey}
+                               class_name={class_name}
+                               handler={self.sortElements(sortkey.key)} />
             )
           })}
         </div>
@@ -123,9 +67,9 @@ var Filter = React.createClass({
 var SortKeySelector = React.createClass({
   render: function() {
     return (
-      <div className={this.props.params.active}>
+      <div className={this.props.class_name}>
         <a onClick={this.props.handler}>
-          <i className={this.props.params.icon}></i>{this.props.params.title}
+          {this.props.params.title}
         </a>
       </div>
     )
@@ -136,7 +80,7 @@ var ElementList = React.createClass({
   render: function() {
     var self = this;
     return (
-      <div>
+      <div className="filtered-elements">
       {self.props.items.map(function (item) {
         return (
           <self.props.rowComponent obj={item} />
@@ -146,10 +90,3 @@ var ElementList = React.createClass({
     );
   }
 });
-
-
-React.render(
-  <Switcher />,
-  document.getElementById('fraction-filter-component')
-);
-

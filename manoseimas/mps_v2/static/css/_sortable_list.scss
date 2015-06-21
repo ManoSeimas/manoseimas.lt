@@ -1,12 +1,64 @@
 #fraction-filter-component .ui.page.grid {
   font-size: $small !important;
-  .fraction-row {
-    img {width: 100px; }
-    font-size: $normal;
-  }
-  .parliamentarian-row {
-    img.photo {
-      max-height: 80px;
+
+  .sort-keys {
+    a { color: $textColor;}
+    .column {
+      vertical-align: middle;
+      padding: 1em 0.3em .5em;
+      border-bottom: 4px solid #E7E4E4;
+      height: 4.5em;
+    }
+    .eight { margin-top: 1em; height: 3.5em; }
+
+    .active {
+      border-bottom: 4px solid $msBlue;
+      a { color: $msBlue; }
     }
   }
+
+  .filtered-elements {
+    margin-top: 1em;
+
+    .column {
+      text-align: center;
+      padding: 0.7em 0;
+    }
+
+    .name {
+      text-align: left;
+      padding-left: 1em;
+
+      img { margin-right: 1em; }
+      img.logo { width: 60px; }
+      img.photo { height: 60px; }
+
+      .info {
+        display: inline-block;
+        vertical-align: middle;
+        max-width: 25em;
+
+        h2 {
+          margin-bottom: 0.1em;
+          line-height: 1.2;
+          font-size: $medium*0.9;
+          a { color: $textColor; }
+          a:hover { color: $linkColor; }
+        }
+        p { color: $greenDark; }
+      }
+    }
+
+    .ui.statistic {
+      .value { font-size: $big*0.9; color: $textColor;}
+      .label { background-color: transparent; }
+    }
+
+    .fraction-row, .parliamentarian-row {
+      border: 1px solid #E7E4E4;
+      margin-bottom: 10px;
+    }
+  }
+
+  .zero.margin.page.grid { padding: 0; }
 }
