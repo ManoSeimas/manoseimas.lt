@@ -48,6 +48,7 @@
 .decisions {
   padding-top: 3em;
 
+  h3 { width: 19rem; }
   h3.supports { color: $greenDark; }
   h3.abstention { color: $yellow; }
   h3.against {color: $redDark; }
