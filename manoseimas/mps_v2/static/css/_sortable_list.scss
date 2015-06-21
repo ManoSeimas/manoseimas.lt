@@ -4,4 +4,9 @@
     img {width: 100px; }
     font-size: $normal;
   }
+  .parliamentarian-row {
+    img.photo {
+      max-height: 80px;
+    }
+  }
 }

@@ -4,8 +4,13 @@ var PaliamentarianRow = React.createClass({
     return (
       <div className="ui parliamentarian-row page grid">
         <div className="name eight wide column">
-          <img className="photo" src={parliamentarian.photo}></img>
-          {parliamentarian.full_name}
+          <div>
+            <img className="photo" src={parliamentarian.photo}></img>
+          </div>
+          <div>
+            <div>{parliamentarian.full_name}</div>
+            <div><a href={parliamentarian.fraction_url}>{parliamentarian.fraction_name}</a></div>
+          </div>
         </div>
         <div className="two wide column">
           <div className="ui discussion statistic">

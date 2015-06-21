@@ -320,10 +320,12 @@ def mps_json(request):
                         'photo', 'statement_count', 'long_statement_count',
                         'vote_percentage', 'proposed_law_project_count',
                         'passed_law_project_count', 'passed_law_project_ratio')
+
     current_fractions = GroupMembership.objects.filter(
         group__type=Group.TYPE_FRACTION,
         until__isnull=True,
     ).select_related('group').values('member_id', 'group__name', 'group__slug')
+
     mp_fractions = {fraction['member_id']: {'name': fraction['group__name'],
                                             'slug': fraction['group__slug']}
                     for fraction in current_fractions}
