@@ -1,3 +1,4 @@
+from functools import partial
 from django.shortcuts import render
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.files.storage import default_storage
@@ -286,8 +287,8 @@ def fractions_json(request):
     return JsonResponse({'items': map(_fraction_dict, fractions)})
 
 
-def _mp_dict(mp):
-    return {
+def _mp_dict(mp, mp_fractions={}):
+    data = {
         'first_name': mp['first_name'],
         'last_name': mp['last_name'],
         'full_name': ' '.join([mp['first_name'], mp['last_name']]),
@@ -301,19 +302,30 @@ def _mp_dict(mp):
         'passed_law_project_count': mp['passed_law_project_count'],
         'passed_law_project_ratio': int(mp['passed_law_project_ratio']),
     }
+    fraction = mp_fractions.get(mp['pk'])
+    if fraction:
+        data.update({
+            'fraction_name': fraction['name'],
+            'fraction_url': reverse('mp_fraction', kwargs={
+                'fraction_slug': fraction['slug']
+            }),
+        })
+    return data
 
 
 def mps_json(request):
-    mps = ParliamentMember.objects.prefetch_related(
-        Prefetch('groups',
-                 queryset=Group.objects.filter(groupmembership__until=None,
-                                               type=Group.TYPE_FRACTION,
-                                               displayed=True),
-                 to_attr='current_fraction')
-    ).filter(
+    mps = ParliamentMember.objects.filter(
         groupmembership__until=None
-    ).distinct().values('first_name', 'last_name', 'slug',
+    ).distinct().values('pk', 'first_name', 'last_name', 'slug',
                         'photo', 'statement_count', 'long_statement_count',
                         'vote_percentage', 'proposed_law_project_count',
                         'passed_law_project_count', 'passed_law_project_ratio')
-    return JsonResponse({'items': map(_mp_dict, mps)})
+    current_fractions = GroupMembership.objects.filter(
+        group__type=Group.TYPE_FRACTION,
+        until__isnull=True,
+    ).select_related('group').values('member_id', 'group__name', 'group__slug')
+    mp_fractions = {fraction['member_id']: {'name': fraction['group__name'],
+                                            'slug': fraction['group__slug']}
+                    for fraction in current_fractions}
+    to_dict_partial = partial(_mp_dict, mp_fractions=mp_fractions)
+    return JsonResponse({'items': map(to_dict_partial, mps)})
