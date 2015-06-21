@@ -45,7 +45,7 @@
           a { color: $textColor; }
           a:hover { color: $linkColor; }
         }
-        p { color: $greenDark; }
+        p a { color: $greenDark; }
       }
     }
 

@@ -262,7 +262,7 @@ def mp_statements(request, mp_slug, statement_page=None):
 
 
 def index_view(request):
-    return render(request, 'jsx.jade', {})
+    return render(request, 'index_with_filter.jade', {})
 
 
 def _fraction_dict(fraction):
