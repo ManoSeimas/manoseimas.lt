@@ -1,7 +1,7 @@
 .ui.stackable.page.grid
   .twelve.wide.column: .transcriptions
     if statements.paginator.num_pages > 1
-      .center.aligned.aligned.grid: .ui.pagination.menu
+      .center.aligned.grid: .ui.pagination.menu
         if statements.has_previous
           a.item.prev(data-prev-page="{{ statements.previous_page_number }}")
             i.left.arrow.icon
