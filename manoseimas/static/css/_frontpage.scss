@@ -50,3 +50,24 @@
   }
   .item.selected { padding: 0.8rem 1rem !important; }
 }
+
+.index-stats {
+  .stats-description {
+    font-size: $normal;
+    font-weight: 200;
+    display: inline-block;
+    vertical-align: middle;
+    color: $gray;
+  }
+
+  .stats-box {
+    padding: .5rem;
+    .block {
+      .explanation {
+        display: table-cell;
+        padding: .2em .8em;
+        color: $gray;
+      }
+    }
+  }
+}
