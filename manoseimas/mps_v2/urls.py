@@ -6,7 +6,6 @@ from manoseimas.mps_v2 import views
 urlpatterns = patterns(
     '',
     url(r'^$', views.mp_list, name='mp_list_all'),
-    url(r'^index$', views.index_view),
     url(r'^fractions_json/?$', views.fractions_json, name='fractions_json'),
     url(r'^mps_json/?$', views.mps_json, name='mps_json'),
     url(r'^fractions/?$',
