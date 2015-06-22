@@ -1,7 +1,7 @@
 var Switcher = React.createClass({
   getInitialState: function () {
     return {
-      active_tab: 'mps'
+      active_tab: 'fractions'
     }
   },
 
