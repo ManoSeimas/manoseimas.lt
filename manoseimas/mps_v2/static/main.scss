@@ -2,6 +2,7 @@
 @import 'css/parliamentarians';
 @import 'css/parliamentarian';
 @import 'css/transcripts';
+@import 'css/sortable_list';
 
 // Elements
 // -----------
@@ -62,4 +63,9 @@
   color: $white;
   margin-top: 1em;
   font-weight: bold;
+}
+
+
+#fraction-filter-component {
+  font-size: $normal !important;
 }

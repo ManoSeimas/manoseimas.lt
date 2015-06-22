@@ -84,6 +84,7 @@ STATICFILES_FINDERS += (
 COMPRESS_PRECOMPILERS = (
     ('text/coffeescript', 'coffee --compile --stdio'),
     ('text/x-scss', 'django_libsass.SassCompiler'),
+    ('text/jsx', 'manoseimas.common.jsx.JSXCompiler'),
 )
 
 # Make this unique, and don't share it with anybody.

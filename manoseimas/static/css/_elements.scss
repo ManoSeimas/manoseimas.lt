@@ -32,11 +32,23 @@
 }
 
 
+// React Loader styling
+// --------------------
+.loader {
+  min-height: 100px;
+  background: white;
+  background-image: url(#{$staticRoot}/img/loader.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+
 // Decisions
 // -----------
 .decisions {
   padding-top: 3em;
 
+  h3 { width: 19rem; }
   h3.supports { color: $greenDark; }
   h3.abstention { color: $yellow; }
   h3.against {color: $redDark; }

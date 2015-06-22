@@ -41,6 +41,7 @@ setup(
         'roman',
         'toposort',
         'django-jsonfield',
+        'PyReact',
     ],
     entry_points={
         'console_scripts': [

@@ -44,7 +44,32 @@ def index(request):
         'recent_votings': recent,
         'fractions': fractions
     }
-    return render(request, 'index.jade', context)
+    return render(request, 'index_alt.jade', context)
+
+
+def votings(request):
+    day = None
+    recent = []
+    last_date = ""
+    for v in get_recent_votings(100):
+        date = v.created.date()
+        if date != last_date:
+            if len(recent) >= 7:
+                break
+
+            day = {'date': date, 'votings': []}
+            recent.append(day)
+
+        last_date = date
+        title = v.documents[0]['name'] if v.documents else v.title
+
+        day['votings'].append({
+            'id': v._id,
+            'title': title,
+            'date': v.created
+        })
+
+    return render(request, 'votings.jade', {'recent_votings': recent})
 
 
 def normalize_search(value):

@@ -1,0 +1,38 @@
+- extends "new_base.jade"
+- load static from staticfiles
+- load compress from compress
+
+- block title
+  | Mano Seimas - stebėk seimo narių veiklą.
+
+-block inlinejs
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
+  script(src="{% static 'js/jquery.scrollTo-1.4.3.1-min.js' %}")
+
+  - compress js
+    script(src="{% static 'components/react_loader.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/row_components.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/filter_component.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/switcher_component.jsx' %}", type="text/jsx", charset="utf-8")
+
+-block middle
+  .photo-box.index
+    .ui.page.grid
+      .doubling.one.column.row
+        .column.center.aligned
+          img(src="{% static 'img/logo-white.png' %}").logo
+          h1.title Stebėk, kaip dirba Seimo nariai
+
+          .byline
+            p Projektą rengia
+            a(href="" target="_blank").tils-logo.white
+
+  #fraction-filter-component
+
+  .colored-bg
+    .ui.center.aligned.zero.margin.stackable.page.grid
+      .twelve.wide.column
+        .test-box
+          h2 Politinio suderinamumo testas
+          p.text-muted Atlik testą, sudarytą iš svarbiausių 2008-2012 m. Seime vykusių   balsavimų, ir sužinok, kurie Seimo nariai ir partijos balsavo taip, kaip   balsuotum tu.
+          a(href="/testas/").ui.green.wide.button Pradėti testą

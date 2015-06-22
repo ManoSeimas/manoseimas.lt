@@ -25,6 +25,7 @@
 /local
 /include
 /backup
+/node_modules
 
 /settings.json
 /manoseimas/static/css/styles.css
