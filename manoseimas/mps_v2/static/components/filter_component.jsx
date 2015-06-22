@@ -2,6 +2,9 @@ var Filter = React.createClass({
   getInitialState: function() {
     return {
       items: [],
+      total_pages: 1,
+      current_page: 1,
+      items_per_page: 20,
       active_filter: null,
       loaded: false
     };
@@ -13,12 +16,18 @@ var Filter = React.createClass({
 
   loadData: function(endpoint) {
     $.get(endpoint, function(result) {
-      this.setState({items: result.items, loaded: true});
+      total_pages = Math.round((result.items.length / this.state.items_per_page)+0.5);
+
+      this.setState({
+        items: result.items,
+        loaded: true,
+        total_pages: total_pages,
+      });
     }.bind(this))
   },
 
   componentWillReceiveProps: function (nextProps) {
-    this.setState({loaded: false});
+    this.setState({loaded: false, current_page: 1});
     this.loadData(nextProps.endpoint);
   },
 
@@ -40,9 +49,16 @@ var Filter = React.createClass({
     }
   },
 
+  onChangePage: function(page) {
+    this.setState({current_page: page});
+    $.scrollTo('#fraction-filter-component', 100, {offset: -40})
+  },
+
   render: function() {
-    var sortkeys = this.props.keys;
-    var self = this;
+    var sortkeys = this.props.keys,
+        self = this,
+        slice_from = (this.state.current_page-1)*this.state.items_per_page,
+        slice_to = this.state.current_page*this.state.items_per_page;
 
     return (
       <div>
@@ -61,8 +77,11 @@ var Filter = React.createClass({
           })}
         </div>
         <Loader loaded={this.state.loaded}>
-          <ElementList items={this.state.items} rowComponent={this.props.rowComponent} />
+          <ElementList items={this.state.items.slice(slice_from, slice_to)} rowComponent={this.props.rowComponent} />
         </Loader>
+        <div className={((this.state.total_pages < 2) ? 'hidden ' : '') + 'ui zero margin center aligned grid'}>
+          <Paginator max={this.state.total_pages} onChange={this.onChangePage}/>
+        </div>
       </div>
     );
   }
