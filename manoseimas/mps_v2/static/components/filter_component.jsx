@@ -67,7 +67,7 @@ var SortebleList = React.createClass({
   render: function() {
     var sortkeys = this.props.keys,
         self = this,
-        slice_from = 1,
+        slice_from = 0,
         slice_to = this.state.current_page*this.state.items_per_page,
         current_page = this.state.current_page,
         elementListWidth = (this.props.sidebar_filter) ? 'fourteen' : 'sixteen',
