@@ -83,9 +83,9 @@ var SortebleList = React.createClass({
 
       // Filter items to show only selected.
       if (this.state.filter_selected != 'all') {
-        var filtered_items = this.state.items.filter((item) => {
+        var filtered_items = this.state.items.filter(function(item) {
           return item.fraction_slug === this.state.filter_selected
-        })
+        }.bind(this))
       }
     } else {
       showSidebar = null;
@@ -139,7 +139,7 @@ var SidebarFilter = React.createClass({
       <div className="two wide column">
         <div className="ui sticky">
           <div className="sidebar">
-            {Object.keys(this.props.options).map( (key) => {
+            {Object.keys(this.props.options).map( function(key) {
               var selected = (this.props.selected_filter === key) ? 'selected' : '';
 
               if (this.props.options[key].logo_url) {
@@ -164,7 +164,7 @@ var SidebarFilter = React.createClass({
                   {item}
                 </a>
               )
-            })}
+            }.bind(this))}
           </div>
         </div>
       </div>
