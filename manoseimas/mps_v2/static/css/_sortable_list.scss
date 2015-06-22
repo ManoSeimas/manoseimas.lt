@@ -1,9 +1,20 @@
-#fraction-filter-component .ui.page.grid {
+#fraction-filter-component .ui.tabular.menu {
+  .item {
+    font-weight: normal;
+    padding: 0.7em 4em;
+    font-size: $normal;
+  }
+}
+
+#fraction-filter-component .ui.page.grid.active_tab {
   font-size: $small !important;
+  padding-bottom: 2rem;
+  margin-top: 1rem !important;
 
   .sort-keys {
-    a { color: $textColor;}
+    a { color: $gray;}
     .column {
+      font-size: $small;
       vertical-align: middle;
       padding: 1em 0.3em .5em;
       border-bottom: 4px solid #E7E4E4;
@@ -51,7 +62,13 @@
 
     .ui.statistic {
       .value { font-size: $big*0.9; color: $textColor;}
-      .label { background-color: transparent; }
+      .label {
+        background-color: transparent;
+        font-weight: normal;
+        font-size: $small;
+        text-shadow: none;
+        color: $gray;
+      }
     }
 
     .fraction-row, .parliamentarian-row {
@@ -61,8 +78,7 @@
   }
 
   .load_more {
-    margin-bottom: 1em;
-    margin-top: 1em;
+    margin-top: 1em !important;
     font-size: $normal;
 
     a {

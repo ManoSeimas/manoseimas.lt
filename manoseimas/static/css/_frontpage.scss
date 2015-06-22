@@ -51,7 +51,14 @@
   .item.selected { padding: 0.8rem 1rem !important; }
 }
 
+.colored-bg.index-stats {
+  border-bottom: none;
+  background-color: rgba(255, 255, 255, 0.05);
+}
 .index-stats {
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+
   .stats-description {
     font-size: $normal;
     font-weight: 200;

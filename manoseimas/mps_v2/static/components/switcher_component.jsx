@@ -22,7 +22,7 @@ var Switcher = React.createClass({
           {key: 'name', title: 'Pavadinimas', icon: undefined},
           {key: 'member_count', title: 'Frakcijos narių skaičius', icon: 'users icon'},
           {key: 'avg_statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
-          {key: 'avg_passed_law_project_ratio', title: 'Projektų teikimas', icon: ''},
+          {key: 'avg_passed_law_project_ratio', title: 'Projektų teikimo sėkmė', icon: ''},
           {key: 'avg_vote_percentage', title: 'Dalyvavimas balsavimuose', icon: ''}
         ],
         name: 'Frakcijos'
@@ -33,7 +33,7 @@ var Switcher = React.createClass({
         keys: [
           {key: 'full_name', title: 'Pavardė', icon: undefined},
           {key: 'statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
-          {key: 'passed_law_project_ratio', title: 'Projektų teikimas', icon: ''},
+          {key: 'passed_law_project_ratio', title: 'Projektų teikimo sėkmė', icon: ''},
           {key: 'vote_percentage', title: 'Dalyvavimas balsavimuose', icon: ''}
         ],
         filter: {
@@ -62,9 +62,9 @@ var Switcher = React.createClass({
 
     return (
       <div>
-        <div className="colored-bg">
+        <div className="switcher-component">
           <div className="ui zero margin center aligned grid">
-            <div className="switcher">
+            <div className="ui top attached tabular menu">
               {Object.keys(tabs).map(function (key) {
                 var selected = (self.state.active_tab === key) ? 'active' : '';
                 var class_names = 'item ' + selected;
