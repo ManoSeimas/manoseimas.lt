@@ -13,7 +13,7 @@ var PaliamentarianRow = React.createClass({
         <div className="two wide column">
           <div className="ui discussion statistic">
             <div className="value">{parliamentarian.statement_count}</div>
-            <div className="label">pasisaktmai</div>
+            <div className="label">pasisakymai</div>
           </div>
         </div>
         <div className="two wide column">
