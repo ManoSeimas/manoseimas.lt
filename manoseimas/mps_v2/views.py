@@ -310,13 +310,16 @@ def _mp_dict(mp, mp_fractions={}):
             'fraction_url': reverse('mp_fraction', kwargs={
                 'fraction_slug': fraction['slug']
             }),
+            'fraction_slug': fraction['slug'],
+            'fraction_logo_url': default_storage.url(fraction['logo']),
         })
     return data
 
 
 def mps_json(request):
     mps = ParliamentMember.objects.filter(
-        groupmembership__until=None
+        groupmembership__until=None,
+        groupmembership__group__type=Group.TYPE_FRACTION,
     ).distinct().values('pk', 'first_name', 'last_name', 'slug',
                         'photo', 'statement_count', 'long_statement_count',
                         'vote_percentage', 'proposed_law_project_count',
@@ -325,10 +328,11 @@ def mps_json(request):
     current_fractions = GroupMembership.objects.filter(
         group__type=Group.TYPE_FRACTION,
         until__isnull=True,
-    ).select_related('group').values('member_id', 'group__name', 'group__slug')
+    ).select_related('group').values('member_id', 'group__name', 'group__slug', 'group__logo')
 
     mp_fractions = {fraction['member_id']: {'name': fraction['group__name'],
-                                            'slug': fraction['group__slug']}
+                                            'slug': fraction['group__slug'],
+                                            'logo': fraction['group__logo']}
                     for fraction in current_fractions}
     to_dict_partial = partial(_mp_dict, mp_fractions=mp_fractions)
     return JsonResponse({'items': map(to_dict_partial, mps)})

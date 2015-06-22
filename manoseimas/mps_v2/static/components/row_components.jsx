@@ -3,7 +3,7 @@ var PaliamentarianRow = React.createClass({
     var parliamentarian = this.props.obj;
     return (
       <div className="ui parliamentarian-row zero margin page grid">
-        <div className="name eight wide column">
+        <div className="name nine wide column">
           <img className="photo" src={parliamentarian.photo}></img>
           <div className="info">
             <h2><a href={parliamentarian.url}>{parliamentarian.full_name}</a></h2>
@@ -16,7 +16,7 @@ var PaliamentarianRow = React.createClass({
             <div className="label">pasisakymai</div>
           </div>
         </div>
-        <div className="two wide column">
+        <div className="three wide column">
           <div className="ui projects statistic">
             <div className="value">{parliamentarian.passed_law_project_ratio}%</div>
             <div className="label">sėkmingų projektų</div>

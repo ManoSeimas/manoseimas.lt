@@ -1,7 +1,7 @@
 var Switcher = React.createClass({
   getInitialState: function () {
     return {
-      active_tab: 'fractions'
+      active_tab: 'mps'
     }
   },
 
@@ -31,14 +31,33 @@ var Switcher = React.createClass({
         row_component: PaliamentarianRow,
         endpoint: '/mp/mps_json',
         keys: [
-          {key: 'second_name', title: 'Pavardė', icon: undefined},
+          {key: 'full_name', title: 'Pavardė', icon: undefined},
           {key: 'statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
           {key: 'passed_law_project_ratio', title: 'Projektų teikimas', icon: ''},
           {key: 'vote_percentage', title: 'Dalyvavimas balsavimuose', icon: ''}
         ],
+        filter: {
+          options_func: function (items) {
+            var options = {all: {
+              name: 'Visos frakcijos',
+              logo_url: null}
+            };
+            for (item of items) {
+              options[item.fraction_slug] = {
+                name: item.fraction_name,
+                logo_url: item.fraction_logo_url
+              };
+            };
+            return options
+          },
+          filter_func: function (item, option) {
+            return (option) ? (item.fraction_slug === option) : true
+          }
+        },
         name: 'Parlamentarai'
       }
     };
+
     var tab = tabs[this.state.active_tab];
 
     return (
@@ -57,7 +76,10 @@ var Switcher = React.createClass({
           </div>
         </div>
         <div className='ui zero margin page grid active_tab'>
-          <Filter endpoint={tab.endpoint} rowComponent={tab.row_component} keys={tab.keys} />
+          <SortebleList endpoint={tab.endpoint}
+                        rowComponent={tab.row_component}
+                        keys={tab.keys}
+                        sidebar_filter={tab.filter} />
         </div>
       </div>
     )
