@@ -49,6 +49,13 @@ var Filter = React.createClass({
     }
   },
 
+  onLoadMore: function() {
+    this.setState({
+      current_page: this.state.current_page + 1
+    })
+  },
+
+  // Used in <Paginator /> (if we would use it)
   onChangePage: function(page) {
     this.setState({current_page: page});
     $.scrollTo('#fraction-filter-component', 100, {offset: -40})
@@ -57,8 +64,10 @@ var Filter = React.createClass({
   render: function() {
     var sortkeys = this.props.keys,
         self = this,
-        slice_from = (this.state.current_page-1)*this.state.items_per_page,
-        slice_to = this.state.current_page*this.state.items_per_page;
+        slice_from = 1,
+        slice_to = this.state.current_page*this.state.items_per_page,
+        total_pages = this.state.total_pages,
+        current_page = this.state.current_page;
 
     return (
       <div>
@@ -77,10 +86,11 @@ var Filter = React.createClass({
           })}
         </div>
         <Loader loaded={this.state.loaded}>
-          <ElementList items={this.state.items.slice(slice_from, slice_to)} rowComponent={this.props.rowComponent} />
+          <ElementList items={this.state.items.slice(slice_from, slice_to)}
+                       rowComponent={this.props.rowComponent} />
         </Loader>
-        <div className={((this.state.total_pages < 2) ? 'hidden ' : '') + 'ui zero margin center aligned grid'}>
-          <Paginator max={this.state.total_pages} onChange={this.onChangePage}/>
+        <div className={((total_pages < 2 || current_page === total_pages) ? 'hidden ' : '') + 'ui zero margin center aligned load_more grid'}>
+          <a onClick={this.onLoadMore}> Load more </a>
         </div>
       </div>
     );

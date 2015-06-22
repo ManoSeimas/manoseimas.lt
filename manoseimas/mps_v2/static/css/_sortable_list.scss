@@ -60,5 +60,20 @@
     }
   }
 
+  .load_more {
+    margin-bottom: 1em;
+    margin-top: 1em;
+    font-size: $normal;
+
+    a {
+      border: 1px dashed $grayLite;
+      padding: 0.2em 10em;
+    }
+    a:hover {
+      background-color: $msGreen;
+      color: $white;
+    }
+  }
+
   .zero.margin.page.grid { padding: 0; }
 }
