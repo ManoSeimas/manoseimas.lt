@@ -1,4 +1,4 @@
-var SortebleList = React.createClass({
+var SortableList = React.createClass({
   getInitialState: function() {
     return {
       items: [],

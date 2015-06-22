@@ -76,7 +76,7 @@ var Switcher = React.createClass({
           </div>
         </div>
         <div className='ui zero margin page grid active_tab'>
-          <SortebleList endpoint={tab.endpoint}
+          <SortableList endpoint={tab.endpoint}
                         rowComponent={tab.row_component}
                         keys={tab.keys}
                         sidebar_filter={tab.filter} />
