@@ -4,7 +4,8 @@ var SortableList = React.createClass({
       items: [],
       current_page: 1,
       items_per_page: 10,
-      sort_key: null,
+      sort_key: this.props.default_key,
+      sort_order: this.props.default_order,
       filter_selected: 'all',
       filter_options: null,
       loaded: false
@@ -18,7 +19,7 @@ var SortableList = React.createClass({
   loadData: function(endpoint) {
     $.get(endpoint, function(result) {
       this.setState({
-        items: result.items,
+        items: this.innerSort(result.items, this.state.sort_key, this.state.sort_order),
         loaded: true,
         filter_options: (this.props.sidebar_filter) ? this.props.sidebar_filter.options_func(result.items) : null
       });
@@ -26,24 +27,34 @@ var SortableList = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    this.setState({loaded: false, current_page: 1});
+    this.setState({
+        loaded: false,
+        current_page: 1,
+        sort_key: (this.props.default_key === nextProps.default_key) ? this.state.sort_key : nextProps.default_key,
+        sort_order: (this.props.default_order === nextProps.default_order) ? this.state.sort_order : nextProps.default_order,
+    });
     this.loadData(nextProps.endpoint);
   },
 
-  sortElements: function (param) {
+  innerSort: function(items, key, order) {
+    return items.sort(function (a, b) {
+      if (a[key] < b[key]) {
+        return -order;
+      } else if (a[key] > b[key]) {
+        return order;
+      } else {
+        return 0
+      }
+    });
+  },
+
+  sortElements: function (param, order) {
     var self = this;
     return function () {
       self.setState({
-        items: self.state.items.sort(function (a, b) {
-          if (a[param] < b[param]) {
-            return 1
-          } else if (a[param] > b[param]) {
-            return -1
-          } else {
-            return 0
-          }
-        }),
-        sort_key: param
+        items: self.innerSort(self.state.items, param, order),
+        sort_key: param,
+        sort_order: order
       })
     }
   },
@@ -104,7 +115,7 @@ var SortableList = React.createClass({
             return (
               <SortKeySelector params={sortkey}
                                class_name={class_name}
-                               handler={self.sortElements(sortkey.key)} />
+                               handler={self.sortElements(sortkey.key, sortkey.order)} />
             )
           })}
         </div>
