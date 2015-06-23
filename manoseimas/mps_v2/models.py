@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
 
@@ -375,11 +375,13 @@ class Group(CrawledItem):
         return agg['avg_passed_ratio']
 
     def get_collaborating_fractions_percentage(self, count=5):
+
         member_projects = LawProject.objects.filter(
             proposers__in=self.active_members
         )
         project_signatories = LawProject.proposers.through.objects.filter(
             parliamentmember__groups__type=Group.TYPE_FRACTION,
+            parliamentmember__groupmembership__until__isnull=True,
             lawproject__id__in=list(
                 member_projects.values_list('id', flat=True).distinct()),
         ).values(
@@ -388,19 +390,37 @@ class Group(CrawledItem):
         ).annotate(group_proposer_count=models.Count('pk'))
 
         project_signatories = list(project_signatories)
-        total_signatories = sum([item['group_proposer_count']
-                                 for item in project_signatories])
-        if not total_signatories:
-            return []
-        signatories_by_fraction = {}
-        for signatories in project_signatories:
-            group_id = signatories['parliamentmember__groups__id']
-            if group_id != self.pk:
-                signatories_by_fraction.setdefault(group_id, 0)
-                signatories_by_fraction[group_id] += signatories['group_proposer_count']  # noqa
+
+        projects = defaultdict(lambda: {})
+        for s in project_signatories:
+            proposer_count = s['group_proposer_count']
+            project_id = s['lawproject__id']
+            group_id = s['parliamentmember__groups__id']
+            projects[project_id][group_id] = proposer_count
+
+        project_percentages = {}
+        for project_id, fraction_signatures in projects.items():
+            total_signatories = sum(fraction_signatures.values())
+            signature_percentages = {
+                fraction_id: float(value) / total_signatories * 100.0
+                for fraction_id, value in fraction_signatures.items()
+            }
+            project_percentages[project_id] = signature_percentages
+
+        fraction_contrib_sums = defaultdict(lambda: 0.0)
+        fraction_contrib_projects = defaultdict(lambda: 0)
+        for project in project_percentages.values():
+            for fraction, percentage in project.items():
+                if fraction != self.pk:  # Ignore own percentages
+                    fraction_contrib_sums[fraction] += percentage
+                    fraction_contrib_projects[fraction] += 1
+
+        fraction_contrib = {key: (fraction_contrib_sums[key]
+                                  / fraction_contrib_projects[key])
+                            for key in fraction_contrib_sums.keys()}
+
         top_signatory_pairs = sorted(
-            [(key, float(value) / total_signatories * 100.0)
-             for key, value in signatories_by_fraction.items()],
+            fraction_contrib.items(),
             reverse=True,
             key=lambda v: v[1],
         )
