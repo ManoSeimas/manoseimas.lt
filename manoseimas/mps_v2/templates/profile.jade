@@ -2,6 +2,7 @@
 - load static from staticfiles
 - load nodeurl from sboard
 - load compress from compress
+- load lt_pluralize
 
 - block title
   | {{ profile.full_name }}
@@ -113,12 +114,6 @@
         .rating(data-title="Priimtų/pasiūlytų įstatymų santykis geresnis negu {{ranking.passed_law_project_ratio_percentile}}%" data-content="Palyginimas su kitų parlamentarų priimtų ir pasiūlytų įstatymų santykiu.")
           .ui.indicating.progress(data-percent="{{ ranking.passed_law_project_ratio_percentile }}"): .bar
 
-      //- .stats-box.total
-      //-   .stats
-      //-     h3 40%
-      //-     .explanation bendras aktyvumas
-      //-   .vertical-progress: .bar: .text
-
   if positions.for or positions.against or positions.neutral
     .decisions
       .ui.page.grid
@@ -177,49 +172,56 @@
 
     .statements-component(data-slug="{{profile.slug}}")
 
-  .law-project-collaborators
-    .ui.page.grid
-      a(name="law-project-collaborators")
-      h2 Įstatymų projektus teikia kartu su
-      table.ui.table
-        thead
-          tr
-            th Nr.
-            th Parlamentaras
-            th Frakcija
-            th Viso projektų
-        tbody
-          for mp in top_collaborating_mps
-            tr
-              td {{ forloop.counter }}
-              td
-                a(href="{% url 'mp_profile' mp.slug %}") {{ mp.full_name }}
-              td
-                if mp.fraction
-                  a(href="{% url 'mp_fraction' mp.fraction.slug %}") {{ mp.fraction.name }}
-              td {{ mp.project_count }}
 
   .law-projects
+    a(name="law-projects")
     .ui.page.grid
-      a(name="law-projects")
-      h2 Įstatymų projektai
-      table.ui.table
-        thead
-          tr
-            th Projekto numeris
-            th Pavadinimas
-            th Teikimo data
-            th Viso teikėjų
-            th Priėmimas
-        tbody
-          for project in law_projects
+      .eight.wide.column
+        h2.title Įstatymų projektai
+      .eight.wide.right.aligned.column
+        .center.aligned.grid: .ui.pagination.menu
+          a.item.prev(data-prev-page="{{ statements.previous_page_number }}")
+            i.left.arrow.icon
+            | Atgal
+
+          .item 2 iš 10
+
+          a.item.next(data-next-page="{{ statements.next_page_number }}")
+            | Pirmyn
+            i.icon.right.arrow
+
+      .ui.zero.margin.grid
+        table.ui.zero.paddings.table
+          thead
             tr
-              td
-                a(href=project['url']) {{ project.number }}
-              td {{ project.title }}
-              td {{ project.date }}
-              td {{ project.proposer_count }}
-              if project.date_passed
-                td Priimtas {{ project.date_passed }}
-              else
-                td Nepriimtas
+              th Projekto numeris
+              th Pavadinimas
+              th Teikimo data
+              th Viso teikėjų
+              th Priėmimas
+          tbody
+            for project in law_projects
+              tr
+                td
+                  a(href=project['url']) {{ project.number }}
+                td {{ project.title }}
+                td {{ project.date }}
+                td {{ project.proposer_count }}
+                if project.date_passed
+                  td Priimtas {{ project.date_passed }}
+                else
+                  td Nepriimtas
+
+  .law-project-collaborators
+    .ui.zero.margin.page.grid
+      a(name="law-project-collaborators")
+      h3 Įstatymų projektus dažniausiai teikia kartu su
+      .collaborators
+        for mp in top_collaborating_mps
+          .parliamentarian.box
+            img(src="{{ mp.photo.url }}")
+            .info
+              h2: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
+              if mp.fraction
+                a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
+              p {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}

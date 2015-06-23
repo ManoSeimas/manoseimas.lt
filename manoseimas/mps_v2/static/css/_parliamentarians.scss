@@ -5,7 +5,8 @@
   margin-bottom: 1em;
   min-height: 540px;
 }
-.parliamentarians.wide {
+.parliamentarians.wide,
+.collaborators {
   margin: 3em 0;
   .parliamentarian.box {
     margin-top: 10px;
@@ -19,6 +20,12 @@
         display: block;
       }
       h2 { margin-bottom: 0.2em; }
+      p { font-size: $tiny; }
     }
   }
+}
+
+.collaborators {
+  padding-left: .5rem !important;
+  margin-bottom: 1rem;
 }
