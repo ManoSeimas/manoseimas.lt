@@ -4,7 +4,8 @@ var LawProjects = React.createClass({
       projects: [],
       current_page: 1,
       items_per_page: 15,
-      show_only_selected: false
+      show_only_selected: false,
+      loaded: false
     }
   },
 
@@ -13,6 +14,7 @@ var LawProjects = React.createClass({
       if (this.isMounted()) {
         this.setState({
           projects: result.items,
+          loaded: true
         })
       }
     }.bind(this))
@@ -73,13 +75,15 @@ var LawProjects = React.createClass({
             </div>
           </div>
 
-          <div className="ui zero margin grid">
-            <SemanticTable columns={columns}
-                           items={projects.slice(slice_from, slice_to)} />
-          </div>
-          <div className="ui center aligned grid">
-            <Paginator max={total_pages} onChange={this.onChangePage} />
-          </div>
+          <Loader loaded={this.state.loaded}>
+            <div className="ui zero margin grid">
+              <SemanticTable columns={columns}
+                             items={projects.slice(slice_from, slice_to)} />
+            </div>
+            <div className="ui center aligned grid">
+              <Paginator max={total_pages} onChange={this.onChangePage} />
+            </div>
+          </Loader>
         </div>
       </div>
     )
