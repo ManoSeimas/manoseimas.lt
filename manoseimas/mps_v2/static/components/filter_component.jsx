@@ -108,14 +108,20 @@ var SortableList = React.createClass({
         <div className="ui zero margin page grid sort-keys">
           {sortkeys.map(function(sortkey, index) {
             // Creating proper class for sort keys using Semantic UI framework.
-            column_count = (index === 0) ? 'eight' : 'two';
-            active = (self.state.sort_key === sortkey.key) ? 'active ' : '';
-            class_name = active + column_count + ' wide center aligned column'
+            var column_count = (index === 0) ? 'eight' : 'two';
+            var active = (self.state.sort_key === sortkey.key) ? 'active ' : '';
+            var class_name = active + column_count + ' wide center aligned column'
+            // used to display sort order arrow
+            var sort_order = (self.state.sort_key === sortkey.key) ? self.state.sort_order : sortkey.order;
+            // used to flip ordering when clicking already active column header
+            var next_order = (self.state.sort_key === sortkey.key) ? -sort_order : sort_order;
+            var icon_class = 'chevron ' + ((sort_order === 1) ? 'up' : 'down') + ' icon';
 
             return (
               <SortKeySelector params={sortkey}
                                class_name={class_name}
-                               handler={self.sortElements(sortkey.key, sortkey.order)} />
+                               icon_class={icon_class}
+                               handler={self.sortElements(sortkey.key, next_order)} />
             )
           })}
         </div>
@@ -188,7 +194,10 @@ var SortKeySelector = React.createClass({
     return (
       <div className={this.props.class_name}>
         <a onClick={this.props.handler}>
-          {this.props.params.title}
+          <span>
+            {this.props.params.title}
+          </span>
+          <i className={this.props.icon_class}> </i>
         </a>
       </div>
     )
