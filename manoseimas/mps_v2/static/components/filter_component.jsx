@@ -54,12 +54,6 @@ var SortableList = React.createClass({
     })
   },
 
-  // Used in <Paginator /> (if we would use it)
-  onChangePage: function(page) {
-    this.setState({current_page: page});
-    $.scrollTo('#fraction-filter-component', 100, {offset: -40})
-  },
-
   selectFilter: function(option) {
     this.setState({filter_selected: option, current_page: 1})
   },
