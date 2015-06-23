@@ -155,12 +155,7 @@
           input(name="filter_presenter" type="checkbox", checked="")
           label Rodyti tik tas kalbos kur parlamentaras yra pristatinėtojas
 
-      .eight.wide.column
-        .stats-box.transcripts-total
-          h4.explanation Pasisako dažniau negu
-          .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Palyginimas su kitų parlamentarų pasisakymų skaičiumi. 100% surenka šnekiausias parlamentaras.")
-            .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar {{ranking.statement_count_percentile}}%
-
+      .eight.wide.right.aligned.column
         .stats-box.horisontal
           .three-numbers
             .block
@@ -172,6 +167,12 @@
             .block
               h4.number {{stats.contributed_discussion_percentage|floatformat:2}}%
               .explanation dalyvavimas diskusijuose
+
+        .stats-box.transcripts-total
+          h4.explanation Pasisako dažniau negu
+          .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Dėmesio! Siūlome atsiminti, kad pasisakymų skaičius nebūtinai atspindi Seimo nario kompetenciją ir pasisakymų kokybę.")
+            .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar {{ranking.statement_count_percentile}}%
+
 
     .statements-component(data-slug="{{profile.slug}}")
 

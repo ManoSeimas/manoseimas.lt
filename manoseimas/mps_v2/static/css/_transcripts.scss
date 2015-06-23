@@ -24,9 +24,11 @@
     }
   }
 
-  .stats-box  {
-    float: right;
-    margin-top: 0;
+  .stats-box { margin-top: 0; }
+  .stats-box.horisontal { float: none; }
+  .stats-box.transcripts-total {
+    margin-left: .5rem;
+    vertical-align: middle;
   }
 
   .sidebar {
