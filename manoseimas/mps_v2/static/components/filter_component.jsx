@@ -4,7 +4,8 @@ var SortableList = React.createClass({
       items: [],
       current_page: 1,
       items_per_page: 10,
-      sort_key: null,
+      sort_key: this.props.default_key,
+      sort_order: this.props.default_order,
       filter_selected: 'all',
       filter_options: null,
       loaded: false
@@ -18,7 +19,7 @@ var SortableList = React.createClass({
   loadData: function(endpoint) {
     $.get(endpoint, function(result) {
       this.setState({
-        items: result.items,
+        items: this.innerSort(result.items, this.state.sort_key, this.state.sort_order),
         loaded: true,
         filter_options: (this.props.sidebar_filter) ? this.props.sidebar_filter.options_func(result.items) : null
       });
@@ -26,24 +27,35 @@ var SortableList = React.createClass({
   },
 
   componentWillReceiveProps: function (nextProps) {
-    this.setState({loaded: false, current_page: 1});
+    this.setState({
+        loaded: false,
+        current_page: 1,
+        sort_key: (this.props.default_key === nextProps.default_key) ? this.state.sort_key : nextProps.default_key,
+        // we want to change order every time we set props
+        sort_order: nextProps.default_order,
+    });
     this.loadData(nextProps.endpoint);
   },
 
-  sortElements: function (param) {
+  innerSort: function(items, key, order) {
+    return items.sort(function (a, b) {
+      if (a[key] < b[key]) {
+        return -order;
+      } else if (a[key] > b[key]) {
+        return order;
+      } else {
+        return 0
+      }
+    });
+  },
+
+  sortElements: function (param, order) {
     var self = this;
     return function () {
       self.setState({
-        items: self.state.items.sort(function (a, b) {
-          if (a[param] < b[param]) {
-            return 1
-          } else if (a[param] > b[param]) {
-            return -1
-          } else {
-            return 0
-          }
-        }),
-        sort_key: param
+        items: self.innerSort(self.state.items, param, order),
+        sort_key: param,
+        sort_order: order
       })
     }
   },
@@ -91,14 +103,20 @@ var SortableList = React.createClass({
         <div className="ui zero margin page grid sort-keys">
           {sortkeys.map(function(sortkey, index) {
             // Creating proper class for sort keys using Semantic UI framework.
-            column_count = (index === 0) ? 'eight' : 'two';
-            active = (self.state.sort_key === sortkey.key) ? 'active ' : '';
-            class_name = active + column_count + ' wide center aligned column'
+            var column_count = (index === 0) ? 'eight' : 'two';
+            var active = (self.state.sort_key === sortkey.key) ? 'active ' : '';
+            var class_name = active + column_count + ' wide center aligned column'
+            // used to display sort order arrow
+            var sort_order = (self.state.sort_key === sortkey.key) ? self.state.sort_order : sortkey.order;
+            // used to flip ordering when clicking already active column header
+            var next_order = (self.state.sort_key === sortkey.key) ? -sort_order : sort_order;
+            var icon_class = 'chevron ' + ((sort_order === 1) ? 'up' : 'down') + ' icon';
 
             return (
               <SortKeySelector params={sortkey}
                                class_name={class_name}
-                               handler={self.sortElements(sortkey.key)} />
+                               icon_class={icon_class}
+                               handler={self.sortElements(sortkey.key, next_order)} />
             )
           })}
         </div>
@@ -171,7 +189,10 @@ var SortKeySelector = React.createClass({
     return (
       <div className={this.props.class_name}>
         <a onClick={this.props.handler}>
-          {this.props.params.title}
+          <span>
+            {this.props.params.title}
+          </span>
+          <i className={this.props.icon_class}> </i>
         </a>
       </div>
     )

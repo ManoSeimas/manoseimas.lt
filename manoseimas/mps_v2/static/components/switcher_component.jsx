@@ -19,23 +19,27 @@ var Switcher = React.createClass({
         row_component: FractionRow,
         endpoint: '/json/fractions',
         keys: [
-          {key: 'name', title: 'Pavadinimas', icon: undefined},
-          {key: 'member_count', title: 'Frakcijos narių skaičius', icon: 'users icon'},
-          {key: 'avg_statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
-          {key: 'avg_passed_law_project_ratio', title: 'Projektų teikimo sėkmė', icon: ''},
-          {key: 'avg_vote_percentage', title: 'Dalyvavimas balsavimuose', icon: ''}
+          {key: 'name', title: 'Pavadinimas', icon: undefined, order: 1},
+          {key: 'member_count', title: 'Frakcijos narių skaičius', icon: 'users icon', order: -1},
+          {key: 'avg_statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon', order: -1},
+          {key: 'avg_passed_law_project_ratio', title: 'Projektų teikimo sėkmė', icon: '', order: -1},
+          {key: 'avg_vote_percentage', title: 'Dalyvavimas balsavimuose', icon: '', order: -1}
         ],
+        default_key: 'name',
+        default_order: 1,
         name: 'Frakcijos'
       },
       mps: {
         row_component: PaliamentarianRow,
         endpoint: '/json/mps',
         keys: [
-          {key: 'full_name', title: 'Pavardė', icon: undefined},
-          {key: 'statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
-          {key: 'passed_law_project_ratio', title: 'Projektų teikimo sėkmė', icon: ''},
-          {key: 'vote_percentage', title: 'Dalyvavimas balsavimuose', icon: ''}
+          {key: 'last_name', title: 'Pavardė', icon: undefined, order: 1},
+          {key: 'statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon', order: -1},
+          {key: 'passed_law_project_ratio', title: 'Projektų teikimo sėkmė', icon: '', order: -1},
+          {key: 'vote_percentage', title: 'Dalyvavimas balsavimuose', icon: '', order: -1}
         ],
+        default_key: 'last_name',
+        default_order: 1,
         filter: {
           options_func: function (items) {
             var options = {all: {
@@ -79,6 +83,8 @@ var Switcher = React.createClass({
           <SortableList endpoint={tab.endpoint}
                         rowComponent={tab.row_component}
                         keys={tab.keys}
+                        default_key={tab.default_key}
+                        default_order={tab.default_order}
                         sidebar_filter={tab.filter} />
         </div>
       </div>
