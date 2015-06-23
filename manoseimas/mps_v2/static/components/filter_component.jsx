@@ -31,7 +31,8 @@ var SortableList = React.createClass({
         loaded: false,
         current_page: 1,
         sort_key: (this.props.default_key === nextProps.default_key) ? this.state.sort_key : nextProps.default_key,
-        sort_order: (this.props.default_order === nextProps.default_order) ? this.state.sort_order : nextProps.default_order,
+        // we want to change order every time we set props
+        sort_order: nextProps.default_order,
     });
     this.loadData(nextProps.endpoint);
   },
