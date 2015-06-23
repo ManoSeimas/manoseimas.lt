@@ -588,6 +588,9 @@ class LawProject(CrawledItem):
         return self.proposers.count()
 
     def get_fraction_contributions(self):
+        ''' Returns list of fractions with percent of their members
+            in proposers list.
+        '''
         proposers = self.proposers.prefetch_related(
             ParliamentMember.FractionPrefetch()
         )
