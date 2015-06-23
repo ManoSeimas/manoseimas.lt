@@ -24,7 +24,7 @@ buildSearchParams = ->
 loadStatementEvents = (url) ->
   $('.show-all').click ->
     content = []
-    discussion_url = '/mp/discussion_json/'+$(this).attr("data-id")
+    discussion_url = '/json/discussion/'+$(this).attr("data-id")
 
     $.getJSON discussion_url, (data) ->
       for statement in data.statements

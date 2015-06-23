@@ -17,7 +17,7 @@ var Switcher = React.createClass({
     var tabs = {
       fractions: {
         row_component: FractionRow,
-        endpoint: '/mp/fractions_json',
+        endpoint: '/json/fractions',
         keys: [
           {key: 'name', title: 'Pavadinimas', icon: undefined},
           {key: 'member_count', title: 'Frakcijos narių skaičius', icon: 'users icon'},
@@ -29,7 +29,7 @@ var Switcher = React.createClass({
       },
       mps: {
         row_component: PaliamentarianRow,
-        endpoint: '/mp/mps_json',
+        endpoint: '/json/mps',
         keys: [
           {key: 'full_name', title: 'Pavardė', icon: undefined},
           {key: 'statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon'},
