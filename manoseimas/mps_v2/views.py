@@ -149,7 +149,7 @@ def mp_profile(request, mp_slug):
         'number': project.project_number,
         'url': project.project_url,
         'proposer_count': project.proposer_count,
-
+        'fraction_contributions': project.get_fraction_contributions(),
     } for project in project_qs[:10]]
 
     stats = {

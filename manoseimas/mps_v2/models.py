@@ -1,3 +1,4 @@
+from collections import Counter
 from django.db import models
 from django_extensions.db.fields import AutoSlugField
 
@@ -560,3 +561,21 @@ class LawProject(CrawledItem):
                                                  self.date, self.date_passed)
         else:
             return u'{} ({})'.format(self.project_number, self.date)
+
+    @reify
+    def proposer_count(self):
+        return self.proposers.count()
+
+    def get_fraction_contributions(self):
+        proposers = self.proposers.prefetch_related(
+            ParliamentMember.FractionPrefetch()
+        )
+        fraction_counts = Counter(map(lambda p: p.fraction, proposers))
+        fractions = []
+        for fraction, count in fraction_counts.items():
+            if fraction:  # may be None if one of proposers is not in fraction
+                fraction.fraction_contribution = (float(count)
+                                                  / self.proposer_count
+                                                  * 100.0)
+                fractions.append(fraction)
+        return fractions
