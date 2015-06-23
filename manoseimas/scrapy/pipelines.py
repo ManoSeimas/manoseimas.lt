@@ -8,9 +8,12 @@ from django.core.files.base import ContentFile
 import manoseimas.common.utils.words as words_utils
 
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
-from manoseimas.scrapy.items import Person, StenogramTopic, ProposedLawProjectProposer
+from manoseimas.scrapy.items import (Person, StenogramTopic,
+                                     ProposedLawProjectProposer)
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
 from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
+
+from manoseimas.mps.abbr import get_fraction_abbr
 
 from manoseimas.mps_v2.models import ParliamentMember, PoliticalParty
 from manoseimas.mps_v2.models import Group, GroupMembership
@@ -153,6 +156,8 @@ class ManoSeimasModelPersistPipeline(object):
                 type=item_group['type'],
                 defaults={'source': source_url}
             )
+            if group.type == Group.TYPE_FRACTION:
+                group.abbr = get_fraction_abbr(group.name)
             group.save()
             item_membership = item_group.get('membership')
             membership, __ = GroupMembership.objects.get_or_create(

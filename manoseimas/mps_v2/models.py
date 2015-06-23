@@ -262,6 +262,7 @@ class Group(CrawledItem):
 
     name = models.CharField(max_length=255, unique=True)
     slug = AutoSlugField(populate_from='name', max_length=120)
+    abbr = models.CharField(max_length=16, blank=True, null=True)
     type = models.CharField(max_length=64,
                             choices=GROUP_TYPES)
     displayed = models.BooleanField(default=True)
