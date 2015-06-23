@@ -8,7 +8,7 @@ from django.utils.safestring import mark_safe
 from django.db.models import Prefetch, Count
 
 from .models import (ParliamentMember, GroupMembership, Group,
-                     Stenogram, StenogramStatement)
+                     Stenogram, StenogramStatement, LawProject)
 
 
 def mp_list(request, fraction_slug=None):
@@ -139,8 +139,9 @@ def mp_profile(request, mp_slug):
         ParliamentMember.FractionPrefetch()
     )
 
-    project_qs = mp.law_projects.order_by('-date')
-    project_qs = project_qs.annotate(proposer_count=Count('proposers'))
+    project_qs = LawProject.objects.annotate(proposer_count=Count('proposers'))
+    project_qs = project_qs.filter(proposers=mp)
+
     law_projects = [{
         'title': project.project_name,
         'date': project.date,
