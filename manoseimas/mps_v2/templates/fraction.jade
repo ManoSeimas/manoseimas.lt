@@ -110,11 +110,11 @@
           tr
             th Nr.
             th Frakcija
-            th Viso projektų
+            th Projektų kartu
         tbody
           for fraction in collaborating_fractions
             tr
               td {{ forloop.counter }}
               td
                 a(href="{% url 'mp_fraction' fraction.slug %}") {{ fraction.name }}
-              td {{ fraction.project_count }}
+              td {{ fraction.signing_percentage|floatformat:0 }}%
