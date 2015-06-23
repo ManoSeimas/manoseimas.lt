@@ -385,6 +385,46 @@ class Group(CrawledItem):
         ).distinct().order_by('-project_count')
         return collab[:5]
 
+    def get_collaborating_fractions_percentage(self, count=5):
+        member_projects = LawProject.objects.filter(
+            proposers__in=self.active_members
+        )
+        project_signatories = LawProject.proposers.through.objects.filter(
+            parliamentmember__groups__type=Group.TYPE_FRACTION,
+            lawproject__id__in=list(
+                member_projects.values_list('id', flat=True).distinct()),
+        ).values(
+            'lawproject__id',
+            'parliamentmember__groups__id',
+        ).annotate(group_proposer_count=models.Count('pk'))
+
+        project_signatories = list(project_signatories)
+        total_signatories = sum([item['group_proposer_count']
+                                 for item in project_signatories])
+        if not total_signatories:
+            return []
+        signatories_by_fraction = {}
+        for signatories in project_signatories:
+            group_id = signatories['parliamentmember__groups__id']
+            if group_id != self.pk:
+                signatories_by_fraction.setdefault(group_id, 0)
+                signatories_by_fraction[group_id] += signatories['group_proposer_count']  # noqa
+        top_signatory_pairs = sorted(
+            [(key, float(value) / total_signatories * 100.0)
+             for key, value in signatories_by_fraction.items()],
+            reverse=True,
+            key=lambda v: v[1],
+        )
+        top_signatory_dict = dict(top_signatory_pairs[:count])
+        top_signatories = list(Group.objects.filter(
+            pk__in=top_signatory_dict.keys()
+        ))
+        for signatory in top_signatories:
+            signatory.signing_percentage = top_signatory_dict[signatory.pk]
+        return sorted(top_signatories,
+                      key=lambda s: s.signing_percentage,
+                      reverse=True)
+
     @property
     def top_collaborating_fractions(self):
         return self.get_top_collaborating_fractions()
