@@ -330,7 +330,8 @@ def mps_json(request):
     current_fractions = GroupMembership.objects.filter(
         group__type=Group.TYPE_FRACTION,
         until__isnull=True,
-    ).select_related('group').values('member_id', 'group__name', 'group__slug', 'group__logo')
+    ).select_related('group').values('member_id', 'group__name', 'group__slug',
+                                     'group__logo')
 
     mp_fractions = {fraction['member_id']: {'name': fraction['group__name'],
                                             'slug': fraction['group__slug'],
