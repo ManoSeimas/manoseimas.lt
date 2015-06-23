@@ -2,9 +2,12 @@ from functools import partial
 
 from django.core.urlresolvers import reverse
 from django.core.files.storage import default_storage
+from django.core.serializers import serialize
 from django.http import JsonResponse
+from django.db.models import Count
 
-from manoseimas.mps_v2.models import Group, GroupMembership, ParliamentMember
+from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
+                                      LawProject)
 
 from .statements import _build_discussion_context
 
@@ -86,3 +89,31 @@ def mps_json(request):
                     for fraction in current_fractions}
     to_dict_partial = partial(_mp_dict, mp_fractions=mp_fractions)
     return JsonResponse({'items': map(to_dict_partial, mps)})
+
+
+def law_projects_json(request, mp_slug):
+    def make_dict(fraction):
+        return {
+            'name': fraction.name,
+            'slug': fraction.slug,
+            'type': fraction.type,
+            'url': reverse('mp_fraction', kwargs={'fraction_slug': fraction.slug}),
+            'contribution': fraction.fraction_contribution,
+        }
+
+    mp = ParliamentMember.objects.get(slug=mp_slug)
+
+    project_qs = LawProject.objects.annotate(proposer_count=Count('proposers'))
+    project_qs = project_qs.filter(proposers=mp)
+
+    law_projects = [{
+        'title': project.project_name,
+        'date': project.date,
+        'date_passed': project.date_passed,
+        'number': project.project_number,
+        'url': project.project_url,
+        'proposer_count': project.proposer_count,
+        'fraction_contributions': map(make_dict, project.get_fraction_contributions()),
+    } for project in project_qs[:10]]
+
+    return JsonResponse({'law_projects': law_projects})

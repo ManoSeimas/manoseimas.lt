@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.db.models import Prefetch, Count
+from django.db.models import Prefetch
 from django.utils.safestring import mark_safe
 
-from manoseimas.mps_v2.models import (ParliamentMember, GroupMembership, Group, LawProject)
+from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
 
 
 def mp_profile(request, mp_slug):
@@ -54,19 +54,6 @@ def mp_profile(request, mp_slug):
         ParliamentMember.FractionPrefetch()
     )
 
-    project_qs = LawProject.objects.annotate(proposer_count=Count('proposers'))
-    project_qs = project_qs.filter(proposers=mp)
-
-    law_projects = [{
-        'title': project.project_name,
-        'date': project.date,
-        'date_passed': project.date_passed,
-        'number': project.project_number,
-        'url': project.project_url,
-        'proposer_count': project.proposer_count,
-        'fraction_contributions': project.get_fraction_contributions(),
-    } for project in project_qs[:10]]
-
     stats = {
         'statement_count': mp.statement_count,
         'long_statement_count': mp.long_statement_count,
@@ -91,7 +78,6 @@ def mp_profile(request, mp_slug):
         'photo_url': mp.photo.url,
         'ranking': mp.ranking,
         'top_collaborating_mps': top_collaborators,
-        'law_projects': law_projects,
     }
 
     return render(request, 'profile.jade', context)
