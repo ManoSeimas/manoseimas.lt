@@ -264,7 +264,8 @@ def mp_statements(request, mp_slug, statement_page=None):
 
 def index_view(request):
     parliament = Group.objects.get(type=Group.TYPE_PARLIAMENT)
-    return render(request, 'index_with_filter.jade', {'parliament': parliament})
+    context = {'parliament': parliament}
+    return render(request, 'index_with_filter.jade', context)
 
 
 def _fraction_dict(fraction):
