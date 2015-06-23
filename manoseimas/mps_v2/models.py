@@ -373,18 +373,6 @@ class Group(CrawledItem):
         )
         return agg['avg_passed_ratio']
 
-    def get_top_collaborating_fractions(self):
-        member_projects = LawProject.objects.filter(
-            proposers__in=self.active_members)
-        collab = Group.objects.filter(
-            members__law_projects__in=member_projects,
-            groupmembership__until__isnull=True,
-            type=self.TYPE_FRACTION,
-        ).exclude(pk=self.pk).annotate(
-            project_count=models.Count('*')
-        ).distinct().order_by('-project_count')
-        return collab[:5]
-
     def get_collaborating_fractions_percentage(self, count=5):
         member_projects = LawProject.objects.filter(
             proposers__in=self.active_members
@@ -427,7 +415,7 @@ class Group(CrawledItem):
 
     @property
     def top_collaborating_fractions(self):
-        return self.get_top_collaborating_fractions()
+        return self.get_collaborating_fractions_percentage()
 
 
 class GroupMembership(CrawledItem):
