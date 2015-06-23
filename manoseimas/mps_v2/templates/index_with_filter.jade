@@ -1,6 +1,7 @@
 - extends "new_base.jade"
 - load static from staticfiles
 - load compress from compress
+- load lt_pluralize
 
 - block title
   | Mano Seimas - stebėk seimo narių veiklą.
@@ -39,12 +40,12 @@
       .stats-box.slim
         .block: .explanation Pasisako
         .block: h4.number {{parliament.avg_statement_count|floatformat:0}}
-        .block: .explanation kartus
+        .block: .explanation {% lt_pluralize parliament.avg_statement_count|floatformat:0 'kartą' 'kartus' 'kartų' %}
 
       .stats-box.slim
         .block: .explanation Pateikia
         .block: h4.number {{parliament.avg_passed_law_project_count|floatformat:0}}
-        .block: .explanation projektus
+        .block: .explanation {% lt_pluralize parliament.avg_passed_law_project_count|floatformat:0 'projektą' 'projektus' 'projektų' %}
 
   #fraction-filter-component
 
