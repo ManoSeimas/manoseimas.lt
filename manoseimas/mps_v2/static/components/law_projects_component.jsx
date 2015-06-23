@@ -2,7 +2,6 @@ var LawProjects = React.createClass({
   getInitialState: function() {
     return {
       projects: [],
-      total_pages: 1,
       current_page: 1,
       items_per_page: 15,
       show_only_selected: false
@@ -11,12 +10,9 @@ var LawProjects = React.createClass({
 
   componentDidMount: function() {
     $.get(this.props.data_url, function(result) {
-      total_pages = Math.round((result.items.length / this.state.items_per_page)+0.5);
-
       if (this.isMounted()) {
         this.setState({
           projects: result.items,
-          total_pages: total_pages
         })
       }
     }.bind(this))
@@ -29,7 +25,8 @@ var LawProjects = React.createClass({
 
   showPassedOnly: function() {
     this.setState({
-      show_only_selected: !this.state.show_only_selected
+      show_only_selected: !this.state.show_only_selected,
+      current_page: 1
     });
   },
 
@@ -52,15 +49,16 @@ var LawProjects = React.createClass({
       },
     }
 
-    var slice_from = (this.state.current_page-1)*this.state.items_per_page,
-        slice_to = this.state.current_page*this.state.items_per_page;
-
     var projects = this.state.projects;
     if (this.state.show_only_selected) {
       projects = projects.filter(function(item) {
         return item.date_passed
       }.bind(this))
     }
+
+    var slice_from = (this.state.current_page-1)*this.state.items_per_page,
+        slice_to = this.state.current_page*this.state.items_per_page,
+        total_pages = Math.round((projects.length / this.state.items_per_page)+0.5);
 
     return (
       <div className="law-projects">
@@ -80,7 +78,7 @@ var LawProjects = React.createClass({
                            items={projects.slice(slice_from, slice_to)} />
           </div>
           <div className="ui center aligned grid">
-            <Paginator max={this.state.total_pages} onChange={this.onChangePage} />
+            <Paginator max={total_pages} onChange={this.onChangePage} />
           </div>
         </div>
       </div>
