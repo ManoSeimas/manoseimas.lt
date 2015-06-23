@@ -71,7 +71,7 @@
   padding-top: 2rem;
 
   .eight.wide.column { padding-bottom: 0; }
-  .ui.zero.margin.grid {margin: 0; }
+  .ui.zero.margin.grid { margin: 0; }
   .ui.table {
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -81,6 +81,10 @@
 .law-project-collaborators {
   h3 { margin: 1rem 0 0; }
   th, tr { font-size: $normal; }
+  .ui.table {
+    margin: 1rem;
+    padding: 0;
+  }
 }
 
 #fraction-filter-component {

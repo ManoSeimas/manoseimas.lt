@@ -7,17 +7,22 @@
 }
 .parliamentarians.wide,
 .collaborators {
-  margin: 3em 0;
+  margin: 3em 0 3em 1em;
+
+  h2 { padding-left: .2em; }
   .parliamentarian.box {
     margin-top: 10px;
+    width: 271px;
 
     .info {
-      // width: 168px;
+      width: 180px;
+
       a.fraction-name {
         font-size: $tiny;
         line-height: 1.2;
         color: $greenDark;
         display: block;
+        padding-right: 5px;
       }
       h2 { margin-bottom: 0.2em; }
       p { font-size: $tiny; }

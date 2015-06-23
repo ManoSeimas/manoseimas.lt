@@ -24,10 +24,8 @@
     .ui.zero.margin.page.grid
       .stats-box
         .one-number
-          .block: h4.number {{fraction.avg_vote_percentage|floatformat:0}}%
-          .block: .explanation Dalyvavimas balsavimuose
-        .rating(data-title="Geriau negu {{fraction.ranking.votes_percentile}}%" data-content="Palyginimas su kitom seimo frakcijom. Kuo daugiau procentų tuo geriau.")
-          .ui.indicating.progress(data-percent=fraction.ranking.votes_percentile): .bar
+          .block.left: h4.number {{fraction.avg_vote_percentage|floatformat:0}}%
+          .block.right: .explanation Dalyvavimas balsavimuose
 
       .stats-box
         .two-numbers
@@ -38,29 +36,19 @@
           .block
             h4.number {{fraction.avg_long_statement_count|floatformat:0}}
             .explanation ilgi pasisakymai (vid.)
-        .rating: .ui.indicating.progress(data-percent=fraction.ranking.statement_count_percentile): .bar
 
       .stats-box
         .three-numbers
           h3 Įstatymų projetai
           .block
             h4.number {{fraction.avg_law_project_count|floatformat:0}}
-            p.explanation pasiūlyti	(vid.)
+            .explanation pasiūlyti	(vid.)
           .block
             h4.number {{fraction.avg_passed_law_project_count|floatformat:0}}
             .explanation priimti (vid.)
           .block
             h4.number {{fraction.avg_passed_law_project_ratio|floatformat:0}}%
             .explanation palaikymas (vid.)
-        .rating(data-title="Priimtų/pasiūlytų įstatymų santykis geresnis negu {{ranking.passed_law_project_ratio_percentile}}%" data-content="Palyginimas su kitų frakcijų priimtų ir pasiūlytų įstatymų santykiu.")
-          .ui.indicating.progress(data-percent="{{ ranking.avg_passed_law_project_ratio_percentile }}"): .bar
-
-
-      .stats-box.total
-        .stats
-          h3 40%
-          .explanation bendras aktyvumas
-        .vertical-progress: .bar: .text
 
   .parliamentarians.wide
     .ui.page.grid
@@ -102,7 +90,7 @@
               a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
 
   .law-project-collaborators
-    .ui.page.grid
+    .ui.zero.margin.page.grid
       a(name="law-project-collaborators")
       h2 Įstatymų projektus teikia kartu su
       table.ui.table
@@ -117,4 +105,4 @@
               td {{ forloop.counter }}
               td
                 a(href="{% url 'mp_fraction' fraction.slug %}") {{ fraction.name }}
-              td {{ fraction.signing_percentage|floatformat:0 }}%
+              td.center.aligned {{ fraction.signing_percentage|floatformat:0 }}%
