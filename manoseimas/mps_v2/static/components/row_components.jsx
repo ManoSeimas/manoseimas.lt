@@ -1,3 +1,15 @@
+var lt_pluralize = function(n, singular, plural1, plural2) {
+    if (n % 10 == 1 && n % 100 != 11) {
+        return singular;
+    } else if (n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20)) {
+        return plural1;
+    } else {
+        return plural2;
+    }
+
+}
+
+
 var PaliamentarianRow = React.createClass({
   render: function() {
     var parliamentarian = this.props.obj;
@@ -13,13 +25,15 @@ var PaliamentarianRow = React.createClass({
         <div className="two wide column">
           <div className="ui discussion statistic">
             <div className="value">{parliamentarian.statement_count}</div>
-            <div className="label">pasisakymai</div>
+            <div className="label">
+              {lt_pluralize(parliamentarian.statement_count, 'pasisakymas', 'pasisakymai', 'pasisakymų')}
+            </div>
           </div>
         </div>
         <div className="three wide column">
           <div className="ui projects statistic">
             <div className="value">{parliamentarian.passed_law_project_ratio}%</div>
-            <div className="label">priimti projektai</div>
+            <div className="label">priimta projektų</div>
           </div>
         </div>
         <div className="two wide column">
@@ -47,19 +61,23 @@ var FractionRow = React.createClass({
         <div className="two wide column">
           <div className="ui member statistic">
             <div className="value">{fraction.member_count}</div>
-            <div className="label">narių</div>
+            <div className="label">
+              {lt_pluralize(fraction.member_count, 'narys', 'nariai', 'narių')}
+            </div>
           </div>
         </div>
         <div className="two wide column">
           <div className="ui discussion statistic">
             <div className="value">{fraction.avg_statement_count}</div>
-            <div className="label">pasisakymai</div>
+            <div className="label">
+              {lt_pluralize(fraction.avg_statement_count, 'pasisakymas', 'pasisakymai', 'pasisakymų')}
+            </div>
           </div>
         </div>
         <div className="two wide column">
           <div className="ui projects statistic">
             <div className="value">{fraction.avg_passed_law_project_ratio}%</div>
-            <div className="label">priimti projektai</div>
+            <div className="label">priimta projektų</div>
           </div>
         </div>
         <div className="two wide column">
