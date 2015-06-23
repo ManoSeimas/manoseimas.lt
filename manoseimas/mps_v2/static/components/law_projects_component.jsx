@@ -4,7 +4,8 @@ var LawProjects = React.createClass({
       projects: [],
       total_pages: 1,
       current_page: 1,
-      items_per_page: 10
+      items_per_page: 15,
+      show_only_selected: false
     }
   },
 
@@ -23,6 +24,13 @@ var LawProjects = React.createClass({
 
   onChangePage: function(page) {
     this.setState({current_page: page});
+    $.scrollTo('.law-projects', 100, {offset: -40});
+  },
+
+  showPassedOnly: function() {
+    this.setState({
+      show_only_selected: !this.state.show_only_selected
+    });
   },
 
   render: function() {
@@ -47,6 +55,13 @@ var LawProjects = React.createClass({
     var slice_from = (this.state.current_page-1)*this.state.items_per_page,
         slice_to = this.state.current_page*this.state.items_per_page;
 
+    var projects = this.state.projects;
+    if (this.state.show_only_selected) {
+      projects = projects.filter(function(item) {
+        return item.date_passed
+      }.bind(this))
+    }
+
     return (
       <div className="law-projects">
         <div className="ui page grid">
@@ -54,12 +69,18 @@ var LawProjects = React.createClass({
             <h2 className="title">Įstatymų projektai</h2>
           </div>
           <div className="eight wide right aligned column">
-            <Paginator max={this.state.total_pages} onChange={this.onChangePage} />
+            <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
+              <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
+              <label>Rodyti tik priimtus projektus</label>
+            </div>
           </div>
 
           <div className="ui zero margin grid">
             <SemanticTable columns={columns}
-                           items={this.state.projects.slice(slice_from, slice_to)} />
+                           items={projects.slice(slice_from, slice_to)} />
+          </div>
+          <div className="ui center aligned grid">
+            <Paginator max={this.state.total_pages} onChange={this.onChangePage} />
           </div>
         </div>
       </div>
