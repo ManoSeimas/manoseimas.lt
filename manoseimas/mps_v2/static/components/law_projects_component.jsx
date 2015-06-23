@@ -27,14 +27,19 @@ var LawProjects = React.createClass({
 
   render: function() {
     var columns = {
-      number: {title: 'Projekto numeris', func: null},
-      title: {title: 'Pavadinimas', func: null },
-      date: {title: 'Teikimo data', func: null },
-      proposer_count: {title: 'Viso teikėjų', func: null },
+      number: {
+        title: 'Projekto numeris',
+        func: function (item) {
+          return <a href={item['url']} target='_blank'>{item['number']}</a>
+        }
+      },
+      title: {title: 'Pavadinimas', func: null},
+      date: {title: 'Teikimo data', func: null},
+      proposer_count: {title: 'Viso teikėjų', func: null},
       date_passed: {
         title: 'Priėmimas',
-        func: function (value) {
-          return (value) ? 'Priimtas '+value : 'Nepriimtas'
+        func: function (item) {
+          return (item['date_passed']) ? 'Priimtas '+item['date_passed'] : 'Nepriimtas'
         }
       },
     }
@@ -81,7 +86,7 @@ var SemanticTable = React.createClass({
                   {Object.keys(columns).map(function (key) {
                     return (
                       <td>
-                      {(columns[key].func) ? columns[key].func(item[key]) : item[key]}
+                      {(columns[key].func) ? columns[key].func(item) : item[key]}
                       </td>
                     )
                   })}
