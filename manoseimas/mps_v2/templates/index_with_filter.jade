@@ -31,17 +31,17 @@
     .ui.zero.margin.center.aligned.page.grid
       .stats-description Vidutiniškai seimo narys:
 
-      .stats-box
+      .stats-box.slim
         .block: .explanation Dalyvauja
         .block: h4.number {{parliament.avg_vote_percentage|floatformat:0}}%
         .block: .explanation balsavimų
 
-      .stats-box
+      .stats-box.slim
         .block: .explanation Pasisako
         .block: h4.number {{parliament.avg_statement_count|floatformat:0}}
         .block: .explanation kartus
 
-      .stats-box
+      .stats-box.slim
         .block: .explanation Pateikia
         .block: h4.number {{parliament.avg_passed_law_project_count|floatformat:0}}
         .block: .explanation projektus

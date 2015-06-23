@@ -94,27 +94,32 @@
   display: inline-block;
   margin: 15px 10px;
   padding: 0 10px 10px;
+  font-size: 0;
 
   h3 {
     font-size: $normal;
     text-align: center;
     margin-bottom: 0;
+    margin-top: 0;
+    line-height: 2rem;
   }
 
   .graph, .info, .block {
     display: inline-block;
     position: relative;
+    vertical-align: top
   }
 
   .pie { padding: 12px 0 5px; }
 
   .one-number {
-    height: 100px;
-    display: table;
+    margin-top: 30px;
+    .block.left { width: 40%; }
+    .block.right { width: 60%; }
     .block {
-      display: table-cell;
-      vertical-align: middle;
-      width: 50%;
+      padding-top: 0;
+      padding-bottom: 1.2rem;
+
       h4.number {
         font-size: $big;
         text-align: center;
@@ -260,6 +265,17 @@
         padding: 0 5px;
         width: 5em;
       }
+    }
+  }
+}
+
+.stats-box.slim {
+  padding: .5rem;
+  .block {
+    .explanation {
+      display: table-cell;
+      padding: .2em .8em;
+      color: $gray;
     }
   }
 }

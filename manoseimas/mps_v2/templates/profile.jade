@@ -82,8 +82,8 @@
       a(name="stats")
       .stats-box
         .one-number
-          .block: h4.number {{stats.vote_percent|floatformat:0}}%
-          .block: .explanation Dalyvavimas balsavimuose
+          .block.left: h4.number {{stats.vote_percent|floatformat:0}}%
+          .block.right: .explanation Dalyvavimas balsavimuose
         .rating(data-title="Geriau negu {{ranking.votes_percentile}}%" data-content="Palyginimas su kitais parlamentarais. Kuo daugiau procentų tuo geriau.")
           .ui.indicating.progress(data-percent=ranking.votes_percentile): .bar
 
