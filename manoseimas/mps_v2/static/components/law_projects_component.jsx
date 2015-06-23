@@ -3,6 +3,7 @@ var LawProjects = React.createClass({
     return {
       projects: [],
       total_pages: 1,
+      current_page: 1,
       items_per_page: 10
     }
   },
@@ -20,31 +21,27 @@ var LawProjects = React.createClass({
     }.bind(this))
   },
 
+  onChangePage: function(page) {
+    this.setState({current_page: page});
+  },
+
   render: function() {
     var columns = {
-      number: {
-        title: 'Projekto numeris',
-        func: null
-      },
-      title: {
-        title: 'Pavadinimas',
-        func: null
-      },
-      date: {
-        title: 'Teikimo data',
-        func: null
-      },
-      proposer_count: {
-        title: 'Viso teikėjų',
-        func: null
-      },
+      number: {title: 'Projekto numeris', func: null},
+      title: {title: 'Pavadinimas', func: null },
+      date: {title: 'Teikimo data', func: null },
+      proposer_count: {title: 'Viso teikėjų', func: null },
       date_passed: {
         title: 'Priėmimas',
         func: function (value) {
-            return (value) ? 'Priimtas '+value : 'Nepriimtas'
+          return (value) ? 'Priimtas '+value : 'Nepriimtas'
         }
       },
     }
+
+    var slice_from = (this.state.current_page-1)*this.state.items_per_page,
+        slice_to = this.state.current_page*this.state.items_per_page;
+
     return (
       <div className="law-projects">
         <div className="ui page grid">
@@ -52,11 +49,12 @@ var LawProjects = React.createClass({
             <h2 className="title">Įstatymų projektai</h2>
           </div>
           <div className="eight wide right aligned column">
-
+            <Paginator max={this.state.total_pages} onChange={this.onChangePage} />
           </div>
 
           <div className="ui zero margin grid">
-            <SemanticTable columns={columns} items={this.state.projects} />
+            <SemanticTable columns={columns}
+                           items={this.state.projects.slice(slice_from, slice_to)} />
           </div>
         </div>
       </div>
