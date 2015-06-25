@@ -67,7 +67,7 @@ var Switcher = React.createClass({
     return (
       <div>
         <div className="switcher-component">
-          <div className="ui zero margin center aligned page grid">
+          <div className="ui none margin center aligned grid">
             <div className="ui top attached tabular menu">
               {Object.keys(tabs).map(function (key) {
                 var selected = (self.state.active_tab === key) ? 'active' : '';

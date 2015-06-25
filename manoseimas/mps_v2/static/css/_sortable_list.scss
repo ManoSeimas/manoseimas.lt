@@ -1,8 +1,12 @@
-#fraction-filter-component .ui.tabular.menu {
-  .item {
-    font-weight: normal;
-    padding: 0.7em 4em;
-    font-size: $normal;
+#fraction-filter-component {
+  .none.margin { margin: 0; }
+
+  .ui.tabular.menu {
+    .item {
+      font-weight: normal;
+      padding: 0.7em 4em;
+      font-size: $normal;
+    }
   }
 }
 
