@@ -100,7 +100,7 @@ var SortableList = React.createClass({
 
     return (
       <div>
-        <div className="ui zero margin page grid sort-keys">
+        <div className="ui zero margin stackable page grid sort-keys">
           {sortkeys.map(function(sortkey, index) {
             // Creating proper class for sort keys using Semantic UI framework.
             var column_count = (index === 0) ? 'eight' : 'two';
