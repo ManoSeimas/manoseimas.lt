@@ -188,17 +188,17 @@
       user: "{{ name }}"
 
   - cron:
-      name: recompute stats
+      name: sync positions
       minute: 55
       hour: 1
-      job: "cd {{ path }} && bin/django recompute_stats"
+      job: "cd {{ path }} && bin/django syncpositions"
       user: "{{ name }}"
 
   - cron:
-      name: sync positions
-      minute: 5
+      name: recompute stats
+      minute: 05
       hour: 2
-      job: "cd {{ path }} && bin/django syncpositions"
+      job: "cd {{ path }} && bin/django recompute_stats"
       user: "{{ name }}"
 
 
