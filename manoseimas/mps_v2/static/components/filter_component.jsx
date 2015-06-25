@@ -134,7 +134,7 @@ var SortableList = React.createClass({
         </Loader>
 
         <div className={((total_pages < 2 || current_page === total_pages) ? 'hidden ' : '') + 'ui zero margin center aligned load_more grid'}>
-          <a onClick={this.onLoadMore}> Load more </a>
+          <a onClick={this.onLoadMore}> Rodyti daugiau </a>
         </div>
       </div>
     );
