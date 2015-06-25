@@ -88,3 +88,24 @@ To access CouchDB web ui run this command::
     ssh -L 9000:localhost:5984 manoseimas.lt
 
 And visit http://localhost:9000/_utils/
+
+
+Manually running crawlers and housekeeping
+==========================================
+
+These crawlers are currently present::
+
+    bin/scrapy crawl mps  # Parliament member profiles
+    bin/scrapy crawl stenograms  # Stenograms
+    bin/scrapy crawl law_projects  # Law project stats
+    bin/scrapy crawl sittings  # Sittings and voting stats, usually invoked via syncsittings
+
+
+These commands are used to precompute and load various things::
+
+    bin/django recompute_stats  # Recompute stats on models
+    bin/django couchdb_sync_id  # RUn this if you see CouchDB conflicts
+    bin/django syncsittings [--update] [--scrape]  # update sittings
+    bin/django syncmps [--update] [--scrape]  # update mps
+    bin/django syncpositions  # Sync MP and Fraction positions on various political issues
+
