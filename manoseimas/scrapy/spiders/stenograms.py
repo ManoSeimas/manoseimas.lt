@@ -9,7 +9,7 @@ from scrapy.selector import Selector
 import roman
 
 from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
-from manoseimas.scrapy.spiders import ManoSeimasSpider
+from manoseimas.scrapy.spiders import ManoSeimasSpider, mark_no_cache
 from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.items import StenogramTopic
 from manoseimas.scrapy.textutils import clean_text
@@ -131,10 +131,11 @@ class StenogramSpider(ManoSeimasSpider):
         Rule(QualifiedRangeSgmlLinkExtractor(
             allow=[
                 # List of Seimas sittings
-                r'/pls/inter/w5_sale\.ses_pos\?p_ses_id=(\d+)',
+                r'/pls/inter\d?/w5_sale\.ses_pos\?p_ses_id=(\d+)',
                 # List of days with early and late sessions
-                r'/pls/inter/w5_sale\.fakt_pos\?p_fakt_pos_id=(-?\d+)'
-            ], allow_range=session_range)
+                r'/pls/inter\d?/w5_sale\.fakt_pos\?p_fakt_pos_id=(-?\d+)'
+            ], allow_range=session_range),
+            process_request=mark_no_cache,
         ),
         Rule(stenogram_link_extractor, 'parse_stenogram'),
     )

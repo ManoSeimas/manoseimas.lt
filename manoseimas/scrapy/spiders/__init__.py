@@ -23,3 +23,8 @@ class ManoSeimasSpider(CrawlSpider):
             'url': response.url,
         }
         self.log('%(msg)s, %(url)s' % s, level=log.ERROR)
+
+
+def mark_no_cache(request):
+    request.meta['_no_cache'] = True
+    return request

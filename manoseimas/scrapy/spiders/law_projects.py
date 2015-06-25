@@ -16,7 +16,7 @@ from manoseimas.scrapy import pipelines
 from manoseimas.scrapy.items import ProposedLawProjectProposer
 from manoseimas.scrapy.items import PassedLawProjectProposer
 from manoseimas.scrapy.loaders import Loader
-from manoseimas.scrapy.spiders import ManoSeimasSpider
+from manoseimas.scrapy.spiders import ManoSeimasSpider, mark_no_cache
 
 
 def process_mp_page_url(url):
@@ -60,14 +60,14 @@ class LawProjectSpider(ManoSeimasSpider):
     ]
 
     mp_projects_link_extractor = LxmlLinkExtractor(
-        allow=[(r'http://www3.lrs.lt/pls/inter/w5_smn_akt_new\.seim_nar_proj'
+        allow=[(r'http://www3.lrs.lt/pls/inter\d?/w5_smn_akt_new\.seim_nar_proj'
                 '\?p_asm_id=\d+'
                 '&p_end='
                 '&p_forma='
                 '&p_grup_id=8'
                 '&p_kad_ses='
                 '&p_start=2012-11-16'),
-               (r'http://www3.lrs.lt/pls/inter/w5_smn_akt_new\.seim_nar_proj'
+               (r'http://www3.lrs.lt/pls/inter\d?/w5_smn_akt_new\.seim_nar_proj'
                 '\?p_asm_id=\d+'
                 '&p_end=[^&]*'
                 '&p_forma=[^&]*'
@@ -82,7 +82,7 @@ class LawProjectSpider(ManoSeimasSpider):
 
     rules = [
         Rule(mp_projects_link_extractor, 'parse_mp_project_index',
-             follow=True),
+             follow=True, process_request=mark_no_cache),
     ]
 
     pipelines = (

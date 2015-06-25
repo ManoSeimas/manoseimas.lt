@@ -18,7 +18,7 @@ from manoseimas.scrapy.items import Voting
 from manoseimas.scrapy.items import VotingDocument
 from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.loaders import absolute_url
-from manoseimas.scrapy.spiders import ManoSeimasSpider
+from manoseimas.scrapy.spiders import ManoSeimasSpider, mark_no_cache
 from manoseimas.scrapy.utils import Increment
 from manoseimas.scrapy.db import get_sequential_votings, get_question
 from manoseimas.scrapy import pipelines
@@ -97,19 +97,20 @@ class SittingsSpider(ManoSeimasSpider):
                      # List of days with early and late sessions
                      r'/pls/inter/w5_sale\.fakt_pos\?p_fakt_pos_id=(-?\d+)'
                  ],
-                 allow_range=sitting_session_range)),
+                 allow_range=sitting_session_range),
+                 process_request=mark_no_cache),
 
             # Discussion on a question
             Rule(QualifiedRangeSgmlLinkExtractor(
                 allow=[r'p_svarst_kl_stad_id=(-?\d+)'],
                 allow_range=question_range
-            ), 'parse_question', follow=True),
+            ), 'parse_question', follow=True, process_request=mark_no_cache),
 
             # Voting results by person
             Rule(QualifiedRangeSgmlLinkExtractor(
                 allow=[r'p_bals_id=(-?\d+)'],
                 allow_range=voting_range
-            ), 'parse_person_votes'),
+            ), 'parse_person_votes', process_request=mark_no_cache),
         )
 
         ManoSeimasSpider.__init__(self)
