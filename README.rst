@@ -3,6 +3,9 @@ Lithuanian government activity.
 
 Project web site: http://manoseimas.lt/
 
+.. image:: https://travis-ci.org/ManoSeimas/manoseimas.lt.svg?branch=master
+    :target: https://travis-ci.org/ManoSeimas/manoseimas.lt
+
 Get in touch
 ============
 
