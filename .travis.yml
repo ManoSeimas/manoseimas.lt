@@ -1,0 +1,15 @@
+language: python
+python: "2.7"
+services:
+    - mysql
+    - couchdb
+before_install:
+    - mysql -uroot -e 'create database manoseimas;'
+    - sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
+install:
+    - sudo make ubuntu
+    - python scripts/genconfig.py config/env/development.cfg
+    - make
+    - printf "[client]\ndatabase = manoseimas\nuser = root\npassword =\ndefault-character-set = utf8\n" | /home/vagrant/.my.cnf
+script:
+    - make test
