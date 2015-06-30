@@ -93,19 +93,19 @@
 
       .stats-box
         .two-numbers
-          h3 Aktyvumas diskusijuose
+          h3 Aktyvumas diskusijose
           .block
             h4.number {{ stats.statement_count }}
             p.explanation pasisakymai
           .block
             h4.number {{ stats.long_statement_percentage|floatformat:0 }}%
-            .explanation Ilgi pasisakymai (kalbos)
+            .explanation ilgi pasisakymai (kalbos)
         .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Palyginimas su kitų parlamentarų pasisakymų skaičiumi. 100% surenka šnekiausias parlamentaras.")
           .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
 
       .stats-box
         .three-numbers
-          h3 Įstatymų projetai
+          h3 Įstatymų projektai
           .block
             h4.number {{ stats.proposed_projects }}
             p.explanation pasiūlyti
@@ -167,7 +167,7 @@
               .explanation ilgi pasisakymai
             .block
               h4.number {{stats.contributed_discussion_percentage|floatformat:2}}%
-              .explanation dalyvavimas diskusijuose
+              .explanation dalyvavimas diskusijose
 
         .stats-box.transcripts-total
           h4.explanation Pasisako dažniau negu
