@@ -40,8 +40,8 @@ var LawProjects = React.createClass({
           return <a href={item['url']} target='_blank'>{item['number']}</a>
         }
       },
-      title: {title: 'Pavadinimas', func: null},
-      date: {title: 'Teikimo data', func: null},
+      title: {title: 'Pavadinimas', className: null, func: null},
+      date: {title: 'Teikimo data', className: 'date', func: null},
       proposer_count: {title: 'Viso teikėjų', func: null},
       date_passed: {
         title: 'Priėmimas',
@@ -98,7 +98,7 @@ var SemanticTable = React.createClass({
         <thead>
           <tr>
             {Object.keys(columns).map(function (key) {
-              return <th>{columns[key].title}</th>
+              return <th className={columns[key].className}>{columns[key].title}</th>
             })}
           </tr>
         </thead>
