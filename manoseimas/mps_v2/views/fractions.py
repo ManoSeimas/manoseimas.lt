@@ -16,7 +16,7 @@ def mp_fraction(request, fraction_slug):
     )
 
     collaborating_fractions = fraction.top_collaborating_fractions
-    members = fraction.active_members
+    members = fraction.active_members.order_by('last_name')
 
     context = {
         'fraction': fraction,
