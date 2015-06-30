@@ -100,7 +100,7 @@
     font-size: $normal;
     text-align: center;
     margin-bottom: 0;
-    margin-top: 0;
+    margin-top: .1em;
     line-height: 2rem;
   }
 
@@ -113,7 +113,7 @@
   .pie { padding: 12px 0 5px; }
 
   .one-number {
-    margin-top: 30px;
+    margin-top: 32px;
     .block.left { width: 40%; }
     .block.right { width: 60%; }
     .block {

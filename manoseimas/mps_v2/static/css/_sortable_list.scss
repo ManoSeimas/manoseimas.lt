@@ -17,6 +17,7 @@
 
   .sort-keys {
     a { color: $gray;}
+    a:hover { color: $msBlue; }
     .column {
       font-size: $small;
       vertical-align: middle;
@@ -30,6 +31,8 @@
       border-bottom: 4px solid $msBlue;
       a { color: $msBlue; }
     }
+
+    .chevron.icon { margin-left: .3em; }
   }
 
   .filtered-elements {
@@ -65,6 +68,7 @@
     }
 
     .ui.statistic {
+      margin-top: .3em;
       .value { font-size: $big*0.9; color: $textColor;}
       .label {
         background-color: transparent;
