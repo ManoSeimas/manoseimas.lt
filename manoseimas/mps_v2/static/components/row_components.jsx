@@ -6,7 +6,6 @@ var lt_pluralize = function(n, singular, plural1, plural2) {
     } else {
         return plural2;
     }
-
 }
 
 
@@ -83,7 +82,7 @@ var FractionRow = React.createClass({
         <div className="two wide column">
           <div className="ui voting statistic">
             <div className="value">{fraction.avg_vote_percentage}%</div>
-            <div className="label">balsavimų vid.</div>
+            <div className="label">balsavimų</div>
           </div>
         </div>
       </div>
