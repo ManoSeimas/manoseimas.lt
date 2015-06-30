@@ -10,5 +10,16 @@ from .json import *
 
 def index_view(request):
     parliament = Group.objects.get(type=Group.TYPE_PARLIAMENT)
-    context = {'parliament': parliament}
+    explanations = {
+      'votings': "Lorem ipsum dolor sit amet, consectetur adipisicing elit, \
+                  sed do eiusmod tempor incididunt ut labore et dolore \
+                  magna aliqua.",
+      'statements': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, \
+                    sed do eiusmod tempor incididunt ut labore et dolore\
+                    magna aliqua.',
+      'projects': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, \
+                   sed do eiusmod tempor incididunt ut labore et dolore \
+                   magna aliqua.'
+    }
+    context = {'parliament': parliament, 'explanations': explanations}
     return render(request, 'index_with_filter.jade', context)

@@ -4,4 +4,5 @@ $(document).ready(function() {
   $('.ui.indicating.progress').progress({showActivity: false});
   $('.tabular.menu .item').tab();
   $('.rating').popup();
+  $('.popup').popup();
 });
