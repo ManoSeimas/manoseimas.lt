@@ -124,6 +124,7 @@
         a(name="decisions")
         h2 Politiniai sprendimai
           small.important DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!
+          i.circle.grey.info.icon(style="float: right;")
 
       .ui.stackable.three.column.center.aligned.page.grid
           .column
@@ -181,3 +182,43 @@
               if mp.fraction
                 a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
               p {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
+
+
+
+  .ui.decisions-metodics.small.modal
+    .header
+      span Metodikos aprašymas
+      i.close.icon
+    .content
+      .description
+        p Procentai parodo laipsnį, kiek frakcijos ir Seimo nariai palaiko pasirinktą temą. Jie apskaičiuojami pagal tris rodiklius: balsavimų skaičių, jų svarbą ir tai, kiek frakcijos narių balsavo. Daugiau žiūrėti čia. Palaikymo reikšmės:
+        ul
+          li
+            b stipriai už (tamsiai žalia)
+            | = nuo 66% iki 100%
+          li
+            b vidutiniškai už (žalia)
+            | = nuo 66% iki 100%
+          li
+            b nestipriai už (šviesiai žalia)
+            | = nuo 66% iki 100%
+          li
+            b neutraliai (geltona)
+            | = nuo 66% iki 100%
+          li
+            b nestipriai prieš (šviesiai raudona)
+            | = nuo 66% iki 100%
+          li
+            b vidutiniškai prieš (raudona)
+            | = nuo 66% iki 100%
+          li
+            b stipriai prieš (tamsiai raudona)
+            | = nuo 66% iki 100%
+        p Stipri Seimo nario pozicija rodo, kad jis visuose balsavimuose balsavo panašiai. Nestipri (silpna) pozicija gali reikšti, kad Seimo narys per balsavimus "susilaikė", arba kad kartais balsavo vienaip, o kartais - kitaip.
+
+  script
+    $(document).ready(function() {
+      $('.decisions .info.icon').click(function() {
+        $('.decisions-metodics.modal').modal('show');
+      });
+    });
