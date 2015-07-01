@@ -1,3 +1,4 @@
+
 var SortableList = React.createClass({
   getInitialState: function() {
     return {
@@ -77,7 +78,8 @@ var SortableList = React.createClass({
         slice_from = 0,
         slice_to = this.state.current_page*this.state.items_per_page,
         current_page = this.state.current_page,
-        elementListWidth = (this.props.sidebar_filter) ? 'fourteen' : 'sixteen',
+        elementListWidth = (this.props.sidebar_filter) ? 14 : 16,
+        elementListWidthClass = num_to_word(elementListWidth),
         filtered_items = this.state.items,
         showSidebar;
 
@@ -99,35 +101,40 @@ var SortableList = React.createClass({
       showSidebar = null;
     }
     var total_pages = Math.round((filtered_items.length / this.state.items_per_page)+0.5);
+    var leading_column_width = 16 - (sortkeys.length - 1) * 2;
 
     return (
       <div>
-        <div className="ui zero margin stackable page grid sort-keys">
-          {sortkeys.map(function(sortkey, index) {
-            // Creating proper class for sort keys using Semantic UI framework.
-            var column_count = (index === 0) ? 'eight' : 'two';
-            var active = (self.state.sort_key === sortkey.key) ? 'active ' : '';
-            var class_name = active + column_count + ' wide center aligned column'
-            // used to display sort order arrow
-            var sort_order = (self.state.sort_key === sortkey.key) ? self.state.sort_order : sortkey.order;
-            // used to flip ordering when clicking already active column header
-            var next_order = (self.state.sort_key === sortkey.key) ? -sort_order : sort_order;
-            var icon_class = 'chevron ' + ((sort_order === 1) ? 'up' : 'down') + ' icon';
+        <div className="ui sixteen wide grid sortkey-wrapper">
+          <div className={'ui ' + elementListWidthClass + ' wide stackable column page grid sort-keys'}>
+            {sortkeys.map(function(sortkey, index) {
+              // Creating proper class for sort keys using Semantic UI framework.
+              var column_width = (index === 0) ? leading_column_width : 2 ;
+              var column_width_class = num_to_word(column_width)
+              var active = (self.state.sort_key === sortkey.key) ? 'active ' : '';
+              var class_name = active + column_width_class + ' wide center aligned column';
+              // used to display sort order arrow
+              var sort_order = (self.state.sort_key === sortkey.key) ? self.state.sort_order : sortkey.order;
+              // used to flip ordering when clicking already active column header
+              var next_order = (self.state.sort_key === sortkey.key) ? -sort_order : sort_order;
+              var icon_class = 'chevron ' + ((sort_order === 1) ? 'up' : 'down') + ' icon';
 
-            return (
-              <SortKeySelector params={sortkey}
-                               class_name={class_name}
-                               icon_class={icon_class}
-                               explanation={sortkey.explanation}
-                               handler={self.sortElements(sortkey.key, next_order)} />
-            )
-          })}
+              return (
+                <SortKeySelector params={sortkey}
+                                 class_name={class_name}
+                                 icon_class={icon_class}
+                                 explanation={sortkey.explanation}
+                                 handler={self.sortElements(sortkey.key, next_order)} />
+              )
+            })}
+          </div>
         </div>
 
         <Loader loaded={this.state.loaded}>
           <div className="ui zero margin page grid">
-            <div className={elementListWidth + ' wide zero paddings column'}>
+            <div className={elementListWidthClass + ' wide zero paddings column'}>
               <ElementList items={filtered_items.slice(slice_from, slice_to)}
+                           leading_column_width={leading_column_width}
                            rowComponent={this.props.rowComponent} />
             </div>
 
@@ -220,7 +227,8 @@ var ElementList = React.createClass({
       <div className="filtered-elements">
         {self.props.items.map(function (item) {
           return (
-              <self.props.rowComponent obj={item} />
+              <self.props.rowComponent obj={item}
+                                       leading_column_width={self.props.leading_column_width} />
           )
         })}
       </div>

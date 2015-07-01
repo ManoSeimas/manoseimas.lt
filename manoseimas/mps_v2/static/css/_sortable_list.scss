@@ -19,6 +19,11 @@
   padding-bottom: 2rem;
   margin-top: 1rem !important;
 
+  .sortkey-wrapper {
+    margin: 0px;
+    padding: 0px;
+  }
+
   .sort-keys {
     a { color: $gray;}
     a:hover { color: $msBlue; }
@@ -29,6 +34,7 @@
       border-bottom: 4px solid #E7E4E4;
       height: 4.5em;
     }
+    padding: 0px;
     .eight { margin-top: 1em; height: 3.5em; }
 
     .active {
