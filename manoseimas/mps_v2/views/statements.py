@@ -50,7 +50,7 @@ def mp_statements(request, mp_slug, statement_page=None):
 
     selected_session = request.GET.get('session')
     only_as_presenter = request.GET.get('only_as_presenter')
-    sessions = Stenogram.objects.distinct().values_list('session', flat=True)
+    sessions = Stenogram.objects.distinct().order_by('-session').values_list('session', flat=True)
 
     all_statements = StenogramStatement.objects.select_related(
         'topic').filter(speaker=mp,
