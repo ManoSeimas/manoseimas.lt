@@ -70,34 +70,6 @@
             h2: a(href="{% url 'mp_profile' member.slug %}") {{member.full_name}}
             a(href="{% url 'mp_fraction' fraction.slug %}").fraction-name {{fraction.name}}
 
-
-  .colored-bg.decisions
-    .ui.page.grid
-      h2 Politiniai sprendimai
-        small (DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!)
-
-    .ui.stackable.three.column.center.aligned.page.grid
-        .column
-          h3.supports UŽ
-
-          for position in positions.for
-            .decision(class=position['klass'])
-              a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
-
-        .column
-          h3.abstention nei už nei prieš
-
-          for position in positions.neutral
-            .decision.abstention
-              a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
-
-        .column
-          h3.against PRIEŠ
-
-          for position in positions.against
-            .decision(class=position['klass'])
-              a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
-
   .law-project-collaborators
     .ui.zero.margin.page.grid
       a(name="law-project-collaborators")

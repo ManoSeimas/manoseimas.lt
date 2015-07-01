@@ -43,7 +43,6 @@ def mp_fraction(request, fraction_slug):
         'fraction': fraction,
         'members': members,
         'collaborating_fractions': collaborating_fractions,
-        'positions': fraction.positions,
         'explanations': explanations,
     }
     return render(request, 'fraction.jade', context)
