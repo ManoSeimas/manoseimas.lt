@@ -7,6 +7,8 @@ urlpatterns = patterns(
     '',
     url(r'^fractions/?$', views.fractions_json, name='fractions_json'),
     url(r'^mps/?$', views.mps_json, name='mps_json'),
+    url(r'^mps/(?P<fraction_slug>[-_\w]+)/?$', views.mps_json,
+        name='fraction_mps_json'),
     url(r'^law_projects/(?P<mp_slug>.+)/?$',
         views.law_projects_json, name='law_projects_json'),
     url(r'^discussion/(?P<statement_id>\d+)/?$',

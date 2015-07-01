@@ -2,7 +2,6 @@ from functools import partial
 
 from django.core.urlresolvers import reverse
 from django.core.files.storage import default_storage
-from django.core.serializers import serialize
 from django.http import JsonResponse
 from django.db.models import Count
 
@@ -68,14 +67,19 @@ def _mp_dict(mp, mp_fractions={}):
     return data
 
 
-def mps_json(request):
-    mps = ParliamentMember.objects.filter(
+def mps_json(request, fraction_slug=None):
+    mp_qs = ParliamentMember.objects.filter(
         groupmembership__until=None,
         groupmembership__group__type=Group.TYPE_FRACTION,
-    ).distinct().values('pk', 'first_name', 'last_name', 'slug',
-                        'photo', 'statement_count', 'long_statement_count',
-                        'vote_percentage', 'proposed_law_project_count',
-                        'passed_law_project_count', 'passed_law_project_ratio')
+    )
+    if fraction_slug:
+        mp_qs = mp_qs.filter(groupmembership__group__slug=fraction_slug)
+    mps = mp_qs.distinct().values('pk', 'first_name', 'last_name', 'slug',
+                                  'photo', 'statement_count',
+                                  'long_statement_count', 'vote_percentage',
+                                  'proposed_law_project_count',
+                                  'passed_law_project_count',
+                                  'passed_law_project_ratio')
 
     current_fractions = GroupMembership.objects.filter(
         group__type=Group.TYPE_FRACTION,

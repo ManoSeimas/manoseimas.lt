@@ -8,13 +8,36 @@ var lt_pluralize = function(n, singular, plural1, plural2) {
     }
 }
 
+var num_to_word = function(num) {
+    dict = {
+        1: 'one',
+        2: 'two',
+        3: 'three',
+        4: 'four',
+        5: 'five',
+        6: 'six',
+        7: 'seven',
+        8: 'eight',
+        9: 'nine',
+        10: 'ten',
+        11: 'eleven',
+        12: 'twelve',
+        13: 'thirteen',
+        14: 'fourteen',
+        15: 'fifteen',
+        16: 'sixteen'
+    }
+    return dict[num]
+};
 
 var PaliamentarianRow = React.createClass({
   render: function() {
     var parliamentarian = this.props.obj;
+    var width_class = num_to_word(this.props.leading_column_width);
+    var leading_column_class = 'name '+ width_class + ' wide column';
     return (
       <div className="ui parliamentarian-row zero margin page grid">
-        <div className="name nine wide column">
+        <div className={leading_column_class}>
           <img className="photo" src={parliamentarian.photo}></img>
           <div className="info">
             <h2><a href={parliamentarian.url}>{parliamentarian.full_name}</a></h2>
@@ -29,7 +52,7 @@ var PaliamentarianRow = React.createClass({
             </div>
           </div>
         </div>
-        <div className="three wide column">
+        <div className="two wide column">
           <div className="ui projects statistic">
             <div className="value">{parliamentarian.passed_law_project_ratio}%</div>
             <div className="label">priimta projektų</div>
@@ -49,9 +72,11 @@ var PaliamentarianRow = React.createClass({
 var FractionRow = React.createClass({
   render: function() {
     var fraction = this.props.obj;
+    var width_class = num_to_word(this.props.leading_column_width);
+    var leading_column_class = 'name '+ width_class + ' wide column';
     return (
       <div className="ui fraction-row zero margin page grid">
-        <div className="name eight wide column">
+        <div className={leading_column_class}>
           <img className="logo" src={fraction.logo_url}></img>
           <div className="info">
             <h2><a href={fraction.url}>{fraction.name}</a></h2>

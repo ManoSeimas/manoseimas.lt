@@ -10,10 +10,19 @@
   }
 }
 
-#fraction-filter-component .ui.page.grid.active_tab {
+#fraction-member-list {
+  .none.margin { margin: 0; }
+}
+
+#fraction-filter-component .ui.page.grid.active_tab, #fraction-member-list {
   font-size: $small !important;
   padding-bottom: 2rem;
   margin-top: 1rem !important;
+
+  .sortkey-wrapper {
+    margin: 0px;
+    padding: 0px;
+  }
 
   .sort-keys {
     a { color: $gray;}
@@ -25,6 +34,7 @@
       border-bottom: 4px solid #E7E4E4;
       height: 4.5em;
     }
+    padding: 0px;
     .eight { margin-top: 1em; height: 3.5em; }
 
     .active {

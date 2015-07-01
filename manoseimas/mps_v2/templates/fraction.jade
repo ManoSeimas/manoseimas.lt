@@ -1,9 +1,20 @@
 - extends "new_base.jade"
 - load static from staticfiles
 - load nodeurl from sboard
+- load compress from compress
 
 - block title
   | {{ fraction.name }}
+
+-block inlinejs
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
+  script(src="{% static 'js/jquery.scrollTo-1.4.3.1-min.js' %}")
+
+  - compress js
+    script(src="{% static 'components/react_loader.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/row_components.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/filter_component.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/fraction_member_list.jsx' %}", type="text/jsx", charset="utf-8")
 
 
 - block middle
@@ -63,12 +74,7 @@
     .ui.page.grid
       h2 Frakcijos nariai
 
-      for member in members
-        .parliamentarian.box
-          img(src="{{ member.photo.url }}")
-          .info
-            h2: a(href="{% url 'mp_profile' member.slug %}") {{member.full_name}}
-            a(href="{% url 'mp_fraction' fraction.slug %}").fraction-name {{fraction.name}}
+      #fraction-member-list(data-endpoint="{% url 'fraction_mps_json' fraction.slug %}")
 
   .law-project-collaborators
     .ui.zero.margin.page.grid
