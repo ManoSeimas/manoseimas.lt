@@ -92,3 +92,15 @@
 #fraction-filter-component {
   font-size: $normal !important;
 }
+
+.stats-description {
+  font-size: $normal;
+  font-weight: 200;
+  display: inline-block;
+  vertical-align: middle;
+  text-align: right;
+  color: $gray;
+  max-width: 10rem;
+  margin-bottom: 2rem;
+}
+
