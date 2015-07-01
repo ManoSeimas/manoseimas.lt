@@ -189,7 +189,16 @@ class ParliamentMember(CrawledItem):
         return self.law_projects.filter(date_passed__isnull=False).count()
 
     def get_passed_law_project_ratio(self):
+        avg_passing_time = LawProject.get_avg_passing_time()
         proposed_count = self.get_proposed_law_project_count()
+        proposed_count = self.law_projects.exclude(
+            date_passed__isnull=True,
+            date__gt=models.Func(models.Func(function='CURDATE'),
+                                 models.Func(
+                                     avg_passing_time,
+                                     template='INTERVAL %(expressions)s DAY'),
+                                 function='DATE_SUB')
+        ).count()
         if proposed_count:
             return (float(self.get_passed_law_project_count())
                     / proposed_count * 100.0)
@@ -603,3 +612,16 @@ class LawProject(CrawledItem):
                                                   * 100.0)
                 fractions.append(fraction)
         return fractions
+
+    @classmethod
+    def get_avg_passing_time(cls):
+        avg = cls.objects.filter(date_passed__isnull=False).aggregate(
+            avg_passing_time=models.Avg(
+                models.Func(
+                    models.F('date_passed'),
+                    models.F('date'),
+                    function='DATEDIFF',
+                )
+            )
+        )
+        return avg.get('avg_passing_time', 0.0)
