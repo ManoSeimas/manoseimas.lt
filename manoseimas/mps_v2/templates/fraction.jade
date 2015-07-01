@@ -25,30 +25,38 @@
       .stats-box
         .one-number
           .block.left: h4.number {{fraction.avg_vote_percentage|floatformat:0}}%
-          .block.right: .explanation Dalyvavimas balsavimuose
-
+          .block.right
+            .explanation: span.popup(data-content="{{explanations.stats_voitings}}"
+                               data-position="top center") Dalyvavimas balsavimuose
       .stats-box
         .two-numbers
           h3 Aktyvumas diskusijose
+            i.info.circle.icon.popup(data-content="{{explanations.stats_discussions}}"
+                                     data-position="top center")
           .block
             h4.number {{fraction.avg_statement_count|floatformat:0}}
             p.explanation pasisakymai (vid.)
           .block
             h4.number {{fraction.avg_long_statement_count|floatformat:0}}
-            .explanation ilgi pasisakymai (vid.)
+            .explanation: span.popup(data-content="{{explanations.stats_long_statements}}"
+                                     data-position="top center") ilgi pasisakymai (vid.)
 
       .stats-box
         .three-numbers
           h3 Įstatymų projektai
+            i.info.circle.icon.popup(data-content="{{explanations.stats_discussions}}"
+                                     data-position="top center")
           .block
             h4.number {{fraction.avg_law_project_count|floatformat:0}}
-            .explanation pasiūlyti	(vid.)
+            .explanation: span.popup(data-content="{{explanations.stats_proposed_projects}}"
+                                     data-position="top center") pasiūlyti	(vid.)
           .block
             h4.number {{fraction.avg_passed_law_project_count|floatformat:0}}
             .explanation priimti (vid.)
           .block
             h4.number {{fraction.avg_passed_law_project_ratio|floatformat:0}}%
-            .explanation palaikymas (vid.)
+            .explanation: span.popup(data-content="{{explanations.stats_projects_success_rate}}"
+                                     data-position="top center") palaikymas (vid.)
 
   .parliamentarians.wide
     .ui.page.grid
@@ -98,7 +106,8 @@
           tr
             th Nr.
             th Frakcija
-            th.center.aligned Bendradarbiavimas
+            th.center.aligned.popup(data-content="{{explanations.projects_collaboration}}"
+                                    data-position="top center") Bendradarbiavimas
         tbody
           for fraction in collaborating_fractions
             tr

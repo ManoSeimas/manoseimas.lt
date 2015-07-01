@@ -1,0 +1,204 @@
+// Stats
+// -----------
+.stats-box {
+  background-color: $white;
+  border: 1px dashed $grayLite;
+  border-radius: $borderRadius;
+  width: 230px;
+  display: inline-block;
+  margin: 15px 10px;
+  padding: 0 5px 5px !important;
+  font-size: 0;
+
+  h3 {
+    font-size: $normal;
+    text-align: center;
+    margin-bottom: .2em;
+    margin-top: .2em;
+    line-height: 2rem;
+
+    .info.icon { display: inline; }
+  }
+
+  .graph, .info, .block {
+    display: inline-block;
+    position: relative;
+    vertical-align: top
+  }
+
+  .pie { padding: 12px 0 5px; }
+
+  .one-number {
+    margin-top: 2.1rem;
+    .block.left { width: 40%; }
+    .block.right { width: 60%;}
+    .block {
+      padding-top: 0;
+      padding-bottom: 1rem;
+
+      h4.number {
+        font-size: $big;
+        text-align: center;
+        margin-bottom: .4em;
+        margin-left: .7em;
+      }
+      .explanation {
+        line-height: 1.3;
+        font-size: $normal;
+        margin-bottom: .4em;
+      }
+    }
+  }
+
+  .two-numbers {
+    .block { width: 50%; }
+  }
+
+  .three-numbers {
+    .block { width: 32%; }
+  }
+
+  .block {
+    vertical-align: middle;
+    .number {
+      text-align: center;
+      font-size: $medium;
+      margin-bottom: 3px;
+    }
+    .explanation {
+      text-align: center;
+      font-size: $tiny;
+      line-height: 1.1;
+      min-height: 34px;
+    }
+    .popup { border-bottom: 1px dotted $grayLite; }
+  }
+
+  .graph { width: 44%; }
+  .info {
+    width: 55%;
+    padding-left: 10px;
+    height: 20px;
+
+    .title {
+      display: table;
+
+      h3 {
+        line-height: 1.2;
+        display: table-cell;
+        vertical-align: middle;
+      }
+    }
+  }
+
+  .rating {
+    margin-top: 0.3rem;
+    .progress {
+      padding: 0;
+      background-color: $grayLite;
+      border-radius: $borderRadius;
+
+      .bar {
+        background-color: $greenDark !important;
+        font-size: 5px;
+      }
+    }
+  }
+
+  .progress:last-child { margin: 0; }
+}
+
+.stats-box.horisontal {
+  width: 270px;
+  font-size: $small;
+  padding: .5em 1em .2em 1em;
+  float: right;
+}
+
+.stats-box.transcripts-total {
+  width: 160px;
+  border: 0;
+  padding-right: 0;
+  padding-left: 0;
+  padding-top: .5em;
+  margin: 0 0 0 1em;
+
+  h4.explanation {
+    font-size: $small;
+    line-height: 1.2;
+    margin-bottom: .1em;
+  }
+
+  .rating {
+    .progress {
+      .bar {
+        background-color: $msBlue !important;
+        color: $white;
+        font-size: $small;
+        padding-top: .3em;
+      }
+    }
+  }
+}
+
+.stats-box.total {
+  background-color: transparent;
+  padding: 10px 15px;
+  width: 180px;
+  float: right;
+
+  h3 {
+    font-size: $big;
+    font-weight: bold;
+    color: $msBlue;
+  }
+  .explanation {
+    text-align: center;
+    font-size: $small;
+    font-weight: normal;
+    color: $textColor;
+  }
+
+  .stats,
+  .vertical-progress { display: inline-block; }
+  .stats { width: 100px; padding-top: 10px; }
+
+  .vertical-progress {
+    margin-left: 10px;
+    font-size: $normal;
+    background-color: $grayLite;
+    width: 24px;
+    height: 100px;
+    line-height: 1px;
+    float: right;
+
+    .bar {
+      background-color: $msBlue;
+      color: $white;
+
+      display: table;
+
+      height: 40px;      // Percents
+      margin-top: 60px;  // 100 - height
+
+      .text {
+        font-size: 10px;
+        display: table-cell;
+        vertical-align: middle;
+        padding: 0 5px;
+        width: 5em;
+      }
+    }
+  }
+}
+
+.stats-box.slim {
+  padding: .5rem;
+  .block {
+    .explanation {
+      display: table-cell;
+      padding: .2em .8em;
+      color: $gray;
+    }
+  }
+}

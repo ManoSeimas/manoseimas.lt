@@ -118,6 +118,7 @@ var SortableList = React.createClass({
               <SortKeySelector params={sortkey}
                                class_name={class_name}
                                icon_class={icon_class}
+                               explanation={sortkey.explanation}
                                handler={self.sortElements(sortkey.key, next_order)} />
             )
           })}
@@ -198,7 +199,9 @@ var SidebarFilter = React.createClass({
 var SortKeySelector = React.createClass({
   render: function() {
     return (
-      <div className={this.props.class_name}>
+      <div className={this.props.class_name + ' popup'}
+           data-content={this.props.explanation}
+           data-position="top center">
         <a onClick={this.props.handler}>
           <span>
             {this.props.params.title}
