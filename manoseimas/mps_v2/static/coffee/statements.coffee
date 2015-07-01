@@ -73,14 +73,16 @@ loadStatementEvents = (url) ->
 
 $(document).ready ->
   ## Initial Load
-  slug = $('.statements-component').attr("data-slug")
-  url = "/mp/statements/#{slug}"
-  # $(location).attr 'pathname'
-  $.get url, (data) ->
-    loadStatments(data, url)
-
-  $('#only_as_presenter input').change (e) ->
-    e.preventDefault()
-    search_params = buildSearchParams()
-    $.get "#{url}#{search_params}", (data) ->
+  statement_component = $('.statements-component')
+  if statement_component.length
+    slug = statement_component.attr("data-slug")
+    url = "/mp/statements/#{slug}"
+    # $(location).attr 'pathname'
+    $.get url, (data) ->
       loadStatments(data, url)
+
+    $('#only_as_presenter input').change (e) ->
+      e.preventDefault()
+      search_params = buildSearchParams()
+      $.get "#{url}#{search_params}", (data) ->
+        loadStatments(data, url)
