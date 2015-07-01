@@ -161,9 +161,16 @@
 
   - cron:
       name: MP crawl
-      minute: 30
+      minute: 10
       hour: 0
       job: "cd {{ path }} && bin/scrapy crawl mps"
+      user: "{{ name }}"
+
+  - cron:
+      name: Sync MPs
+      minute: 23
+      hour: 0
+      job: "cd {{ path }} && bin/django syncmps"
       user: "{{ name }}"
 
   - cron:
