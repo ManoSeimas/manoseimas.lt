@@ -75,22 +75,3 @@
       h2 Frakcijos nariai
 
       #fraction-member-list(data-endpoint="{% url 'fraction_mps_json' fraction.slug %}")
-
-  .law-project-collaborators
-    .ui.zero.margin.page.grid
-      a(name="law-project-collaborators")
-      h2 Įstatymų projektus teikia kartu su
-      table.ui.table
-        thead
-          tr
-            th Nr.
-            th Frakcija
-            th.center.aligned.popup(data-content="{{explanations.projects_collaboration}}"
-                                    data-position="top center") Bendradarbiavimas
-        tbody
-          for fraction in collaborating_fractions
-            tr
-              td {{ forloop.counter }}
-              td
-                a(href="{% url 'mp_fraction' fraction.slug %}") {{ fraction.name }}
-              td.center.aligned {{ fraction.signing_percentage|floatformat:0 }}%

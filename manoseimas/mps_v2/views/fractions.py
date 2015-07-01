@@ -15,7 +15,6 @@ def mp_fraction(request, fraction_slug):
         slug=fraction_slug
     )
 
-    collaborating_fractions = fraction.top_collaborating_fractions
     members = fraction.active_members.order_by('last_name')
 
     explanations = {
@@ -42,7 +41,6 @@ def mp_fraction(request, fraction_slug):
     context = {
         'fraction': fraction,
         'members': members,
-        'collaborating_fractions': collaborating_fractions,
         'explanations': explanations,
     }
     return render(request, 'fraction.jade', context)
