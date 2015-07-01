@@ -150,30 +150,13 @@
   .transcripts
     a(name='stenogram_section')
     .ui.stackable.page.grid
-      .eight.wide.column
+      .ten.wide.column
         h2 Seimo posedžių stenogramos
-        .ui.checkbox#only_as_presenter
-          input(name="filter_presenter" type="checkbox", checked="")
+
+      .six.wide.right.aligned.column
+        .ui.toggle.checkbox#only_as_presenter
           label Rodyti tik tas kalbos kur parlamentaras yra pristatinėtojas
-
-      .eight.wide.right.aligned.column
-        .stats-box.horisontal
-          .three-numbers
-            .block
-              h4.number {{stats.statement_count}}
-              p.explanation pasisakymai
-            .block
-              h4.number {{stats.long_statement_count}}
-              .explanation ilgi pasisakymai
-            .block
-              h4.number {{stats.contributed_discussion_percentage|floatformat:2}}%
-              .explanation dalyvavimas diskusijose
-
-        .stats-box.transcripts-total
-          h4.explanation Pasisako dažniau negu
-          .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Dėmesio! Siūlome atsiminti, kad pasisakymų skaičius nebūtinai atspindi Seimo nario kompetenciją ir pasisakymų kokybę.")
-            .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar {{ranking.statement_count_percentile}}%
-
+          input(name="filter_presenter" type="checkbox", checked="")
 
     .statements-component(data-slug="{{profile.slug}}")
 

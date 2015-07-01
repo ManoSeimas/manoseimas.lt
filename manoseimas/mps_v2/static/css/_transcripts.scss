@@ -41,4 +41,11 @@
     }
   }
 
+  .ui.toggle.checkbox {
+    padding-left: 0;
+    label {
+      text-align: left;
+      margin-top: -.5em;
+    }
+  }
 }
