@@ -10,7 +10,11 @@
   }
 }
 
-#fraction-filter-component .ui.page.grid.active_tab {
+#fraction-member-list {
+  .none.margin { margin: 0; }
+}
+
+#fraction-filter-component .ui.page.grid.active_tab, #fraction-member-list {
   font-size: $small !important;
   padding-bottom: 2rem;
   margin-top: 1rem !important;
