@@ -67,7 +67,8 @@ var SortableList = React.createClass({
   },
 
   selectFilter: function(option) {
-    this.setState({filter_selected: option, current_page: 1})
+    this.setState({filter_selected: option, current_page: 1});
+    $.scrollTo('.sort-keys', 100, {offset: -50});
   },
 
   render: function() {
@@ -84,7 +85,8 @@ var SortableList = React.createClass({
       showSidebar = (
         <SidebarFilter options={this.state.filter_options}
                        selected_filter={this.state.filter_selected}
-                       callback={this.selectFilter} />
+                       callback={this.selectFilter}
+                       sticky_context='.filtered-elements' />
       )
 
       // Filter items to show only selected.
@@ -142,6 +144,15 @@ var SortableList = React.createClass({
 });
 
 var SidebarFilter = React.createClass({
+  componentDidMount: function() {
+    if (this.props.sticky_context){
+      $('.ui.sticky').sticky({
+        context: this.props.sticky_context,
+        offset: 70
+      });
+    }
+  },
+
   setSelected: function(key) {
     this.props.callback(key);
   },
