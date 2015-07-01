@@ -193,7 +193,9 @@
 }
 
 .stats-box.slim {
-  padding: .5rem;
+  padding: .5rem !important;
+  width: 220px;
+
   .block {
     .explanation {
       display: table-cell;
