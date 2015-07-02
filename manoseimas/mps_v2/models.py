@@ -389,6 +389,8 @@ class Group(CrawledItem):
         member_projects = LawProject.objects.filter(
             proposers__in=self.active_members
         )
+        # Retrieve proposer counts for each pair of (project_id, group_id)
+        # for all fraction member projects
         project_signatories = LawProject.proposers.through.objects.filter(
             parliamentmember__groups__type=Group.TYPE_FRACTION,
             parliamentmember__groupmembership__until__isnull=True,
@@ -401,6 +403,8 @@ class Group(CrawledItem):
 
         project_signatories = list(project_signatories)
 
+        # Build a dict: project -> group_id -> count
+        # for retrieved projects
         projects = defaultdict(lambda: {})
         for s in project_signatories:
             proposer_count = s['group_proposer_count']
@@ -408,6 +412,7 @@ class Group(CrawledItem):
             group_id = s['parliamentmember__groups__id']
             projects[project_id][group_id] = proposer_count
 
+        # Calculate contribution ratios for each project
         project_percentages = {}
         for project_id, fraction_signatures in projects.items():
             total_signatories = sum(fraction_signatures.values())
@@ -417,6 +422,7 @@ class Group(CrawledItem):
             }
             project_percentages[project_id] = signature_percentages
 
+        # Sum up contribution ratios for each fraction
         fraction_contrib_sums = defaultdict(lambda: 0.0)
         fraction_contrib_projects = defaultdict(lambda: 0)
         for project in project_percentages.values():
@@ -425,10 +431,12 @@ class Group(CrawledItem):
                     fraction_contrib_sums[fraction] += percentage
                     fraction_contrib_projects[fraction] += 1
 
+        # Compute fraction average contribution ratios
         fraction_contrib = {key: (fraction_contrib_sums[key]
                                   / fraction_contrib_projects[key])
                             for key in fraction_contrib_sums.keys()}
 
+        # Take top N contributing fractions and retrieve their data
         top_signatory_pairs = sorted(
             fraction_contrib.items(),
             reverse=True,
@@ -438,6 +446,7 @@ class Group(CrawledItem):
         top_signatories = list(Group.objects.filter(
             pk__in=top_signatory_dict.keys()
         ))
+        # Augment ORM objects with average contribution percentage
         for signatory in top_signatories:
             signatory.signing_percentage = top_signatory_dict[signatory.pk]
         return sorted(top_signatories,
