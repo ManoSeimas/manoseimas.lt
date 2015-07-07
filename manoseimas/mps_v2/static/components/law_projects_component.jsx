@@ -66,7 +66,7 @@ var LawProjects = React.createClass({
       <div className="law-projects">
         <div className="ui page grid">
           <div className="eight wide column">
-            <h2 className="title">Įstatymų projektai</h2>
+            <h2 className="title">Teisės aktų projektai</h2>
           </div>
           <div className="eight wide right aligned column">
             <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
