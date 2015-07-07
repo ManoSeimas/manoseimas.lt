@@ -98,7 +98,7 @@
             h4.number {{ stats.statement_count }}
             p.explanation pasisakymai
           .block
-            h4.number {{ stats.long_statement_percentage|floatformat:0 }}%
+            h4.number {{ stats.long_statement_count }}
             .explanation ilgi pasisakymai (kalbos)
         .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Palyginimas su kitų parlamentarų pasisakymų skaičiumi. 100% surenka šnekiausias parlamentaras.")
           .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
