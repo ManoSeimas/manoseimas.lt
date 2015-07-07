@@ -42,9 +42,9 @@ loadStatementEvents = (url) ->
         content.push '</p>'
         content.push '</div>'
 
-      $('.ui.modal .header').text data.topic.title
-      $('.ui.modal .description').html content.join("")
-      $('.ui.modal').modal 'show', 'show dimmer'
+      $('.ui.modal.discussion .header').text data.topic.title
+      $('.ui.modal.discussion .description').html content.join("")
+      $('.ui.modal.discussion').modal 'show', 'show dimmer'
 
   $('.ui.pagination.menu .next').click  (e) ->
     e.preventDefault()
