@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
+import math
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -66,3 +67,7 @@ class reify(object):
         val = self.wrapped(inst)
         setattr(inst, self.wrapped.__name__, val)
         return val
+
+
+def round(number):
+    return math.floor(number + 0.5)

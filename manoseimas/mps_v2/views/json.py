@@ -7,6 +7,7 @@ from django.db.models import Count
 
 from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
                                       LawProject)
+from manoseimas.utils import round
 
 from .statements import _build_discussion_context
 
@@ -25,11 +26,13 @@ def _fraction_dict(fraction):
         'logo_url': fraction.logo.url if fraction.logo else default_logo,
         'url': reverse('mp_fraction', kwargs={'fraction_slug': fraction.slug}),
         'member_count': fraction.active_member_count,
-        'avg_statement_count': int(fraction.avg_statement_count),
+        'avg_statement_count': round(fraction.avg_statement_count),
         'avg_long_statement_count': fraction.avg_long_statement_count,
-        'avg_vote_percentage': int(fraction.avg_vote_percentage),
-        'avg_discussion_contribution_percentage': fraction.avg_discussion_contribution_percentage,
-        'avg_passed_law_project_ratio': int(fraction.avg_passed_law_project_ratio),
+        'avg_vote_percentage': round(fraction.avg_vote_percentage),
+        'avg_discussion_contribution_percentage':
+            fraction.avg_discussion_contribution_percentage,
+        'avg_passed_law_project_ratio':
+            round(fraction.avg_passed_law_project_ratio),
     }
 
 
@@ -49,10 +52,10 @@ def _mp_dict(mp, mp_fractions={}):
         'photo': default_storage.url(mp['photo']),
         'statement_count': int(mp['statement_count']),
         'long_statement_count': mp['long_statement_count'],
-        'vote_percentage': int(mp['vote_percentage']),
+        'vote_percentage': round(mp['vote_percentage']),
         'proposed_law_project_count': mp['proposed_law_project_count'],
         'passed_law_project_count': mp['passed_law_project_count'],
-        'passed_law_project_ratio': int(mp['passed_law_project_ratio']),
+        'passed_law_project_ratio': round(mp['passed_law_project_ratio']),
     }
     fraction = mp_fractions.get(mp['pk'])
     if fraction:
@@ -101,7 +104,8 @@ def law_projects_json(request, mp_slug):
             'name': fraction.name,
             'slug': fraction.slug,
             'type': fraction.type,
-            'url': reverse('mp_fraction', kwargs={'fraction_slug': fraction.slug}),
+            'url': reverse('mp_fraction',
+                           kwargs={'fraction_slug': fraction.slug}),
             'contribution': fraction.fraction_contribution,
         }
 
@@ -117,7 +121,8 @@ def law_projects_json(request, mp_slug):
         'number': project.project_number,
         'url': project.project_url,
         'proposer_count': project.proposer_count,
-        'fraction_contributions': map(make_dict, project.get_fraction_contributions()),
+        'fraction_contributions': map(make_dict,
+                                      project.get_fraction_contributions()),
     } for project in project_qs]
 
     return JsonResponse({'items': law_projects})
