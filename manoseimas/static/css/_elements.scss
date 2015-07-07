@@ -83,3 +83,19 @@
   .decision.against { border-color: $red; border-left: 7px solid $red; }
   .decision.lite-against { border-color: $redLite; border-left: 7px solid $redLite; }
 }
+
+
+// Footer
+// ------
+
+.display-table {
+  display: table;
+}
+
+.display-table-cell {
+  display: table-cell;
+}
+
+.vertical-middle {
+  vertical-align: middle !important;
+}
