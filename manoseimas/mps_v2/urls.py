@@ -5,7 +5,6 @@ from manoseimas.mps_v2 import views
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.mp_list, name='mp_list_all'),
     url(r'^fractions/?$',
         views.mp_fraction_list, name='mp_fraction_list'),
     url(r'^discussion/(?P<statement_id>\d+)$',
@@ -18,6 +17,4 @@ urlpatterns = patterns(
         views.mp_statements, name='mp_statements_paged'),
     url(r'^statements/(?P<mp_slug>.+)/$',
         views.mp_statements, name='mp_statements'),
-    url(r'^(?P<fraction_slug>[-_\w]+)/$',
-        views.mp_list, name='mp_list_fraction'),
 )
