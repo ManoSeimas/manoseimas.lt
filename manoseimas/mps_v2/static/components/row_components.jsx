@@ -91,6 +91,12 @@ var FractionRow = React.createClass({
           </div>
         </div>
         <div className="two wide column">
+          <div className="ui voting statistic">
+            <div className="value">{fraction.avg_vote_percentage}%</div>
+            <div className="label">balsavimų</div>
+          </div>
+        </div>
+        <div className="two wide column">
           <div className="ui discussion statistic">
             <div className="value">{fraction.avg_statement_count}</div>
             <div className="label">
@@ -102,12 +108,6 @@ var FractionRow = React.createClass({
           <div className="ui projects statistic">
             <div className="value">{fraction.avg_passed_law_project_ratio}%</div>
             <div className="label">priimta projektų</div>
-          </div>
-        </div>
-        <div className="two wide column">
-          <div className="ui voting statistic">
-            <div className="value">{fraction.avg_vote_percentage}%</div>
-            <div className="label">balsavimų</div>
           </div>
         </div>
       </div>

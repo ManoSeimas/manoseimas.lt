@@ -31,6 +31,11 @@ var Switcher = React.createClass({
             explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
             icon: 'users icon', order: -1},
           {
+            key: 'avg_vote_percentage',
+            title: 'Dalyvavimas balsavimuose',
+            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            icon: '', order: -1},
+          {
             key: 'avg_statement_count',
             title: 'Aktyvumas diskusijose',
             explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
@@ -38,11 +43,6 @@ var Switcher = React.createClass({
           {
             key: 'avg_passed_law_project_ratio',
             title: 'Projektų teikimo sėkmė',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
-            icon: '', order: -1},
-          {
-            key: 'avg_vote_percentage',
-            title: 'Dalyvavimas balsavimuose',
             explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
             icon: '', order: -1}
         ],
