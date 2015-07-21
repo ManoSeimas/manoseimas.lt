@@ -181,7 +181,7 @@
               h2: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
               if mp.fraction
                 a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
-              (data-content="Skaičiuojama, kiek teisės aktų projektų Seimo narys pasirašė kartu su kitais Seimo nariais. Parodo Seimo nario \"bendradarbiavimo\" lygį su atskirais Seimo nariais.") {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
+              p(data-content="Skaičiuojama, kiek teisės aktų projektų Seimo narys pasirašė kartu su kitais Seimo nariais. Parodo Seimo nario \"bendradarbiavimo\" lygį su atskirais Seimo nariais.") {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
 
 
 
