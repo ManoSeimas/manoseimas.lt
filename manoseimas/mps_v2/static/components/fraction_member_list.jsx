@@ -1,10 +1,33 @@
 var FractionMemberList = React.createClass({
     render: function() {
         var keys = [
-          {key: 'last_name', title: 'Pavardė', icon: undefined, order: 1},
-          {key: 'vote_percentage', title: 'Dalyvavimas balsavimuose', icon: '', order: -1},
-          {key: 'statement_count', title: 'Aktyvumas diskusijose', icon: 'comment outline icon', order: -1},
-          {key: 'passed_law_project_ratio', title: 'Projektų teikimo sėkmė', icon: '', order: -1}
+          {
+              key: 'last_name',
+              title: 'Pavardė',
+              icon: undefined,
+              order: 1
+          },
+          {
+              key: 'vote_percentage',
+              title: 'Dalyvavimas balsavimuose',
+              explanation: 'Skaičiuojama, kokioje dalyje balsavimų Seimo narys dalyvavo (balsavo už, prieš arba susilaikė) nuo 2012 m. kadencijos pradžios.',
+              icon: undefined,
+              order: -1
+          },
+          {
+              key: 'statement_count',
+              title: 'Aktyvumas diskusijose',
+              explanation: 'Skaičiuojama, kiek kartų Seimo narys pasisakė per Seimo plenarinius posėdžius nuo 2012 m. kadencijos pradžios.',
+              icon: 'comment outline icon',
+              order: -1
+          },
+          {
+              key: 'passed_law_project_ratio',
+              title: 'Projektų teikimo sėkmė',
+              explanation: 'Skaičiuojama, kiek procentų teisės aktų projektų, kuriuos siūlė Seimo narys, buvo priimta.',
+              icon: '',
+              order: -1
+          }
         ];
         var default_key = 'last_name';
         var default_order = 1;
