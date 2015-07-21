@@ -41,12 +41,13 @@ var LawProjects = React.createClass({
         }
       },
       title: {title: 'Pavadinimas', className: null, func: null},
-      date: {title: 'Teikimo data', className: 'date', func: null},
-      proposer_count: {title: 'Viso teikėjų', func: null},
+      date: {title: 'Teikimo data', className: 'date center aligned', func: null},
+      proposer_count: {title: 'Viso teikėjų', className: 'center aligned', func: null},
       date_passed: {
-        title: 'Priėmimas',
+        title: 'Stadija',
+        className: 'center aligned',
         func: function (item) {
-          return (item['date_passed']) ? 'Priimtas '+item['date_passed'] : 'Nepriimtas'
+          return (item['date_passed']) ? 'Priimta '+item['date_passed'] : 'Nepriimta'
         }
       },
     }
@@ -108,7 +109,7 @@ var SemanticTable = React.createClass({
                 <tr>
                   {Object.keys(columns).map(function (key) {
                     return (
-                      <td>
+                      <td className="ui center aligned">
                       {(columns[key].func) ? columns[key].func(item) : item[key]}
                       </td>
                     )
