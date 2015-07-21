@@ -21,7 +21,7 @@
         .meta
           a.show-all(data-id=statement.id) Rodyti visą diskusiją
           .document-title {{statement.topic}}
-          .date {{statement.topic.timestamp}}
+          .date {{statement.topic.timestamp.date}}
 
     .ui.zero.margin.center.aligned.grid: .ui.pagination.menu
       if statements.has_previous
