@@ -22,28 +22,28 @@ var Switcher = React.createClass({
           {
             key: 'name',
             title: 'Pavadinimas',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: undefined,
             icon: undefined,
             order: 1},
           {
             key: 'member_count',
             title: 'Frakcijos narių skaičius',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: undefined,
             icon: 'users icon', order: -1},
           {
             key: 'avg_vote_percentage',
             title: 'Dalyvavimas balsavimuose',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: 'Skaičiuojama, kokioje dalyje balsavimų kiekviena frakcija dalyvavo (balsavo už, prieš arba susilaikė) nuo 2012 m. kadencijos pradžios. Frakcijos dalyvavimas balsavimuose skaičiuojamas pagal kiekvieno frakcijos nario dalyvavimą, apskaičiavus jų vidurkį.',
             icon: '', order: -1},
           {
             key: 'avg_statement_count',
             title: 'Aktyvumas diskusijose',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: 'Skaičiuojama, kiek vidutiniškai kartų frakcijos narys pasisakė per Seimo plenarinius posėdžius metu. Skaičiuojami visi pasisakymai.',
             icon: 'comment outline icon', order: -1},
           {
             key: 'avg_passed_law_project_ratio',
             title: 'Projektų teikimo sėkmė',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: 'Skaičiuojama, kokia dalis iš visų frakcijos narių pateiktų teisės aktų projektų buvo priimti. Frakcijos priimtų projektų dalis skaičiuojama pagal kiekvieno frakcijos nario pateiktų ir priimtų teisės aktų projektų santykį, apskaičiavus jų vidurkį.',
             icon: '', order: -1}
         ],
         default_key: 'name',
@@ -57,22 +57,22 @@ var Switcher = React.createClass({
           {
             key: 'last_name',
             title: 'Pavardė',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: undefined,
             icon: undefined, order: 1},
           {
             key: 'vote_percentage',
             title: 'Dalyvavimas balsavimuose',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: 'Skaičiuojama, kokioje dalyje balsavimų Seimo narys dalyvavo (balsavo už, prieš arba susilaikė) nuo 2012 m. kadencijos pradžios.',
             icon: '', order: -1},
           {
             key: 'statement_count',
             title: 'Aktyvumas diskusijose',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: 'Skaičiuojama, kiek kartų Seimo narys pasisakė per Seimo plenarinius posėdžius nuo 2012 m. kadencijos pradžios.',
             icon: 'comment outline icon', order: -1},
           {
             key: 'passed_law_project_ratio',
             title: 'Projektų teikimo sėkmė',
-            explanation: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit',
+            explanation: 'Skaičiuojama, kiek procentų teisės aktų projektų, kuriuos siūlė Seimo narys, buvo priimta.',
             icon: '', order: -1}
         ],
         default_key: 'last_name',

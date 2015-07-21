@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 
 from manoseimas.mps_v2.models import Group
@@ -11,15 +13,9 @@ from .json import *
 def index_view(request):
     parliament = Group.objects.get(type=Group.TYPE_PARLIAMENT)
     explanations = {
-      'votings': "Lorem ipsum dolor sit amet, consectetur adipisicing elit, \
-                  sed do eiusmod tempor incididunt ut labore et dolore \
-                  magna aliqua.",
-      'statements': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, \
-                    sed do eiusmod tempor incididunt ut labore et dolore\
-                    magna aliqua.',
-      'projects': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, \
-                   sed do eiusmod tempor incididunt ut labore et dolore \
-                   magna aliqua.'
+        'votings': "Šis rodiklis parodo, kiek vidutiškai balsavimų Seimo narys dalyvavo nuo 2012 m. (balsavo už, prieš arba susilaikė).",
+        'statements': "Šis rodiklis parodo, kiek vidutiniškai kartų nuo 2012 m. kadencijos pradžios Seimo narys pasisakė Seimo plenarinių posėdžių metu. Skaičiuojami visi pasisakymai.",
+        'projects': 'Šis rodiklis parodo, kiek vidutiniškai kartų Seimo narys pasirašė po Seimo narių teiktais teisės aktų projektais.'
     }
     context = {'parliament': parliament, 'explanations': explanations}
     return render(request, 'index_with_filter.jade', context)

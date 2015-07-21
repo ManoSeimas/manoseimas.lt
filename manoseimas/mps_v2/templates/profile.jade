@@ -108,13 +108,13 @@
           h3 Teisės aktų projektai
           .block
             h4.number {{ stats.proposed_projects }}
-            p.explanation pasiūlyti
+            p.explanation pateikti
           .block
             h4.number {{ stats.passed_projects }}
             .explanation priimti
           .block
             h4.number {{stats.passed_project_percentage|floatformat:0 }}%
-            .explanation palaikymas
+            .explanation sėkmė
         .rating(data-title="Priimtų/pasiūlytų įstatymų santykis geresnis negu {{ranking.passed_law_project_ratio_percentile}}%" data-content="Palyginimas su kitų parlamentarų priimtų ir pasiūlytų įstatymų santykiu.")
           .ui.indicating.progress(data-percent="{{ ranking.passed_law_project_ratio_percentile }}"): .bar
 
