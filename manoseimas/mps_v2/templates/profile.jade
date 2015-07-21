@@ -88,7 +88,7 @@
         .one-number
           .block.left: h4.number {{stats.vote_percent|floatformat:0}}%
           .block.right: .explanation Dalyvavimas balsavimuose
-        .rating(data-title="Geriau negu {{ranking.votes_percentile}}%" data-content="Palyginimas su kitais parlamentarais. Kuo daugiau procentų tuo geriau.")
+        .rating(data-title="Balsavo daugiau nei {{ranking.votes_percentile}}%" data-content="Lyginant su visais Seimo nariais. 100% surenka aktyviausias balsavimuose dalyvaujantis Seimo narys.")
           .ui.indicating.progress(data-percent=ranking.votes_percentile): .bar
 
       .stats-box
@@ -100,7 +100,7 @@
           .block
             h4.number {{ stats.long_statement_count }}
             .explanation ilgi pasisakymai (kalbos)
-        .rating(data-title="Pasisako dažniau negu {{ranking.statement_count_percentile}}%" data-content="Palyginimas su kitų parlamentarų pasisakymų skaičiumi. 100% surenka šnekiausias parlamentaras.")
+        .rating(data-title="Pasisako daugiau nei {{ranking.statement_count_percentile}}%" data-content="Lyginant su visais Seimo nariais. 100% surenka daugiausia kalbantis Seimo narys.")
           .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
 
       .stats-box
@@ -115,7 +115,7 @@
           .block
             h4.number {{stats.passed_project_percentage|floatformat:0 }}%
             .explanation sėkmė
-        .rating(data-title="Priimtų/pasiūlytų įstatymų santykis geresnis negu {{ranking.passed_law_project_ratio_percentile}}%" data-content="Palyginimas su kitų parlamentarų priimtų ir pasiūlytų įstatymų santykiu.")
+        .rating(data-title="Sėkmingesnis nei {{ranking.passed_law_project_ratio_percentile}}%" data-content="Lyginant su visais Seimo nariais. 100% surenka Seimo narys, kurio pateiktų ir priimtų teisės aktų projektų santykis yra didžiausias.")
           .ui.indicating.progress(data-percent="{{ ranking.passed_law_project_ratio_percentile }}"): .bar
 
   if positions.for or positions.against or positions.neutral
@@ -156,7 +156,7 @@
       if stats.statement_count
         .six.wide.right.aligned.column
           .ui.toggle.checkbox#only_as_presenter
-            label Rodyti tik tas kalbos kur parlamentaras yra pristatinėtojas
+            label Rodyti tik tuos pasisakymus, kuriuose Seimo narys yra pranešėjas
             input(name="filter_presenter" type="checkbox", checked="")
 
     if stats.statement_count
@@ -172,7 +172,7 @@
   .law-project-collaborators
     .ui.zero.margin.page.grid
       a(name="law-project-collaborators")
-      h3 Įstatymų projektus dažniausiai teikia kartu su:
+      h3 Seimo nariai, su kuriais dažniausiai teikia teisės aktų projektus
       .collaborators
         for mp in top_collaborating_mps
           .parliamentarian.box
@@ -181,7 +181,7 @@
               h2: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
               if mp.fraction
                 a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
-              p {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
+              (data-content="Skaičiuojama, kiek teisės aktų projektų Seimo narys pasirašė kartu su kitais Seimo nariais. Parodo Seimo nario \"bendradarbiavimo\" lygį su atskirais Seimo nariais.") {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
 
 
 
