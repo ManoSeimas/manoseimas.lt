@@ -25,7 +25,7 @@ def mp_fraction(request, fraction_slug):
         'stats_discussions': "Skaičiuojama, kiek vidutiniškai kartų frakcijos narys pasisakė per Seimo plenarinius posėdžius nuo 2012 m. kadencijos pradžios.  Skaičiuojami visi pasisakymai.",
         'stats_long_statements': "Ilgi pasisakymai - daugiau nei 50 žodžių.",
         'stats_proposed_projects': "Skaičiuojama, kiek vidutiniškai kartų frakcijos narys pasirašė po Seimo narių teiktais teisės aktų projektais.",
-        'stats_projects_success_rate': "Skaičiuojama, kokia procentinė dalis frakcijos pateiktų teisės aktų projektų buvo priimti. Frakcijos priimtų projektų dalis skaičiuojama pagal kiekvieno frakcijos nario pateiktų ir priimtų teisės aktų projektų santykį, apskaičiavus jų vidurkį.",
+        'stats_projects_success_rate': "Skaičiuojama, kokia procentinė dalis frakcijos pateiktų teisės aktų projektų buvo priimti. Frakcijos priimtų projektų dalis skaičiuojama pagal kiekvieno frakcijos nario pateiktų ir priimtų teisės aktų projektų santykį, apskaičiavus jų vidurkį. Dėmesio!  Kokia dalis frakcijos pateiktų teisės aktų projektų bus priimti gali priklausyti nuo įvairių faktorių, pavyzdžiui, ar frakcija yra koalicijoje, ar opozicijoje.",
     }
 
     context = {
