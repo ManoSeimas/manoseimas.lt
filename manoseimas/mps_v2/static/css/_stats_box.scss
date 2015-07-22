@@ -71,7 +71,6 @@
       line-height: 1.1;
       min-height: 34px;
     }
-    .popup { border-bottom: 1px dotted $grayLite; }
   }
 
   .graph { width: 44%; }
@@ -107,6 +106,8 @@
 
   .progress:last-child { margin: 0; }
 }
+
+.popup { border-bottom: 1px dotted $grayLite; }
 
 .stats-box.horisontal {
   width: 270px;
