@@ -78,7 +78,8 @@ def mps_json(request, fraction_slug=None):
         groupmembership__group__type=Group.TYPE_FRACTION,
     )
     if fraction_slug:
-        mp_qs = mp_qs.filter(groupmembership__group__slug=fraction_slug)
+        mp_qs = mp_qs.filter(groupmembership__group__slug=fraction_slug,
+                             groupmembership__until__isnull=True)
     mps = mp_qs.distinct().values('pk', 'first_name', 'last_name', 'slug',
                                   'photo', 'statement_count',
                                   'long_statement_count', 'vote_percentage',
