@@ -131,7 +131,8 @@
         a(name="decisions")
         h2 Politiniai sprendimai
           small.important DĖMESIO: duomenys praeitos (2008-2012) kadencijos balsavimų!
-          i.circle.grey.info.icon(style="float: right;")
+          a
+            i.circle.grey.info.icon(style="float: right;")
 
       .ui.stackable.three.column.center.aligned.page.grid
           .column
@@ -199,30 +200,23 @@
       i.close.icon
     .content
       .description
-        p Procentai parodo laipsnį, kiek frakcijos ir Seimo nariai palaiko pasirinktą temą. Jie apskaičiuojami pagal tris rodiklius: balsavimų skaičių, jų svarbą ir tai, kiek frakcijos narių balsavo. Daugiau žiūrėti čia. Palaikymo reikšmės:
+        p Rodoma, kiek Seimo narys palaiko įvairius Seimo politinius sprendimus. Spalvų intensyvumas nurodo palaikymo laipsnį:
         ul
           li
-            b stipriai už (tamsiai žalia)
-            | = nuo 66% iki 100%
+            b Tamsiai žalia: 67-100 proc. palaikymas
           li
-            b vidutiniškai už (žalia)
-            | = nuo 66% iki 100%
+            b Žalia: 34-66 proc. palaikymas
           li
-            b nestipriai už (šviesiai žalia)
-            | = nuo 66% iki 100%
+            b Šviesiai žalia: 1-33. proc palaikymas
           li
-            b neutraliai (geltona)
-            | = nuo 66% iki 100%
+            b Geltona: 0 proc. palaikymas
           li
-            b nestipriai prieš (šviesiai raudona)
-            | = nuo 66% iki 100%
+            b Šviesiai raudona: 1-33 proc. pasipriešinimas
           li
-            b vidutiniškai prieš (raudona)
-            | = nuo 66% iki 100%
+            b Raudona: 34-66 proc. pasipriešinimas
           li
-            b stipriai prieš (tamsiai raudona)
-            | = nuo 66% iki 100%
-        p Stipri Seimo nario pozicija rodo, kad jis visuose balsavimuose balsavo panašiai. Nestipri (silpna) pozicija gali reikšti, kad Seimo narys per balsavimus "susilaikė", arba kad kartais balsavo vienaip, o kartais - kitaip.
+            b Tamsiai raudona: 67-100 proc. pasipriešinimas
+        p Palaikymas / pasipriešinimas apskaičiuojamas įvertinant kiekvieną Seimo nario balsavimą dėl to politinio sprendimo (už = 2, susilaikė = -1, prieš = -2) ir išvedant jų vidurkį.
 
   script
     $(document).ready(function() {

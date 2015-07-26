@@ -82,6 +82,10 @@
   .decision.strong-against { border-color: $redDark; border-left: 7px solid $redDark; }
   .decision.against { border-color: $red; border-left: 7px solid $red; }
   .decision.lite-against { border-color: $redLite; border-left: 7px solid $redLite; }
+
+  a i {
+    color: $textColor;
+  }
 }
 
 
