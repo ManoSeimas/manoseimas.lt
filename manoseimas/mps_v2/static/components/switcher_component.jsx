@@ -43,7 +43,7 @@ var Switcher = React.createClass({
           {
             key: 'avg_passed_law_project_ratio',
             title: 'Projektų teikimo sėkmė',
-            explanation: 'Skaičiuojama, kokia dalis iš visų frakcijos narių pateiktų teisės aktų projektų buvo priimti. Frakcijos priimtų projektų dalis skaičiuojama pagal kiekvieno frakcijos nario pateiktų ir priimtų teisės aktų projektų santykį, apskaičiavus jų vidurkį.',
+            explanation: 'Skaičiuojama, kokia dalis iš visų frakcijos narių pateiktų teisės aktų projektų buvo priimti. Frakcijos priimtų projektų dalis skaičiuojama pagal kiekvieno frakcijos nario pateiktų ir priimtų teisės aktų projektų santykį, apskaičiavus jų vidurkį. Dėmesio! Kokia dalis pateiktų teisės aktų projektų bus priimti gali priklausyti nuo įvairių faktorių, pavyzdžiui, ar frakcija yra koalicijoje, ar opozicijoje.',
             icon: '', order: -1}
         ],
         default_key: 'name',
