@@ -15,7 +15,6 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^$', 'manoseimas.mps_v2.views.index_view'),
-    url(r'^index_alt/?$', 'manoseimas.views.index'),   # Alternative index page wihout stats filter
     url(r'^votings/?$', 'manoseimas.views.votings'),
     url(r'^search.json$', 'manoseimas.views.ajax_search'),
     url(r'^accounts/', include('social.apps.django_app.urls',

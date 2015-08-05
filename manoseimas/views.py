@@ -16,37 +16,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def index(request):
-    day = None
-    recent = []
-    last_date = ""
-    for v in get_recent_votings(100):
-        date = v.created.date()
-        if date != last_date:
-            if len(recent) >= 7:
-                break
-
-            day = {'date': date, 'votings': []}
-            recent.append(day)
-
-        last_date = date
-        title = v.documents[0]['name'] if v.documents else v.title
-
-        day['votings'].append({
-            'id': v._id,
-            'title': title,
-            'date': v.created
-        })
-
-    fractions = Group.objects.filter(type=Group.TYPE_FRACTION)
-    fractions = sorted(fractions, key=lambda f: f.active_member_count, reverse=True)
-    context = {
-        'recent_votings': recent,
-        'fractions': fractions
-    }
-    return render(request, 'index_alt.jade', context)
-
-
 def votings(request):
     day = None
     recent = []
