@@ -124,8 +124,6 @@ def law_projects_json(request, mp_slug):
         'number': project.project_number,
         'url': project.project_url,
         'proposer_count': project.proposer_count,
-        'fraction_contributions': map(make_dict,
-                                      project.get_fraction_contributions()),
     } for project in project_qs]
 
     return JsonResponse({'items': law_projects})
