@@ -222,7 +222,7 @@
     notify: reload apache
 
   - name: set up apache virtual host for couchdb
-    template: src=templates/apache_couchdb.conf dest=/etc/apache2/sites-enabled/{{ name }}_couchdb.conf
+    template: src=templates/apache_couchdb.conf dest=/etc/apache2/sites-enabled/{{ name }}_couchdb.conf state=absent
     notify: reload apache
 
   - name: create log dirs
