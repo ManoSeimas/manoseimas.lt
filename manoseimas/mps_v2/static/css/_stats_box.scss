@@ -10,6 +10,11 @@
   padding: 0 5px 5px !important;
   font-size: 0;
 
+  .rating-notice {
+    color: $grayDark;
+    font-size: 0.8rem;
+  }
+
   h3 {
     font-size: $normal;
     text-align: center;

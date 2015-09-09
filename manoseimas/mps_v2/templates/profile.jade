@@ -91,6 +91,7 @@
             span.popup(data-position="top center" data-content="Skaičiuojama, kokioje dalyje balsavimų Seimo narys dalyvavo (balsavo už, prieš arba susilaikė) nuo 2012 m. kadencijos pradžios") Dalyvavimas balsavimuose
         .rating(data-title="Balsavo daugiau nei {{ranking.votes_percentile}}%" data-content="Lyginant su visais Seimo nariais. 100% surenka aktyviausias balsavimuose dalyvaujantis Seimo narys.")
           .ui.indicating.progress(data-percent=ranking.votes_percentile): .bar
+        .rating-notice Lyginant su kitais seimo nariais
 
       .stats-box
         .two-numbers
@@ -105,6 +106,7 @@
               span.popup(data-position="top center" data-content="Ilgi pasisakymai - daugiau nei 50 žodžių.") ilgi pasisakymai (kalbos)
         .rating(data-title="Pasisako daugiau nei {{ranking.statement_count_percentile}}%" data-content="Lyginant su visais Seimo nariais. 100% surenka daugiausia kalbantis Seimo narys.")
           .ui.indicating.progress(data-percent=ranking.statement_count_percentile): .bar
+        .rating-notice Lyginant su kitais seimo nariais
 
       .stats-box
         .three-numbers
@@ -124,6 +126,8 @@
 
         .rating(data-title="Sėkmingesnis nei {{ranking.passed_law_project_ratio_percentile}}%" data-content="Lyginant su visais Seimo nariais. 100% surenka Seimo narys, kurio pateiktų ir priimtų teisės aktų projektų santykis yra didžiausias.")
           .ui.indicating.progress(data-percent="{{ ranking.passed_law_project_ratio_percentile }}"): .bar
+        .rating-notice Lyginant su kitais seimo nariais
+
 
   a(name="law-projects")
   .law-project-collaborators
