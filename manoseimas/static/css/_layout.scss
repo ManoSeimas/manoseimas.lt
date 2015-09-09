@@ -80,6 +80,13 @@ header {
   .dropdown-menu {
     a.item { padding: .5rem !important; width: 150px; text-align: center;}
   }
+
+  a.donate {
+    color: $greenDark !important;
+    padding: 0.5em 1em;
+    border: 1px solid $greenDark;
+    border-radius: $borderRadius;
+  }
 }
 
 header.ui.grid.scrooled {

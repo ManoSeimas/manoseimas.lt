@@ -14,10 +14,8 @@ header.ui.page.grid
               .ui.icon.input
                 input(placeholder="Ieškok politikų, temų, argumentų", type="text", name="q").long-search-box
                 i.search.link.icon
-
-
           .item
-            a(href="http://transparency.lt/donate/", target="_NEW") Prisidėk!
+            a(href="http://transparency.lt/donate/", target="_NEW").donate Prisidėk!
           .ui.dropdown.item
             if request.user.is_authenticated
               i.user.icon
