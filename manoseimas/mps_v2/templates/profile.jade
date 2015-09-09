@@ -125,6 +125,42 @@
         .rating(data-title="Sėkmingesnis nei {{ranking.passed_law_project_ratio_percentile}}%" data-content="Lyginant su visais Seimo nariais. 100% surenka Seimo narys, kurio pateiktų ir priimtų teisės aktų projektų santykis yra didžiausias.")
           .ui.indicating.progress(data-percent="{{ ranking.passed_law_project_ratio_percentile }}"): .bar
 
+  a(name="law-projects")
+  .law-project-collaborators
+    .ui.zero.margin.page.grid
+      a(name="law-project-collaborators")
+      h2 Seimo nariai, su kuriais dažniausiai teikia teisės aktų projektus
+      .collaborators
+        for mp in top_collaborating_mps
+          .parliamentarian.box
+            img(src="{{ mp.photo.url }}")
+            .info
+              h2: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
+              if mp.fraction
+                a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
+              h5
+                span.popup(data-position="top center" data-content="Skaičiuojama, kiek teisės aktų projektų Seimo narys pasirašė kartu su kitais Seimo nariais. Parodo Seimo nario \"bendradarbiavimo\" lygį su atskirais Seimo nariais.") {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
+
+  #law-projects-component(data-slug="{{profile.slug}}")
+
+  .transcripts
+    a(name='stenogram_section')
+    .ui.stackable.page.grid
+      .ten.wide.column
+        h2 Seimo posėdžių stenogramos
+      if stats.statement_count
+        .six.wide.right.aligned.column
+          .ui.toggle.checkbox#only_as_presenter
+            label Rodyti tik tuos pasisakymus, kuriuose Seimo narys yra pranešėjas
+            input(name="filter_presenter" type="checkbox", checked="")
+
+    if stats.statement_count
+      .statements-component(data-slug="{{profile.slug}}")
+    else
+      .ui.stackable.page.grid
+        .eight.wide.column
+          h4 Šis seimo narys neturi pasisakymų seimo posėdžių metu
+
   if positions.for or positions.against or positions.neutral
     .decisions
       .ui.page.grid
@@ -155,42 +191,6 @@
             for position in positions.against
               .decision(class=position['klass'])
                 a(href="{{ position.permalink }}" title=position["formatted"]) {{ position.title }}
-
-  .transcripts
-    a(name='stenogram_section')
-    .ui.stackable.page.grid
-      .ten.wide.column
-        h2 Seimo posedžių stenogramos
-      if stats.statement_count
-        .six.wide.right.aligned.column
-          .ui.toggle.checkbox#only_as_presenter
-            label Rodyti tik tuos pasisakymus, kuriuose Seimo narys yra pranešėjas
-            input(name="filter_presenter" type="checkbox", checked="")
-
-    if stats.statement_count
-      .statements-component(data-slug="{{profile.slug}}")
-    else
-      .ui.stackable.page.grid
-        .eight.wide.column
-          h4 Šis seimo narys neturi pasisakymų seimo posėdžių metu
-
-  a(name="law-projects")
-  #law-projects-component(data-slug="{{profile.slug}}")
-
-  .law-project-collaborators
-    .ui.zero.margin.page.grid
-      a(name="law-project-collaborators")
-      h3 Seimo nariai, su kuriais dažniausiai teikia teisės aktų projektus
-      .collaborators
-        for mp in top_collaborating_mps
-          .parliamentarian.box
-            img(src="{{ mp.photo.url }}")
-            .info
-              h2: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
-              if mp.fraction
-                a(href="{% url 'mp_fraction' mp.fraction.slug %}").fraction-name {{mp.fraction.name}}
-              h5
-                span.popup(data-position="top center" data-content="Skaičiuojama, kiek teisės aktų projektų Seimo narys pasirašė kartu su kitais Seimo nariais. Parodo Seimo nario \"bendradarbiavimo\" lygį su atskirais Seimo nariais.") {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
 
 
 
