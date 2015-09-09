@@ -99,6 +99,18 @@ TEMPLATE_LOADERS = (
     ))
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
+    'manoseimas.context_processors.settings_for_context',
+)
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -109,7 +121,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.core.context_processors.request'
+                'django.core.context_processors.request',
+                'manoseimas.context_processors.settings_for_context',
             ],
             'loaders': [
                 ('pyjade.ext.django.Loader', (
@@ -131,17 +144,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'manoseimas.urls'
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
-    'manoseimas.context_processors.settings_for_context',
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
