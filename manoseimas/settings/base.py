@@ -13,7 +13,8 @@ config = exportrecipe.load(os.path.join(BUILDOUT_DIR, 'settings.json'))
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['manoseimas.lt', 'ms.tinginiai.lt', 'localhost']
+ALLOWED_HOSTS = ['manoseimas.lt', 'www.manoseimas.lt',
+                 'ms.tinginiai.lt', 'localhost']
 
 ADMINS = (
     ('Server Admin', 'sirexas@gmail.com'),
