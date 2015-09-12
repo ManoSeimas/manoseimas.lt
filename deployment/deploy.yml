@@ -221,10 +221,6 @@
     template: src=templates/apache.conf dest=/etc/apache2/sites-enabled/{{ name }}.conf
     notify: reload apache
 
-  - name: set up apache virtual host for couchdb
-    template: src=templates/apache_couchdb.conf dest=/etc/apache2/sites-enabled/{{ name }}_couchdb.conf state=absent
-    notify: reload apache
-
   - name: create log dirs
     file: path=/var/log/apache2/{{ item }} state=directory
     with_items:
