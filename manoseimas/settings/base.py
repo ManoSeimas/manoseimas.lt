@@ -62,7 +62,6 @@ STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'www', 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(config.buildout_parts_dir, 'flot'),
-    os.path.join(config.buildout_parts_dir, 'modernizr'),
     os.path.join(config.buildout_parts_dir, 'jquery'),
     os.path.join(config.buildout_parts_dir, 'history.js'),
     os.path.join(config.buildout_parts_dir, 'bootstrap'),
