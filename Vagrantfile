@@ -80,8 +80,6 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y nodejs nodejs-legacy npm
     sudo apt-get install -y coffeescript
     (cd /vagrant && make ubuntu)
-    # PIL is awful
-    sudo ln -s /usr/include/freetype2 /usr/include/freetype || true
     grep "cd /vagrant" /home/vagrant/.bashrc || echo "cd /vagrant" >> /home/vagrant/.bashrc
     sudo -u vagrant mkdir -p /home/vagrant/manoseimas
     printf "[client]\ndatabase = manoseimas\nuser = manoseimas\npassword =\ndefault-character-set = utf8\n" | sudo -u vagrant tee /home/vagrant/.my.cnf
