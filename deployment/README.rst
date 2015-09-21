@@ -49,10 +49,10 @@ Run following command::
 
     vagrant up
 
-It downloads virtuabl mox images and runs deployment scripts. If you want to
-rested deployment scripts repeatedly run::
+It downloads virtualbox images and runs deployment scripts. If you want to
+retest deployment scripts repeatedly run::
 
     vagrant provision
 
-If everything went well you should see working web page by visiting
+If everything went well you should see a working web page by visiting
 http://localhost:8080/ .
