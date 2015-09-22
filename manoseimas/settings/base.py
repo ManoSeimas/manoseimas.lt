@@ -206,8 +206,8 @@ LOGGING = {
             'maxBytes': 1024 * 1024 * 3,
         },
         'null': {
-            'level':'DEBUG',
-            'class':'django.utils.log.NullHandler',
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
         },
     },
     'loggers': {
@@ -226,14 +226,14 @@ LOGGING = {
             'propagate': True,
         },
         'couchdbkit': {
-            'handlers':['null'],
+            'handlers': ['null'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
         'restkit': {
-            'handlers':['null'],
+            'handlers': ['null'],
             'propagate': True,
-            'level':'INFO',
+            'level': 'INFO',
         },
     }
 }
