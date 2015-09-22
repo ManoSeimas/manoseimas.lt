@@ -104,7 +104,7 @@ These crawlers are currently present::
 These commands are used to precompute and load various things::
 
     bin/django recompute_stats  # Recompute stats on models
-    bin/django couchdb_sync_id  # RUn this if you see CouchDB conflicts
+    bin/django couchdb_sync_id  # Run this if you see CouchDB conflicts
     bin/django syncsittings [--update] [--scrape]  # update sittings
     bin/django syncmps [--update] [--scrape]  # update mps
     bin/django syncpositions  # Sync MP and Fraction positions on various political issues
