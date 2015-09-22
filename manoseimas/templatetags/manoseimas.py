@@ -56,7 +56,7 @@ def matching_documents(values, query):
     result = "<ul>"
     for doc in values:
         name = normalize_search(doc['name'])
-        if query in normalize_search(doc['name']):
+        if query in name:
             result += "<li>%s</li>" % doc['name']
 
     result += "</ul>"
