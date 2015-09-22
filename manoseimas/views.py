@@ -53,11 +53,11 @@ def ajax_search(request):
         nodes = couch.view('compat/search', descending=True, limit=25, **args)
         results = []
         for n in nodes:
-            r = { 'id': n._id, 'type': n.doc_type }
+            r = {'id': n._id, 'type': n.doc_type}
             if 'title' in n:
                 r['title'] = n.title
             if 'created' in n:
-                r['created'] = str( n.created )
+                r['created'] = str(n.created)
             if n.doc_type == "Voting":
                 docs = []
                 for doc in n.documents:
