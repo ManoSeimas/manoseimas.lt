@@ -59,12 +59,12 @@ def ajax_search(request):
             if 'created' in n:
                 r['created'] = str( n.created )
             if n.doc_type == "Voting":
-               docs = []
-               for doc in n.documents:
-                  if key in normalize_search(doc['name']):
-                     docs.append(doc)
+                docs = []
+                for doc in n.documents:
+                    if key in normalize_search(doc['name']):
+                        docs.append(doc)
 
-               r['documents'] = docs
+                r['documents'] = docs
 
             results.append(r)
         return results
