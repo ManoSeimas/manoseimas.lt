@@ -82,7 +82,7 @@ class QualifiedRangeSgmlLinkExtractor(SgmlLinkExtractor):
             allowed = True
 
         if self.deny_res:
-            denied = qualified_range_match(link.url, self.deny_res, self.deny_range)
+            denied = qualified_range_match(url, self.deny_res, self.deny_range)
         else:
             denied = False
 
