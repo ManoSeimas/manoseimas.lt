@@ -16,7 +16,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-This module works as glue between all manseimas project apps.
+This module works as glue between all manoseimas project apps.
 
 """
 
