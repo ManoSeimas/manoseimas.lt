@@ -67,7 +67,7 @@ class VotingView(DetailsView):
     adapts(IVoting)
 
     template = 'votings/voting_details.html'
-    
+
     def nav(self, active=tuple()):
         nav = super(VotingView, self).nav(active)
         return voting_nav(self.node, nav, active)
@@ -107,11 +107,11 @@ class MPsPositionView(DetailsView):
 
         for mp in sorted(voting.mps, key=attrgetter('last_name', 'first_name')):
             mps_sorted[ mp.vote ].append(mp)
-        
+
         context = {
                 'fractions': ( fractions_sorted[True], fractions_sorted[False]),
                 'mps': ( mps_sorted['aye'], mps_sorted['no'], mps_sorted['abstain'] ),
-                'voting': voting 
+                'voting': voting
         }
         context.update(overrides)
         return super(MPsPositionView, self).render(**context)

@@ -157,10 +157,10 @@ class FractionView(GroupView):
         membership = dict()
         complete_sessions = dict()
 
-        # We don't scrape MPs prior to ~ 2008, and so fraction records from before that 
+        # We don't scrape MPs prior to ~ 2008, and so fraction records from before that
         # session will be incomplete (only containing MPs that were still around in 2008 or later).
-        # To avoid hard-coding years into this code, we're detecting the scrape limits by filtering out 
-        # any years that we don't see members leaving the fraction. 
+        # To avoid hard-coding years into this code, we're detecting the scrape limits by filtering out
+        # any years that we don't see members leaving the fraction.
         for o in members:
             membership[o.parliament[0]] = []
 

@@ -24,7 +24,7 @@ class ManoseimasProfileView(ProfileView):
         if self.request.user.id == self.node.uid:
             positions = [{
                 'solution': pp.node,
-                'val': int(pp.position), 
+                'val': int(pp.position),
                 'text': USER_POSITION_NAMES[int(pp.position)],
             } for pp in PersonPosition.objects.filter(profile=self.node)]
             positions.sort(key=lambda p: p['solution'].ref.title)

@@ -1,6 +1,6 @@
 
+from urlparse import urlparse
 import re
-from urlparse import urlparse 
 
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.utils.url import canonicalize_url, url_is_from_any_domain, url_has_any_extension
@@ -23,7 +23,7 @@ def qualified_range_match(url, regexs, ranges):
         matches = r.search(url)
         if matches:
             matches = matches.groups()
-            
+
             # We support only a single capture
             if len(matches) != 1:
                 raise ValueError("Qualified Range regex must contain a single capture!")
@@ -32,7 +32,7 @@ def qualified_range_match(url, regexs, ranges):
 
             if len(rng) != 2:
                 raise ValueError("Qualified Range must be a pair!")
-            
+
             if rng[0] != None and match < rng[0]:
                 #print "Rejecting: %s < %s" % (match, rng[0])
                 continue
@@ -78,10 +78,10 @@ class QualifiedRangeSgmlLinkExtractor(SgmlLinkExtractor):
             return False
 
         if self.allow_res:
-            allowed = qualified_range_match(url, self.allow_res, self.allow_range) 
+            allowed = qualified_range_match(url, self.allow_res, self.allow_range)
         else:
             allowed = True
-        
+
         if self.deny_res:
             denied = qualified_range_match(link.url, self.deny_res, self.deny_range)
         else:

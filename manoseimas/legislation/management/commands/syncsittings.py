@@ -18,7 +18,7 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import os 
+import os
 from subprocess import call
 
 from django.conf import settings

@@ -96,8 +96,8 @@ class Voting(Node):
 provideNode(Voting, "voting")
 
 def get_full_voting(source_id, include_metrics=True):
-    """ 
-    Fetches a voting and all of its referenced Fractions and MPs, using an 
+    """
+    Fetches a voting and all of its referenced Fractions and MPs, using an
     optimized query. Also calculates metrics for the voting.
     """
 
@@ -135,7 +135,7 @@ def get_full_voting(source_id, include_metrics=True):
                 fraction.votes[vote_type] += 1
                 fraction.voting_score += voting.get_vote_value(vote_type)
                 fraction.total_votes += 1
-    
+
     if (include_metrics):
         for fraction in fractions.values():
             fraction.viso = int( 100 * fraction.voting_score / (2*fraction.total_votes) )

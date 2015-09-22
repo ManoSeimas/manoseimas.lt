@@ -20,7 +20,7 @@
 import os.path
 import urllib
 import glob
-import os 
+import os
 from subprocess import call
 
 from django.core.management.base import BaseCommand
@@ -118,7 +118,7 @@ class SyncProcessor(object):
 
         urllib.urlretrieve(url, path)
         self.set_image_from_file(profile, path)
-    
+
     def get_profile_node(self, source_id):
         if source_id not in self._profiles:
             profile = couch.view('mps/by_source_id', key=source_id).first()
