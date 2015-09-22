@@ -148,7 +148,6 @@ def deletemps(args):
     db = server['nodes']
     print('Deleting MP profiles.')
     for row, doc in _list_nodes('sboard/by_type', startkey=['MPProfile'], endkey=['MPProfile', u'\ufff0']):
-        group_id = doc['_id']
         print('DEL: [ %(_id)s ]: %(first_name)s %(last_name)s' % doc)
         db.delete_doc(doc)
 

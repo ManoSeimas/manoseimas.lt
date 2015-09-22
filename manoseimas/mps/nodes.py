@@ -155,7 +155,6 @@ class FractionView(GroupView):
     def render(self, **overrides):
         members = self.node.members()
         membership = dict()
-        complete_sessions = dict()
 
         # We don't scrape MPs prior to ~ 2008, and so fraction records from before that
         # session will be incomplete (only containing MPs that were still around in 2008 or later).
