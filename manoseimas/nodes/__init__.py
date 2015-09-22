@@ -20,5 +20,5 @@ This module works as glue between all manoseimas project apps.
 
 """
 
-import manoseimas.nodes.votings
-import manoseimas.nodes.profile
+import manoseimas.nodes.votings  # noqa: registers adapters during import
+import manoseimas.nodes.profile  # noqa: registers adapters during import
