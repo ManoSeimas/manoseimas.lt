@@ -3,7 +3,6 @@ import cgi
 
 from docutils.parsers.rst import roles
 from docutils import nodes
-from docutils import utils
 
 
 # Define description role for docutils.

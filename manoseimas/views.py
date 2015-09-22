@@ -1,12 +1,8 @@
 import unidecode
-from django.http import HttpResponse
-from django.http import Http404
-from django.http import HttpResponseBadRequest
 from django.shortcuts import render
 from decorators import ajax_request
 
 from manoseimas.votings.models import get_recent_votings
-from manoseimas.mps_v2.models import Group
 
 from sboard.nodes import search_words_re
 from sboard.models import couch
