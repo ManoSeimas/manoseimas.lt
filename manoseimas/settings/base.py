@@ -37,7 +37,7 @@ DATABASES = {
 TIME_ZONE = 'Europe/Vilnius'
 
 LANGUAGES = (
-    ('lt', _('Lithianian')),
+    ('lt', _('Lithuanian')),
 )
 
 LANGUAGE_CODE = 'lt'
