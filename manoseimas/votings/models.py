@@ -142,7 +142,7 @@ def get_full_voting(source_id, include_metrics=True):
             fraction.supports = fraction.viso >= 0
             # FIXME: Acquire no-vote values to calculate participation!
             #fraction['participation'] = int( 100 * fraction['registered_for_voting'] / fraction['total_votes'] )
-            fraction.participation = 100;
+            fraction.participation = 100
 
     voting.fractions = fractions.values()
     voting.mps = mps.values()
