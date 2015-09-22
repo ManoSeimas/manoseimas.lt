@@ -32,7 +32,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.middleware.csrf import get_token
 
 from sboard.ajax import AjaxView
-from sboard.json import json_response
 from sboard.nodes import DetailsView
 from sboard.nodes import ListView
 from sboard.nodes import NodeView

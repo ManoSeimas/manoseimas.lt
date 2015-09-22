@@ -1,6 +1,5 @@
 
 from urlparse import urlparse
-import re
 
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
 from scrapy.utils.url import canonicalize_url, url_is_from_any_domain, url_has_any_extension

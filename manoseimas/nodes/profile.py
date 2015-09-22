@@ -5,7 +5,6 @@ from django.utils.translation import ugettext as _
 from sboard.profiles.interfaces import IProfile
 from sboard.profiles.nodes import ProfileView
 from manoseimas.compat.models import PersonPosition
-from manoseimas.mps.nodes import prepare_position_list
 
 
 USER_POSITION_NAMES = {

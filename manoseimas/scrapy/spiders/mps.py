@@ -11,7 +11,7 @@ from scrapy.contrib.pipeline.images import ImagesPipeline
 from manoseimas.scrapy.items import Group
 from manoseimas.scrapy.items import Person
 from manoseimas.scrapy.loaders import Loader
-from manoseimas.scrapy.spiders import ManoSeimasSpider, mark_no_cache
+from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.textutils import mapwords
 from manoseimas.scrapy.textutils import split_by_comma
 from manoseimas.scrapy.textutils import str2dict
