@@ -72,8 +72,13 @@ class SittingsSpider(ManoSeimasSpider):
         voting_range = None
 
         if resume.lower() != "no":
-            # Resume spidering from the last stored Voting
-            voting = get_sequential_votings(limit=1)[0]
+            # Resume spidering from the last stored Voting, if there is one
+            resume_from = get_sequential_votings(limit=1)
+        else:
+            resume_from = []
+
+        if resume_from:
+            voting = resume_from[0]
             question = get_question(voting['question'])
             session = question['session']
             # Note: We're incrementing range arguments by 1 because our
