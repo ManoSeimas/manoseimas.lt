@@ -21,11 +21,17 @@ manager. It's up to you how you get CouchDB running.
 
 By default ``config/env/development.cfg`` configuration is used and it expects
 you to have ``django-sboard`` and ``couchdbkit`` in ``parts`` directory. So you
-have to clone those repositories manually::
+have to clone those repositories manually via SSH::
 
     mkdir parts
     hg clone ssh://hg@bitbucket.org/sirex/django-sboard parts/django-sboard
     git clone -b django-1.8 git@github.com:sirex/couchdbkit.git parts/couchdbkit
+
+or via HTTPS::
+
+    hg clone https://bitbucket.org/sirex/django-sboard parts/django-sboard
+    git clone -b django-1.8 https://github.com/sirex/couchdbkit.git parts/couchdbkit
+
 
 Build the project::
 
