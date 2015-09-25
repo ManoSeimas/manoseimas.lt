@@ -4,8 +4,13 @@ computer to get started with the development.
 Configuring development environment
 ===================================
 
-Ubuntu 14.04
-------------
+
+First, decide if you want to set it up directly on your machine, or if you want
+to use Vagrant.
+
+
+Direct setup (Ubuntu 14.04)
+---------------------------
 
 Before starting, install system dependencies (this will require ``sudo``)::
 
@@ -16,7 +21,7 @@ Run CouchDB using Docker::
     docker run -d -p 5984:5984 --name couchdb klaemo/couchdb:1.6.1
 
 If you don't have Docker, you can install CouchDB using the manual way (see
-`Manual CouchDB install`_) also you can install CouchDB using your package
+`Appendix: Manual CouchDB install`_) also you can install CouchDB using your package
 manager. It's up to you how you get CouchDB running.
 
 Build the project::
@@ -35,8 +40,9 @@ And run the project::
 
     make run
 
-Vagrant
--------
+
+Vagrant setup
+-------------
 
 Vagrant is a quick way to setup development environment. Download Vagrant from
 `https://www.vagrantup.com/downloads.html` and optionally download Oracle
@@ -53,8 +59,9 @@ browser and navigate to::
 
     http://127.0.0.1:8000
 
-Manual CouchDB install
-----------------------
+
+Appendix: Manual CouchDB install
+================================
 
 https://github.com/iriscouch/build-couchdb
 
@@ -72,10 +79,10 @@ After building CouchDB, run it using this command::
     ./build/bin/couchdb
 
 
-CouchDB
-=======
+Production CouchDB access
+=========================
 
-To access CouchDB web ui run this command::
+To access CouchDB web UI run this command::
 
     ssh -L 9000:localhost:5984 manoseimas.lt
 
@@ -92,7 +99,6 @@ These crawlers are currently present::
     bin/scrapy crawl law_projects  # Law project stats
     bin/scrapy crawl sittings  # Sittings and voting stats, usually invoked via syncsittings
 
-
 These commands are used to precompute and load various things::
 
     bin/django recompute_stats  # Recompute stats on models
@@ -101,3 +107,5 @@ These commands are used to precompute and load various things::
     bin/django syncmps [--update] [--scrape]  # update mps
     bin/django syncpositions  # Sync MP and Fraction positions on various political issues
 
+See the crontab rules in ``deployment/deploy.yml`` for the order and frequency
+of their execution.
