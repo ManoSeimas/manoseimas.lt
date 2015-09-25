@@ -2,21 +2,24 @@ language: python
 python: "2.7"
 sudo: false
 services:
-    - mysql
-    - couchdb
+  - mysql
+  - couchdb
 cache:
-    pip: true
-    ccache: true
-    directories:
-        - eggs
+  pip: true
+  ccache: true
+  directories:
+      - eggs
 before_cache:
-    - rm -f $HOME/.cache/pip/log/debug.log
+  - rm -f $HOME/.cache/pip/log/debug.log
 before_install:
-    - mysql -uroot -e 'create database manoseimas;'
-    - printf "[client]\ndatabase = manoseimas\nuser = root\npassword =\ndefault-character-set = utf8\n" > ~/.my.cnf
+  - mysql -uroot -e 'create database manoseimas;'
+  - printf "[client]\ndatabase = manoseimas\nuser = root\npassword =\ndefault-character-set = utf8\n" > ~/.my.cnf
 install:
-    - pip install -U pip
-    - python scripts/genconfig.py config/env/development.cfg
-    - make
+  - pip install -U pip
+  - python scripts/genconfig.py config/env/development.cfg
+  - make
 script:
-    - make test
+  - make test
+notifications:
+  slack:
+    secure: GP9mfQqcwVsGjcGwmGrS8BTkrHraJX0/lZr4aYo7h7MM7XEQv5MW3RmxjdfHvT6HGgIy/y4iucfqleGRc+Rm5acIXG1/gHGXl6o9DJgBwOUJi3nqMZH9+O+HNKEM4Z5LC6MliV4yFhMB5w71wDwPEDNqtzpELbRvRRVF9IfbN+onqkAZ3tvo5uPW2J/z9YEtCKwGtvNQnuzAs/nCxxvpD4LeN4hImlNKlianROcBNH22Y2JXzIigqG06IJhblkbvxo6CF+2V0HDsTCvBgrf+3tzAHRy2tTcNPwvvmWOqzXB5096dNn4SGqQN1UORIF+y6Em55k+ipowAIhREK8DN+Dccgf/RIW7brxukOe7Y5ugT5x8Vy0frk4GZObbEWW6sdGCQUs+aZSRZadh7M4hiqF0J1oZCkNPV+KCQ6fIvQTcjLt4YRPt+lIHQMug5qoGne87+QHWeOKhGaOVdhCnA/r2NeJOvQTj5K7zuQsHoLjGhd6AJ6e12ZctCIvkzntzhCBMxiUfmdREwISj65Xncm34UvT4yTKCrYsDJTSeJnkekxaOUAdKTSvLJapHIlCGfH0umnTA90NNpbuI7meZ0Q6mmwJzXg6MZXr7opZz1vduh+od10JfvVeVaZD33reT9SW8bVaKyv6HHbLtvQk/9eNpUjNKTt008ag9wgG+8uiI=
