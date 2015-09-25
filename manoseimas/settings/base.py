@@ -251,6 +251,7 @@ COUCHDB_DATABASES = (
     ('manoseimas.mps', COUCHDB_SERVER + 'nodes'),
     ('manoseimas.solutions', COUCHDB_SERVER + 'nodes'),
     ('manoseimas.votings', COUCHDB_SERVER + 'nodes'),
+    ('manoseimas.widget', COUCHDB_SERVER + 'nodes'),
 )
 
 ELASTICSEARCH_SERVERS = (

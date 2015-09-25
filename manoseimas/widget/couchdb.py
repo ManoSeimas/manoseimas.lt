@@ -4,8 +4,9 @@
 
 import os
 
+from django.conf import settings
+from couchdbkit.ext.django.loading import CouchdbkitHandler
 from couchdbkit import push
-from sboard.models import Node
 
 
 def syncdb(app, verbosity=2):
@@ -16,6 +17,12 @@ def syncdb(app, verbosity=2):
         return
     if verbosity >= 1:
         print "sync `manoseimas.widget` in CouchDB"
-    db = Node.get_db()
+    # Getting the database is a tricky business: this gets called early
+    # during unit test setup, and we don't want to touch the real DB
+    # during unit test runs, do we?  At this point settings.COUCHDB_DATABASES
+    # has been modified by sboard.testrunner.SboardTestSuiteRunner, but
+    # nothing else.
+    handler = CouchdbkitHandler(settings.COUCHDB_DATABASES)
+    db = handler.get_db('widget')
     path = os.path.join(os.path.dirname(__file__), '_design')
     push(path, db, force=True, docid='_design/widget')
