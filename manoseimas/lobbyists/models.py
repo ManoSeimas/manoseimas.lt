@@ -16,7 +16,7 @@ class Lobbyist(CrawledItem):
     slug = AutoSlugField(populate_from='name', max_length=120)
     name = models.CharField(max_length=128)
     # XXX: should probably be a separate table
-    representatives = models.CharField(max_length=255)
+    representatives = models.CharField(max_length=255, blank=True)
     url = models.URLField(blank=True)
     company_code = models.CharField(max_length=32, blank=True)
     # date of inclusion into the official list of lobbyists
