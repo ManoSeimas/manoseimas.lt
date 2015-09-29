@@ -290,7 +290,7 @@ class ManoSeimasModelPersistPipeline(object):
         lobbyist.date_of_inclusion = item['date_of_inclusion']
         lobbyist.decision = item['decision']
         lobbyist.status = item.get('status')
-        lobbyist.source_url = item['source_url']
+        lobbyist.source = item['source_url']
         lobbyist.raw_data = item['raw_data']
         lobbyist.save()
         return item
