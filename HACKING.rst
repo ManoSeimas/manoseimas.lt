@@ -98,6 +98,7 @@ These crawlers are currently present::
     bin/scrapy crawl stenograms  # Stenograms
     bin/scrapy crawl law_projects  # Law project stats
     bin/scrapy crawl sittings  # Sittings and voting stats, usually invoked via syncsittings
+    bin/scrapy crawl lobbyists  # Lobbyists
 
 These commands are used to precompute and load various things::
 
