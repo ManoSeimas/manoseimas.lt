@@ -4,7 +4,7 @@ from .models import Lobbyist
 
 
 class LobbyistAdmin(admin.ModelAdmin):
-    readonly_fields = ('slug',)
+    readonly_fields = ('slug', 'source', 'raw_data')
 
 
-admin.site.register(Lobbyist)
+admin.site.register(Lobbyist, LobbyistAdmin)
