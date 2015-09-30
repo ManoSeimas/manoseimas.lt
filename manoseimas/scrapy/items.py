@@ -228,3 +228,17 @@ class PassedLawProjectProposer(Item):
     passing_url = Field()
     source = Field(input_processor=processor.Identity(),
                    output_processor=processor.TakeFirst())
+
+
+class Lobbyist(Item):
+    name = Field(output_processor=processor.TakeFirst())
+    url = Field()
+    representatives = Field()
+    company_code = Field()
+    date_of_inclusion = Field(input_processor=processor.Identity(),
+                              output_processor=processor.TakeFirst())
+    decision = Field()
+    status = Field()
+    source_url = Field()
+    raw_data = Field()
+

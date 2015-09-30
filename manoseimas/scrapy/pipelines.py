@@ -8,8 +8,9 @@ from django.core.files.base import ContentFile
 import manoseimas.common.utils.words as words_utils
 
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
-from manoseimas.scrapy.items import (Person, StenogramTopic,
-                                     ProposedLawProjectProposer)
+from manoseimas.scrapy.items import (
+    Person, StenogramTopic, ProposedLawProjectProposer,
+    Lobbyist as LobbyistItem)
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
 from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
 
@@ -20,6 +21,7 @@ from manoseimas.mps_v2.models import Group, GroupMembership
 from manoseimas.mps_v2.models import Stenogram, StenogramStatement
 from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
 from manoseimas.mps_v2.models import Voting, LawProject
+from manoseimas.lobbyists.models import Lobbyist as LobbyistModel
 
 
 def is_latest_version(item, doc):
@@ -273,6 +275,26 @@ class ManoSeimasModelPersistPipeline(object):
 
         return item
 
+    @transaction.atomic
+    def process_lobbyist(self, item, spider):
+        lobbyist, created = LobbyistModel.objects.get_or_create(
+            name=item['name'],
+            # some fields cannot be null
+            defaults=dict(
+                date_of_inclusion=item['date_of_inclusion'],
+            )
+        )
+        lobbyist.representatives = item.get('representatives')
+        lobbyist.url = item.get('url')
+        lobbyist.company_code = item.get('company_code')
+        lobbyist.date_of_inclusion = item['date_of_inclusion']
+        lobbyist.decision = item['decision']
+        lobbyist.status = item.get('status')
+        lobbyist.source = item['source_url']
+        lobbyist.raw_data = item['raw_data']
+        lobbyist.save()
+        return item
+
     @check_spider_pipeline
     def process_item(self, item, spider):
         if isinstance(item, Person):
@@ -281,6 +303,8 @@ class ManoSeimasModelPersistPipeline(object):
             return self.process_stenogram_topic(item, spider)
         elif isinstance(item, ProposedLawProjectProposer):
             return self.process_proposed_law_project(item, spider)
+        elif isinstance(item, LobbyistItem):
+            return self.process_lobbyist(item, spider)
         else:
             return item
 
