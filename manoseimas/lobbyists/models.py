@@ -28,3 +28,30 @@ class Lobbyist(CrawledItem):
 
     def __unicode__(self):
         return self.name
+
+
+class LobbyistDeclaration(CrawledItem):
+    lobbyist_name = models.CharField(max_length=128)
+    lobbyist = models.ForeignKey('Lobbyist', blank=True, null=True)
+    year = models.IntegerField()
+    comments = models.CharField(max_length=1024, blank=True)
+
+    def __unicode__(self):
+        return '{} ({})'.format(self.lobbyist_name, self.year)
+
+
+class LobbyistClient(models.Model):
+    declaration = models.ForeignKey('LobbyistDeclaration',
+                                    related_name='clients')
+    name = models.CharField(max_length=128)
+
+    def __unicode__(self):
+        return self.name
+
+
+class LobbyistLawProject(models.Model):
+    client = models.ForeignKey('LobbyistClient', related_name='law_projects')
+    title = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.title
