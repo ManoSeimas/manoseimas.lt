@@ -242,3 +242,8 @@ class Lobbyist(Item):
     source_url = Field()
     raw_data = Field()
 
+
+class LobbyistDeclaration(Item):
+    name = Field()
+    comments = Field()
+    source_url = Field()
