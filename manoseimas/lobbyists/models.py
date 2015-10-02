@@ -37,7 +37,7 @@ class LobbyistDeclaration(CrawledItem):
     comments = models.CharField(max_length=1024, blank=True)
 
     def __unicode__(self):
-        return '{} ({})'.format(self.lobbyist_name, self.year)
+        return u'{} ({})'.format(self.lobbyist_name, self.year)
 
 
 class LobbyistClient(models.Model):
