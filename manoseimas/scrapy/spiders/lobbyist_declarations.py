@@ -172,4 +172,4 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         # - <entry></entry>
         # - <entry>Lobistinės veiklos nevykdė</entry>
         # - <entry>Lobistinė veikla sustabdyta</entry>
-        return {'comments': entry.xpath('text()').extract()}
+        return {'comments': entry.xpath('text()').extract() or ['']}

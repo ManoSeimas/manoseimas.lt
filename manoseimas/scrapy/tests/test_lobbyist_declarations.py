@@ -62,6 +62,9 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
     ]
 
     comments_examples = [
+        ('<entry></entry>', {
+            'comments': '',
+        }),
         ('<entry>\n\n</entry>', {
             'comments': '',
         }),
