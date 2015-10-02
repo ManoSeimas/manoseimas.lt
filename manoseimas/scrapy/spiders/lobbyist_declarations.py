@@ -153,7 +153,10 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         #     1) Lietuvos Respublikos azartinių lošimų įstatymas;
         #     2) Lietuvos Respublikos statybos įstatymas;
         #   </entry>
-        return self._split_projects(entry.xpath('text()').extract()[0])
+        projects = []
+        for s in entry.xpath('text()').extract():
+            projects.extend(self._split_projects(s))
+        return projects
 
     def _split_projects(self, projects):
         projects = projects.strip()

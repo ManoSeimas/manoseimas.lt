@@ -44,6 +44,7 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
     ]
 
     law_projects_examples = [
+        ('<entry></entry>', []),
         ('<entry>\n\n</entry>', []),
         ('<entry>\n-\n</entry>', []),
         ('<entry>\nLietuvos Respublikos asociacijų įstatymas.\n</entry>', [
