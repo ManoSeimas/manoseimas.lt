@@ -7,7 +7,7 @@ from scrapy.http import Response, HtmlResponse, XmlResponse
 
 from manoseimas.scrapy.items import LobbyistDeclaration
 from manoseimas.scrapy.loaders import Loader
-from manoseimas.scrapy.spiders.lobbyist_declarations import LobbyistDeclarationsSpider
+from manoseimas.scrapy.spiders.lobbyist_declarations import LobbyistDeclarationsSpider, NO_CLIENT
 from manoseimas.scrapy.tests.utils import fixture
 
 
@@ -40,6 +40,20 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
         }),
         ('<entry>\nVŠĮ "MOKESČIŲ IR VERSLO PROCESŲ ADMINISTRAVIMO CENTRAS"\n</entry>', {
             'name': u'VŠĮ "MOKESČIŲ IR VERSLO PROCESŲ ADMINISTRAVIMO CENTRAS"',
+        }),
+    ]
+
+    client_examples = [
+        ('<entry></entry>', None),
+        ('<entry>\n\n</entry>', None),
+        ('<entry>\n-\n</entry>', NO_CLIENT),
+        ('<entry>\nLietuvos kabelinės televizijos asociacija\n</entry>', {
+            'client': u'Lietuvos kabelinės televizijos asociacija',
+            'law_projects': [],
+        }),
+        ('<entry>\n1. Visuomeninė organizacija Žvėryno bendruomenė\n</entry>', {
+            'client': u'Visuomeninė organizacija Žvėryno bendruomenė',
+            'law_projects': [],
         }),
     ]
 
@@ -169,45 +183,77 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
              <entry>
              </entry>
             </row>
-      ''',
-      {
-          'name': u'LIUDVIKAS RAGAUSKIS',
-          'clients': [
-              {
-                  'client': u'Visuomeninė organizacija Žvėryno bendruomenė',
-                  'law_projects': [
-                      u'Lietuvos Respublikos vietos savivaldos taryb\u0173 rinkim\u0173 \u012fstatymas',
-                  ],
-              },
-              {
-                  'client': u'VšĮ „Gamtos ateitis"',
-                  'law_projects': [
-                      u'Lietuvos Respublikos atliek\u0173 tvarkymo \u012fstatymas',
-                  ],
-              },
-              {
-                  'client': u'VšĮ „Konstitucinių teisių gynimo agentūra“',
-                  'law_projects': [
-                      u'Lietuvos Respublikos rinkim\u0173 kodeksas',
-                      u'Lietuvos Respublikos \u017eem\u0117s reformos \u012fstatymas',
-                      u'Lietuvos Respublikos saugom\u0173 teritorij\u0173 \u012fstatymas',
-                      u'Lietuvos Respublikos teism\u0173 \u012fstatymas',
-                      u'Lietuvos Respublikos teritorij\u0173 planavimo \u012fstatymas',
-                      u'Lietuvos Respublikos \u017eem\u0117s \u012fstatymas',
-                      u'Lietuvos Respublikos nekilnojamojo kult\u016bros paveldo apsaugos \u012fstatymas',
-                  ],
-              },
-              {
-                  'client': u'VšĮ „Vilniaus metro“',
-                  'law_projects': [
-                      u'Lietuvos Respublikos gele\u017einkeli\u0173 transporto kodekso patvirtinimo, \u012fsigaliojimo ir taikymo \u012fstatymas',
-                      u'Lietuvos Respublikos metropoliteno \u012fstatymas',
-                  ],
-              },
-          ],
-          'source_url': u'http://localhost/test.html',
-          'comments': u'',
-      }),
+        ''',
+        {
+            'name': u'LIUDVIKAS RAGAUSKIS',
+            'clients': [
+                {
+                    'client': u'Visuomeninė organizacija Žvėryno bendruomenė',
+                    'law_projects': [
+                        u'Lietuvos Respublikos vietos savivaldos taryb\u0173 rinkim\u0173 \u012fstatymas',
+                    ],
+                },
+                {
+                    'client': u'VšĮ „Gamtos ateitis"',
+                    'law_projects': [
+                        u'Lietuvos Respublikos atliek\u0173 tvarkymo \u012fstatymas',
+                    ],
+                },
+                {
+                    'client': u'VšĮ „Konstitucinių teisių gynimo agentūra“',
+                    'law_projects': [
+                        u'Lietuvos Respublikos rinkim\u0173 kodeksas',
+                        u'Lietuvos Respublikos \u017eem\u0117s reformos \u012fstatymas',
+                        u'Lietuvos Respublikos saugom\u0173 teritorij\u0173 \u012fstatymas',
+                        u'Lietuvos Respublikos teism\u0173 \u012fstatymas',
+                        u'Lietuvos Respublikos teritorij\u0173 planavimo \u012fstatymas',
+                        u'Lietuvos Respublikos \u017eem\u0117s \u012fstatymas',
+                        u'Lietuvos Respublikos nekilnojamojo kult\u016bros paveldo apsaugos \u012fstatymas',
+                    ],
+                },
+                {
+                    'client': u'VšĮ „Vilniaus metro“',
+                    'law_projects': [
+                        u'Lietuvos Respublikos gele\u017einkeli\u0173 transporto kodekso patvirtinimo, \u012fsigaliojimo ir taikymo \u012fstatymas',
+                        u'Lietuvos Respublikos metropoliteno \u012fstatymas',
+                    ],
+                },
+            ],
+            'source_url': u'http://localhost/test.html',
+            'comments': u'',
+        }),
+        ('''
+            <row>
+                <entry>42.</entry>
+                <entry>Vardenis Pavardenis</entry>
+                <entry>A Client</entry>
+                <entry>Some project</entry>
+                <entry></entry>
+            </row>
+            <row>
+                <entry></entry>
+                <entry></entry>
+                <entry>-</entry>
+                <entry>Another project</entry>
+                <entry></entry>
+            </row>
+         ''',
+         {
+             'name': u'Vardenis Pavardenis',
+             'comments': u'',
+             'source_url': u'http://localhost/test.html',
+             'clients': [
+                 {
+                     'client': 'A Client',
+                     'law_projects': [
+                         u'Some project',
+                     ],
+                 },
+             ],
+             'law_projects': [
+                 u'Another project',
+             ],
+         }),
     ]
 
     def setUp(self):
@@ -228,6 +274,12 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
         item = declaration.load_item()
         actual = dict(item)
         return actual
+
+    def parse_client(self, html, fn):
+        response = XmlResponse('http://localhost/test.html',
+                               body='<book>%s</book>' % html)
+        node = response.css('entry')[0]
+        return fn(node)
 
     def parse_law_projects(self, html, fn):
         response = XmlResponse('http://localhost/test.html',
@@ -250,6 +302,10 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
     def test_parse_name(self):
         self.run_examples(self.name_examples, self.parse_field,
                           self.spider._parse_name)
+
+    def test_parse_clients(self):
+        self.run_examples(self.client_examples, self.parse_client,
+                          self.spider._parse_client)
 
     def test_parse_law_projects(self):
         self.run_examples(self.law_projects_examples, self.parse_law_projects,

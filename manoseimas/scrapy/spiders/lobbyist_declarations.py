@@ -11,6 +11,9 @@ from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 
 
+NO_CLIENT = object()  # marker
+
+
 class LobbyistDeclarationsSpider(ManoSeimasSpider):
     name = 'lobbyist_declarations'
     allowed_domains = ['www.vtek.lt', 'old.vtek.lt']
@@ -91,7 +94,9 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         for row in row_group:
             if columns == 5:
                 new_client = self._parse_client(row.xpath('entry')[-3])
-                if new_client is not None:
+                if new_client is NO_CLIENT:
+                    client = None
+                elif new_client is not None:
                     client = new_client
                     declaration.add_value("clients", [client])
             law_projects = self._parse_law_projects(row.xpath('entry')[-2])
@@ -123,9 +128,14 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         # - <entry></entry>
         # - <entry>Lietuvos kabelinės televizijos asociacija</entry>
         # - <entry>1. Visuomeninė organizacija Žvėryno bendruomenė</entry>
-        name = self._clean_list_item(entry.xpath('text()').extract()[0])
+        names = entry.xpath('text()').extract()
+        if not names:
+            return None
+        name = self._clean_list_item(names[0])
         if not name:
             return None
+        if name == '-':
+            return NO_CLIENT
         return LobbyistClient(client=name, law_projects=[])
 
     def _parse_law_projects(self, entry):
