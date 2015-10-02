@@ -10,7 +10,7 @@ import manoseimas.common.utils.words as words_utils
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
 from manoseimas.scrapy.items import (
     Person, StenogramTopic, ProposedLawProjectProposer,
-    Lobbyist as LobbyistItem)
+    Lobbyist, LobbyistDeclaration)
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
 from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
 
@@ -21,7 +21,8 @@ from manoseimas.mps_v2.models import Group, GroupMembership
 from manoseimas.mps_v2.models import Stenogram, StenogramStatement
 from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
 from manoseimas.mps_v2.models import Voting, LawProject
-from manoseimas.lobbyists.models import Lobbyist as LobbyistModel
+
+import manoseimas.lobbyists.models as lobbyists_models
 
 
 def is_latest_version(item, doc):
@@ -277,7 +278,7 @@ class ManoSeimasModelPersistPipeline(object):
 
     @transaction.atomic
     def process_lobbyist(self, item, spider):
-        lobbyist, created = LobbyistModel.objects.get_or_create(
+        lobbyist, created = lobbyists_models.Lobbyist.objects.get_or_create(
             name=item['name'],
             # some fields cannot be null
             defaults=dict(
@@ -295,6 +296,25 @@ class ManoSeimasModelPersistPipeline(object):
         lobbyist.save()
         return item
 
+    @transaction.atomic
+    def process_lobbyist_declaration(self, item, spider):
+        declaration, created = lobbyists_models.LobbyistDeclaration.objects.get_or_create(
+            lobbyist_name=item['name'],
+            year=item['year'],
+        )
+        # TODO: find a matching lobbyist and link them up
+        declaration.comments = item.get('comments')
+        declaration.save()
+        for client_item in item.get('clients', []):
+            client, created = declaration.clients.get_or_create(name=client_item['client'])
+            for project in client_item['law_projects']:
+                client.law_projects.get_or_create(title=project)
+        if item.get('law_projects'):
+            client, created = declaration.clients.get_or_create(name='-')
+            for project in item['law_projects']:
+                client.law_projects.get_or_create(title=project)
+        return item
+
     @check_spider_pipeline
     def process_item(self, item, spider):
         if isinstance(item, Person):
@@ -303,8 +323,10 @@ class ManoSeimasModelPersistPipeline(object):
             return self.process_stenogram_topic(item, spider)
         elif isinstance(item, ProposedLawProjectProposer):
             return self.process_proposed_law_project(item, spider)
-        elif isinstance(item, LobbyistItem):
+        elif isinstance(item, Lobbyist):
             return self.process_lobbyist(item, spider)
+        elif isinstance(item, LobbyistDeclaration):
+            return self.process_lobbyist_declaration(item, spider)
         else:
             return item
 

@@ -316,6 +316,8 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
         self.assertEqual(len(items), 30)
         self.assertEqual(items[0]['name'], 'ROMAS STUMBRYS')
         self.assertEqual(items[0]['comments'], u'Lobistinės veiklos nevykdė')
+        self.assertEqual(items[0]['year'], '2012')
+        self.assertEqual(items[0]['source_url'], response.url)
 
     def test_parse_declaration_xml_5_columns(self):
         # this format was used for 2014 declarations
@@ -327,5 +329,7 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
         items = list(self.spider.parse_declaration_xml(response))
         self.assertEqual(len(items), 34)
         self.assertEqual(items[0]['name'], 'ROMAS STUMBRYS')
+        self.assertEqual(items[0]['year'], '2014')
+        self.assertEqual(items[0]['source_url'], response.url)
         self.assertEqual(items[-1]['name'], u'UAB INLINEN')
         self.assertEqual(items[-1]['comments'], u'Lobistinės veiklos nevykdė')

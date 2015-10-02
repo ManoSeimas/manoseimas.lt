@@ -55,8 +55,11 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
             self.error(response, "Lobbyist declaration has unexpected number of columns ({})".format(len(columns)))
             return
         rows = response.xpath('//row')[1:]
+        year = response.meta['year']
         for group in self._group_rows(rows):
-            yield self._parse_lobbyist(response, group)
+            lobbyist = self._parse_lobbyist(response, group)
+            lobbyist['year'] = year
+            yield lobbyist
 
     def _group_rows(self, rows):
         group = []
