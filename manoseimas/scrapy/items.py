@@ -246,5 +246,12 @@ class Lobbyist(Item):
 class LobbyistDeclaration(Item):
     name = Field()
     comments = Field()
+    clients = Field(input_processor=processor.Identity(),
+                    output_processor=processor.Identity())
     law_projects = Field(output_processor=processor.Identity())
     source_url = Field()
+
+
+class LobbyistClient(Item):
+    client = Field()
+    law_projects = Field(output_processor=processor.Identity())

@@ -5,7 +5,7 @@ import scrapy
 from scrapy.http import XmlResponse
 
 from manoseimas.scrapy import pipelines
-from manoseimas.scrapy.items import LobbyistDeclaration
+from manoseimas.scrapy.items import LobbyistDeclaration, LobbyistClient
 from manoseimas.scrapy.helpers.msword import doc2xml
 from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.spiders import ManoSeimasSpider
@@ -45,21 +45,57 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         #  - 'Lobisto vardas, pavardė ar pavadinimas'
         #  - 'Teisės akto ar teisės akto projekto, dėl kurio vykdyta lobistinė veikla, pavadinimas'
         #  - 'Pastabos'
-        if len(columns) != 4:
+        # or
+        #  - 'Eilės\nNr.'
+        #  - 'Lobisto vardas, pavardė ar pavadinimas'
+        #  - 'Lobistinės veiklos užsakovas'
+        #  - 'Teisės akto ar teisės akto projekto, dėl kurio vykdyta lobistinė veikla, pavadinimas'
+        #  - 'Pastabos'
+        if len(columns) not in (4, 5):
             self.error(response, "Lobbyist declaration has unexpected number of columns ({})".format(len(columns)))
             return
         rows = response.xpath('//row')[1:]
-        for row in rows:
-            yield self._parse_lobbyist(response, row)
+        for group in self._group_rows(rows):
+            yield self._parse_lobbyist(response, group)
 
-    def _parse_lobbyist(self, response, row):
-        nr, name, law_projects, comments = row.xpath('entry')
+    def _group_rows(self, rows):
+        group = []
+        for row in rows:
+            if row.xpath('entry[1]/text()').extract()[0].strip():
+                if group:
+                    yield group
+                group = [row]
+            else:
+                group.append(row)
+        if group:
+            yield group
+
+    def _parse_lobbyist(self, response, row_group):
+        row = row_group[0]
+        entries = row.xpath('entry')
+        columns = len(entries)
+        if columns == 4:
+            nr, name, law_projects, comments = entries
+        else:
+            assert len(entries) == 5
+            nr, name, clients, law_projects, comments = entries
         declaration = Loader(self, response, LobbyistDeclaration(), row,
                              required=('name', ))
         declaration.add_value('source_url', response.url)
         declaration.add_value(None, self._parse_number(nr))
         declaration.add_value(None, self._parse_name(name))
-        declaration.add_value(None, self._parse_law_projects(law_projects))
+        client = None
+        for row in row_group:
+            if columns == 5:
+                new_client = self._parse_client(row.xpath('entry')[-3])
+                if new_client is not None:
+                    client = new_client
+                    declaration.add_value("clients", [client])
+            law_projects = self._parse_law_projects(row.xpath('entry')[-2])
+            if client is not None:
+                client['law_projects'].extend(law_projects)
+            else:
+                declaration.add_value('law_projects', law_projects)
         declaration.add_value(None, self._parse_comments(comments))
         return declaration.load_item()
 
@@ -78,6 +114,16 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         # - <entry>ADVOKATŲ PROFESINĖ BENDRIJA "BALTIC LEGAL SOLUTIONS LIETUVA”</entry>
         # - <entry>VŠĮ "MOKESČIŲ IR VERSLO PROCESŲ ADMINISTRAVIMO CENTRAS"</entry>
         return {'name': entry.xpath('text()').extract()}
+
+    def _parse_client(self, entry):
+        # Example inputs:
+        # - <entry></entry>
+        # - <entry>Lietuvos kabelinės televizijos asociacija</entry>
+        # - <entry>1. Visuomeninė organizacija Žvėryno bendruomenė</entry>
+        name = self._clean_list_item(entry.xpath('text()').extract()[0])
+        if not name:
+            return None
+        return LobbyistClient(client=name, law_projects=[])
 
     def _parse_law_projects(self, entry):
         # Example inputs:
@@ -104,17 +150,17 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         #     1) Lietuvos Respublikos azartinių lošimų įstatymas;
         #     2) Lietuvos Respublikos statybos įstatymas;
         #   </entry>
-        return {'law_projects': self._split_projects(entry.xpath('text()').extract()[0])}
+        return self._split_projects(entry.xpath('text()').extract()[0])
 
     def _split_projects(self, projects):
         projects = projects.strip()
         if not projects or projects == '-':
             return []
         parts = re.split(r'[;.]\s*\n', projects)
-        return filter(None, map(self._clean_project, parts))
+        return filter(None, map(self._clean_list_item, parts))
 
-    def _clean_project(self, project):
-        project = re.sub(r'^\s*(\d+[)]\s*)?', '', project)
+    def _clean_list_item(self, project):
+        project = re.sub(r'^\s*(\d+[).]\s*)?', '', project)
         project = re.sub(r'\s*([.;]\s*)?$', '', project)
         return project
 
