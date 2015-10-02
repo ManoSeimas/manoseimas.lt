@@ -51,7 +51,7 @@ class LobbyistClient(models.Model):
 
 class LobbyistLawProject(models.Model):
     client = models.ForeignKey('LobbyistClient', related_name='law_projects')
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=1024)
 
     def __unicode__(self):
         return self.title
