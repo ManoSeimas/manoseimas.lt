@@ -246,4 +246,5 @@ class Lobbyist(Item):
 class LobbyistDeclaration(Item):
     name = Field()
     comments = Field()
+    law_projects = Field(output_processor=processor.Identity())
     source_url = Field()
