@@ -24,6 +24,8 @@ urlpatterns = patterns(
     url(r'^widget/', include('manoseimas.widget.urls')),
     url(r'^mp/', include('manoseimas.mps_v2.urls')),
     url(r'^json/', include('manoseimas.mps_v2.json_urls')),
+# XXX: WIP:
+    url(r'^lobbyists/', include('manoseimas.lobbyists.urls')),
     url(r'^valdymas/', include(admin.site.urls)),
 )
 
