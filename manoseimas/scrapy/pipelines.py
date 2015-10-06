@@ -305,6 +305,7 @@ class ManoSeimasModelPersistPipeline(object):
         # TODO: find a matching lobbyist and link them up
         declaration.comments = item.get('comments')
         declaration.source = item['source_url']
+        declaration.raw_data = item['raw_data']
         declaration.save()
         for client_item in item.get('clients', []):
             client, created = declaration.clients.get_or_create(name=client_item['client'])

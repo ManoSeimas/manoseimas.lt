@@ -6,7 +6,7 @@ class CrawledItem(models.Model):
     source = models.URLField()
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    raw_data = models.CharField(max_length=1024, blank=True)
+    raw_data = models.CharField(max_length=10240, blank=True)
 
     class Meta:
         abstract = True

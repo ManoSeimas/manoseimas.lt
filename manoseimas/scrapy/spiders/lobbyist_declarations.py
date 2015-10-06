@@ -88,6 +88,7 @@ class LobbyistDeclarationsSpider(ManoSeimasSpider):
         declaration = Loader(self, response, LobbyistDeclaration(), row,
                              required=('name', ))
         declaration.add_value('source_url', response.url)
+        declaration.add_value('raw_data', '\n'.join(row.extract() for row in row_group))
         declaration.add_value(None, self._parse_number(nr))
         declaration.add_value(None, self._parse_name(name))
         client = None

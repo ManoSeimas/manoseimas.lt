@@ -260,8 +260,18 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
         self.spider = LobbyistDeclarationsSpider()
 
     def run_examples(self, examples, wrapper, fn):
-        for html, expected in examples:
-            actual = wrapper(html, fn)
+        for xml, expected in examples:
+            actual = wrapper(xml, fn)
+            self.assertEqual(expected, actual)
+
+    def run_examples_with_raw_data(self, examples, wrapper, fn):
+        for xml, expected in examples:
+            actual = wrapper(xml, fn)
+            expected = expected.copy()
+            expected['raw_data'] = xml.decode('UTF-8').strip().replace('\n            <row>', '\n<row>')
+            if 'raw_data' in actual:
+                # let's see a useful diff of these
+                self.assertEqual(expected['raw_data'], actual['raw_data'])
             self.assertEqual(expected, actual)
 
     def parse_field(self, html, fn):
@@ -312,8 +322,9 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
                           self.spider._parse_law_projects)
 
     def test_parse_lobbyist(self):
-        self.run_examples(self.lobbyist_examples, self.parse_lobbyist,
-                          self.spider._parse_lobbyist)
+        self.run_examples_with_raw_data(self.lobbyist_examples,
+                                        self.parse_lobbyist,
+                                        self.spider._parse_lobbyist)
 
     def test_split_projects(self):
         self.assertEqual(self.spider._split_projects(' '), [])

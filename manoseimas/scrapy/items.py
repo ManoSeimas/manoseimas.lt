@@ -251,6 +251,7 @@ class LobbyistDeclaration(Item):
                     output_processor=processor.Identity())
     law_projects = Field(output_processor=processor.Identity())
     source_url = Field()
+    raw_data = Field()
 
 
 class LobbyistClient(Item):
