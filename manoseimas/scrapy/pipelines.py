@@ -109,6 +109,16 @@ class MPNameMatcher(object):
         return mp
 
 
+class LobbyistNameMatcher(object):
+
+    def __init__(self):
+        all_lobbyists = lobbyists_models.Lobbyist.objects.all()
+        self.by_name = {l.name.upper(): l for l in all_lobbyists}
+
+    def get_lobbyist_by_name(self, name):
+        return self.by_name.get(name.upper())
+
+
 class ManoSeimasModelPersistPipeline(object):
 
     @transaction.atomic
@@ -302,7 +312,9 @@ class ManoSeimasModelPersistPipeline(object):
             lobbyist_name=item['name'],
             year=item['year'],
         )
-        # TODO: find a matching lobbyist and link them up
+        lobbyist = self.lobbyist_matcher.get_lobbyist_by_name(item['name'])
+        if lobbyist is not None:
+            declaration.lobbyist = lobbyist
         declaration.comments = item.get('comments')
         declaration.source = item['source_url']
         declaration.raw_data = item['raw_data']
@@ -334,3 +346,4 @@ class ManoSeimasModelPersistPipeline(object):
 
     def open_spider(self, spider):
         self.mp_matcher = MPNameMatcher()
+        self.lobbyist_matcher = LobbyistNameMatcher()
