@@ -224,18 +224,18 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
         }),
         ('''
             <row>
-                <entry>42.</entry>
-                <entry>Vardenis Pavardenis</entry>
-                <entry>A Client</entry>
-                <entry>Some project</entry>
-                <entry></entry>
+             <entry>42.</entry>
+             <entry>Vardenis Pavardenis</entry>
+             <entry>A Client</entry>
+             <entry>Some project</entry>
+             <entry></entry>
             </row>
             <row>
-                <entry></entry>
-                <entry></entry>
-                <entry>-</entry>
-                <entry>Another project</entry>
-                <entry></entry>
+             <entry></entry>
+             <entry></entry>
+             <entry>-</entry>
+             <entry>Another project</entry>
+             <entry></entry>
             </row>
          ''',
          {
