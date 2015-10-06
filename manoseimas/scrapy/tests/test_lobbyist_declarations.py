@@ -271,8 +271,19 @@ class TestLobbyistDeclarationsSpider(unittest.TestCase):
             expected['raw_data'] = xml.decode('UTF-8').strip().replace('\n            <row>', '\n<row>')
             if 'raw_data' in actual:
                 # let's see a useful diff of these
+                expected['raw_data'] = self.fixup_libxml2(expected['raw_data'])
+                actual['raw_data'] = self.fixup_libxml2(actual['raw_data'])
                 self.assertEqual(expected['raw_data'], actual['raw_data'])
             self.assertEqual(expected, actual)
+
+    def fixup_libxml2(self, html):
+        # Older libxml2 versions destroy some of the whitespace when you
+        # parse and convert the html tree back to a string.  This causes
+        # test failures on Travis CI.
+        html = html.replace('></entry>', '>\n             </entry>')
+        html = html.replace('><entry>', '>\n             <entry>')
+        html = html.replace('></row>', '>\n            </row>')
+        return html
 
     def parse_field(self, html, fn):
         response = XmlResponse('http://localhost/test.html',
