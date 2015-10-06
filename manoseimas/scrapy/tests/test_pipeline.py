@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import StringIO
 import unittest
 
@@ -7,7 +8,7 @@ from mock import patch
 from scrapy.http import HtmlResponse
 
 from ..items import Person
-from ..pipelines import ManoseimasPipeline
+from ..pipelines import ManoseimasPipeline, LobbyistNameMatcher
 from ..db import get_db
 from ..spiders.mps import MpsSpider
 
@@ -120,3 +121,13 @@ class TestPipelineGetDB(unittest.TestCase):
         db = get_db('legalacts', cache=False)
         self.assertEqual(db.dbname, 'my_legalacts_testdb')
         db.server.delete_db(db.dbname)
+
+
+class TestLobbyistNameMatcher(unittest.TestCase):
+
+    def test_canonical_name(self):
+        canonical_name = LobbyistNameMatcher.canonical_name
+        self.assertEqual(canonical_name(u"Vardenis Pavardenis"), u"VARDENIS PAVARDENIS")
+        self.assertEqual(canonical_name(u"UAB „Bendrovė“"), u"UAB BENDROVĖ")
+        self.assertEqual(canonical_name(u'UAB "INLINEN"'), u"UAB INLINEN")
+        self.assertEqual(canonical_name(u'UAB “GLAXOSMITHKLINE LIETUVA”'), u"UAB GLAXOSMITHKLINE LIETUVA")

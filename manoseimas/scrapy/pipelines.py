@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import datetime
 import functools
 import os
@@ -113,10 +114,20 @@ class LobbyistNameMatcher(object):
 
     def __init__(self):
         all_lobbyists = lobbyists_models.Lobbyist.objects.all()
-        self.by_name = {l.name.upper(): l for l in all_lobbyists}
+        self.by_name = {self.canonical_name(l.name): l
+                        for l in all_lobbyists}
 
     def get_lobbyist_by_name(self, name):
-        return self.by_name.get(name.upper())
+        return self.by_name.get(self.canonical_name(name))
+
+    @staticmethod
+    def canonical_name(name):
+        return name.upper().translate({
+            ord(u'"'): None,
+            ord(u'„'): None,
+            ord(u'“'): None,
+            ord(u'”'): None,
+        })
 
 
 class ManoSeimasModelPersistPipeline(object):
