@@ -57,6 +57,7 @@
     - coffeescript
     - git
     - mercurial
+    - antiword
 
   # Create app user
 

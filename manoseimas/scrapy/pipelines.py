@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import datetime
 import functools
 import os
@@ -10,7 +11,7 @@ import manoseimas.common.utils.words as words_utils
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
 from manoseimas.scrapy.items import (
     Person, StenogramTopic, ProposedLawProjectProposer,
-    Lobbyist as LobbyistItem)
+    Lobbyist, LobbyistDeclaration)
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
 from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
 
@@ -21,7 +22,8 @@ from manoseimas.mps_v2.models import Group, GroupMembership
 from manoseimas.mps_v2.models import Stenogram, StenogramStatement
 from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
 from manoseimas.mps_v2.models import Voting, LawProject
-from manoseimas.lobbyists.models import Lobbyist as LobbyistModel
+
+import manoseimas.lobbyists.models as lobbyists_models
 
 
 def is_latest_version(item, doc):
@@ -106,6 +108,26 @@ class MPNameMatcher(object):
                 mp_name = ' '.join((parts[0], parts[-1]))
                 mp = self.mp_names.get(mp_name.upper())
         return mp
+
+
+class LobbyistNameMatcher(object):
+
+    def __init__(self):
+        all_lobbyists = lobbyists_models.Lobbyist.objects.all()
+        self.by_name = {self.canonical_name(l.name): l
+                        for l in all_lobbyists}
+
+    def get_lobbyist_by_name(self, name):
+        return self.by_name.get(self.canonical_name(name))
+
+    @staticmethod
+    def canonical_name(name):
+        return name.upper().translate({
+            ord(u'"'): None,
+            ord(u'„'): None,
+            ord(u'“'): None,
+            ord(u'”'): None,
+        })
 
 
 class ManoSeimasModelPersistPipeline(object):
@@ -277,7 +299,7 @@ class ManoSeimasModelPersistPipeline(object):
 
     @transaction.atomic
     def process_lobbyist(self, item, spider):
-        lobbyist, created = LobbyistModel.objects.get_or_create(
+        lobbyist, created = lobbyists_models.Lobbyist.objects.get_or_create(
             name=item['name'],
             # some fields cannot be null
             defaults=dict(
@@ -295,6 +317,32 @@ class ManoSeimasModelPersistPipeline(object):
         lobbyist.save()
         return item
 
+    @transaction.atomic
+    def process_lobbyist_declaration(self, item, spider):
+        declaration, created = lobbyists_models.LobbyistDeclaration.objects.get_or_create(
+            lobbyist_name=item['name'],
+            year=item['year'],
+        )
+        lobbyist = self.lobbyist_matcher.get_lobbyist_by_name(item['name'])
+        if lobbyist is not None:
+            declaration.lobbyist = lobbyist
+        declaration.comments = item.get('comments')
+        declaration.source = item['source_url']
+        declaration.raw_data = item['raw_data']
+        declaration.save()
+        if not created:
+            # re-create the clients and topics on every scrape
+            declaration.clients.all().delete()
+        for client_item in item.get('clients', []):
+            client = declaration.clients.create(name=client_item['client'])
+            for project in client_item['law_projects']:
+                client.law_projects.create(title=project)
+        if item.get('law_projects'):
+            client = declaration.clients.create(name='-')
+            for project in item['law_projects']:
+                client.law_projects.create(title=project)
+        return item
+
     @check_spider_pipeline
     def process_item(self, item, spider):
         if isinstance(item, Person):
@@ -303,10 +351,13 @@ class ManoSeimasModelPersistPipeline(object):
             return self.process_stenogram_topic(item, spider)
         elif isinstance(item, ProposedLawProjectProposer):
             return self.process_proposed_law_project(item, spider)
-        elif isinstance(item, LobbyistItem):
+        elif isinstance(item, Lobbyist):
             return self.process_lobbyist(item, spider)
+        elif isinstance(item, LobbyistDeclaration):
+            return self.process_lobbyist_declaration(item, spider)
         else:
             return item
 
     def open_spider(self, spider):
         self.mp_matcher = MPNameMatcher()
+        self.lobbyist_matcher = LobbyistNameMatcher()

@@ -192,7 +192,7 @@ class TestLobbyistsSpider(unittest.TestCase):
             self.assertEqual(self.spider.maybe_titlecase(name), name)
 
     def test_parse(self):
-        response = HtmlResponse('www.vtek.lt/index.php/deklaravimas', body=fixture('vtek_deklaravimas.html'))
+        response = HtmlResponse('http://www.vtek.lt/index.php/deklaravimas', body=fixture('vtek_deklaravimas.html'))
         items = list(self.spider.parse(response))
         self.assertEqual(len(items), 35)
         self.assertEqual(items[0]['name'], 'Romas Stumbrys')

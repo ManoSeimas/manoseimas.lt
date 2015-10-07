@@ -11,7 +11,7 @@ ubuntu:
 	sudo apt-get -y build-dep python-imaging python-mysqldb python-pylibmc
 	sudo apt-get -y install build-essential python-dev python-virtualenv \
 		git mercurial gettext exuberant-ctags libxml2-dev libxslt1-dev \
-		libffi-dev libssl-dev
+		libffi-dev libssl-dev antiword
 
 run: bin/django ; bin/django runserver 0.0.0.0:8000
 
