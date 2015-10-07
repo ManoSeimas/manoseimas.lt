@@ -114,3 +114,41 @@ var FractionRow = React.createClass({
     )
   }
 });
+
+var LobbyistRow = React.createClass({
+  render: function() {
+    var fraction = this.props.obj;
+    var width_class = num_to_word(this.props.leading_column_width);
+    var leading_column_class = 'name '+ width_class + ' wide column';
+    return (
+      <div className="ui fraction-row zero margin page grid">
+        <div className={leading_column_class}>
+          <img className="logo" src={fraction.logo_url}></img>
+          <div className="info">
+            <h2><a href={fraction.url}>{fraction.name}</a></h2>
+          </div>
+        </div>
+        <div className="two wide column">
+          <div className="ui member statistic">
+            <div className="value">{fraction.member_count}</div>
+            <div className="label">
+              {lt_pluralize(fraction.member_count, 'narys', 'nariai', 'narių')}
+            </div>
+          </div>
+        </div>
+        <div className="two wide column">
+          <div className="ui voting statistic">
+            <div className="value">{fraction.avg_vote_percentage}%</div>
+            <div className="label">balsavimų</div>
+          </div>
+        </div>
+        <div className="two wide column">
+          <div className="ui projects statistic">
+            <div className="value">{fraction.avg_passed_law_project_ratio}%</div>
+            <div className="label">priimta projektų</div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+});
