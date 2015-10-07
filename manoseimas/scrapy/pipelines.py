@@ -330,14 +330,17 @@ class ManoSeimasModelPersistPipeline(object):
         declaration.source = item['source_url']
         declaration.raw_data = item['raw_data']
         declaration.save()
+        if not created:
+            # re-create the clients and topics on every scrape
+            declaration.clients.all().delete()
         for client_item in item.get('clients', []):
-            client, created = declaration.clients.get_or_create(name=client_item['client'])
+            client = declaration.clients.create(name=client_item['client'])
             for project in client_item['law_projects']:
-                client.law_projects.get_or_create(title=project)
+                client.law_projects.create(title=project)
         if item.get('law_projects'):
-            client, created = declaration.clients.get_or_create(name='-')
+            client = declaration.clients.create(name='-')
             for project in item['law_projects']:
-                client.law_projects.get_or_create(title=project)
+                client.law_projects.create(title=project)
         return item
 
     @check_spider_pipeline
