@@ -96,7 +96,37 @@ var Switcher = React.createClass({
           }
         },
         name: 'Parlamentarai'
-      }
+      },
+      lobbyists: {
+        row_component: LobbyistRow,
+        endpoint: '/json/fractions',
+        keys: [
+          {
+            key: 'name',
+            title: 'Pavadinimas',
+            explanation: undefined,
+            icon: undefined,
+            order: 1},
+          {
+            key: 'member_count',
+            title: 'Įtakoti įstatmai',
+            explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
+            icon: 'users icon', order: -1},
+          {
+            key: 'avg_vote_percentage',
+            title: 'Užsakovai',
+            explanation: undefined,
+            icon: '', order: -1},
+          {
+            key: 'avg_passed_law_project_ratio',
+            title: 'Įtakojimo sėkmė',
+            explanation: 'Skaičiuojama, kokia dalis iš visų įtakotų teisės aktų projektų buvo priimti.',
+            icon: '', order: -1}
+        ],
+        default_key: 'name',
+        default_order: 1,
+        name: 'Lobistai'
+      },
     };
 
     var tab = tabs[this.state.active_tab];
