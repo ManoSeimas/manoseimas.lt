@@ -284,15 +284,41 @@ class ManoSeimasModelPersistPipeline(object):
                 date_of_inclusion=item['date_of_inclusion'],
             )
         )
-        lobbyist.representatives = item.get('representatives')
-        lobbyist.url = item.get('url')
-        lobbyist.company_code = item.get('company_code')
+        lobbyist.representatives = item.get('representatives') or ''
+        lobbyist.url = item.get('url') or ''
+        lobbyist.company_code = item.get('company_code') or ''
         lobbyist.date_of_inclusion = item['date_of_inclusion']
         lobbyist.decision = item['decision']
-        lobbyist.status = item.get('status')
+        lobbyist.status = item.get('status') or ''
         lobbyist.source = item['source_url']
         lobbyist.raw_data = item['raw_data']
         lobbyist.save()
+        return item
+
+    @transaction.atomic
+    def process_lobbyist_declaration(self, item, spider):
+        declaration, created = lobbyists_models.LobbyistDeclaration.objects.get_or_create(
+            lobbyist_name=item['name'],
+            year=item['year'],
+        )
+        lobbyist = self.lobbyist_matcher.get_lobbyist_by_name(item['name'])
+        if lobbyist is not None:
+            declaration.lobbyist = lobbyist
+        declaration.comments = item.get('comments') or ''
+        declaration.source = item['source_url']
+        declaration.raw_data = item['raw_data']
+        declaration.save()
+        if not created:
+            # re-create the clients and topics on every scrape
+            declaration.clients.all().delete()
+        for client_item in item.get('clients', []):
+            client = declaration.clients.create(name=client_item['client'])
+            for project in client_item['law_projects']:
+                client.law_projects.create(title=project)
+        if item.get('law_projects'):
+            client = declaration.clients.create(name='-')
+            for project in item['law_projects']:
+                client.law_projects.create(title=project)
         return item
 
     @check_spider_pipeline
