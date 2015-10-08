@@ -1,4 +1,5 @@
 [run]
+source = manoseimas
 omit =
     manoseimas/settings/*
     */migrations/*

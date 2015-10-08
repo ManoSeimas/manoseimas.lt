@@ -1,0 +1,280 @@
+# -*- coding: utf-8 -*-
+import logging
+import urllib
+from collections import defaultdict
+
+from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
+from scrapy.contrib.spiders import Rule
+
+from manoseimas.scrapy.spiders import ManoSeimasSpider
+from manoseimas.scrapy.items import Suggestion
+from manoseimas.scrapy import pipelines
+
+
+class SuggestionsSpider(ManoSeimasSpider):
+    """Scrape suggestions from committee resolutions.
+
+    Tip: if you think some data is discarded unnecessarily, run bin/scrapy
+    with --loglevel=INFO
+    """
+
+    name = 'suggestions'
+    allowed_domains = ['lrs.lt']
+
+    # Query parameters:
+    # - 'p_drus' (dokumento rūšis): document type
+    # - 'p_kalb_id' (kalbos identifikatorius): language ID
+    # - 'p_rus' (rušiavimas): sort order
+    # - 'p_gal' (galutinis?): document status
+    start_urls = [
+        'http://www3.lrs.lt/pls/inter3/dokpaieska.rezult_l?' +
+        urllib.urlencode({
+            'p_drus': '146', # Rūšis: Komiteto išvada
+            'p_nuo': '2015-01-01', # XXX: temporary, to speed it up
+            'p_kalb_id': '1', # Kalba: Lietuvių
+            'p_rus': '1', # Rūšiuoti rezultatus pagal: Registravimo datą
+        }),
+    ]
+
+    rules = (
+        # This handles pagination for us.
+        Rule(SgmlLinkExtractor(allow=r'dokpaieska.rezult_l\?')),
+
+        # This handles committee resolutions.
+        Rule(SgmlLinkExtractor(allow=r'dokpaieska.showdoc_l\?p_id=-?\d+.*',
+                               deny=r'p_daug=[1-9]'),
+             'parse_document'),
+    )
+
+    pipelines = (
+##      pipelines.ManoseimasPipeline,  # XXX
+    )
+
+    def parse_document(self, response):
+        tables = response.xpath("//div/table")
+        empties = 0
+        for table in tables:
+            for item in self._parse_table(table, response.url):
+                if not item['submitter_and_date']:
+                    empties += 1
+                    continue
+                yield item
+        if empties:
+            self.log("{n} empty rows discarded at {url}".format(n=empties, url=response.url),
+                     level=logging.WARNING)
+
+    def _parse_table(self, table, url):
+        if not self._is_table_interesting(table, url):
+            return
+        last_item = None
+        indexes = list(self._table_column_indexes(table))
+        rows = self._process_rowspan_colspan(table.xpath('thead/tr|tr')[2:])
+        for row in rows:
+            for item in self._parse_row(row, indexes):
+                if not item['submitter_and_date'] and not item['opinion']:
+                    # sometimes there are blank rows
+                    continue
+                item['source_url'] = url
+                if not item['submitter_and_date'] and last_item:
+                    item['submitter_and_date'] = last_item['submitter_and_date']
+                yield item
+                last_item = item
+
+    def _is_table_interesting(self, table, url):
+        # We expect a table that has the following columns:
+        #   [u'Eil. Nr.',
+        #    u'Pasiūlymo teikėjas, data',
+        #    u'Siūloma keisti',                     # colspan=3
+        #    u'Pasiūlymo turinys',
+        #    u'Komiteto nuomonė',
+        #    u'Argumentai, pagrindžiantys nuomonę']
+        # All of these except "Siūloma keisti" have a rowspan of 2.  The 2nd row
+        # subdivides the "Siūloma keisti" column:
+        #   [u'Str.', u'Str. d.', u'P.']
+        columns = self._parse_table_columns(table)
+        columns2 = self._parse_table_columns(table, 2)
+        n = len(columns)
+        m = len(columns2)
+        if (n, m) == (6, 3):
+            # I think false positives are unlikely, so I'm not checking actual column titles.
+            return True
+        # Here are some of the tables I've seen:
+        # - [n=7] Eil. Nr. | Pasiūlymo teikėjas, data | Siūloma keisti | Pastabos | Pasiūlymo turinys | Komiteto nuomonė | Argumentai, pagrindžiantys nuomonę
+        #   This is basically the right table, except it has one extra column in the middle.
+        #   Example: http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=1076776&p_tr2=2
+        # - [n=6,m=6] Eil. Nr. | Projekto Nr. | Teisės akto projekto pavadinimas | Teikia | Siūlo | Svarstymo mėnuo
+        #   These are in section 6 or 7 (Komiteto sprendimas ir pasiūlymai) and don't interest us.
+        # - [n=6,m=0] Eil. Nr. | Projekto Nr. | Teisės akto projekto pavadinimas | Teikia | Siūlo | Svarstymo mėnuo
+        #   Same as above, but once the table had no heading and only one row of data.
+        # - [n=5] Eil. Nr. | Projekto Nr. | Teisės akto projekto pavadinimas | Teikia | Siūlo
+        #   These are in section 6 or 7 (Komiteto sprendimas ir pasiūlymai) and don't interest us.
+        # - [n=4] Institucija | Turinys | Komiteto nuomonė | Argumentai, pagrindžiantys nuomonę
+        #   These are in section 3 (Vyriausybės ar už pozicijos rengimą atsakingos institucijos parengta ar aprobuota pozicija)
+        # - [n=3] Institucija | Turinys | Komiteto nuomonė
+        #   These are in section 3 (Vyriausybės ar už pozicijos rengimą atsakingos institucijos parengta ar aprobuota pozicija)
+        # - [n=2] Dėl (topic) | (paragraph of text)
+        #   This is in section 8 (Komiteto sprendimas); it has no header row
+        # - [n=1] (paragraph of text)
+        #   Just a paragraph of text, somehow wrapped in a table without a border.
+        # We might want to suppress the warning for known false positives.
+        level = logging.INFO
+        if n == 6 and m in (6, 0):
+            level = logging.DEBUG
+        elif n <= 2:
+            level = logging.DEBUG
+        if len(columns) != 6:
+            self.log(u"Skipping table with wrong number of columns ({n}) at {url}:\n{columns}".format(
+                n=n, url=url, columns=self._format_columns_for_log(columns)), level=level)
+        else:
+            self.log(u"Skipping table with wrong number of columns ({m}) in second row at {url}:\n{columns}".format(
+                m=m, url=url, columns=self._format_columns_for_log(columns2)), level=level)
+        return False
+
+    @classmethod
+    def _parse_table_columns(cls, table, row=1):
+        return [
+            cls._extract_text(col)
+            for col in table.xpath("(thead/tr|tr)[%d]/td" % row)
+        ]
+
+    @classmethod
+    def _table_column_indexes(cls, table, row=1):
+        idx = 0
+        for col in table.xpath("(thead/tr|tr)[%d]/td" % row):
+            yield idx
+            idx += cls._colspan(col)
+
+    @staticmethod
+    def _truncate(s, maxlen=50):
+        if len(s) > maxlen:
+            return s[:maxlen - 3] + '...'
+        else:
+            return s
+
+    @classmethod
+    def _format_columns_for_log(cls, columns):
+        return u' | '.join(map(cls._truncate, columns))
+
+    @staticmethod
+    def _colspan(td):
+        return int((td.xpath('@colspan').extract() or ['1'])[0])
+
+    @staticmethod
+    def _rowspan(td):
+        return int((td.xpath('@rowspan').extract() or ['1'])[0])
+
+    @classmethod
+    def _process_rowspan_colspan(cls, rows):
+        pending = defaultdict(list)
+        for row in rows:
+            output = []
+            for td in row.xpath('td'):
+                while pending[len(output)]:
+                    output.append(pending[len(output)].pop())
+                colspan = cls._colspan(td)
+                rowspan = cls._rowspan(td)
+                for n in range(colspan):
+                    pending[len(output)] += [td] * (rowspan - 1)
+                    output.append(td)
+            while pending[len(output)]:
+                output.append(pending[len(output)].pop())
+            yield output
+
+    @classmethod
+    def _parse_row(cls, row, column_indexes):
+        # Columns:
+        # 0. Eil. Nr.
+        # 1. Pasiūlymo teikėjas, data
+        # 2. Siūloma keisti: Str., Str.d., P.
+        # 3. Pasiūlymo turinys
+        # 4. Komiteto nuomonė
+        # 5. Argumentai, pagrindžiantys nuomonę
+        submitter_and_date = cls._extract_text(row[column_indexes[1]])
+        opinion = cls._extract_text(row[column_indexes[4]])
+        yield Suggestion(
+            submitter_and_date=submitter_and_date, # XXX: parse this!
+            opinion=cls._parse_opinion(opinion),
+        )
+
+    @staticmethod
+    def _parse_submitter(submitter_and_date):
+        # Expect one of:
+        # - ""
+        # - "Submitter YYYY-MM-DD"
+        # - "Submitter, YYYY-MM-DD"
+        # - "Submitter (YYYY-DD-MM)"
+        # - "Submitter ( YYYY-DD-MM )"
+        # - "Submitter ( YYYY- DD-MM)"
+        # - "Submitter (YYYY-MM-DD, raštas Nr. g-YYYY-NNNN)"
+        # - "Submitter (YYYY-MM-DD, nutarimas Nr. NNN)"
+        # - "Submitter YYYY-MM-DD Nr. 1.NN-NN"
+        # - "Submitter, YYYY-MM-DD Nr. g-YYYY-NNNN"
+        # - "Submitter, YYYY-MM-DD Nr. g-YYYY-NNNN"
+        # - "Submitter, YYYY-MM-DD d. Nutarimas Nr. NNN"
+        # - "Submitter, YYYY MM DD Nutarimas Nr. NNN"
+        # - "Submitter, YYYYMMDD (Nr.NNN)"
+        # - "Submitter, YYYY-" (!)
+        # - "Submitter, YYYY-MM" (!)
+        # - "Submitter, YYYY-MM-" (!)
+        # - "SubmitterYYYY-MM-DD" (!)
+        # - "Submitter YYYY-MM-DD nutarimas Nr. NNN"
+        # - "Submitter YYYY m. liepos NN d. išvada Nr. NNN"
+        # - "Submitter (YYYY m. rugpjūčio 19 d. nutarimas Nr. NNN)"
+        # - "Submitter (YYYYm. rugpjūčio 19 d. nutarimas Nr. NNN)"
+        # - "Submitter (YYYY-MM-DD raštas Nr. NS-NNNN) (išrašas)"
+        # - "Submitter YYYY-MM-DD Nr. XIIP-NNNN(N)"
+        # BTW submitter might be hyphenated, for extra fun, e.g.
+        # - "Seimo kanceliarijos Teisės departamentas"
+        # - "Seimo kanceliari-jos Teisės departa-mentas"
+        # and there are other fun possibilities, like
+        # - "Anoniminis"
+        # - "Asociacija ,,Infobalt“"
+        # - "Asociacija „Infobalt“"
+        # - "Asociacija „INFOBALT“"
+        # - "ETD prie TM"
+        # - "Europos teisės departamentas"
+        # - "Europos teisės Departamentas"
+        # - "Europos Teisės departamentas prie TM"
+        # - "Europos Teisės departamentas prie Teisingumo ministerijos"
+        # - "Europos teisės departamentas prie Lietuvos Respublikos teisingumo ministerijos"
+        # And combined goodness:
+        # - "Jurbarko rajono verslininkų organizacija, NNNN-NN-NN Kartu pridėtas NNNN-NN-NN raštas"
+        # - "Jurbarko rajono verslininkų organizacija, NNNN-NN-NN Kartu pridėtas ir NNNN-NN-NN raštas."
+        # - "Huntingtono ligos asociacija, Lietuvos išsėtinės sklerozės sąjunga, Lietuvos asociacija „Gyvastis“, Lietuvos sergančiųjų genetinėmis nervų-raumenų ligomis asociacija „Sraunus\", Lietuvos vaikų vėžio asociacija „Paguoda“, Onkohematologinių ligonių bendrija „Kraujas\", NNNN-NN-NN"
+        # - "Lietuvos Pediatrų draugijos pirmininkas prof. A. Valiulis, Lietuvos vaikų nefrologų draugijos pirmininkė prof. A. Jankauskienė, Lietuvos vaikų gastroenterologų ir mitybos draugijos pirmininkas doc. V. Urbonas, Lietuvos vaikų hematologų draugijos pirmininkė dr. S. Trakymienė, Lietuvos vaikų kardiologų draugijos pirmininkė doc. O. Kinčinienė, Vilniaus krašto pediatrų draugijos pirmininkė doc. R. Vankevičienė, NNNN-NN-NN"
+        # - "Lietuvos Respub-likos specialiųjų tyrimų tarnyba, NNNN-NN-NN antikorup-cinio vertinimo išvada, Nr. N-NN-NNN"
+        # - "LR Seimo Sveikatos reikalų komiteto neetatinė ekspertė Mykolo Romerio universiteto Politikos mokslų instituto profesorė dr. Danguolė Jankauskienė, NNNN-NN-NN"
+        # - "Seimo nariai L. Dmitrijeva V.V. Margevičienė R. Tamašiūnienė J. Vaickienė V. Filipovičienė G. Purvaneckienė J. Varkala R. Baškienė M.A. Pavilionienė A. Matulas NNNN-NN-NN"
+        # - "VšĮ „Psichikos sveikatos perspektyvos“, NNNN.NN.NN VšĮ Žmogaus teisių stebėjimo institutas, NNNN.NN.NN Asociacija „Lietuvos neįgaliųjų forumas“, NNNN.NN.NN VšĮ „Paramos vaikams centras“, NNNN.NN.NN Asociacija „Nacionalinis aktyvių mamų sambūris“, NNNN.NN.NN Žiburio fondas, NNNN.NN.NN LPF SOS vaikų kaimų Lietuvoje draugija, NNNN.NN.NN VšĮ Šeimos santykių institutas, NNNN.NN.NN Visuomeninė organizacija „Gelbėkit vaikus“, NNNN.NN.NN"
+        return submitter_and_date  # XXX: placeholder
+
+    @staticmethod
+    def _parse_opinion(opinion):
+        # Examples:
+        # - ""
+        # - "Pritarti"
+        # - "Pritarti."
+        # - "Atsižvelgti"
+        # - "Nepritarti"
+        # - "Nepritarti."
+        # - "Pritarti iš dalies"
+        # - "Iš dalies pritarti"
+        # - "Nesvarstyti"
+        # - "Nesvarstyta"
+        # - "Spręsti pagrindiniame komitete"
+        # - "Siūlyti spręsti pagrindiniame komitete"
+        # - "Apsispręsti pagrindiniame komitete"
+        # - "Pritarti Pritarti"
+        # - "Pritarti (už-N; prieš-N; susilaikė-N)"
+        # - "Nepritarti (bendru sutarimu – už)"
+        # - "Pritarti. Siūlomos pataisos neprieštarauja Lietuvos Respublikos įsipareigojimams tinkamai tvarkyti atliekas."
+        return opinion.rstrip('.')
+
+    @classmethod
+    def _extract_text(cls, element):
+        return cls._normalize_whitespace(
+            ' '.join(element.xpath('.//text()').extract()))
+
+    @staticmethod
+    def _normalize_whitespace(s):
+        return ' '.join(s.split())
