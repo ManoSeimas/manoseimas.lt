@@ -306,12 +306,12 @@ class ManoSeimasModelPersistPipeline(object):
                 date_of_inclusion=item['date_of_inclusion'],
             )
         )
-        lobbyist.representatives = item.get('representatives')
-        lobbyist.url = item.get('url')
-        lobbyist.company_code = item.get('company_code')
+        lobbyist.representatives = item.get('representatives') or ''
+        lobbyist.url = item.get('url') or ''
+        lobbyist.company_code = item.get('company_code') or ''
         lobbyist.date_of_inclusion = item['date_of_inclusion']
         lobbyist.decision = item['decision']
-        lobbyist.status = item.get('status')
+        lobbyist.status = item.get('status') or ''
         lobbyist.source = item['source_url']
         lobbyist.raw_data = item['raw_data']
         lobbyist.save()
@@ -326,7 +326,7 @@ class ManoSeimasModelPersistPipeline(object):
         lobbyist = self.lobbyist_matcher.get_lobbyist_by_name(item['name'])
         if lobbyist is not None:
             declaration.lobbyist = lobbyist
-        declaration.comments = item.get('comments')
+        declaration.comments = item.get('comments') or ''
         declaration.source = item['source_url']
         declaration.raw_data = item['raw_data']
         declaration.save()
