@@ -9,7 +9,7 @@
     home: /opt/{{ name }}
     path: "{{ home }}/app"
     repo: https://github.com/manoseimas/manoseimas.lt
-    vars: staging
+    vars: production
     git_ref: master
 
   vars_files:
