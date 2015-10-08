@@ -5,8 +5,17 @@ footer
     .ui.page.grid
       .doubling.two.column.row
         .column
-          a(target="_blank" href="http://www.transparency.lt")
-            img(src="{% static 'img/tils-logo-updated.png' %}")
+          .ui.grid.center.aligned
+            .eight.wide.column.vertical-middle
+              a(target="_blank" href="http://www.transparency.lt")
+                img(src="{% static 'img/tils-logo-updated.png' %}")
+            .eight.wide.column.vertical-middle
+              img(src="{% static 'img/eu-logo.png' %}", style="width: 50%")
+          .sixteen.wide.column.row
+            .copyright.
+              Iš dalies finansuojama EK programos „Nusikalstamumo prevencija ir
+              kova su nusikalstamumu“ lėšomis. EK Vidaus reikalų generalinis
+              direktoratas.
         .column
           .ui.grid.center.aligned
             .three.wide.column.display-table-cell.vertical-middle
