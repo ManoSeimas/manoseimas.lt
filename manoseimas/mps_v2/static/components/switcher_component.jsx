@@ -1,7 +1,8 @@
 var Switcher = React.createClass({
   getInitialState: function () {
     return {
-      active_tab: 'mps'
+      active_tab: 'mps',
+      active_subtabs: { 'lobbyists': 'lobbyists'} //{tabname: subtab_name, }
     }
   },
 
@@ -12,8 +13,91 @@ var Switcher = React.createClass({
     }
   },
 
+  setActiveSubtabs: function (tab_name, subtab_name) {
+      /* A callback to switch subtab that can be passed down the hierarchy. */
+      var self = this;
+      self.setState({ active_subtabs: {tab_name: subtab_name} });
+  },
+
+  getSubtabs: function (tab_name) {
+    /* Return subtabs for a given tab. */
+    var subtabs_by_tab = {
+      lobbyists: {
+        default_subtab: 'lobbyists',
+        lobbyists: {
+          row_component: LobbyistRow,
+          endpoint: '/json/fractions',
+          default_key: 'name',
+          default_order: 1,
+          keys: [
+            {
+              key: 'name',
+              title: 'Pavadinimas',
+              explanation: undefined,
+              icon: undefined,
+              order: 1},
+            {
+              key: 'member_count',
+              title: 'Įtakoti įstatmai',
+              explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
+              icon: 'users icon', order: -1},
+            {
+              key: 'avg_vote_percentage',
+              title: 'Užsakovai',
+              explanation: undefined,
+              icon: '', order: -1},
+            {
+              key: 'avg_passed_law_project_ratio',
+              title: 'Įtakojimo sėkmė',
+              explanation: 'Skaičiuojama, kokia dalis iš visų įtakotų teisės aktų projektų buvo priimti.',
+              icon: '', order: -1}
+          ]
+        },
+        proposers: {
+          row_component: undefined,
+          endpoint: undefined,
+          default_key: 'name',
+          default_order: 1,
+          keys: [
+            {
+              key: 'name',
+              title: 'Pavadinimas',
+              explanation: undefined,
+              icon: undefined,
+              order: 1},
+            {
+              key: 'member_count',
+              title: 'Įtakoti įstatmai',
+              explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
+              icon: 'users icon', order: -1},
+            {
+              key: 'avg_vote_percentage',
+              title: 'Teikta pastabų',
+              explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
+              icon: '', order: -1},
+            {
+              key: 'avg_passed_law_project_ratio',
+              title: 'Įtakojimo sėkmė',
+              explanation: 'Skaičiuojama, kokia dalis iš visų teiktų pastabų buvo priimti.',
+              icon: '', order: -1}
+          ]
+        }
+      }
+    };
+    return subtabs_by_tab[tab_name];
+  },
+
+  getSubtab: function (tab_name, subtab_name) {
+    /* Return a subtab subtab_name for tab tab_name. */
+    var self = this;
+    subtabs = self.getSubtabs(tab_name);
+    return (subtab_name ? subtabs[subtab_name] : subtabs[subtabs.default_name]);
+  },
+
   render: function () {
     var self = this;
+    var active_subtabs = self.state.active_subtabs;
+    var lobbyist_subtab = self.getSubtab('lobbyists', active_subtabs['lobbyists'])
     var tabs = {
       fractions: {
         row_component: FractionRow,
@@ -98,33 +182,11 @@ var Switcher = React.createClass({
         name: 'Parlamentarai'
       },
       lobbyists: {
-        row_component: LobbyistRow,
-        endpoint: '/json/fractions',
-        keys: [
-          {
-            key: 'name',
-            title: 'Pavadinimas',
-            explanation: undefined,
-            icon: undefined,
-            order: 1},
-          {
-            key: 'member_count',
-            title: 'Įtakoti įstatmai',
-            explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
-            icon: 'users icon', order: -1},
-          {
-            key: 'avg_vote_percentage',
-            title: 'Užsakovai',
-            explanation: undefined,
-            icon: '', order: -1},
-          {
-            key: 'avg_passed_law_project_ratio',
-            title: 'Įtakojimo sėkmė',
-            explanation: 'Skaičiuojama, kokia dalis iš visų įtakotų teisės aktų projektų buvo priimti.',
-            icon: '', order: -1}
-        ],
-        default_key: 'name',
-        default_order: 1,
+        keys: lobbyist_subtab.keys,
+        row_component: lobbyist_subtab.row_component,
+        endpoint: lobbyist_subtab.endpoint,
+        default_key: lobbyist_subtab.default_key,
+        default_order: lobbyist_subtab.default_order,
         name: 'Lobistai'
       },
     };
