@@ -1,0 +1,24 @@
+# -*- coding: utf-8 -*-
+
+from django.http import JsonResponse
+
+from manoseimas.lobbyists.models import Lobbyist
+
+
+def _lobbyists_dict(lobbyist):
+    return {
+        'name': lobbyist.name,
+        'slug': lobbyist.slug,
+        'url': lobbyist.url,
+        'company_code': lobbyist.company_code,
+        'date_of_inclusion': lobbyist.date_of_inclusion,
+        'law_project_count': 0,
+        'client_count': 1,
+        'avg_statement_count': 0,
+        'avg_discussion_contribution_percentage': 0,
+        'avg_passed_law_project_ratio': 0,
+    }
+
+def lobbyists_json(request):
+    lobbyists = Lobbyist.objects.all()
+    return JsonResponse({'items': map(_lobbyists_dict, lobbyists)})
