@@ -4,6 +4,10 @@ sudo: false
 services:
   - mysql
   - couchdb
+addons:
+  apt:
+    packages:
+      - antiword
 cache:
   pip: true
   ccache: true
