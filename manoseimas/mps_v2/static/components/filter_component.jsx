@@ -9,6 +9,7 @@ var SortableList = React.createClass({
       sort_order: this.props.default_order,
       filter_selected: 'all',
       filter_options: null,
+      subtab_selected: this.props.active_subtab || 'lobbyists',
       loaded: false
     };
   },
@@ -68,20 +69,23 @@ var SortableList = React.createClass({
   },
 
   selectFilter: function(option) {
-    this.setState({filter_selected: option, current_page: 1});
+    this.setState({
+        filter_selected: option,
+        current_page: 1
+    });
     $.scrollTo('.sort-keys', 100, {offset: -50});
   },
 
   render: function() {
+    var show_sidebar = Boolean(this.props.sidebar_filter) | Boolean(this.props.sidebar_subtabs);
     var sortkeys = this.props.keys,
         self = this,
         slice_from = 0,
         slice_to = this.state.current_page*this.state.items_per_page,
         current_page = this.state.current_page,
-        elementListWidth = (this.props.sidebar_filter) ? 14 : 16,
+        elementListWidth = show_sidebar ? 14 : 16,
         elementListWidthClass = num_to_word(elementListWidth),
-        filtered_items = this.state.items,
-        showSidebar;
+        filtered_items = this.state.items;
 
     if (this.props.sidebar_filter) {
       showSidebar = (
@@ -97,6 +101,15 @@ var SortableList = React.createClass({
           return item.fraction_slug === this.state.filter_selected
         }.bind(this))
       }
+    } else if (this.props.sidebar_subtabs) {
+      var subtabs = this.props.sidebar_subtabs;
+      showSidebar = (
+        <SidebarSubtabs options={subtabs.options}
+                        subtab_selected={this.state.subtab_selected}
+                        callback={subtabs.callback}
+                        sticky_context='.filtered-elements' />
+      )
+
     } else {
       showSidebar = null;
     }
@@ -189,6 +202,43 @@ var SidebarFilter = React.createClass({
               } else {
                 var item = <h4>{this.props.options[key].name}</h4>
               }
+
+              return (
+                <a className={'item ' + selected} onClick={this.setSelected.bind(this, key)}>
+                  {item}
+                </a>
+              )
+            }.bind(this))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+});
+
+var SidebarSubtabs = React.createClass({
+  componentDidMount: function() {
+    if (this.props.sticky_context){
+      $('.ui.sticky').sticky({
+        context: this.props.sticky_context,
+        offset: 70
+      });
+    }
+  },
+
+  setSelected: function(key) {
+    this.props.callback('lobbyists', key);
+  },
+
+  render: function() {
+    return (
+      <div className="two wide column">
+        <div className="ui sticky">
+          <div className="sidebar">
+            {Object.keys(this.props.options).map( function(key) {
+              var selected = (this.props.subtab_selected === key) ? 'selected' : '';
+
+              var item = <h4>{this.props.options[key].name}</h4>
 
               return (
                 <a className={'item ' + selected} onClick={this.setSelected.bind(this, key)}>
