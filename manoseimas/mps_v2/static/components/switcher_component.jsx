@@ -1,8 +1,9 @@
 var Switcher = React.createClass({
+
   getInitialState: function () {
     return {
       active_tab: 'mps',
-      active_subtabs: { 'lobbyists': 'lobbyists'} //{tabname: subtab_name, }
+      active_subtabs: { lobbyists: 'lobbyists' } //tabname: subtab_name
     }
   },
 
@@ -14,13 +15,21 @@ var Switcher = React.createClass({
   },
 
   setActiveSubtabs: function (tab_name, subtab_name) {
-      /* A callback to switch subtab that can be passed down the hierarchy. */
+      // A callback to switch subtab that can be passed down the hierarchy.
       var self = this;
-      self.setState({ active_subtabs: {tab_name: subtab_name} });
+      self.setState(function(previousState, currentProps) {
+        var new_subtabs = {};
+        var old_subtabs = previousState.active_subtabs;
+        Object.keys(old_subtabs).map( function(key) {
+          key === tab_name ? val = subtab_name : val = old_subtabs[key];
+          new_subtabs[key] = val;
+        });
+        return {active_subtabs: new_subtabs};
+      });
   },
 
   getSubtabs: function (tab_name) {
-    /* Return subtabs for a given tab. */
+    // Return subtabs for a given tab.
     var subtabs_by_tab = {
       lobbyists: {
         default_subtab: 'lobbyists',
@@ -53,9 +62,9 @@ var Switcher = React.createClass({
               icon: '', order: -1}
           ]
         },
-        proposers: {
-          row_component: undefined,
-          endpoint: undefined,
+        suggester: {
+          row_component: LobbyistRow,
+          endpoint: '/json/fractions',
           default_key: 'name',
           default_order: 1,
           keys: [
@@ -87,11 +96,12 @@ var Switcher = React.createClass({
     return subtabs_by_tab[tab_name];
   },
 
-  getSubtab: function (tab_name, subtab_name) {
-    /* Return a subtab subtab_name for tab tab_name. */
+  getSubtab: function (tab, subtab) {
+    // Return a subtab subtab_name for tab tab_name.
     var self = this;
-    subtabs = self.getSubtabs(tab_name);
-    return (subtab_name ? subtabs[subtab_name] : subtabs[subtabs.default_name]);
+    subtabs = self.getSubtabs(tab);
+    subtab = (subtab.startsWith('suggester') ? 'suggester' : subtab)
+    return (subtab ? subtabs[subtab] : subtabs[subtabs.default_name]);
   },
 
   render: function () {
@@ -187,12 +197,29 @@ var Switcher = React.createClass({
         endpoint: lobbyist_subtab.endpoint,
         default_key: lobbyist_subtab.default_key,
         default_order: lobbyist_subtab.default_order,
+        subtabs: {
+          options: {
+            header: {
+              name: 'Įtakotojai'
+            },
+            lobbyists: {
+              name: 'Lobistai'
+            },
+            suggester_state: {
+              name: 'Valstybė'
+            },
+            suggester_other: {
+              name: 'Kas jie?'
+            }
+          },
+          callback: this.setActiveSubtabs,
+          active_subtab: this.state.active_subtabs.lobbyists
+        },
         name: 'Lobistai'
-      },
+      }
     };
 
     var tab = tabs[this.state.active_tab];
-
     return (
       <div>
         <div className="switcher-component">
@@ -214,7 +241,8 @@ var Switcher = React.createClass({
                         keys={tab.keys}
                         default_key={tab.default_key}
                         default_order={tab.default_order}
-                        sidebar_filter={tab.filter} />
+                        sidebar_filter={tab.filter}
+                        sidebar_subtabs={tab.subtabs}/>
         </div>
       </div>
     )
