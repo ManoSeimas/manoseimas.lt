@@ -76,6 +76,16 @@ var SortableList = React.createClass({
     $.scrollTo('.sort-keys', 100, {offset: -50});
   },
 
+  selectSubtab: function(tab, option) {
+    this.setState({
+        subtab_selected: option,
+        current_page: 1
+    });
+    $.scrollTo('.sort-keys', 100, {offset: -50});
+
+    this.props.sidebar_subtabs.callback(tab, option);
+  },
+
   render: function() {
     var show_sidebar = Boolean(this.props.sidebar_filter) | Boolean(this.props.sidebar_subtabs);
     var sortkeys = this.props.keys,
@@ -106,7 +116,7 @@ var SortableList = React.createClass({
       showSidebar = (
         <SidebarSubtabs options={subtabs.options}
                         subtab_selected={this.state.subtab_selected}
-                        callback={subtabs.callback}
+                        callback={this.selectSubtab}
                         sticky_context='.filtered-elements' />
       )
 
