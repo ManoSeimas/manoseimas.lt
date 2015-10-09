@@ -35,7 +35,7 @@ var Switcher = React.createClass({
         default_subtab: 'lobbyists',
         lobbyists: {
           row_component: LobbyistRow,
-          endpoint: '/json/fractions',
+          endpoint: 'lobbyists/json/lobbyists',
           default_key: 'name',
           default_order: 1,
           keys: [
