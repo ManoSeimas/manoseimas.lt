@@ -36,8 +36,8 @@ var Switcher = React.createClass({
         lobbyists: {
           row_component: LobbyistRow,
           endpoint: 'lobbyists/json/lobbyists',
-          default_key: 'name',
-          default_order: 1,
+          default_key: 'law_project_count',
+          default_order: -1,
           keys: [
             {
               key: 'name',
@@ -46,12 +46,12 @@ var Switcher = React.createClass({
               icon: undefined,
               order: 1},
             {
-              key: 'member_count',
+              key: 'law_project_count',
               title: 'Įtakoti įstatmai',
               explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
               icon: 'users icon', order: -1},
             {
-              key: 'avg_vote_percentage',
+              key: 'client_count',
               title: 'Užsakovai',
               explanation: undefined,
               icon: '', order: -1},
@@ -65,7 +65,7 @@ var Switcher = React.createClass({
         suggester: {
           row_component: SuggesterRow,
           endpoint: '/json/fractions',
-          default_key: 'name',
+          default_key: 'law_projec_count',
           default_order: 1,
           keys: [
             {
@@ -75,12 +75,12 @@ var Switcher = React.createClass({
               icon: undefined,
               order: 1},
             {
-              key: 'member_count',
+              key: 'law_project_count',
               title: 'Įtakoti įstatmai',
               explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
               icon: 'users icon', order: -1},
             {
-              key: 'avg_vote_percentage',
+              key: 'number_of_suggestions',
               title: 'Teikta pastabų',
               explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
               icon: '', order: -1},
