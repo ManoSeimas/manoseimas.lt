@@ -128,7 +128,7 @@ var LobbyistRow = React.createClass({
           </div>
         </div>
         <div className="two wide column">
-          <div className="ui member statistic">
+          <div className="ui project statistic">
             <div className="value">{lobbyist.law_project_count}</div>
             <div className="label">
               {lt_pluralize(lobbyist.law_project_count, 'įstatymas', 'įstatymai', 'įstatymų')}
@@ -136,7 +136,7 @@ var LobbyistRow = React.createClass({
           </div>
         </div>
         <div className="two wide column">
-          <div className="ui voting statistic">
+          <div className="ui client statistic">
             <div className="value">{lobbyist.client_count}</div>
             <div className="label">
               {lt_pluralize(lobbyist.client_count, 'užsakovas', 'užsakovai', 'užsakovų')}
@@ -144,7 +144,7 @@ var LobbyistRow = React.createClass({
           </div>
         </div>
         <div className="two wide column">
-          <div className="ui projects statistic">
+          <div className="ui success statistic">
             <div className="value">{lobbyist.avg_passed_law_project_ratio}%</div>
             <div className="label">priimta projektų</div>
           </div>

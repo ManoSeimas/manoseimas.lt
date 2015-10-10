@@ -14,8 +14,6 @@ def _lobbyists_dict(lobbyist):
         'date_of_inclusion': lobbyist.date_of_inclusion,
         'law_project_count': lobbyist.law_project_count,
         'client_count': lobbyist.client_count,
-        'avg_statement_count': 0,
-        'avg_discussion_contribution_percentage': 0,
         'avg_passed_law_project_ratio': 0,
     }
 
