@@ -29,6 +29,26 @@ class Lobbyist(CrawledItem):
     def __unicode__(self):
         return self.name
 
+    def get_clients(self):
+        clients = []
+        for declaration in self.lobbyistdeclaration_set.all():
+            clients.extend(declaration.clients.all())
+        return clients
+
+    @property
+    def client_count(self):
+        return len(self.get_clients())
+
+    def get_law_projects(self):
+        law_projects = []
+        for client in self.get_clients():
+            law_projects.extend(client.law_projects.all())
+        return law_projects
+
+    @property
+    def law_project_count(self):
+        return len(self.get_law_projects())
+
 
 class LobbyistDeclaration(CrawledItem):
     lobbyist_name = models.CharField(max_length=128)
