@@ -40,7 +40,7 @@ var Switcher = React.createClass({
           default_order: -1,
           keys: [
             {
-              key: 'name',
+              key: 'slug',
               title: 'Pavadinimas',
               explanation: undefined,
               icon: undefined,
@@ -69,7 +69,7 @@ var Switcher = React.createClass({
           default_order: 1,
           keys: [
             {
-              key: 'name',
+              key: 'slug',
               title: 'Pavadinimas',
               explanation: undefined,
               icon: undefined,
