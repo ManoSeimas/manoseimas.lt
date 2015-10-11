@@ -53,6 +53,13 @@
 
 .subtabs {
   @extend .sidebar;
+  .header {
+    @extend .item;
+      font-size: $normal;
+      font-weight: bold;
+      text-align: center;
+      color: $black;
+  }
   .item
     .title {
       font-size: $normal;

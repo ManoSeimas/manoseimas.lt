@@ -247,6 +247,13 @@ var SidebarSubtabs = React.createClass({
         <div className="ui sticky">
           <div className="subtabs">
             {Object.keys(this.props.options).map( function(key) {
+              if (key === 'header') {
+                return(
+                  <div>
+                    <span className="header title">{this.props.options[key].name}</span>
+                  </div>
+                )
+              }
               var selected = (this.props.subtab_selected === key) ? 'selected' : '';
               var item = (
                 <div>
