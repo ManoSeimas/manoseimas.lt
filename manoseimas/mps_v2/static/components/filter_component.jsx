@@ -23,7 +23,8 @@ var SortableList = React.createClass({
       this.setState({
         items: this.innerSort(result.items, this.state.sort_key, this.state.sort_order),
         loaded: true,
-        filter_options: (this.props.sidebar_filter) ? this.props.sidebar_filter.options_func(result.items) : null
+        filter_options: (this.props.sidebar_filter) ? this.props.sidebar_filter.options_func(result.items) : null,
+        subtab_options: (this.props.sidebar_subtabs) ? this.props.sidebar_subtabs.options_func(result.subtab_counts) : null
       });
     }.bind(this))
   },
@@ -114,7 +115,7 @@ var SortableList = React.createClass({
     } else if (this.props.sidebar_subtabs) {
       var subtabs = this.props.sidebar_subtabs;
       showSidebar = (
-        <SidebarSubtabs options={subtabs.options}
+        <SidebarSubtabs options={this.state.subtab_options}
                         subtab_selected={this.state.subtab_selected}
                         callback={this.selectSubtab}
                         sticky_context='.filtered-elements' />
@@ -244,12 +245,15 @@ var SidebarSubtabs = React.createClass({
     return (
       <div className="two wide column">
         <div className="ui sticky">
-          <div className="sidebar">
+          <div className="subtabs">
             {Object.keys(this.props.options).map( function(key) {
               var selected = (this.props.subtab_selected === key) ? 'selected' : '';
-
-              var item = <h4>{this.props.options[key].name}</h4>
-
+              var item = (
+                <div>
+                  <span className="count">{this.props.options[key].count}</span>
+                  <span className="title">{this.props.options[key].name}</span>
+                </div>
+              )
               return (
                 <a className={'item ' + selected} onClick={this.setSelected.bind(this, key)}>
                   {item}

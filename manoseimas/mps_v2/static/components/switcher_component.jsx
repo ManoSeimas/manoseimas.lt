@@ -198,6 +198,30 @@ var Switcher = React.createClass({
         default_key: lobbyist_subtab.default_key,
         default_order: lobbyist_subtab.default_order,
         subtabs: {
+          options_func: function (subtab_counts) {
+            var options = {
+              header: {
+                name: 'Įtakotojai',
+                count: null
+              },
+              lobbyists: {
+                name: 'Lobistai',
+                count: null
+              },
+              suggester_state: {
+                name: 'Valstybė',
+                count: null
+              },
+              suggester_other: {
+                name: 'Kas jie?',
+                count: null
+              }
+            };
+            for (key of Object.keys(subtab_counts)) {
+              options[key].count = subtab_counts[key];
+            };
+            return options
+          },
           options: {
             header: {
               name: 'Įtakotojai'
