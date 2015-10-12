@@ -61,6 +61,10 @@
       color: $black;
       cursor: auto;
   }
+  .header:hover {
+    background-color: $white;
+    border-color: $grayLite;
+  }
   .item
     .title {
       font-size: $normal;
