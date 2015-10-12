@@ -265,3 +265,5 @@ class Suggestion(Item):
     document = Field()
     opinion = Field()
     source_url = Field()
+    source_id = Field()
+    source_index = Field()

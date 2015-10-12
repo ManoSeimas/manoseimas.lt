@@ -634,3 +634,19 @@ class LawProject(CrawledItem):
             )
         )
         return avg.get('avg_passing_time', 0.0)
+
+
+class Suggestion(CrawledItem):
+    source_id = models.CharField(max_length=16, db_index=True)
+    source_index = models.IntegerField()
+
+    submitter = models.CharField(max_length=1024)
+    date = models.DateField(blank=True, null=True)
+    document = models.CharField(max_length=1024, blank=True)
+    opinion = models.CharField(max_length=1024, blank=True)
+
+    class Meta:
+        unique_together = (('source_id', 'source_index'))
+
+    def __unicode__(self):
+        return u'{} ({})'.format(self.submitter, self.opinion)

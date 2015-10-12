@@ -660,12 +660,14 @@ class TestSuggestionsSpider(unittest.TestCase):
                 date=u'2015-10-09',
                 document=u'',
                 opinion=u'Pritarti iš dalies',
-                source_url='http://localhost/test.html',
+                source_url='http://localhost/test.html?p_id=12345',
+                source_id='12345',
+                source_index=0,
             ),
         ])
 
     def check(self, html, expected):
-        response = HtmlResponse('http://localhost/test.html',
+        response = HtmlResponse('http://localhost/test.html?p_id=12345',
                                 body='<body><div>%s</div></body>' % html)
         spider = SuggestionsSpider()
         actual = list(spider.parse_document(response))

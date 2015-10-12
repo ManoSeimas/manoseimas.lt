@@ -49,18 +49,23 @@ class SuggestionsSpider(ManoSeimasSpider):
     )
 
     pipelines = (
-##      pipelines.ManoseimasPipeline,  # XXX
+        pipelines.ManoSeimasModelPersistPipeline,
     )
 
     def parse_document(self, response):
+        source_id = self._get_query_attr(response.url, 'p_id')
         tables = response.xpath("//div/table")
         empties = 0
+        source_index = 0
         for table in tables:
             for item in self._parse_table(table, response.url):
                 if not item['submitter']:
                     empties += 1
                     continue
+                item['source_id'] = source_id
+                item['source_index'] = source_index
                 yield item
+                source_index += 1
         if empties:
             # Examples of documents producing this warning:
             # - http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=487050&p_tr2=2

@@ -11,7 +11,7 @@ import manoseimas.common.utils.words as words_utils
 from manoseimas.scrapy.db import get_db, get_doc, store_doc
 from manoseimas.scrapy.items import (
     Person, StenogramTopic, ProposedLawProjectProposer,
-    Lobbyist, LobbyistDeclaration)
+    Lobbyist, LobbyistDeclaration, Suggestion)
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
 from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
 
@@ -22,6 +22,7 @@ from manoseimas.mps_v2.models import Group, GroupMembership
 from manoseimas.mps_v2.models import Stenogram, StenogramStatement
 from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
 from manoseimas.mps_v2.models import Voting, LawProject
+from manoseimas.mps_v2.models import Suggestion as SuggestionModel
 
 import manoseimas.lobbyists.models as lobbyists_models
 
@@ -343,6 +344,23 @@ class ManoSeimasModelPersistPipeline(object):
                 client.law_projects.create(title=project)
         return item
 
+    @transaction.atomic
+    def process_suggestion(self, item, spider):
+        suggestion, created = SuggestionModel.objects.get_or_create(
+            source_id=item['source_id'],
+            source_index=item['source_index'],
+            defaults={
+                'submitter': item['submitter'],
+            },
+        )
+        suggestion.submitter = item['submitter']
+        suggestion.date = item['date'] or None
+        suggestion.document = item['document']
+        suggestion.opinion = item['opinion']
+        suggestion.source_url = item['source_url']
+        suggestion.save()
+        return item
+
     @check_spider_pipeline
     def process_item(self, item, spider):
         if isinstance(item, Person):
@@ -355,6 +373,8 @@ class ManoSeimasModelPersistPipeline(object):
             return self.process_lobbyist(item, spider)
         elif isinstance(item, LobbyistDeclaration):
             return self.process_lobbyist_declaration(item, spider)
+        elif isinstance(item, Suggestion):
+            return self.process_suggestion(item, spider)
         else:
             return item
 
