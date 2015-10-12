@@ -12,8 +12,13 @@ def lobbyist_list(request):
 def lobbyist_profile(request, lobbyist_slug):
     """A profile view for a lobbyist."""
 
-    context = {
+    profile = {
         'name': 'Name: ' + lobbyist_slug,
+        'slug': lobbyist_slug
+    }
+
+    context = {
+        'profile': profile,
     }
 
     return render(request, 'lobbyist_profile.jade', context)
