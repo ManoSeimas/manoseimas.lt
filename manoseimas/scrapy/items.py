@@ -260,6 +260,8 @@ class LobbyistClient(Item):
 
 
 class Suggestion(Item):
-    submitter_and_date = Field()  # XXX: temporary
+    submitter = Field()
+    date = Field()
+    document = Field()
     opinion = Field()
     source_url = Field()

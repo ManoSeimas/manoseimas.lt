@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 import logging
 import re
 import urllib
@@ -56,7 +57,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         empties = 0
         for table in tables:
             for item in self._parse_table(table, response.url):
-                if not item['submitter_and_date']:
+                if not item['submitter']:
                     empties += 1
                     continue
                 yield item
@@ -82,12 +83,14 @@ class SuggestionsSpider(ManoSeimasSpider):
         rows = self._process_rowspan_colspan(table.xpath('thead/tr|tr')[2:])
         for row in rows:
             for item in self._parse_row(row, indexes):
-                if not item['submitter_and_date'] and not item['opinion']:
+                if not item['submitter'] and not item['opinion']:
                     # sometimes there are blank rows
                     continue
                 item['source_url'] = url
-                if not item['submitter_and_date'] and last_item:
-                    item['submitter_and_date'] = last_item['submitter_and_date']
+                if not item['submitter'] and last_item:
+                    item['submitter'] = last_item['submitter']
+                    item['date'] = last_item['date']
+                    item['document'] = last_item['document']
                 yield item
                 last_item = item
 
@@ -206,12 +209,12 @@ class SuggestionsSpider(ManoSeimasSpider):
             return
         opinion = cls._extract_text(row[column_indexes[4]])
         yield Suggestion(
-            submitter_and_date=submitter_and_date, # XXX: parse this!
-            opinion=cls._parse_opinion(opinion),
+            opinion=cls._clean_opinion(opinion),
+            **cls._parse_submitter(submitter_and_date)
         )
 
-    @staticmethod
-    def _parse_submitter(submitter_and_date):
+    @classmethod
+    def _parse_submitter(cls, submitter_and_date):
         # Expect one of:
         # - ""
         # - "Submitter YYYY-MM-DD"
@@ -265,10 +268,48 @@ class SuggestionsSpider(ManoSeimasSpider):
         # - "Seimo nariai L. Dmitrijeva V.V. Margevičienė R. Tamašiūnienė J. Vaickienė V. Filipovičienė G. Purvaneckienė J. Varkala R. Baškienė M.A. Pavilionienė A. Matulas NNNN-NN-NN"
         # - "VšĮ „Psichikos sveikatos perspektyvos“, NNNN.NN.NN VšĮ Žmogaus teisių stebėjimo institutas, NNNN.NN.NN Asociacija „Lietuvos neįgaliųjų forumas“, NNNN.NN.NN VšĮ „Paramos vaikams centras“, NNNN.NN.NN Asociacija „Nacionalinis aktyvių mamų sambūris“, NNNN.NN.NN Žiburio fondas, NNNN.NN.NN LPF SOS vaikų kaimų Lietuvoje draugija, NNNN.NN.NN VšĮ Šeimos santykių institutas, NNNN.NN.NN Visuomeninė organizacija „Gelbėkit vaikus“, NNNN.NN.NN"
         # - "Teikia: Seimo nariai: Dainius Budrys, Vaidotas Bacevičius, Vytautas Gapšys, Juozas Olekas, Julius Sabatauskas, Erikas Tamašauskas."
-        return submitter_and_date  # XXX: placeholder
+        parts = re.split(r'(\d\d\d\d ?-? ?[01]? ?\d ?-? ?[0-3] ?\d)\b', submitter_and_date, maxsplit=1)
+        submitter = parts[0]
+        date = parts[1] if len(parts) > 1 else ''
+        document = parts[2] if len(parts) > 2 else ''
+        return dict(
+            submitter=cls._clean_submitter(submitter),
+            date=cls._clean_date(date),
+            document=cls._clean_document(document),
+        )
 
     @staticmethod
-    def _parse_opinion(opinion):
+    def _clean_submitter(submitter):
+        return submitter.rstrip('(, ')
+
+    @staticmethod
+    def _clean_date(date):
+        date = date.replace(' ', '')
+        m = re.match(r'(\d\d\d\d)-?(\d?\d)-?(\d\d)', date)
+        if m:
+            try:
+                date = str(datetime.date(*map(int, m.groups())))
+            except ValueError:
+                raise ValueError('bad date: %s' % date)
+        return date
+
+    @staticmethod
+    def _clean_document(document):
+        # "YYYY-MM-DD d. nr. 123"
+        document = re.sub('^ *d[.]', '', document)
+        # leading punctuation and spaces
+        document = re.sub('^[- ;,)]+', '', document)
+        # trailing spaces
+        document = re.sub(' +$', '', document)
+        # YYYY-MM-DD (Nr. NNN)
+        document = re.sub('^[(](.*)[)]$', r'\1', document)
+        # (YYYY-MM-DD Nr.NNN), but leave YYYY-MM-DD Nr. XIIP-NNN(N) alone
+        document = re.sub('^([^()]*(?:[(][^)]*[)][^()]*)*)[)]*$', r'\1', document)
+        # leading and trailing spaces inside the ( )
+        return document.strip()
+
+    @staticmethod
+    def _clean_opinion(opinion):
         # Examples:
         # - ""
         # - "Pritarta"

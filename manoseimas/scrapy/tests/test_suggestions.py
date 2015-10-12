@@ -95,17 +95,23 @@ class TestTableParsing(unittest.TestCase):
             </table>
         ''', [
             Suggestion(
-                submitter_and_date=u'STT (2015-10-09, raštas Nr. g-2015-123)',
+                submitter=u'STT',
+                date=u'2015-10-09',
+                document=u'raštas Nr. g-2015-123',
                 opinion=u'',
                 source_url='http://localhost/test.html',
             ),
             Suggestion(
-                submitter_and_date=u'STT (2015-10-09, raštas Nr. g-2015-123)',
+                submitter=u'STT',
+                date=u'2015-10-09',
+                document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
             ),
             Suggestion(
-                submitter_and_date=u'LR Vyriausybė, 2015-10-09',
+                submitter=u'LR Vyriausybė',
+                date=u'2015-10-09',
+                document=u'',
                 opinion=u'Pritarti iš dalies',
                 source_url='http://localhost/test.html',
             ),
@@ -162,17 +168,23 @@ class TestTableParsing(unittest.TestCase):
             </table>
         ''', [
             Suggestion(
-                submitter_and_date=u'STT (2015-10-09, raštas Nr. g-2015-123)',
+                submitter=u'STT',
+                date=u'2015-10-09',
+                document=u'raštas Nr. g-2015-123',
                 opinion=u'',
                 source_url='http://localhost/test.html',
             ),
             Suggestion(
-                submitter_and_date=u'STT (2015-10-09, raštas Nr. g-2015-123)',
+                submitter=u'STT',
+                date=u'2015-10-09',
+                document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
             ),
             Suggestion(
-                submitter_and_date=u'LR Vyriausybė, 2015-10-09',
+                submitter=u'LR Vyriausybė',
+                date=u'2015-10-09',
+                document=u'',
                 opinion=u'Pritarti iš dalies',
                 source_url='http://localhost/test.html',
             ),
@@ -261,12 +273,77 @@ class TestRowParsing(unittest.TestCase):
 
     def test_parse_submitter(self):
         f = SuggestionsSpider._parse_submitter
-        self.assertEqual(f(u''), u'')
+        self.assertEqual(f(u''),
+                         {'submitter': '',
+                          'date': '',
+                          'document': ''})
         self.assertEqual(f(u'Seimo kanceliarijos Teisės departamentas, 2015-10-09'),
-                         u'Seimo kanceliarijos Teisės departamentas, 2015-10-09')
+                         {'submitter': u'Seimo kanceliarijos Teisės departamentas',
+                          'date': '2015-10-09',
+                          'document': ''})
+        self.assertEqual(f(u'Submitter (2015-10-12)'),
+                         {'submitter': u'Submitter',
+                          'date': '2015-10-12',
+                          'document': ''})
+        self.assertEqual(f(u'Submitter ( 2015-10-12 )'),
+                         {'submitter': u'Submitter',
+                          'date': '2015-10-12',
+                          'document': ''})
+        self.assertEqual(f(u'Submitter ( 2015-10-12, nutarimas Nr. 123)'),
+                         {'submitter': u'Submitter',
+                          'date': '2015-10-12',
+                          'document': u'nutarimas Nr. 123'})
+        self.assertEqual(f(u'Submitter, 2015 10 12 Nutarimas Nr. 42'),
+                         {'submitter': u'Submitter',
+                          'date': '2015-10-12',
+                          'document': 'Nutarimas Nr. 42'})
+        self.assertEqual(f(u'Submitter2015-10-12'),
+                         {'submitter': u'Submitter',
+                          'date': '2015-10-12',
+                          'document': ''})
+        self.assertEqual(f(u'Submitter, 20151012 (Nr.123 )'),
+                         {'submitter': u'Submitter',
+                          'date': '2015-10-12',
+                          'document': 'Nr.123'})
+        self.assertEqual(f(u'Submitter, 2015-10-12 Nr. XIIP-1234(5)'),
+                         {'submitter': u'Submitter',
+                          'date': '2015-10-12',
+                          'document': 'Nr. XIIP-1234(5)'})
+        self.assertEqual(f(u'BFK 2012-12 -12 d.'),
+                         {'submitter': u'BFK',
+                          'date': '2012-12-12',
+                          'document': ''})
+        self.assertEqual(f(u'Submitter 2013 - 09- 02'),
+                         {'submitter': u'Submitter',
+                          'date': '2013-09-02',
+                          'document': ''})
+        self.assertEqual(f(u'Generalinė prokuratūra 2013-1 1-07'),
+                         {'submitter': u'Generalinė prokuratūra',
+                          'date': '2013-11-07',
+                          'document': ''})
+        self.assertEqual(f(u'Lietuvos savivaldybių asociacija 2014-5-29'),
+                         {'submitter': u'Lietuvos savivaldybių asociacija',
+                          'date': '2014-05-29',
+                          'document': ''})
+        self.assertEqual(f(u'Seimo kanceliarijos Teisės departamentas(2013-08-0 2 )'),
+                         {'submitter': u'Seimo kanceliarijos Teisės departamentas',
+                          'date': '2013-08-02',
+                          'document': ''})
 
-    def test_parse_opinion(self):
-        f = SuggestionsSpider._parse_opinion
+    @unittest.skip("Not implemented yet")
+    def test_parse_submitter_unhandled_cases(self):
+        f = SuggestionsSpider._parse_submitter
+        self.assertEqual(f(u'Lietuvos savivaldybių asociacija (Nr. G-2013-10370)'),
+                         {'submitter': u'Lietuvos savivaldybių asociacija',
+                          'date': '',
+                          'document': 'Nr. G-2013-10370'})
+        self.assertEqual(f(u'Seimo kanceliarijos Teisės departamen tas 2013-13-05'),
+                         {'submitter': u'Seimo kanceliarijos Teisės departamen tas',
+                          'date': '',
+                          'document': ' 2013-13-05'})
+
+    def test_clean_opinion(self):
+        f = SuggestionsSpider._clean_opinion
         self.assertEqual(f(u''), u'')
         self.assertEqual(f(u'Pritarti'), u'Pritarti')
         self.assertEqual(f(u'Pritarti.'), u'Pritarti')
@@ -292,7 +369,9 @@ class TestRowParsing(unittest.TestCase):
               <td></td>
             </tr>
         ''', Suggestion(
-            submitter_and_date=u'STT (2015-10-09, raštas Nr. g-2015-123)',
+            submitter=u'STT',
+            date=u'2015-10-09',
+            document=u'raštas Nr. g-2015-123',
             opinion=u'Pritarti',
         ))
 
@@ -533,7 +612,8 @@ class TestSuggestionsSpider(unittest.TestCase):
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(len(items), 1)
-        self.assertEqual(items[0]['submitter_and_date'], u'Seimo kanceliarijos Teisės departamentas, 2015-09-08')
+        self.assertEqual(items[0]['submitter'], u'Seimo kanceliarijos Teisės departamentas')
+        self.assertEqual(items[0]['date'], u'2015-09-08')
         self.assertEqual(items[0]['opinion'], 'Pritarti')
         self.assertEqual(items[0]['source_url'], response.url)
 
@@ -576,7 +656,9 @@ class TestSuggestionsSpider(unittest.TestCase):
             </table>
         ''', [
             Suggestion(
-                submitter_and_date=u'LR Vyriausybė, 2015-10-09',
+                submitter=u'LR Vyriausybė',
+                date=u'2015-10-09',
+                document=u'',
                 opinion=u'Pritarti iš dalies',
                 source_url='http://localhost/test.html',
             ),
