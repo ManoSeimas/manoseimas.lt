@@ -64,7 +64,7 @@ var Switcher = React.createClass({
         },
         suggester: {
           row_component: SuggesterRow,
-          endpoint: '/json/fractions',
+          endpoint: 'lobbyists/json/lobbyists',
           default_key: 'law_projec_count',
           default_order: 1,
           keys: [
