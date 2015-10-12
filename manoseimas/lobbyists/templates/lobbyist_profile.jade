@@ -5,7 +5,7 @@
 // - load lt_pluralize
 
 - block title
-  | {{ name }}
+  | {{ profile.name }}
 
 -block inlinejs
   script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
@@ -25,7 +25,7 @@
     .ui.zero.margin.page.grid
       .twelve.wide.column
         .title
-          h1 {{ name }}
+          h1 {{ profile.name }}
 
 //  #law-projects-component(data-slug="{{profile.slug}}")
 
