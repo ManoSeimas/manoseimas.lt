@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import re
 import urllib
 from collections import defaultdict
 
@@ -30,7 +31,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         'http://www3.lrs.lt/pls/inter3/dokpaieska.rezult_l?' +
         urllib.urlencode({
             'p_drus': '146', # Rūšis: Komiteto išvada
-            'p_nuo': '2015-01-01', # XXX: temporary, to speed it up
+            'p_nuo': '2012-11-16',
             'p_kalb_id': '1', # Kalba: Lietuvių
             'p_rus': '1', # Rūšiuoti rezultatus pagal: Registravimo datą
         }),
@@ -60,6 +61,16 @@ class SuggestionsSpider(ManoSeimasSpider):
                     continue
                 yield item
         if empties:
+            # Examples of documents producing this warning:
+            # - http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=487050&p_tr2=2
+            #   (extra empty row between header and table data)
+            # - http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=467948&p_tr2=2
+            #   http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=444377&p_tr2=2
+            #   http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=444379&p_tr2=2
+            #   (this table was used to specify the suggestions of the
+            #   committee itself, so there are no submitters, obviously)
+            # - http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=467537&p_tr2=2
+            #   (1st suggestion is unattributed)
             self.log("{n} empty rows discarded at {url}".format(n=empties, url=response.url),
                      level=logging.WARNING)
 
@@ -190,6 +201,9 @@ class SuggestionsSpider(ManoSeimasSpider):
         # 4. Komiteto nuomonė
         # 5. Argumentai, pagrindžiantys nuomonę
         submitter_and_date = cls._extract_text(row[column_indexes[1]])
+        if re.match(r'^\d+[.]$', submitter_and_date):
+            # Messed up colspans at http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=456205&p_tr2=2
+            return
         opinion = cls._extract_text(row[column_indexes[4]])
         yield Suggestion(
             submitter_and_date=submitter_and_date, # XXX: parse this!
@@ -237,6 +251,10 @@ class SuggestionsSpider(ManoSeimasSpider):
         # - "Europos Teisės departamentas prie TM"
         # - "Europos Teisės departamentas prie Teisingumo ministerijos"
         # - "Europos teisės departamentas prie Lietuvos Respublikos teisingumo ministerijos"
+        # - "TD"
+        # - "(TD)"
+        # - "Teisės departamentas"
+        # - "Teisės departamen-tas prie Lietuvos Respublikos teisingumo ministerijos"
         # And combined goodness:
         # - "Jurbarko rajono verslininkų organizacija, NNNN-NN-NN Kartu pridėtas NNNN-NN-NN raštas"
         # - "Jurbarko rajono verslininkų organizacija, NNNN-NN-NN Kartu pridėtas ir NNNN-NN-NN raštas."
@@ -246,28 +264,53 @@ class SuggestionsSpider(ManoSeimasSpider):
         # - "LR Seimo Sveikatos reikalų komiteto neetatinė ekspertė Mykolo Romerio universiteto Politikos mokslų instituto profesorė dr. Danguolė Jankauskienė, NNNN-NN-NN"
         # - "Seimo nariai L. Dmitrijeva V.V. Margevičienė R. Tamašiūnienė J. Vaickienė V. Filipovičienė G. Purvaneckienė J. Varkala R. Baškienė M.A. Pavilionienė A. Matulas NNNN-NN-NN"
         # - "VšĮ „Psichikos sveikatos perspektyvos“, NNNN.NN.NN VšĮ Žmogaus teisių stebėjimo institutas, NNNN.NN.NN Asociacija „Lietuvos neįgaliųjų forumas“, NNNN.NN.NN VšĮ „Paramos vaikams centras“, NNNN.NN.NN Asociacija „Nacionalinis aktyvių mamų sambūris“, NNNN.NN.NN Žiburio fondas, NNNN.NN.NN LPF SOS vaikų kaimų Lietuvoje draugija, NNNN.NN.NN VšĮ Šeimos santykių institutas, NNNN.NN.NN Visuomeninė organizacija „Gelbėkit vaikus“, NNNN.NN.NN"
+        # - "Teikia: Seimo nariai: Dainius Budrys, Vaidotas Bacevičius, Vytautas Gapšys, Juozas Olekas, Julius Sabatauskas, Erikas Tamašauskas."
         return submitter_and_date  # XXX: placeholder
 
     @staticmethod
     def _parse_opinion(opinion):
         # Examples:
         # - ""
+        # - "Pritarta"
         # - "Pritarti"
         # - "Pritarti."
+        # - "29. Pritarti"
+        # - "Pritari" [sic]
         # - "Atsižvelgti"
         # - "Nepritarti"
         # - "Nepritarti."
+        # - "Ne-pritarti"
+        # - "Nepri tarti"
+        # - "Nepri-tarti"
         # - "Pritarti iš dalies"
         # - "Iš dalies pritarti"
         # - "Nesvarstyti"
         # - "Nesvarstyta"
         # - "Spręsti pagrindiniame komitete"
         # - "Siūlyti spręsti pagrindiniame komitete"
+        # - "Siūlyti svarstyti pagrindi- niam komitetui"
+        # - "Siūlyti svarstyti pagrindi-niam komitetui"
         # - "Apsispręsti pagrindiniame komitete"
+        # - "Apsispręsti pagrindiniamekomitete"
         # - "Pritarti Pritarti"
         # - "Pritarti (už-N; prieš-N; susilaikė-N)"
         # - "Nepritarti (bendru sutarimu – už)"
         # - "Pritarti. Siūlomos pataisos neprieštarauja Lietuvos Respublikos įsipareigojimams tinkamai tvarkyti atliekas."
+        # - "Atsižvelgti (gauta Vyriausybės nuomonė 2015-02-04)"
+        # - "Atsižvelgti. Pritarti"
+        # - "Iš esmės pritarti"
+        # - "Iš esmės pritarti pataisymui"
+        # - "Iš esmės pritarti Pritarti"
+        # - "Pritarti dėl asmens informavimo"
+        # - "Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti Pritarti iš dalies Nepritarti Atsižvelgti Pritarti"
+        # - "Pritarti Pritarti Pritarti iš dalies Pritarti Pritarti. Atsižvelgti Atsižvelgti pagr. Komitetui, tačiau nestabdyti projekto XIIP- 2328 svarstymo ir priėmimo proceso Seime"
+        # - "2014-03-18 d. Seimo plenarinio posėdžio metu nebuvo pritarta pasiūlymui prašyti Vyriausybės išvadų dėl įstatymo projekto XIIP-1539"
+        # - "Su nuomone susipažinta"
+        # - "Žr. TTK 2014 04 16 išvadą"
+        # - ". Pritarti Pritarti iš dalies Pritarti"
+        # - "Pritarti \\ Pritarti"
+        # - "???"
+        # - "`"
         return opinion.rstrip('.')
 
     @classmethod
