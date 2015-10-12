@@ -290,7 +290,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             try:
                 date = str(datetime.date(*map(int, m.groups())))
             except ValueError:
-                raise ValueError('bad date: %s' % date)
+                # TODO: log
+                return ''
         return date
 
     @staticmethod
