@@ -1,0 +1,31 @@
+- extends "new_base.jade"
+- load static from staticfiles
+// - load nodeurl from sboard
+- load compress from compress
+// - load lt_pluralize
+
+- block title
+  | {{ name }}
+
+-block inlinejs
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
+  script(src="{% static 'js/jquery.scrollTo-1.4.3.1-min.js' %}")
+  - compress js
+    script(src="{% static 'coffee/statements.coffee' %}", type="text/coffeescript", charset="utf-8")
+    script(src="{% static 'components/react_paginator.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/react_loader.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/law_projects_component.jsx' %}", type="text/jsx", charset="utf-8")
+
+- block header
+  - include "snippets/header_bootstrap.jade"
+  - include "header_scrooled.jade"
+
+- block middle
+  .photo-box.parliamentarian
+    .ui.zero.margin.page.grid
+      .twelve.wide.column
+        .title
+          h1 {{ name }}
+
+//  #law-projects-component(data-slug="{{profile.slug}}")
+
