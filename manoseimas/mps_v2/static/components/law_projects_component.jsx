@@ -5,7 +5,7 @@ var LawProjects = React.createClass({
       current_page: 1,
       items_per_page: 15,
       show_only_selected: false,
-      app: this.props.app ? this.props.app : 'default_app',
+      source: this.props.source ? this.props.source : 'default_source',
       loaded: false
     }
   },
@@ -33,10 +33,10 @@ var LawProjects = React.createClass({
     });
   },
 
-  getColumns: function(app) {
-    // Colums data structure by app name.
+  getColumns: function(source) {
+    // Colums data structure by source name.
     var columns = {
-      default_app: {
+      default_source: {
         number: {
           title: 'Projekto numeris',
           func: function (item) {
@@ -60,11 +60,25 @@ var LawProjects = React.createClass({
         client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
       }
     }
-    return columns[app];
+    return columns[source];
+  },
+
+  showPassedOnlyElement: function(source) {
+    if (source === 'lobbyists') {
+      return('');
+    }
+    return (
+      <div className="eight wide right aligned column">
+        <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
+          <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
+          <label>Rodyti tik priimtus projektus</label>
+        </div>
+      </div>
+    );
   },
 
   render: function() {
-    var columns = this.getColumns(this.state.app);
+    var columns = this.getColumns(this.state.source);
 
     var projects = this.state.projects;
     if (this.state.show_only_selected) {
@@ -83,13 +97,7 @@ var LawProjects = React.createClass({
           <div className="eight wide column">
             <h2 className="title">Teisės aktai</h2>
           </div>
-          <div className="eight wide right aligned column">
-            <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
-              <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
-              <label>Rodyti tik priimtus projektus</label>
-            </div>
-          </div>
-
+          { this.showPassedOnlyElement(this.state.source) }
           <Loader loaded={this.state.loaded}>
             <div className="ui zero margin grid">
               <SemanticTable columns={columns}
@@ -139,11 +147,11 @@ var SemanticTable = React.createClass({
 
 
 var data_slug = $('#law-projects-component').attr("data-slug");
-var app_prefix = $('#law-projects-component').attr("app-prefix");
-var prefix = ( app_prefix ? ('/' + app_prefix) : '' );
+var source_prefix = $('#law-projects-component').attr("source-prefix");
+var prefix = ( source_prefix ? ('/' + source_prefix) : '' );
 var data_url = prefix + '/json/law_projects/' + data_slug;
 
 React.render(
-  <LawProjects data_url={data_url} app={app_prefix} />,
+  <LawProjects data_url={data_url} source={source_prefix} />,
   document.getElementById('law-projects-component')
 );
