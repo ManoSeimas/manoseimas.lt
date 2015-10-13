@@ -12,6 +12,7 @@ from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
 from manoseimas.utils import round
 
 from .statements import _build_discussion_context
+from .utils import is_state_actor
 
 
 def mp_discussion_json(request, statement_id):
@@ -134,5 +135,6 @@ def suggesters_json(request):
     suggesters = [{
         'title': item['submitter'],
         'proposal_count': item['id__count'],
+        'state_actor': is_state_actor(item['submitter']),
     } for item in qs]
     return JsonResponse({'items': suggesters})
