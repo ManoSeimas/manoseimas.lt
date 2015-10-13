@@ -257,3 +257,13 @@ class LobbyistDeclaration(Item):
 class LobbyistClient(Item):
     client = Field()
     law_projects = Field(output_processor=processor.Identity())
+
+
+class Suggestion(Item):
+    submitter = Field()
+    date = Field()
+    document = Field()
+    opinion = Field()
+    source_url = Field()
+    source_id = Field()
+    source_index = Field()
