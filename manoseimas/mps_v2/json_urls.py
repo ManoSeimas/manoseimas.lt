@@ -13,4 +13,5 @@ urlpatterns = patterns(
         views.law_projects_json, name='law_projects_json'),
     url(r'^discussion/(?P<statement_id>\d+)/?$',
         views.mp_discussion_json, name='mp_discussion_json'),
+    url(r'^suggesters/?$', views.suggesters_json, name='suggesters_json'),
 )

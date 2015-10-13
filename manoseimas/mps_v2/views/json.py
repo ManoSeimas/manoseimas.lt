@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from django.db.models import Count
 
 from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
-                                      LawProject)
+                                      LawProject, Suggestion)
 from manoseimas.utils import round
 
 from .statements import _build_discussion_context
@@ -127,3 +127,12 @@ def law_projects_json(request, mp_slug):
     } for project in project_qs]
 
     return JsonResponse({'items': law_projects})
+
+
+def suggesters_json(request):
+    qs = Suggestion.objects.values('submitter').annotate(Count('id'))
+    suggesters = [{
+        'title': item['submitter'],
+        'proposal_count': item['id__count'],
+    } for item in qs]
+    return JsonResponse({'items': suggesters})
