@@ -12,8 +12,13 @@ def lobbyist_list(request):
 def lobbyist_profile(request, lobbyist_slug):
     """A profile view for a lobbyist."""
 
+    try:
+        lobbyist = Lobbyist.objects.get(slug=lobbyist_slug)
+    except Lobbyist.DoesNotExist:
+        lobbyist = None
+
     profile = {
-        'name': 'Name: ' + lobbyist_slug,
+        'name': lobbyist.name if lobbyist else 'Lobistas',
         'slug': lobbyist_slug
     }
 
