@@ -33,34 +33,38 @@ var LawProjects = React.createClass({
     });
   },
 
-  getColumns: function(source) {
-    // Colums data structure by source name.
-    var columns = {
+  tableConfig: function(source) {
+    // Table configuration for source.
+    var config = {
       default_source: {
-        number: {
-          title: 'Projekto numeris',
-          func: function (item) {
-            return <a href={item['url']} target='_blank'>{item['number']}</a>
-          }
-        },
-        title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
-        date: {title: 'Teikimo data', className: 'date center aligned', itemClassName: 'center aligned', func: null},
-        proposer_count: {title: 'Viso teikėjų', className: 'center aligned', itemClassName: 'center aligned', func: null},
-        date_passed: {
-          title: 'Stadija',
-          className: 'center aligned',
-          itemClassName: 'center aligned',
-          func: function (item) {
-            return (item['date_passed']) ? 'Priimta '+item['date_passed'] : 'Nepriimta'
+        columns: {
+          number: {
+            title: 'Projekto numeris',
+            func: function (item) {
+              return <a href={item['url']} target='_blank'>{item['number']}</a>
+            }
+          },
+          title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+          date: {title: 'Teikimo data', className: 'date center aligned', itemClassName: 'center aligned', func: null},
+          proposer_count: {title: 'Viso teikėjų', className: 'center aligned', itemClassName: 'center aligned', func: null},
+          date_passed: {
+            title: 'Stadija',
+            className: 'center aligned',
+            itemClassName: 'center aligned',
+            func: function (item) {
+              return (item['date_passed']) ? 'Priimta '+item['date_passed'] : 'Nepriimta'
+            }
           }
         }
       },
       lobbyists: {
-        title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
-        client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
+        columns: {
+          title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+          client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
+        }
       }
     }
-    return columns[source];
+    return config[source];
   },
 
   showPassedOnlyElement: function(source) {
@@ -78,7 +82,7 @@ var LawProjects = React.createClass({
   },
 
   render: function() {
-    var columns = this.getColumns(this.state.source);
+    var columns = this.tableConfig(this.state.source).columns;
 
     var projects = this.state.projects;
     if (this.state.show_only_selected) {
