@@ -5,6 +5,7 @@ var LawProjects = React.createClass({
       current_page: 1,
       items_per_page: 15,
       show_only_selected: false,
+      app: this.props.app ? this.props.app : 'default_app',
       loaded: false
     }
   },
@@ -32,26 +33,38 @@ var LawProjects = React.createClass({
     });
   },
 
-  render: function() {
+  getColumns: function(app) {
+    // Colums data structure by app name.
     var columns = {
-      number: {
-        title: 'Projekto numeris',
-        func: function (item) {
-          return <a href={item['url']} target='_blank'>{item['number']}</a>
+      default_app: {
+        number: {
+          title: 'Projekto numeris',
+          func: function (item) {
+            return <a href={item['url']} target='_blank'>{item['number']}</a>
+          }
+        },
+        title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+        date: {title: 'Teikimo data', className: 'date center aligned', itemClassName: 'center aligned', func: null},
+        proposer_count: {title: 'Viso teikėjų', className: 'center aligned', itemClassName: 'center aligned', func: null},
+        date_passed: {
+          title: 'Stadija',
+          className: 'center aligned',
+          itemClassName: 'center aligned',
+          func: function (item) {
+            return (item['date_passed']) ? 'Priimta '+item['date_passed'] : 'Nepriimta'
+          }
         }
       },
-      title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
-      date: {title: 'Teikimo data', className: 'date center aligned', itemClassName: 'center aligned', func: null},
-      proposer_count: {title: 'Viso teikėjų', className: 'center aligned', itemClassName: 'center aligned', func: null},
-      date_passed: {
-        title: 'Stadija',
-        className: 'center aligned',
-        itemClassName: 'center aligned',
-        func: function (item) {
-          return (item['date_passed']) ? 'Priimta '+item['date_passed'] : 'Nepriimta'
-        }
-      },
+      lobbyists: {
+        title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+        client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
+      }
     }
+    return columns[app];
+  },
+
+  render: function() {
+    var columns = this.getColumns(this.state.app);
 
     var projects = this.state.projects;
     if (this.state.show_only_selected) {
@@ -126,11 +139,11 @@ var SemanticTable = React.createClass({
 
 
 var data_slug = $('#law-projects-component').attr("data-slug");
-var prefix = $('#law-projects-component').attr("app-prefix");
-prefix = (prefix ? ('/' + prefix) : '');
+var app_prefix = $('#law-projects-component').attr("app-prefix");
+var prefix = ( app_prefix ? ('/' + app_prefix) : '' );
 var data_url = prefix + '/json/law_projects/' + data_slug;
 
 React.render(
-  <LawProjects data_url={data_url} />,
+  <LawProjects data_url={data_url} app={app_prefix} />,
   document.getElementById('law-projects-component')
 );
