@@ -125,7 +125,10 @@ var SemanticTable = React.createClass({
 });
 
 
-var data_url = '/json/law_projects/' + $('#law-projects-component').attr("data-slug");
+var data_slug = $('#law-projects-component').attr("data-slug");
+var prefix = $('#law-projects-component').attr("app-prefix");
+prefix = (prefix ? ('/' + prefix) : '');
+var data_url = prefix + '/json/law_projects/' + data_slug;
 
 React.render(
   <LawProjects data_url={data_url} />,
