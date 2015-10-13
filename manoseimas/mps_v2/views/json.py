@@ -9,10 +9,10 @@ from django.db.models import Count
 
 from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
                                       LawProject, Suggestion)
+from manoseimas.mps_v2.utils import is_state_actor
 from manoseimas.utils import round
 
 from .statements import _build_discussion_context
-from .utils import is_state_actor
 
 
 def mp_discussion_json(request, statement_id):
