@@ -37,6 +37,8 @@ var LawProjects = React.createClass({
     // Table configuration for source.
     var config = {
       default_source: {
+        sort_key: 'date',
+        sort_order: -1,
         columns: {
           number: {
             title: 'Projekto numeris',
@@ -58,6 +60,8 @@ var LawProjects = React.createClass({
         }
       },
       lobbyists: {
+        sort_key: 'client',
+        sort_order: -1,
         columns: {
           title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
           client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
@@ -81,10 +85,25 @@ var LawProjects = React.createClass({
     );
   },
 
-  render: function() {
-    var columns = this.tableConfig(this.state.source).columns;
+  innerSort: function(items, key, order) {
+    return items.sort(function (a, b) {
+      if (a[key] < b[key]) {
+        return -order;
+      } else if (a[key] > b[key]) {
+        return order;
+      } else {
+        return 0
+      }
+    });
+  },
 
-    var projects = this.state.projects;
+  render: function() {
+    var table = this.tableConfig(this.state.source);
+    var columns = table.columns;
+    var projects = this.innerSort(this.state.projects,
+                                  table.sort_key,
+                                  table.sort_order);
+
     if (this.state.show_only_selected) {
       projects = projects.filter(function(item) {
         return item.date_passed
