@@ -54,11 +54,6 @@ var Switcher = React.createClass({
               key: 'client_count',
               title: 'Užsakovai',
               explanation: undefined,
-              icon: '', order: -1},
-            {
-              key: 'avg_passed_law_project_ratio',
-              title: 'Poveikio sėkmė',
-              explanation: 'Skaičiuojama, kokia dalis iš visų paveiktų teisės aktų projektų buvo priimti.',
               icon: '', order: -1}
           ]
         },

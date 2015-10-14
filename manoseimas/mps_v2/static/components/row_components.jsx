@@ -143,12 +143,6 @@ var LobbyistRow = React.createClass({
             </div>
           </div>
         </div>
-        <div className="two wide column">
-          <div className="ui success statistic">
-            <div className="value">{lobbyist.avg_passed_law_project_ratio}%</div>
-            <div className="label">priimta projektų</div>
-          </div>
-        </div>
       </div>
     )
   }
