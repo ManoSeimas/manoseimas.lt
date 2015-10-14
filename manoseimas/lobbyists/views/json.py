@@ -37,6 +37,9 @@ def law_projects_json(request, lobbyist_slug):
     return JsonResponse({'items': map(_law_project_dict, projects)})
 
 
-_item_counts = {'lobbyists': Lobbyist.objects.count(),
-                'suggester_state': 111,
-                'suggester_other': 7777}
+def lobbyist_count():
+    return Lobbyist.objects.count()
+
+_item_counts = {'lobbyists': lobbyist_count(),
+                'suggester_state': 111,  # Placeholder
+                'suggester_other': 7777} # Placeholder
