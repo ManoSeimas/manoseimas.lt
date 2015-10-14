@@ -135,3 +135,10 @@
     }
   }
 }
+
+.photo-box.lobbyist {
+  @extend .photo-box.single-title;
+  background: url(#{$staticRoot}/img/seimas_door.jpg);
+  background-position: top;
+  min-height: 16em;
+}

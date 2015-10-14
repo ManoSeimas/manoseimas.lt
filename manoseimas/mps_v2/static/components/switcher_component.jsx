@@ -1,7 +1,9 @@
 var Switcher = React.createClass({
+
   getInitialState: function () {
     return {
-      active_tab: 'mps'
+      active_tab: 'mps',
+      active_subtabs: { lobbyists: 'lobbyists' } //tabname: subtab_name
     }
   },
 
@@ -12,8 +14,100 @@ var Switcher = React.createClass({
     }
   },
 
+  setActiveSubtabs: function (tab_name, subtab_name) {
+      // A callback to switch subtab that can be passed down the hierarchy.
+      var self = this;
+      self.setState(function(previousState, currentProps) {
+        var new_subtabs = {};
+        var old_subtabs = previousState.active_subtabs;
+        Object.keys(old_subtabs).map( function(key) {
+          key === tab_name ? val = subtab_name : val = old_subtabs[key];
+          new_subtabs[key] = val;
+        });
+        return {active_subtabs: new_subtabs};
+      });
+  },
+
+  getSubtabs: function (tab_name) {
+    // Return subtabs for a given tab.
+    var subtabs_by_tab = {
+      lobbyists: {
+        default_subtab: 'lobbyists',
+        lobbyists: {
+          row_component: LobbyistRow,
+          endpoint: 'lobbyists/json/lobbyists',
+          default_key: 'law_project_count',
+          default_order: -1,
+          keys: [
+            {
+              key: 'slug',
+              title: 'Pavadinimas',
+              explanation: undefined,
+              icon: undefined,
+              order: 1},
+            {
+              key: 'law_project_count',
+              title: 'Paveikti įstatymai',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
+              icon: 'users icon', order: -1},
+            {
+              key: 'client_count',
+              title: 'Užsakovai',
+              explanation: undefined,
+              icon: '', order: -1},
+            {
+              key: 'avg_passed_law_project_ratio',
+              title: 'Poveikio sėkmė',
+              explanation: 'Skaičiuojama, kokia dalis iš visų paveiktų teisės aktų projektų buvo priimti.',
+              icon: '', order: -1}
+          ]
+        },
+        suggester: {
+          row_component: SuggesterRow,
+          endpoint: 'lobbyists/json/lobbyists',
+          default_key: 'law_project_count',
+          default_order: 1,
+          keys: [
+            {
+              key: 'slug',
+              title: 'Pavadinimas',
+              explanation: undefined,
+              icon: undefined,
+              order: 1},
+            {
+              key: 'law_project_count',
+              title: 'Paveikti įstatmai',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
+              icon: 'users icon', order: -1},
+            {
+              key: 'number_of_suggestions',
+              title: 'Teikta pastabų',
+              explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
+              icon: '', order: -1},
+            {
+              key: 'avg_passed_law_project_ratio',
+              title: 'Poveikio sėkmė',
+              explanation: 'Skaičiuojama, kokia dalis iš visų teiktų pastabų buvo priimti.',
+              icon: '', order: -1}
+          ]
+        }
+      }
+    };
+    return subtabs_by_tab[tab_name];
+  },
+
+  getSubtab: function (tab, subtab) {
+    // Return a subtab subtab for tab tab.
+    var self = this;
+    subtabs = self.getSubtabs(tab);
+    subtab = (subtab.startsWith('suggester') ? 'suggester' : subtab)
+    return (subtab ? subtabs[subtab] : subtabs[subtabs.default_name]);
+  },
+
   render: function () {
     var self = this;
+    var active_subtabs = self.state.active_subtabs;
+    var lobbyist_subtab = self.getSubtab('lobbyists', active_subtabs['lobbyists'])
     var tabs = {
       fractions: {
         row_component: FractionRow,
@@ -96,11 +190,46 @@ var Switcher = React.createClass({
           }
         },
         name: 'Parlamentarai'
+      },
+      lobbyists: {
+        keys: lobbyist_subtab.keys,
+        row_component: lobbyist_subtab.row_component,
+        endpoint: lobbyist_subtab.endpoint,
+        default_key: lobbyist_subtab.default_key,
+        default_order: lobbyist_subtab.default_order,
+        subtabs: {
+          options_func: function (subtab_counts) {
+            var options = {
+              header: {
+                name: 'Daro įtaką',
+                count: null
+              },
+              lobbyists: {
+                name: 'Lobistai',
+                count: null
+              },
+              suggester_state: {
+                name: 'Valstybė',
+                count: null
+              },
+              suggester_other: {
+                name: 'Kiti',
+                count: null
+              }
+            };
+            for (key of Object.keys(subtab_counts)) {
+              options[key].count = subtab_counts[key];
+            };
+            return options
+          },
+          callback: this.setActiveSubtabs,
+          active_subtab: this.state.active_subtabs.lobbyists
+        },
+        name: 'Lobistai'
       }
     };
 
     var tab = tabs[this.state.active_tab];
-
     return (
       <div>
         <div className="switcher-component">
@@ -122,7 +251,8 @@ var Switcher = React.createClass({
                         keys={tab.keys}
                         default_key={tab.default_key}
                         default_order={tab.default_order}
-                        sidebar_filter={tab.filter} />
+                        sidebar_filter={tab.filter}
+                        sidebar_subtabs={tab.subtabs}/>
         </div>
       </div>
     )
