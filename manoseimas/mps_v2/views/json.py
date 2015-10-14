@@ -151,9 +151,9 @@ def _get_suggesters_other():
 def suggesters_json(request):
     state_actor_filter = request.GET.get('state_actor', '').lower()
     if state_actor_filter in ('0', 'false', 'no'):
-        suggesters = _get_suggesters_state()
-    elif state_actor_filter in ('1', 'true', 'yes'):
         suggesters = _get_suggesters_other()
+    elif state_actor_filter in ('1', 'true', 'yes'):
+        suggesters = _get_suggesters_state()
     else:
         suggesters = _get_suggesters()
     return JsonResponse({'items': suggesters,
