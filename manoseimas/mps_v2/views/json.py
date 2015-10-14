@@ -131,10 +131,15 @@ def law_projects_json(request, mp_slug):
 
 
 def suggesters_json(request):
+    state_actor_filter = request.GET.get('state_actor', '').lower()
     qs = Suggestion.objects.values('submitter').annotate(Count('id'))
     suggesters = [{
         'title': item['submitter'],
         'proposal_count': item['id__count'],
         'state_actor': is_state_actor(item['submitter']),
     } for item in qs]
+    if state_actor_filter in ('0', 'false', 'no'):
+        suggesters = [item for item in suggesters if not item['state_actor']]
+    elif state_actor_filter in ('1', 'true', 'yes'):
+        suggesters = [item for item in suggesters if item['state_actor']]
     return JsonResponse({'items': suggesters})
