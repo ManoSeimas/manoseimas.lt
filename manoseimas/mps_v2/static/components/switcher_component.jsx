@@ -97,7 +97,7 @@ var Switcher = React.createClass({
   },
 
   getSubtab: function (tab, subtab) {
-    // Return a subtab subtab_name for tab tab_name.
+    // Return a subtab subtab for tab tab.
     var self = this;
     subtabs = self.getSubtabs(tab);
     subtab = (subtab.startsWith('suggester') ? 'suggester' : subtab)
