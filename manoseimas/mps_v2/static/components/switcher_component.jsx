@@ -222,20 +222,6 @@ var Switcher = React.createClass({
             };
             return options
           },
-          options: {
-            header: {
-              name: 'Daro'
-            },
-            lobbyists: {
-              name: 'Lobistai'
-            },
-            suggester_state: {
-              name: 'Valstybė'
-            },
-            suggester_other: {
-              name: 'Kas jie?'
-            }
-          },
           callback: this.setActiveSubtabs,
           active_subtab: this.state.active_subtabs.lobbyists
         },
