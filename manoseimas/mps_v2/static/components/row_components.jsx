@@ -175,12 +175,6 @@ var SuggesterRow = React.createClass({
             <div className="label">pastabų</div>
           </div>
         </div>
-        <div className="two wide column">
-          <div className="ui projects statistic">
-            <div className="value">{fraction.avg_passed_law_project_ratio}%</div>
-            <div className="label">priimta projektų</div>
-          </div>
-        </div>
       </div>
     )
   }

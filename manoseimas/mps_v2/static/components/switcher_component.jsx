@@ -78,11 +78,6 @@ var Switcher = React.createClass({
               key: 'number_of_suggestions',
               title: 'Teikta pastabų',
               explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
-              icon: '', order: -1},
-            {
-              key: 'avg_passed_law_project_ratio',
-              title: 'Poveikio sėkmė',
-              explanation: 'Skaičiuojama, kokia dalis iš visų teiktų pastabų buvo priimti.',
               icon: '', order: -1}
           ]
         }
