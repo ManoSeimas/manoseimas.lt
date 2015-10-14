@@ -31,7 +31,7 @@ class SuggestionsSpider(ManoSeimasSpider):
     start_urls = [
         'http://www3.lrs.lt/pls/inter3/dokpaieska.rezult_l?' +
         urllib.urlencode({
-            'p_drus': '146', # Rūšis: Komiteto išvada
+            'p_drus': '290', # Rūšis: Pagrindinio komiteto išvada
             'p_nuo': '2012-11-16',
             'p_kalb_id': '1', # Kalba: Lietuvių
             'p_rus': '1', # Rūšiuoti rezultatus pagal: Registravimo datą
@@ -84,7 +84,11 @@ class SuggestionsSpider(ManoSeimasSpider):
         if not self._is_table_interesting(table, url):
             return
         last_item = None
-        indexes = list(self._table_column_indexes(table))
+        heuristic = 'left'
+        if '491388' in url:
+            # http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=491388&p_tr2=2
+            heuristic = 'right'
+        indexes = list(self._table_column_indexes(table, heuristic=heuristic))
         rows = self._process_rowspan_colspan(table.xpath('thead/tr|tr')[2:])
         for row in rows:
             for item in self._parse_row(row, indexes):
@@ -157,11 +161,22 @@ class SuggestionsSpider(ManoSeimasSpider):
         ]
 
     @classmethod
-    def _table_column_indexes(cls, table, row=1):
+    def _table_column_bounds(cls, table, row=1):
         idx = 0
         for col in table.xpath("(thead/tr|tr)[%d]/td" % row):
             yield idx
             idx += cls._colspan(col)
+        yield idx
+
+    @classmethod
+    def _table_column_indexes(cls, table, row=1, heuristic='middle'):
+        bounds = list(cls._table_column_bounds(table, row=row))
+        if heuristic == 'middle':
+            return [(low + high) // 2 for (low, high) in zip(bounds, bounds[1:])]
+        elif heuristic == 'right':
+            return [(high - 1) for (low, high) in zip(bounds, bounds[1:])]
+        else:
+            return [low for (low, high) in zip(bounds, bounds[1:])]
 
     @staticmethod
     def _truncate(s, maxlen=50):
@@ -209,9 +224,6 @@ class SuggestionsSpider(ManoSeimasSpider):
         # 4. Komiteto nuomonė
         # 5. Argumentai, pagrindžiantys nuomonę
         submitter_and_date = cls._extract_text(row[column_indexes[1]])
-        if re.match(r'^\d+[.]$', submitter_and_date):
-            # Messed up colspans at http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=456205&p_tr2=2
-            return
         opinion = cls._extract_text(row[column_indexes[4]])
         yield Suggestion(
             opinion=cls._clean_opinion(opinion),
