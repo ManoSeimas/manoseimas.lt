@@ -96,7 +96,8 @@ var SortableList = React.createClass({
         current_page = this.state.current_page,
         elementListWidth = show_sidebar ? 14 : 16,
         elementListWidthClass = num_to_word(elementListWidth),
-        filtered_items = this.state.items;
+        filtered_items = this.state.items,
+        showSidebar;
 
     if (this.props.sidebar_filter) {
       showSidebar = (
