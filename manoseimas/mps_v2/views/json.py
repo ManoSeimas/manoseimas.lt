@@ -130,26 +130,41 @@ def law_projects_json(request, mp_slug):
     return JsonResponse({'items': law_projects})
 
 
-def suggesters_json(request):
-    state_actor_filter = request.GET.get('state_actor', '').lower()
+#TODO: should this be a model method?
+def _get_suggesters():
     qs = Suggestion.objects.values('submitter').annotate(Count('id'))
     suggesters = [{
         'title': item['submitter'],
         'proposal_count': item['id__count'],
         'state_actor': is_state_actor(item['submitter']),
     } for item in qs]
+    return suggesters
+
+#TODO: should this be a model method?
+def _get_suggesters_state():
+    return [item for item in _get_suggesters() if item['state_actor']]
+
+#TODO: should this be a model method?
+def _get_suggesters_other():
+    return [item for item in _get_suggesters() if not item['state_actor']]
+
+def suggesters_json(request):
+    state_actor_filter = request.GET.get('state_actor', '').lower()
     if state_actor_filter in ('0', 'false', 'no'):
-        suggesters = [item for item in suggesters if not item['state_actor']]
+        suggesters = _get_suggesters_state()
     elif state_actor_filter in ('1', 'true', 'yes'):
-        suggesters = [item for item in suggesters if item['state_actor']]
+        suggesters = _get_suggesters_other()
+    else:
+        suggesters = _get_suggesters()
     return JsonResponse({'items': suggesters,
                          'subtab_counts': subtab_counts()})
 
 
-# TODO: this needs refactoring badly.
+# TODO: this needs refactoring BADLY. We risk circular imports.
 from manoseimas.lobbyists.models import Lobbyist
 def subtab_counts():
-    """A copy from manoseimas/lobbyists/views/json.py. KEEP IN SYNC TIL REFACTORED."""
+    """Counts of 'actors' in each subtab."""
     return {'lobbyists': Lobbyist.objects.count(),
-            'suggester_state': 111,  # Placeholder
-            'suggester_other': 7777} # Placeholder
+            'suggester_state': len(_get_suggesters_state()),
+            'suggester_other': len(_get_suggesters_other()),
+            }

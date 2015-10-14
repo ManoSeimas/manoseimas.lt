@@ -37,8 +37,5 @@ def law_projects_json(request, lobbyist_slug):
     return JsonResponse({'items': map(_law_project_dict, projects)})
 
 
-def subtab_counts():
-    """A copy from manoseimas/mps_v2/views/json.py. KEEP IN SYNC TIL REFACTORED."""
-    return {'lobbyists': Lobbyist.objects.count(),
-            'suggester_state': 111,  # Placeholder
-            'suggester_other': 7777} # Placeholder
+# TODO: this needs refactoring BADLY. We risk circular imports.
+from manoseimas.mps_v2.views.json import subtab_counts
