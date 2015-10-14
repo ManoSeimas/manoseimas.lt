@@ -16,6 +16,7 @@ def lobbyist_profile(request, lobbyist_slug):
     try:
         lobbyist = Lobbyist.objects.get(slug=lobbyist_slug)
     except Lobbyist.DoesNotExist:
+        # TODO: handle this case gracefully
         lobbyist = None
 
     profile = {
