@@ -157,11 +157,17 @@ class SuggestionsSpider(ManoSeimasSpider):
         ]
 
     @classmethod
-    def _table_column_indexes(cls, table, row=1):
+    def _table_column_bounds(cls, table, row=1):
         idx = 0
         for col in table.xpath("(thead/tr|tr)[%d]/td" % row):
             yield idx
             idx += cls._colspan(col)
+        yield idx
+
+    @classmethod
+    def _table_column_indexes(cls, table, row=1):
+        bounds = list(cls._table_column_bounds(table, row=row))
+        return [(high - 1) for (low, high) in zip(bounds, bounds[1:])]
 
     @staticmethod
     def _truncate(s, maxlen=50):
@@ -209,9 +215,6 @@ class SuggestionsSpider(ManoSeimasSpider):
         # 4. Komiteto nuomonė
         # 5. Argumentai, pagrindžiantys nuomonę
         submitter_and_date = cls._extract_text(row[column_indexes[1]])
-        if re.match(r'^\d+[.]$', submitter_and_date):
-            # Messed up colspans at http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=456205&p_tr2=2
-            return
         opinion = cls._extract_text(row[column_indexes[4]])
         yield Suggestion(
             opinion=cls._clean_opinion(opinion),
