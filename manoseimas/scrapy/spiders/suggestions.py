@@ -84,7 +84,11 @@ class SuggestionsSpider(ManoSeimasSpider):
         if not self._is_table_interesting(table, url):
             return
         last_item = None
-        indexes = list(self._table_column_indexes(table))
+        heuristic = 'left'
+        if '491388' in url:
+            # http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=491388&p_tr2=2
+            heuristic = 'right'
+        indexes = list(self._table_column_indexes(table, heuristic=heuristic))
         rows = self._process_rowspan_colspan(table.xpath('thead/tr|tr')[2:])
         for row in rows:
             for item in self._parse_row(row, indexes):
@@ -165,9 +169,14 @@ class SuggestionsSpider(ManoSeimasSpider):
         yield idx
 
     @classmethod
-    def _table_column_indexes(cls, table, row=1):
+    def _table_column_indexes(cls, table, row=1, heuristic='middle'):
         bounds = list(cls._table_column_bounds(table, row=row))
-        return [(high - 1) for (low, high) in zip(bounds, bounds[1:])]
+        if heuristic == 'middle':
+            return [(low + high) // 2 for (low, high) in zip(bounds, bounds[1:])]
+        elif heuristic == 'right':
+            return [(high - 1) for (low, high) in zip(bounds, bounds[1:])]
+        else:
+            return [low for (low, high) in zip(bounds, bounds[1:])]
 
     @staticmethod
     def _truncate(s, maxlen=50):

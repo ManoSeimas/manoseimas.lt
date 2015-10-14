@@ -700,11 +700,21 @@ class TestSuggestionsSpider(unittest.TestCase):
         self.assertEqual(len(items), 52)
 
     def test_table_with_more_mismatching_columns(self):
-        # Regression data for bogus data due to (haven't figured out why yet)
+        # Regression data for bogus data due to colspan irregularity
         response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=491388&p_tr2=2',
                                 body=fixture('suggestion_491388.html'))
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(len(items), 53)
+        for item in items:
+            self.assertTrue(len(item['opinion']) < 100, item)
+
+    def test_table_with_even_more_mismatching_columns(self):
+        # Regression data for bogus data due to colspan irregularity
+        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=485154&p_tr2=2',
+                                body=fixture('suggestion_485154.html'))
+        spider = SuggestionsSpider()
+        items = list(spider.parse_document(response))
+        self.assertEqual(len(items), 11)
         for item in items:
             self.assertTrue(len(item['opinion']) < 100, item)
