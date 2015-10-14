@@ -47,8 +47,8 @@ var Switcher = React.createClass({
               order: 1},
             {
               key: 'law_project_count',
-              title: 'Įtakoti įstatmai',
-              explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
+              title: 'Paveikti įstatymai',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
               icon: 'users icon', order: -1},
             {
               key: 'client_count',
@@ -57,8 +57,8 @@ var Switcher = React.createClass({
               icon: '', order: -1},
             {
               key: 'avg_passed_law_project_ratio',
-              title: 'Įtakojimo sėkmė',
-              explanation: 'Skaičiuojama, kokia dalis iš visų įtakotų teisės aktų projektų buvo priimti.',
+              title: 'Poveikio sėkmė',
+              explanation: 'Skaičiuojama, kokia dalis iš visų paveiktų teisės aktų projektų buvo priimti.',
               icon: '', order: -1}
           ]
         },
@@ -76,8 +76,8 @@ var Switcher = React.createClass({
               order: 1},
             {
               key: 'law_project_count',
-              title: 'Įtakoti įstatmai',
-              explanation: 'Skaičiuojamas bendras kiekis įtakoktų teiės aktų.',
+              title: 'Paveikti įstatmai',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
               icon: 'users icon', order: -1},
             {
               key: 'number_of_suggestions',
@@ -86,7 +86,7 @@ var Switcher = React.createClass({
               icon: '', order: -1},
             {
               key: 'avg_passed_law_project_ratio',
-              title: 'Įtakojimo sėkmė',
+              title: 'Poveikio sėkmė',
               explanation: 'Skaičiuojama, kokia dalis iš visų teiktų pastabų buvo priimti.',
               icon: '', order: -1}
           ]
@@ -201,7 +201,7 @@ var Switcher = React.createClass({
           options_func: function (subtab_counts) {
             var options = {
               header: {
-                name: 'Įtakotojai',
+                name: 'Daro įtaką',
                 count: null
               },
               lobbyists: {
@@ -224,7 +224,7 @@ var Switcher = React.createClass({
           },
           options: {
             header: {
-              name: 'Įtakotojai'
+              name: 'Daro'
             },
             lobbyists: {
               name: 'Lobistai'
