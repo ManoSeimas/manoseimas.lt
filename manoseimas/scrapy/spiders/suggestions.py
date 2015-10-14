@@ -31,7 +31,7 @@ class SuggestionsSpider(ManoSeimasSpider):
     start_urls = [
         'http://www3.lrs.lt/pls/inter3/dokpaieska.rezult_l?' +
         urllib.urlencode({
-            'p_drus': '146', # Rūšis: Komiteto išvada
+            'p_drus': '290', # Rūšis: Pagrindinio komiteto išvada
             'p_nuo': '2012-11-16',
             'p_kalb_id': '1', # Kalba: Lietuvių
             'p_rus': '1', # Rūšiuoti rezultatus pagal: Registravimo datą
