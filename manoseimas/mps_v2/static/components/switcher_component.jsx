@@ -57,9 +57,33 @@ var Switcher = React.createClass({
               icon: '', order: -1}
           ]
         },
-        suggester: {
+        suggester_state: {
           row_component: SuggesterRow,
-          endpoint: 'json/suggesters/',
+          endpoint: 'json/suggesters/?state_actor=1',
+          default_key: 'proposal_count',
+          default_order: -1,
+          keys: [
+            {
+              key: 'slug',
+              title: 'Pavadinimas',
+              explanation: undefined,
+              icon: undefined,
+              order: 1},
+            {
+              key: 'law_project_count',
+              title: 'Paveikti įstatmai',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
+              icon: 'users icon', order: -1},
+            {
+              key: 'number_of_suggestions',
+              title: 'Teikta pastabų',
+              explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
+              icon: '', order: -1}
+          ]
+        },
+        suggester_other: {
+          row_component: SuggesterRow,
+          endpoint: 'json/suggesters/?state_actor=0',
           default_key: 'proposal_count',
           default_order: -1,
           keys: [
@@ -90,7 +114,6 @@ var Switcher = React.createClass({
     // Return a subtab subtab for tab tab.
     var self = this;
     subtabs = self.getSubtabs(tab);
-    subtab = (subtab.startsWith('suggester') ? 'suggester' : subtab)
     return (subtab ? subtabs[subtab] : subtabs[subtabs.default_name]);
   },
 
