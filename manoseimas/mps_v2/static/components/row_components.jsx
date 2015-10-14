@@ -163,7 +163,7 @@ var SuggesterRow = React.createClass({
         </div>
         <div className="two wide column">
           <div className="ui member statistic">
-            <div className="value">{suggester.proposal_count}</div>
+            <div className="value">{suggester.document_count}</div>
             <div className="label">
               {lt_pluralize(suggester.member_count, 'įstatymas', 'įstatymai', 'įstatymų')}
             </div>
