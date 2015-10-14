@@ -38,6 +38,7 @@ def law_projects_json(request, lobbyist_slug):
 
 
 def subtab_counts():
+    """A copy from manoseimas/mps_v2/views/json.py. KEEP IN SYNC TIL REFACTORED."""
     return {'lobbyists': Lobbyist.objects.count(),
             'suggester_state': 111,  # Placeholder
             'suggester_other': 7777} # Placeholder

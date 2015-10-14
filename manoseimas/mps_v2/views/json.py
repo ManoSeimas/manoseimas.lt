@@ -142,4 +142,14 @@ def suggesters_json(request):
         suggesters = [item for item in suggesters if not item['state_actor']]
     elif state_actor_filter in ('1', 'true', 'yes'):
         suggesters = [item for item in suggesters if item['state_actor']]
-    return JsonResponse({'items': suggesters})
+    return JsonResponse({'items': suggesters,
+                         'subtab_counts': subtab_counts()})
+
+
+# TODO: this needs refactoring badly.
+from manoseimas.lobbyists.models import Lobbyist
+def subtab_counts():
+    """A copy from manoseimas/lobbyists/views/json.py. KEEP IN SYNC TIL REFACTORED."""
+    return {'lobbyists': Lobbyist.objects.count(),
+            'suggester_state': 111,  # Placeholder
+            'suggester_other': 7777} # Placeholder
