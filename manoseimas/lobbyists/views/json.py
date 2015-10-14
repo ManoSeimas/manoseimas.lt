@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 
 from manoseimas.lobbyists.models import Lobbyist
@@ -9,7 +10,7 @@ def _lobbyists_dict(lobbyist):
     return {
         'name': lobbyist.name,
         'slug': lobbyist.slug,
-        'url': lobbyist.url,
+        'url': reverse('lobbyist_profile', kwargs={'lobbyist_slug': lobbyist.slug}),
         'company_code': lobbyist.company_code,
         'date_of_inclusion': lobbyist.date_of_inclusion,
         'law_project_count': lobbyist.law_project_count,
