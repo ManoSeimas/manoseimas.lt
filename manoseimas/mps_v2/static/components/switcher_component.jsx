@@ -213,7 +213,7 @@ var Switcher = React.createClass({
                 count: null
               },
               suggester_other: {
-                name: 'Kas jie?',
+                name: 'Kiti',
                 count: null
               }
             };
