@@ -21,7 +21,7 @@ def _lobbyists_dict(lobbyist):
 def lobbyists_json(request):
     lobbyists = Lobbyist.objects.all()
     return JsonResponse({'items': map(_lobbyists_dict, lobbyists),
-                         'subtab_counts': _item_counts})
+                         'subtab_counts': subtab_counts()})
 
 
 def _law_project_dict(project):
@@ -37,9 +37,7 @@ def law_projects_json(request, lobbyist_slug):
     return JsonResponse({'items': map(_law_project_dict, projects)})
 
 
-def lobbyist_count():
-    return Lobbyist.objects.count()
-
-_item_counts = {'lobbyists': lobbyist_count(),
-                'suggester_state': 111,  # Placeholder
-                'suggester_other': 7777} # Placeholder
+def subtab_counts():
+    return {'lobbyists': Lobbyist.objects.count(),
+            'suggester_state': 111,  # Placeholder
+            'suggester_other': 7777} # Placeholder
