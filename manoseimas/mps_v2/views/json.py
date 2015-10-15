@@ -132,17 +132,17 @@ def law_projects_json(request, mp_slug):
 
 #TODO: should this be a model method?
 def _get_suggesters():
-    proposal_count_qs = Suggestion.objects.values('submitter').annotate(proposal_count=Count('id'))
+    suggestion_count_qs = Suggestion.objects.values('submitter').annotate(suggestion_count=Count('id'))
 
     suggesters = [{
         'title': suggester['submitter'],
-        'proposal_count': suggester['proposal_count'],
+        'suggestion_count': suggester['suggestion_count'],
         'state_actor': is_state_actor(suggester['submitter']),
-    } for suggester in proposal_count_qs]
+    } for suggester in suggestion_count_qs]
 
     # TODO: a smart query should replace this contraption
-    document_count_qs = Suggestion.objects.values('submitter','source_id').distinct()
-    suggester_documents = [(item['submitter'], item['source_id']) for item in document_count_qs]
+    law_project_count_qs = Suggestion.objects.values('submitter','source_id').distinct()
+    suggester_documents = [(item['submitter'], item['source_id']) for item in law_project_count_qs]
     counts = {}
     for t in suggester_documents:
         title = t[0]
@@ -151,7 +151,7 @@ def _get_suggesters():
         else:
             counts[title] += 1
     for suggester in suggesters:
-        suggester['document_count'] = counts[suggester['title']]
+        suggester['law_project_count'] = counts[suggester['title']]
 
     return suggesters
 

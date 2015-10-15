@@ -60,7 +60,7 @@ var Switcher = React.createClass({
         suggester_state: {
           row_component: SuggesterRow,
           endpoint: 'json/suggesters/?state_actor=1',
-          default_key: 'proposal_count',
+          default_key: 'suggestion_count',
           default_order: -1,
           keys: [
             {
@@ -70,12 +70,12 @@ var Switcher = React.createClass({
               icon: undefined,
               order: 1},
             {
-              key: 'document_count',
+              key: 'law_project_count',
               title: 'Paveikti įstatmai',
               explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
               icon: 'users icon', order: -1},
             {
-              key: 'proposal_count',
+              key: 'suggestion_count',
               title: 'Teikta pastabų',
               explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
               icon: '', order: -1}
@@ -84,7 +84,7 @@ var Switcher = React.createClass({
         suggester_other: {
           row_component: SuggesterRow,
           endpoint: 'json/suggesters/?state_actor=0',
-          default_key: 'proposal_count',
+          default_key: 'suggestion_count',
           default_order: -1,
           keys: [
             {
