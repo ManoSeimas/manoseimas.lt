@@ -427,6 +427,13 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos": [
             u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
         ],
+        # Trailing comments
+        u"Konkurencijos taryba": [
+            u"Konkurencijos taryba (sutrumpintai)",
+        ],
+        u'Lietuvos laisvosios rinkos institutas': [
+            u"Lietuvos laisvosios rinkos institutas (pateikiama sutrumpintai)",
+        ],
         # Exception: trailing periods are sometimes necessary
         u"R. Jocienė ir kt.": [],
         # Often quotes are entered incorrectly
@@ -531,6 +538,40 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Darbo saugos specialistų darbdavių asociacija",
             u"Darbų saugos specialistų darbdavių asociacija",
         ],
+        u"Europos teisės departamentas": [
+            u"Europos Teisės departamentas",
+            u"Europos teisės departamentas",
+            u"Europos Teisės departamentas išvada XIP-",
+            u"Europos Teisės departamentas prie Lietuvos Respublikos teisingumo ministerijos",
+            u"Europos teisės departamentas prie Lietuvos RespublikosTeisingumo ministerijos",
+            u"Europos teisės departamentas prie Lietuvos Respublikos teisingumo ministerijos",
+            u"Europos teisės departamentas prie Lietuvos Respublikos teisingumo ministrerijos",
+            u"Europos teisės departamentas prie Lietuvos Respublikos vyriausybės",
+            u"Europos Teisės departamentas prie LR Teisingumo ministerijos",
+            u"Europos teisės departamentas prie LR Teisingumo ministerijos",
+            u"Europos teisės departamentas prie LR teisingumo ministerijos",
+            u"Europos Teisės departamentas prie LR TM",
+            u"Europos teisės departamentas prie LR TM",
+            u"Europos teisės departamentas prie TD",
+            u"Europos teisės departamentas prie Teisingum 0 ministerijo s",
+            u"Europos teisės departamentas prie Teisingumo ministerijas",
+            u"Europos Teisės departamentas prie Teisingumo ministerijos",
+            u"Europos teisės departamentas Prie Teisingumo ministerijos",
+            u"Europos teisės departamentas prie Teisingumo ministerijos",
+            u"Europos teisės departamentas, prie Teisingumo ministerijos",
+            u"Europos teisės departamentasprie Teisingumo ministerijos",
+            u"Europos teisės departamentas prie teisingumo ministerijos",
+            u"Europos teisės departamentas, prie teisingumo ministerijos",
+            u"Europos teisės departamentas prie Teisingumo ministerijos 2013-0",
+            u"Europos teisės departamentas prie Teisingumo ministerijos dėl įstatymo projekto Nr. XIIP-970",
+            u"Europos teisės departamentas prie Teisingumo ministerijos dėl projekto Nr. XIIP-288",
+            u"Europos teisės departamentas prie TM",
+            u"Europos teisės departamento",
+            u"Europos teisės departamento išvada prie Teisingumo ministerijos",
+            u"Europos teisės departamento prie LR Teisingumo ministerijos",
+            u"Europos teisės departamento prie TM išvada",
+            u"Europos teisės departametas",
+        ],
         u"Lietuvos miško savininkų asociacija": [
             u"Lietuvos miško savininkų asociacija",
             u"Lietuvos miškų savininkų asociacija",
@@ -629,6 +670,13 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"VŠĮ Lietuvos laisvosios rinkos institutas": [
             u"VŠĮ Lietuvos laisvosios rinkos institutas",
             u"VšĮ Lietuvos laisvosios rinkos institutas",
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u'(TD)',
+            u'TD',
+            u'Seimo kanceliarijos teisės departamentas',
+            u'LR Seimo kanceliarijos teisės departamentas',
+            u'LR Seimo kanceliarijos Teisės departamentas',
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
