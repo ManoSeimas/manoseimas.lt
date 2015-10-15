@@ -15,28 +15,12 @@ from manoseimas.scrapy.items import StenogramTopic
 from manoseimas.scrapy.textutils import clean_text
 from manoseimas.scrapy.textutils import extract_text
 from manoseimas.scrapy.textutils import strip_tags
+from manoseimas.scrapy.helpers.dates import month_names_map, date_re
 from manoseimas.scrapy import pipelines
 
 
 MINIMUM_SESSION = 95
 
-month_names_map = {
-    u'sausio':     1,
-    u'vasario':    2,
-    u'kovo':       3,
-    u'balandžio':  4,
-    u'gegužės':    5,
-    u'birželio':   6,
-    u'liepos':     7,
-    u'rugpjūčio':  8,
-    u'rugsėjo':    9,
-    u'spalio':    10,
-    u'lapkričio': 11,
-    u'gruodžio':  12,
-}
-
-date_re = re.compile(r'(\d{4})\s+m\.\s+(\w+)\s+(\d{1,2})\s+d\.',
-                     re.UNICODE)
 sitting_re = re.compile(ur'\s*(\w+)\s+POSĖDŽIO.*NR.\s(\d+)',
                         re.UNICODE | re.IGNORECASE)
 sitting_no_re = re.compile(r'.*NR.\s(\d+)', re.UNICODE)

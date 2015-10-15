@@ -10,6 +10,7 @@ from scrapy.contrib.spiders import Rule
 
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.items import Suggestion
+from manoseimas.scrapy.helpers.dates import date_re, month_names_map
 from manoseimas.scrapy import pipelines
 
 
@@ -285,11 +286,23 @@ class SuggestionsSpider(ManoSeimasSpider):
         # - "Seimo nariai L. Dmitrijeva V.V. Margevičienė R. Tamašiūnienė J. Vaickienė V. Filipovičienė G. Purvaneckienė J. Varkala R. Baškienė M.A. Pavilionienė A. Matulas NNNN-NN-NN"
         # - "VšĮ „Psichikos sveikatos perspektyvos“, NNNN.NN.NN VšĮ Žmogaus teisių stebėjimo institutas, NNNN.NN.NN Asociacija „Lietuvos neįgaliųjų forumas“, NNNN.NN.NN VšĮ „Paramos vaikams centras“, NNNN.NN.NN Asociacija „Nacionalinis aktyvių mamų sambūris“, NNNN.NN.NN Žiburio fondas, NNNN.NN.NN LPF SOS vaikų kaimų Lietuvoje draugija, NNNN.NN.NN VšĮ Šeimos santykių institutas, NNNN.NN.NN Visuomeninė organizacija „Gelbėkit vaikus“, NNNN.NN.NN"
         # - "Teikia: Seimo nariai: Dainius Budrys, Vaidotas Bacevičius, Vytautas Gapšys, Juozas Olekas, Julius Sabatauskas, Erikas Tamašauskas."
-        parts = re.split(r'(\d\d\d\d ?-? ?[01]? ?\d ?-? ?[0-3] ?\d)\b', submitter_and_date, maxsplit=1)
+        # Sometimes dates have some extra spaces in them for fun!
+        # - "Lietuvos miško savininkų asociacija 201 3 -0 5 - 28 Nr. 41 G-2013-6553"
+        # - "Lietuvos Respublikos teisingumo ministerija,2 013-11-12"
+        # - "Seimo kanceliarijos Teisės departamentas, 201 5 -02-05"
+        # - "Seimo kanceliarijos Teisės departamentas, 201 5 -0 4 - 17"
+        # - "Seimo kanceliarijos Teisės departamentas, 201 5 -0 4 -20"
+        raw = submitter_and_date
+        short_date_re = re.compile(r'(\d\d\d\d ?-? ?[01]? ?\d ?-? ?[0-3] ?\d)\b')
+        if not short_date_re.search(submitter_and_date):
+            submitter_and_date = re.sub(r'(\d) (\d)', r'\1\2', submitter_and_date)
+        submitter_and_date = cls._normalize_dates(submitter_and_date)
+        parts = short_date_re.split(submitter_and_date, maxsplit=1)
         submitter = parts[0]
         date = parts[1] if len(parts) > 1 else ''
         document = parts[2] if len(parts) > 2 else ''
         return dict(
+            raw=raw,
             submitter=cls._clean_submitter(submitter),
             date=cls._clean_date(date),
             document=cls._clean_document(document),
@@ -297,7 +310,110 @@ class SuggestionsSpider(ManoSeimasSpider):
 
     @staticmethod
     def _clean_submitter(submitter):
-        return submitter.rstrip('(, ')
+        submitter = re.sub(r'\(sudaryta [^)]*\)', '', submitter)
+        submitter = re.sub(ur'([ \d])išvada.*$', r'\1', submitter)
+        submitter = re.sub(r'\((?:pateikiama )?sutrumpintai\)', '', submitter)
+        submitter = re.sub(ur'\s+dėl įstatymo projekto [^,]*', '', submitter)
+        submitter = re.sub(ur', \d\d\d\d Nr. [^,]*', '', submitter)
+        submitter = re.sub(r'\d\d\d\d(-\d\d)?-?$', '', submitter)
+        submitter = re.sub(r'20\d\d?(-\d\d?)?(-\d\d?)?v?$', '', submitter)
+        submitter = re.sub(r'\(gauta *$', '', submitter)
+        submitter = submitter.rstrip('(,; ')
+        submitter = submitter.replace(',,', u'„')
+        submitter = re.sub(ur'- ?(?!urbanist|visuotin)([a-ząčęėįšųūž])', r'\1', submitter)
+        submitter = re.sub(ur'(\.)([A-ZĄČĘĖĮŠŲŪŽ])', r'\1 \2', submitter)
+        submitter = re.sub(ur'(?<!\bkt)\.$', r'', submitter)
+        submitter = re.sub(ur'(komitetas)(?! prie).+$', r'\1', submitter)
+        replacements = {
+            u'departamenras': 'departamentas',
+            u'departamentamentas': 'departamentas',
+            u'departamantas': 'departamentas',
+            u'departamntas': 'departamentas',
+            u'RespublikosPrezidentės': u'Respublikos Prezidentės',
+            u'Teisėsdepartamentas': u'Teisės departamentas',
+            u'Teisės departamentas (TD)': u'Teisės departamentas',
+            u'Teisės departamento (TD)': u'Teisės departamentas',
+            u'Žaliais taškas': u'Žaliasis taškas',
+            u'LAMPETRA': u'Lampetra',
+            u'INFOBALT': u'Infobalt',
+            u'AB LESTO': u'AB „Lesto“',
+            u'AB Lietuvos dujos“': u'AB „Lietuvos dujos“',
+            u'AB Litgrid': u'AB „Litgrid“',
+            u'AB LOTOS Geonafta įmonių grupė': u'AB „LOTOS Geonafta įmonių grupė“',
+            u'įmonių grupė“ UAB': u'įmonių grupė“, UAB',
+            u'„Investors‘ Forum,“': u'„Investuotojų forumas“',
+            u'Asociacija Lietuvos antstolių rūmai': u'Asociacija „Lietuvos antstolių rūmai“',
+            u'Audito Komitet': u'Audito komitet',
+            u"Darbų saugos specialistų darbdavių asociacija": u"Darbo saugos specialistų darbdavių asociacija",
+            u'Legalaus Verslo aljansas': u'Legalaus verslo aljansas',
+            u'Aukčiausiasis': u'Aukščiausiasis',
+            u'Aukščiausiais Teismas': u'Aukščiausiasis Teismas',
+            u'Aukščiausias Teismas': u'Aukščiausiasis Teismas',
+            u'Aukščiausiasis teismas': u'Aukščiausiasis Teismas',
+            u'Lietuvos Advokatūra': u'Lietuvos advokatūra',
+            u' Apeliacinis Teismas': u' apeliacinis teismas',
+            u' Apeliacinis teismas': u' apeliacinis teismas',
+            u'Europos Teisės': u'Europos teisės',
+            u'departamentasprie': u'departamentas prie',
+            u'pramoninkų': u'pramonininkų',
+            u'tarnyb a': u'tarnyba',
+            u'tarnyba tarnyba': u'tarnyba',
+            u'tarnyba (toliau– STT)': u'tarnyba',
+            u'Seimo Biudžeto': u'Seimo biudžeto',
+            u'Respublikos Finansų': u'Respublikos finansų',
+            u'Respublikos Generalinė': u'Respublikos generalinė',
+            u'Respublikos Specialiųjų': u'Respublikos specialiųjų',
+            u'Respublikos Teisingumo': u'Respublikos teisingumo',
+            u'Respublikos Transporto': u'Respublikos transporto',
+            u'Respublikos Trišalė': u'Respublikos trišalė',
+            u'Respublikos Ūkio': u'Respublikos ūkio',
+            u'Respublikos Vaiko': u'Respublikos vaiko',
+            u'Respublikos Valst': u'Respublikos valst',
+            u'Respublikos Vyr': u'Respublikos vyr',
+            u'Lietuvos respublikos': u'Lietuvos Respublikos',
+            u'Lietuvos Savivaldybių': u'Lietuvos savivaldybių',
+            u'LIETUVOS KARJERŲ ASOCIACIJA': u'Lietuvos karjerų asociacija',
+            u'miškų savininkų asociacija': u'miško savininkų asociacija',
+            u'asociacija LINAVA': u'asociacija „Linava“',
+            u'asociacija „LINAVA“': u'asociacija „Linava“',
+            u'vežėjų asociacija „Linava“': u'vežėjų automobiliais asociacija „Linava“',
+            u"Lietuvos nealkoholinių gėrimų gamintojų ir importuotojų asociacija":
+                u"Lietuvos nealkoholinių gėrimų gamintojų bei importuotojų asociacija",
+            u'Konfederacija': u'konfederacija',
+            u'vaiko teisių apsaugos kontrolės': u'vaiko teisių apsaugos kontrolieriaus',
+            u'Vilnaius': u'Vilniaus',
+            u' Universitetas': u' universitetas',
+            u'VšĮ': u'VŠĮ',
+            u'ministreijos': 'ministerijos',
+            u'departame ntas': 'departamentas',
+            u'LR Seimo': u'Seimo',
+            u'LRS Seimo': u'Seimo',
+            u'LRS kanceliarijos': u'Seimo kanceliarijos',
+            u'Seimo Kanceliarijos': u'Seimo kanceliarijos',
+            u'Lietuvos Respublikos Seimo kanceliarijos': u'Seimo kanceliarijos',
+            u'Seimo kanceliarijos teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+            u'Teisingum 0': u'Teisingumo',
+            u'departametas': u'departamentas',
+            u'kanceliarij os': u'kanceliarijos',
+            u'kancelarijos': u'kanceliarijos',
+            u'Seimo Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+            u'LRS Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+            u'Teisės Departamentas': u'Teisės departamentas',
+        }
+        for a, b in sorted(replacements.items()):
+            submitter = submitter.replace(a, b)
+        submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
+        submitter = {
+            u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
+            u'TD': u'Seimo kanceliarijos Teisės departamentas',
+            u'Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+        }.get(submitter, submitter)
+        return submitter
+
+    @staticmethod
+    def _normalize_dates(s):
+        return date_re.sub(lambda m: '%04d-%02d-%02d' % (
+            int(m.group(1)), month_names_map[m.group(2)], int(m.group(3))), s)
 
     @staticmethod
     def _clean_date(date):

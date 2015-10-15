@@ -100,6 +100,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'',
                 source_url='http://localhost/test.html',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
                 submitter=u'STT',
@@ -107,6 +108,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
+                raw=u'',
             ),
             Suggestion(
                 submitter=u'LR Vyriausybė',
@@ -114,6 +116,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'',
                 opinion=u'Pritarti iš dalies',
                 source_url='http://localhost/test.html',
+                raw=u'LR Vyriausybė, 2015-10-09',
             ),
         ])
 
@@ -173,6 +176,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'',
                 source_url='http://localhost/test.html',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
                 submitter=u'STT',
@@ -180,6 +184,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
+                raw=u'',
             ),
             Suggestion(
                 submitter=u'LR Vyriausybė',
@@ -187,6 +192,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'',
                 opinion=u'Pritarti iš dalies',
                 source_url='http://localhost/test.html',
+                raw=u'LR Vyriausybė, 2015-10-09',
             ),
         ])
 
@@ -269,66 +275,80 @@ class TestTableDiscrimination(unittest.TestCase):
         ''')
 
 
-class TestRowParsing(unittest.TestCase):
+class TestSubmitterParsing(unittest.TestCase):
 
-    def test_parse_submitter(self):
-        f = SuggestionsSpider._parse_submitter
-        self.assertEqual(f(u''),
-                         {'submitter': '',
-                          'date': '',
-                          'document': ''})
-        self.assertEqual(f(u'Seimo kanceliarijos Teisės departamentas, 2015-10-09'),
-                         {'submitter': u'Seimo kanceliarijos Teisės departamentas',
-                          'date': '2015-10-09',
-                          'document': ''})
-        self.assertEqual(f(u'Submitter (2015-10-12)'),
-                         {'submitter': u'Submitter',
-                          'date': '2015-10-12',
-                          'document': ''})
-        self.assertEqual(f(u'Submitter ( 2015-10-12 )'),
-                         {'submitter': u'Submitter',
-                          'date': '2015-10-12',
-                          'document': ''})
-        self.assertEqual(f(u'Submitter ( 2015-10-12, nutarimas Nr. 123)'),
-                         {'submitter': u'Submitter',
-                          'date': '2015-10-12',
-                          'document': u'nutarimas Nr. 123'})
-        self.assertEqual(f(u'Submitter, 2015 10 12 Nutarimas Nr. 42'),
-                         {'submitter': u'Submitter',
-                          'date': '2015-10-12',
-                          'document': 'Nutarimas Nr. 42'})
-        self.assertEqual(f(u'Submitter2015-10-12'),
-                         {'submitter': u'Submitter',
-                          'date': '2015-10-12',
-                          'document': ''})
-        self.assertEqual(f(u'Submitter, 20151012 (Nr.123 )'),
-                         {'submitter': u'Submitter',
-                          'date': '2015-10-12',
-                          'document': 'Nr.123'})
-        self.assertEqual(f(u'Submitter, 2015-10-12 Nr. XIIP-1234(5)'),
-                         {'submitter': u'Submitter',
-                          'date': '2015-10-12',
-                          'document': 'Nr. XIIP-1234(5)'})
-        self.assertEqual(f(u'BFK 2012-12 -12 d.'),
-                         {'submitter': u'BFK',
-                          'date': '2012-12-12',
-                          'document': ''})
-        self.assertEqual(f(u'Submitter 2013 - 09- 02'),
-                         {'submitter': u'Submitter',
-                          'date': '2013-09-02',
-                          'document': ''})
-        self.assertEqual(f(u'Generalinė prokuratūra 2013-1 1-07'),
-                         {'submitter': u'Generalinė prokuratūra',
-                          'date': '2013-11-07',
-                          'document': ''})
-        self.assertEqual(f(u'Lietuvos savivaldybių asociacija 2014-5-29'),
-                         {'submitter': u'Lietuvos savivaldybių asociacija',
-                          'date': '2014-05-29',
-                          'document': ''})
-        self.assertEqual(f(u'Seimo kanceliarijos Teisės departamentas(2013-08-0 2 )'),
-                         {'submitter': u'Seimo kanceliarijos Teisės departamentas',
-                          'date': '2013-08-02',
-                          'document': ''})
+    examples = [
+        (u'',
+         {'submitter': '',
+          'date': '',
+          'document': ''}),
+        (u'Seimo kanceliarijos Teisės departamentas, 2015-10-09',
+         {'submitter': u'Seimo kanceliarijos Teisės departamentas',
+          'date': '2015-10-09',
+          'document': ''}),
+        (u'Submitter (2015-10-12)',
+         {'submitter': u'Submitter',
+          'date': '2015-10-12',
+          'document': ''}),
+        (u'Submitter ( 2015-10-12 )',
+         {'submitter': u'Submitter',
+          'date': '2015-10-12',
+          'document': ''}),
+        (u'Submitter ( 2015-10-12, nutarimas Nr. 123)',
+         {'submitter': u'Submitter',
+          'date': '2015-10-12',
+          'document': u'nutarimas Nr. 123'}),
+        (u'Submitter, 2015 10 12 Nutarimas Nr. 42',
+         {'submitter': u'Submitter',
+          'date': '2015-10-12',
+          'document': 'Nutarimas Nr. 42'}),
+        (u'Submitter2015-10-12',
+         {'submitter': u'Submitter',
+          'date': '2015-10-12',
+          'document': ''}),
+        (u'Submitter, 20151012 (Nr.123 )',
+         {'submitter': u'Submitter',
+          'date': '2015-10-12',
+          'document': 'Nr.123'}),
+        (u'Submitter, 2015-10-12 Nr. XIIP-1234(5)',
+         {'submitter': u'Submitter',
+          'date': '2015-10-12',
+          'document': 'Nr. XIIP-1234(5)'}),
+        (u'BFK 2012-12 -12 d.',
+         {'submitter': u'BFK',
+          'date': '2012-12-12',
+          'document': ''}),
+        (u'Submitter 2013 - 09- 02',
+         {'submitter': u'Submitter',
+          'date': '2013-09-02',
+          'document': ''}),
+        (u'Generalinė prokuratūra 2013-1 1-07',
+         {'submitter': u'Generalinė prokuratūra',
+          'date': '2013-11-07',
+          'document': ''}),
+        (u'Lietuvos savivaldybių asociacija 2014-5-29',
+         {'submitter': u'Lietuvos savivaldybių asociacija',
+          'date': '2014-05-29',
+          'document': ''}),
+        (u'Seimo kanceliarijos Teisės departamentas(2013-08-0 2 )',
+         {'submitter': u'Seimo kanceliarijos Teisės departamentas',
+          'date': '2013-08-02',
+          'document': ''}),
+        (u'Ekonomikos komitetas, 2015 m. rugsėjo 16 d. išvada Nr. 108-P-22',
+         {'submitter': u'Ekonomikos komitetas',
+          'date': '2015-09-16',
+          'document': u'išvada Nr. 108-P-22'}),
+        (u"Žemės ūkio ministerija 2013-05-03 1MS-34-(11.27)",
+         {'submitter': u'Žemės ūkio ministerija',
+          'date': '2013-05-03',
+          'document': '1MS-34-(11.27)'}),
+    ]
+
+    def test(self):
+        for example, expected in self.examples:
+            actual = SuggestionsSpider._parse_submitter(example)
+            self.assertEqual(actual.pop('raw'), example)
+            self.assertEqual(actual, expected)
 
     @unittest.skip("Not implemented yet")
     def test_parse_submitter_unhandled_cases(self):
@@ -341,6 +361,9 @@ class TestRowParsing(unittest.TestCase):
                          {'submitter': u'Seimo kanceliarijos Teisės departamen tas',
                           'date': '',
                           'document': ' 2013-13-05'})
+
+
+class TestRowParsing(unittest.TestCase):
 
     def test_clean_opinion(self):
         f = SuggestionsSpider._clean_opinion
@@ -373,7 +396,329 @@ class TestRowParsing(unittest.TestCase):
             date=u'2015-10-09',
             document=u'raštas Nr. g-2015-123',
             opinion=u'Pritarti',
+            raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
         ))
+
+
+class TestSubmitterCleaning(unittest.TestCase):
+
+    # Map expected value to a list of input values that should produce it.
+    # It's also expected that the cleaning function is idempotent, so the
+    # expected value itself is implicitly added to the input value list.
+    examples = {
+        # Blank values get passed through
+        u'': [],
+        u'-': [],
+        # When you split "name (date, document no)" or "name, date" you end up
+        # with trailing " (" or ", ".
+        u'STT': [
+            u'STT (',
+            u'STT, ',
+        ],
+        u'Žemės ūkio ministerija': [
+            u'Žemės ūkio ministerija (gauta',
+        ],
+        # Trailing incomplete date fragments are stripped
+        u'STT': [
+            u'STT 2014-',
+            u'STT, 2013-01-',
+        ],
+        # Trailing periods are stripped
+        u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos": [
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
+        ],
+        # Trailing comments
+        u"Konkurencijos taryba": [
+            u"Konkurencijos taryba (sutrumpintai)",
+        ],
+        u'Lietuvos laisvosios rinkos institutas': [
+            u"Lietuvos laisvosios rinkos institutas (pateikiama sutrumpintai)",
+        ],
+        # Exception: trailing periods are sometimes necessary
+        u"R. Jocienė ir kt.": [],
+        # Often quotes are entered incorrectly
+        u'AB „Amber grid“': [
+            u'AB „Amber grid“',
+            u'AB ,,Amber grid“',
+        ],
+        # Spacing after initials
+        u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė": [
+            u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė",
+            u"Etninės kultūros globos tarybos pirmininkė D.Urbanavičienė",
+        ],
+        # Hyphenation
+        u'A. Drevinskas': [
+            u'A.Drevin-skas',
+            u'A. Drevinskas',
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u'Seimo kanceliari-jos Teisės departa- mentas',
+            u'Seimo kanceliarijos Teisės departamentas',
+        ],
+        # Hyphenation exceptions
+        u'Pilietė A. Butkutė-Žverelo': [
+            u'Pilietė A. Butkutė-Žverelo',
+        ],
+        u'Architektė-urbanistė Agnė Selemonaitė': [
+            u'Architektė-urbanistė Agnė Selemonaitė',
+        ],
+        u'Koalicija „Moters teisės-visuotinės žmogaus teisės“': [
+            u'Koalicija „Moters teisės-visuotinės žmogaus teisės“',
+        ],
+        # Some people have trouble spelling 'departamentas'
+        u'Europos teisės departamentas': [
+            u'Europos teisės departa-menras',
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u'Seimo kanceliari-jos Teisės departa-menta-mentas',
+        ],
+        # Spaces are important
+        u'Lietuvos Respublikos Prezidentės dekretas': [
+            u'Lietuvos RespublikosPrezidentės dekretas',
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u'Seimo kanceliari-jos Teisėsdepartamentas',
+        ],
+        # Typos
+        u'VŠĮ „Žaliasis taškas“': [
+            u'VŠĮ „Žaliais taškas“',
+            u'VŠĮ „Žaliasis taškas“',
+        ],
+        u"VŠĮ Vilniaus universiteto ligoninės Santariškių klinikos": [
+            u"VšĮ Vilnaius universiteto ligoninės Santariškių klinikos",
+            u"VšĮ Vilniaus universiteto ligoninės Santariškių klinikos",
+        ],
+        # Different spellings
+        u'Žuvininkystės įmonių asociacija „Lampetra“': [
+            u'Žuvininkystės įmonių asociacija „LAMPETRA“',
+            u'Žuvininkystės įmonių asociacija „Lampetra“',
+        ],
+        u'AB „Lesto“': [
+            u'AB „Lesto“',
+            u'AB LESTO',
+        ],
+        u"AB „Lietuvos dujos“": [
+            u"AB „Lietuvos dujos“",
+            u"AB Lietuvos dujos“",
+        ],
+        u"AB „Litgrid“": [
+            u"AB „Litgrid“",
+            u"AB Litgrid",
+        ],
+        u"AB „LOTOS Geonafta įmonių grupė“, UAB „Minijos nafta“, UAB „LL investicijos“": [
+            u"AB „LOTOS Geonafta įmonių grupė“ UAB „Minijos nafta“, UAB „LL investicijos“",
+            u"AB LOTOS Geonafta įmonių grupė, UAB „Minijos nafta“, UAB „LL investicijos“",
+        ],
+        u"Asociacija „Infobalt“": [
+            u"Asociacija „INFOBALT“",
+            u"Asociacija „Infobalt“",
+        ],
+        u"Asociacija „Investuotojų forumas“": [
+            u"Asociacija „Investors‘ Forum,“",
+            u"Asociacija „Investuotojų forumas“",
+        ],
+        u"Asociacija „Lietuvos antstolių rūmai“": [
+            u"Asociacija „Lietuvos antstolių rūmai“",
+            u"Asociacija Lietuvos antstolių rūmai",
+        ],
+        u"Audito komitetas": [
+            u"Audito Komitetas",
+            u"Audito komitetas",
+        ],
+        u"Biudžeto ir finansų komitetas": [
+            u"Biudžeto ir finansų komitetas",
+            u"Biudžeto ir finansų komitetas, 2012-12-12109-P-41(4)",
+            u"Biudžeto ir finansų komitetas (patikslinta išvada)",
+        ],
+        u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti": [
+            u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti",
+            u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos 2013 m. gegužės 29 d. sprendimu Nr. SV-S-255)",
+        ],
+        u"Darbo saugos specialistų darbdavių asociacija": [
+            u"Darbo saugos specialistų darbdavių asociacija",
+            u"Darbų saugos specialistų darbdavių asociacija",
+        ],
+        u"Europos teisės departamentas": [
+            u"Europos Teisės departamentas",
+            u"Europos teisės departamentas",
+            u"Europos Teisės departamentas išvada XIP-",
+            u"Europos Teisės departamentas prie Lietuvos Respublikos teisingumo ministerijos",
+            u"Europos teisės departamentas prie Lietuvos RespublikosTeisingumo ministerijos",
+            u"Europos teisės departamentas prie Lietuvos Respublikos teisingumo ministerijos",
+            u"Europos teisės departamentas prie Lietuvos Respublikos teisingumo ministrerijos",
+            u"Europos teisės departamentas prie Lietuvos Respublikos vyriausybės",
+            u"Europos Teisės departamentas prie LR Teisingumo ministerijos",
+            u"Europos teisės departamentas prie LR Teisingumo ministerijos",
+            u"Europos teisės departamentas prie LR teisingumo ministerijos",
+            u"Europos Teisės departamentas prie LR TM",
+            u"Europos teisės departamentas prie LR TM",
+            u"Europos teisės departamentas prie TD",
+            u"Europos teisės departamentas prie Teisingum 0 ministerijo s",
+            u"Europos teisės departamentas prie Teisingumo ministerijas",
+            u"Europos Teisės departamentas prie Teisingumo ministerijos",
+            u"Europos teisės departamentas Prie Teisingumo ministerijos",
+            u"Europos teisės departamentas prie Teisingumo ministerijos",
+            u"Europos teisės departamentas, prie Teisingumo ministerijos",
+            u"Europos teisės departamentasprie Teisingumo ministerijos",
+            u"Europos teisės departamentas prie teisingumo ministerijos",
+            u"Europos teisės departamentas, prie teisingumo ministerijos",
+            u"Europos teisės departamentas prie Teisingumo ministerijos 2013-0",
+            u"Europos teisės departamentas prie Teisingumo ministerijos dėl įstatymo projekto Nr. XIIP-970",
+            u"Europos teisės departamentas prie Teisingumo ministerijos dėl projekto Nr. XIIP-288",
+            u"Europos teisės departamentas prie TM",
+            u"Europos teisės departamento",
+            u"Europos teisės departamento išvada prie Teisingumo ministerijos",
+            u"Europos teisės departamento prie LR Teisingumo ministerijos",
+            u"Europos teisės departamento prie TM išvada",
+            u"Europos teisės departametas",
+        ],
+        u"Lietuvos miško savininkų asociacija": [
+            u"Lietuvos miško savininkų asociacija",
+            u"Lietuvos miškų savininkų asociacija",
+        ],
+        u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“": [
+            u"Lietuvos nacionalinė vežėjų asociacija LINAVA",
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija „LINAVA“",
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija LINAVA",
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
+        ],
+        u"Lietuvos nealkoholinių gėrimų gamintojų bei importuotojų asociacija": [
+            u"Lietuvos nealkoholinių gėrimų gamintojų bei importuotojų asociacija",
+            u"Lietuvos nealkoholinių gėrimų gamintojų ir importuotojų asociacija",
+        ],
+        u"Lietuvos pramonininkų konfederacija": [
+            u"Lietuvos pramonininkų Konfederacija",
+            u"Lietuvos pramonininkų konfederacija",
+            u"Lietuvos pramoninkų konfederacija",
+        ],
+        u"Lietuvos Respublikos finansų ministerija": [
+            u"Lietuvos Respublikos Finansų ministerija",
+            u"Lietuvos Respublikos finansų ministerija",
+        ],
+        u"Lietuvos Respublikos generalinė prokuratūra": [
+            u"Lietuvos Respublikos Generalinė prokuratūra",
+            u"Lietuvos Respublikos generalinė prokuratūra",
+        ],
+        u"Lietuvos Respublikos Seimo biudžeto ir finansų komitetas": [
+            u"Lietuvos Respublikos Seimo Biudžeto ir finansų komitetas",
+            u"Lietuvos Respublikos Seimo biudžeto ir finansų komitetas",
+        ],
+        u"Lietuvos Respublikos specialiųjų tyrimų tarnyba": [
+            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyb a",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba.",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Lietuvos respublikos specialiųjų tyrimų tarnyba",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba 2012-",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba, 2013-01-",
+            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba tarnyb a",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba (toliau– STT)",
+        ],
+        u"Lietuvos Respublikos teisingumo ministerija": [
+            u"Lietuvos Respublikos Teisingumo ministerija",
+            u"Lietuvos Respublikos teisingumo ministerija",
+        ],
+        u"Lietuvos Respublikos transporto priemonių draudikų biuras": [
+            u"Lietuvos Respublikos Transporto priemonių draudikų biuras",
+            u"Lietuvos Respublikos transporto priemonių draudikų biuras",
+        ],
+        u"Lietuvos Respublikos trišalė taryba": [
+            u"Lietuvos Respublikos Trišalė taryba",
+            u"Lietuvos Respublikos trišalė taryba",
+        ],
+        u"Lietuvos Respublikos ūkio ministerija": [
+            u"Lietuvos Respublikos Ūkio ministerija",
+            u"Lietuvos Respublikos ūkio ministerija",
+        ],
+        u"Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga": [
+            u"Lietuvos Respublikos Vaiko teisių apsaugos kontrolės įstaiga",
+            u"Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga",
+        ],
+        u"Lietuvos Respublikos valstybės saugumo departamentas": [
+            u"Lietuvos Respublikos Valstybės saugumo departamentas",
+            u"Lietuvos Respublikos valstybės saugumo departamentas",
+        ],
+        u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
+            u"Lietuvos Respublikos Vyriausioji rinkimų komisija",
+            u"Lietuvos Respublikos vyriausioji rinkimų komisija",
+        ],
+        u"Lietuvos savivaldybių asociacija": [
+            u"Lietuvos Savivaldybių asociacija",
+            u"Lietuvos savivaldybių asociacija",
+        ],
+        # Different capitalizations
+        u"Legalaus verslo aljansas": [
+            u"Legalaus Verslo aljansas",
+        ],
+        u"Lietuvos apeliacinis teismas": [
+            u"Lietuvos Apeliacinis Teismas",
+            u"Lietuvos Apeliacinis teismas",
+            u"Lietuvos apeliacinis teismas",
+        ],
+        u"Lietuvos advokatūra": [
+            u"Lietuvos Advokatūra",
+            u"Lietuvos advokatūra",
+        ],
+        u"Lietuvos karjerų asociacija": [
+            u"LIETUVOS KARJERŲ ASOCIACIJA",
+            u"Lietuvos karjerų asociacija",
+        ],
+        u"Vytauto Didžiojo universitetas": [
+            u"Vytauto Didžiojo Universitetas",
+            u"Vytauto Didžiojo universitetas",
+        ],
+        u"VŠĮ Lietuvos laisvosios rinkos institutas": [
+            u"VŠĮ Lietuvos laisvosios rinkos institutas",
+            u"VšĮ Lietuvos laisvosios rinkos institutas",
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u"(TD)",
+            u"LR Seimo kanceliarijos Teisės departamentas",
+            u"LR Seimo kanceliarijos teisės departamentas",
+            u"LRS Seimo kanceliarijos teisės departamentas",
+            u"LRS Teisės departamentas",
+            u"LRS kanceliarijos Teisės departamentas",
+            u"Lietuvos Respublikos Seimo kanceliarijos Teisės departamentas",
+            u"Seimo Kanceliarijos Teisės departamentas",
+            u"Seimo Teisės departamentas",
+            u"Seimo kancelarijos Teisės departamentas",
+            u"Seimo kanceliarij os Teisės departamentas",
+            u"Seimo kanceliarijos Teisės Departamentas",
+            u"Seimo kanceliarijos Teisės departamantas, 2014-09išvada Nr. XIIP-",
+            u"Seimo kanceliarijos Teisės departamentas (TD)",
+            u"Seimo kanceliarijos Teisės departamentas 201-12-07",
+            u"Seimo kanceliarijos Teisės departamentas 2011-05-10v",
+            u"Seimo kanceliarijos Teisės departamentas 2014-05-2",
+            u"Seimo kanceliarijos Teisės departamentas dėl įstatymo projekto Nr. XIIP-288",
+            u"Seimo kanceliarijos Teisės departamentas dėl įstatymo projekto Nr. XIIP-970",
+            u"Seimo kanceliarijos Teisės departamentas",
+            u"Seimo kanceliarijos Teisės departamentas, 2014 Nr. XIIP-1309(2)-04-09",
+            u"Seimo kanceliarijos Teisės departamentas, 2015-03-3",
+            u"Seimo kanceliarijos Teisės departamentas, 2015-05-5",
+            u"Seimo kanceliarijos Teisės departamento (TD) išvada",
+            u"Seimo kanceliarijos Teisės departamento išvada",
+            u"Seimo kanceliarijos Teisės departamento",
+            u"Seimo kanceliarijos Teisės departamntas",
+            u"Seimo kanceliarijos teisės departamentas",
+            u"Seimo kanceliarijos teisės departamentas;",
+            u"TD",
+            u"Teisės departamentas",
+        ],
+        # Some fun typos here too
+        u'Lietuvos Aukščiausiasis Teismas': [
+            u"Lietuvos Aukčiausiasis Teismas",
+            u"Lietuvos Aukščiausiais Teismas",
+            u"Lietuvos Aukščiausiasis Teismas",
+            u"Lietuvos Aukščiausiasis teismas",
+            u"Lietuvos Aukščiausias Teismas",
+        ],
+    }
+
+    def test(self):
+        for expected, inputs in sorted(self.examples.items()):
+            for example in sorted(inputs + [expected]):
+                actual = SuggestionsSpider._clean_submitter(example)
+                self.assertEqual(actual, expected)
 
 
 class TestTableColumnParsing(unittest.TestCase):
@@ -663,6 +1008,7 @@ class TestSuggestionsSpider(unittest.TestCase):
                 source_url='http://localhost/test.html?p_id=12345',
                 source_id='12345',
                 source_index=0,
+                raw=u'LR Vyriausybė, 2015-10-09',
             ),
         ])
 
