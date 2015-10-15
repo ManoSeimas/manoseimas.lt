@@ -41,7 +41,7 @@ var SortableList = React.createClass({
   },
 
   innerSort: function(items, key, order) {
-    var _sort = function (a, b) {
+    return items.sort(function (a, b) {
       if (a[key] < b[key]) {
         return -order;
       } else if (a[key] > b[key]) {
@@ -49,10 +49,7 @@ var SortableList = React.createClass({
       } else {
         return 0
       }
-    }
-
-    var result = items.sort(_sort);
-    return result;
+    });
   },
 
   sortElements: function (param, order) {
