@@ -9,7 +9,6 @@ from django.db.models import Count
 
 from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
                                       LawProject, Suggestion)
-from manoseimas.mps_v2.utils import is_state_actor
 from manoseimas.utils import round
 
 from .statements import _build_discussion_context
@@ -129,17 +128,23 @@ def law_projects_json(request, mp_slug):
 
     return JsonResponse({'items': law_projects})
 
-
 def suggesters_json(request):
     state_actor_filter = request.GET.get('state_actor', '').lower()
-    qs = Suggestion.objects.values('submitter').annotate(Count('id'))
-    suggesters = [{
-        'title': item['submitter'],
-        'proposal_count': item['id__count'],
-        'state_actor': is_state_actor(item['submitter']),
-    } for item in qs]
     if state_actor_filter in ('0', 'false', 'no'):
-        suggesters = [item for item in suggesters if not item['state_actor']]
+        suggesters = Suggestion.suggestion_and_project_count_other()
     elif state_actor_filter in ('1', 'true', 'yes'):
-        suggesters = [item for item in suggesters if item['state_actor']]
-    return JsonResponse({'items': suggesters})
+        suggesters = Suggestion.suggestion_and_project_count_state()
+    else:
+        suggesters = Suggestion.suggestion_and_project_count()
+    return JsonResponse({'items': suggesters,
+                         'subtab_counts': subtab_counts()})
+
+
+# TODO: this needs refactoring BADLY. We risk circular imports.
+from manoseimas.lobbyists.models import Lobbyist
+def subtab_counts():
+    """Counts of 'actors' in each subtab."""
+    return {'lobbyists': Lobbyist.objects.count(),
+            'suggester_state': len(Suggestion.suggestion_and_project_count_state()),
+            'suggester_other': len(Suggestion.suggestion_and_project_count_other()),
+            }
