@@ -70,12 +70,12 @@ var Switcher = React.createClass({
               icon: undefined,
               order: 1},
             {
-              key: 'law_project_count',
+              key: 'document_count',
               title: 'Paveikti įstatmai',
               explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
               icon: 'users icon', order: -1},
             {
-              key: 'number_of_suggestions',
+              key: 'proposal_count',
               title: 'Teikta pastabų',
               explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
               icon: '', order: -1}
