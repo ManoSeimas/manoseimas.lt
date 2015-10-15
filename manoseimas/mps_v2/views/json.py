@@ -5,13 +5,11 @@ from functools import partial
 from django.core.urlresolvers import reverse
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
-from django.db import connection
 from django.db.models import Count
 
 from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
                                       LawProject, Suggestion)
-from manoseimas.mps_v2.utils import is_state_actor
-from manoseimas.utils import round, dict_fetch_all
+from manoseimas.utils import round
 
 from .statements import _build_discussion_context
 
@@ -130,48 +128,14 @@ def law_projects_json(request, mp_slug):
 
     return JsonResponse({'items': law_projects})
 
-
-#TODO: should this be a model method?
-def _get_suggesters():
-    cursor = connection.cursor()
-    cursor.execute("""
-        SELECT submitter AS title,
-               COUNT(source_id) AS law_project_count,
-               SUM(proposal_count) AS suggestion_count
-        FROM (
-            (SELECT submitter, source_id, COUNT(id) AS proposal_count
-             FROM mps_v2_suggestion
-             GROUP BY submitter, source_id) AS t2
-        )
-        GROUP BY submitter;
-    """)
-    rows = dict_fetch_all(cursor)
-
-    suggesters = [{
-        'title': row['title'],
-        'suggestion_count': int(row['suggestion_count']),
-        'law_project_count': int(row['law_project_count']),
-        'state_actor': is_state_actor(row['title']),
-    } for row in rows]
-
-    return suggesters
-
-#TODO: should this be a model method?
-def _get_suggesters_state():
-    return [item for item in _get_suggesters() if item['state_actor']]
-
-#TODO: should this be a model method?
-def _get_suggesters_other():
-    return [item for item in _get_suggesters() if not item['state_actor']]
-
 def suggesters_json(request):
     state_actor_filter = request.GET.get('state_actor', '').lower()
     if state_actor_filter in ('0', 'false', 'no'):
-        suggesters = _get_suggesters_other()
+        suggesters = Suggestion.suggestion_and_project_count_other()
     elif state_actor_filter in ('1', 'true', 'yes'):
-        suggesters = _get_suggesters_state()
+        suggesters = Suggestion.suggestion_and_project_count_state()
     else:
-        suggesters = _get_suggesters()
+        suggesters = Suggestion.suggestion_and_project_count()
     return JsonResponse({'items': suggesters,
                          'subtab_counts': subtab_counts()})
 
@@ -181,6 +145,6 @@ from manoseimas.lobbyists.models import Lobbyist
 def subtab_counts():
     """Counts of 'actors' in each subtab."""
     return {'lobbyists': Lobbyist.objects.count(),
-            'suggester_state': len(_get_suggesters_state()),
-            'suggester_other': len(_get_suggesters_other()),
+            'suggester_state': len(Suggestion.suggestion_and_project_count_state()),
+            'suggester_other': len(Suggestion.suggestion_and_project_count_other()),
             }
