@@ -99,7 +99,7 @@ var Switcher = React.createClass({
               explanation: 'Skaičiuojamas bendras kiekis paveiktų teisės aktų.',
               icon: 'users icon', order: -1},
             {
-              key: 'number_of_suggestions',
+              key: 'suggestion_count',
               title: 'Teikta pastabų',
               explanation: 'Skaičiuojamas bendras kiekis teiktų pastabų visiems teisės aktams.',
               icon: '', order: -1}
