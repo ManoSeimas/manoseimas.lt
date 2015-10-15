@@ -48,7 +48,7 @@ var Switcher = React.createClass({
             {
               key: 'law_project_count',
               title: 'Paveikti įstatymai',
-              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teisės aktų.',
               icon: 'users icon', order: -1},
             {
               key: 'client_count',
@@ -71,8 +71,8 @@ var Switcher = React.createClass({
               order: 1},
             {
               key: 'law_project_count',
-              title: 'Paveikti įstatmai',
-              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
+              title: 'Paveikti įstatymai',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teisės aktų.',
               icon: 'users icon', order: -1},
             {
               key: 'suggestion_count',
@@ -95,8 +95,8 @@ var Switcher = React.createClass({
               order: 1},
             {
               key: 'law_project_count',
-              title: 'Paveikti įstatmai',
-              explanation: 'Skaičiuojamas bendras kiekis paveiktų teiės aktų.',
+              title: 'Paveikti įstatymai',
+              explanation: 'Skaičiuojamas bendras kiekis paveiktų teisės aktų.',
               icon: 'users icon', order: -1},
             {
               key: 'number_of_suggestions',

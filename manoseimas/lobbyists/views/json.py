@@ -31,7 +31,6 @@ def _law_project_dict(project):
     }
 
 def law_projects_json(request, lobbyist_slug):
-    law_projects = {}
     lobbyist = Lobbyist.objects.get(slug=lobbyist_slug)
     projects = lobbyist.get_law_projects()
     return JsonResponse({'items': map(_law_project_dict, projects)})

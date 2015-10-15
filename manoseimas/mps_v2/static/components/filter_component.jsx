@@ -181,7 +181,7 @@ var SortableList = React.createClass({
 
 var SidebarFilter = React.createClass({
   componentDidMount: function() {
-    if (this.props.sticky_context){
+    if (this.props.sticky_context) {
       $('.ui.sticky').sticky({
         context: this.props.sticky_context,
         offset: 70
