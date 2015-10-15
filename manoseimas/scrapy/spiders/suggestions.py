@@ -293,9 +293,11 @@ class SuggestionsSpider(ManoSeimasSpider):
         # - "Seimo kanceliarijos Teisės departamentas, 201 5 -0 4 - 17"
         # - "Seimo kanceliarijos Teisės departamentas, 201 5 -0 4 -20"
         raw = submitter_and_date
-        submitter_and_date = re.sub(r'(\d) (\d)', r'\1\2', submitter_and_date)
+        short_date_re = re.compile(r'(\d\d\d\d ?-? ?[01]? ?\d ?-? ?[0-3] ?\d)\b')
+        if not short_date_re.search(submitter_and_date):
+            submitter_and_date = re.sub(r'(\d) (\d)', r'\1\2', submitter_and_date)
         submitter_and_date = cls._normalize_dates(submitter_and_date)
-        parts = re.split(r'(\d\d\d\d ?-? ?[01]? ?\d ?-? ?[0-3] ?\d)\b', submitter_and_date, maxsplit=1)
+        parts = short_date_re.split(submitter_and_date, maxsplit=1)
         submitter = parts[0]
         date = parts[1] if len(parts) > 1 else ''
         document = parts[2] if len(parts) > 2 else ''
