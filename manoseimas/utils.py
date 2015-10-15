@@ -74,7 +74,7 @@ def round(number):
 
 
 def dict_fetch_all(cursor):
-    "Raw query helper. Return all rows from a cursor as a dict"
+    """Raw query helper. Return all rows from a cursor as a dict"""
     columns = [col[0] for col in cursor.description]
     return [
         dict(zip(columns, row))
