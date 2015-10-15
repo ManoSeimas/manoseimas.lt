@@ -5,12 +5,13 @@ from functools import partial
 from django.core.urlresolvers import reverse
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
+from django.db import connection
 from django.db.models import Count
 
 from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
                                       LawProject, Suggestion)
 from manoseimas.mps_v2.utils import is_state_actor
-from manoseimas.utils import round
+from manoseimas.utils import round, dict_fetch_all
 
 from .statements import _build_discussion_context
 
@@ -132,26 +133,26 @@ def law_projects_json(request, mp_slug):
 
 #TODO: should this be a model method?
 def _get_suggesters():
-    suggestion_count_qs = Suggestion.objects.values('submitter').annotate(suggestion_count=Count('id'))
+    cursor = connection.cursor()
+    cursor.execute("""
+        SELECT submitter AS title,
+               COUNT(source_id) AS law_project_count,
+               SUM(proposal_count) AS suggestion_count
+        FROM (
+            (SELECT submitter, source_id, COUNT(id) AS proposal_count
+             FROM mps_v2_suggestion
+             GROUP BY submitter, source_id) AS t2
+        )
+        GROUP BY submitter;
+    """)
+    rows = dict_fetch_all(cursor)
 
     suggesters = [{
-        'title': suggester['submitter'],
-        'suggestion_count': suggester['suggestion_count'],
-        'state_actor': is_state_actor(suggester['submitter']),
-    } for suggester in suggestion_count_qs]
-
-    # TODO: a smart query should replace this contraption
-    law_project_count_qs = Suggestion.objects.values('submitter','source_id').distinct()
-    suggester_documents = [(item['submitter'], item['source_id']) for item in law_project_count_qs]
-    counts = {}
-    for t in suggester_documents:
-        title = t[0]
-        if title not in counts:
-            counts[title] = 1
-        else:
-            counts[title] += 1
-    for suggester in suggesters:
-        suggester['law_project_count'] = counts[suggester['title']]
+        'title': row['title'],
+        'suggestion_count': int(row['suggestion_count']),
+        'law_project_count': int(row['law_project_count']),
+        'state_actor': is_state_actor(row['title']),
+    } for row in rows]
 
     return suggesters
 
