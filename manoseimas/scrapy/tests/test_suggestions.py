@@ -498,6 +498,15 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Audito Komitetas",
             u"Audito komitetas",
         ],
+        u"Biudžeto ir finansų komitetas": [
+            u"Biudžeto ir finansų komitetas",
+            u"Biudžeto ir finansų komitetas, 2012-12-12109-P-41(4)",
+            u"Biudžeto ir finansų komitetas (patikslinta išvada)",
+        ],
+        u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti": [
+            u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti",
+            u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos 2013 m. gegužės 29 d. sprendimu Nr. SV-S-255)",
+        ],
         u"Darbo saugos specialistų darbdavių asociacija": [
             u"Darbo saugos specialistų darbdavių asociacija",
             u"Darbų saugos specialistų darbdavių asociacija",

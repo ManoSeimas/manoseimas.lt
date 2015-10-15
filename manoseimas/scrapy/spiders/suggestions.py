@@ -308,11 +308,13 @@ class SuggestionsSpider(ManoSeimasSpider):
     def _clean_submitter(submitter):
         submitter = re.sub(r'\d\d\d\d(-\d\d)?-?$', '', submitter)
         submitter = re.sub(r'\(gauta *$', '', submitter)
+        submitter = re.sub(r'\(sudaryta [^)]*\)', '', submitter)
         submitter = submitter.rstrip('(, ')
         submitter = submitter.replace(',,', u'„')
         submitter = re.sub(ur'- ?(?!urbanist|visuotin)([a-ząčęėįšųūž])', r'\1', submitter)
         submitter = re.sub(ur'(\.)([A-ZĄČĘĖĮŠŲŪŽ])', r'\1 \2', submitter)
         submitter = re.sub(ur'(?<!\bkt)\.$', r'', submitter)
+        submitter = re.sub(ur'(komitetas)(?! prie).+$', r'\1', submitter)
         replacements = {
             u'departamenras': 'departamentas',
             u'departamentamentas': 'departamentas',
@@ -336,8 +338,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Aukščiausias Teismas': u'Aukščiausiasis Teismas',
             u'Aukščiausiasis teismas': u'Aukščiausiasis Teismas',
             u'Lietuvos Advokatūra': u'Lietuvos advokatūra',
-            u'Apeliacinis Teismas': u'apeliacinis teismas',
-            u'Apeliacinis teismas': u'apeliacinis teismas',
+            u' Apeliacinis Teismas': u' apeliacinis teismas',
+            u' Apeliacinis teismas': u' apeliacinis teismas',
             u'pramoninkų': u'pramonininkų',
             u'tarnyb a': u'tarnyba',
             u'tarnyba tarnyba': u'tarnyba',
@@ -367,6 +369,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vilnaius': u'Vilniaus',
             u' Universitetas': u' universitetas',
             u'VšĮ': u'VŠĮ',
+            u'ministreijos': 'ministerijos',
+            u'departame ntas': 'departamentas',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
