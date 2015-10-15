@@ -297,7 +297,23 @@ class SuggestionsSpider(ManoSeimasSpider):
 
     @staticmethod
     def _clean_submitter(submitter):
-        return submitter.rstrip('(, ')
+        submitter = re.sub(r'\(gauta *$', '', submitter)
+        submitter = submitter.rstrip('(, ')
+        submitter = submitter.replace(',,', u'„')
+        submitter = re.sub(ur'- ?(?!urbanist|visuotin)([a-ząčęėįšųūž])', r'\1', submitter)
+        submitter = re.sub(ur'(\.)([A-ZĄČĘĖĮŠŲŪŽ])', r'\1 \2', submitter)
+        submitter = submitter.replace('departamenras', 'departamentas')
+        submitter = submitter.replace('departamentamentas', 'departamentas')
+        submitter = submitter.replace(u'RespublikosPrezidentės', u'Respublikos Prezidentės')
+        submitter = submitter.replace(u'Teisėsdepartamentas', u'Teisės departamentas')
+        submitter = submitter.replace(u'Žaliais taškas', u'Žaliasis taškas')
+        submitter = submitter.replace(u'LAMPETRA', u'Lampetra')
+        submitter = submitter.replace(u'AB LESTO', u'AB „Lesto“')
+        submitter = submitter.replace(u'AB Lietuvos dujos“', u'AB „Lietuvos dujos“')
+        submitter = submitter.replace(u'AB Litgrid', u'AB „Litgrid“')
+        submitter = submitter.replace(u'AB LOTOS Geonafta įmonių grupė', u'AB „LOTOS Geonafta įmonių grupė“')
+        submitter = submitter.replace(u'įmonių grupė“ UAB', u'įmonių grupė“, UAB')
+        return submitter
 
     @staticmethod
     def _clean_date(date):

@@ -376,6 +376,93 @@ class TestRowParsing(unittest.TestCase):
         ))
 
 
+class TestSubmitterCleaning(unittest.TestCase):
+
+    examples = [
+        # Blank values get passed through
+        (u'', u''),
+        (u'-', u'-'),
+        # When you split "name (date, document no)" or "name, date" you end up
+        # with trailing " (" or ", ".
+        (u'STT (', u'STT'),
+        (u'STT, ', u'STT'),
+        (u'Žemės ūkio ministerija (gauta',
+         u'Žemės ūkio ministerija'),
+        # Often quotes are entered incorrectly
+        (u'AB ,,Amber grid“',
+         u'AB „Amber grid“'),
+        # Spacing after initials
+        (u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė",
+         u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė"),
+        (u"Etninės kultūros globos tarybos pirmininkė D.Urbanavičienė",
+         u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė"),
+        # Hyphenation
+        (u'A.Drevin-skas', u'A. Drevinskas'),
+        (u'Seimo kanceliari-jos Teisės departa- mentas',
+         u'Seimo kanceliarijos Teisės departamentas'),
+        # Hyphenation exceptions
+        (u'Pilietė A. Butkutė-Žverelo',
+         u'Pilietė A. Butkutė-Žverelo'),
+        (u'Architektė-urbanistė Agnė Selemonaitė',
+         u'Architektė-urbanistė Agnė Selemonaitė'),
+        (u'Koalicija „Moters teisės-visuotinės žmogaus teisės“',
+         u'Koalicija „Moters teisės-visuotinės žmogaus teisės“'),
+        # Some people have trouble spelling 'departamentas'
+        (u'Europos teisės departa-menras',
+         u'Europos teisės departamentas'),
+        (u'Seimo kanceliari-jos Teisės departa-menta-mentas',
+         u'Seimo kanceliarijos Teisės departamentas'),
+        # Spaces are important
+        (u'Lietuvos RespublikosPrezidentės dekretas',
+         u'Lietuvos Respublikos Prezidentės dekretas'),
+        (u'Seimo kanceliari-jos Teisėsdepartamentas',
+         u'Seimo kanceliarijos Teisės departamentas'),
+        # Typos
+        (u'VŠĮ „Žaliais taškas“',
+         u'VŠĮ „Žaliasis taškas“'),
+        # Different spellings
+        (u'Žuvininkystės įmonių asociacija „LAMPETRA“',
+         u'Žuvininkystės įmonių asociacija „Lampetra“'),
+        (u'Žuvininkystės įmonių asociacija „Lampetra“',
+         u'Žuvininkystės įmonių asociacija „Lampetra“'),
+        (u'AB LESTO', u'AB „Lesto“'),
+        (u'AB „Lesto“', u'AB „Lesto“'),
+        (u"AB „Lietuvos dujos“", u"AB „Lietuvos dujos“"),
+        (u"AB Lietuvos dujos“", u"AB „Lietuvos dujos“"),
+        (u"AB „Litgrid“", u"AB „Litgrid“"),
+        (u"AB Litgrid", u"AB „Litgrid“"),
+        (u"AB „LOTOS Geonafta įmonių grupė“ UAB „Minijos nafta“, UAB „LL investicijos“",
+         u"AB „LOTOS Geonafta įmonių grupė“, UAB „Minijos nafta“, UAB „LL investicijos“"),
+        (u"AB LOTOS Geonafta įmonių grupė, UAB „Minijos nafta“, UAB „LL investicijos“",
+         u"AB „LOTOS Geonafta įmonių grupė“, UAB „Minijos nafta“, UAB „LL investicijos“"),
+        (u"Asociacija „INFOBALT“",
+         u"Asociacija „Infobalt“"),
+        (u"Asociacija „Infobalt“",
+         u"Asociacija „Infobalt“"),
+        (u"Asociacija „Investors‘ Forum,“"
+         u"Asociacija „Investuotojų forumas“"),
+        (u"Asociacija „Investuotojų forumas“"
+         u"Asociacija „Investuotojų forumas“"),
+        (u"Asociacija „Lietuvos antstolių rūmai“",
+         u"Asociacija „Lietuvos antstolių rūmai“"),
+        (u"Asociacija Lietuvos antstolių rūmai",
+         u"Asociacija „Lietuvos antstolių rūmai“"),
+        (u"Audito Komitetas",
+         u"Audito komitetas"),
+        (u"Audito komitetas",
+         u"Audito komitetas"),
+        (u"Darbo saugos specialistų darbdavių asociacija",
+         u"Darbo saugos specialistų darbdavių asociacija"),
+        (u"Darbų saugos specialistų darbdavių asociacija",
+         u"Darbo saugos specialistų darbdavių asociacija"),
+    ]
+
+    def test(self):
+        for example, expected in self.examples:
+            actual = SuggestionsSpider._clean_submitter(example)
+            self.assertEqual(actual, expected)
+
+
 class TestTableColumnParsing(unittest.TestCase):
 
     def check(self, html, *expected_for_each_row):
