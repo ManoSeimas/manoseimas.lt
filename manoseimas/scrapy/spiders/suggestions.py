@@ -310,12 +310,15 @@ class SuggestionsSpider(ManoSeimasSpider):
 
     @staticmethod
     def _clean_submitter(submitter):
-        submitter = re.sub(r'\d\d\d\d(-\d\d)?-?$', '', submitter)
-        submitter = re.sub(r'\(gauta *$', '', submitter)
         submitter = re.sub(r'\(sudaryta [^)]*\)', '', submitter)
-        submitter = re.sub(ur' išvada.*$', '', submitter)
+        submitter = re.sub(ur'([ \d])išvada.*$', r'\1', submitter)
         submitter = re.sub(r'\((?:pateikiama )?sutrumpintai\)', '', submitter)
-        submitter = submitter.rstrip('(, ')
+        submitter = re.sub(ur'\s+dėl įstatymo projekto [^,]*', '', submitter)
+        submitter = re.sub(ur', \d\d\d\d Nr. [^,]*', '', submitter)
+        submitter = re.sub(r'\d\d\d\d(-\d\d)?-?$', '', submitter)
+        submitter = re.sub(r'20\d\d?(-\d\d?)?(-\d\d?)?v?$', '', submitter)
+        submitter = re.sub(r'\(gauta *$', '', submitter)
+        submitter = submitter.rstrip('(,; ')
         submitter = submitter.replace(',,', u'„')
         submitter = re.sub(ur'- ?(?!urbanist|visuotin)([a-ząčęėįšųūž])', r'\1', submitter)
         submitter = re.sub(ur'(\.)([A-ZĄČĘĖĮŠŲŪŽ])', r'\1 \2', submitter)
@@ -324,8 +327,12 @@ class SuggestionsSpider(ManoSeimasSpider):
         replacements = {
             u'departamenras': 'departamentas',
             u'departamentamentas': 'departamentas',
+            u'departamantas': 'departamentas',
+            u'departamntas': 'departamentas',
             u'RespublikosPrezidentės': u'Respublikos Prezidentės',
             u'Teisėsdepartamentas': u'Teisės departamentas',
+            u'Teisės departamentas (TD)': u'Teisės departamentas',
+            u'Teisės departamento (TD)': u'Teisės departamentas',
             u'Žaliais taškas': u'Žaliasis taškas',
             u'LAMPETRA': u'Lampetra',
             u'INFOBALT': u'Infobalt',
@@ -380,9 +387,18 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'ministreijos': 'ministerijos',
             u'departame ntas': 'departamentas',
             u'LR Seimo': u'Seimo',
+            u'LRS Seimo': u'Seimo',
+            u'LRS kanceliarijos': u'Seimo kanceliarijos',
+            u'Seimo Kanceliarijos': u'Seimo kanceliarijos',
+            u'Lietuvos Respublikos Seimo kanceliarijos': u'Seimo kanceliarijos',
             u'Seimo kanceliarijos teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
             u'Teisingum 0': u'Teisingumo',
             u'departametas': u'departamentas',
+            u'kanceliarij os': u'kanceliarijos',
+            u'kancelarijos': u'kanceliarijos',
+            u'Seimo Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+            u'LRS Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+            u'Teisės Departamentas': u'Teisės departamentas',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -390,6 +406,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
             u'TD': u'Seimo kanceliarijos Teisės departamentas',
+            u'Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
         }.get(submitter, submitter)
         return submitter
 
