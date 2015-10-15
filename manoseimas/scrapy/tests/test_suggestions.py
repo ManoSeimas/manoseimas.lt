@@ -329,6 +329,10 @@ class TestRowParsing(unittest.TestCase):
                          {'submitter': u'Seimo kanceliarijos Teisės departamentas',
                           'date': '2013-08-02',
                           'document': ''})
+        self.assertEqual(f(u'Ekonomikos komitetas, 2015 m. rugsėjo 16 d. išvada Nr. 108-P-22'),
+                         {'submitter': u'Ekonomikos komitetas',
+                          'date': '2015-09-16',
+                          'document': u'išvada Nr. 108-P-22'})
 
     @unittest.skip("Not implemented yet")
     def test_parse_submitter_unhandled_cases(self):

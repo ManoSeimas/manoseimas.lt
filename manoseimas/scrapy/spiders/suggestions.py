@@ -10,6 +10,7 @@ from scrapy.contrib.spiders import Rule
 
 from manoseimas.scrapy.spiders import ManoSeimasSpider
 from manoseimas.scrapy.items import Suggestion
+from manoseimas.scrapy.helpers.dates import date_re, month_names_map
 from manoseimas.scrapy import pipelines
 
 
@@ -292,6 +293,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         # - "Seimo kanceliarijos Teisės departamentas, 201 5 -0 4 - 17"
         # - "Seimo kanceliarijos Teisės departamentas, 201 5 -0 4 -20"
         submitter_and_date = re.sub(r'(\d) (\d)', r'\1\2', submitter_and_date)
+        submitter_and_date = cls._normalize_dates(submitter_and_date)
         parts = re.split(r'(\d\d\d\d ?-? ?[01]? ?\d ?-? ?[0-3] ?\d)\b', submitter_and_date, maxsplit=1)
         submitter = parts[0]
         date = parts[1] if len(parts) > 1 else ''
@@ -369,6 +371,11 @@ class SuggestionsSpider(ManoSeimasSpider):
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
         return submitter
+
+    @staticmethod
+    def _normalize_dates(s):
+        return date_re.sub(lambda m: '%04d-%02d-%02d' % (
+            int(m.group(1)), month_names_map[m.group(2)], int(m.group(3))), s)
 
     @staticmethod
     def _clean_date(date):

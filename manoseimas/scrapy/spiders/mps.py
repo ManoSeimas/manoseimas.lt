@@ -18,25 +18,12 @@ from manoseimas.scrapy.textutils import str2dict
 from manoseimas.scrapy import textutils
 
 from manoseimas.scrapy import pipelines
+from manoseimas.scrapy.helpers.dates import month_names_map
 
 group_meta_re = re.compile(r'.*, ([^(]+)(?:\(([^)]+)\))?')
 date_re = re.compile(r'\d{4}-\d\d-\d\d')
 dob_re = re.compile(u'Gim\u0117 (\d{4}) m\. (\w+) (\d+) d\.', re.UNICODE)
 
-month_names_map = {
-    u'sausio':     1,
-    u'vasario':    2,
-    u'kovo':       3,
-    u'balandžio':  4,
-    u'gegužės':    5,
-    u'birželio':   6,
-    u'liepos':     7,
-    u'rugpjūčio':  8,
-    u'rugsėjo':    9,
-    u'spalio':    10,
-    u'lapkričio': 11,
-    u'gruodžio':  12,
-}
 
 # This maps URL components to different Seimas versions
 seimas_version_map = {
