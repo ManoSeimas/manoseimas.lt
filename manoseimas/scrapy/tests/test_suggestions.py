@@ -378,89 +378,240 @@ class TestRowParsing(unittest.TestCase):
 
 class TestSubmitterCleaning(unittest.TestCase):
 
-    examples = [
+    # Map expected value to a list of input values that should produce it.
+    # It's also expected that the cleaning function is idempotent, so the
+    # expected value itself is implicitly added to the input value list.
+    examples = {
         # Blank values get passed through
-        (u'', u''),
-        (u'-', u'-'),
+        u'': [],
+        u'-': [],
         # When you split "name (date, document no)" or "name, date" you end up
         # with trailing " (" or ", ".
-        (u'STT (', u'STT'),
-        (u'STT, ', u'STT'),
-        (u'Žemės ūkio ministerija (gauta',
-         u'Žemės ūkio ministerija'),
+        u'STT': [
+            u'STT (',
+            u'STT, ',
+        ],
+        u'Žemės ūkio ministerija': [
+            u'Žemės ūkio ministerija (gauta',
+        ],
+        # Trailing incomplete date fragments are stripped
+        u'STT': [
+            u'STT 2014-',
+            u'STT, 2013-01-',
+        ],
+        # Trailing periods are stripped
+        u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos": [
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
+        ],
+        # Exception: trailing periods are sometimes necessary
+        u"R. Jocienė ir kt.": [],
         # Often quotes are entered incorrectly
-        (u'AB ,,Amber grid“',
-         u'AB „Amber grid“'),
+        u'AB „Amber grid“': [
+            u'AB „Amber grid“',
+            u'AB ,,Amber grid“',
+        ],
         # Spacing after initials
-        (u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė",
-         u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė"),
-        (u"Etninės kultūros globos tarybos pirmininkė D.Urbanavičienė",
-         u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė"),
+        u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė": [
+            u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė",
+            u"Etninės kultūros globos tarybos pirmininkė D.Urbanavičienė",
+        ],
         # Hyphenation
-        (u'A.Drevin-skas', u'A. Drevinskas'),
-        (u'Seimo kanceliari-jos Teisės departa- mentas',
-         u'Seimo kanceliarijos Teisės departamentas'),
+        u'A. Drevinskas': [
+            u'A.Drevin-skas',
+            u'A. Drevinskas',
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u'Seimo kanceliari-jos Teisės departa- mentas',
+            u'Seimo kanceliarijos Teisės departamentas',
+        ],
         # Hyphenation exceptions
-        (u'Pilietė A. Butkutė-Žverelo',
-         u'Pilietė A. Butkutė-Žverelo'),
-        (u'Architektė-urbanistė Agnė Selemonaitė',
-         u'Architektė-urbanistė Agnė Selemonaitė'),
-        (u'Koalicija „Moters teisės-visuotinės žmogaus teisės“',
-         u'Koalicija „Moters teisės-visuotinės žmogaus teisės“'),
+        u'Pilietė A. Butkutė-Žverelo': [
+            u'Pilietė A. Butkutė-Žverelo',
+        ],
+        u'Architektė-urbanistė Agnė Selemonaitė': [
+            u'Architektė-urbanistė Agnė Selemonaitė',
+        ],
+        u'Koalicija „Moters teisės-visuotinės žmogaus teisės“': [
+            u'Koalicija „Moters teisės-visuotinės žmogaus teisės“',
+        ],
         # Some people have trouble spelling 'departamentas'
-        (u'Europos teisės departa-menras',
-         u'Europos teisės departamentas'),
-        (u'Seimo kanceliari-jos Teisės departa-menta-mentas',
-         u'Seimo kanceliarijos Teisės departamentas'),
+        u'Europos teisės departamentas': [
+            u'Europos teisės departa-menras',
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u'Seimo kanceliari-jos Teisės departa-menta-mentas',
+        ],
         # Spaces are important
-        (u'Lietuvos RespublikosPrezidentės dekretas',
-         u'Lietuvos Respublikos Prezidentės dekretas'),
-        (u'Seimo kanceliari-jos Teisėsdepartamentas',
-         u'Seimo kanceliarijos Teisės departamentas'),
+        u'Lietuvos Respublikos Prezidentės dekretas': [
+            u'Lietuvos RespublikosPrezidentės dekretas',
+        ],
+        u'Seimo kanceliarijos Teisės departamentas': [
+            u'Seimo kanceliari-jos Teisėsdepartamentas',
+        ],
         # Typos
-        (u'VŠĮ „Žaliais taškas“',
-         u'VŠĮ „Žaliasis taškas“'),
+        u'VŠĮ „Žaliasis taškas“': [
+            u'VŠĮ „Žaliais taškas“',
+            u'VŠĮ „Žaliasis taškas“',
+        ],
+        u"VŠĮ Vilniaus universiteto ligoninės Santariškių klinikos": [
+            u"VšĮ Vilnaius universiteto ligoninės Santariškių klinikos",
+            u"VšĮ Vilniaus universiteto ligoninės Santariškių klinikos",
+        ],
         # Different spellings
-        (u'Žuvininkystės įmonių asociacija „LAMPETRA“',
-         u'Žuvininkystės įmonių asociacija „Lampetra“'),
-        (u'Žuvininkystės įmonių asociacija „Lampetra“',
-         u'Žuvininkystės įmonių asociacija „Lampetra“'),
-        (u'AB LESTO', u'AB „Lesto“'),
-        (u'AB „Lesto“', u'AB „Lesto“'),
-        (u"AB „Lietuvos dujos“", u"AB „Lietuvos dujos“"),
-        (u"AB Lietuvos dujos“", u"AB „Lietuvos dujos“"),
-        (u"AB „Litgrid“", u"AB „Litgrid“"),
-        (u"AB Litgrid", u"AB „Litgrid“"),
-        (u"AB „LOTOS Geonafta įmonių grupė“ UAB „Minijos nafta“, UAB „LL investicijos“",
-         u"AB „LOTOS Geonafta įmonių grupė“, UAB „Minijos nafta“, UAB „LL investicijos“"),
-        (u"AB LOTOS Geonafta įmonių grupė, UAB „Minijos nafta“, UAB „LL investicijos“",
-         u"AB „LOTOS Geonafta įmonių grupė“, UAB „Minijos nafta“, UAB „LL investicijos“"),
-        (u"Asociacija „INFOBALT“",
-         u"Asociacija „Infobalt“"),
-        (u"Asociacija „Infobalt“",
-         u"Asociacija „Infobalt“"),
-        (u"Asociacija „Investors‘ Forum,“"
-         u"Asociacija „Investuotojų forumas“"),
-        (u"Asociacija „Investuotojų forumas“"
-         u"Asociacija „Investuotojų forumas“"),
-        (u"Asociacija „Lietuvos antstolių rūmai“",
-         u"Asociacija „Lietuvos antstolių rūmai“"),
-        (u"Asociacija Lietuvos antstolių rūmai",
-         u"Asociacija „Lietuvos antstolių rūmai“"),
-        (u"Audito Komitetas",
-         u"Audito komitetas"),
-        (u"Audito komitetas",
-         u"Audito komitetas"),
-        (u"Darbo saugos specialistų darbdavių asociacija",
-         u"Darbo saugos specialistų darbdavių asociacija"),
-        (u"Darbų saugos specialistų darbdavių asociacija",
-         u"Darbo saugos specialistų darbdavių asociacija"),
-    ]
+        u'Žuvininkystės įmonių asociacija „Lampetra“': [
+            u'Žuvininkystės įmonių asociacija „LAMPETRA“',
+            u'Žuvininkystės įmonių asociacija „Lampetra“',
+        ],
+        u'AB „Lesto“': [
+            u'AB „Lesto“',
+            u'AB LESTO',
+        ],
+        u"AB „Lietuvos dujos“": [
+            u"AB „Lietuvos dujos“",
+            u"AB Lietuvos dujos“",
+        ],
+        u"AB „Litgrid“": [
+            u"AB „Litgrid“",
+            u"AB Litgrid",
+        ],
+        u"AB „LOTOS Geonafta įmonių grupė“, UAB „Minijos nafta“, UAB „LL investicijos“": [
+            u"AB „LOTOS Geonafta įmonių grupė“ UAB „Minijos nafta“, UAB „LL investicijos“",
+            u"AB LOTOS Geonafta įmonių grupė, UAB „Minijos nafta“, UAB „LL investicijos“",
+        ],
+        u"Asociacija „Infobalt“": [
+            u"Asociacija „INFOBALT“",
+            u"Asociacija „Infobalt“",
+        ],
+        u"Asociacija „Investuotojų forumas“": [
+            u"Asociacija „Investors‘ Forum,“",
+            u"Asociacija „Investuotojų forumas“",
+        ],
+        u"Asociacija „Lietuvos antstolių rūmai“": [
+            u"Asociacija „Lietuvos antstolių rūmai“",
+            u"Asociacija Lietuvos antstolių rūmai",
+        ],
+        u"Audito komitetas": [
+            u"Audito Komitetas",
+            u"Audito komitetas",
+        ],
+        u"Darbo saugos specialistų darbdavių asociacija": [
+            u"Darbo saugos specialistų darbdavių asociacija",
+            u"Darbų saugos specialistų darbdavių asociacija",
+        ],
+        u"Lietuvos miško savininkų asociacija": [
+            u"Lietuvos miško savininkų asociacija",
+            u"Lietuvos miškų savininkų asociacija",
+        ],
+        u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“": [
+            u"Lietuvos nacionalinė vežėjų asociacija LINAVA",
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija „LINAVA“",
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija LINAVA",
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
+        ],
+        u"Lietuvos nealkoholinių gėrimų gamintojų bei importuotojų asociacija": [
+            u"Lietuvos nealkoholinių gėrimų gamintojų bei importuotojų asociacija",
+            u"Lietuvos nealkoholinių gėrimų gamintojų ir importuotojų asociacija",
+        ],
+        u"Lietuvos pramonininkų konfederacija": [
+            u"Lietuvos pramonininkų Konfederacija",
+            u"Lietuvos pramonininkų konfederacija",
+            u"Lietuvos pramoninkų konfederacija",
+        ],
+        u"Lietuvos Respublikos finansų ministerija": [
+            u"Lietuvos Respublikos Finansų ministerija",
+            u"Lietuvos Respublikos finansų ministerija",
+        ],
+        u"Lietuvos Respublikos generalinė prokuratūra": [
+            u"Lietuvos Respublikos Generalinė prokuratūra",
+            u"Lietuvos Respublikos generalinė prokuratūra",
+        ],
+        u"Lietuvos Respublikos Seimo biudžeto ir finansų komitetas": [
+            u"Lietuvos Respublikos Seimo Biudžeto ir finansų komitetas",
+            u"Lietuvos Respublikos Seimo biudžeto ir finansų komitetas",
+        ],
+        u"Lietuvos Respublikos specialiųjų tyrimų tarnyba": [
+            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyb a",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba.",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Lietuvos respublikos specialiųjų tyrimų tarnyba",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba 2012-",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba, 2013-01-",
+            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba tarnyb a",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba (toliau– STT)",
+        ],
+        u"Lietuvos Respublikos teisingumo ministerija": [
+            u"Lietuvos Respublikos Teisingumo ministerija",
+            u"Lietuvos Respublikos teisingumo ministerija",
+        ],
+        u"Lietuvos Respublikos transporto priemonių draudikų biuras": [
+            u"Lietuvos Respublikos Transporto priemonių draudikų biuras",
+            u"Lietuvos Respublikos transporto priemonių draudikų biuras",
+        ],
+        u"Lietuvos Respublikos trišalė taryba": [
+            u"Lietuvos Respublikos Trišalė taryba",
+            u"Lietuvos Respublikos trišalė taryba",
+        ],
+        u"Lietuvos Respublikos ūkio ministerija": [
+            u"Lietuvos Respublikos Ūkio ministerija",
+            u"Lietuvos Respublikos ūkio ministerija",
+        ],
+        u"Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga": [
+            u"Lietuvos Respublikos Vaiko teisių apsaugos kontrolės įstaiga",
+            u"Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga",
+        ],
+        u"Lietuvos Respublikos valstybės saugumo departamentas": [
+            u"Lietuvos Respublikos Valstybės saugumo departamentas",
+            u"Lietuvos Respublikos valstybės saugumo departamentas",
+        ],
+        u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
+            u"Lietuvos Respublikos Vyriausioji rinkimų komisija",
+            u"Lietuvos Respublikos vyriausioji rinkimų komisija",
+        ],
+        u"Lietuvos savivaldybių asociacija": [
+            u"Lietuvos Savivaldybių asociacija",
+            u"Lietuvos savivaldybių asociacija",
+        ],
+        # Different capitalizations
+        u"Legalaus verslo aljansas": [
+            u"Legalaus Verslo aljansas",
+        ],
+        u"Lietuvos apeliacinis teismas": [
+            u"Lietuvos Apeliacinis Teismas",
+            u"Lietuvos Apeliacinis teismas",
+            u"Lietuvos apeliacinis teismas",
+        ],
+        u"Lietuvos advokatūra": [
+            u"Lietuvos Advokatūra",
+            u"Lietuvos advokatūra",
+        ],
+        u"Lietuvos karjerų asociacija": [
+            u"LIETUVOS KARJERŲ ASOCIACIJA",
+            u"Lietuvos karjerų asociacija",
+        ],
+        u"Vytauto Didžiojo universitetas": [
+            u"Vytauto Didžiojo Universitetas",
+            u"Vytauto Didžiojo universitetas",
+        ],
+        u"VŠĮ Lietuvos laisvosios rinkos institutas": [
+            u"VŠĮ Lietuvos laisvosios rinkos institutas",
+            u"VšĮ Lietuvos laisvosios rinkos institutas",
+        ],
+        # Some fun typos here too
+        u'Lietuvos Aukščiausiasis Teismas': [
+            u"Lietuvos Aukčiausiasis Teismas",
+            u"Lietuvos Aukščiausiais Teismas",
+            u"Lietuvos Aukščiausiasis Teismas",
+            u"Lietuvos Aukščiausiasis teismas",
+            u"Lietuvos Aukščiausias Teismas",
+        ],
+    }
 
     def test(self):
-        for example, expected in self.examples:
-            actual = SuggestionsSpider._clean_submitter(example)
-            self.assertEqual(actual, expected)
+        for expected, inputs in sorted(self.examples.items()):
+            for example in sorted(inputs + [expected]):
+                actual = SuggestionsSpider._clean_submitter(example)
+                self.assertEqual(actual, expected)
 
 
 class TestTableColumnParsing(unittest.TestCase):
