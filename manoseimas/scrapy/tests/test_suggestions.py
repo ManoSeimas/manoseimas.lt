@@ -100,6 +100,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'',
                 source_url='http://localhost/test.html',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
                 submitter=u'STT',
@@ -107,6 +108,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
+                raw=u'',
             ),
             Suggestion(
                 submitter=u'LR Vyriausybė',
@@ -114,6 +116,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'',
                 opinion=u'Pritarti iš dalies',
                 source_url='http://localhost/test.html',
+                raw=u'LR Vyriausybė, 2015-10-09',
             ),
         ])
 
@@ -173,6 +176,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'',
                 source_url='http://localhost/test.html',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
                 submitter=u'STT',
@@ -180,6 +184,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
+                raw=u'',
             ),
             Suggestion(
                 submitter=u'LR Vyriausybė',
@@ -187,6 +192,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'',
                 opinion=u'Pritarti iš dalies',
                 source_url='http://localhost/test.html',
+                raw=u'LR Vyriausybė, 2015-10-09',
             ),
         ])
 
@@ -390,6 +396,7 @@ class TestRowParsing(unittest.TestCase):
             date=u'2015-10-09',
             document=u'raštas Nr. g-2015-123',
             opinion=u'Pritarti',
+            raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
         ))
 
 
@@ -927,6 +934,7 @@ class TestSuggestionsSpider(unittest.TestCase):
                 source_url='http://localhost/test.html?p_id=12345',
                 source_id='12345',
                 source_index=0,
+                raw=u'LR Vyriausybė, 2015-10-09',
             ),
         ])
 
