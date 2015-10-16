@@ -713,6 +713,12 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"TD",
             u"Teisės departamentas",
         ],
+        u"Finansinių nusikaltimų tyrimo tarnyba prie Vidaus reikalų ministerijos": [
+            u"Finansinių nusikaltimų tyrimo tarnyba prie Lietuvos Respublikos vidaus reikalų ministerijos",
+            u"Finansinių nusikaltimų tyrimo tarnyba prie LR vidaus reikalų ministerijos",
+            u"Finansinių nusikaltimų tyrimo tarnyba prie Vidaus reikalų ministerijos",
+            u"Finansinių nusikaltimų tyrimų tarnyba prie Vidaus reikalų ministerijos",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",

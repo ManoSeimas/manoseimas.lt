@@ -404,6 +404,9 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Seimo Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
             u'LRS Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
             u'Teisės Departamentas': u'Teisės departamentas',
+            u'prie LR': u'prie Lietuvos Respublikos',
+            u'prie Lietuvos Respublikos vidaus reikalų ministerijos': u'prie Vidaus reikalų ministerijos',
+            u'nusikaltimų tyrimų tarnyba': u'nusikaltimų tyrimo tarnyba',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
