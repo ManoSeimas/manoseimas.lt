@@ -602,7 +602,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos pramonininkų konfederacija",
             u"Lietuvos pramoninkų konfederacija",
         ],
-        u"Lietuvos Respublikos finansų ministerija": [
+        u"Finansų ministerija": [
             u"Lietuvos Respublikos Finansų ministerija",
             u"Lietuvos Respublikos finansų ministerija",
         ],
@@ -625,7 +625,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba tarnyb a",
             u"Lietuvos Respublikos specialiųjų tyrimų tarnyba (toliau– STT)",
         ],
-        u"Lietuvos Respublikos teisingumo ministerija": [
+        u"Teisingumo ministerija": [
             u"Lietuvos Respublikos Teisingumo ministerija",
             u"Lietuvos Respublikos teisingumo ministerija",
         ],
@@ -637,7 +637,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos Trišalė taryba",
             u"Lietuvos Respublikos trišalė taryba",
         ],
-        u"Lietuvos Respublikos ūkio ministerija": [
+        u"Ūkio ministerija": [
             u"Lietuvos Respublikos Ūkio ministerija",
             u"Lietuvos Respublikos ūkio ministerija",
         ],
@@ -743,6 +743,23 @@ class TestSubmitterCleaning(unittest.TestCase):
         ],
         u'Local American Working Group (LAWG)': [
             u'LAWG',
+        ],
+        u'Kultūros ministerija': [
+            u'Kultūros ministerija',
+            u'LR kultūros ministerija',
+        ],
+        u"Aplinkos ministerija": [
+            u"Aplinkos ministerija",
+            u"Lietuvos Respublikos aplinkos ministerija",
+        ],
+        u"Energetikos ministerija": [
+            u"Energetikos ministerija",
+            u"Lietuvos Respublikos Energetikos ministerija",
+        ],
+        u"Žemės ūkio ministerija": [
+            u"LR Žemės ūkio ministerija",
+            u"Lietuvos Respublikos žemės ūkio ministerija",
+            u"Žemės ūkio ministerija",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [

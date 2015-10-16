@@ -416,6 +416,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             submitter = submitter.replace(a, b)
         submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
         submitter = re.sub(ur' \(JTVPK\)$', '', submitter)
+        submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
             u'TD': u'Seimo kanceliarijos Teisės departamentas',
