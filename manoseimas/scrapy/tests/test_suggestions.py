@@ -346,6 +346,10 @@ class TestSubmitterParsing(unittest.TestCase):
          {'submitter': u'Darbo grupė viešojo sektoriaus audito sistemai tobulinti',
           'date': '2013-10-15',
           'document': ''}),
+        (u'Durpių įmonių asociacija „Lietuviškos durpės“ Ruošė: Ginutis Juozapavičius G-2013-6053',
+         {'submitter': u'Durpių įmonių asociacija „Lietuviškos durpės“ Ruošė: Ginutis Juozapavičius',
+          'date': '',
+          'document': u'G-2013-6053'}),
     ]
 
     def test(self):
