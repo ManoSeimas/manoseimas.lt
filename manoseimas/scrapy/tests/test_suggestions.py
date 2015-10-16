@@ -442,9 +442,6 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Konkurencijos taryba": [
             u"Konkurencijos taryba (sutrumpintai)",
         ],
-        u'Lietuvos laisvosios rinkos institutas': [
-            u"Lietuvos laisvosios rinkos institutas (pateikiama sutrumpintai)",
-        ],
         # Exception: trailing periods are sometimes necessary
         u"R. Jocienė ir kt.": [],
         # Often quotes are entered incorrectly
@@ -454,6 +451,9 @@ class TestSubmitterCleaning(unittest.TestCase):
         ],
         u'Lietuvos asociacija „Gyvastis“': [
             u'Lietuvos asociacija „Gyvastis',
+        ],
+        u'Asociacija „Lietuvos maisto pramonė“': [
+            u"Asociacija „Lietuvos maisto pramonė",
         ],
         # Spacing after initials
         u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė": [
@@ -547,6 +547,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti": [
             u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti",
             u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos 2013 m. gegužės 29 d. sprendimu Nr. SV-S-255)",
+            u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos ",
         ],
         u"Darbo saugos specialistų darbdavių asociacija": [
             u"Darbo saugos specialistų darbdavių asociacija",
@@ -687,16 +688,21 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Vytauto Didžiojo Universitetas",
             u"Vytauto Didžiojo universitetas",
         ],
-        u"VŠĮ Lietuvos laisvosios rinkos institutas": [
-            u"VŠĮ Lietuvos laisvosios rinkos institutas",
-            u"VšĮ Lietuvos laisvosios rinkos institutas",
-        ],
         u'Marijampolės regiono plėtros taryba': [
             u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA',
         ],
         u"Teisėjų taryba": [
             u"Teisėjų Taryba",
             u"Teisėjų taryba",
+        ],
+        u"Lietuvos nepriklausomybės akto signataras Zigmas Vaišvila": [
+            u"Lietuvos Nepriklausomybės Akto signataras Zigmas Vaišvila",
+        ],
+        u"Lietuvos nepriklausomybės akto signatarų klubas": [
+            u"Lietuvos Nepriklausomybės Akto signatarų klubas",
+        ],
+        u"Lietuvos nepriklausomybės aktų signatarų klubo prezidentė B. Valionytė": [
+            u"Lietuvos nepriklausomybės aktų signatarų klubo prezidentė B. Valionytė",
         ],
         # Just different
         u'Seimo kanceliarijos Teisės departamentas': [
@@ -799,6 +805,41 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos apeliacinis teismas": [
             u"Lietuvos apeliacinis teismas",
             u"Apeliacinis teismas",
+        ],
+        u'Lietuvos žemės ūkio bendrovių asociacija': [
+            u'LŽŪBA',
+        ],
+        u"Nacionalinė tabako ir alkoholio kontrolės koalicija": [
+            u"Nacionalin ė tabako ir alkoholio kontrolės koalicija",
+        ],
+        u"Narkotikų, tabako ir alkoholio kontrolės departamentas A. Veryga": [
+            u"Narkotikų, tabako ir alkoholio kontrolės departmentas A. Veryga",
+        ],
+        u"Lietuvos draudikų asociacija": [
+            u"Lietuvos draudik ų asociacija",
+            u"Lietuvos draudikų asociacija",
+        ],
+        u"Lietuvos farmacijos darbuotojų profesinė sąjunga": [
+            u"Lietuvos farmacijos darbuotojų profesinė sąjunga",
+            u"Lietuvos farmacijos darbuotojų profesinės sąjunga",
+        ],
+        u"Lietuvos geografų draugija": [
+            u"LIETUVOS GEOGRAFŲ DRAUGIJA",
+        ],
+        u"Lietuvos laisvosios rinkos institutas": [
+            u"Laisvosios rinkos institutas",
+            u"Lietuvos laisvosios rinkos institutas",
+            u"VŠĮ Lietuvos laisvosios rinkos institutas",
+            u"VŠĮ Lietuvos laisvosios rinkos institutas",
+            u"VšĮ Lietuvos laisvosios rinkos institutas",
+            u"Lietuvos laisvosios rinkos institutas (pateikiama sutrumpintai)",
+        ],
+        u"Lietuvos kelių policijos tarnyba": [
+            u"Kelių policijos tarnyba",
+            u"Lietuvos kelių policijos tarnyba",
+        ],
+        u"Lietuvos nacionalinės sveikatos tarybos pirmininkas J. Pundzius": [
+            u"Lietuvos nacionalinė sveikatos tarybos pirmininkas J. Pundzius",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [

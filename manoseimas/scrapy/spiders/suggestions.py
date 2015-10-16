@@ -313,7 +313,7 @@ class SuggestionsSpider(ManoSeimasSpider):
 
     @staticmethod
     def _clean_submitter(submitter):
-        submitter = re.sub(r'\(sudaryta [^)]*\)', '', submitter)
+        submitter = re.sub(r'\(sudaryta [^)]*\)?', '', submitter)
         submitter = re.sub(ur'([ \d])išvada.*$', r'\1', submitter)
         submitter = re.sub(r'\((?:pateikiama )?sutrumpintai\)', '', submitter)
         submitter = re.sub(ur'\s+dėl įstatymo projekto [^,]*', '', submitter)
@@ -336,6 +336,10 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'departamentamentas': 'departamentas',
             u'departamantas': 'departamentas',
             u'departamntas': 'departamentas',
+            u'departmentas': 'departamentas',
+            u'departamentasprie': u'departamentas prie',
+            u'departame ntas': 'departamentas',
+            u'departametas': u'departamentas',
             u'RespublikosPrezidentės': u'Respublikos Prezidentės',
             u'Teisėsdepartamentas': u'Teisės departamentas',
             u'Teisės departamentas (TD)': u'Teisės departamentas',
@@ -361,7 +365,6 @@ class SuggestionsSpider(ManoSeimasSpider):
             u' Apeliacinis Teismas': u' apeliacinis teismas',
             u' Apeliacinis teismas': u' apeliacinis teismas',
             u'Europos Teisės': u'Europos teisės',
-            u'departamentasprie': u'departamentas prie',
             u'pramoninkų': u'pramonininkų',
             u'tarnyb a': u'tarnyba',
             u'tarnyba tarnyba': u'tarnyba',
@@ -392,7 +395,6 @@ class SuggestionsSpider(ManoSeimasSpider):
             u' Universitetas': u' universitetas',
             u'VšĮ': u'VŠĮ',
             u'ministreijos': 'ministerijos',
-            u'departame ntas': 'departamentas',
             u'LR Seimo': u'Seimo',
             u'LRS Seimo': u'Seimo',
             u'LRS kanceliarijos': u'Seimo kanceliarijos',
@@ -400,7 +402,6 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Lietuvos Respublikos Seimo kanceliarijos': u'Seimo kanceliarijos',
             u'Seimo kanceliarijos teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
             u'Teisingum 0': u'Teisingumo',
-            u'departametas': u'departamentas',
             u'kanceliarij os': u'kanceliarijos',
             u'kancelarijos': u'kanceliarijos',
             u'Seimo Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
@@ -416,12 +417,18 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Valstybinės teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba',
             u'Taryba': u'taryba',
             u'Lietuvos Vyriausiasis': u'Lietuvos vyriausiasis',
+            u'Nacionalin ė': u'Nacionalinė',
+            u'draudik ų': u'draudikų',
+            u'profesinės sąjunga': u'profesinė sąjunga',
+            u'Lietuvos nacionalinė sveikatos tarybos': u'Lietuvos nacionalinės sveikatos tarybos',
+            u'LIETUVOS GEOGRAFŲ DRAUGIJA': u'Lietuvos geografų draugija',
+            u'Lietuvos Nepriklausomybės Akt': u'Lietuvos nepriklausomybės akt',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
         submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
         submitter = re.sub(ur' \(JTVPK\)$', '', submitter)
-        submitter = re.sub(ur'(„\w+)$', ur'\1“', submitter, flags=re.UNICODE)
+        submitter = re.sub(ur'(„[\w\d ]+)$', ur'\1“', submitter, flags=re.UNICODE)
         submitter = re.sub(ur'^LR ', u'Lietuvos Respublikos ', submitter)
         submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
         submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
@@ -439,6 +446,10 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Aukščiausiasis Teismas': u'Lietuvos Aukščiausiasis Teismas',
             u'Apeliacinis teismas': u'Lietuvos apeliacinis teismas',
             u'Konstitucinis Teismas': u'Lietuvos Respublikos Konstitucinis Teismas',
+            u'LŽŪBA': u'Lietuvos žemės ūkio bendrovių asociacija',
+            u'Kelių policijos tarnyba': u'Lietuvos kelių policijos tarnyba',
+            u'Laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
+            u'VŠĮ Lietuvos laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
         }.get(submitter, submitter)
         return submitter
 
