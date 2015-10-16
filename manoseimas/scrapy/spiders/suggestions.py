@@ -101,6 +101,7 @@ class SuggestionsSpider(ManoSeimasSpider):
                     item['submitter'] = last_item['submitter']
                     item['date'] = last_item['date']
                     item['document'] = last_item['document']
+                    item['raw'] = last_item['raw']
                 yield item
                 last_item = item
 

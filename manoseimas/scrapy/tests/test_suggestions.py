@@ -108,7 +108,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
-                raw=u'',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
                 submitter=u'LR Vyriausybė',
@@ -184,7 +184,7 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
-                raw=u'',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
                 submitter=u'LR Vyriausybė',
