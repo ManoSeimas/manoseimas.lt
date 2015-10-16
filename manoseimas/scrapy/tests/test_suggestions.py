@@ -434,10 +434,6 @@ class TestSubmitterCleaning(unittest.TestCase):
             u'STT 2014-',
             u'STT, 2013-01-',
         ],
-        # Trailing periods are stripped
-        u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos": [
-            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
-        ],
         # Trailing comments
         u"Konkurencijos taryba": [
             u"Konkurencijos taryba (sutrumpintai)",
@@ -760,6 +756,19 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"LR Žemės ūkio ministerija",
             u"Lietuvos Respublikos žemės ūkio ministerija",
             u"Žemės ūkio ministerija",
+        ],
+        u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos": [
+            u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos",
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
+        ],
+        u"Valstybinė mokesčių inspekcija prie Finansų ministerijos": [
+            u"Valstybinė mokesčių inspekcija prie Finansų ministerijos",
+            u"Valstybinė mokesčių inspekcija prie Lietuvos Respublikos finansų ministerijos",
+        ],
+        u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos": [
+            u"Valstybinės teismo medicinos tarnyba prie Lietuvos Respublikos Teisingumo ministerijos",
+            u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [

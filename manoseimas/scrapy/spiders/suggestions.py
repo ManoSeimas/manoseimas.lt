@@ -411,12 +411,16 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'prie Lietuvos Respublikos vidaus reikalų ministerijos': u'prie Vidaus reikalų ministerijos',
             u'nusikaltimų tyrimų tarnyba': u'nusikaltimų tyrimo tarnyba',
             u'm. savivaldybė': u'miesto savivaldybė',
+            u'Valstybės vaiko teisių ir įvaikinimo tarnyba': u'Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba',
+            u'prie socialinės apsaugos ir darbo ministerijos': u'prie Socialinės apsaugos ir darbo ministerijos',
+            u'Valstybinės teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
         submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
         submitter = re.sub(ur' \(JTVPK\)$', '', submitter)
         submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
+        submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
             u'TD': u'Seimo kanceliarijos Teisės departamentas',
