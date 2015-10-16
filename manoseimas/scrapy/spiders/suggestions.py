@@ -318,7 +318,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(r'\((?:pateikiama )?sutrumpintai\)', '', submitter)
         submitter = re.sub(ur'\s+dėl įstatymo projekto [^,]*', '', submitter)
         submitter = re.sub(ur', \d\d\d\d Nr. [^,]*', '', submitter)
-        submitter = re.sub(r'\d\d\d\d(-\d\d)?-?$', '', submitter)
+        submitter = re.sub(r' *\d\d\d\d(-\d\d)?-? *$', '', submitter)
         submitter = re.sub(r'20\d\d?(-\d\d?)?(-\d\d?)?v?$', '', submitter)
         submitter = re.sub(r'\(gauta *[^)]*[)]?$', '', submitter)
         submitter = submitter.rstrip('(,; ')
