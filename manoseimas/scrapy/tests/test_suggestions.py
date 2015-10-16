@@ -719,6 +719,15 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Finansinių nusikaltimų tyrimo tarnyba prie Vidaus reikalų ministerijos",
             u"Finansinių nusikaltimų tyrimų tarnyba prie Vidaus reikalų ministerijos",
         ],
+        u"Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos": [
+            u"Informacinės visuomenės plėtros komitetas",
+            u"Informacinės visuomenės plėtros komitetas prie SM",
+            u"IVPK",
+        ],
+        u"Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras": [
+            u"JTVPK",
+            u"Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras (JTVPK)",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",
