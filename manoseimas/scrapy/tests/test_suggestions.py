@@ -350,6 +350,10 @@ class TestSubmitterParsing(unittest.TestCase):
          {'submitter': u'Durpių įmonių asociacija „Lietuviškos durpės“ Ruošė: Ginutis Juozapavičius',
           'date': '',
           'document': u'G-2013-6053'}),
+        (u'Lietuvos Aukščiausiasis teismas 2013-04 XIP-3018',
+         {'submitter': u'Lietuvos Aukščiausiasis Teismas',
+          'date': '',
+          'document': u'XIP-3018'}),
     ]
 
     def test(self):
@@ -689,6 +693,10 @@ class TestSubmitterCleaning(unittest.TestCase):
         ],
         u'Marijampolės regiono plėtros taryba': [
             u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA',
+        ],
+        u"Teisėjų taryba": [
+            u"Teisėjų Taryba",
+            u"Teisėjų taryba",
         ],
         # Just different
         u'Seimo kanceliarijos Teisės departamentas': [
