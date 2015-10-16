@@ -426,6 +426,9 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'Žemės ūkio ministerija': [
             u'Žemės ūkio ministerija (gauta',
         ],
+        u'Kristina M.': [
+            u'Kristina M. (gauta el. paštu)',
+        ],
         # Trailing incomplete date fragments are stripped
         u'STT': [
             u'STT 2014-',
