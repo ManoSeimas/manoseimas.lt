@@ -342,6 +342,10 @@ class TestSubmitterParsing(unittest.TestCase):
          {'submitter': u'Žemės ūkio ministerija',
           'date': '2013-05-03',
           'document': '1MS-34-(11.27)'}),
+        (u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos 2013 m. gegužės 29 d. sprendimu Nr. SV-S-255) 2013-10-15",
+         {'submitter': u'Darbo grupė viešojo sektoriaus audito sistemai tobulinti',
+          'date': '2013-10-15',
+          'document': ''}),
     ]
 
     def test(self):
@@ -671,6 +675,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"VŠĮ Lietuvos laisvosios rinkos institutas",
             u"VšĮ Lietuvos laisvosios rinkos institutas",
         ],
+        # Just different
         u'Seimo kanceliarijos Teisės departamentas': [
             u"(TD)",
             u"LR Seimo kanceliarijos Teisės departamentas",
