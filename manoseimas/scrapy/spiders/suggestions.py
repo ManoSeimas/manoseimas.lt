@@ -386,7 +386,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         #     /python2.7/sre_compile.py
         #     AssertionError: "sorry, but this version only supports 100 named groups"
         submitter = re.sub(u'|'.join(names), lambda m: m.group(0)[0] + '.', submitter)
-        name = [
+        names = [
             u'Laim(a|os)',
             u'Laris(a|os)',
             u'Laur(a|os)',
