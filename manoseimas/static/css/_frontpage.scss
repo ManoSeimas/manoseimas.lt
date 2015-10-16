@@ -51,6 +51,40 @@
   .item.selected { padding: 0.8rem 1rem !important; }
 }
 
+.subtabs {
+  @extend .sidebar;
+  .header {
+    @extend .item;
+      font-size: $normal;
+      font-weight: bold;
+      text-align: center;
+      color: $black;
+      cursor: auto;
+  }
+  .header:hover {
+    background-color: $white;
+    border-color: $grayLite;
+  }
+  .item
+    .title {
+      font-size: $normal;
+      width: 6rem;
+      color: $black;
+    }
+    .count {
+      font-size: $big;
+      text-align: right;
+      width: 4rem;
+      float: left;
+      color: $black;
+    }
+
+  .item:hover, .item.selected {
+    .title { color: $white; }
+    .count { color: $white; }
+  }
+}
+
 .colored-bg.index-stats {
   border-bottom: none;
   background-color: rgba(255, 255, 255, 0.05);

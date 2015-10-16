@@ -5,6 +5,7 @@ var LawProjects = React.createClass({
       current_page: 1,
       items_per_page: 15,
       show_only_selected: false,
+      source: this.props.source ? this.props.source : 'default_source',
       loaded: false
     }
   },
@@ -32,28 +33,77 @@ var LawProjects = React.createClass({
     });
   },
 
-  render: function() {
-    var columns = {
-      number: {
-        title: 'Projekto numeris',
-        func: function (item) {
-          return <a href={item['url']} target='_blank'>{item['number']}</a>
+  tableConfig: function(source) {
+    // Table configuration for source.
+    var config = {
+      default_source: {
+        sort_key: 'date',
+        sort_order: -1,
+        columns: {
+          number: {
+            title: 'Projekto numeris',
+            func: function (item) {
+              return <a href={item['url']} target='_blank'>{item['number']}</a>
+            }
+          },
+          title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+          date: {title: 'Teikimo data', className: 'date center aligned', itemClassName: 'center aligned', func: null},
+          proposer_count: {title: 'Viso teikėjų', className: 'center aligned', itemClassName: 'center aligned', func: null},
+          date_passed: {
+            title: 'Stadija',
+            className: 'center aligned',
+            itemClassName: 'center aligned',
+            func: function (item) {
+              return (item['date_passed']) ? 'Priimta '+item['date_passed'] : 'Nepriimta'
+            }
+          }
         }
       },
-      title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
-      date: {title: 'Teikimo data', className: 'date center aligned', itemClassName: 'center aligned', func: null},
-      proposer_count: {title: 'Viso teikėjų', className: 'center aligned', itemClassName: 'center aligned', func: null},
-      date_passed: {
-        title: 'Stadija',
-        className: 'center aligned',
-        itemClassName: 'center aligned',
-        func: function (item) {
-          return (item['date_passed']) ? 'Priimta '+item['date_passed'] : 'Nepriimta'
+      lobbyists: {
+        sort_key: 'client',
+        sort_order: -1,
+        columns: {
+          title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+          client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
         }
-      },
+      }
     }
+    return config[source];
+  },
 
-    var projects = this.state.projects;
+  showPassedOnlyElement: function(source) {
+    if (source === 'lobbyists') {
+      return('');
+    }
+    return (
+      <div className="eight wide right aligned column">
+        <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
+          <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
+          <label>Rodyti tik priimtus projektus</label>
+        </div>
+      </div>
+    );
+  },
+
+  innerSort: function(items, key, order) {
+    return items.sort(function (a, b) {
+      if (a[key] < b[key]) {
+        return -order;
+      } else if (a[key] > b[key]) {
+        return order;
+      } else {
+        return 0
+      }
+    });
+  },
+
+  render: function() {
+    var table = this.tableConfig(this.state.source);
+    var columns = table.columns;
+    var projects = this.innerSort(this.state.projects,
+                                  table.sort_key,
+                                  table.sort_order);
+
     if (this.state.show_only_selected) {
       projects = projects.filter(function(item) {
         return item.date_passed
@@ -70,13 +120,7 @@ var LawProjects = React.createClass({
           <div className="eight wide column">
             <h2 className="title">Teisės aktai</h2>
           </div>
-          <div className="eight wide right aligned column">
-            <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
-              <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
-              <label>Rodyti tik priimtus projektus</label>
-            </div>
-          </div>
-
+          { this.showPassedOnlyElement(this.state.source) }
           <Loader loaded={this.state.loaded}>
             <div className="ui zero margin grid">
               <SemanticTable columns={columns}
@@ -125,9 +169,12 @@ var SemanticTable = React.createClass({
 });
 
 
-var data_url = '/json/law_projects/' + $('#law-projects-component').attr("data-slug");
+var data_slug = $('#law-projects-component').attr("data-slug");
+var source_prefix = $('#law-projects-component').attr("source-prefix");
+var prefix = ( source_prefix ? ('/' + source_prefix) : '' );
+var data_url = prefix + '/json/law_projects/' + data_slug;
 
 React.render(
-  <LawProjects data_url={data_url} />,
+  <LawProjects data_url={data_url} source={source_prefix} />,
   document.getElementById('law-projects-component')
 );

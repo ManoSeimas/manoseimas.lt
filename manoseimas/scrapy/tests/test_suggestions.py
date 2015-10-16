@@ -108,10 +108,10 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
-                raw=u'',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
-                submitter=u'LR Vyriausybė',
+                submitter=u'Lietuvos Respublikos Vyriausybė',
                 date=u'2015-10-09',
                 document=u'',
                 opinion=u'Pritarti iš dalies',
@@ -184,10 +184,10 @@ class TestTableParsing(unittest.TestCase):
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
                 source_url='http://localhost/test.html',
-                raw=u'',
+                raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
-                submitter=u'LR Vyriausybė',
+                submitter=u'Lietuvos Respublikos Vyriausybė',
                 date=u'2015-10-09',
                 document=u'',
                 opinion=u'Pritarti iš dalies',
@@ -342,6 +342,18 @@ class TestSubmitterParsing(unittest.TestCase):
          {'submitter': u'Žemės ūkio ministerija',
           'date': '2013-05-03',
           'document': '1MS-34-(11.27)'}),
+        (u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos 2013 m. gegužės 29 d. sprendimu Nr. SV-S-255) 2013-10-15",
+         {'submitter': u'Darbo grupė viešojo sektoriaus audito sistemai tobulinti',
+          'date': '2013-10-15',
+          'document': ''}),
+        (u'Durpių įmonių asociacija „Lietuviškos durpės“ Ruošė: Ginutis Juozapavičius G-2013-6053',
+         {'submitter': u'Durpių įmonių asociacija „Lietuviškos durpės“ Ruošė: Ginutis Juozapavičius',
+          'date': '',
+          'document': u'G-2013-6053'}),
+        (u'Lietuvos Aukščiausiasis teismas 2013-04 XIP-3018',
+         {'submitter': u'Lietuvos Aukščiausiasis Teismas',
+          'date': '',
+          'document': u'XIP-3018'}),
     ]
 
     def test(self):
@@ -418,21 +430,17 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'Žemės ūkio ministerija': [
             u'Žemės ūkio ministerija (gauta',
         ],
+        u'Kristina M.': [
+            u'Kristina M. (gauta el. paštu)',
+        ],
         # Trailing incomplete date fragments are stripped
         u'STT': [
             u'STT 2014-',
             u'STT, 2013-01-',
         ],
-        # Trailing periods are stripped
-        u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos": [
-            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
-        ],
         # Trailing comments
         u"Konkurencijos taryba": [
             u"Konkurencijos taryba (sutrumpintai)",
-        ],
-        u'Lietuvos laisvosios rinkos institutas': [
-            u"Lietuvos laisvosios rinkos institutas (pateikiama sutrumpintai)",
         ],
         # Exception: trailing periods are sometimes necessary
         u"R. Jocienė ir kt.": [],
@@ -440,6 +448,12 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'AB „Amber grid“': [
             u'AB „Amber grid“',
             u'AB ,,Amber grid“',
+        ],
+        u'Lietuvos asociacija „Gyvastis“': [
+            u'Lietuvos asociacija „Gyvastis',
+        ],
+        u'Asociacija „Lietuvos maisto pramonė“': [
+            u"Asociacija „Lietuvos maisto pramonė",
         ],
         # Spacing after initials
         u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė": [
@@ -533,6 +547,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti": [
             u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti",
             u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos 2013 m. gegužės 29 d. sprendimu Nr. SV-S-255)",
+            u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti (sudaryta Lietuvos Respublikos Seimo valdybos ",
         ],
         u"Darbo saugos specialistų darbdavių asociacija": [
             u"Darbo saugos specialistų darbdavių asociacija",
@@ -591,7 +606,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos pramonininkų konfederacija",
             u"Lietuvos pramoninkų konfederacija",
         ],
-        u"Lietuvos Respublikos finansų ministerija": [
+        u"Finansų ministerija": [
             u"Lietuvos Respublikos Finansų ministerija",
             u"Lietuvos Respublikos finansų ministerija",
         ],
@@ -614,7 +629,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba tarnyb a",
             u"Lietuvos Respublikos specialiųjų tyrimų tarnyba (toliau– STT)",
         ],
-        u"Lietuvos Respublikos teisingumo ministerija": [
+        u"Teisingumo ministerija": [
             u"Lietuvos Respublikos Teisingumo ministerija",
             u"Lietuvos Respublikos teisingumo ministerija",
         ],
@@ -626,7 +641,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos Trišalė taryba",
             u"Lietuvos Respublikos trišalė taryba",
         ],
-        u"Lietuvos Respublikos ūkio ministerija": [
+        u"Ūkio ministerija": [
             u"Lietuvos Respublikos Ūkio ministerija",
             u"Lietuvos Respublikos ūkio ministerija",
         ],
@@ -645,6 +660,12 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos savivaldybių asociacija": [
             u"Lietuvos Savivaldybių asociacija",
             u"Lietuvos savivaldybių asociacija",
+        ],
+        u"Lietuvos Respublikos Prezidentė": [
+            u"LR Prezidentė",
+        ],
+        u"Lietuvos Respublikos Prezidentės dekretas": [
+            u"Lietuvos Respublikos Prezidentės dekretas",
         ],
         # Different capitalizations
         u"Legalaus verslo aljansas": [
@@ -667,10 +688,23 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Vytauto Didžiojo Universitetas",
             u"Vytauto Didžiojo universitetas",
         ],
-        u"VŠĮ Lietuvos laisvosios rinkos institutas": [
-            u"VŠĮ Lietuvos laisvosios rinkos institutas",
-            u"VšĮ Lietuvos laisvosios rinkos institutas",
+        u'Marijampolės regiono plėtros taryba': [
+            u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA',
         ],
+        u"Teisėjų taryba": [
+            u"Teisėjų Taryba",
+            u"Teisėjų taryba",
+        ],
+        u"Lietuvos nepriklausomybės akto signataras Zigmas Vaišvila": [
+            u"Lietuvos Nepriklausomybės Akto signataras Zigmas Vaišvila",
+        ],
+        u"Lietuvos nepriklausomybės akto signatarų klubas": [
+            u"Lietuvos Nepriklausomybės Akto signatarų klubas",
+        ],
+        u"Lietuvos nepriklausomybės aktų signatarų klubo prezidentė B. Valionytė": [
+            u"Lietuvos nepriklausomybės aktų signatarų klubo prezidentė B. Valionytė",
+        ],
+        # Just different
         u'Seimo kanceliarijos Teisės departamentas': [
             u"(TD)",
             u"LR Seimo kanceliarijos Teisės departamentas",
@@ -704,6 +738,109 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"TD",
             u"Teisės departamentas",
         ],
+        u"Finansinių nusikaltimų tyrimo tarnyba prie Vidaus reikalų ministerijos": [
+            u"Finansinių nusikaltimų tyrimo tarnyba prie Lietuvos Respublikos vidaus reikalų ministerijos",
+            u"Finansinių nusikaltimų tyrimo tarnyba prie LR vidaus reikalų ministerijos",
+            u"Finansinių nusikaltimų tyrimo tarnyba prie Vidaus reikalų ministerijos",
+            u"Finansinių nusikaltimų tyrimų tarnyba prie Vidaus reikalų ministerijos",
+        ],
+        u"Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos": [
+            u"Informacinės visuomenės plėtros komitetas",
+            u"Informacinės visuomenės plėtros komitetas prie SM",
+            u"IVPK",
+        ],
+        u"Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras": [
+            u"JTVPK",
+            u"Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras (JTVPK)",
+        ],
+        u"Kauno miesto savivaldybės administracija": [
+            u"Kauno miesto savivaldybės administracija",
+            u"Kauno m. savivaldybės administracija",
+        ],
+        u"Lietuvos agrarinės ekonomikos institutas": [
+            u"LAEI",
+        ],
+        u'Local American Working Group (LAWG)': [
+            u'LAWG',
+        ],
+        u'Kultūros ministerija': [
+            u'Kultūros ministerija',
+            u'LR kultūros ministerija',
+        ],
+        u"Aplinkos ministerija": [
+            u"Aplinkos ministerija",
+            u"Lietuvos Respublikos aplinkos ministerija",
+        ],
+        u"Energetikos ministerija": [
+            u"Energetikos ministerija",
+            u"Lietuvos Respublikos Energetikos ministerija",
+        ],
+        u"Žemės ūkio ministerija": [
+            u"LR Žemės ūkio ministerija",
+            u"Lietuvos Respublikos žemės ūkio ministerija",
+            u"Žemės ūkio ministerija",
+            u"ŽŪM",
+        ],
+        u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos": [
+            u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos",
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
+        ],
+        u"Valstybinė mokesčių inspekcija prie Finansų ministerijos": [
+            u"Valstybinė mokesčių inspekcija prie Finansų ministerijos",
+            u"Valstybinė mokesčių inspekcija prie Lietuvos Respublikos finansų ministerijos",
+        ],
+        u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos": [
+            u"Valstybinės teismo medicinos tarnyba prie Lietuvos Respublikos Teisingumo ministerijos",
+            u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos",
+        ],
+        u"Lietuvos Respublikos Konstitucinis Teismas": [
+            u"Konstitucinis Teismas",
+            u"Lietuvos Respublikos Konstitucinis Teismas",
+        ],
+        u"Lietuvos vyriausiasis administracinis teismas": [
+            u"Lietuvos Vyriausiasis administracinis teismas",
+            u"Lietuvos vyriausiasis administracinis teismas",
+        ],
+        u"Lietuvos apeliacinis teismas": [
+            u"Lietuvos apeliacinis teismas",
+            u"Apeliacinis teismas",
+        ],
+        u'Lietuvos žemės ūkio bendrovių asociacija': [
+            u'LŽŪBA',
+        ],
+        u"Nacionalinė tabako ir alkoholio kontrolės koalicija": [
+            u"Nacionalin ė tabako ir alkoholio kontrolės koalicija",
+        ],
+        u"Narkotikų, tabako ir alkoholio kontrolės departamentas A. Veryga": [
+            u"Narkotikų, tabako ir alkoholio kontrolės departmentas A. Veryga",
+        ],
+        u"Lietuvos draudikų asociacija": [
+            u"Lietuvos draudik ų asociacija",
+            u"Lietuvos draudikų asociacija",
+        ],
+        u"Lietuvos farmacijos darbuotojų profesinė sąjunga": [
+            u"Lietuvos farmacijos darbuotojų profesinė sąjunga",
+            u"Lietuvos farmacijos darbuotojų profesinės sąjunga",
+        ],
+        u"Lietuvos geografų draugija": [
+            u"LIETUVOS GEOGRAFŲ DRAUGIJA",
+        ],
+        u"Lietuvos laisvosios rinkos institutas": [
+            u"Laisvosios rinkos institutas",
+            u"Lietuvos laisvosios rinkos institutas",
+            u"VŠĮ Lietuvos laisvosios rinkos institutas",
+            u"VŠĮ Lietuvos laisvosios rinkos institutas",
+            u"VšĮ Lietuvos laisvosios rinkos institutas",
+            u"Lietuvos laisvosios rinkos institutas (pateikiama sutrumpintai)",
+        ],
+        u"Lietuvos kelių policijos tarnyba": [
+            u"Kelių policijos tarnyba",
+            u"Lietuvos kelių policijos tarnyba",
+        ],
+        u"Lietuvos nacionalinės sveikatos tarybos pirmininkas J. Pundzius": [
+            u"Lietuvos nacionalinė sveikatos tarybos pirmininkas J. Pundzius",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",
@@ -711,6 +848,17 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Aukščiausiasis Teismas",
             u"Lietuvos Aukščiausiasis teismas",
             u"Lietuvos Aukščiausias Teismas",
+            u"Aukščiausiasis Teismas",
+        ],
+        # Some people put their home addresses, phone numbers, emails or IP addresses
+        u'Antanas Mitašiūnas': [
+            u"Antanas Mitašiūnas, Kalvarijų 999-99, LT-99999 Vilnius, tel. 9-999-99999"
+        ],
+        u"Juozas Vaitkus": [
+            u"Juozas Vaitkus el. paštu juoas.vaitkus@ff.vu.lt",
+        ],
+        u"Rūta": [
+            u"Rūta 84.46.242.173",
         ],
     }
 
@@ -1001,7 +1149,7 @@ class TestSuggestionsSpider(unittest.TestCase):
             </table>
         ''', [
             Suggestion(
-                submitter=u'LR Vyriausybė',
+                submitter=u'Lietuvos Respublikos Vyriausybė',
                 date=u'2015-10-09',
                 document=u'',
                 opinion=u'Pritarti iš dalies',

@@ -1,7 +1,6 @@
 from collections import Counter, defaultdict
-from django.db import models
+from django.db import models, connection
 from django_extensions.db.fields import AutoSlugField
-
 from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
@@ -11,7 +10,8 @@ from sboard.models import couch
 from couchdbkit.exceptions import ResourceNotFound
 
 
-from manoseimas.utils import reify
+from manoseimas.mps_v2.utils import is_state_actor
+from manoseimas.utils import reify, dict_fetch_all
 
 import manoseimas.common.utils.words as words_utils
 
@@ -650,3 +650,39 @@ class Suggestion(CrawledItem):
 
     def __unicode__(self):
         return u'{} ({})'.format(self.submitter, self.opinion)
+
+    @classmethod
+    def suggestion_and_project_count(self):
+        """Count suggestions and law projects for each suggester."""
+        cursor = connection.cursor()
+        cursor.execute("""
+            SELECT submitter AS title,
+                   COUNT(source_id) AS law_project_count,
+                   SUM(proposal_count) AS suggestion_count
+            FROM (
+                (SELECT submitter, source_id, COUNT(id) AS proposal_count
+                 FROM mps_v2_suggestion
+                 GROUP BY submitter, source_id) AS t2
+            )
+            GROUP BY submitter;
+        """)
+        rows = dict_fetch_all(cursor)
+
+        counts = [{
+                'title': row['title'],
+                'suggestion_count': int(row['suggestion_count']),
+                'law_project_count': int(row['law_project_count']),
+                'state_actor': is_state_actor(row['title']),
+                } for row in rows]
+
+        return counts
+
+    @classmethod
+    def suggestion_and_project_count_state(self):
+        return [item for item in self.suggestion_and_project_count()
+                     if item['state_actor']]
+
+    @classmethod
+    def suggestion_and_project_count_other(self):
+        return [item for item in self.suggestion_and_project_count()
+                     if not item['state_actor']]
