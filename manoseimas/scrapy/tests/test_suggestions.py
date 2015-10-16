@@ -111,7 +111,7 @@ class TestTableParsing(unittest.TestCase):
                 raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
-                submitter=u'LR Vyriausybė',
+                submitter=u'Lietuvos Respublikos Vyriausybė',
                 date=u'2015-10-09',
                 document=u'',
                 opinion=u'Pritarti iš dalies',
@@ -187,7 +187,7 @@ class TestTableParsing(unittest.TestCase):
                 raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
-                submitter=u'LR Vyriausybė',
+                submitter=u'Lietuvos Respublikos Vyriausybė',
                 date=u'2015-10-09',
                 document=u'',
                 opinion=u'Pritarti iš dalies',
@@ -448,6 +448,9 @@ class TestSubmitterCleaning(unittest.TestCase):
             u'AB „Amber grid“',
             u'AB ,,Amber grid“',
         ],
+        u'Lietuvos asociacija „Gyvastis“': [
+            u'Lietuvos asociacija „Gyvastis',
+        ],
         # Spacing after initials
         u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė": [
             u"Etninės kultūros globos tarybos pirmininkė D. Urbanavičienė",
@@ -653,6 +656,12 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Savivaldybių asociacija",
             u"Lietuvos savivaldybių asociacija",
         ],
+        u"Lietuvos Respublikos Prezidentė": [
+            u"LR Prezidentė",
+        ],
+        u"Lietuvos Respublikos Prezidentės dekretas": [
+            u"Lietuvos Respublikos Prezidentės dekretas",
+        ],
         # Different capitalizations
         u"Legalaus verslo aljansas": [
             u"Legalaus Verslo aljansas",
@@ -756,6 +765,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"LR Žemės ūkio ministerija",
             u"Lietuvos Respublikos žemės ūkio ministerija",
             u"Žemės ūkio ministerija",
+            u"ŽŪM",
         ],
         u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos": [
             u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
@@ -1077,7 +1087,7 @@ class TestSuggestionsSpider(unittest.TestCase):
             </table>
         ''', [
             Suggestion(
-                submitter=u'LR Vyriausybė',
+                submitter=u'Lietuvos Respublikos Vyriausybė',
                 date=u'2015-10-09',
                 document=u'',
                 opinion=u'Pritarti iš dalies',

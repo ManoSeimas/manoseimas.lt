@@ -414,11 +414,14 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Valstybės vaiko teisių ir įvaikinimo tarnyba': u'Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba',
             u'prie socialinės apsaugos ir darbo ministerijos': u'prie Socialinės apsaugos ir darbo ministerijos',
             u'Valstybinės teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba',
+            u'Taryba': u'taryba',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
         submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
         submitter = re.sub(ur' \(JTVPK\)$', '', submitter)
+        submitter = re.sub(ur'(„\w+)$', ur'\1“', submitter, flags=re.UNICODE)
+        submitter = re.sub(ur'^LR ', u'Lietuvos Respublikos ', submitter)
         submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
         submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
         submitter = {
@@ -431,6 +434,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'LAEI': u'Lietuvos agrarinės ekonomikos institutas',
             u'LAWG': u'Local American Working Group (LAWG)',
             u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA': u'Marijampolės regiono plėtros taryba',
+            u'ŽŪM': u'Žemės ūkio ministerija',
         }.get(submitter, submitter)
         return submitter
 
