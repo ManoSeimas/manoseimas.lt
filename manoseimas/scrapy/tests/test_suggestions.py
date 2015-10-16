@@ -788,6 +788,18 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Valstybinės teismo medicinos tarnyba prie Lietuvos Respublikos Teisingumo ministerijos",
             u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos",
         ],
+        u"Lietuvos Respublikos Konstitucinis Teismas": [
+            u"Konstitucinis Teismas",
+            u"Lietuvos Respublikos Konstitucinis Teismas",
+        ],
+        u"Lietuvos vyriausiasis administracinis teismas": [
+            u"Lietuvos Vyriausiasis administracinis teismas",
+            u"Lietuvos vyriausiasis administracinis teismas",
+        ],
+        u"Lietuvos apeliacinis teismas": [
+            u"Lietuvos apeliacinis teismas",
+            u"Apeliacinis teismas",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",
@@ -795,6 +807,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Aukščiausiasis Teismas",
             u"Lietuvos Aukščiausiasis teismas",
             u"Lietuvos Aukščiausias Teismas",
+            u"Aukščiausiasis Teismas",
         ],
         # Some people put their home addresses, phone numbers, emails or IP addresses
         u'Antanas Mitašiūnas': [

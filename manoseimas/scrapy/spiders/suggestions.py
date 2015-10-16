@@ -415,6 +415,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'prie socialinės apsaugos ir darbo ministerijos': u'prie Socialinės apsaugos ir darbo ministerijos',
             u'Valstybinės teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba',
             u'Taryba': u'taryba',
+            u'Lietuvos Vyriausiasis': u'Lietuvos vyriausiasis',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -435,6 +436,9 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'LAWG': u'Local American Working Group (LAWG)',
             u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA': u'Marijampolės regiono plėtros taryba',
             u'ŽŪM': u'Žemės ūkio ministerija',
+            u'Aukščiausiasis Teismas': u'Lietuvos Aukščiausiasis Teismas',
+            u'Apeliacinis teismas': u'Lietuvos apeliacinis teismas',
+            u'Konstitucinis Teismas': u'Lietuvos Respublikos Konstitucinis Teismas',
         }.get(submitter, submitter)
         return submitter
 
