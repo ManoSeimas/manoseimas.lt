@@ -325,6 +325,8 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur'(\.)([A-ZĄČĘĖĮŠŲŪŽ])', r'\1 \2', submitter)
         submitter = re.sub(ur'(?<!\bkt)\.$', r'', submitter)
         submitter = re.sub(ur'(komitetas)(?! prie).+$', r'\1', submitter)
+        submitter = re.sub(ur', \w+ \d+-\d+, LT-\d+ Vilnius', '', submitter, flags=re.UNICODE)
+        submitter = re.sub(ur', tel\. [-\d]+', '', submitter)
         replacements = {
             u'departamenras': 'departamentas',
             u'departamentamentas': 'departamentas',

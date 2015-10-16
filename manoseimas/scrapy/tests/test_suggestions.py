@@ -712,6 +712,10 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Aukščiausiasis teismas",
             u"Lietuvos Aukščiausias Teismas",
         ],
+        # Some people put their home addresses
+        u'Antanas Mitašiūnas': [
+            u"Antanas Mitašiūnas, Kalvarijų 999-99, LT-99999 Vilnius, tel. 9-999-99999"
+        ],
     }
 
     def test(self):
