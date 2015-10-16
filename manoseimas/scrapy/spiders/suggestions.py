@@ -410,6 +410,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'prie SM': u'prie Susisiekimo ministerijos',
             u'prie Lietuvos Respublikos vidaus reikalų ministerijos': u'prie Vidaus reikalų ministerijos',
             u'nusikaltimų tyrimų tarnyba': u'nusikaltimų tyrimo tarnyba',
+            u'm. savivaldybė': u'miesto savivaldybė',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -422,6 +423,9 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Informacinės visuomenės plėtros komitetas': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
             u'IVPK': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
             u'JTVPK': u'Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras',
+            u'LAEI': u'Lietuvos agrarinės ekonomikos institutas',
+            u'LAWG': u'Local American Working Group (LAWG)',
+            u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA': u'Marijampolės regiono plėtros taryba',
         }.get(submitter, submitter)
         return submitter
 

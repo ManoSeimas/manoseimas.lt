@@ -682,6 +682,9 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"VŠĮ Lietuvos laisvosios rinkos institutas",
             u"VšĮ Lietuvos laisvosios rinkos institutas",
         ],
+        u'Marijampolės regiono plėtros taryba': [
+            u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA',
+        ],
         # Just different
         u'Seimo kanceliarijos Teisės departamentas': [
             u"(TD)",
@@ -730,6 +733,16 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras": [
             u"JTVPK",
             u"Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras (JTVPK)",
+        ],
+        u"Kauno miesto savivaldybės administracija": [
+            u"Kauno miesto savivaldybės administracija",
+            u"Kauno m. savivaldybės administracija",
+        ],
+        u"Lietuvos agrarinės ekonomikos institutas": [
+            u"LAEI",
+        ],
+        u'Local American Working Group (LAWG)': [
+            u'LAWG',
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
