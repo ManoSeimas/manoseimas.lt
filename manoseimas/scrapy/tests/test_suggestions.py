@@ -683,12 +683,20 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos ūkio ministerija",
         ],
         u"Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga": [
+            u"Lietuvos Respublikos Vaiko teisių apsaugos kontrolierius",
             u"Lietuvos Respublikos Vaiko teisių apsaugos kontrolės įstaiga",
             u"Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga",
+            u"Lietuvos Respublikos vaiko teisių apsaugos kontrolierius",
+            u"Vaiko teisių apsaugos kontrolieriaus įstaiga",
+            u"Vaiko teisių apsaugos kontrolierius",
+            u"Vaiko teisių apsaugos kontrolierė",
+            u"LR Vaiko teisių apsaugos kontrolierius",
         ],
         u"Lietuvos Respublikos valstybės saugumo departamentas": [
             u"Lietuvos Respublikos Valstybės saugumo departamentas",
+            u"Lietuvos Respublikos saugumo departamentas",
             u"Lietuvos Respublikos valstybės saugumo departamentas",
+            u"LR Valstybės saugumo departamentas",
             u"Valstybės saugumo departamentas",
         ],
         u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
@@ -791,6 +799,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Finansinių nusikaltimų tyrimų tarnyba prie Vidaus reikalų ministerijos",
         ],
         u"Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos": [
+            u"Informacinės visuomenės komitetas",
             u"Informacinės visuomenės plėtros komitetas",
             u"Informacinės visuomenės plėtros komitetas prie SM",
             u"IVPK",
@@ -826,11 +835,6 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos žemės ūkio ministerija",
             u"Žemės ūkio ministerija",
             u"ŽŪM",
-        ],
-        u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos": [
-            u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
-            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos",
-            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
         ],
         u"Valstybinė mokesčių inspekcija prie Finansų ministerijos": [
             u"Valstybinė mokesčių inspekcija prie Finansų ministerijos",
@@ -890,6 +894,8 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos": [
             u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie SADM",
             u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos",
+            u"Valstybės vaiko teisių ir įvaikinimo tarnyba prie socialinės apsaugos ir darbo ministerijos.",
         ],
         u"Valstybės valdymo ir savivaldybių komitetas": [
             u"Valstybės valdymo ir savivaldybės komitetas",
@@ -945,6 +951,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos Respublikos valstybės kontrolė": [
             u"Valstybės kontrolė",
             u"Lietuvos Respublikos valstybės kontrolė",
+            u"Lietuvos Respublikos valstybės kontrolės Valstybinio audito", # išvada Nr. 9-7, 2013-07-04
         ],
         u"Vilniaus universiteto Filologijos fakultetas": [
             u"Vilniaus universiteto Filologijos fakultetas",
@@ -975,6 +982,27 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Mykolo Romerio universiteto Teisės fakultetas": [
             u"MRU Teisės fakultetas",
             u"Mykolo Romerio universiteto Teisės fakultetas",
+        ],
+        u"Lietuvos sveikatos mokslų universitetas": [
+            u"Lietuvos sveikatos mokslo universitetas",
+            u"Lietuvos sveikatos mokslų universitetas",
+        ],
+        u"Lietuvos techninės apžiūros įmonių asociacija „Transeksta“": [
+            u"Lietuvos techninės apžiūros įmonių asociacija TRANSEKSTA",
+            u"Lietuvos techninės apžiūros įmonių asociacija „Transeksta“",
+            u"Lietuvos techninės apžiūros įmonių asociacija Transeksta",
+        ],
+        u"Lietuvos teisėsaugos pareigūnų federacija": [
+            u"Lietuvos Teisėsaugos pareigūnų federacija",
+            u"Lietuvos teisėsaugos pareigūnų federacija",
+        ],
+        u"Lietuvos teisės institutas": [
+            u"Lietuvos Teisės institutas",
+            u"Lietuvos teisės institutas",
+        ],
+        u"Lietuvos vyskupų konferencija": [
+            u"Lietuvos Vyskupų Konferencija",
+            u"Lietuvos vyskupų konferencija",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [

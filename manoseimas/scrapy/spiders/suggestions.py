@@ -466,6 +466,13 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'P olitikos': u'Politikos',
             u'prof . ': u'prof. ',
             u'MRU Teisės': u'Mykolo Romerio universiteto Teisės',
+            u'sveikatos mokslo universitetas': u'sveikatos mokslų universitetas',
+            u' TRANSEKSTA': u' „Transeksta“',
+            u' Transeksta': u' „Transeksta“',
+            u'Lietuvos Teisės institut': u'Lietuvos teisės institut',
+            u'Lietuvos Teisėsaugos': u'Lietuvos teisėsaugos',
+            u'Lietuvos Vyskupų': u'Lietuvos vyskupų',
+            u' Konferencija': u' konferencija',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -481,13 +488,13 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur'Vyriausybė \(nut.+', u'Vyriausybė', submitter)
         submitter = re.sub(ur'(Vyriausybė)(.*[Nn]utarimas)(.*)$', u'Vyriausybė', submitter)
         submitter = re.sub(ur'^Seimo (.)(.* (?:komisij|komitet))', lambda m: m.group(1).upper() + m.group(2), submitter)
-        submitter = re.sub(ur'aiko teisių apsaugos kontrol.+$', u'aiko teisių apsaugos kontrolieriaus įstaiga', submitter)
-        submitter = re.sub(ur'TRANSEKSTA', u'„Transeksta“', submitter)
+        submitter = re.sub(ur'[Vv]aiko teisių apsaugos kontrol.+$', u'vaiko teisių apsaugos kontrolieriaus įstaiga', submitter)
         # Full string replacement
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
             u'TD': u'Seimo kanceliarijos Teisės departamentas',
             u'Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+            u'Informacinės visuomenės komitetas': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
             u'Informacinės visuomenės plėtros komitetas': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
             u'IVPK': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
             u'JTVPK': u'Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras',
@@ -508,6 +515,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Valstybės valdymo ir savivaldybių reikalų komitetas': u'Valstybės valdymo ir savivaldybių komitetas',
             u'Valstybės kontrolė': u'Lietuvos Respublikos valstybės kontrolė',
             u'Valstybės saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u'Lietuvos Respublikos Valstybės saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u'Lietuvos Respublikos saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
             u'Valstybinė ligonių kasa': u'Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos',
             u'Valstybinė mokesčių inspekcija': u'Valstybinė mokesčių inspekcija prie Finansų ministerijos',
             u'Valstybinė teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos',
@@ -515,7 +524,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
             u'Švietimo, mokslo ir kultūros komiteto': u'Švietimo, mokslo ir kultūros komitetas',
             u'Valstybinė duomenų inspekcija': u'Valstybinė duomenų apsaugos inspekcija',
-            u'Vaiko teisių apsaugos kontrolieriaus įstaiga': u'Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga',
+            u'vaiko teisių apsaugos kontrolieriaus įstaiga': u'Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga',
             u'Chevron': u'UAB Chevron Exploration & Production Lietuva',
             u'Lietuvos Respublikos saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
             u"STT": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
@@ -523,6 +532,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"Specialiųjų tyrimų tarnyba": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
             u"Specialiųjų tyrimų tarnybos antikorupcinio vertinimo": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
             u"Nacionalinis pareigūnų profesinių sąjungų susivienijimus": u"Nacionalinis pareigūnų profesinių sąjungų susivienijimas",
+            u'Lietuvos Respublikos valstybės kontrolės Valstybinio audito': u'Lietuvos Respublikos valstybės kontrolė',
         }.get(submitter, submitter)
         return submitter
 
