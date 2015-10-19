@@ -366,6 +366,18 @@ class TestSubmitterParsing(unittest.TestCase):
          {'submitter': u"Lietuvos Respublikos Vyriausybė",
           'date': '2013-11-27',
           'document': u'nutarimas Nr. XIIP-1087'}),
+        (u"Lietuvos Respublikos Vyriausybė, (Nutarimas Nr. 1403), 2014-12-15",
+         {'submitter': u"Lietuvos Respublikos Vyriausybė",
+          'date': '2014-12-15',
+          'document': u'Nutarimas Nr. 1403'}),
+        (u"Vyriausybės nutarimas Nr. 545 (2013-06-12)",
+         {'submitter': u"Lietuvos Respublikos Vyriausybė",
+          'date': '2013-06-12',
+          'document': u'nutarimas Nr. 545'}),
+        (u"Vyriausybė (nut. Nr.159; 2014-02-19)",
+         {'submitter': u"Lietuvos Respublikos Vyriausybė",
+          'date': '2014-02-19',
+          'document': u'nut. Nr.159'}),
     ]
 
     def test(self):

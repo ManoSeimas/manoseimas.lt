@@ -303,12 +303,16 @@ class SuggestionsSpider(ManoSeimasSpider):
             parts = re.split(r'()((?:\bG-20\d\d-\d+|\b[IVXL]+P-\d+|[Nn]utarimas|[Nn]ut\.).*)', submitter_and_date, maxsplit=1)
         submitter = parts[0]
         date = parts[1] if len(parts) > 1 else ''
-        document = parts[2] if len(parts) > 2 else ''
+        document = cls._clean_document(parts[2]) if len(parts) > 2 else ''
+        if not document:
+            parts = re.split(r'((?:\bG-20\d\d-\d+|\b[IVXL]+P-\d+|[Nn]utarimas|[Nn]ut\.).*)', submitter, maxsplit=1)
+            submitter = parts[0]
+            document = cls._clean_document(parts[1]) if len(parts) > 1 else ''
         return dict(
             raw=raw,
             submitter=cls._clean_submitter(submitter),
             date=cls._clean_date(date),
-            document=cls._clean_document(document),
+            document=document,
         )
 
     @classmethod
@@ -433,6 +437,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
+        submitter = submitter.replace(u'Lietuvos Respublikos vyriausybė', u'Lietuvos Respublikos Vyriausybė')
         submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
         submitter = re.sub(ur' \(JTVPK\)$', '', submitter)
         submitter = re.sub(ur'(„[\w\d ]+)$', ur'\1“', submitter, flags=re.UNICODE)
@@ -458,12 +463,11 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Kelių policijos tarnyba': u'Lietuvos kelių policijos tarnyba',
             u'Laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
             u'VŠĮ Lietuvos laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
-            u'Lietuvos Respublikos vyriausybės': u'Lietuvos Respublikos Vyriausybė',
+            u'Lietuvos Respublikos Vyriausybės': u'Lietuvos Respublikos Vyriausybė',
             u'Vyriausybė': u'Lietuvos Respublikos Vyriausybė',
             u'Vyriausybės': u'Lietuvos Respublikos Vyriausybė',
             u'Valstybės valdymo ir savivaldybių reikalų komitetas': u'Valstybės valdymo ir savivaldybių komitetas',
             u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
-            u'Lietuvos Respublikos vyriausybė': u'Lietuvos Respublikos Vyriausybė',
         }.get(submitter, submitter)
         return submitter
 
@@ -599,8 +603,8 @@ class SuggestionsSpider(ManoSeimasSpider):
         document = re.sub('^ *d[.]', '', document)
         # leading punctuation and spaces
         document = re.sub('^[- ;,)]+', '', document)
-        # trailing spaces
-        document = re.sub(' +$', '', document)
+        # trailing spaces and commas and stuff
+        document = re.sub('[(,; ]+$', '', document)
         # YYYY-MM-DD (Nr. NNN)
         document = re.sub('^[(](.*)[)]$', r'\1', document)
         # (YYYY-MM-DD Nr.NNN), but leave YYYY-MM-DD Nr. XIIP-NNN(N) alone
