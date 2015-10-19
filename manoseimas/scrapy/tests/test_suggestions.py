@@ -95,7 +95,7 @@ class TestTableParsing(unittest.TestCase):
             </table>
         ''', [
             Suggestion(
-                submitter=u'STT',
+                submitter=u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
                 date=u'2015-10-09',
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'',
@@ -103,7 +103,7 @@ class TestTableParsing(unittest.TestCase):
                 raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
-                submitter=u'STT',
+                submitter=u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
                 date=u'2015-10-09',
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
@@ -171,7 +171,7 @@ class TestTableParsing(unittest.TestCase):
             </table>
         ''', [
             Suggestion(
-                submitter=u'STT',
+                submitter=u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
                 date=u'2015-10-09',
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'',
@@ -179,7 +179,7 @@ class TestTableParsing(unittest.TestCase):
                 raw=u'STT (2015-10-09, raštas Nr. g-2015-123)',
             ),
             Suggestion(
-                submitter=u'STT',
+                submitter=u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
                 date=u'2015-10-09',
                 document=u'raštas Nr. g-2015-123',
                 opinion=u'Pritarti',
@@ -378,6 +378,10 @@ class TestSubmitterParsing(unittest.TestCase):
          {'submitter': u"Lietuvos Respublikos Vyriausybė",
           'date': '2014-02-19',
           'document': u'nut. Nr.159'}),
+        (u"Specialiųjų tyrimų tarnybos antikorupcinio vertinimo išvada 2013-02-05",
+         {'submitter': u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+          'date': '2013-02-05',
+          'document': u''}),
     ]
 
     def test(self):
@@ -428,7 +432,7 @@ class TestRowParsing(unittest.TestCase):
               <td></td>
             </tr>
         ''', Suggestion(
-            submitter=u'STT',
+            submitter=u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
             date=u'2015-10-09',
             document=u'raštas Nr. g-2015-123',
             opinion=u'Pritarti',
@@ -447,9 +451,9 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'-': [],
         # When you split "name (date, document no)" or "name, date" you end up
         # with trailing " (" or ", ".
-        u'STT': [
-            u'STT (',
-            u'STT, ',
+        u'Teisės institutas': [
+            u'Teisės institutas (',
+            u'Teisės institutas, ',
         ],
         u'Žemės ūkio ministerija': [
             u'Žemės ūkio ministerija (gauta',
@@ -458,9 +462,9 @@ class TestSubmitterCleaning(unittest.TestCase):
             u'Kristina M. (gauta el. paštu)',
         ],
         # Trailing incomplete date fragments are stripped
-        u'STT': [
-            u'STT 2014-',
-            u'STT, 2013-01-',
+        u'UAB VVTF': [
+            u'UAB VVTF 2014-',
+            u'UAB VVTF, 2013-01-',
         ],
         # Trailing comments
         u"Konkurencijos taryba": [
@@ -637,15 +641,22 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos generalinė prokuratūra",
         ],
         u"Lietuvos Respublikos specialiųjų tyrimų tarnyba": [
+            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba tarnyb a",
             u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba",
             u"Lietuvos Respublikos specialiųjų tyrimų tarnyb a",
-            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba.",
-            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
-            u"Lietuvos respublikos specialiųjų tyrimų tarnyba",
-            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba 2012-",
-            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba, 2013-01-",
-            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba tarnyb a",
             u"Lietuvos Respublikos specialiųjų tyrimų tarnyba (toliau– STT)",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba 2012-",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba, 2013-01-",
+            u"Lietuvos Respublikos specialiųjų tyrimų tarnyba.",
+            u"Lietuvos respublikos specialiųjų tyrimų tarnyba",
+            u"LR Specialiųjų tyrimų tarnyba",
+            u"Specialiųjų tyrimų tarnyba",
+            u"STT",
+            u'STT (',
+            u'STT, ',
+            u'STT 2014-',
+            u'STT, 2013-01-',
         ],
         u"Teisingumo ministerija": [
             u"Lietuvos Respublikos Teisingumo ministerija",

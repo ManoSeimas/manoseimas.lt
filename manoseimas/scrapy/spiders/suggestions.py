@@ -516,9 +516,11 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Valstybinė duomenų inspekcija': u'Valstybinė duomenų apsaugos inspekcija',
             u'Vaiko teisių apsaugos kontrolieriaus įstaiga': u'Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga',
             u'Chevron': u'UAB Chevron Exploration & Production Lietuva',
-            u'Specialiųjų tyrimų tarnyba': u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
-            u'STT': u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
             u'Lietuvos Respublikos saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u"STT": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Specialiųjų tyrimų tarnyba": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Specialiųjų tyrimų tarnybos antikorupcinio vertinimo": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
         }.get(submitter, submitter)
         return submitter
 
