@@ -542,6 +542,10 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"Hieraldikos komisija": u"Lietuvos heraldikos komisija",
             u"Vyriausioji rinkimų komisija": u"Lietuvos Respublikos vyriausioji rinkimų komisija",
             u"„Linava“": u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
+            u"Žemės ūkio rūmai": u"Lietuvos Respublikos žemės ūkio rūmai",
+            u"Respublikiniai būsto valdymo ir priežiūros rūmai": u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai",
+            u"Lietuvos transporto priemonių draudikų biuras": u"Lietuvos Respublikos transporto priemonių draudikų biuras",
+            u"Lietuvos Respublikos Socialinių reikalų ir darbo komitetas": u"Socialinių reikalų ir darbo komitetas",
         }.get(submitter, submitter)
         return submitter
 

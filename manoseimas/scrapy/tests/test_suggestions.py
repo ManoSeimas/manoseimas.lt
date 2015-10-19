@@ -920,6 +920,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Socialinių reikalų ir darbo komiteto pasiūlymas",
             u"Seimo Socialinių reikalų ir darbo komitetas",
             u"Seimo socialinių reikalų ir darbo komitetas",
+            u"Lietuvos Respublikos Socialinių reikalų ir darbo komitetas",
         ],
         u"Mykolo Romerio universitetas": [
             u"Mykolo Riomerio universitetas",
@@ -1035,6 +1036,18 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“": [
             u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
             u"„Linava“",
+        ],
+        u"Lietuvos Respublikos žemės ūkio rūmai": [
+            u"Žemės ūkio rūmai",
+            u"Lietuvos Respublikos žemės ūkio rūmai",
+        ],
+        u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai": [
+            u"Respublikiniai būsto valdymo ir priežiūros rūmai",
+            u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai",
+        ],
+        u"Lietuvos Respublikos transporto priemonių draudikų biuras": [
+            u"Lietuvos Respublikos transporto priemonių draudikų biuras",
+            u"Lietuvos transporto priemonių draudikų biuras",
         ],
         # Oh my
         u"Onkohematologinių ligonių bendrija „Kraujas“ ir kt.": [
