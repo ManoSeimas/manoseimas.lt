@@ -355,15 +355,15 @@ class TestSubmitterParsing(unittest.TestCase):
           'date': '',
           'document': u'XIP-3018'}),
         (u"Lietuvos Respublikos vyriausybės Nutarimas Nr. 441",
-         {'submitter': u"Lietuvos Respublikos vyriausybė",
+         {'submitter': u"Lietuvos Respublikos Vyriausybė",
           'date': '',
           'document': u'Nutarimas Nr. 441'}),
         (u"Lietuvos Respublikos vyriausybės nutarimas Nr. 441",
-         {'submitter': u"Lietuvos Respublikos vyriausybė",
+         {'submitter': u"Lietuvos Respublikos Vyriausybė",
           'date': '',
           'document': u'nutarimas Nr. 441'}),
         (u"Lietuvos Respublikos vyriausybė, 2013m. lapkričio 27 d. nutarimas Nr. XIIP-1087",
-         {'submitter': u"Lietuvos Respublikos vyriausybė",
+         {'submitter': u"Lietuvos Respublikos Vyriausybė",
           'date': '2013-11-27',
           'document': u'nutarimas Nr. XIIP-1087'}),
     ]
@@ -879,6 +879,12 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Mykolo Romerio universiteto Teisės fakultetas": [
             u"Mykolo Romerio universiteto Teisės fakultetas",
             u"Mykolo Romerio universtiteto Teisės fakultetas",
+        ],
+        u"Lietuvos Respublikos Vyriausybė": [
+            u"Lietuvos Respublikos Vyriausybė",
+            u"Lietuvos Respublikos vyriausybė",
+            u"Lietuvos Respublikos Vyriausybės",
+            u"Lietuvos Respublikos vyriausybės",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
