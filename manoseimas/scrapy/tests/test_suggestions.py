@@ -465,6 +465,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'UAB VVTF': [
             u'UAB VVTF 2014-',
             u'UAB VVTF, 2013-01-',
+            u"UAB VVTF 12-12-06",
         ],
         # Trailing comments
         u"Konkurencijos taryba": [
