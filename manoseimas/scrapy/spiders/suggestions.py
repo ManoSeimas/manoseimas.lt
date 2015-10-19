@@ -444,6 +444,12 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Valstybių valdymo ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
             u'universiteto filologijos': u'universiteto Filologijos',
             u'Vilniaus Gedmino technikos universitet': u'Vilniaus Gedimino technikos universitet',
+            u'Tesės ir teisėtvarkos': u'Teisės ir teisėtvarkos',
+            u'Teisės ir teisėtvarkos patarėj': u'Teisės ir teisėtvarkos komiteto patarėj',
+            u'komiteto biuro patarėj': u'komiteto patarėj',
+            u'TTK biuro patarėj': u'Teisės ir teisėtvarkos komiteto patarėj',
+            u'Zdanavčienė': u'Zdanavičienė',
+            u'kanceliarijos Teisės ir teisėtvarkos': u'Teisės ir teisėtvarkos',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -485,6 +491,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Valstybinė teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos',
             u'Valstybinė vaistų kontrolės tarnyba': u'Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos',
             u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
+            u'Valstybinė duomenų inspekcija': u'Valstybinė duomenų apsaugos inspekcija',
         }.get(submitter, submitter)
         return submitter
 

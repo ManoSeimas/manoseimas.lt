@@ -925,6 +925,24 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Vilniaus universiteto Filologijos fakultetas",
             u"Vilniaus universiteto filologijos fakultetas",
         ],
+        u"Valstybinė duomenų apsaugos inspekcija": [
+            u"Valstybinė duomenų apsaugos inspekcija",
+            u"Valstybinė duomenų inspekcija",
+        ],
+        u"Teisės ir teisėtvarkos komiteto patarėja R. Karpavičiūtė": [
+            u"TTK biuro patarėja R. Karpavičiūtė",
+            u"Teisės ir teisėtvarkos komiteto biuro patarėja R. Karpavičiūtė",
+            u"Teisės ir teisėtvarkos komiteto patarėja R. Karpavičiūtė",
+            u"Teisės ir teisėtvarkos patarėja R. Karpavičiūtė",
+            u"Tesės ir teisėtvarkos komiteto patarėja R. Karpavičiūtė",
+        ],
+        u"Teisės ir teisėtvarkos komiteto patarėja L. Zdanavičienė": [
+            u"Teisės ir teisėtvarkos komiteto patarėja L. Zdanavčienė",
+            u"Teisės ir teisėtvarkos komiteto patarėja L. Zdanavičienė",
+        ],
+        u"Teisės ir teisėtvarkos komiteto patarėjas V. Kanapinskas": [
+            u"Seimo kanceliarijos Teisės ir teisėtvarkos komiteto biuro patarėjas Virginijus Kanapinskas",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",
