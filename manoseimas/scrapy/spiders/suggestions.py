@@ -430,6 +430,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'LIETUVOS GEOGRAFŲ DRAUGIJA': u'Lietuvos geografų draugija',
             u'Lietuvos Nepriklausomybės Akt': u'Lietuvos nepriklausomybės akt',
             u'V. Didžiojo': u'Vytauto Didžiojo',  # our names normalizer is too greedy
+            u'Vilniaus G. technikos': u'Vilniaus Gedimino technikos',  # ditto
             u'savibaldybių': u'savivaldybių',
             u'prie SADM': u'prie Socialinės apsaugos ir darbo ministerijos',
             u' Komitetas': u' komitetas',
@@ -441,6 +442,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Valstybės ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
             u'Valstybės valdymo ir savivaldybės komitet': u'Valstybės valdymo ir savivaldybių komitet',
             u'Valstybių valdymo ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'universiteto filologijos': u'universiteto Filologijos',
+            u'Vilniaus Gedmino technikos universitet': u'Vilniaus Gedimino technikos universitet',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)

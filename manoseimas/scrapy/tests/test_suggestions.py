@@ -921,6 +921,10 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Valstybės kontrolė",
             u"Lietuvos Respublikos valstybės kontrolė",
         ],
+        u"Vilniaus universiteto Filologijos fakultetas": [
+            u"Vilniaus universiteto Filologijos fakultetas",
+            u"Vilniaus universiteto filologijos fakultetas",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",
@@ -929,6 +933,9 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Aukščiausiasis teismas",
             u"Lietuvos Aukščiausias Teismas",
             u"Aukščiausiasis Teismas",
+        ],
+        u"Vilniaus Gedimino technikos universitetas": [
+            u"Vilniaus Gedmino technikos universitetas",
         ],
         # Some people put their home addresses, phone numbers, emails or IP addresses
         u'A. Mitašiūnas': [
