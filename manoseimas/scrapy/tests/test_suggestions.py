@@ -976,6 +976,12 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'A. Mitašiūnas': [
             u"Antanas Mitašiūnas, Kalvarijų 999-99, LT-99999 Vilnius, tel. 9-999-99999"
         ],
+        u"Rimantė Vyčaitė": [
+            u"Rimantė Vyčaitė, gyv. A. Vivulskio g. 99-99, Vilnius",
+        ],
+        u"Ramutė Marijona Bliznikienė": [
+            u"Ramutė Marijona Bliznikienė, gyv. Naugarduko 999-99, Vilnius",
+        ],
         u"J. Vaitkus": [
             u"Juozas Vaitkus el. paštu juoas.vaitkus@ff.vu.lt",
         ],
