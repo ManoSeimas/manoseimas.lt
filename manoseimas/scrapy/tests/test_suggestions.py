@@ -489,10 +489,6 @@ class TestSubmitterCleaning(unittest.TestCase):
             u'A.Drevin-skas',
             u'A. Drevinskas',
         ],
-        u'Seimo kanceliarijos Teisės departamentas': [
-            u'Seimo kanceliari-jos Teisės departa- mentas',
-            u'Seimo kanceliarijos Teisės departamentas',
-        ],
         # Hyphenation exceptions
         u'Pilietė A. Butkutė-Žverelo': [
             u'Pilietė A. Butkutė-Žverelo',
@@ -507,15 +503,9 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'Europos teisės departamentas': [
             u'Europos teisės departa-menras',
         ],
-        u'Seimo kanceliarijos Teisės departamentas': [
-            u'Seimo kanceliari-jos Teisės departa-menta-mentas',
-        ],
         # Spaces are important
         u'Lietuvos Respublikos Prezidentės dekretas': [
             u'Lietuvos RespublikosPrezidentės dekretas',
-        ],
-        u'Seimo kanceliarijos Teisės departamentas': [
-            u'Seimo kanceliari-jos Teisėsdepartamentas',
         ],
         # Typos
         u'VŠĮ „Žaliasis taškas“': [
@@ -567,6 +557,8 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Biudžeto ir finansų komitetas",
             u"Biudžeto ir finansų komitetas, 2012-12-12109-P-41(4)",
             u"Biudžeto ir finansų komitetas (patikslinta išvada)",
+            u"Lietuvos Respublikos Seimo Biudžeto ir finansų komitetas",
+            u"Lietuvos Respublikos Seimo biudžeto ir finansų komitetas",
         ],
         u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti": [
             u"Darbo grupė viešojo sektoriaus audito sistemai tobulinti",
@@ -638,10 +630,6 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos Generalinė prokuratūra",
             u"Lietuvos Respublikos generalinė prokuratūra",
         ],
-        u"Lietuvos Respublikos Seimo biudžeto ir finansų komitetas": [
-            u"Lietuvos Respublikos Seimo Biudžeto ir finansų komitetas",
-            u"Lietuvos Respublikos Seimo biudžeto ir finansų komitetas",
-        ],
         u"Lietuvos Respublikos specialiųjų tyrimų tarnyba": [
             u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba",
             u"Lietuvos Respublikos specialiųjų tyrimų tarnyb a",
@@ -676,6 +664,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos Respublikos valstybės saugumo departamentas": [
             u"Lietuvos Respublikos Valstybės saugumo departamentas",
             u"Lietuvos Respublikos valstybės saugumo departamentas",
+            u"Valstybės saugumo departamentas",
         ],
         u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
             u"Lietuvos Respublikos Vyriausioji rinkimų komisija",
@@ -765,6 +754,10 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Seimo kanceliarijos teisės departamentas;",
             u"TD",
             u"Teisės departamentas",
+            u'Seimo kanceliari-jos Teisės departa- mentas',
+            u'Seimo kanceliarijos Teisės departamentas',
+            u'Seimo kanceliari-jos Teisės departa-menta-mentas',
+            u'Seimo kanceliari-jos Teisėsdepartamentas',
         ],
         u"Finansinių nusikaltimų tyrimo tarnyba prie Vidaus reikalų ministerijos": [
             u"Finansinių nusikaltimų tyrimo tarnyba prie Lietuvos Respublikos vidaus reikalų ministerijos",
@@ -874,15 +867,20 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
         ],
         u"Valstybės valdymo ir savivaldybių komitetas": [
+            u"Valstybės valdymo ir savivaldybės komitetas",
             u"Valstybės valdymo ir savibaldybių komitetas",
             u"Valstybės valdymo ir savivaldybių komitetas",
             u"Valstybės valdymo ir savivaldybių reikalų komitetas",
+            u"Valstybės ir savivaldybių komitetas",
+            u"Valstybių valdymo ir savivaldybių komitetas",
         ],
         u"Socialinių reikalų ir darbo komitetas": [
             u"Socialinių reikalų ir darbo Komitetas",
             u"Socialinių reikalų ir darbo komitetas",
             u"Socialinių reikalų ir darbo komiteto",
             u"Socialinių reikalų ir darbo komiteto pasiūlymas",
+            u"Seimo Socialinių reikalų ir darbo komitetas",
+            u"Seimo socialinių reikalų ir darbo komitetas",
         ],
         u"Mykolo Romerio universitetas": [
             u"Mykolo Riomerio universitetas",
@@ -898,6 +896,53 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos Vyriausybės",
             u"Lietuvos Respublikos vyriausybės",
         ],
+        u"Valstybinė kainų ir energetikos kontrolės komisija": [
+            u"Valstybinė kainų energetikos kontrolės komisija",
+            u"Valstybinė kainų ir energetikos kontrolės komisija",
+        ],
+        u"Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos": [
+            u"Valstybinė ligonių kasa",
+            u"Valstybinė ligonių kasa prie SAM",
+            u"Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos",
+        ],
+        u"Valstybinė mokesčių inspekcija prie Finansų ministerijos": [
+            u"Valstybinė mokesčių inspekcija",
+            u"Valstybinė mokesčių inspekcija prie Finansų ministerijos",
+        ],
+        u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos": [
+            u"Valstybinė teismo medicinos tarnyba",
+            u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos",
+        ],
+        u"Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos": [
+            u"Valstybinė vaistų kontrolės tarnyba",
+            u"Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos",
+        ],
+        u"Lietuvos Respublikos valstybės kontrolė": [
+            u"Valstybės kontrolė",
+            u"Lietuvos Respublikos valstybės kontrolė",
+        ],
+        u"Vilniaus universiteto Filologijos fakultetas": [
+            u"Vilniaus universiteto Filologijos fakultetas",
+            u"Vilniaus universiteto filologijos fakultetas",
+        ],
+        u"Valstybinė duomenų apsaugos inspekcija": [
+            u"Valstybinė duomenų apsaugos inspekcija",
+            u"Valstybinė duomenų inspekcija",
+        ],
+        u"Teisės ir teisėtvarkos komiteto patarėja R. Karpavičiūtė": [
+            u"TTK biuro patarėja R. Karpavičiūtė",
+            u"Teisės ir teisėtvarkos komiteto biuro patarėja R. Karpavičiūtė",
+            u"Teisės ir teisėtvarkos komiteto patarėja R. Karpavičiūtė",
+            u"Teisės ir teisėtvarkos patarėja R. Karpavičiūtė",
+            u"Tesės ir teisėtvarkos komiteto patarėja R. Karpavičiūtė",
+        ],
+        u"Teisės ir teisėtvarkos komiteto patarėja L. Zdanavičienė": [
+            u"Teisės ir teisėtvarkos komiteto patarėja L. Zdanavčienė",
+            u"Teisės ir teisėtvarkos komiteto patarėja L. Zdanavičienė",
+        ],
+        u"Teisės ir teisėtvarkos komiteto patarėjas V. Kanapinskas": [
+            u"Seimo kanceliarijos Teisės ir teisėtvarkos komiteto biuro patarėjas Virginijus Kanapinskas",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",
@@ -906,6 +951,9 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Aukščiausiasis teismas",
             u"Lietuvos Aukščiausias Teismas",
             u"Aukščiausiasis Teismas",
+        ],
+        u"Vilniaus Gedimino technikos universitetas": [
+            u"Vilniaus Gedmino technikos universitetas",
         ],
         # Some people put their home addresses, phone numbers, emails or IP addresses
         u'A. Mitašiūnas': [

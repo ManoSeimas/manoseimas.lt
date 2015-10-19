@@ -415,6 +415,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Teisės Departamentas': u'Teisės departamentas',
             u'prie LR': u'prie Lietuvos Respublikos',
             u'prie SM': u'prie Susisiekimo ministerijos',
+            u'prie SAM': u'prie Sveikatos apsaugos ministerijos',
             u'prie Lietuvos Respublikos vidaus reikalų ministerijos': u'prie Vidaus reikalų ministerijos',
             u'nusikaltimų tyrimų tarnyba': u'nusikaltimų tyrimo tarnyba',
             u'm. savivaldybė': u'miesto savivaldybė',
@@ -430,6 +431,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'LIETUVOS GEOGRAFŲ DRAUGIJA': u'Lietuvos geografų draugija',
             u'Lietuvos Nepriklausomybės Akt': u'Lietuvos nepriklausomybės akt',
             u'V. Didžiojo': u'Vytauto Didžiojo',  # our names normalizer is too greedy
+            u'Vilniaus G. technikos': u'Vilniaus Gedimino technikos',  # ditto
             u'savibaldybių': u'savivaldybių',
             u'prie SADM': u'prie Socialinės apsaugos ir darbo ministerijos',
             u' Komitetas': u' komitetas',
@@ -440,6 +442,20 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Žvejų ir žuvies perdirbėjų asociacijos (ŽŽPA) „Baltijos žvejas“ pirmininkas A. Aušra': u'Žvejų ir žuvies perdirbėjų asociacija (ŽŽPA) „Baltijos žvejas“',
             u'savivaldybės taryba': u'savivaldybė',
             u'VU Santariškių': u'Vilniaus universiteto ligoninės Santariškių',
+            u'Lietuvos Respublikos Seimo': u'Seimo',
+            u'valdymo ir savivalybės komitetas': u'valdymo ir savivaldybių komitetas',
+            u'Valstybinė kainų energetikos': u'Valstybinė kainų ir energetikos',
+            u'Valstybės ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'Valstybės valdymo ir savivaldybės komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'Valstybių valdymo ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'universiteto filologijos': u'universiteto Filologijos',
+            u'Vilniaus Gedmino technikos universitet': u'Vilniaus Gedimino technikos universitet',
+            u'Tesės ir teisėtvarkos': u'Teisės ir teisėtvarkos',
+            u'Teisės ir teisėtvarkos patarėj': u'Teisės ir teisėtvarkos komiteto patarėj',
+            u'komiteto biuro patarėj': u'komiteto patarėj',
+            u'TTK biuro patarėj': u'Teisės ir teisėtvarkos komiteto patarėj',
+            u'Zdanavčienė': u'Zdanavičienė',
+            u'kanceliarijos Teisės ir teisėtvarkos': u'Teisės ir teisėtvarkos',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -453,6 +469,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur'komiteto(?: +pasiūlymas)?$', u'komitetas', submitter)
         submitter = re.sub(ur'savivaldybės meras.*$', u'savivaldybė', submitter)
         submitter = re.sub(ur'Vyriausybės [nN]utarimas.*', u'Vyriausybė', submitter)
+        submitter = re.sub(ur'^Seimo (.)(.* (?:komisij|komitet))', lambda m: m.group(1).upper() + m.group(2), submitter)
         # Full string replacement
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
@@ -476,8 +493,15 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vyriausybė': u'Lietuvos Respublikos Vyriausybė',
             u'Vyriausybės': u'Lietuvos Respublikos Vyriausybė',
             u'Valstybės valdymo ir savivaldybių reikalų komitetas': u'Valstybės valdymo ir savivaldybių komitetas',
+            u'Valstybės kontrolė': u'Lietuvos Respublikos valstybės kontrolė',
+            u'Valstybės saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u'Valstybinė ligonių kasa': u'Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos',
+            u'Valstybinė mokesčių inspekcija': u'Valstybinė mokesčių inspekcija prie Finansų ministerijos',
+            u'Valstybinė teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos',
+            u'Valstybinė vaistų kontrolės tarnyba': u'Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos',
             u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
             u'Švietimo, mokslo ir kultūros komiteto': u'Švietimo, mokslo ir kultūros komitetas',
+            u'Valstybinė duomenų inspekcija': u'Valstybinė duomenų apsaugos inspekcija',
         }.get(submitter, submitter)
         return submitter
 
