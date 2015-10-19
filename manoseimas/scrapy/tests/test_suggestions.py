@@ -507,6 +507,12 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'Lietuvos Respublikos Prezidentės dekretas': [
             u'Lietuvos RespublikosPrezidentės dekretas',
         ],
+        u"Sveikatos reikalų komiteto neetatinė ekspertė prof. R. Kalėdienė": [
+            u"Sveikatos reikalų komiteto neetatinė ekspertė prof . R. Kalėdienė",
+        ],
+        u'Politikos mokslų intituto profesorė dr. D. Jankauskienė': [
+            u'P olitikos mokslų intituto profesorė dr. D. Jankauskienė',
+        ],
         # Typos
         u'VŠĮ „Žaliasis taškas“': [
             u'VŠĮ „Žaliais taškas“',

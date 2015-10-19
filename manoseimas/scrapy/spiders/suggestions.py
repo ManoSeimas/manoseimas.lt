@@ -463,6 +463,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Nacionalinis pareigūnų profesinių sąjungų susivienijimus': u'Nacionalinis pareigūnų profesinių sąjungų susivienijimas',
             u'sveikatos mokslo universitetas': u'Lietuvos sveikatos mokslų universitetas',
             u'Lietuvos prekybos, pramonės ir amatų asociacija': u'Lietuvos prekybos, pramonės ir amatų rūmų asociacija',
+            u'P olitikos': u'Politikos',
+            u'prof . ': u'prof. ',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
