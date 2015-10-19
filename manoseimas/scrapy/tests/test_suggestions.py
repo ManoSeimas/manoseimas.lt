@@ -637,6 +637,8 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos nacionalinė vežėjų automobiliais asociacija „LINAVA“",
             u"Lietuvos nacionalinė vežėjų automobiliais asociacija LINAVA",
             u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
+            u"„Linava“",
         ],
         u"Lietuvos nealkoholinių gėrimų gamintojų bei importuotojų asociacija": [
             u"Lietuvos nealkoholinių gėrimų gamintojų bei importuotojų asociacija",
@@ -681,10 +683,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos Respublikos transporto priemonių draudikų biuras": [
             u"Lietuvos Respublikos Transporto priemonių draudikų biuras",
             u"Lietuvos Respublikos transporto priemonių draudikų biuras",
-        ],
-        u"Lietuvos Respublikos trišalė taryba": [
-            u"Lietuvos Respublikos Trišalė taryba",
-            u"Lietuvos Respublikos trišalė taryba",
+            u"Lietuvos transporto priemonių draudikų biuras",
         ],
         u"Ūkio ministerija": [
             u"Lietuvos Respublikos Ūkio ministerija",
@@ -710,6 +709,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
             u"Lietuvos Respublikos Vyriausioji rinkimų komisija",
             u"Lietuvos Respublikos vyriausioji rinkimų komisija",
+            u"Vyriausioji rinkimų komisija",
         ],
         u"Lietuvos savivaldybių asociacija": [
             u"Lietuvos Savivaldybių asociacija",
@@ -729,6 +729,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Apeliacinis Teismas",
             u"Lietuvos Apeliacinis teismas",
             u"Lietuvos apeliacinis teismas",
+            u"Apeliacinis teismas",
         ],
         u"Lietuvos advokatūra": [
             u"Lietuvos Advokatūra",
@@ -847,10 +848,12 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Valstybinė mokesčių inspekcija prie Finansų ministerijos": [
             u"Valstybinė mokesčių inspekcija prie Finansų ministerijos",
             u"Valstybinė mokesčių inspekcija prie Lietuvos Respublikos finansų ministerijos",
+            u"Valstybinė mokesčių inspekcija",
         ],
         u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos": [
-            u"Valstybinės teismo medicinos tarnyba prie Lietuvos Respublikos Teisingumo ministerijos",
             u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos",
+            u"Valstybinė teismo medicinos tarnyba",
+            u"Valstybinės teismo medicinos tarnyba prie Lietuvos Respublikos Teisingumo ministerijos",
         ],
         u"Lietuvos Respublikos Konstitucinis Teismas": [
             u"Konstitucinis Teismas",
@@ -859,10 +862,6 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos vyriausiasis administracinis teismas": [
             u"Lietuvos Vyriausiasis administracinis teismas",
             u"Lietuvos vyriausiasis administracinis teismas",
-        ],
-        u"Lietuvos apeliacinis teismas": [
-            u"Lietuvos apeliacinis teismas",
-            u"Apeliacinis teismas",
         ],
         u'Lietuvos žemės ūkio bendrovių asociacija': [
             u'LŽŪBA',
@@ -927,6 +926,8 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Mykolo Romerio universitetas",
         ],
         u"Mykolo Romerio universiteto Teisės fakultetas": [
+            u"MRU Teisės fakultetas",
+            u"Mykolo Romerio universiteto Teisės fakultetas",
             u"Mykolo Romerio universiteto Teisės fakultetas",
             u"Mykolo Romerio universtiteto Teisės fakultetas",
         ],
@@ -944,14 +945,6 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Valstybinė ligonių kasa",
             u"Valstybinė ligonių kasa prie SAM",
             u"Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos",
-        ],
-        u"Valstybinė mokesčių inspekcija prie Finansų ministerijos": [
-            u"Valstybinė mokesčių inspekcija",
-            u"Valstybinė mokesčių inspekcija prie Finansų ministerijos",
-        ],
-        u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos": [
-            u"Valstybinė teismo medicinos tarnyba",
-            u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos",
         ],
         u"Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos": [
             u"Valstybinė vaistų kontrolės tarnyba",
@@ -988,10 +981,6 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Nacionalinis pareigūnų profesinių sąjungų susivienijimas",
             u"Nacionalinis pareigūnų profesinių sąjungų susivienijimus",
         ],
-        u"Mykolo Romerio universiteto Teisės fakultetas": [
-            u"MRU Teisės fakultetas",
-            u"Mykolo Romerio universiteto Teisės fakultetas",
-        ],
         u"Lietuvos sveikatos mokslų universitetas": [
             u"Lietuvos sveikatos mokslo universitetas",
             u"Lietuvos sveikatos mokslų universitetas",
@@ -1014,6 +1003,7 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos vyskupų konferencija",
         ],
         u"Lietuvos Respublikos trišalė taryba": [
+            u"Lietuvos Respublikos Trišalė taryba",
             u"Lietuvos Respublikos trišalė taryba",
             u"Lietuvos trišalė taryba",
         ],
@@ -1029,14 +1019,6 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos heraldikos komisija",
             u"Hieraldikos komisija",
         ],
-        u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
-            u"Vyriausioji rinkimų komisija",
-            u"Lietuvos Respublikos vyriausioji rinkimų komisija",
-        ],
-        u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“": [
-            u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
-            u"„Linava“",
-        ],
         u"Lietuvos Respublikos žemės ūkio rūmai": [
             u"Žemės ūkio rūmai",
             u"Lietuvos Respublikos žemės ūkio rūmai",
@@ -1044,10 +1026,6 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai": [
             u"Respublikiniai būsto valdymo ir priežiūros rūmai",
             u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai",
-        ],
-        u"Lietuvos Respublikos transporto priemonių draudikų biuras": [
-            u"Lietuvos Respublikos transporto priemonių draudikų biuras",
-            u"Lietuvos transporto priemonių draudikų biuras",
         ],
         # Oh my
         u"Onkohematologinių ligonių bendrija „Kraujas“ ir kt.": [
