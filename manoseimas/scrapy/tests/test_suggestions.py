@@ -503,6 +503,14 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'Koalicija „Moters teisės-visuotinės žmogaus teisės“': [
             u'Koalicija „Moters teisės-visuotinės žmogaus teisės“',
         ],
+        # Name shortening
+        u'V. Pavardenis': [
+            u'Vytautas Pavardenis',
+        ],
+        # Don't shorten when there's no surname
+        u'Gintaras': [
+            u'Gintaras',
+        ],
         # Some people have trouble spelling 'departamentas'
         u'Europos teisės departamentas': [
             u'Europos teisės departa-menras',

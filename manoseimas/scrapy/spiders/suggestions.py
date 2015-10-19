@@ -633,7 +633,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vytaut(as|o)',
             u'Zit(a|os)',
         ]
-        return re.sub(ur'\b({})\b'.format(u'|'.join(names)).replace(u'(', u'(?:'),
+        return re.sub(ur'\b(?:{})\b(?= *[A-ZĄČĘĖĮŠŲŪŽ])'.format(u'|'.join(names).replace(u'(', u'(?:')),
                       lambda m: m.group(0)[0] + '.', s)
 
     @staticmethod
