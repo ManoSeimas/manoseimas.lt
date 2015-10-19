@@ -400,6 +400,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vilnaius': u'Vilniaus',
             u' Universitetas': u' universitetas',
             u'VšĮ': u'VŠĮ',
+            u'Viešoji įstaiga': u'VŠĮ',
             u'ministreijos': 'ministerijos',
             u'LR Seimo': u'Seimo',
             u'LRS Seimo': u'Seimo',
@@ -456,6 +457,12 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'TTK biuro patarėj': u'Teisės ir teisėtvarkos komiteto patarėj',
             u'Zdanavčienė': u'Zdanavičienė',
             u'kanceliarijos Teisės ir teisėtvarkos': u'Teisės ir teisėtvarkos',
+            u'Gilbert A. Ankenbauer Generalinis direktorius Chevron Exploration & Production Lietuva UAB': u'UAB Chevron Exploration& Production Lietuva',
+            u'UAB Chevron Exploration& Production Lietuva': u'UAB Chevron Exploration & Production Lietuva',
+            u'Specialiųjų tyrimų tarnybos antikorupcinio vertinimo': u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
+            u'Nacionalinis pareigūnų profesinių sąjungų susivienijimus': u'Nacionalinis pareigūnų profesinių sąjungų susivienijimas',
+            u'sveikatos mokslo universitetas': u'Lietuvos sveikatos mokslų universitetas',
+            u'Lietuvos prekybos, pramonės ir amatų asociacija': u'Lietuvos prekybos, pramonės ir amatų rūmų asociacija',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -471,6 +478,8 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur'Vyriausybė \(nut.+', u'Vyriausybė', submitter)
         submitter = re.sub(ur'(Vyriausybė)(.*[Nn]utarimas)(.*)$', u'Vyriausybė', submitter)
         submitter = re.sub(ur'^Seimo (.)(.* (?:komisij|komitet))', lambda m: m.group(1).upper() + m.group(2), submitter)
+        submitter = re.sub(ur'aiko teisių apsaugos kontrol.+$', u'aiko teisių apsaugos kontrolieriaus įstaiga', submitter)
+        submitter = re.sub(ur'TRANSEKSTA', u'„Transeksta“', submitter)
         # Full string replacement
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
@@ -503,6 +512,11 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
             u'Švietimo, mokslo ir kultūros komiteto': u'Švietimo, mokslo ir kultūros komitetas',
             u'Valstybinė duomenų inspekcija': u'Valstybinė duomenų apsaugos inspekcija',
+            u'Vaiko teisių apsaugos kontrolieriaus įstaiga': u'Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga',
+            u'Chevron': u'UAB Chevron Exploration & Production Lietuva',
+            u'Specialiųjų tyrimų tarnyba': u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
+            u'STT': u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
+            u'Lietuvos Respublikos saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
         }.get(submitter, submitter)
         return submitter
 
@@ -598,6 +612,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Stas(ys|io)',
             u'Vald(as|o)',
             u'Vaidot(as|o)',
+            u'Vaidevut(ė|ės)',
             u'Valentin(as|o)',
             u'Valerij(us|aus)',
             u'Vand(a|os)',
