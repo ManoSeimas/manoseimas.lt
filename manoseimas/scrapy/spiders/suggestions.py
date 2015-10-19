@@ -548,7 +548,7 @@ class SuggestionsSpider(ManoSeimasSpider):
     def _normalize_names(s):
         names = [
             u'Adolf(as|o)',
-            u'Agn(ė|ės)'
+            u'Agn(ė|ės)',
             u'Aleksand(as|o)',
             u'Alg(is|io)',
             u'Antan(as|o)',

@@ -497,7 +497,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u'Pilietė A. Butkutė-Žverelo': [
             u'Pilietė A. Butkutė-Žverelo',
         ],
-        u'Architektė-urbanistė Agnė Selemonaitė': [
+        u'Architektė-urbanistė A. Selemonaitė': [
             u'Architektė-urbanistė Agnė Selemonaitė',
         ],
         u'Koalicija „Moters teisės-visuotinės žmogaus teisės“': [
@@ -509,6 +509,9 @@ class TestSubmitterCleaning(unittest.TestCase):
         ],
         u"Seimo narys Č. V. Stankevičius": [
             u"Seimo narys Česlovas Vytautas Stankevičius",
+        ],
+        u"Sveikatos reikalų komiteto neetatinė ekspertė Doc. Dr. A. Širinskienė": [
+            u"Sveikatos reikalų komiteto neetatinė ekspertė Doc. Dr. Agnė Širinskienė",
         ],
         # Don't shorten when there's no surname
         u'Gintaras': [
