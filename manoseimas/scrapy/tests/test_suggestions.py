@@ -664,6 +664,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos Respublikos valstybės saugumo departamentas": [
             u"Lietuvos Respublikos Valstybės saugumo departamentas",
             u"Lietuvos Respublikos valstybės saugumo departamentas",
+            u"Valstybės saugumo departamentas",
         ],
         u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
             u"Lietuvos Respublikos Vyriausioji rinkimų komisija",
@@ -866,9 +867,12 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
         ],
         u"Valstybės valdymo ir savivaldybių komitetas": [
+            u"Valstybės valdymo ir savivaldybės komitetas",
             u"Valstybės valdymo ir savibaldybių komitetas",
             u"Valstybės valdymo ir savivaldybių komitetas",
             u"Valstybės valdymo ir savivaldybių reikalų komitetas",
+            u"Valstybės ir savivaldybių komitetas",
+            u"Valstybių valdymo ir savivaldybių komitetas",
         ],
         u"Socialinių reikalų ir darbo komitetas": [
             u"Socialinių reikalų ir darbo Komitetas",
@@ -891,6 +895,31 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Lietuvos Respublikos vyriausybė",
             u"Lietuvos Respublikos Vyriausybės",
             u"Lietuvos Respublikos vyriausybės",
+        ],
+        u"Valstybinė kainų ir energetikos kontrolės komisija": [
+            u"Valstybinė kainų energetikos kontrolės komisija",
+            u"Valstybinė kainų ir energetikos kontrolės komisija",
+        ],
+        u"Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos": [
+            u"Valstybinė ligonių kasa",
+            u"Valstybinė ligonių kasa prie SAM",
+            u"Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos",
+        ],
+        u"Valstybinė mokesčių inspekcija prie Finansų ministerijos": [
+            u"Valstybinė mokesčių inspekcija",
+            u"Valstybinė mokesčių inspekcija prie Finansų ministerijos",
+        ],
+        u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos": [
+            u"Valstybinė teismo medicinos tarnyba",
+            u"Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos",
+        ],
+        u"Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos": [
+            u"Valstybinė vaistų kontrolės tarnyba",
+            u"Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos",
+        ],
+        u"Lietuvos Respublikos valstybės kontrolė": [
+            u"Valstybės kontrolė",
+            u"Lietuvos Respublikos valstybės kontrolė",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [

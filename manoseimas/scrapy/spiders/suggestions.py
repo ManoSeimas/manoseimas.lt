@@ -414,6 +414,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Teisės Departamentas': u'Teisės departamentas',
             u'prie LR': u'prie Lietuvos Respublikos',
             u'prie SM': u'prie Susisiekimo ministerijos',
+            u'prie SAM': u'prie Sveikatos apsaugos ministerijos',
             u'prie Lietuvos Respublikos vidaus reikalų ministerijos': u'prie Vidaus reikalų ministerijos',
             u'nusikaltimų tyrimų tarnyba': u'nusikaltimų tyrimo tarnyba',
             u'm. savivaldybė': u'miesto savivaldybė',
@@ -435,6 +436,11 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'universtiteto': u'universiteto',
             u'Mykolo Riomerio': u'Mykolo Romerio',
             u'Lietuvos Respublikos Seimo': u'Seimo',
+            u'valdymo ir savivalybės komitetas': u'valdymo ir savivaldybių komitetas',
+            u'Valstybinė kainų energetikos': u'Valstybinė kainų ir energetikos',
+            u'Valstybės ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'Valstybės valdymo ir savivaldybės komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'Valstybių valdymo ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -469,6 +475,12 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vyriausybė': u'Lietuvos Respublikos Vyriausybė',
             u'Vyriausybės': u'Lietuvos Respublikos Vyriausybė',
             u'Valstybės valdymo ir savivaldybių reikalų komitetas': u'Valstybės valdymo ir savivaldybių komitetas',
+            u'Valstybės kontrolė': u'Lietuvos Respublikos valstybės kontrolė',
+            u'Valstybės saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u'Valstybinė ligonių kasa': u'Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos',
+            u'Valstybinė mokesčių inspekcija': u'Valstybinė mokesčių inspekcija prie Finansų ministerijos',
+            u'Valstybinė teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos',
+            u'Valstybinė vaistų kontrolės tarnyba': u'Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos',
             u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
         }.get(submitter, submitter)
         return submitter
