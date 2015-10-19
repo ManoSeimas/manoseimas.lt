@@ -960,6 +960,14 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Teisės ir teisėtvarkos komiteto patarėjas V. Kanapinskas": [
             u"Seimo kanceliarijos Teisės ir teisėtvarkos komiteto biuro patarėjas Virginijus Kanapinskas",
         ],
+        u"Nacionalinis pareigūnų profesinių sąjungų susivienijimas": [
+            u"Nacionalinis pareigūnų profesinių sąjungų susivienijimas",
+            u"Nacionalinis pareigūnų profesinių sąjungų susivienijimus",
+        ],
+        u"Mykolo Romerio universiteto Teisės fakultetas": [
+            u"MRU Teisės fakultetas",
+            u"Mykolo Romerio universiteto Teisės fakultetas",
+        ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
             u"Lietuvos Aukčiausiasis Teismas",

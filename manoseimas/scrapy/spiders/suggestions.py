@@ -465,6 +465,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Lietuvos prekybos, pramonės ir amatų asociacija': u'Lietuvos prekybos, pramonės ir amatų rūmų asociacija',
             u'P olitikos': u'Politikos',
             u'prof . ': u'prof. ',
+            u'MRU Teisės': u'Mykolo Romerio universiteto Teisės',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -521,6 +522,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
             u"Specialiųjų tyrimų tarnyba": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
             u"Specialiųjų tyrimų tarnybos antikorupcinio vertinimo": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Nacionalinis pareigūnų profesinių sąjungų susivienijimus": u"Nacionalinis pareigūnų profesinių sąjungų susivienijimas",
         }.get(submitter, submitter)
         return submitter
 
