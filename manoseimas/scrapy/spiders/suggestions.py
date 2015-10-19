@@ -644,7 +644,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Zit(a|os)',
         ]
         return re.sub(ur'\b(?:{})\b(?= *[A-ZĄČĘĖĮŠŲŪŽ])'.format(u'|'.join(names).replace(u'(', u'(?:')),
-                      lambda m: m.group(0)[0] + '.', s)
+                      lambda m: m.group(0)[0] + '.', s, flags=re.UNICODE)
 
     @staticmethod
     def _normalize_dates(s):
