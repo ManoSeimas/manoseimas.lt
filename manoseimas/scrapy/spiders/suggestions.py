@@ -336,6 +336,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur',? el\. paštu \S+\@\S+\.\S+', '', submitter)
         submitter = re.sub(ur' +\d+\.\d+\.\d+\.\d+', '', submitter)
         submitter = cls._normalize_names(submitter)
+        # Sub-string relpacement
         replacements = {
             u'departamenras': 'departamentas',
             u'departamentamentas': 'departamentas',
@@ -434,6 +435,11 @@ class SuggestionsSpider(ManoSeimasSpider):
             u' Komitetas': u' komitetas',
             u'universtiteto': u'universiteto',
             u'Mykolo Riomerio': u'Mykolo Romerio',
+            u' Rezoliucija': u'',
+            u'Žemės ūkio rūmų tarybos': u'Žemės ūkio rūmų taryba',
+            u'Žvejų ir žuvies perdirbėjų asociacijos (ŽŽPA) „Baltijos žvejas“ pirmininkas A. Aušra': u'Žvejų ir žuvies perdirbėjų asociacija (ŽŽPA) „Baltijos žvejas“',
+            u'savivaldybės taryba': u'savivaldybė',
+            u'VU Santariškių': u'Vilniaus universiteto ligoninės Santariškių',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -445,6 +451,9 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
         submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
         submitter = re.sub(ur'komiteto(?: +pasiūlymas)?$', u'komitetas', submitter)
+        submitter = re.sub(ur'savivaldybės meras.*$', u'savivaldybė', submitter)
+        submitter = re.sub(ur'Vyriausybės [nN]utarimas.*', u'Vyriausybė', submitter)
+        # Full string replacement
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
             u'TD': u'Seimo kanceliarijos Teisės departamentas',
@@ -468,6 +477,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vyriausybės': u'Lietuvos Respublikos Vyriausybė',
             u'Valstybės valdymo ir savivaldybių reikalų komitetas': u'Valstybės valdymo ir savivaldybių komitetas',
             u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
+            u'Švietimo, mokslo ir kultūros komiteto': u'Švietimo, mokslo ir kultūros komitetas',
         }.get(submitter, submitter)
         return submitter
 
