@@ -468,7 +468,8 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
         submitter = re.sub(ur'komiteto(?: +pasiūlymas)?$', u'komitetas', submitter)
         submitter = re.sub(ur'savivaldybės meras.*$', u'savivaldybė', submitter)
-        submitter = re.sub(ur'Vyriausybės [nN]utarimas.*', u'Vyriausybė', submitter)
+        submitter = re.sub(ur'Vyriausybė \(nut.+', u'Vyriausybė', submitter)
+        submitter = re.sub(ur'(Vyriausybė)(.*[Nn]utarimas)(.*)$', u'Vyriausybė', submitter)
         submitter = re.sub(ur'^Seimo (.)(.* (?:komisij|komitet))', lambda m: m.group(1).upper() + m.group(2), submitter)
         # Full string replacement
         submitter = {
