@@ -386,7 +386,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         # Split reason:
         #     /python2.7/sre_compile.py
         #     AssertionError: "sorry, but this version only supports 100 named groups"
-        submitter = re.sub(u'|'.join(names), lambda m: m.group(0)[0] + '.', submitter)
+        submitter = re.sub(ur'\b(?:%s)\b' % u'|'.join(names), lambda m: m.group(0)[0] + '.', submitter)
         names = [
             u'Laim(a|os)',
             u'Laris(a|os)',
@@ -395,7 +395,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Liucij(us|aus)',
             u'Leonard(|o)',
             u'Loret(a|os)',
-            u'ij(a|os)',
+            u'Marij(a|os)',
             u'Martyn(a|os)',
             u'Mečislov(as|o)',
             u'Migl(ė|ės)',
@@ -441,7 +441,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vytaut(as|o)',
             u'Zit(a|os)',
         ]
-        submitter = re.sub(u'|'.join(names), lambda m: m.group(0)[0] + '.', submitter)
+        submitter = re.sub(ur'\b(?:%s)\b' % u'|'.join(names), lambda m: m.group(0)[0] + '.', submitter)
         replacements = {
             u'departamenras': 'departamentas',
             u'departamentamentas': 'departamentas',
@@ -534,6 +534,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Lietuvos nacionalinė sveikatos tarybos': u'Lietuvos nacionalinės sveikatos tarybos',
             u'LIETUVOS GEOGRAFŲ DRAUGIJA': u'Lietuvos geografų draugija',
             u'Lietuvos Nepriklausomybės Akt': u'Lietuvos nepriklausomybės akt',
+            u'V. Didžiojo': u'Vytauto Didžiojo',  # our names normalizer is too greedy
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)

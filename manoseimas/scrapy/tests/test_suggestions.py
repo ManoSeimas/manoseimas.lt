@@ -851,10 +851,10 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Aukščiausiasis Teismas",
         ],
         # Some people put their home addresses, phone numbers, emails or IP addresses
-        u'Antanas Mitašiūnas': [
+        u'A. Mitašiūnas': [
             u"Antanas Mitašiūnas, Kalvarijų 999-99, LT-99999 Vilnius, tel. 9-999-99999"
         ],
-        u"Juozas Vaitkus": [
+        u"J. Vaitkus": [
             u"Juozas Vaitkus el. paštu juoas.vaitkus@ff.vu.lt",
         ],
         u"Rūta": [
