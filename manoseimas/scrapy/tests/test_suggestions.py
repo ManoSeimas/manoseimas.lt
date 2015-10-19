@@ -1027,6 +1027,10 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Respublikiniai būsto valdymo ir priežiūros rūmai",
             u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai",
         ],
+        u"Tarptautinė žmogaus teisių gynimo organizacija „Fair Trials International“": [
+            u"Nevyriausybinė organizacija FAIR TRIALS INTERNATIONAL\"",
+            u"Tarptautinė žmogaus teisių gynimo organizacija „Fair Trials International“",
+        ],
         # Oh my
         u"Onkohematologinių ligonių bendrija „Kraujas“ ir kt.": [
             u"Onkohematologinių ligonių bendrija „Kraujas\" ir kt.",

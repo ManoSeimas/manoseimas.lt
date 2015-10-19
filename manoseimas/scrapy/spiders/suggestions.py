@@ -546,6 +546,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"Respublikiniai būsto valdymo ir priežiūros rūmai": u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai",
             u"Lietuvos transporto priemonių draudikų biuras": u"Lietuvos Respublikos transporto priemonių draudikų biuras",
             u"Lietuvos Respublikos Socialinių reikalų ir darbo komitetas": u"Socialinių reikalų ir darbo komitetas",
+            u"Nevyriausybinė organizacija FAIR TRIALS INTERNATIONAL\"": u"Tarptautinė žmogaus teisių gynimo organizacija „Fair Trials International“",
         }.get(submitter, submitter)
         return submitter
 
