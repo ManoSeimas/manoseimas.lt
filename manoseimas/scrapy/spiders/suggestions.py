@@ -473,13 +473,14 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Lietuvos Teisėsaugos': u'Lietuvos teisėsaugos',
             u'Lietuvos Vyskupų': u'Lietuvos vyskupų',
             u' Konferencija': u' konferencija',
+            u' draugija Judesys“': u' draugija „Judesys“',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
         submitter = submitter.replace(u'Lietuvos Respublikos vyriausybė', u'Lietuvos Respublikos Vyriausybė')
         submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
         submitter = re.sub(ur' \(JTVPK\)$', '', submitter)
-        submitter = re.sub(ur'(„[\w\d ]+)$', ur'\1“', submitter, flags=re.UNICODE)
+        submitter = re.sub(ur'(„[\w\d ]+)(?:$|(?<! ) *"|(?=,))', ur'\1“', submitter, flags=re.UNICODE)
         submitter = re.sub(ur'^LR ', u'Lietuvos Respublikos ', submitter)
         submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
         submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
@@ -533,6 +534,13 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"Specialiųjų tyrimų tarnybos antikorupcinio vertinimo": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
             u"Nacionalinis pareigūnų profesinių sąjungų susivienijimus": u"Nacionalinis pareigūnų profesinių sąjungų susivienijimas",
             u'Lietuvos Respublikos valstybės kontrolės Valstybinio audito': u'Lietuvos Respublikos valstybės kontrolė',
+            u'Generalinė prokuratūra': u'Lietuvos Respublikos generalinė prokuratūra',
+            u'Lietuvos trišalė taryba': u'Lietuvos Respublikos trišalė taryba',
+            u"Lietuvos teisėjų asociacija": u"Lietuvos Respublikos teisėjų asociacija",
+            u"Valstybinė kultūros paveldo komisija": u"Lietuvos Respublikos valstybinė kultūros paveldo komisija",
+            u"Hieraldikos komisija": u"Lietuvos heraldikos komisija",
+            u"Vyriausioji rinkimų komisija": u"Lietuvos Respublikos vyriausioji rinkimų komisija",
+            u"„Linava“": u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
         }.get(submitter, submitter)
         return submitter
 
@@ -540,7 +548,7 @@ class SuggestionsSpider(ManoSeimasSpider):
     def _normalize_names(s):
         names = [
             u'Adolf(as|o)',
-            u'Agn(ė|ės)?'
+            u'Agn(ė|ės)'
             u'Aleksand(as|o)',
             u'Alg(is|io)',
             u'Antan(as|o)',
@@ -576,7 +584,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Gintar(ė|ės)',
             u'Gy(tis|čio)',
             u'Igori(s|o)',
-            u'Jaroslav(o)',
+            u'Jaroslav(o)?',
             u'Jon(as|o)',
             u'Jolit(a|os)',
             u'Juoz(as|o)',

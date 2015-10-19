@@ -323,7 +323,7 @@ class TestSubmitterParsing(unittest.TestCase):
           'date': '2013-09-02',
           'document': ''}),
         (u'Generalinė prokuratūra 2013-1 1-07',
-         {'submitter': u'Generalinė prokuratūra',
+         {'submitter': u'Lietuvos Respublikos generalinė prokuratūra',
           'date': '2013-11-07',
           'document': ''}),
         (u'Lietuvos savivaldybių asociacija 2014-5-29',
@@ -650,6 +650,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos Respublikos generalinė prokuratūra": [
             u"Lietuvos Respublikos Generalinė prokuratūra",
             u"Lietuvos Respublikos generalinė prokuratūra",
+            u"Generalinė prokuratūra",
         ],
         u"Lietuvos Respublikos specialiųjų tyrimų tarnyba": [
             u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba tarnyb a",
@@ -1006,6 +1007,55 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos vyskupų konferencija": [
             u"Lietuvos Vyskupų Konferencija",
             u"Lietuvos vyskupų konferencija",
+        ],
+        u"Lietuvos Respublikos trišalė taryba": [
+            u"Lietuvos Respublikos trišalė taryba",
+            u"Lietuvos trišalė taryba",
+        ],
+        u"Lietuvos Respublikos teisėjų asociacija": [
+            u"Lietuvos Respublikos teisėjų asociacija",
+            u"Lietuvos teisėjų asociacija",
+        ],
+        u"Lietuvos Respublikos valstybinė kultūros paveldo komisija": [
+            u"Valstybinė kultūros paveldo komisija",
+            u"Lietuvos Respublikos valstybinė kultūros paveldo komisija",
+        ],
+        u"Lietuvos heraldikos komisija": [
+            u"Lietuvos heraldikos komisija",
+            u"Hieraldikos komisija",
+        ],
+        u"Lietuvos Respublikos vyriausioji rinkimų komisija": [
+            u"Vyriausioji rinkimų komisija",
+            u"Lietuvos Respublikos vyriausioji rinkimų komisija",
+        ],
+        u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“": [
+            u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
+            u"„Linava“",
+        ],
+        # Oh my
+        u"Onkohematologinių ligonių bendrija „Kraujas“ ir kt.": [
+            u"Onkohematologinių ligonių bendrija „Kraujas\" ir kt.",
+        ],
+        u"Asociacija „Gyvastis“, ir kt.": [
+            u"Asociacija „Gyvastis\", ir kt.",
+        ],
+        u"Lietuvos vaikų vėžio asociacija „Paguoda“ ir kt.": [
+            u"Lietuvos vaikų vėžio asociacija „Paguoda \" ir kt.",
+        ],
+        u"Asociacija „Pozityvus gyvenimas“, ir kt.": [
+            u"Asociacija „Pozityvus gyvenimas\", ir kt.",
+        ],
+        u"Onkologinėmis ligomis sergančių moterų draugija „Eivena“, ir kt.": [
+            u"Onkologinėmis ligomis sergančių moterų draugija „Eivena \", ir kt.",
+        ],
+        u"VŠĮ „Kartu lengviau“ (sergantieji smegenų navikais), ir kt.": [
+            u"VŠĮ „Kartu lengviau\" (sergantieji smegenų navikais), ir kt.",
+        ],
+        u"Lietuvos sergančiųjų genetinėmis nervųraumenų ligomis asociacija „Sraunija“, ir kt.": [
+            u"Lietuvos sergančiųjų genetinėmis nervųraumenų ligomis asociacija „Sraunija\", ir kt.",
+        ],
+        u"Bechterevo liga sergančių draugija „Judesys“, ir kt.": [
+            u"Bechterevo liga sergančių draugija Judesys“, ir kt.",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
