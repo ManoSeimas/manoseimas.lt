@@ -300,7 +300,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             submitter_and_date = cls._normalize_dates(submitter_and_date)
         parts = short_date_re.split(submitter_and_date, maxsplit=1)
         if len(parts) == 1:
-            parts = re.split(r'()(\bG-20\d\d-\d+.*|\b[IVXL]+P-\d+.*)', submitter_and_date, maxsplit=1)
+            parts = re.split(r'()((?:\bG-20\d\d-\d+|\b[IVXL]+P-\d+|\b[Nn]utarimas).*)', submitter_and_date, maxsplit=1)
         submitter = parts[0]
         date = parts[1] if len(parts) > 1 else ''
         document = parts[2] if len(parts) > 2 else ''
@@ -452,6 +452,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Kelių policijos tarnyba': u'Lietuvos kelių policijos tarnyba',
             u'Laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
             u'VŠĮ Lietuvos laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
+            u'Lietuvos Respublikos vyriausybės': u'Lietuvos Respublikos vyriausybė',
         }.get(submitter, submitter)
         return submitter
 

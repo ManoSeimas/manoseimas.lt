@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 
-date_re = re.compile(r'(\d{4})\s+m\.\s+(\w+)\s+(\d{1,2})\s+d\.', re.UNICODE)
+date_re = re.compile(r'(\d{4})\s*m\.\s+(\w+)\s+(\d{1,2})\s+d\.', re.UNICODE)
 month_names_map = {
     u'sausio':     1,
     u'vasario':    2,
