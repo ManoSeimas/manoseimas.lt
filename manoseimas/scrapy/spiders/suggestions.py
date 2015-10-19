@@ -425,6 +425,11 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'LIETUVOS GEOGRAFŲ DRAUGIJA': u'Lietuvos geografų draugija',
             u'Lietuvos Nepriklausomybės Akt': u'Lietuvos nepriklausomybės akt',
             u'V. Didžiojo': u'Vytauto Didžiojo',  # our names normalizer is too greedy
+            u'savibaldybių': u'savivaldybių',
+            u'prie SADM': u'prie Socialinės apsaugos ir darbo ministerijos',
+            u' Komitetas': u' komitetas',
+            u'universtiteto': u'universiteto',
+            u'Mykolo Riomerio': u'Mykolo Romerio',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
@@ -434,6 +439,7 @@ class SuggestionsSpider(ManoSeimasSpider):
         submitter = re.sub(ur'^LR ', u'Lietuvos Respublikos ', submitter)
         submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
         submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
+        submitter = re.sub(ur'komiteto(?: +pasiūlymas)?$', u'komitetas', submitter)
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
             u'TD': u'Seimo kanceliarijos Teisės departamentas',
@@ -453,6 +459,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
             u'VŠĮ Lietuvos laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
             u'Lietuvos Respublikos vyriausybės': u'Lietuvos Respublikos vyriausybė',
+            u'Valstybės valdymo ir savivaldybių reikalų komitetas': u'Valstybės valdymo ir savivaldybių komitetas',
+            u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
         }.get(submitter, submitter)
         return submitter
 

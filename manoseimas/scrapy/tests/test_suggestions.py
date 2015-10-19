@@ -716,6 +716,10 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos nepriklausomybės aktų signatarų klubo prezidentė B. Valionytė": [
             u"Lietuvos nepriklausomybės aktų signatarų klubo prezidentė B. Valionytė",
         ],
+        u"Statybos ir architektūros teismo ekspertų sąjunga": [
+            u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA",
+            u"Statybos ir architektūros teismo ekspertų sąjunga",
+        ],
         # Just different
         u'Seimo kanceliarijos Teisės departamentas': [
             u"(TD)",
@@ -852,6 +856,29 @@ class TestSubmitterCleaning(unittest.TestCase):
         ],
         u"Lietuvos nacionalinės sveikatos tarybos pirmininkas J. Pundzius": [
             u"Lietuvos nacionalinė sveikatos tarybos pirmininkas J. Pundzius",
+        ],
+        u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos": [
+            u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie SADM",
+            u"Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba prie Socialinės apsaugos ir darbo ministerijos",
+        ],
+        u"Valstybės valdymo ir savivaldybių komitetas": [
+            u"Valstybės valdymo ir savibaldybių komitetas",
+            u"Valstybės valdymo ir savivaldybių komitetas",
+            u"Valstybės valdymo ir savivaldybių reikalų komitetas",
+        ],
+        u"Socialinių reikalų ir darbo komitetas": [
+            u"Socialinių reikalų ir darbo Komitetas",
+            u"Socialinių reikalų ir darbo komitetas",
+            u"Socialinių reikalų ir darbo komiteto",
+            u"Socialinių reikalų ir darbo komiteto pasiūlymas",
+        ],
+        u"Mykolo Romerio universitetas": [
+            u"Mykolo Riomerio universitetas",
+            u"Mykolo Romerio universitetas",
+        ],
+        u"Mykolo Romerio universiteto Teisės fakultetas": [
+            u"Mykolo Romerio universiteto Teisės fakultetas",
+            u"Mykolo Romerio universtiteto Teisės fakultetas",
         ],
         # Some fun typos here too
         u'Lietuvos Aukščiausiasis Teismas': [
