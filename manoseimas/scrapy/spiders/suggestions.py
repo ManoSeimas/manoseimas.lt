@@ -101,6 +101,7 @@ class SuggestionsSpider(ManoSeimasSpider):
                     item['submitter'] = last_item['submitter']
                     item['date'] = last_item['date']
                     item['document'] = last_item['document']
+                    item['raw'] = last_item['raw']
                 yield item
                 last_item = item
 
@@ -296,39 +297,56 @@ class SuggestionsSpider(ManoSeimasSpider):
         short_date_re = re.compile(r'(\d\d\d\d ?-? ?[01]? ?\d ?-? ?[0-3] ?\d)\b')
         if not short_date_re.search(submitter_and_date):
             submitter_and_date = re.sub(r'(\d) (\d)', r'\1\2', submitter_and_date)
-        submitter_and_date = cls._normalize_dates(submitter_and_date)
+            submitter_and_date = cls._normalize_dates(submitter_and_date)
         parts = short_date_re.split(submitter_and_date, maxsplit=1)
+        if len(parts) == 1:
+            parts = re.split(r'()((?:\bG-20\d\d-\d+|\b[IVXL]+P-\d+|[Nn]utarimas|[Nn]ut\.).*)', submitter_and_date, maxsplit=1)
         submitter = parts[0]
         date = parts[1] if len(parts) > 1 else ''
-        document = parts[2] if len(parts) > 2 else ''
+        document = cls._clean_document(parts[2]) if len(parts) > 2 else ''
+        if not document:
+            parts = re.split(r'((?:\bG-20\d\d-\d+|\b[IVXL]+P-\d+|[Nn]utarimas|[Nn]ut\.).*)', submitter, maxsplit=1)
+            submitter = parts[0]
+            document = cls._clean_document(parts[1]) if len(parts) > 1 else ''
         return dict(
             raw=raw,
             submitter=cls._clean_submitter(submitter),
             date=cls._clean_date(date),
-            document=cls._clean_document(document),
+            document=document,
         )
 
-    @staticmethod
-    def _clean_submitter(submitter):
-        submitter = re.sub(r'\(sudaryta [^)]*\)', '', submitter)
+    @classmethod
+    def _clean_submitter(cls, submitter):
+        submitter = re.sub(r'\(sudaryta [^)]*\)?', '', submitter)
         submitter = re.sub(ur'([ \d])išvada.*$', r'\1', submitter)
         submitter = re.sub(r'\((?:pateikiama )?sutrumpintai\)', '', submitter)
         submitter = re.sub(ur'\s+dėl įstatymo projekto [^,]*', '', submitter)
         submitter = re.sub(ur', \d\d\d\d Nr. [^,]*', '', submitter)
-        submitter = re.sub(r'\d\d\d\d(-\d\d)?-?$', '', submitter)
+        submitter = re.sub(r' *\b\d\d-\d\d-\d\d *$', '', submitter)
+        submitter = re.sub(r' *\b\d\d\d\d(-\d\d)?-? *$', '', submitter)
         submitter = re.sub(r'20\d\d?(-\d\d?)?(-\d\d?)?v?$', '', submitter)
-        submitter = re.sub(r'\(gauta *$', '', submitter)
+        submitter = re.sub(r'\(gauta *[^)]*[)]?$', '', submitter)
         submitter = submitter.rstrip('(,; ')
-        submitter = submitter.replace(',,', u'„')
+        submitter = submitter.replace(',,', ur'„')
         submitter = re.sub(ur'- ?(?!urbanist|visuotin)([a-ząčęėįšųūž])', r'\1', submitter)
         submitter = re.sub(ur'(\.)([A-ZĄČĘĖĮŠŲŪŽ])', r'\1 \2', submitter)
-        submitter = re.sub(ur'(?<!\bkt)\.$', r'', submitter)
+        submitter = re.sub(ur'(?<!\bkt)(?<![A-ZĄČĘĖĮŠŲŪŽ])\.$', r'', submitter)
         submitter = re.sub(ur'(komitetas)(?! prie).+$', r'\1', submitter)
+        submitter = re.sub(ur', (gyv. )?(\w\. )?\w+ (g\. )?\d+-\d+,?( LT-\d+)? Vilnius', '', submitter, flags=re.UNICODE)
+        submitter = re.sub(ur', tel\. [-\d]+', '', submitter)
+        submitter = re.sub(ur',? el\. paštu \S+\@\S+\.\S+', '', submitter)
+        submitter = re.sub(ur' +\d+\.\d+\.\d+\.\d+', '', submitter)
+        submitter = cls._normalize_names(submitter)
+        # Sub-string relpacement
         replacements = {
             u'departamenras': 'departamentas',
             u'departamentamentas': 'departamentas',
             u'departamantas': 'departamentas',
             u'departamntas': 'departamentas',
+            u'departmentas': 'departamentas',
+            u'departamentasprie': u'departamentas prie',
+            u'departame ntas': 'departamentas',
+            u'departametas': u'departamentas',
             u'RespublikosPrezidentės': u'Respublikos Prezidentės',
             u'Teisėsdepartamentas': u'Teisės departamentas',
             u'Teisės departamentas (TD)': u'Teisės departamentas',
@@ -354,7 +372,6 @@ class SuggestionsSpider(ManoSeimasSpider):
             u' Apeliacinis Teismas': u' apeliacinis teismas',
             u' Apeliacinis teismas': u' apeliacinis teismas',
             u'Europos Teisės': u'Europos teisės',
-            u'departamentasprie': u'departamentas prie',
             u'pramoninkų': u'pramonininkų',
             u'tarnyb a': u'tarnyba',
             u'tarnyba tarnyba': u'tarnyba',
@@ -384,8 +401,8 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Vilnaius': u'Vilniaus',
             u' Universitetas': u' universitetas',
             u'VšĮ': u'VŠĮ',
+            u'Viešoji įstaiga': u'VŠĮ',
             u'ministreijos': 'ministerijos',
-            u'departame ntas': 'departamentas',
             u'LR Seimo': u'Seimo',
             u'LRS Seimo': u'Seimo',
             u'LRS kanceliarijos': u'Seimo kanceliarijos',
@@ -393,22 +410,261 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Lietuvos Respublikos Seimo kanceliarijos': u'Seimo kanceliarijos',
             u'Seimo kanceliarijos teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
             u'Teisingum 0': u'Teisingumo',
-            u'departametas': u'departamentas',
             u'kanceliarij os': u'kanceliarijos',
             u'kancelarijos': u'kanceliarijos',
             u'Seimo Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
             u'LRS Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
             u'Teisės Departamentas': u'Teisės departamentas',
+            u'prie LR': u'prie Lietuvos Respublikos',
+            u'prie SM': u'prie Susisiekimo ministerijos',
+            u'prie SAM': u'prie Sveikatos apsaugos ministerijos',
+            u'prie Lietuvos Respublikos vidaus reikalų ministerijos': u'prie Vidaus reikalų ministerijos',
+            u'nusikaltimų tyrimų tarnyba': u'nusikaltimų tyrimo tarnyba',
+            u'm. savivaldybė': u'miesto savivaldybė',
+            u'Valstybės vaiko teisių ir įvaikinimo tarnyba': u'Valstybės vaiko teisių apsaugos ir įvaikinimo tarnyba',
+            u'prie socialinės apsaugos ir darbo ministerijos': u'prie Socialinės apsaugos ir darbo ministerijos',
+            u'Valstybinės teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba',
+            u'Taryba': u'taryba',
+            u'Lietuvos Vyriausiasis': u'Lietuvos vyriausiasis',
+            u'Nacionalin ė': u'Nacionalinė',
+            u'draudik ų': u'draudikų',
+            u'profesinės sąjunga': u'profesinė sąjunga',
+            u'Lietuvos nacionalinė sveikatos tarybos': u'Lietuvos nacionalinės sveikatos tarybos',
+            u'LIETUVOS GEOGRAFŲ DRAUGIJA': u'Lietuvos geografų draugija',
+            u'Lietuvos Nepriklausomybės Akt': u'Lietuvos nepriklausomybės akt',
+            u'V. Didžiojo': u'Vytauto Didžiojo',  # our names normalizer is too greedy
+            u'Vilniaus G. technikos': u'Vilniaus Gedimino technikos',  # ditto
+            u'savibaldybių': u'savivaldybių',
+            u'prie SADM': u'prie Socialinės apsaugos ir darbo ministerijos',
+            u' Komitetas': u' komitetas',
+            u'universtiteto': u'universiteto',
+            u'Mykolo Riomerio': u'Mykolo Romerio',
+            u' Rezoliucija': u'',
+            u'Žemės ūkio rūmų tarybos': u'Žemės ūkio rūmų taryba',
+            u'Žvejų ir žuvies perdirbėjų asociacijos (ŽŽPA) „Baltijos žvejas“ pirmininkas A. Aušra': u'Žvejų ir žuvies perdirbėjų asociacija (ŽŽPA) „Baltijos žvejas“',
+            u'savivaldybės taryba': u'savivaldybė',
+            u'VU Santariškių': u'Vilniaus universiteto ligoninės Santariškių',
+            u'Lietuvos Respublikos Seimo': u'Seimo',
+            u'valdymo ir savivalybės komitetas': u'valdymo ir savivaldybių komitetas',
+            u'Valstybinė kainų energetikos': u'Valstybinė kainų ir energetikos',
+            u'Valstybės ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'Valstybės valdymo ir savivaldybės komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'Valstybių valdymo ir savivaldybių komitet': u'Valstybės valdymo ir savivaldybių komitet',
+            u'universiteto filologijos': u'universiteto Filologijos',
+            u'Vilniaus Gedmino technikos universitet': u'Vilniaus Gedimino technikos universitet',
+            u'Tesės ir teisėtvarkos': u'Teisės ir teisėtvarkos',
+            u'Teisės ir teisėtvarkos patarėj': u'Teisės ir teisėtvarkos komiteto patarėj',
+            u'komiteto biuro patarėj': u'komiteto patarėj',
+            u'TTK biuro patarėj': u'Teisės ir teisėtvarkos komiteto patarėj',
+            u'Zdanavčienė': u'Zdanavičienė',
+            u'kanceliarijos Teisės ir teisėtvarkos': u'Teisės ir teisėtvarkos',
+            u'Gilbert A. Ankenbauer Generalinis direktorius Chevron Exploration & Production Lietuva UAB': u'UAB Chevron Exploration& Production Lietuva',
+            u'UAB Chevron Exploration& Production Lietuva': u'UAB Chevron Exploration & Production Lietuva',
+            u'Specialiųjų tyrimų tarnybos antikorupcinio vertinimo': u'Lietuvos Respublikos specialiųjų tyrimų tarnyba',
+            u'Nacionalinis pareigūnų profesinių sąjungų susivienijimus': u'Nacionalinis pareigūnų profesinių sąjungų susivienijimas',
+            u'sveikatos mokslo universitetas': u'Lietuvos sveikatos mokslų universitetas',
+            u'Lietuvos prekybos, pramonės ir amatų asociacija': u'Lietuvos prekybos, pramonės ir amatų rūmų asociacija',
+            u'P olitikos': u'Politikos',
+            u'prof . ': u'prof. ',
+            u'MRU Teisės': u'Mykolo Romerio universiteto Teisės',
+            u'sveikatos mokslo universitetas': u'sveikatos mokslų universitetas',
+            u' TRANSEKSTA': u' „Transeksta“',
+            u' Transeksta': u' „Transeksta“',
+            u'Lietuvos Teisės institut': u'Lietuvos teisės institut',
+            u'Lietuvos Teisėsaugos': u'Lietuvos teisėsaugos',
+            u'Lietuvos Vyskupų': u'Lietuvos vyskupų',
+            u' Konferencija': u' konferencija',
+            u' draugija Judesys“': u' draugija „Judesys“',
         }
         for a, b in sorted(replacements.items()):
             submitter = submitter.replace(a, b)
+        submitter = submitter.replace(u'Lietuvos Respublikos vyriausybė', u'Lietuvos Respublikos Vyriausybė')
         submitter = re.sub(ur'(departamento|departamentas)(,? [Pp]rie .*)?$', 'departamentas', submitter)
+        submitter = re.sub(ur' \(JTVPK\)$', '', submitter)
+        submitter = re.sub(ur'(„[\w\d ]+)(?:$|(?<! ) *"|(?=,))', ur'\1“', submitter, flags=re.UNICODE)
+        submitter = re.sub(ur'^LR ', u'Lietuvos Respublikos ', submitter)
+        submitter = re.sub(ur'^(?:LR|Lietuvos Respublikos) (.* ministerija)$', lambda m: m.group(1).capitalize(), submitter)
+        submitter = re.sub(ur'prie (?:LR|Lietuvos Respublikos) (.* ministerijos)$', lambda m: u'prie ' + m.group(1).capitalize(), submitter)
+        submitter = re.sub(ur'komiteto(?: +pasiūlymas)?$', u'komitetas', submitter)
+        submitter = re.sub(ur'savivaldybės meras.*$', u'savivaldybė', submitter)
+        submitter = re.sub(ur'Vyriausybė \(nut.+', u'Vyriausybė', submitter)
+        submitter = re.sub(ur'(Vyriausybė)(.*[Nn]utarimas)(.*)$', u'Vyriausybė', submitter)
+        submitter = re.sub(ur'^Seimo (.)(.* (?:komisij|komitet))', lambda m: m.group(1).upper() + m.group(2), submitter)
+        submitter = re.sub(ur'[Vv]aiko teisių apsaugos kontrol.+$', u'vaiko teisių apsaugos kontrolieriaus įstaiga', submitter)
+        # Full string replacement
         submitter = {
             u'(TD)': u'Seimo kanceliarijos Teisės departamentas',
             u'TD': u'Seimo kanceliarijos Teisės departamentas',
             u'Teisės departamentas': u'Seimo kanceliarijos Teisės departamentas',
+            u'Informacinės visuomenės komitetas': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
+            u'Informacinės visuomenės plėtros komitetas': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
+            u'IVPK': u'Informacinės visuomenės plėtros komitetas prie Susisiekimo ministerijos',
+            u'JTVPK': u'Jungtinių Tautų vyriausiojo pabėgėlių komisaro regioninis Šiaurės Europos biuras',
+            u'LAEI': u'Lietuvos agrarinės ekonomikos institutas',
+            u'LAWG': u'Local American Working Group (LAWG)',
+            u'MARIJAMPOLĖS REGIONO PLĖTROS TARYBA': u'Marijampolės regiono plėtros taryba',
+            u'ŽŪM': u'Žemės ūkio ministerija',
+            u'Aukščiausiasis Teismas': u'Lietuvos Aukščiausiasis Teismas',
+            u'Apeliacinis teismas': u'Lietuvos apeliacinis teismas',
+            u'Konstitucinis Teismas': u'Lietuvos Respublikos Konstitucinis Teismas',
+            u'LŽŪBA': u'Lietuvos žemės ūkio bendrovių asociacija',
+            u'Kelių policijos tarnyba': u'Lietuvos kelių policijos tarnyba',
+            u'Laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
+            u'VŠĮ Lietuvos laisvosios rinkos institutas': u'Lietuvos laisvosios rinkos institutas',
+            u'Lietuvos Respublikos Vyriausybės': u'Lietuvos Respublikos Vyriausybė',
+            u'Vyriausybė': u'Lietuvos Respublikos Vyriausybė',
+            u'Vyriausybės': u'Lietuvos Respublikos Vyriausybė',
+            u'Valstybės valdymo ir savivaldybių reikalų komitetas': u'Valstybės valdymo ir savivaldybių komitetas',
+            u'Valstybės kontrolė': u'Lietuvos Respublikos valstybės kontrolė',
+            u'Valstybės saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u'Lietuvos Respublikos Valstybės saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u'Lietuvos Respublikos saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u'Valstybinė ligonių kasa': u'Valstybinė ligonių kasa prie Sveikatos apsaugos ministerijos',
+            u'Valstybinė mokesčių inspekcija': u'Valstybinė mokesčių inspekcija prie Finansų ministerijos',
+            u'Valstybinė teismo medicinos tarnyba': u'Valstybinė teismo medicinos tarnyba prie Teisingumo ministerijos',
+            u'Valstybinė vaistų kontrolės tarnyba': u'Valstybinė vaistų kontrolės tarnyba prie Sveikatos apsaugos ministerijos',
+            u"STATYBOS IR ARCHITEKTŪROS TEISMO EKSPERTŲ SĄJUNGA": u"Statybos ir architektūros teismo ekspertų sąjunga",
+            u'Švietimo, mokslo ir kultūros komiteto': u'Švietimo, mokslo ir kultūros komitetas',
+            u'Valstybinė duomenų inspekcija': u'Valstybinė duomenų apsaugos inspekcija',
+            u'vaiko teisių apsaugos kontrolieriaus įstaiga': u'Lietuvos Respublikos vaiko teisių apsaugos kontrolieriaus įstaiga',
+            u'Chevron': u'UAB Chevron Exploration & Production Lietuva',
+            u'Lietuvos Respublikos saugumo departamentas': u'Lietuvos Respublikos valstybės saugumo departamentas',
+            u"STT": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Lietuvos Respublikos Specialiųjų tyrimų tarnyba": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Specialiųjų tyrimų tarnyba": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Specialiųjų tyrimų tarnybos antikorupcinio vertinimo": u"Lietuvos Respublikos specialiųjų tyrimų tarnyba",
+            u"Nacionalinis pareigūnų profesinių sąjungų susivienijimus": u"Nacionalinis pareigūnų profesinių sąjungų susivienijimas",
+            u'Lietuvos Respublikos valstybės kontrolės Valstybinio audito': u'Lietuvos Respublikos valstybės kontrolė',
+            u'Generalinė prokuratūra': u'Lietuvos Respublikos generalinė prokuratūra',
+            u'Lietuvos trišalė taryba': u'Lietuvos Respublikos trišalė taryba',
+            u"Lietuvos teisėjų asociacija": u"Lietuvos Respublikos teisėjų asociacija",
+            u"Valstybinė kultūros paveldo komisija": u"Lietuvos Respublikos valstybinė kultūros paveldo komisija",
+            u"Hieraldikos komisija": u"Lietuvos heraldikos komisija",
+            u"Vyriausioji rinkimų komisija": u"Lietuvos Respublikos vyriausioji rinkimų komisija",
+            u"„Linava“": u"Lietuvos nacionalinė vežėjų automobiliais asociacija „Linava“",
+            u"Žemės ūkio rūmai": u"Lietuvos Respublikos žemės ūkio rūmai",
+            u"Respublikiniai būsto valdymo ir priežiūros rūmai": u"Lietuvos respublikiniai būsto valdymo ir priežiūros rūmai",
+            u"Lietuvos transporto priemonių draudikų biuras": u"Lietuvos Respublikos transporto priemonių draudikų biuras",
+            u"Lietuvos Respublikos Socialinių reikalų ir darbo komitetas": u"Socialinių reikalų ir darbo komitetas",
+            u"Nevyriausybinė organizacija FAIR TRIALS INTERNATIONAL\"": u"Tarptautinė žmogaus teisių gynimo organizacija „Fair Trials International“",
+            u"Lietuvos kelių policija": u"Lietuvos kelių policijos tarnyba",
+            u"Lietuvos prekybos, pramonės ir amatų asociacija": u"Lietuvos prekybos, pramonės ir amatų rūmų asociacija",
+            u"Valstybinė duomenų inspekcija": u"Valstybinė duomenų apsaugos inspekcija",
+            u"Vaistinių asociacija": u"Lietuvos vaistinių asociacija",
+            u"Investuotojų forumas": u"Asociacija „Investuotojų forumas“",
+            u"Lietuvos sveikatos mokslų universitetas Medicinos akademija, Visuomenės sveikatos fakultetas": u"Lietuvos sveikatos mokslų universiteto Medicinos akademijos Visuomenės sveikatos fakultetas",
         }.get(submitter, submitter)
         return submitter
+
+    @staticmethod
+    def _normalize_names(s):
+        names = [
+            u'Adolf(as|o)',
+            u'Agn(ė|ės)',
+            u'Aleksand(as|o)',
+            u'Alg(is|io)',
+            u'Antan(as|o)',
+            u'Anatolij(us|jaus)',
+            u'Albin(as|o)',
+            u'Algimant(as|o)',
+            u'Algird(as|o)',
+            u'Andr(ius|iaus)',
+            u'Arimant(as|o)',
+            u'Artūr(as|o)',
+            u'Arvyd(as|o)',
+            u'Aurelij(a|os)',
+            u'Audron(ė|ės)',
+            u'Birut(ė|ės)',
+            u'Bron(ius|iaus)',
+            u'Česlov(as|o)',
+            u'Dain(ius|iaus)',
+            u'Daiv(a|os)',
+            u'Dali(a|os)',
+            u'Danguol(ė|ės)',
+            u'Danguolė(s)',
+            u'Dar(ius|iaus)',
+            u'Deivid(as|o)',
+            u'Dom(as|o)',
+            u'Edvard(as|o)',
+            u'Eduard(as|o)',
+            u'Eligij(us|aus)',
+            u'Erik(as|o)',
+            u'Evald(as|o)',
+            u'Eugenij(us|aus)',
+            u'Giedr(ius|iaus)',
+            u'Gintar(as|o)',
+            u'Gintar(ė|ės)',
+            u'Gy(tis|čio)',
+            u'Igori(s|o)',
+            u'Jaroslav(o)?',
+            u'Jon(as|o)',
+            u'Jolit(a|os)',
+            u'Juoz(as|o)',
+            u'Jul(ius|iaus)',
+            u'Jurg(is|io)',
+            u'Jur(as|o)',
+            u'Gedimin(as|o)',
+            u'Giedr(ė|ės)',
+            u'Gintaut(as|o)',
+            u'Henrik(as|o)',
+            u'Irm(a|os)',
+            u'Kondrot(as|o)',
+            u'Laim(a|os)',
+            u'Laris(a|os)',
+            u'Laur(a|os)',
+            u'Lin(as|o)',
+            u'Liucij(us|aus)',
+            u'Leonard(|o)',
+            u'Loret(a|os)',
+            u'Marij(a|os)',
+            u'Martyn(a|os)',
+            u'Mečislov(as|o)',
+            u'Migl(ė|ės)',
+            u'Mild(a|os)',
+            u'Mindaug(as|o)',
+            u'Nomed(a|os)',
+            u'Kazimier(as|o)',
+            u'Kaz(ys|io)',
+            u'Kęstut(is|čio)',
+            u'Kęst(as|o)',
+            u'Nagl(is|io)',
+            u'On(a|os)',
+            u'Paul(ius|iaus)',
+            u'Petr(as|o)',
+            u'Povil(as|o)',
+            u'Raimund(as|o)',
+            u'Ramut(ė|ės)',
+            u'Ras(a|os)',
+            u'Remigij(us|aus)',
+            u'Rimant(ė|ės)',
+            u'Rimant(as|o)',
+            u'Rim(a|os)',
+            u'Rit(a|os)',
+            u'Robert(as|o)',
+            u'Roland(as|o)',
+            u'Rok(as|o)',
+            u'Saul(ius|iaus)',
+            u'Sergej(|aus)',
+            u'Stas(ys|io)',
+            u'Vald(as|o)',
+            u'Vaidot(as|o)',
+            u'Vaidevut(ė|ės)',
+            u'Valentin(as|o)',
+            u'Valerij(us|aus)',
+            u'Vand(a|os)',
+            u'Vidmant(as|o)',
+            u'Viktor(as|o)',
+            u'Vilij(a|os)',
+            u'Virginij(us|aus)',
+            u'Vitalij(a|os)',
+            u'Vitalij(us|aus)',
+            u'Vinc(ė|ės)',
+            u'Vit(as|o)',
+            u'Vytaut(as|o)',
+            u'Zit(a|os)',
+        ]
+        return re.sub(ur'\b(?:{})\b(?= *[A-ZĄČĘĖĮŠŲŪŽ])'.format(u'|'.join(names).replace(u'(', u'(?:')),
+                      lambda m: m.group(0)[0] + '.', s, flags=re.UNICODE)
 
     @staticmethod
     def _normalize_dates(s):
@@ -433,8 +689,8 @@ class SuggestionsSpider(ManoSeimasSpider):
         document = re.sub('^ *d[.]', '', document)
         # leading punctuation and spaces
         document = re.sub('^[- ;,)]+', '', document)
-        # trailing spaces
-        document = re.sub(' +$', '', document)
+        # trailing spaces and commas and stuff
+        document = re.sub('[(,; ]+$', '', document)
         # YYYY-MM-DD (Nr. NNN)
         document = re.sub('^[(](.*)[)]$', r'\1', document)
         # (YYYY-MM-DD Nr.NNN), but leave YYYY-MM-DD Nr. XIIP-NNN(N) alone
