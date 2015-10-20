@@ -547,6 +547,12 @@ class SuggestionsSpider(ManoSeimasSpider):
             u"Lietuvos transporto priemonių draudikų biuras": u"Lietuvos Respublikos transporto priemonių draudikų biuras",
             u"Lietuvos Respublikos Socialinių reikalų ir darbo komitetas": u"Socialinių reikalų ir darbo komitetas",
             u"Nevyriausybinė organizacija FAIR TRIALS INTERNATIONAL\"": u"Tarptautinė žmogaus teisių gynimo organizacija „Fair Trials International“",
+            u"Lietuvos kelių policija": u"Lietuvos kelių policijos tarnyba",
+            u"Lietuvos prekybos, pramonės ir amatų asociacija": u"Lietuvos prekybos, pramonės ir amatų rūmų asociacija",
+            u"Valstybinė duomenų inspekcija": u"Valstybinė duomenų apsaugos inspekcija",
+            u"Vaistinių asociacija": u"Lietuvos vaistinių asociacija",
+            u"Investuotojų forumas": u"Asociacija „Investuotojų forumas“",
+            u"Lietuvos sveikatos mokslų universitetas Medicinos akademija, Visuomenės sveikatos fakultetas": u"Lietuvos sveikatos mokslų universiteto Medicinos akademijos Visuomenės sveikatos fakultetas",
         }.get(submitter, submitter)
         return submitter
 

@@ -1031,6 +1031,30 @@ class TestSubmitterCleaning(unittest.TestCase):
             u"Nevyriausybinė organizacija FAIR TRIALS INTERNATIONAL\"",
             u"Tarptautinė žmogaus teisių gynimo organizacija „Fair Trials International“",
         ],
+        u"Lietuvos kelių policijos tarnyba": [
+            u"Lietuvos kelių policija",
+            u"Lietuvos kelių policijos tarnyba",
+        ],
+        u"Lietuvos prekybos, pramonės ir amatų rūmų asociacija": [
+            u"Lietuvos prekybos, pramonės ir amatų asociacija",
+            u"Lietuvos prekybos, pramonės ir amatų rūmų asociacija",
+        ],
+        u"Valstybinė duomenų apsaugos inspekcija": [
+            u"Valstybinė duomenų apsaugos inspekcija",
+            u"Valstybinė duomenų inspekcija",
+        ],
+        u"Lietuvos vaistinių asociacija": [
+            u"Vaistinių asociacija",
+            u"Lietuvos vaistinių asociacija",
+        ],
+        u"Asociacija „Investuotojų forumas“": [
+            u"Asociacija „Investuotojų forumas“",
+            u"Investuotojų forumas",
+        ],
+        u"Lietuvos sveikatos mokslų universiteto Medicinos akademijos Visuomenės sveikatos fakultetas": [
+            u"Lietuvos sveikatos mokslų universitetas Medicinos akademija, Visuomenės sveikatos fakultetas",
+            u"Lietuvos sveikatos mokslų universiteto Medicinos akademijos Visuomenės sveikatos fakultetas",
+        ],
         # Oh my
         u"Onkohematologinių ligonių bendrija „Kraujas“ ir kt.": [
             u"Onkohematologinių ligonių bendrija „Kraujas\" ir kt.",
