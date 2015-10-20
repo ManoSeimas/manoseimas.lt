@@ -447,7 +447,10 @@ class TestSubmitterCleaning(unittest.TestCase):
     # expected value itself is implicitly added to the input value list.
     examples = {
         # Blank values get passed through
-        u'': [],
+        u'': [
+            u'',
+            u'_ „ _',
+        ],
         u'-': [],
         # When you split "name (date, document no)" or "name, date" you end up
         # with trailing " (" or ", ".
@@ -1347,9 +1350,16 @@ class TestRowspanColspanHandling(unittest.TestCase):
 
 class TestSuggestionsSpider(unittest.TestCase):
 
+    def response_from_fixture(self, filename):
+        assert filename.startswith('suggestion_')
+        assert filename.endswith('.html')
+        doc_id = filename[len('suggestion_'):-len('.html')]
+        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=%s&p_tr2=2' % doc_id,
+                                body=fixture(filename))
+        return response
+
     def test_parse_document(self):
-        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=1076487&p_tr2=2',
-                                body=fixture('suggestion_1076487.html'))
+        response = self.response_from_fixture('suggestion_1076487.html')
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(len(items), 1)
@@ -1418,8 +1428,7 @@ class TestSuggestionsSpider(unittest.TestCase):
     def test_table_with_unexpected_thead(self):
         # Regression test for
         # WARNING: 2 empty rows discarded at http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=1022652&p_tr2=2
-        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=1022652&p_tr2=2',
-                                body=fixture('suggestion_1022652.html'))
+        response = self.response_from_fixture('suggestion_1022652.html')
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(len(items), 6)
@@ -1427,24 +1436,21 @@ class TestSuggestionsSpider(unittest.TestCase):
     def test_table_with_extra_colspans(self):
         # Regression data for bogus data due to unexpected colspans
         # (also blank row skipping)
-        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=1024338&p_tr2=2',
-                                body=fixture('suggestion_1024338.html'))
+        response = self.response_from_fixture('suggestion_1024338.html')
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(items[-2]['opinion'], 'Pritarti')
 
     def test_table_with_mismatching_colspans(self):
         # Regression data for bogus data due to colspans in data not matching colspans in header
-        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=456205&p_tr2=2',
-                                body=fixture('suggestion_456205.html'))
+        response = self.response_from_fixture('suggestion_456205.html')
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(len(items), 52)
 
     def test_table_with_more_mismatching_columns(self):
         # Regression data for bogus data due to colspan irregularity
-        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=491388&p_tr2=2',
-                                body=fixture('suggestion_491388.html'))
+        response = self.response_from_fixture('suggestion_491388.html')
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(len(items), 53)
@@ -1453,10 +1459,44 @@ class TestSuggestionsSpider(unittest.TestCase):
 
     def test_table_with_even_more_mismatching_columns(self):
         # Regression data for bogus data due to colspan irregularity
-        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=485154&p_tr2=2',
-                                body=fixture('suggestion_485154.html'))
+        response = self.response_from_fixture('suggestion_485154.html')
         spider = SuggestionsSpider()
         items = list(spider.parse_document(response))
         self.assertEqual(len(items), 11)
         for item in items:
             self.assertTrue(len(item['opinion']) < 100, item)
+
+    def test_another_colspan_mismatch(self):
+        # Regression data for bogus data due to colspan irregularity
+        # Regression test for https://github.com/ManoSeimas/manoseimas.lt/issues/97
+        response = self.response_from_fixture('suggestion_491130.html')
+        spider = SuggestionsSpider()
+        items = list(spider.parse_document(response))
+        self.assertEqual(items[3]['submitter'], u"Lietuvos Respublikos specialiųjų tyrimų tarnyba")
+        # NB: this fixture could be a test case for another issue:
+        # the last table in this document is skipped because it has an
+        # extra column (Pastabos).
+
+    def test_ditto(self):
+        # Regression test for https://github.com/ManoSeimas/manoseimas.lt/issues/97
+        response = self.response_from_fixture('suggestion_457922.html')
+        spider = SuggestionsSpider()
+        items = list(spider.parse_document(response))
+        self.assertEqual(items[0]['submitter'], items[1]['submitter'])
+        self.assertEqual(items[0]['submitter'], items[2]['submitter'])
+
+    def test_bad_table(self):
+        # Some tables have the right number of columns, but the columns are shuffled
+        # Regression test for https://github.com/ManoSeimas/manoseimas.lt/issues/97
+        response = self.response_from_fixture('suggestion_439277.html')
+        spider = SuggestionsSpider()
+        items = list(spider.parse_document(response))
+        # There are two tables on this page, with one row each.
+        # We might skip either table (one is interesting, but has
+        # slightly wrong format; the 2nd is not interesting at all), but
+        # it wouldn't be wrong if we managed to parse both, as long as we
+        # did it correctly.
+        self.assertTrue(0 <= len(items) <= 2)
+        expected = (u'Seimo kanceliarijos teisės departamentas', u'Švietimo, mokslo ir kultūros komitetas')
+        for item in items:
+            self.assertTrue(item['submitter'] in expected, item['submitter'])
