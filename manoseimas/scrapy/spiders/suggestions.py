@@ -86,8 +86,9 @@ class SuggestionsSpider(ManoSeimasSpider):
             return
         last_item = None
         heuristic = 'left'
-        if '491388' in url:
+        if '491388' in url or '491130' in url:
             # http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=491388&p_tr2=2
+            # http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=491130&p_tr2=2
             heuristic = 'right'
         indexes = list(self._table_column_indexes(table, heuristic=heuristic))
         rows = self._process_rowspan_colspan(table.xpath('thead/tr|tr')[2:])

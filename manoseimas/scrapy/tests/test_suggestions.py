@@ -1464,6 +1464,18 @@ class TestSuggestionsSpider(unittest.TestCase):
         for item in items:
             self.assertTrue(len(item['opinion']) < 100, item)
 
+    def test_another_colspan_mismatch(self):
+        # Regression data for bogus data due to colspan irregularity
+        # Regression test for https://github.com/ManoSeimas/manoseimas.lt/issues/97
+        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=491130&p_tr2=2',
+                                body=fixture('suggestion_491130.html'))
+        spider = SuggestionsSpider()
+        items = list(spider.parse_document(response))
+        self.assertEqual(items[3]['submitter'], u"Lietuvos Respublikos specialiųjų tyrimų tarnyba")
+        # NB: this fixture could be a test case for another issue:
+        # the last table in this document is skipped because it has an
+        # extra column (Pastabos).
+
     def test_ditto(self):
         # Regression test for https://github.com/ManoSeimas/manoseimas.lt/issues/97
         response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=457922&p_tr2=2',
