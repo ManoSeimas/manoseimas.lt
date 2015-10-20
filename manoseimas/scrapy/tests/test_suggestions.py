@@ -1497,7 +1497,6 @@ class TestSuggestionsSpider(unittest.TestCase):
         # it wouldn't be wrong if we managed to parse both, as long as we
         # did it correctly.
         self.assertTrue(0 <= len(items) <= 2)
+        expected = (u'Seimo kanceliarijos teisės departamentas', u'Švietimo, mokslo ir kultūros komitetas')
         for item in items:
-            self.assertTrue(item['submitter'] in (u'Seimo kanceliarijos teisės departamentas',
-                                                  u'Švietimo, mokslo ir kultūros komitetas'),
-                            item['submitter'])
+            self.assertTrue(item['submitter'] in expected, item['submitter'])
