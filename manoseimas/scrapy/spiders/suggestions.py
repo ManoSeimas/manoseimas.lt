@@ -122,8 +122,37 @@ class SuggestionsSpider(ManoSeimasSpider):
         n = len(columns)
         m = len(columns2)
         if (n, m) == (6, 3):
-            # I think false positives are unlikely, so I'm not checking actual column titles.
-            return True
+            # I've seen columns[4] contain
+            # - u'Nuomonė'
+            # - u'Komiteto nuomonė'
+            # - u'komiteto nuomonė'
+            # - u'Komi-teto nuomonė'
+            # - u'Komiteto išvadų rengėjo nuomonė'
+            # - u'Išvadų rengėjo nuomonė'
+            # - u'Išvadų rengėjų nuomonė'
+            # - u'Projekto iniciatorių nuomonė'
+            # - u'' (http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=474580&p_tr2=2)
+            if columns[1] == u'Pasiūlymo teikėjas, data' and not columns[4] or columns[4].endswith(u'uomonė'):
+                return True
+            # This is what I've seen:
+            #   [u'Pasiūlymo teikėjas, data',
+            #    u'Siūloma keisti',                     # colspan=3
+            #    u'Pastabos',
+            #    u'Pasiūlymo turinys',
+            #    u'Komiteto nuomonė',
+            #    u'Argumentai, pagrindžiantys nuomonę']
+            # These tend to appear in section 7 (Komiteto sprendimas ir pasiūlymai) and don't interest us.
+            if (columns[0], columns[4]) == (u'Pasiūlymo teikėjas, data', u'Komiteto nuomonė'):
+                # we know about this, let's skip the warning
+                level = logging.DEBUG
+            else:
+                # there are no known other false positives, so this is
+                # probably a false negative -- something to check out, so
+                # let's log it at a higher level.
+                level = logging.WARNING
+            self.log(u"Skipping table with wrong column titles at {url}:\n{columns}".format(
+                url=url, columns=self._format_columns_for_log(columns)), level=level)
+            return False
         # Here are some of the tables I've seen:
         # - [n=7] Eil. Nr. | Pasiūlymo teikėjas, data | Siūloma keisti | Pastabos | Pasiūlymo turinys | Komiteto nuomonė | Argumentai, pagrindžiantys nuomonę
         #   This is basically the right table, except it has one extra column in the middle.

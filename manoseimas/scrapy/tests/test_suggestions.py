@@ -1484,3 +1484,20 @@ class TestSuggestionsSpider(unittest.TestCase):
         items = list(spider.parse_document(response))
         self.assertEqual(items[0]['submitter'], items[1]['submitter'])
         self.assertEqual(items[0]['submitter'], items[2]['submitter'])
+
+    def test_bad_table(self):
+        # Some tables have the right number of columns, but the columns are shuffled
+        # Regression test for https://github.com/ManoSeimas/manoseimas.lt/issues/97
+        response = self.response_from_fixture('suggestion_439277.html')
+        spider = SuggestionsSpider()
+        items = list(spider.parse_document(response))
+        # There are two tables on this page, with one row each.
+        # We might skip either table (one is interesting, but has
+        # slightly wrong format; the 2nd is not interesting at all), but
+        # it wouldn't be wrong if we managed to parse both, as long as we
+        # did it correctly.
+        self.assertTrue(0 <= len(items) <= 2)
+        for item in items:
+            self.assertTrue(item['submitter'] in (u'Seimo kanceliarijos teisės departamentas',
+                                                  u'Švietimo, mokslo ir kultūros komitetas'),
+                            item['submitter'])
