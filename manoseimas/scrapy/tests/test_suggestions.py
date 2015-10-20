@@ -447,7 +447,10 @@ class TestSubmitterCleaning(unittest.TestCase):
     # expected value itself is implicitly added to the input value list.
     examples = {
         # Blank values get passed through
-        u'': [],
+        u'': [
+            u'',
+            u'_ „ _',
+        ],
         u'-': [],
         # When you split "name (date, document no)" or "name, date" you end up
         # with trailing " (" or ", ".
@@ -1460,3 +1463,12 @@ class TestSuggestionsSpider(unittest.TestCase):
         self.assertEqual(len(items), 11)
         for item in items:
             self.assertTrue(len(item['opinion']) < 100, item)
+
+    def test_ditto(self):
+        # Regression test for https://github.com/ManoSeimas/manoseimas.lt/issues/97
+        response = HtmlResponse('http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=457922&p_tr2=2',
+                                body=fixture('suggestion_457922.html'))
+        spider = SuggestionsSpider()
+        items = list(spider.parse_document(response))
+        self.assertEqual(items[0]['submitter'], items[1]['submitter'])
+        self.assertEqual(items[0]['submitter'], items[2]['submitter'])

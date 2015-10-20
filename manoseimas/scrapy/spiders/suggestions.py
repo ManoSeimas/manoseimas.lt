@@ -317,6 +317,8 @@ class SuggestionsSpider(ManoSeimasSpider):
 
     @classmethod
     def _clean_submitter(cls, submitter):
+        if not submitter or submitter == u'_ „ _':
+            return ""
         submitter = re.sub(r'\(sudaryta [^)]*\)?', '', submitter)
         submitter = re.sub(ur'([ \d])išvada.*$', r'\1', submitter)
         submitter = re.sub(r'\((?:pateikiama )?sutrumpintai\)', '', submitter)
