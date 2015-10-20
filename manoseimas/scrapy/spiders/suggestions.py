@@ -132,7 +132,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             # - u'Išvadų rengėjų nuomonė'
             # - u'Projekto iniciatorių nuomonė'
             # - u'' (http://www3.lrs.lt/pls/inter3/dokpaieska.showdoc_l?p_id=474580&p_tr2=2)
-            if columns[1] == u'Pasiūlymo teikėjas, data' and not columns[4] or columns[4].endswith(u'uomonė'):
+            if columns[1] == u'Pasiūlymo teikėjas, data' and (not columns[4] or columns[4].endswith(u'uomonė')):
                 return True
             # This is what I've seen:
             #   [u'Pasiūlymo teikėjas, data',
