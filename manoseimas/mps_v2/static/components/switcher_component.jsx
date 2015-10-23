@@ -221,12 +221,12 @@ var Switcher = React.createClass({
                 name: 'Lobistai',
                 count: null
               },
-              suggester_state: {
-                name: 'Valstybė',
-                count: null
-              },
               suggester_other: {
                 name: 'Kiti',
+                count: null
+              },
+              suggester_state: {
+                name: 'Valstybė',
                 count: null
               }
             };
