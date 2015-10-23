@@ -238,7 +238,7 @@ var Switcher = React.createClass({
           callback: this.setActiveSubtabs,
           active_subtab: this.state.active_subtabs.lobbyists
         },
-        name: 'Lobistai'
+        name: 'Įtaka'
       }
     };
 
