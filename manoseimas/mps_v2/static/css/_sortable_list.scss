@@ -88,6 +88,8 @@
         text-shadow: none;
         color: $gray;
       }
+      a { color: $textColor; }
+      a:hover { color: $linkColor; }
     }
 
     .fraction-row, .parliamentarian-row {
