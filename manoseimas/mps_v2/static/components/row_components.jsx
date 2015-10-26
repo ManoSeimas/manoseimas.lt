@@ -133,7 +133,7 @@ var LobbyistRow = React.createClass({
               <a href={lobbyist.url}>{lobbyist.law_project_count}</a>
             </div>
             <div className="label">
-              {lt_pluralize(lobbyist.law_project_count, 'įstatymas', 'įstatymai', 'įstatymų')}
+              <a href={lobbyist.url}>{lt_pluralize(lobbyist.law_project_count, 'įstatymas', 'įstatymai', 'įstatymų')}</a>
             </div>
           </div>
         </div>
@@ -143,7 +143,7 @@ var LobbyistRow = React.createClass({
               <a href={lobbyist.url}>{lobbyist.client_count}</a>
             </div>
             <div className="label">
-              {lt_pluralize(lobbyist.client_count, 'užsakovas', 'užsakovai', 'užsakovų')}
+              <a href={lobbyist.url}>{lt_pluralize(lobbyist.client_count, 'užsakovas', 'užsakovai', 'užsakovų')}</a>
             </div>
           </div>
         </div>
