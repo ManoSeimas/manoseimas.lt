@@ -145,7 +145,8 @@ var SortableList = React.createClass({
               var icon_class = 'chevron ' + ((sort_order === 1) ? 'up' : 'down') + ' icon';
 
               return (
-                <SortKeySelector params={sortkey}
+                <SortKeySelector key={sortkey.key}
+                                 params={sortkey}
                                  class_name={class_name}
                                  icon_class={icon_class}
                                  explanation={sortkey.explanation}
@@ -216,7 +217,7 @@ var SidebarFilter = React.createClass({
               }
 
               return (
-                <a className={'item ' + selected} onClick={this.setSelected.bind(this, key)}>
+                <a className={'item ' + selected} onClick={this.setSelected.bind(this, key)} key={key}>
                   {item}
                 </a>
               )
@@ -250,7 +251,7 @@ var SidebarSubtabs = React.createClass({
             {Object.keys(this.props.options).map( function(key) {
               if (key === 'header') {
                 return(
-                  <div>
+                  <div key={key}>
                     <span className="header title">{this.props.options[key].name}</span>
                   </div>
                 )
@@ -263,7 +264,7 @@ var SidebarSubtabs = React.createClass({
                 </div>
               )
               return (
-                <a className={'item ' + selected} onClick={this.setSelected.bind(this, key)}>
+                <a className={'item ' + selected} onClick={this.setSelected.bind(this, key)} key={key}>
                   {item}
                 </a>
               )
@@ -297,9 +298,9 @@ var ElementList = React.createClass({
     var self = this;
     return (
       <div className="filtered-elements">
-        {self.props.items.map(function (item) {
+        {self.props.items.map(function (item, index) {
           return (
-              <self.props.rowComponent obj={item}
+              <self.props.rowComponent obj={item} key={index}
                                        leading_column_width={self.props.leading_column_width} />
           )
         })}

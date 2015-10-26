@@ -252,7 +252,7 @@ var Switcher = React.createClass({
                 var selected = (self.state.active_tab === key) ? 'active' : '';
                 var class_names = 'item ' + selected;
                 return (
-                  <a className={class_names} onClick={self.setActiveTab(key)}>{tabs[key].name}</a>
+                  <a className={class_names} onClick={self.setActiveTab(key)} key={key}>{tabs[key].name}</a>
                 )
               })}
             </div>
