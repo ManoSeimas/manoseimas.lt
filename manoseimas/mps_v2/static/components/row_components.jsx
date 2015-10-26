@@ -128,24 +128,28 @@ var LobbyistRow = React.createClass({
           </div>
         </div>
         <div className="two wide column">
-          <div className="ui project statistic">
-            <div className="value">
-              <a href={lobbyist.url}>{lobbyist.law_project_count}</a>
-            </div>
-            <div className="label">
-              <a href={lobbyist.url}>{lt_pluralize(lobbyist.law_project_count, 'įstatymas', 'įstatymai', 'įstatymų')}</a>
-            </div>
-          </div>
+          <a href={lobbyist.url}>
+            <span className="ui project statistic">
+              <span className="value">
+                {lobbyist.law_project_count}
+              </span>
+              <span className="label">
+                {lt_pluralize(lobbyist.law_project_count, 'įstatymas', 'įstatymai', 'įstatymų')}
+              </span>
+            </span>
+          </a>
         </div>
         <div className="two wide column">
-          <div className="ui client statistic">
-            <div className="value">
-              <a href={lobbyist.url}>{lobbyist.client_count}</a>
-            </div>
-            <div className="label">
-              <a href={lobbyist.url}>{lt_pluralize(lobbyist.client_count, 'užsakovas', 'užsakovai', 'užsakovų')}</a>
-            </div>
-          </div>
+          <a href={lobbyist.url}>
+            <span className="ui client statistic">
+              <span className="value">
+                {lobbyist.client_count}
+              </span>
+              <span className="label">
+                {lt_pluralize(lobbyist.client_count, 'užsakovas', 'užsakovai', 'užsakovų')}
+              </span>
+            </span>
+          </a>
         </div>
       </div>
     )
