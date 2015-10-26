@@ -79,6 +79,7 @@
     }
 
     .ui.statistic {
+      display: block;
       margin-top: .3em;
       .value { font-size: $big*0.9; color: $textColor;}
       .label {
@@ -88,6 +89,10 @@
         text-shadow: none;
         color: $gray;
       }
+      .value, .label { display: block; }
+    }
+    a:hover .ui.statistic {
+      .value, .label { color: $linkColor; }
     }
 
     .fraction-row, .parliamentarian-row {
