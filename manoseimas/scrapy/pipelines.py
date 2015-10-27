@@ -350,10 +350,18 @@ class ManoSeimasModelPersistPipeline(object):
     def process_suggestion(self, item, spider):
         suggester, created = SuggesterModel.objects.get_or_create(
             title=item['submitter'],
+            defaults={'source': item['source_url']},
         )
+        if not suggester.source:
+            suggester.source = item['source_url']
+            suggester.save()
         resolution, created = CommitteeResolution.objects.get_or_create(
             source_id=item['source_id'],
+            defaults={'source': item['source_url']},
         )
+        if not resolution.source:
+            resolution.source = item['source_url']
+            resolution.save()
         suggestion, created = SuggestionModel.objects.get_or_create(
             source_resolution=resolution,
             source_index=item['source_index'],
@@ -362,7 +370,7 @@ class ManoSeimasModelPersistPipeline(object):
         suggestion.date = item['date'] or None
         suggestion.document = item['document']
         suggestion.opinion = item['opinion']
-        suggestion.source_url = item['source_url']
+        suggestion.source = item['source_url']
         suggestion.save()
         return item
 

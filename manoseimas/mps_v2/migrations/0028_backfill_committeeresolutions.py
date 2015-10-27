@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        # bug: keeps empty source, created_at, modified_at columns
         migrations.RunSQL("""
            INSERT IGNORE INTO mps_v2_committeeresolution (source_id, title, source)
            SELECT DISTINCT source_id, '', source FROM mps_v2_suggestion
