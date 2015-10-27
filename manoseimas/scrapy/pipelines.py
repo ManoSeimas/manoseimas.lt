@@ -24,6 +24,7 @@ from manoseimas.mps_v2.models import StenogramTopic as StenogramTopicModel
 from manoseimas.mps_v2.models import Voting, LawProject
 from manoseimas.mps_v2.models import Suggestion as SuggestionModel
 from manoseimas.mps_v2.models import Suggester as SuggesterModel
+from manoseimas.mps_v2.models import CommitteeResolution
 
 import manoseimas.lobbyists.models as lobbyists_models
 
@@ -348,11 +349,14 @@ class ManoSeimasModelPersistPipeline(object):
     @transaction.atomic
     def process_suggestion(self, item, spider):
         suggester, created = SuggesterModel.objects.get_or_create(
-            title=item['submitter']
+            title=item['submitter'],
+        )
+        resolution, created = CommitteeResolution.objects.get_or_create(
+            source_id=item['source_id'],
         )
         suggestion, created = SuggestionModel.objects.get_or_create(
-            source_id=item['source_id'],
-            source_index=item['source_index']
+            source_resolution=resolution,
+            source_index=item['source_index'],
         )
         suggestion.submitter.add(suggester)
         suggestion.date = item['date'] or None
