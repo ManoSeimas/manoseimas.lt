@@ -636,11 +636,17 @@ class LawProject(CrawledItem):
         return avg.get('avg_passing_time', 0.0)
 
 
+class Suggester(CrawledItem):
+    """Submittter of a suggestion."""
+
+    title = models.TextField()
+
+
 class Suggestion(CrawledItem):
     source_id = models.CharField(max_length=16, db_index=True)
     source_index = models.IntegerField()
 
-    submitter = models.TextField()
+    submitter = models.ManyToManyField(Suggester, related_name = 'suggestions')
     date = models.DateField(blank=True, null=True)
     document = models.TextField(blank=True)
     opinion = models.TextField(blank=True)
