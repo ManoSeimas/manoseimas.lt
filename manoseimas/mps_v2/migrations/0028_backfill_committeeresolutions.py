@@ -11,9 +11,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # bug: keeps empty source, created_at, modified_at columns
-        migrations.RunSQL("""
-           INSERT IGNORE INTO mps_v2_committeeresolution (source_id, title, source)
-           SELECT DISTINCT source_id, '', source FROM mps_v2_suggestion
-        """),
+        migrations.RunSQL([
+            "INSERT IGNORE INTO mps_v2_committeeresolution (source_id, title) SELECT DISTINCT source_id, '' FROM mps_v2_suggestion",
+            "UPDATE mps_v2_committeeresolution SET created_at = utc_timestamp() WHERE created_at is NULL",
+            "UPDATE mps_v2_committeeresolution SET modified_at = utc_timestamp() WHERE modified_at is NULL",
+        ], [
+            "DELETE FROM mps_v2_committeeresolution",
+        ]),
     ]
