@@ -1367,9 +1367,14 @@ class TestSuggestionsSpider(unittest.TestCase):
         self.assertEqual(items[0]['date'], u'2015-09-08')
         self.assertEqual(items[0]['opinion'], 'Pritarti')
         self.assertEqual(items[0]['source_url'], response.url)
+        self.assertEqual(items[0]['source_title'], u'KOMITETO IŠVADA Seimo nutarimo „Dėl Lietuvos Respublikos Seimo VII (rudens) sesijos darbų programos“ projektui')
 
     def test_empty_rows(self):
         self.check('''
+          <table>
+            <caption>PAGRINDINIO KOMITETO IŠVADA dėl testavimo<br><br></caption>
+          </table>
+          <div>
             <table>
               <tr>
                 <td rowspan=2>Eil Nr.</td>
@@ -1405,6 +1410,7 @@ class TestSuggestionsSpider(unittest.TestCase):
                 <td></td>
               </tr>
             </table>
+          </div>
         ''', [
             Suggestion(
                 submitter=u'Lietuvos Respublikos Vyriausybė',
@@ -1414,13 +1420,14 @@ class TestSuggestionsSpider(unittest.TestCase):
                 source_url='http://localhost/test.html?p_id=12345',
                 source_id='12345',
                 source_index=0,
+                source_title=u'PAGRINDINIO KOMITETO IŠVADA dėl testavimo',
                 raw=u'LR Vyriausybė, 2015-10-09',
             ),
         ])
 
     def check(self, html, expected):
         response = HtmlResponse('http://localhost/test.html?p_id=12345',
-                                body='<body><div>%s</div></body>' % html)
+                                body='<body>%s</body>' % html)
         spider = SuggestionsSpider()
         actual = list(spider.parse_document(response))
         self.assertEqual(actual, expected)
