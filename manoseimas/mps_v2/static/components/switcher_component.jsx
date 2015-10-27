@@ -217,16 +217,16 @@ var Switcher = React.createClass({
                 name: 'Daro įtaką',
                 count: null
               },
-              lobbyists: {
-                name: 'Lobistai',
-                count: null
-              },
               suggester_other: {
-                name: 'Kiti',
+                name: 'Suinteresuoti asmenys',
                 count: null
               },
               suggester_state: {
-                name: 'Valstybė',
+                name: 'Valdžios atsovai',
+                count: null
+              },
+              lobbyists: {
+                name: 'Registruoit lobistai',
                 count: null
               }
             };

@@ -69,15 +69,16 @@
   .item
     .title {
       font-size: $normal;
-      width: 6rem;
+      width: 6.5rem;
       color: $black;
     }
     .count {
       font-size: $big;
       text-align: right;
-      width: 4rem;
+      width: 3.6rem;
       float: left;
       color: $black;
+      padding-top: 0.65rem;
     }
 
   .item:hover, .item.selected {
