@@ -684,11 +684,11 @@ class Suggestion(CrawledItem):
         rows = dict_fetch_all(cursor)
 
         counts = [{
-                'title': row['title'],
-                'suggestion_count': int(row['suggestion_count']),
-                'law_project_count': int(row['law_project_count']),
-                'state_actor': is_state_actor(row['title']),
-                } for row in rows]
+            'title': row['title'],
+            'suggestion_count': int(row['suggestion_count']),
+            'law_project_count': int(row['law_project_count']),
+            'state_actor': is_state_actor(row['title']),
+        } for row in rows]
 
         return counts
 
