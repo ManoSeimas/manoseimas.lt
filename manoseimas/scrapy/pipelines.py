@@ -361,7 +361,8 @@ class ManoSeimasModelPersistPipeline(object):
         )
         if not resolution.source:
             resolution.source = item['source_url']
-            resolution.save()
+        resolution.title = item['source_title']
+        resolution.save()
         suggestion, created = SuggestionModel.objects.get_or_create(
             source_resolution=resolution,
             source_index=item['source_index'],
