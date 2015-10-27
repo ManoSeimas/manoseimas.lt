@@ -48,7 +48,8 @@
     background-color: $greenDark;
     h4 { color: $white; }
   }
-  .item.selected { padding: 0.8rem 1rem !important; }
+  .item.selected {
+    padding: 0.8rem 0.5rem 0.8rem 1rem !important; }
 }
 
 .subtabs {
