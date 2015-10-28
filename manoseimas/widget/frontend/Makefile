@@ -1,9 +1,19 @@
-all: .done
+# non-recursive make support
+here ?= .
 
-.done: tmp scripts/*.coffee templates/*.handlebars
-	npm instal .
-	PATH=$(PATH):node_modules/.bin node_modules/.bin/cake build
-	touch .done
+tmpdir := $(here)/tmp
+scripts := $(here)/scripts/*.coffee
+templates := $(here)/templates/*.handlebars
+widget_stamp := $(here)/.done
+bindir := node_modules/.bin
 
-tmp:
+.PHONY: all
+all: $(widget_stamp)
+
+$(widget_stamp): $(tmpdir) $(scripts) $(templates)
+	cd $(here) && npm install .
+	cd $(here) && PATH=$(PATH):$(bindir) $(bindir)/cake build
+	touch $@
+
+$(tmpdir):
 	mkdir -p $@
