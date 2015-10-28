@@ -350,7 +350,6 @@ class ManoSeimasModelPersistPipeline(object):
         suggester, created = SuggesterModel.objects.get_or_create(
             title=item['submitter']
         )
-        suggester.save()
         suggestion, created = SuggestionModel.objects.get_or_create(
             source_id=item['source_id'],
             source_index=item['source_index']
