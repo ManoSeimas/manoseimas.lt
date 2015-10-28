@@ -66,6 +66,13 @@ var LawProjects = React.createClass({
           title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
           client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
         }
+      },
+      suggester: {
+        sort_key: 'title',
+        sort_order: 1,
+        columns: {
+          title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+        }
       }
     }
     return config[source];
@@ -169,12 +176,10 @@ var SemanticTable = React.createClass({
 });
 
 
-var data_slug = $('#law-projects-component').attr("data-slug");
-var source_prefix = $('#law-projects-component').attr("source-prefix");
-var prefix = ( source_prefix ? ('/' + source_prefix) : '' );
-var data_url = prefix + '/json/law_projects/' + data_slug;
+var data_url = $('#law-projects-component').attr("data_url");
+var source = $('#law-projects-component').attr("source");
 
 React.render(
-  <LawProjects data_url={data_url} source={source_prefix} />,
+  <LawProjects data_url={data_url} source={source} />,
   document.getElementById('law-projects-component')
 );

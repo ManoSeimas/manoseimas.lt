@@ -145,7 +145,7 @@
               h5
                 span.popup(data-position="top center" data-content="Skaičiuojama, kiek teisės aktų projektų Seimo narys pasirašė kartu su kitais Seimo nariais. Parodo Seimo nario \"bendradarbiavimo\" lygį su atskirais Seimo nariais.") {{ mp.project_count }} {% lt_pluralize mp.project_count 'bandras projektas' ' bendri projektai' 'bendrų projektų' %}
 
-  #law-projects-component(data-slug="{{profile.slug}}")
+  #law-projects-component(data_url="/json/law_projects/{{profile.slug}}")
 
   .transcripts
     a(name='stenogram_section')
