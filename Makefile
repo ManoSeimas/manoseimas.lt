@@ -24,7 +24,8 @@ buildout.cfg: ; ./scripts/genconfig.py config/env/development.cfg
 
 bin/pip: ; virtualenv --no-site-packages --python=python2.7 .
 
-bin/buildout: bin/pip ; $< install zc.buildout==2.3.1
+bin/buildout: bin/pip
+	bin/pip install zc.buildout==2.3.1
 
 mkdirs: var/log var/www/static var/www/media
 
@@ -36,7 +37,7 @@ manoseimas/widget/frontend/.done: bin/sassc manoseimas/widget/frontend/scripts/*
 	$(MAKE) -C manoseimas/widget/frontend
 
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
-	$<
+	bin/buildout
 	touch -c bin/django
 	touch -c bin/sassc
 
