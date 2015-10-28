@@ -32,11 +32,6 @@ mkdirs: var/log var/www/static var/www/media
 
 var/log var/www/static var/www/media: ; mkdir -p $@
 
-widget: manoseimas/widget/frontend/.done
-
-manoseimas/widget/frontend/.done: bin/sassc manoseimas/widget/frontend/scripts/*.coffee manoseimas/widget/frontend/templates/*.handlebars
-	$(MAKE) -C manoseimas/widget/frontend
-
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
 	bin/buildout
 	touch -c $@
@@ -52,3 +47,9 @@ import_backup: bin/django
 	bin/django couchdb_sync_id
 
 .PHONY: all help run mkdirs widget tags migrate import_backup
+
+here := manoseimas/widget/frontend
+include $(here)/Makefile
+widget: $(widget_stamp)
+# one extra dependency
+$(widget_stamp): bin/sassc
