@@ -646,7 +646,7 @@ class Suggestion(CrawledItem):
     source_id = models.CharField(max_length=16, db_index=True)
     source_index = models.IntegerField()
 
-    submitter = models.ManyToManyField(Suggester, related_name = 'suggestions')
+    submitter = models.ManyToManyField(Suggester, related_name='suggestions')
     date = models.DateField(blank=True, null=True)
     document = models.TextField(blank=True)
     opinion = models.TextField(blank=True)
@@ -666,9 +666,18 @@ class Suggestion(CrawledItem):
                    COUNT(source_id) AS law_project_count,
                    SUM(proposal_count) AS suggestion_count
             FROM (
-                (SELECT submitter, source_id, COUNT(id) AS proposal_count
-                 FROM mps_v2_suggestion
-                 GROUP BY submitter, source_id) AS t2
+                (SELECT
+                    t1.title AS submitter,
+                    t3.source_id AS source_id,
+                    COUNT(t3.id) AS proposal_count
+                    FROM
+                        mps_v2_suggester AS t1,
+                        mps_v2_suggestion_submitter as t2,
+                        mps_v2_suggestion as t3
+                        WHERE
+                            t1.id=t2.suggester_id AND t2.suggestion_id=t3.id
+                    GROUP BY submitter, source_id
+                 ) AS t4
             )
             GROUP BY submitter;
         """)
@@ -692,3 +701,4 @@ class Suggestion(CrawledItem):
     def suggestion_and_project_count_other(self):
         return [item for item in self.suggestion_and_project_count()
                      if not item['state_actor']]
+
