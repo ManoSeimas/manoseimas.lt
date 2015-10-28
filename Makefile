@@ -25,7 +25,7 @@ buildout.cfg: ; ./scripts/genconfig.py config/env/development.cfg
 bin/pip: ; virtualenv --no-site-packages --python=python2.7 .
 
 bin/buildout: bin/pip
-	bin/pip install zc.buildout==2.3.1
+	bin/pip install zc.buildout==2.4.6
 	touch -c $@
 
 mkdirs: var/log var/www/static var/www/media
