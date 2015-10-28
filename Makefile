@@ -23,6 +23,7 @@ tags: bin/django ; bin/ctags -v --tag-relative
 buildout.cfg: ; ./scripts/genconfig.py config/env/development.cfg
 
 bin/pip:
+	rm -rf lib
 	virtualenv --no-site-packages --python=python2.7 .
 	bin/pip install -U pip setuptools wheel
 
