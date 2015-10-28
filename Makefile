@@ -34,7 +34,8 @@ var/log var/www/static var/www/media: ; mkdir -p $@
 
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
 	bin/buildout
-	touch -c $@
+	touch -c bin/django
+	touch -c bin/sassc
 
 migrate: bin/django ; bin/django migrate
 
