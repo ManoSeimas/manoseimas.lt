@@ -22,7 +22,9 @@ tags: bin/django ; bin/ctags -v --tag-relative
 
 buildout.cfg: ; ./scripts/genconfig.py config/env/development.cfg
 
-bin/pip: ; virtualenv --no-site-packages --python=python2.7 .
+bin/pip:
+	virtualenv --no-site-packages --python=python2.7 .
+	bin/pip install -U pip setuptools wheel
 
 bin/buildout: bin/pip
 	bin/pip install zc.buildout==2.4.6
