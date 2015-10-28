@@ -570,6 +570,7 @@ class SuggestionsSpider(ManoSeimasSpider):
             u'Generalinė prokuratūra': u'Lietuvos Respublikos generalinė prokuratūra',
             u'Lietuvos trišalė taryba': u'Lietuvos Respublikos trišalė taryba',
             u"Lietuvos teisėjų asociacija": u"Lietuvos Respublikos teisėjų asociacija",
+            u"Teisėjų asociacija": u"Lietuvos Respublikos teisėjų asociacija",
             u"Valstybinė kultūros paveldo komisija": u"Lietuvos Respublikos valstybinė kultūros paveldo komisija",
             u"Hieraldikos komisija": u"Lietuvos heraldikos komisija",
             u"Vyriausioji rinkimų komisija": u"Lietuvos Respublikos vyriausioji rinkimų komisija",

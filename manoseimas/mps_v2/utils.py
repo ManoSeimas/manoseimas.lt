@@ -116,8 +116,6 @@ def is_state_actor(actor):
     if actor.startswith('teikia '):
         actor = actor[len('teikia '):]
     if actor.endswith('asociacija'):
-        if actor == 'lietuvos respublikos teisėjų asociacija':
-            return True
         return False
     if 'gretutinių teisių asociacija „agata“' in actor:
         return True
