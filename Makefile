@@ -39,8 +39,7 @@ manoseimas/widget/frontend/.done: bin/sassc manoseimas/widget/frontend/scripts/*
 
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
 	bin/buildout
-	touch -c bin/django
-	touch -c bin/sassc
+	touch -c $@
 
 migrate: bin/django ; bin/django migrate
 
