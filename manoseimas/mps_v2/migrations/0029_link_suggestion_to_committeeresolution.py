@@ -26,4 +26,11 @@ class Migration(migrations.Migration):
             name='suggestion',
             unique_together=set([('source_resolution', 'source_index')]),
         ),
+        # Workaround for https://code.djangoproject.com/ticket/25621
+        # D58bb2cf0b1407c8c24fa06b0cc34f38 is what you get from Django's
+        # BaseDatabaseSchemaEditor._create_index_name() when you pass it
+        # (model, ["source_id"], suffix="_fk_mps_v2_committeeresolution_source_id")
+        migrations.RunSQL([], [
+            "ALTER TABLE mps_v2_suggestion DROP FOREIGN KEY D58bb2cf0b1407c8c24fa06b0cc34f38",
+        ]),
     ]
