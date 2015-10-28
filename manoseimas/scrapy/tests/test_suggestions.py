@@ -1013,6 +1013,7 @@ class TestSubmitterCleaning(unittest.TestCase):
         u"Lietuvos Respublikos teisėjų asociacija": [
             u"Lietuvos Respublikos teisėjų asociacija",
             u"Lietuvos teisėjų asociacija",
+            u"Teisėjų asociacija",
         ],
         u"Lietuvos Respublikos valstybinė kultūros paveldo komisija": [
             u"Valstybinė kultūros paveldo komisija",

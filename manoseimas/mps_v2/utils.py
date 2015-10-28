@@ -19,22 +19,20 @@
 
 from __future__ import unicode_literals
 
-import re
-
-
-abbreviations = {
-    'IVPK': 'Informacinės Visuomenės Plėtros Komitetas',
-    'TM': 'Teisingumo Ministerija',
-    'TD': 'Teisės Departamentas',
-    'ETD': 'Europos Teisės Departamentas',
-    'LR': 'Lietuvos Respublika',
-    'LRS': 'Lietuvos Respublikos Seimas',
-    'LRV': 'Lietuvos Respublikos Vyriausybė',
-    'FM': 'Finansų Ministerija',
-    'STT': 'Specialiųjų Tyrimų Tarnyba',
-    'TTK': 'Teisės ir Teisėtvarkos Komitetas',
-    'BFK': 'Biudžeto ir Finansų Komitetas',
-}
+known_state_actors = [
+    'A. Jusevičienė',   # dirba VRM
+    'A. Norkūnas',      # teisėjas
+    'A. Vaičiulis',     # buvęs policijos viršininkas?
+    'D. Komparskienė',  # Teisės ir teisėtvarkos komiteto biuro vedėja
+    'I. Bazylevas',     # dirba VRM VSD
+    'J. Sykas',         # prokuroras
+    'K. Daukšys',       # seimo narys
+    'M. Bastys',        # seimo narys
+    'M. Zasčiurinskas', # seimo narys
+    'V. Stundys',       # seimo narys
+    'Vida Jakiūnaitė',  # politikė?
+    '„LATGA“',          # uhh
+]
 
 
 def is_state_actor(actor):
@@ -56,22 +54,77 @@ def is_state_actor(actor):
         True
 
     """
-    actor = actor.replace('- ', '')
-    actor = re.sub(r'[-()]', '', actor)
-    actor = ' '.join(abbreviations.get(word.upper(), word) for word in actor.split())
     actor = actor.lower()
-    actor = actor.replace('s eimo', 'seimo')
-    if actor.startswith('teikia:'):
-        actor = actor[len('teikia:'):].lstrip()
     if 'olimpinis' in actor:
         return False
     if actor.endswith(('sąjunga', 'biuras', 'rūmai')):
+        if actor.startswith('jungtinių tautų'):
+            return True
+        if 'policijos biuras' in actor:
+            return True
+        if actor.startswith('nacionalinis'):
+            return True
         return False
-    if actor.startswith('všį'):
+    if actor.startswith(('všį', 'valstybės įmonė')):
+        if 'klinik' in actor:
+            return True
+        if 'kraujo centr' in actor:
+            return True
+        if 'patologijos centr' in actor:
+            return True
+        return False
+    if ' neetatin' in actor:
+        return False
+    if 'darbdavių konfederac' in actor:
         return False
     if 'ministerij' in actor or 'departament' in actor:
         return True
     if 'komitet' in actor:
+        return True
+    if 'savivaldyb' in actor:
+        if 'asociac' in actor:
+            return False
+        return True
+    if 'plėtros taryb' in actor:
+        return True
+    if 'regioninio parko direkcij' in actor:
+        return True
+    if 'kultūros globos taryb' in actor:
+        return True
+    if 'konkurencijos taryb' in actor:
+        return True
+    if 'policijos tarnyb' in actor:
+        return True
+    if 'kriminalinė tarnyb' in actor:
+        return True
+    if 'gyventojų registro tarnyb' in actor:
+        return True
+    if 'lygių galimybių kontrolieriaus tarnyb' in actor:
+        return True
+    if actor.endswith('teismas'):
+        return True
+    if actor.endswith('komisija'):
+        if actor == 'lietuvos radijo ir televizijos komisija':
+            return False
+        if actor.startswith('pasipriešinimo'):
+            return False
+        return True
+    if actor.endswith(' meras'):
+        return True
+    if 'prokuratūr' in actor:
+        return True
+    if actor.startswith('teikia '):
+        actor = actor[len('teikia '):]
+    if actor.endswith('asociacija'):
+        return False
+    if 'gretutinių teisių asociacija „agata“' in actor:
+        return True
+    if actor.endswith('mokyklos'):
+        return True
+    if actor.startswith('nacional'):
+        if actor.endswith(('susivienijimas', 'asociacija', 'koalicija',
+                           'laureatai', 'platforma')):
+            return False
         return True
     if actor.startswith((
             'lietuvos respublik',
@@ -79,12 +132,20 @@ def is_state_actor(actor):
             'prezident',
             'seimo',
             'specialiųjų tyrimų tarnyb',
-            'specialiųjų tyrimo tarnyb', # typo, I assume
             'viešųjų',
             'valstyb',
             'vyriausyb',
+            'darbo grup',
+            'lietuvos bank',
+            'europos centrinis bank',
+            'europos sisteminės rizikos valdyba',
+            'teisėj',
+            'spaudos, radijo ir televizijos rėmimo fondas',
+            'užkrečiamųjų ligų ir aids centras',
+            'žemės ūkio rūmų taryba',
     )):
         return True
-    if actor.endswith('komitetas'):
-        return True
+    for known in known_state_actors:
+        if actor.startswith(known.lower()):
+            return True
     return False
