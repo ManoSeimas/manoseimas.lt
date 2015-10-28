@@ -90,26 +90,6 @@ COMPRESS_PRECOMPILERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = config.secret_key
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    ('pyjade.ext.django.Loader', (
-        'django.template.loaders.filesystem.Loader',
-        'django.template.loaders.app_directories.Loader',
-        'django.template.loaders.eggs.Loader',
-    ))
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    'django.contrib.messages.context_processors.messages',
-    'django.core.context_processors.request',
-    'manoseimas.context_processors.settings_for_context',
-)
-
 
 TEMPLATES = [
     {
@@ -121,7 +101,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'django.core.context_processors.request',
                 'manoseimas.context_processors.settings_for_context',
             ],
             'loaders': [
