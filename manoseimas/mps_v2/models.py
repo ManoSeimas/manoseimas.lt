@@ -638,7 +638,7 @@ class LawProject(CrawledItem):
 
 class Suggester(CrawledItem):
     """Submittter of a suggestion."""
-
+    slug = AutoSlugField(populate_from='title', max_length=120)
     title = models.TextField()
 
 

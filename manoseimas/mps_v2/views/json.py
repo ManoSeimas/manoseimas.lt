@@ -7,8 +7,12 @@ from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.db.models import Count
 
-from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
-                                      LawProject, Suggestion)
+from manoseimas.mps_v2.models import (CommitteeResolution,
+                                      Group,
+                                      GroupMembership,
+                                      LawProject,
+                                      ParliamentMember,
+                                      Suggestion)
 from manoseimas.utils import round
 
 from .statements import _build_discussion_context
@@ -138,6 +142,19 @@ def suggesters_json(request):
         suggesters = Suggestion.suggestion_and_project_count()
     return JsonResponse({'items': suggesters,
                          'subtab_counts': subtab_counts()})
+
+
+def _resolution_dict(resolution):
+    return {
+        'title': resolution.title,
+    }
+
+def resolutions_json(request, suggester_slug):
+    """Get resolutions for a given suggester."""
+    resolutions_qs = CommitteeResolution.objects.filter(
+        suggestion__submitter__slug=suggester_slug)
+
+    return JsonResponse({'items': map(_resolution_dict, resolutions_qs)})
 
 
 # TODO: this needs refactoring BADLY. We risk circular imports.
