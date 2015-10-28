@@ -26,6 +26,7 @@ bin/pip: ; virtualenv --no-site-packages --python=python2.7 .
 
 bin/buildout: bin/pip
 	bin/pip install zc.buildout==2.3.1
+	touch -c $@
 
 mkdirs: var/log var/www/static var/www/media
 
