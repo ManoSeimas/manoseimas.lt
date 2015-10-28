@@ -1,29 +1,24 @@
 ---
 - hosts: all
   sudo: yes
-  gather_facts: yes
-
 
   vars:
     name: manoseimas
     home: /opt/{{ name }}
     path: "{{ home }}/app"
     repo: https://github.com/manoseimas/manoseimas.lt
-    vars: production
     git_ref: master
-
-  vars_files:
-    - vars/{{ vars }}.yml
 
 
   tasks:
 
-  - fail: msg="Ansible version 1.9 or greater required."
+  - name: check Ansible version
+    fail: msg="Ansible version 1.9 or greater required."
     when: ansible_version.full | version_compare('1.9', '<')
 
   # apt-get update
   - name: apt update
-    apt: update_cache=yes
+    apt: update_cache=yes cache_valid_time=86400
 
   # Locales
 

@@ -1,15 +1,15 @@
 How to deploy
 =============
 
-Deployment scripts are written using Ansible_, in order to deploy you need to
+Deployment scripts are written using Ansible_.  In order to deploy you need to
 install Ansible_::
 
     sudo apt install python-pip
-    sudo pip install 'ansible>=1.6'
+    pip install --user ansible
 
-To deploy this app run following command::
+To deploy this app on staging run the following command::
 
-    ansible-playbook deploy.yml
+    ansible-playbook -i staging deploy.yml -K
 
 .. _Ansible: http://www.ansible.com/
 
@@ -18,34 +18,40 @@ About deployment scripts
 ========================
 
 Main deployment script is ``deploy.yml``. In addition, you can specify
-deployment profile by specifying vars file, like this::
+where to deploy by specifying a different inventory file, e.g. ::
 
-    ansible-playbook deploy.yml -e vars=vagrant
+    ansible-playbook -i production deploy.yml -K
 
-With this, ``vars/vagrant.yml`` file will be used with some overrides.
-
-By default, ``inventory.cfg`` file is used as Ansible inventory file. This is
+By default ``staging`` is used as the Ansible inventory file. This is
 specified in ``ansible.cfg`` which is read by Ansible by default.
+
+You can check what Ansible would change without actually making any
+changes by running ::
+
+    ansible-playbook -i staging deploy.yml -K -C
+
+If you have your SSH key in root's authorized_keys, you can avoid having
+to type your sudo password if you do ::
+
+    ansible-playbook -i staging deploy.yml -u root
 
 
 Testing deployment scripts
 ==========================
 
-Before doing real deployment you may want to try it in a sandbox, instructions
-bellow helps you to do that.
+Before doing real deployment you may want to try it in a Vagrant sandbox.
 
 Install vagrant, virtualbox and ansible::
 
     sudo apt install vagrant virtualbox python-pip
-    sudo pip install 'ansible>=1.6'
+    pip install --user ansible
 
-For the vagrant, you will probably need to download it from vagrant.com_,
+For the vagrant, you will may need to download it from vagrant.com_,
 because at least 1.6 version is required.
-
 
 .. _vagrant.com: http://www.vagrantup.com/downloads.html
 
-Run following command::
+Run the following command::
 
     vagrant up
 
