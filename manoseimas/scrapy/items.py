@@ -267,4 +267,5 @@ class Suggestion(Item):
     source_url = Field()
     source_id = Field()
     source_index = Field()
+    source_title = Field()
     raw = Field()

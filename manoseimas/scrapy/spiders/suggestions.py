@@ -55,6 +55,7 @@ class SuggestionsSpider(ManoSeimasSpider):
 
     def parse_document(self, response):
         source_id = self._get_query_attr(response.url, 'p_id')
+        source_title = self._parse_title(response)
         tables = response.xpath("//div/table")
         empties = 0
         source_index = 0
@@ -65,6 +66,7 @@ class SuggestionsSpider(ManoSeimasSpider):
                     continue
                 item['source_id'] = source_id
                 item['source_index'] = source_index
+                item['source_title'] = source_title
                 yield item
                 source_index += 1
         if empties:
@@ -80,6 +82,10 @@ class SuggestionsSpider(ManoSeimasSpider):
             #   (1st suggestion is unattributed)
             self.log("{n} empty rows discarded at {url}".format(n=empties, url=response.url),
                      level=logging.WARNING)
+
+    def _parse_title(self, response):
+        caption = response.xpath('//body/table//caption')
+        return self._extract_text(caption[0]) if caption else ''
 
     def _parse_table(self, table, url):
         if not self._is_table_interesting(table, url):

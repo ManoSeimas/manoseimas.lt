@@ -642,8 +642,15 @@ class Suggester(CrawledItem):
     title = models.TextField()
 
 
+class CommitteeResolution(CrawledItem):
+    source_id = models.CharField(max_length=16, unique=True)
+    title = models.TextField()
+
+
 class Suggestion(CrawledItem):
-    source_id = models.CharField(max_length=16, db_index=True)
+    source_resolution = models.ForeignKey(CommitteeResolution,
+                                          db_column='source_id',
+                                          to_field='source_id')
     source_index = models.IntegerField()
 
     submitter = models.ManyToManyField(Suggester, related_name='suggestions')
@@ -652,7 +659,7 @@ class Suggestion(CrawledItem):
     opinion = models.TextField(blank=True)
 
     class Meta:
-        unique_together = (('source_id', 'source_index'))
+        unique_together = (('source_resolution', 'source_index'))
 
     def __unicode__(self):
         return u'{} ({})'.format(self.submitter, self.opinion)
@@ -684,11 +691,11 @@ class Suggestion(CrawledItem):
         rows = dict_fetch_all(cursor)
 
         counts = [{
-                'title': row['title'],
-                'suggestion_count': int(row['suggestion_count']),
-                'law_project_count': int(row['law_project_count']),
-                'state_actor': is_state_actor(row['title']),
-                } for row in rows]
+            'title': row['title'],
+            'suggestion_count': int(row['suggestion_count']),
+            'law_project_count': int(row['law_project_count']),
+            'state_actor': is_state_actor(row['title']),
+        } for row in rows]
 
         return counts
 
