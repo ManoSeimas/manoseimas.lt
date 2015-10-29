@@ -153,7 +153,7 @@ def _resolution_dict(resolution):
 def resolutions_json(request, suggester_slug):
     """Get resolutions for a given suggester."""
     resolutions_qs = CommitteeResolution.objects.filter(
-        suggestion__submitter__slug=suggester_slug)
+        suggestion__submitter__slug=suggester_slug).distinct()
 
     return JsonResponse({'items': map(_resolution_dict, resolutions_qs)})
 
