@@ -72,7 +72,7 @@ var LawProjects = React.createClass({
         sort_order: 1,
         columns: {
           title: {
-            title: 'Pasiūlymai',
+            title: 'Pasiūlymas',
               className: 'center aligned',
               itemClassName: 'left aligned',
               func: function (item) {
