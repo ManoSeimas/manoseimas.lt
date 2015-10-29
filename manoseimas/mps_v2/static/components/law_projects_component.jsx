@@ -79,17 +79,16 @@ var LawProjects = React.createClass({
   },
 
   showPassedOnlyElement: function(source) {
-    if (source === 'lobbyists') {
-      return('');
-    }
-    return (
-      <div className="eight wide right aligned column">
-        <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
-          <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
-          <label>Rodyti tik priimtus projektus</label>
+    if (source === 'default_source') {
+      return (
+        <div className="eight wide right aligned column">
+          <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
+            <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
+            <label>Rodyti tik priimtus projektus</label>
+          </div>
         </div>
-      </div>
-    );
+      );
+    };
   },
 
   innerSort: function(items, key, order) {
