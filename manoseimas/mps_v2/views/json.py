@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from functools import partial
 
 from django.core.urlresolvers import reverse
@@ -144,9 +146,15 @@ def suggesters_json(request):
                          'subtab_counts': subtab_counts()})
 
 
+def _mangle(text):
+    text = text.lstrip()
+    text = re.sub(u'^(PAGRINDINIO )?(KOMITETO )?(IŠVADA )?', u'', text)
+    text = text.lstrip()
+    return text
+
 def _resolution_dict(resolution):
     return {
-        'title': resolution.title,
+        'title': _mangle(resolution.title),
         'url': resolution.source,
     }
 
