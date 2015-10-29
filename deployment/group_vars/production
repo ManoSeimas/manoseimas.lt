@@ -1,4 +1,3 @@
 ---
 server_name: manoseimas.lt
 server_aliases: [www.manoseimas.lt]
-couchdb_server_name: couchdb.manoseimas.lt

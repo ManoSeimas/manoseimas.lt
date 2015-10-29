@@ -1,4 +1,3 @@
 ---
 server_name: localhost
 server_aliases: []
-couchdb_server_name: couchdb.localhost

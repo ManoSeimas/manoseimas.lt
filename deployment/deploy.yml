@@ -221,7 +221,6 @@
     file: path=/var/log/apache2/{{ item }} state=directory
     with_items:
     - "{{ name }}"
-    - "{{ name }}-couchdb"
 
   - name: remove default apache vhost
     file: path=/etc/apache2/sites-enabled/000-default.conf state=absent

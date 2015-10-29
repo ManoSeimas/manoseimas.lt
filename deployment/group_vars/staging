@@ -1,5 +1,3 @@
 ---
 server_name: manoseimas-staging.pov.lt
 server_aliases: []
-# XXX: what is this even?
-couchdb_server_name: couchdb.manoseimas.lt
