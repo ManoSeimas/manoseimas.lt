@@ -1,4 +1,5 @@
 from collections import Counter, defaultdict
+from django.core.urlresolvers import reverse
 from django.db import models, connection
 from django_extensions.db.fields import AutoSlugField
 from django.utils.translation import ugettext_lazy as _
@@ -669,11 +670,13 @@ class Suggestion(CrawledItem):
         """Count suggestions and law projects for each suggester."""
         cursor = connection.cursor()
         cursor.execute("""
-            SELECT submitter AS title,
+            SELECT submitter_slug,
+                   submitter AS title,
                    COUNT(source_id) AS law_project_count,
                    SUM(proposal_count) AS suggestion_count
             FROM (
                 (SELECT
+                    t1.slug as submitter_slug,
                     t1.title AS submitter,
                     t3.source_id AS source_id,
                     COUNT(t3.id) AS proposal_count
@@ -692,6 +695,8 @@ class Suggestion(CrawledItem):
 
         counts = [{
             'title': row['title'],
+            'url': reverse('suggester_profile',
+                           kwargs={'suggester_slug': row['submitter_slug']}),
             'suggestion_count': int(row['suggestion_count']),
             'law_project_count': int(row['law_project_count']),
             'state_actor': is_state_actor(row['title']),
