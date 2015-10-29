@@ -71,7 +71,14 @@ var LawProjects = React.createClass({
         sort_key: 'title',
         sort_order: 1,
         columns: {
-          title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
+          title: {
+            title: 'Pavadinimas',
+              className: 'center aligned',
+              itemClassName: 'left aligned',
+              func: function (item) {
+                return <a href={item['url']} target='_blank'>{item['title']}</a>
+              }
+          },
         }
       }
     }

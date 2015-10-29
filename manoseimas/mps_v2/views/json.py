@@ -147,6 +147,7 @@ def suggesters_json(request):
 def _resolution_dict(resolution):
     return {
         'title': resolution.title,
+        'url': resolution.source,
     }
 
 def resolutions_json(request, suggester_slug):
