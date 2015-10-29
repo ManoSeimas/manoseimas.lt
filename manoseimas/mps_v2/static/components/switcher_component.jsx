@@ -112,8 +112,8 @@ var Switcher = React.createClass({
   getSubtab: function (tab, subtab) {
     // Return a subtab subtab for tab tab.
     var self = this;
-    subtabs = self.getSubtabs(tab);
-    return (subtab ? subtabs[subtab] : subtabs[subtabs.default_name]);
+    var subtabs = self.getSubtabs(tab);
+    return subtabs[subtab];
   },
 
   render: function () {
