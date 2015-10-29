@@ -1,0 +1,3 @@
+# use: ansible-playbook -i production deploy.yml -K
+[production]
+manoseimas.lt

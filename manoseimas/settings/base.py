@@ -14,6 +14,7 @@ config = exportrecipe.load(os.path.join(BUILDOUT_DIR, 'settings.json'))
 DEBUG = False
 
 ALLOWED_HOSTS = ['manoseimas.lt', 'www.manoseimas.lt',
+                 'manoseimas-staging.pov.lt',
                  'ms.tinginiai.lt', 'localhost']
 
 ADMINS = (
@@ -185,6 +186,14 @@ LOGGING = {
             'backupCount': 2,
             'maxBytes': 1024 * 1024 * 3,
         },
+        'error_log': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'level': 'ERROR',
+            'formatter': 'verbose',
+            'filename': os.path.join(BUILDOUT_DIR, 'var/log/error.log'),
+            'backupCount': 2,
+            'maxBytes': 1024 * 1024 * 3,
+        },
         'null': {
             'level': 'DEBUG',
             'class': 'django.utils.log.NullHandler',
@@ -196,7 +205,7 @@ LOGGING = {
             'handlers': ['everything'],
         },
         'django.request': {
-            'handlers': ['mail_admins'],
+            'handlers': ['error_log', 'mail_admins'],
             'level': 'ERROR',
             'propagate': True,
         },
