@@ -110,3 +110,19 @@ These commands are used to precompute and load various things::
 
 See the crontab rules in ``deployment/deploy.yml`` for the order and frequency
 of their execution.
+
+
+Testing
+=======
+
+To run full test suite please run::
+
+    make run
+
+Select a specific test::
+
+    scripts/runtests manoseimas/<path-to-module>/<module-name>.py[:TestClass.test_name]
+
+Run tests with a shorter setup::
+
+    bin/nosetests manoseimas/<path-to-module>/<module-name>.py:<ClassName>.<test_name>
