@@ -7,6 +7,8 @@ install Ansible_::
     sudo apt install python-pip
     pip install --user ansible
 
+(Be sure to include ``~/.local/bin`` early in your ``PATH``!)
+
 To deploy this app on staging run the following command::
 
     ansible-playbook -i staging deploy.yml -K
