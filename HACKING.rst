@@ -121,8 +121,8 @@ To run full test suite please run::
 
 Select a specific test::
 
-    scripts/runtests manoseimas/<path-to-module>/<module-name>.py[:TestClass.test_name]
+    scripts/runtests manoseimas/<path-to-module>/<module-name>.py[:<TestClass>.<test_name>]
 
 Run tests with a shorter setup::
 
-    bin/nosetests manoseimas/<path-to-module>/<module-name>.py:<ClassName>.<test_name>
+    bin/nosetests manoseimas/<path-to-module>/<module-name>.py:<TestClass>.<test_name>
