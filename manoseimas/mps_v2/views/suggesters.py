@@ -1,17 +1,13 @@
 # -*-coding: utf-8 -*-
 
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from manoseimas.mps_v2.models import Suggester
 
 
 def suggester_profile(request, suggester_slug):
     """A profile view for a suggester."""
 
-    try:
-        suggester = Suggester.objects.get(slug=suggester_slug)
-    except Suggester.DoesNotExist:
-        # TODO: handle this case gracefully
-        suggester = None
+    suggester = get_object_or_404(Suggester.objects, slug=suggester_slug)
 
     profile = {
         'title': suggester.title if suggester else 'Suinteresuotas asmuo',
