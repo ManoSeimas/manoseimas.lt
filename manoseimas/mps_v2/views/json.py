@@ -147,9 +147,7 @@ def suggesters_json(request):
 
 
 def _mangle(text):
-    text = text.lstrip()
-    text = re.sub(u'^(PAGRINDINIO )?(KOMITETO )?(IŠVADA )?', u'', text)
-    text = text.lstrip()
+    text = re.sub(u'^\s*(PAGRINDINIO )?(KOMITETO )?(IŠVADA )?\s*', u'', text)
     return text
 
 def _resolution_dict(resolution):
