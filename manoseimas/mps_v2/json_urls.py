@@ -14,4 +14,6 @@ urlpatterns = patterns(
     url(r'^discussion/(?P<statement_id>\d+)/?$',
         views.mp_discussion_json, name='mp_discussion_json'),
     url(r'^suggesters/?$', views.suggesters_json, name='suggesters_json'),
+    url(r'^resolutions/(?P<suggester_slug>.+)/$',
+        views.resolutions_json, name='resolutions_json')
 )

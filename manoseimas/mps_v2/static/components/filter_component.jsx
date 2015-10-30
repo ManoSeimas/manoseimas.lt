@@ -9,7 +9,7 @@ var SortableList = React.createClass({
       sort_order: this.props.default_order,
       filter_selected: 'all',
       filter_options: null,
-      subtab_selected: this.props.active_subtab || 'lobbyists',
+      subtab_selected: '',
       loaded: false
     };
   },
@@ -117,7 +117,7 @@ var SortableList = React.createClass({
       var subtabs = this.props.sidebar_subtabs;
       showSidebar = (
         <SidebarSubtabs options={this.state.subtab_options}
-                        subtab_selected={this.state.subtab_selected}
+                        subtab_selected={subtabs.active_subtab}
                         callback={this.selectSubtab}
                         sticky_context='.filtered-elements' />
       )

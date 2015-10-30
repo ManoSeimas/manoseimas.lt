@@ -17,4 +17,6 @@ urlpatterns = patterns(
         views.mp_statements, name='mp_statements_paged'),
     url(r'^statements/(?P<mp_slug>.+)/$',
         views.mp_statements, name='mp_statements'),
+    url(r'^suggester/(?P<suggester_slug>.+)/$',
+        views.suggester_profile, name='suggester_profile'),
 )

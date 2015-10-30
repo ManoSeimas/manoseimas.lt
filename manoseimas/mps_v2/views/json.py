@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from functools import partial
 
 from django.core.urlresolvers import reverse
@@ -7,8 +9,12 @@ from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.db.models import Count
 
-from manoseimas.mps_v2.models import (Group, GroupMembership, ParliamentMember,
-                                      LawProject, Suggestion)
+from manoseimas.mps_v2.models import (CommitteeResolution,
+                                      Group,
+                                      GroupMembership,
+                                      LawProject,
+                                      ParliamentMember,
+                                      Suggestion)
 from manoseimas.utils import round
 
 from .statements import _build_discussion_context
@@ -138,6 +144,24 @@ def suggesters_json(request):
         suggesters = Suggestion.suggestion_and_project_count()
     return JsonResponse({'items': suggesters,
                          'subtab_counts': subtab_counts()})
+
+
+def _mangle(text):
+    text = re.sub(u'^\s*(PAGRINDINIO )?(KOMITETO )?(IŠVADA )?\s*', u'', text)
+    return text
+
+def _resolution_dict(resolution):
+    return {
+        'title': _mangle(resolution.title),
+        'url': resolution.source,
+    }
+
+def resolutions_json(request, suggester_slug):
+    """Get resolutions for a given suggester."""
+    resolutions_qs = CommitteeResolution.objects.filter(
+        suggestion__submitter__slug=suggester_slug).distinct()
+
+    return JsonResponse({'items': map(_resolution_dict, resolutions_qs)})
 
 
 # TODO: this needs refactoring BADLY. We risk circular imports.

@@ -3,7 +3,7 @@ var Switcher = React.createClass({
   getInitialState: function () {
     return {
       active_tab: 'mps',
-      active_subtabs: { lobbyists: 'lobbyists' } //tabname: subtab_name
+      active_subtabs: { lobbyists: 'suggester_other' } //tab_name: subtab_name
     }
   },
 
@@ -32,7 +32,6 @@ var Switcher = React.createClass({
     // Return subtabs for a given tab.
     var subtabs_by_tab = {
       lobbyists: {
-        default_subtab: 'lobbyists',
         lobbyists: {
           row_component: LobbyistRow,
           endpoint: 'lobbyists/json/lobbyists',
@@ -113,8 +112,8 @@ var Switcher = React.createClass({
   getSubtab: function (tab, subtab) {
     // Return a subtab subtab for tab tab.
     var self = this;
-    subtabs = self.getSubtabs(tab);
-    return (subtab ? subtabs[subtab] : subtabs[subtabs.default_name]);
+    var subtabs = self.getSubtabs(tab);
+    return subtabs[subtab];
   },
 
   render: function () {

@@ -66,23 +66,36 @@ var LawProjects = React.createClass({
           title: {title: 'Pavadinimas', className: 'center aligned', itemClassName: 'left aligned', func: null},
           client: {title: 'Užsakovas', className: 'center aligned', itemClassName: 'center aligned', func: null},
         }
+      },
+      suggester: {
+        sort_key: 'title',
+        sort_order: 1,
+        columns: {
+          title: {
+            title: 'Pasiūlymas',
+              className: 'center aligned',
+              itemClassName: 'left aligned',
+              func: function (item) {
+                return <a href={item['url']} target='_blank'>{item['title']}</a>
+              }
+          },
+        }
       }
     }
     return config[source];
   },
 
   showPassedOnlyElement: function(source) {
-    if (source === 'lobbyists') {
-      return('');
-    }
-    return (
-      <div className="eight wide right aligned column">
-        <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
-          <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
-          <label>Rodyti tik priimtus projektus</label>
+    if (source === 'default_source') {
+      return (
+        <div className="eight wide right aligned column">
+          <div className="ui toggle checkbox" onClick={this.showPassedOnly}>
+            <input name="filter_passed" type="checkbox" checked={this.state.show_only_selected}/>
+            <label>Rodyti tik priimtus projektus</label>
+          </div>
         </div>
-      </div>
-    );
+      );
+    };
   },
 
   innerSort: function(items, key, order) {
@@ -169,12 +182,10 @@ var SemanticTable = React.createClass({
 });
 
 
-var data_slug = $('#law-projects-component').attr("data-slug");
-var source_prefix = $('#law-projects-component').attr("source-prefix");
-var prefix = ( source_prefix ? ('/' + source_prefix) : '' );
-var data_url = prefix + '/json/law_projects/' + data_slug;
+var data_url = $('#law-projects-component').attr("data_url");
+var source = $('#law-projects-component').attr("source");
 
 React.render(
-  <LawProjects data_url={data_url} source={source_prefix} />,
+  <LawProjects data_url={data_url} source={source} />,
   document.getElementById('law-projects-component')
 );

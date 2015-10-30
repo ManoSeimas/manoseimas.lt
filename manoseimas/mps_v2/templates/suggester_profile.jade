@@ -3,7 +3,7 @@
 - load compress from compress
 
 - block title
-  | {{ profile.name }}
+  | {{ profile.title }}
 
 -block inlinejs
   script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
@@ -23,8 +23,7 @@
     .ui.zero.margin.page.grid
       .twelve.wide.column
         .title
-          h1 {{ profile.name }}
+          h1 {{ profile.title }}
 
-  #law-projects-component(source="lobbyists",
-                          data_url="/lobbyists/json/law_projects/{{profile.slug}}")
+  #law-projects-component(source="suggester", data_url="/json/resolutions/{{profile.slug}}")
 

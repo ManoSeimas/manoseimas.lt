@@ -166,22 +166,26 @@ var SuggesterRow = React.createClass({
       <div className="ui fraction-row zero margin page grid">
        <div className={leading_column_class}>
           <div className="info">
-            <h2>{suggester.title}</h2>
+            <h2><a href={suggester.url}>{suggester.title}</a></h2>
           </div>
         </div>
         <div className="two wide column">
-          <div className="ui member statistic">
-            <div className="value">{suggester.law_project_count}</div>
-            <div className="label">
-              {lt_pluralize(suggester.member_count, 'įstatymas', 'įstatymai', 'įstatymų')}
-            </div>
-          </div>
+          <a href={suggester.url}>
+            <span className="ui member statistic">
+              <span className="value">{suggester.law_project_count}</span>
+              <span className="label">
+                {lt_pluralize(suggester.member_count, 'įstatymas', 'įstatymai', 'įstatymų')}
+              </span>
+            </span>
+          </a>
         </div>
         <div className="two wide column">
-          <div className="ui voting statistic">
-            <div className="value">{suggester.suggestion_count}</div>
-            <div className="label">pastabų</div>
-          </div>
+          <a href={suggester.url}>
+            <span className="ui voting statistic">
+              <span className="value">{suggester.suggestion_count}</span>
+              <span className="label">pastabų</span>
+            </span>
+          </a>
         </div>
       </div>
     )
