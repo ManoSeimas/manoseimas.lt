@@ -225,7 +225,7 @@ var Switcher = React.createClass({
                 count: null
               },
               lobbyists: {
-                name: 'Registruoit lobistai',
+                name: 'Registruoti lobistai',
                 count: null
               }
             };
