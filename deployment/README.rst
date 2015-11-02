@@ -64,3 +64,12 @@ retest deployment scripts repeatedly run::
 
 If everything went well you should see a working web page by visiting
 http://localhost:8080/ .
+
+
+Working on the server
+=====================
+
+You may want re-run scraping on-demand on the server. To do so please login onto
+manoseimas.lt and run ::
+
+sudo -u manoseimas -H bin/scrapy crawl <spinder-name>
