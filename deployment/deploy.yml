@@ -204,6 +204,27 @@
       job: "cd {{ path }} && bin/django recompute_stats"
       user: "{{ name }}"
 
+  - cron:
+      name: lobbyists crawl
+      minute: 25
+      hour: 2
+      job: "cd {{ path }} && bin/scrapy crawl lobbyists"
+      user: "{{ name }}"
+
+  - cron:
+      name: lobbyist declarations crawl
+      minute: 30
+      hour: 2
+      job: "cd {{ path }} && bin/scrapy crawl lobbyist_declarations"
+      user: "{{ name }}"
+
+  - cron:
+      name: suggestions crawl
+      minute: 35
+      hour: 2
+      job: "cd {{ path }} && bin/scrapy crawl suggestions"
+      user: "{{ name }}"
+
 
   # Set up Apache
 
