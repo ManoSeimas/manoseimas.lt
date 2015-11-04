@@ -221,7 +221,7 @@ var Switcher = React.createClass({
                 count: null
               },
               suggester_state: {
-                name: 'Valdžios atsovai',
+                name: 'Valdžios atstovai',
                 count: null
               },
               lobbyists: {
