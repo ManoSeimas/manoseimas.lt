@@ -96,8 +96,8 @@
       .stats-box
         .two-numbers
           h3 Aktyvumas diskusijose
-          .block
-            h4.number {{ stats.statement_count }}
+          .block 
+           h4.number {{ stats.statement_count }}
             p.explanation
               span.popup(data-position="top center" data-content="Skaičiuojama, kiek kartų Seimo narys pasisakė per Seimo plenarinius posėdžius. Skaičiuojami visi pasisakymai.") pasisakymai
           .block
@@ -170,6 +170,15 @@
     .ui.stackable.page.grid
       .ten.wide.column
         h2 Deklaruoti interesai
+
+    .ui.zero.margin.center.aligned.grid
+      a(name="stats")
+      .stats-box
+        .one-number
+          .block.left: h4.number {{2}}
+          .block.right: .explanation
+            span.popup(data-position="top center" data-content="Fiziniai, ir juridiniai asmenys susiję su seimo narius.") Susiję asmenys
+
 
   if positions.for or positions.against or positions.neutral
     .decisions
