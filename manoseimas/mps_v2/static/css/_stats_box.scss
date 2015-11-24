@@ -211,3 +211,15 @@
     }
   }
 }
+
+.stats-box.flex-width {
+  @extend .stats-box;
+
+  width: initial;
+  .one-number {
+    .block.left { width: initial; }
+      h4.number { margin-right: 1ex; }
+    .block.right { width: initial;}
+      .explanation { margin-left: 2ex; }
+  }
+}
