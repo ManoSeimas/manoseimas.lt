@@ -165,6 +165,7 @@
         .eight.wide.column
           h4 Šis seimo narys neturi pasisakymų seimo posėdžių metu
 
+
   .declarations
     a(name='declaration_section')
     .ui.stackable.page.grid
@@ -173,23 +174,23 @@
 
     .ui.zero.margin.center.aligned.grid
       a(name="stats")
-      .stats-box
+      .stats-box.popup(data-position="top left" data-content="Fiziniai, ir juridiniai asmenys susiję su asmeniu.")
         .one-number
           .block.left: h4.number {{2}}
           .block.right: .explanation
-            span.popup(data-position="top center" data-content="Fiziniai, ir juridiniai asmenys susiję su asmeniu.") Susiję asmenys
+            span Susiję asmenys
 
-      .stats-box.flex-width
+      .stats-box.flex-width.popup(data-position="top left" data-content="Skaičiuojama bendra visų sandorių absoliučių reikšmių suma.")
         .one-number
           .block.left: h4.number {{65000}}€
           .block.right: .explanation
-            span.popup(data-position="top center" data-content="Skaičiuojama bendra visų sandorių absoliučių reikšmių suma.") Sandoriai
+            span Sandoriai
 
-      .stats-box.flex-width
+      .stats-box.flex-width.popup(data-position="top left" data-content="Bendras asmens ir sutuoktinio turtas.")
         .one-number
           .block.left: h4.number {{6500000}}€
           .block.right: .explanation
-            span.popup(data-position="top center" data-content="Bendras asmens ir sutuoktinio turtas.") Turtas
+            span Turtas
 
 
   if positions.for or positions.against or positions.neutral
