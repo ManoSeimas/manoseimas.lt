@@ -38,6 +38,14 @@ AUTHENTICATION_BACKENDS += (
 
 INSTALLED_APPS += (
     'debug_toolbar',
+    'webpack_loader',
 )
 
 DATABASES['default']['NAME'] = 'manoseimas'
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'bundles/',
+        'STATS_FILE': os.path.join(BUILDOUT_DIR, 'webpack-stats.json'),
+    }
+}

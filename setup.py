@@ -24,6 +24,7 @@ setup(
         'django-debug-toolbar',
         'django-extensions',
         'django-test-utils',
+        'django-webpack-loader',
         'Werkzeug',
         'ipdb',
         'ipython',

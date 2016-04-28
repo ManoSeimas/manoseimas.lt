@@ -32,6 +32,9 @@ pip-selfcheck.json
 /manoseimas/static/css/styles.css
 /manoseimas/static/fonts/open-sans/stylesheet.css
 
+assets/bundles
+webpack-stats.json
+
 # Widget build files and output
 /manoseimas/widget/frontend/node_modules
 /manoseimas/widget/frontend/build
