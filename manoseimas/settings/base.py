@@ -157,6 +157,7 @@ INSTALLED_APPS = (
     'manoseimas.compat',            # depends on: solutions
     'manoseimas.widget',
     'manoseimas.lobbyists',
+    'manoseimas.compatibility_test',
 )
 
 MIGRATION_MODULES = {
