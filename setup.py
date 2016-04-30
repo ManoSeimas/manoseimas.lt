@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='manoseimas-lt',
-    version='0.1',
+    version='0.2',
     license='AGPLv3+',
     packages=find_packages(),
     install_requires=[

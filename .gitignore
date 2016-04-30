@@ -35,6 +35,7 @@ pip-selfcheck.json
 assets/bundles
 client/bundles
 webpack-stats.json
+webpack-stats-prod.json
 
 # Widget build files and output
 /manoseimas/widget/frontend/node_modules
