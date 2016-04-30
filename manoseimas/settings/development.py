@@ -48,3 +48,5 @@ WEBPACK_LOADER.update({
         'STATS_FILE': os.path.join(BUILDOUT_DIR, 'webpack-stats.json'),
     }
 })
+
+WEBPACK_COMMAND = ['npm', 'run', 'build:hot-reload']
