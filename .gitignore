@@ -33,6 +33,7 @@ pip-selfcheck.json
 /manoseimas/static/fonts/open-sans/stylesheet.css
 
 assets/bundles
+client/bundles
 webpack-stats.json
 
 # Widget build files and output
