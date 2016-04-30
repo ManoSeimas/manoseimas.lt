@@ -16,6 +16,10 @@
 # along with manoseimas.lt.  If not, see <http://www.gnu.org/licenses/>.
 
 import math
+import atexit
+import subprocess
+import fcntl
+from contextlib import contextmanager
 from datetime import datetime
 
 from django.core.urlresolvers import reverse
@@ -80,3 +84,34 @@ def dict_fetch_all(cursor):
         dict(zip(columns, row))
         for row in cursor.fetchall()
     ]
+
+
+LOCKFLIE = 'var/.devserver_lock'
+
+@contextmanager
+def file_lock(lockfile):
+    with open(lockfile, 'w') as f:
+        try:
+            fcntl.flock(f, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except IOError:
+            yield False
+        else:
+            yield True
+            fcntl.flock(f, fcntl.LOCK_UN)
+
+
+@contextmanager
+def managed_subprocess(*args, **kwargs):
+    process = None
+    with file_lock(LOCKFLIE) as lock_acquired:
+
+        if lock_acquired:
+            process = subprocess.Popen(*args, **kwargs)
+
+        def cleanup():
+            # send control-c
+            if process and process.poll() is None:
+                process.terminate()
+        atexit.register(cleanup)
+        yield
+        cleanup()

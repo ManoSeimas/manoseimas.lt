@@ -68,6 +68,7 @@ STATICFILES_DIRS = (
     os.path.join(config.buildout_parts_dir, 'bootstrap'),
     os.path.join(config.buildout_parts_dir, 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
     os.path.join(PROJECT_DIR, 'widget', 'frontend', 'build'),
+    os.path.join(BUILDOUT_DIR, 'client'),
 )
 
 STATICFILES_FINDERS = (
@@ -157,6 +158,9 @@ INSTALLED_APPS = (
     'manoseimas.compat',            # depends on: solutions
     'manoseimas.widget',
     'manoseimas.lobbyists',
+    'manoseimas.compatibility_test',
+
+    'webpack_loader',
 )
 
 MIGRATION_MODULES = {
@@ -306,4 +310,11 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Django-social-auth does not support JSON serializer.
 # See: https://docs.djangoproject.com/en/1.8/topics/http/sessions/#session-serialization
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': 'dist/',
+        'STATS_FILE': os.path.join(BUILDOUT_DIR, 'webpack-stats-prod.json'),
+    }
+}
 

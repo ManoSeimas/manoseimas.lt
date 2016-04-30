@@ -13,7 +13,7 @@ ubuntu:
 		git mercurial gettext exuberant-ctags libxml2-dev libxslt1-dev \
 		libffi-dev libssl-dev antiword
 
-run: bin/django ; bin/django runserver 0.0.0.0:8000
+run: bin/django ; bin/django devserver 0.0.0.0:8000
 
 test: bin/django ; scripts/runtests.py
 
