@@ -1,0 +1,12 @@
+- extends "test_base.jade"
+
+- load render_bundle from webpack_loader
+
+- block title
+  | Politinio suderinamumo testas - manoSeimas.lt
+
+- block main
+  #react-app
+
+  - render_bundle 'react'
+  - render_bundle 'compat_test'

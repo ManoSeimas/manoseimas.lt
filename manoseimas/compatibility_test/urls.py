@@ -5,5 +5,9 @@ from manoseimas.compatibility_test import views
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.index_view, name='start_test'),
+    url(r'^$', views.index, name='start_test'),
+    url(r'question/?$',
+        views.first_question, name='first_question'),
+    url(r'question/(?P<question_slug>[-_\w]+)/$',
+        views.question, name='question'),
 )

@@ -1,0 +1,37 @@
+- extends "test_base.jade"
+- load static from staticfiles
+
+- block title
+  | Politinio suderinamumo testas - manoSeimas.lt
+
+- block main
+  .header
+    img(src="{% static 'img/logo-black.png' %}").logo
+    .question-steps
+      .step
+      .step
+      .step
+      .step
+      .step
+      .step
+      .step
+      .step
+
+  .content
+    h2 Testo pavadinimas
+    .instruction
+      .number 1
+      .text
+        strong Atsakykite į 10 klausimų
+        | apie svarbiausius Lietuvos įvykius, dėl kurių balsuota Seime.
+    .instruction
+      .number 2
+      .text
+        strong Gaukite rezultatus
+        | , kurios partijos ir Seimo nariai balsavo panašiausiai į Jus.
+
+    .note Dėmesio, manoSeimas.lt apžvelgia tik 10 svarbių valstybės gyvenimo klausimų. Todėl primename, kad renkantis už ką balsuoti, neužtenka vadovautis šio testo rezultatais.
+
+    a(href="{% url 'first_question' %}").button Pradėti
+
+  .context-image
