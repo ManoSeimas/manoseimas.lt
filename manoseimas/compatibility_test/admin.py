@@ -34,6 +34,13 @@ class CompatTestAdmin(admin.ModelAdmin):
         TopicInline,
     ]
 
+
+class GroupAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    inlines = [
+        TopicInline,
+    ]
+
 admin.site.register(CompatTest, CompatTestAdmin)
 admin.site.register(PoliticalTopic, TopicAdmin)
-admin.site.register(TestGroup)
+admin.site.register(TestGroup, GroupAdmin)
