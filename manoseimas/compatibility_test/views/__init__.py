@@ -1,8 +1,12 @@
 from django.shortcuts import render
+from django.views.generic import View
 
 
-def index(request):
-    return render(request, 'start_test.jade', {})
+class IndexView(View):
+    template_name = 'start_test.jade'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
 
 
 def question(request, question_slug):
@@ -11,4 +15,3 @@ def question(request, question_slug):
 
 def first_question(request):
     return question(request, 'first')
-

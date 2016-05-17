@@ -1,0 +1,19 @@
+@import "_variables";
+
+$red: #aacc11;
+
+h1 {
+  color: green;
+}
+
+.block {
+  background-color: $black;
+}
+
+.section {
+  lost-utility: clearfix;
+}
+
+.column {
+  lost-column: 1/2;
+}

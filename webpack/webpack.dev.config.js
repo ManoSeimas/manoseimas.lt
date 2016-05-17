@@ -19,7 +19,7 @@ config.entry = {
         'webpack/hot/dev-server',
         app_root + '/compatibility_test/client/index'
     ],
-    react: ['react', 'react-dom'],
+    react: ['react', 'react-dom', 'react-router', 'react-redux', 'redux'],
 }
 
 // override django's STATIC_URL for webpack bundles
@@ -36,10 +36,12 @@ config.plugins = config.plugins.concat([
 config.module.loaders.push(
     {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        include: path.join(__dirname, '../manoseimas/compatibility_test'),
         loaders: ['react-hot', 'babel'],
+
     }, {
         test:   /\.css$/,
+        exclude: /node_modules/,
         loader: 'style!css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!postcss-loader'
     }
 )

@@ -1,13 +1,15 @@
-from django.conf.urls import include, patterns, url
+from django.conf.urls import patterns, url
 
-from manoseimas.compatibility_test import views
+from manoseimas.compatibility_test.views import IndexView
+from manoseimas.compatibility_test.views import question
+from manoseimas.compatibility_test.views import first_question
 
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.index, name='start_test'),
+    url(r'^$', IndexView.as_view(), name='start_test'),
     url(r'question/?$',
-        views.first_question, name='first_question'),
+        first_question, name='first_question'),
     url(r'question/(?P<question_slug>[-_\w]+)/$',
-        views.question, name='question'),
+        question, name='question'),
 )

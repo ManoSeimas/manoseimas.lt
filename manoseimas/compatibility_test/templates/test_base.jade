@@ -1,5 +1,6 @@
 - load static from staticfiles
 - load compress from compress
+- load render_bundle from webpack_loader
 
 !!! 5
 html(lang=en)
@@ -18,8 +19,7 @@ html(lang=en)
 
     link(rel="shortcut icon", type="image/x-icon", href="{% static 'favicon.png' %}")
     - compress css
-      link(rel="stylesheet", type="text/x-scss", href="{% static 'fonts/open-sans/stylesheet.scss'%}")
-      link(rel="stylesheet", type="text/x-scss", href="{% static 'test_styles.scss' %}")
+      link(rel="stylesheet", type="text/x-scss", href="{% static 'css/compat_base.scss' %}")
 
   body
     div#main-block
