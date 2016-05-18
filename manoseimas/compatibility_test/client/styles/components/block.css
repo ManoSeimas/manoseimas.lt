@@ -1,0 +1,39 @@
+@import "../_variables";
+
+.instruction {
+  margin-top: 35px;
+  max-width: 600px;
+}
+
+.instruction > .number {
+  vertical-align: top;
+}
+
+.number {
+  display: inline-block;
+  width: 20px;
+  padding: 12px 18px;
+  margin: 5px;
+  border-radius: 30px;
+  text-align: center;
+  font-weight: bold;
+  font-size: $big;
+  background-color: $black;
+  color: #fff;
+}
+
+.text {
+  display: inline-block;
+  color: $black;
+  font-size: $big;
+  font-style: normal;
+  font-weight: 300;
+  font-family: 'Roboto' !important;
+  width: calc(100% - 90px);
+  margin-left: 15px;
+  line-height: 1.3;
+
+  strong {
+    font-weight: normal;
+  }
+}

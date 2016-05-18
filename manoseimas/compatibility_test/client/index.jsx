@@ -4,7 +4,7 @@ import { Router, useRouterHistory } from 'react-router'
 import { createHashHistory } from 'history'
 import createStore from './store/createStore'
 import AppContainer from './app/main'
-import routes from './routes.jsx'
+import routes from './app/routes'
 
 const history = useRouterHistory(createHashHistory)({ queryKey: false })
 const initialState = window.___INITIAL_STATE__

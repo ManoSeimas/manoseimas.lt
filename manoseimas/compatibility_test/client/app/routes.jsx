@@ -1,7 +1,7 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
-import Layout from './app/layout'
-import { StartTest, Question } from './app/TestView'
+import Layout from './layout'
+import { StartTest, Question } from './TestView'
 
 export default (store) => {
     /**
@@ -13,7 +13,7 @@ export default (store) => {
         <Route path="/" component={Layout}>
             <IndexRoute component={StartTest}/>
 
-            <Route path="/q" component={Question}/>
+            <Route path="/question" component={Question}/>
         </Route>
     )
 }

@@ -1,9 +1,60 @@
-body {
-  background-color: green;
+@import "_variables";
+
+:global body {
+  font-family: 'Roboto', sans-serif;
 }
 
-#main-block {
-  margin: auto;
-  width: 800px;
-  background-color: white;
+:global h2 {
+  color: $black;
+  margin-top: 0;
+  font-weight: normal;
+  font-size: $huge;
+}
+
+:global header {
+  margin-bottom: 50px;
+}
+
+:global .button {
+  display: inline-block;
+  padding: 1em 4em;
+  background-color: $black;
+  color: white;
+  font-size: $normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: color($black a(90%));
+  }
+}
+
+.note {
+  font-style: italic;
+  font-weight: 300;
+  font-size: $small;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  max-width: 550px;
+}
+
+.block {
+  margin-left: 80px;
+}
+
+.content {
+  lost-column: 3/4 0;
+  margin-right: 0 !important;
+
+  h2 {
+    margin-bottom: 50px;
+  }
+}
+
+.context-image {
+  height: 300px;
+  border: 2px dashed $grey;
+  lost-column: 1/4 0;
 }
