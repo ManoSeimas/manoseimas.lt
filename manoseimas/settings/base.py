@@ -68,7 +68,7 @@ STATICFILES_DIRS = (
     os.path.join(config.buildout_parts_dir, 'bootstrap'),
     os.path.join(config.buildout_parts_dir, 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
     os.path.join(PROJECT_DIR, 'widget', 'frontend', 'build'),
-    os.path.join(BUILDOUT_DIR, 'client'),
+    os.path.join(BUILDOUT_DIR, 'build'),
 )
 
 STATICFILES_FINDERS = (
@@ -313,8 +313,7 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'dist/',
+        'BUNDLE_DIR_NAME': 'bundles/',
         'STATS_FILE': os.path.join(BUILDOUT_DIR, 'webpack-stats-prod.json'),
     }
 }
-
