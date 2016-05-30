@@ -1,18 +1,18 @@
 import React from 'react'
 import { Link } from 'react-router'
 
-const Question = (props) =>
+const Topic = (props) =>
     <div>
         <Link to="/">Back</Link>
         <div>
-          Question {props.question.id} - {props.question.title}
+          Topic {props.topic.id} - {props.topic.title}
           <a className='button' onClick={props.onClickHandler}>Toliau</a>
         </div>
     </div>
 
-Question.propTypes = {
-  question: React.PropTypes.object,
+Topic.propTypes = {
+  topic: React.PropTypes.object,
   onClickHandler: React.PropTypes.func
 }
 
-export default Question
+export default Topic
