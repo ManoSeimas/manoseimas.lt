@@ -1,39 +1,39 @@
 // ------------------------------------
 // Constants
 // ------------------------------------
-export const SET_ACTIVE_QUESTION = 'SET_ACTIVE_QUESTION'
+export const SET_ACTIVE_TOPIC = 'SET_ACTIVE_TOPIC'
 
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function setActiveQuestion (question_id) {
+export function setActiveTopic (topic_id) {
   return {
-    type: SET_ACTIVE_QUESTION,
-    question_id: question_id
+    type: SET_ACTIVE_TOPIC,
+    topic_id: topic_id
   }
 }
 
 export const actions = {
-  setActiveQuestion
+  setActiveTopic
 }
 
 // ------------------------------------
 // Action Handlers
 // ------------------------------------
-function getQuestionById (question_id, questions) {
-    for (let question of questions) {
-        if (question.id === question_id)
-            return question
+function getTopicById (topic_id, topics) {
+    for (let topic of topics) {
+        if (topic.id === topic_id)
+            return topic
     }
     return undefined
 }
 
 const ACTION_HANDLERS = {
-  SET_ACTIVE_QUESTION: (state, action) => {
+  SET_ACTIVE_TOPIC: (state, action) => {
     return Object.assign({}, state, {
-      active_question: state.questions[action.question_id],
-      previous_question_id: (state.active_question) ? state.active_question.id : undefined,
-      next_question_id: (state.active_question) ? state.active_question.id + 1 : 1
+      active_topic: state.topics[action.topic_id],
+      previous_topic_id: (state.active_topic) ? state.active_topic.id : undefined,
+      next_topic_id: (state.active_topic) ? action.topic_id + 1 : 1
     })
   }
 }
@@ -42,17 +42,17 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  active_question: undefined,
-  next_question_id: 1,
-  previous_question_id: undefined,
-  questions: [{
-    id: 1,
+  active_topic: undefined,
+  next_topic_id: 0,
+  previous_topic_id: undefined,
+  topics: [{
+    id: 0,
     title: 'One'
   }, {
-    id: 2,
+    id: 1,
     title: 'Two'
   }, {
-    id:3,
+    id:2,
     title: 'Three'
   }]
 }

@@ -1,7 +1,7 @@
 import StartTest from './StartTest'
-import Question from './Question'
+import Topic from './Topic'
 
 export {
     StartTest,
-    Question
+    Topic
 }
