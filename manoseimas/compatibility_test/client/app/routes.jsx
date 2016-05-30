@@ -11,9 +11,10 @@ export default (store) => {
     let compo = <div>Hello J</div>
     return (
         <Route path="/" component={Layout}>
-            <IndexRoute component={StartTest}/>
+            <IndexRoute component={StartTest} />
 
-            <Route path="/question" component={Question}/>
+            <Route path="/question" component={Question} />
+            <Route path="/question/:questionId" component={Question} />
         </Route>
     )
 }

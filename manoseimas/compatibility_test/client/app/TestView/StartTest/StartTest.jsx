@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router'
-import { Block, StatusBar } from '../../components'
-import styles from '../../styles/base.css'
+import { Block, StatusBar } from '../../../components'
+import styles from '../../../styles/base.css'
 
 const StartTest = (props) =>
     <div>
@@ -27,12 +26,15 @@ const StartTest = (props) =>
                     klausimų. Todėl primename, kad renkantis už ką balsuoti, neužtenka
                     vadovautis šio testo rezultatais.
                 </div>
-
-                <Link to='/question' className='button'>Pradėti</Link>
+                <a className='button' onClick={props.onClickHandler}>Pradėti</a>
             </div>
         </div>
 
         <div className={styles['context-image']}></div>
     </div>
+
+StartTest.propTypes = {
+    onClickHandler: React.PropTypes.func.isRequired
+}
 
 export default StartTest

@@ -1,4 +1,4 @@
-import StartTest from './StartTest.jsx'
+import StartTest from './StartTest'
 import Question from './Question'
 
 export {

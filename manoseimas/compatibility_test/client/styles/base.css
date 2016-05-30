@@ -27,6 +27,7 @@
 
   &:hover {
     background-color: color($black a(90%));
+    cursor: pointer;
   }
 }
 
