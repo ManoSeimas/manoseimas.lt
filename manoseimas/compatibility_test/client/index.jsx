@@ -2,19 +2,21 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Router, useRouterHistory } from 'react-router'
 import { createHashHistory } from 'history'
-import createStore from './store/createStore'
-import AppContainer from './app/main'
+import { Provider } from 'react-redux'
+import { syncHistoryWithStore } from 'react-router-redux'
+import configureStore from './store/configureStore'
 import routes from './app/routes'
 
-const history = useRouterHistory(createHashHistory)({ queryKey: false })
 const initialState = window.___INITIAL_STATE__
-const store = createStore(initialState)
+const browserHistory = useRouterHistory(createHashHistory)({ queryKey: false })
+const store = configureStore(initialState, browserHistory)
+const history = syncHistoryWithStore(browserHistory, store, {
+  selectLocationState: (state) => state.router
+})
 
 ReactDOM.render(
-    <AppContainer
-        history={history}
-        store={store}
-        routes={routes(store)}
-    />,
+    <Provider store={store}>
+        <Router history={history} children={routes(store)} />
+    </Provider>,
     document.getElementById('compat-app')
 )
