@@ -160,6 +160,7 @@ INSTALLED_APPS = (
     'manoseimas.lobbyists',
     'manoseimas.compatibility_test',
 
+    'rest_framework',
     'webpack_loader',
 )
 

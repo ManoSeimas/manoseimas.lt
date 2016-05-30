@@ -5,7 +5,7 @@ const Topic = (props) =>
     <div>
         <Link to="/">Back</Link>
         <div>
-          Topic {props.topic.id} - {props.topic.title}
+          Topic {props.topic.name} - {props.topic.description}
           <a className='button' onClick={props.onClickHandler}>Toliau</a>
         </div>
     </div>

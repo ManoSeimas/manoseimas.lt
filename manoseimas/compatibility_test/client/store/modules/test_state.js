@@ -32,7 +32,7 @@ const ACTION_HANDLERS = {
   SET_ACTIVE_TOPIC: (state, action) => {
     return Object.assign({}, state, {
       active_topic: state.topics[action.topic_id],
-      previous_topic_id: (state.active_topic) ? state.active_topic.id : undefined,
+      previous_topic_id: (state.active_topic) ? action.topic_id - 1 : undefined,
       next_topic_id: (state.active_topic) ? action.topic_id + 1 : 1
     })
   }
@@ -45,16 +45,7 @@ const initialState = {
   active_topic: undefined,
   next_topic_id: 0,
   previous_topic_id: undefined,
-  topics: [{
-    id: 0,
-    title: 'One'
-  }, {
-    id: 1,
-    title: 'Two'
-  }, {
-    id:2,
-    title: 'Three'
-  }]
+  topics: []
 }
 export default (state = initialState, action) => {
   const handler = ACTION_HANDLERS[action.type]

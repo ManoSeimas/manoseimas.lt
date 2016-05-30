@@ -43,6 +43,8 @@ setup(
         'toposort',
         'django-jsonfield',
         'PyReact',
+        'djangorestframework',
+        'markdown',
     ],
     entry_points={
         'console_scripts': [
