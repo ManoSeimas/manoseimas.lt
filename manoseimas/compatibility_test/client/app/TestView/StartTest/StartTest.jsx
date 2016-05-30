@@ -12,12 +12,16 @@ const StartTest = (props) =>
         <div className={styles['content']}>
             <h2>Testo pavadinimas</h2>
             <Block number={1}>
-                <strong>Atsakykite į 10 klausimų</strong> apie svarbiausius Lietuvos įvykius,
+                <span>
+                    <strong>Atsakykite į 10 klausimų</strong> apie svarbiausius Lietuvos įvykius,
                 dėl kurių balsuota Seime.
+                </span>
             </Block>
             <Block number={2}>
-                <strong>Gaukite rezultatus</strong>, kurios partijos ir Seimo nariai balsavo
-                panašiausiai į Jus.
+               <span>
+                   <strong>Gaukite rezultatus</strong>, kurios partijos ir Seimo nariai balsavo
+                   panašiausiai į Jus.
+                </span>
             </Block>
 
             <div className={styles['block']}>
