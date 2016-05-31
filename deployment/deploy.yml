@@ -123,6 +123,7 @@
     git: repo={{ repo }} dest={{ path }} version={{ git_ref }} force=yes
     notify: reload source code
     sudo_user: "{{ name }}"
+    tags: update
 
   - name: install app dependencies
     command: make ubuntu chdir={{ path }}
@@ -130,28 +131,34 @@
   - name: init buildout
     command: python2.7 scripts/genconfig.py config/env/production.cfg chdir={{ path }} creates={{ path }}/buildout.cfg
     sudo_user: "{{ name }}"
+    tags: update
 
   - name: build project
     command: make chdir={{ path }}
     sudo_user: "{{ name }}"
+    tags: update
 
   - name: migrate database
     command: bin/django migrate --noinput chdir={{ path }}
     sudo_user: "{{ name }}"
+    tags: update
 
   - name: build widget frontend assets
     shell: "{{ path }}/manoseimas/widget/frontend/node_modules/.bin/cake build chdir={{ path }}/manoseimas/widget/frontend"
     environment:
       PATH: "{{ path }}/manoseimas/widget/frontend/node_modules/.bin:{{ ansible_env.PATH }}"
     sudo_user: "{{ name }}"
+    tags: update
 
   - name: collectstatic
     command: bin/django collectstatic --noinput chdir={{ path }}
     sudo_user: "{{ name }}"
+    tags: update
 
   - name: django compress
     command: bin/django compress --extension=html,jade --force chdir={{ path }}
     sudo_user: "{{ name }}"
+    tags: update
 
   # Set up crons
 
@@ -255,6 +262,7 @@
 
   - name: reload source code
     command: touch --no-create {{ path }}/bin/django.wsgi
+    sudo_user: "{{ name }}"
 
   - name: reload apache
     service: name=apache2 state=reloaded
