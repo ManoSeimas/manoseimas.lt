@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import os
 import os.path
 import exportrecipe
 
@@ -45,7 +46,6 @@ LANGUAGE_CODE = 'lt'
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_DIR, 'locale'),
-    os.path.join(config.buildout_parts_dir, 'django-sboard/sboard/locale'),
 )
 
 SITE_ID = 1
@@ -137,28 +137,20 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'social.apps.django_app.default',
     'sorl.thumbnail',
-    'couchdbkit.ext.django',
     'compressor',
+    'haystack',
 
     'manoseimas',
-
-    'sboard',
-    'sboard.profiles',
-    'sboard.categories',
 
     'django_extensions',
     'test_utils',
     'django_nose',
 
-    'manoseimas.legislation',
-    'manoseimas.votings',
-    'manoseimas.mps',
     'manoseimas.mps_v2',
-    'manoseimas.solutions',         # depends on: votings
-    'manoseimas.compat',            # depends on: solutions
     'manoseimas.widget',
     'manoseimas.lobbyists',
     'manoseimas.compatibility_test',
+    'manoseimas.scrapy',
 
     'rest_framework',
     'webpack_loader',
@@ -166,7 +158,6 @@ INSTALLED_APPS = (
 
 MIGRATION_MODULES = {
     'default': 'manoseimas.migrations.python_social_auth',
-    'profiles': 'manoseimas.migrations.sboard_profiles',
 }
 
 
@@ -205,7 +196,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        '': { # wildcard
+        '': {  # wildcard
             'level': 'DEBUG',
             'handlers': ['everything'],
         },
@@ -219,34 +210,8 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'couchdbkit': {
-            'handlers': ['null'],
-            'propagate': True,
-            'level': 'INFO',
-        },
-        'restkit': {
-            'handlers': ['null'],
-            'propagate': True,
-            'level': 'INFO',
-        },
     }
 }
-
-PUBLIC_COUCHDB_SERVER = 'http://couchdb.manoseimas.lt/'
-
-COUCHDB_SERVER = config.couchdb_server
-COUCHDB_DATABASES = (
-    ('sboard', COUCHDB_SERVER + 'nodes'),
-    ('sboard.profiles', COUCHDB_SERVER + 'nodes'),
-
-    # XXX: do some thing, that adding these settings should not be necessary.
-    ('manoseimas.compat', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.legislation', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.mps', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.solutions', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.votings', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.widget', COUCHDB_SERVER + 'nodes'),
-)
 
 ELASTICSEARCH_SERVERS = (
     '127.0.0.1:9200',
@@ -262,7 +227,6 @@ CACHES = {
 PROTOCOL = 'http'
 DEFAULT_FROM_EMAIL = 'manoseimas@doublemarked.com'
 
-AUTH_PROFILE_MODULE = 'profiles.Profile'
 AUTH_USER_MODEL = 'manoseimas.ManoSeimasUser'
 
 AUTHENTICATION_BACKENDS = (
@@ -278,25 +242,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = config.facebook_api_secret
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.google_oauth2_key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.google_oauth2_secret
-
-SBOARD_NODES = (
-    'sboard.categories.nodes.CategoryNode',
-    'manoseimas.legislation.nodes.LawNode',
-    'manoseimas.legislation.nodes.LawChangeNode',
-    'manoseimas.legislation.nodes.LawProjectNode',
-    'manoseimas.votings.nodes.VotingNode',
-    'manoseimas.policy.nodes.PolicyNode',
-)
-
-SBOARD_SEARCH_HANDLERS = (
-    'manoseimas.votings.nodes.search_lrs_url',
-    'manoseimas.compat.nodes.CompatSearchView',
-)
-
-SBOARD_PAGE_TEMPLATES = (
-    ('sboard/page.html', 'Plain page'),
-    ('index.html', 'Index page'),
-)
 
 RESTRUCTUREDTEXT_FILTER_SETTINGS = {
     'footnote_references': 'superscript',
@@ -317,4 +262,11 @@ WEBPACK_LOADER = {
         'BUNDLE_DIR_NAME': 'bundles/',
         'STATS_FILE': os.path.join(BUILDOUT_DIR, 'webpack-stats-prod.json'),
     }
+}
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BUILDOUT_DIR, 'var', 'whoosh_index'),
+    },
 }

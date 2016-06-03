@@ -60,7 +60,6 @@ def mp_profile(request, mp_slug):
         'long_statement_percentage': mp.get_long_statement_percentage,
         'contributed_discussion_percentage':
             mp.discussion_contribution_percentage,
-        'votes': mp.votes,
         'vote_percent': mp.vote_percentage,
         'proposed_projects': mp.proposed_law_project_count,
         'passed_projects': mp.passed_law_project_count,
@@ -75,7 +74,7 @@ def mp_profile(request, mp_slug):
         'committees': mp.committees,
         'biography': mark_safe(mp.biography),
         'stats': stats,
-        'photo_url': mp.photo.url,
+        'photo_url': mp.photo.url if mp.photo else None,
         'ranking': mp.ranking,
         'top_collaborating_mps': top_collaborators,
     }

@@ -176,10 +176,12 @@ class VotingDocument(Item):
 
 
 class PersonVote(Item):
+    _id = Field()
     name = Field()
     person = Field()
     fraction = Field()
     vote = Field()
+    datetime = Field()
 
 
 class Registration(Item):

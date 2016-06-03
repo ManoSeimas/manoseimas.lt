@@ -74,7 +74,8 @@ class reify(object):
 
 
 def round(number):
-    return math.floor(number + 0.5)
+    if number is not None:
+        return math.floor(number + 0.5)
 
 
 def dict_fetch_all(cursor):
@@ -87,6 +88,7 @@ def dict_fetch_all(cursor):
 
 
 LOCKFLIE = 'var/.devserver_lock'
+
 
 @contextmanager
 def file_lock(lockfile):

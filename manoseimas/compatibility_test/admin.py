@@ -1,13 +1,14 @@
 from django.contrib import admin
+
 from manoseimas.compatibility_test.models import CompatTest
-from manoseimas.compatibility_test.models import PoliticalTopic
+from manoseimas.compatibility_test.models import Topic
+from manoseimas.compatibility_test.models import TopicVoting
 from manoseimas.compatibility_test.models import Argument
-from manoseimas.compatibility_test.models import Voting
 from manoseimas.compatibility_test.models import TestGroup
 
 
 class VotingInline(admin.TabularInline):
-    model = Voting
+    model = TopicVoting
 
 
 class ArgumentInline(admin.TabularInline):
@@ -15,7 +16,7 @@ class ArgumentInline(admin.TabularInline):
 
 
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'test')
+    list_display = ('name', 'description')
     list_filter = ('name',)
     inlines = [
         ArgumentInline,
@@ -23,24 +24,19 @@ class TopicAdmin(admin.ModelAdmin):
     ]
 
 
-class TopicInline(admin.TabularInline):
-    model = PoliticalTopic
+class TestGroupInline(admin.TabularInline):
+    model = TestGroup
 
 
 class CompatTestAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
     list_filter = ('name',)
-    inlines = [
-        TopicInline,
-    ]
+    inlines = [TestGroupInline]
 
 
-class GroupAdmin(admin.ModelAdmin):
+class TestGroupAdmin(admin.ModelAdmin):
     list_display = ('name',)
-    inlines = [
-        TopicInline,
-    ]
 
 admin.site.register(CompatTest, CompatTestAdmin)
-admin.site.register(PoliticalTopic, TopicAdmin)
-admin.site.register(TestGroup, GroupAdmin)
+admin.site.register(Topic, TopicAdmin)
+admin.site.register(TestGroup, TestGroupAdmin)

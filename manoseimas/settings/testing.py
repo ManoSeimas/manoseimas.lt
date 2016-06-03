@@ -1,6 +1,6 @@
 from manoseimas.settings.base import *  # noqa
 
-TEST_RUNNER = 'sboard.testrunner.SboardTestSuiteRunner'
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
 CACHES = {
     'default': {

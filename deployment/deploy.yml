@@ -163,20 +163,6 @@
       user: "{{ name }}"
 
   - cron:
-      name: Sync MPs
-      minute: 23
-      hour: 0
-      job: "cd {{ path }} && bin/django syncmps"
-      user: "{{ name }}"
-
-  - cron:
-      name: sittings crawl
-      minute: 45
-      hour: 0
-      job: "cd {{ path }} && bin/django syncsittings --scrape"
-      user: "{{ name }}"
-
-  - cron:
       name: stenogram crawl
       minute: 5
       hour: 1
@@ -188,13 +174,6 @@
       minute: 40
       hour: 1
       job: "cd {{ path }} && bin/scrapy crawl law_projects"
-      user: "{{ name }}"
-
-  - cron:
-      name: sync positions
-      minute: 55
-      hour: 1
-      job: "cd {{ path }} && bin/django syncpositions"
       user: "{{ name }}"
 
   - cron:

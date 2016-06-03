@@ -10,12 +10,7 @@ setup(
         'django',
         'python-social-auth',
         'sorl-thumbnail',
-        'couchdbkit',
-        'django-sboard',
         'Scrapy',
-        'CouchDB',
-        'twisted',
-        'pycrypto',
         'django_compressor',
         'MySQL-python',
         'pylibmc',
@@ -45,11 +40,10 @@ setup(
         'PyReact',
         'djangorestframework',
         'markdown',
+        'unidecode',
+        'webtest',
+        'django-webtest',
+        'whoosh',
+        'django-haystack',
     ],
-    entry_points={
-        'console_scripts': [
-            'couch = manoseimas.scripts.couch:main',
-            'initscrapy = manoseimas.scrapy.main:main',
-        ],
-    }
 )

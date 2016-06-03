@@ -20,16 +20,10 @@ manoseimas - social project for Lithuanian parliament.
 
 This project is based on Django web framework and has these apps:
 
-mps
+mps_v2
     Members of Parliament.
 
-    This app mainly extends ``sboard.profiles`` functionality.
-
-solutions
-    Solutions are main object of this project and describes a solution to a
-    problem or to a set of problems.
-
-compat
+compatibility_test
     Compatibility checking app. This app helps to check if opinion on
     particular solutions or solution groups are compatible between different
     users and user groups.
@@ -38,7 +32,7 @@ scrapy
     Scrapy scripts for crawling data from various sources. Main source of data
     currently is lrs.lt - web site of Lithuanian parliament.
 
-votings
-    MPs votings, automatically crawled from lrs.lt.
+widget
+    Embedable widget.
 
 """

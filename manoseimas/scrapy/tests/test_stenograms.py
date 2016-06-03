@@ -7,8 +7,9 @@ import os.path
 import unittest
 import datetime
 
+from django.test import TestCase
+
 import mock
-import couchdbkit
 
 from scrapy.http import HtmlResponse
 from scrapy.link import Link
@@ -16,6 +17,8 @@ from scrapy.selector import Selector
 
 from manoseimas.scrapy.tests.utils import fixture
 
+from manoseimas.scrapy import models
+from manoseimas.scrapy.pipelines import save_item
 from manoseimas.scrapy.settings import COUCHDB_URL, BUILDOUT_DIR
 from manoseimas.scrapy.textutils import strip_tags, extract_text
 from manoseimas.scrapy.spiders.stenograms import StenogramSpider
@@ -228,28 +231,13 @@ class StenogramCrawlerTestCase(unittest.TestCase):
         self.assertEqual(20, len(items))
 
 
-class VotingByTitleTests(unittest.TestCase):
-    def setUp(self):
-        self.server = couchdbkit.Server(COUCHDB_URL)
-        self.db = self.server.get_or_create_db('test_nodes')
-        path = os.path.join(BUILDOUT_DIR, 'manoseimas', 'scrapy', 'couchdb',
-                            'nodes')
-        couchdbkit.push(path, self.db, force=True, docid='_design/scrapy')
-
-        self.get_db_patch = mock.patch('manoseimas.scrapy.helpers.stenograms.get_db')
-        get_db = self.get_db_patch.start()
-        get_db.return_value = self.db
-
-    def tearDown(self):
-        self.get_db_patch.stop()
-        self.server.delete_db('test_nodes')
+class VotingByTitleTests(TestCase):
 
     def test_get_votings_by_date(self):
-        self.db.save_doc(FIXTURES['sitting_245_1'])
-        self.db.save_doc(FIXTURES['sitting_245_2'])
-        docs = stenogram_helpers.get_votings_by_date(datetime.date(2015, 5,
-                                                                     14))
-        ids = [d['_id'] for d in docs]
+        save_item(FIXTURES['sitting_245_1'])
+        save_item(FIXTURES['sitting_245_2'])
+        docs = stenogram_helpers.get_votings_by_date(datetime.date(2015, 5, 14))
+        ids = [d.key for d in docs]
         self.assertEqual(ids, ['000oz6', '000oz7'])
 
         dt = datetime.datetime(2015, 5, 14, 15, 4, 3)
@@ -259,15 +247,15 @@ class VotingByTitleTests(unittest.TestCase):
             'priėmimas)'
         )
         docs = stenogram_helpers.get_voting_for_stenogram(docs, title, dt)
-        ids = [d['_id'] for d in docs]
+        ids = [d.key for d in docs]
         self.assertEqual(ids, ['000oz6'])
 
 
 class VotingForStenogramTests(unittest.TestCase):
     def test_single_documents(self):
         votings = [
-            FIXTURES['sitting_245_1'],
-            FIXTURES['sitting_245_2'],
+            models.Voting().update_from_item(FIXTURES['sitting_245_1']),
+            models.Voting().update_from_item(FIXTURES['sitting_245_2']),
         ]
         dt = datetime.datetime(2015, 5, 14, 15, 4, 3)
         title = (
@@ -276,13 +264,13 @@ class VotingForStenogramTests(unittest.TestCase):
             'priėmimas)'
         )
         docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        ids = [d['_id'] for d in docs]
+        ids = [d.key for d in docs]
         self.assertEqual(ids, ['000oz6'])
 
     def test_many_documents(self):
         votings = [
-            FIXTURES['sitting_245_1'],
-            FIXTURES['sitting_245_2'],
+            models.Voting().update_from_item(FIXTURES['sitting_245_1']),
+            models.Voting().update_from_item(FIXTURES['sitting_245_2']),
         ]
         dt = datetime.datetime(2015, 5, 14, 15, 51, 20)
         title = (
@@ -317,7 +305,7 @@ class VotingForStenogramTests(unittest.TestCase):
             '( pateikimas )'
         )
         docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        ids = [d['_id'] for d in docs]
+        ids = [d.key for d in docs]
         self.assertEqual(ids, ['000oz7'])
 
     def test_date_check(self):
@@ -330,21 +318,21 @@ class VotingForStenogramTests(unittest.TestCase):
         )
 
         votings = [
-            dict(data, _id='a', created='2015-05-14T15:00:00Z'),
-            dict(data, _id='b', created='2015-05-14T15:30:00Z'),
-            dict(data, _id='c', created='2015-05-14T14:00:00Z'),
+            models.Voting().update_from_item(dict(data, _id='a', datetime='2015-05-14 15:00:00')),
+            models.Voting().update_from_item(dict(data, _id='b', datetime='2015-05-14 15:30:00')),
+            models.Voting().update_from_item(dict(data, _id='c', datetime='2015-05-14 14:00:00')),
         ]
         docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        ids = [d['_id'] for d in docs]
+        ids = [d.key for d in docs]
         self.assertEqual(ids, ['a', 'b'])
 
         votings = [
-            dict(data, _id='a', created='2015-05-14T13:00:00Z'),
-            dict(data, _id='b', created='2015-05-14T15:10:00Z'),
-            dict(data, _id='c', created='2015-05-14T14:00:00Z'),
+            models.Voting().update_from_item(dict(data, _id='a', datetime='2015-05-14 13:00:00')),
+            models.Voting().update_from_item(dict(data, _id='b', datetime='2015-05-14 15:10:00')),
+            models.Voting().update_from_item(dict(data, _id='c', datetime='2015-05-14 14:00:00')),
         ]
         docs = stenogram_helpers.get_voting_for_stenogram(votings, title, dt)
-        ids = [d['_id'] for d in docs]
+        ids = [d.key for d in docs]
         self.assertEqual(ids, ['b'])
 
 
@@ -353,7 +341,7 @@ FIXTURES = {
         # Source: http://www3.lrs.lt/pls/inter/w5_sale.klaus_stadija?p_svarst_kl_stad_id=-20469
         '_id': '000oz6',
         'doc_type': 'Voting',
-        'created': '2015-05-14T15:04:03Z',
+        'datetime': '2015-05-14 15:04:03',
         'documents': [
             {
                 'type': 'svarstymas',
@@ -365,7 +353,7 @@ FIXTURES = {
         # Source: http://www3.lrs.lt/pls/inter/w5_sale.klaus_stadija?p_svarst_kl_stad_id=-20472
         '_id': '000oz7',
         'doc_type': 'Voting',
-        'created': '2015-05-14T15:51:20Z',
+        'datetime': '2015-05-14 15:51:20',
         'documents': [
             {
                 'type': 'pateikimas',

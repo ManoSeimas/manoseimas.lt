@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Paiška</h2>
+
+<form method="GET">
+  <div class="ui action input">
+    <input placeholder="Ieškoti..." type="text" name="q" value="{{ query }}">
+    <button class="ui button">Ieškoti</button>
+  </div>
+</form>
+
+{% if query %}
+    <h3>Rezultatai</h3>
+
+    {% for result in page.object_list %}
+        <p><a href="{{ result.object.get_absolute_url }}">{{ result.object }}</a></p>
+    {% empty %}
+        <p>Nieko nerasta.</p>
+    {% endfor %}
+
+    {% if page.has_previous or page.has_next %}
+    <div>
+        {% if page.has_previous %}
+        <a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">&laquo; Ankstesnis</a>
+        {% endif %}
+        |
+        {% if page.has_next %}
+        <a href="?q={{ query }}&amp;page={{ page.next_page_number }}">Tolesnis &raquo;</a>
+        {% endif %}
+    </div>
+    {% endif %}
+{% else %}
+    {# Show some example queries to run, maybe query syntax, something else? #}
+{% endif %}
+{% endblock %}

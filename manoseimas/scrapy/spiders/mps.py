@@ -27,6 +27,7 @@ dob_re = re.compile(u'Gim\u0117 (\d{4}) m\. (\w+) (\d+) d\.', re.UNICODE)
 
 # This maps URL components to different Seimas versions
 seimas_version_map = {
+    786: 0,   # not sure where these numbers come from so adding 0
     6113: 10,
     8801: 11
 }

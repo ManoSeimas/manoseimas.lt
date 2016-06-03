@@ -27,6 +27,7 @@ pip-selfcheck.json
 /include
 /backup
 /node_modules
+/build/
 
 /settings.json
 /manoseimas/static/css/styles.css
