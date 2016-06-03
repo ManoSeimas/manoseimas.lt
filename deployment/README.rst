@@ -13,6 +13,12 @@ To deploy this app on staging run the following command::
 
     ansible-playbook -i staging deploy.yml -K
 
+If you don't have root access on the staging server, you can still do an update
+of the existing deployment with
+
+    ansible-playbook -i staging deploy.yml -K --tags update
+
+
 .. _Ansible: http://www.ansible.com/
 
 
@@ -72,4 +78,4 @@ Working on the server
 You may want re-run scraping on-demand on the server. To do so please login onto
 manoseimas.lt and run ::
 
-sudo -u manoseimas -H bin/scrapy crawl <spinder-name>
+    sudo -u manoseimas -H bin/scrapy crawl <spinder-name>
