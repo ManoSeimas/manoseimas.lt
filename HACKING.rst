@@ -20,6 +20,10 @@ Build the project::
 
     make
 
+Install npm packages::
+
+    npm install
+
 Run migrations::
 
     bin/django migrate
