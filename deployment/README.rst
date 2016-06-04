@@ -79,3 +79,29 @@ You may want re-run scraping on-demand on the server. To do so please login onto
 manoseimas.lt and run ::
 
     sudo -u manoseimas -H bin/scrapy crawl <spinder-name>
+
+
+Upgrade Notes
+=============
+
+2016-06-04 New test upgrade notes
+---------------------------------
+
+- By adding new test, CouchDB and django-sboard was `removed completely
+  <https://github.com/ManoSeimas/manoseimas.lt/commit/d6a6f36472cd55cd23f48cd7bf7e420655f538d8>`_.
+
+- When running ``bin/django migrate`` if you get error like this::
+
+    RuntimeError: Error creating new content types. Please make
+                  sure contenttypes is migrated before trying to
+                  migrate apps individually.
+
+- You need to execute following command in order to fix that::
+
+    mysql -e 'alter table django_content_type drop column name;'
+
+  For some reasons, it looks that ``contenttypes.0002_remove_content_type_name``
+  migrations was not executend when upgrading to Django 1.8.
+
+  For more information see this bug report:
+  https://code.djangoproject.com/ticket/25100
