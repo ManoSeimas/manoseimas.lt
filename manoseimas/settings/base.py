@@ -3,9 +3,11 @@
 import os
 import os.path
 import exportrecipe
+import platform
 
 from django.utils.translation import ugettext_lazy as _
 
+DIST = platform.linux_distribution()[:2]
 
 PROJECT_DIR = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
@@ -26,11 +28,18 @@ MANAGERS = ADMINS
 
 ATOMIC_REQUESTS = True
 
+if DIST == ('Ubuntu', '16.04'):
+    # With MySQL 5.7 the command SET storage_engine=MyISAM won't work.
+    # http://stackoverflow.com/a/37220446/475477
+    init_command = 'SET default_storage_engine=INNODB'
+else:
+    init_command = 'SET storage_engine=INNODB'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'OPTIONS': {
-            'init_command': 'SET storage_engine=INNODB',
+            'init_command': init_command,
             'read_default_file': os.path.expanduser('~/.my.cnf'),
         },
     }
