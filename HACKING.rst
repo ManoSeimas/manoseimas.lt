@@ -24,6 +24,23 @@ Install npm packages::
 
     npm install
 
+Create mysql user::
+
+    mysql -u root
+      CREATE DATABASE IF NOT EXISTS manoseimas CHARSET=utf8;
+      CREATE USER 'manoseimas'@'localhost';
+      GRANT ALL PRIVILEGES ON *.* TO 'manoseimas'@'localhost';
+      FLUSH PRIVILEGES;
+
+Create mysql config file::
+
+    vim ~/.my.cnf
+      [client]
+      database = manoseimas
+      user = manoseimas
+      password =
+      default-character-set = utf8
+
 Run migrations::
 
     bin/django migrate
@@ -94,4 +111,4 @@ reused. Usually this is a good thig, because tests will run much faster, but if
 database schema is changes, you need to create migration file and then recreate
 database::
 
-    $ mysql -uroot -e 'DROP DATABASE test_manoseimas; CREATE DATABASE manoseimas CHARSET=utf8;'
+    mysql -uroot -e 'DROP DATABASE IF EXISTS test_manoseimas; CREATE DATABASE test_manoseimas CHARSET=utf8;'
