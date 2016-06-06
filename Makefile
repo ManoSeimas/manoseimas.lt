@@ -42,6 +42,9 @@ bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildc
 
 migrate: bin/django ; bin/django migrate
 
+clean:
+	rm -rf bin develop-eggs .installed.cfg .mr.developer.cfg buildout.cfg parts
+
 reset_mysql:
 	mysql -e 'drop database if exists manoseimas; create database manoseimas character set utf8 collate utf8_bin;'
 
@@ -50,7 +53,7 @@ import_backup: bin/django
 	bin/django migrate --fake-initial
 	bin/django couchdb_sync_id
 
-.PHONY: all help run mkdirs widget tags migrate import_backup
+.PHONY: all help run mkdirs widget tags migrate clean reset_mysql import_backup
 
 here := manoseimas/widget/frontend
 include $(here)/Makefile
