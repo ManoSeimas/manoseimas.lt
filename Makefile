@@ -51,7 +51,6 @@ reset_mysql:
 import_backup: bin/django
 	mysql -u manoseimas < backup/manoseimas.sql
 	bin/django migrate --fake-initial
-	bin/django couchdb_sync_id
 
 .PHONY: all help run mkdirs widget tags migrate clean reset_mysql import_backup
 

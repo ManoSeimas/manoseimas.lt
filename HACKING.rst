@@ -77,16 +77,12 @@ These crawlers are currently present::
     bin/scrapy crawl mps  # Parliament member profiles
     bin/scrapy crawl stenograms  # Stenograms
     bin/scrapy crawl law_projects  # Law project stats
-    bin/scrapy crawl sittings  # Sittings and voting stats, usually invoked via syncsittings
+    bin/scrapy crawl sittings  # Sittings and voting stats
     bin/scrapy crawl lobbyists  # Lobbyists
 
 These commands are used to precompute and load various things::
 
-    bin/django recompute_stats  # Recompute stats on models
-    bin/django couchdb_sync_id  # Run this if you see CouchDB conflicts
-    bin/django syncsittings [--update] [--scrape]  # update sittings
-    bin/django syncmps [--update] [--scrape]  # update mps
-    bin/django syncpositions  # Sync MP and Fraction positions on various political issues
+    bin/django recompute_stats
 
 See the crontab rules in ``deployment/deploy.yml`` for the order and frequency
 of their execution.
