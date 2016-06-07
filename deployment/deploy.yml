@@ -38,7 +38,6 @@
     with_items:
     - build-essential
     - mysql-server
-    - couchdb
     - memcached
     - python-mysqldb
     - python-dev
@@ -58,11 +57,6 @@
 
   - name: create {{ name }} user
     user: name={{ name }} system=yes group=www-data home={{ home }}
-
-  # Set up CouchDB
-
-  - name: ensure couchdb is running and starts on boot
-    service: name=couchdb state=started enabled=true
 
   # Set up Memcached
 

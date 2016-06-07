@@ -37,13 +37,3 @@ HTTPCACHE_STORAGE = 'scrapy.contrib.httpcache.LeveldbCacheStorage'
 HTTPCACHE_DIR = '/tmp/manoseimas_httpcache'
 
 IMAGES_STORE = '/tmp/manoseimas_images'
-
-COUCHDB_URL = 'http://127.0.0.1:5984'
-
-COUCHDB_DATABASES = (
-    ('legalact', COUCHDB_URL, 'legalacts',),
-    ('question', COUCHDB_URL, 'sittings',),
-    ('voting', COUCHDB_URL, 'sittings',),
-    ('person', COUCHDB_URL, 'mps',),
-    ('nodes_voting', COUCHDB_URL, 'nodes',),
-)
