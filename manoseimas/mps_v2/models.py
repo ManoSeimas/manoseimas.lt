@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from jsonfield import JSONField
 
 from manoseimas.mps_v2.utils import is_state_actor
-from manoseimas.utils import reify, dict_fetch_all
+from manoseimas.utils import reify, dict_fetch_all, todate
 from manoseimas.scrapy import models as scrapy_models
 
 import manoseimas.common.utils.words as words_utils
@@ -24,6 +24,16 @@ class CrawledItem(models.Model):
 
 def get_mp_full_name(mp):
     return mp.full_name
+
+
+def get_mp_votes(source_id, start_date='2012-11-16', end_date=None):
+    start_date = todate(start_date)
+    end_date = todate(end_date)
+    votes = scrapy_models.PersonVote.objects.filter(
+        p_asm_id=source_id,
+        timestamp__range=(start_date, end_date),
+    )
+    return votes
 
 
 def prepare_positions(node):
@@ -158,8 +168,7 @@ class ParliamentMember(CrawledItem):
 
     @property
     def votes(self):
-        raise ValueError('get_mp_votes comes from CouchDB and should be replaced by scrapy_models.PersonVote')
-        # return get_mp_votes(self.source_id)
+        return get_mp_votes(self.source_id)
 
     def get_vote_percentage(self):
         votes = scrapy_models.PersonVote.objects.filter(p_asm_id=self.source_id).count()
