@@ -51,7 +51,7 @@ class PersonVote(ScrapyPipe):
             'abstain': -1,
             'no-vote': -1,
         }
-        self.p_asm_id = item['_id']
+        self.p_asm_id = item['person']
         self.fraction = item['fraction']
         self.name = item['name']
         self.vote = votemap[item['vote']]
