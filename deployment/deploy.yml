@@ -53,6 +53,7 @@
     - git
     - mercurial
     - antiword
+    - acl
 
   # Create app user
 
