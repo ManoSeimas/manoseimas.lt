@@ -78,6 +78,7 @@ STATICFILES_DIRS = (
     os.path.join(config.buildout_parts_dir, 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
     os.path.join(PROJECT_DIR, 'widget', 'frontend', 'build'),
     os.path.join(BUILDOUT_DIR, 'build'),
+    os.path.join(BUILDOUT_DIR, 'bundles'),
 )
 
 STATICFILES_FINDERS = (
