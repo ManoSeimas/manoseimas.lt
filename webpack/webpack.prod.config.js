@@ -1,5 +1,6 @@
 var webpack = require("webpack")
 var BundleTracker = require('webpack-bundle-tracker')
+var config = require('./webpack.base.config.js')
 
 config.output.path = require('path').resolve('./bundles')
 

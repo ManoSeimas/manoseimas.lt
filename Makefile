@@ -31,9 +31,9 @@ bin/buildout: bin/pip
 	bin/pip install zc.buildout==2.4.6
 	touch -c $@
 
-mkdirs: var/log var/www/static var/www/media
+mkdirs: var/log var/www/static var/www/media build bundles
 
-var/log var/www/static var/www/media: ; mkdir -p $@
+var/log var/www/static var/www/media build bundles: ; mkdir -p $@
 
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
 	bin/buildout

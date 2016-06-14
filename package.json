@@ -46,6 +46,7 @@
     "webpack": "^1.13.0",
     "webpack-bundle-tracker": "0.0.93",
     "webpack-dev-server": "^1.14.1",
-    "babel-preset-stage-0": "~6.5.0"
+    "babel-preset-stage-0": "~6.5.0",
+    "es6-promise": "~3.2.1"
   }
 }
