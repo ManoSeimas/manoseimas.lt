@@ -7,7 +7,8 @@ from manoseimas.scrapy.models import PersonVote
 
 
 class VotingAdmin(admin.ModelAdmin):
-    list_display = ('title', 'timestamp', 'documents', 'votes')
+    list_display = ('title', 'timestamp', 'documents', 'votes', 'source')
+    search_fields = ('=source',)
 
     def title(self, obj):
         return obj.get_title()

@@ -9,6 +9,9 @@ from manoseimas.compatibility_test.models import TestGroup
 
 class VotingInline(admin.TabularInline):
     model = TopicVoting
+    raw_id_fields = [
+        'voting',
+    ]
 
 
 class ArgumentInline(admin.TabularInline):
