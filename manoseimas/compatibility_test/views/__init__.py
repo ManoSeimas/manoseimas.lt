@@ -24,9 +24,12 @@ class IndexView(View):
         return render(request, self.template_name, {'topics': self.topics})
 
 
-def question(request, question_slug):
-    return render(request, 'test_question.jade', {'question': question_slug})
 
+class ResultsView(View):
+    template_name = 'results.jade'
 
-def first_question(request):
-    return question(request, 'first')
+    def get(self, request):
+        context = {
+            'title': 'Seimo rinkimai 2016',
+        }
+        return render(reques, self.template_name, context)
