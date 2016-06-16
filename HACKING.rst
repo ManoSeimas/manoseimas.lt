@@ -24,6 +24,23 @@ Install npm packages::
 
     npm install
 
+Create mysql user::
+
+    mysql -u root
+      CREATE DATABASE IF NOT EXISTS manoseimas CHARSET=utf8;
+      CREATE USER 'manoseimas'@'localhost';
+      GRANT ALL PRIVILEGES ON *.* TO 'manoseimas'@'localhost';
+      FLUSH PRIVILEGES;
+
+Create mysql config file::
+
+    vim ~/.my.cnf
+      [client]
+      database = manoseimas
+      user = manoseimas
+      password =
+      default-character-set = utf8
+
 Run migrations::
 
     bin/django migrate
@@ -60,16 +77,12 @@ These crawlers are currently present::
     bin/scrapy crawl mps  # Parliament member profiles
     bin/scrapy crawl stenograms  # Stenograms
     bin/scrapy crawl law_projects  # Law project stats
-    bin/scrapy crawl sittings  # Sittings and voting stats, usually invoked via syncsittings
+    bin/scrapy crawl sittings  # Sittings and voting stats
     bin/scrapy crawl lobbyists  # Lobbyists
 
 These commands are used to precompute and load various things::
 
-    bin/django recompute_stats  # Recompute stats on models
-    bin/django couchdb_sync_id  # Run this if you see CouchDB conflicts
-    bin/django syncsittings [--update] [--scrape]  # update sittings
-    bin/django syncmps [--update] [--scrape]  # update mps
-    bin/django syncpositions  # Sync MP and Fraction positions on various political issues
+    bin/django recompute_stats
 
 See the crontab rules in ``deployment/deploy.yml`` for the order and frequency
 of their execution.
@@ -94,4 +107,4 @@ reused. Usually this is a good thig, because tests will run much faster, but if
 database schema is changes, you need to create migration file and then recreate
 database::
 
-    $ mysql -uroot -e 'DROP DATABASE test_manoseimas; CREATE DATABASE manoseimas CHARSET=utf8;'
+    mysql -uroot -e 'DROP DATABASE IF EXISTS test_manoseimas; CREATE DATABASE test_manoseimas CHARSET=utf8;'

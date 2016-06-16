@@ -51,7 +51,7 @@ class PersonVote(ScrapyPipe):
             'abstain': -1,
             'no-vote': -1,
         }
-        self.p_asm_id = item['_id']
+        self.p_asm_id = item['person']
         self.fraction = item['fraction']
         self.name = item['name']
         self.vote = votemap[item['vote']]
@@ -80,3 +80,6 @@ class Voting(ScrapyPipe):
             return self.value['formulation']
         elif 'formulation_a' in self.value:
             return 'a) %s; b) %s' % (self.value['formulation_a'], self.value['formulation_b'])
+
+    def __unicode__(self):
+        return self.name

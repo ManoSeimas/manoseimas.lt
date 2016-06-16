@@ -3,13 +3,10 @@
 
 from __future__ import unicode_literals
 
-import os.path
 import unittest
 import datetime
 
 from django.test import TestCase
-
-import mock
 
 from scrapy.http import HtmlResponse
 from scrapy.link import Link
@@ -19,7 +16,6 @@ from manoseimas.scrapy.tests.utils import fixture
 
 from manoseimas.scrapy import models
 from manoseimas.scrapy.pipelines import save_item
-from manoseimas.scrapy.settings import COUCHDB_URL, BUILDOUT_DIR
 from manoseimas.scrapy.textutils import strip_tags, extract_text
 from manoseimas.scrapy.spiders.stenograms import StenogramSpider
 from manoseimas.scrapy.spiders.stenograms import as_statement
