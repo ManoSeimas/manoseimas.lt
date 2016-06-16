@@ -20,6 +20,9 @@ class TopicVoting(models.Model):
     voting = models.ForeignKey('scrapy.Voting')
     factor = models.PositiveIntegerField(default=1)  # voting importance
 
+    def __unicode__(self):
+        return self.voting.get_title()
+
 
 class CompatTest(models.Model):
     name = models.CharField(max_length=200)
