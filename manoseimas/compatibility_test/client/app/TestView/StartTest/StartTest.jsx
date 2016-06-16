@@ -10,7 +10,7 @@ const StartTest = (props) =>
         </header>
 
         <div className={styles['content']}>
-            <h2>Testo pavadinimas</h2>
+            <h2>{props.title}</h2>
             <Block number={1}>
                 <span>
                     <strong>Atsakykite į 10 klausimų</strong> apie svarbiausius Lietuvos įvykius,
@@ -38,7 +38,8 @@ const StartTest = (props) =>
     </div>
 
 StartTest.propTypes = {
-    onClickHandler: React.PropTypes.func.isRequired
+    onClickHandler: React.PropTypes.func.isRequired,
+    title: React.PropTypes.string.isRequired
 }
 
 export default StartTest

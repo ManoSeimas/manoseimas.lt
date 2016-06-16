@@ -45,7 +45,8 @@ const initialState = {
   active_topic: undefined,
   next_topic_id: 0,
   previous_topic_id: undefined,
-  topics: []
+  topics: [],
+  title: 'Test name'
 }
 export default (state = initialState, action) => {
   const handler = ACTION_HANDLERS[action.type]
