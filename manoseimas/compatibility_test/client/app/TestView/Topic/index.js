@@ -14,6 +14,7 @@ class TopicContainer extends React.Component {
     next_topic_id: PropTypes.number.isRequired,
     setActiveTopic: PropTypes.func.isRequired,
     active_topic: PropTypes.object.isRequired,
+    topics_amount: PropTypes.number.isRequired,
     params: React.PropTypes.object
   }
 
@@ -29,14 +30,17 @@ class TopicContainer extends React.Component {
 
   render () {
     return <Topic onClickHandler={this._openTopic}
-                  topic={this.props.active_topic} />
+                  topic={this.props.active_topic}
+                  doneTopics={this.props.next_topic_id}
+                  topicsAmount={this.props.topics_amount} />
   }
 
 }
 
 const mapStateToProps = (state) => ({
     next_topic_id: state.test_state.next_topic_id,
-    active_topic: state.test_state.active_topic
+    active_topic: state.test_state.active_topic,
+    topics_amount: state.test_state.topics.length
 })
 
 export default connect((mapStateToProps), {

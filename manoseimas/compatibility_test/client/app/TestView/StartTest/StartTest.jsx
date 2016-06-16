@@ -6,7 +6,7 @@ const StartTest = (props) =>
     <div>
         <header>
             <img src='/static/img/logo-black.png' className='logo' />
-            <StatusBar current={1} max={10} />
+            <StatusBar current={0} max={props.amount} />
         </header>
 
         <div className={styles['content']}>
@@ -39,6 +39,7 @@ const StartTest = (props) =>
 
 StartTest.propTypes = {
     onClickHandler: React.PropTypes.func.isRequired,
+    amount: React.PropTypes.number.isRequired,
     title: React.PropTypes.string.isRequired
 }
 

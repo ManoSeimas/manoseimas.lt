@@ -12,6 +12,7 @@ class StartTestContainer extends React.Component {
 
   static propTypes = {
     next_topic_id: PropTypes.number.isRequired,
+    topics_amount: PropTypes.number.isRequired,
     setActiveTopic: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired
   }
@@ -28,12 +29,14 @@ class StartTestContainer extends React.Component {
 
   render () {
     return <StartTest onClickHandler={this._openTopic}
+                      amount={this.props.topics_amount}
                       title={this.props.title} />
   }
 }
 
 const mapStateToProps = (state) => ({
-    next_topic_id: state.test_state.next_topic_id
+    next_topic_id: state.test_state.next_topic_id,
+    topics_amount: state.test_state.topics.length,
     title: state.test_state.title
 })
 
