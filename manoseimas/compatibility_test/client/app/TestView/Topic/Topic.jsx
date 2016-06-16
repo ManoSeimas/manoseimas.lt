@@ -7,6 +7,7 @@ const Topic = (props) =>
         <header>
             <img src='/static/img/logo-black.png' className='logo' />
             <StatusBar current={props.doneTopics} max={props.topicsAmount} />
+            <TopicGroup name={props.topic.group} number={'0' + props.doneTopics} />
         </header>
 
         <div>
