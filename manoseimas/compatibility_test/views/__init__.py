@@ -91,7 +91,19 @@ class IndexView(View):
         qs = Topic.objects.all()
         test = get_current_test()
         qs = qs.filter(groups__test=test)
-        return qs.values('id', 'name', 'description')  # group
+        values = qs.values('id', 'name', 'groups__name', 'description')
+
+        topics = []
+        for topic in values:
+            topics.append({
+                'id': topic['id'],
+                'name': topic['name'],
+                'group': topic['groups__name'],
+                'description': topic['description'],
+            })
+            # arguments
+            # votings
+        return topics
 
     def get(self, request):
         context = {
