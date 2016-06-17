@@ -37,6 +37,8 @@ class TestGroup(models.Model):
     test = models.ForeignKey(CompatTest, null=True)
     topics = models.ManyToManyField(Topic, related_name='groups')
 
+    # TODO: unique(test, topic)
+
     def __unicode__(self):
         return self.name
 
@@ -45,4 +47,5 @@ class Argument(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     supporting = models.BooleanField(default=True)
-    topic = models.ForeignKey(Topic, on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
+                              related_name='arguments')
