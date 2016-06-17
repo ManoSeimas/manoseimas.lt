@@ -2,6 +2,13 @@
 from django.shortcuts import render
 from django.views.generic import View
 
+from manoseimas.compatibility_test.models import CompatTest
+from manoseimas.compatibility_test.models import Topic
+
+
+def get_current_test():
+    return CompatTest.objects.first()
+
 
 class IndexView(View):
     template_name = 'start_test.jade'
@@ -80,9 +87,15 @@ class IndexView(View):
             }
         ]
 
+    def topics_all(self):
+        qs = Topic.objects.all()
+        test = get_current_test()
+        qs = qs.filter(groups__test=test)
+        return qs.values('id', 'name', 'description')  # group
+
     def get(self, request):
         context = {
-            'topics': self.topics,
+            'topics': self.topics_all(),
             'title': 'Seimo rinkimai 2016',
         }
         return render(request, self.template_name, context)
@@ -95,4 +108,4 @@ class ResultsView(View):
         context = {
             'title': 'Seimo rinkimai 2016',
         }
-        return render(reques, self.template_name, context)
+        return render(request, self.template_name, context)
