@@ -1,39 +1,44 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Topic from './Topic'
-import { setActiveTopic } from '../../../store/modules/test_state'
+import { setActiveTopic, finishTest } from '../../../store/modules/test_state'
 
 class TopicContainer extends React.Component {
 
-  constructor (props, context) {
-    super(props)
-    this._openTopic = this._openTopic.bind(this)
-  }
+    constructor (props, context) {
+        super(props)
+        this._openTopic = this._openTopic.bind(this)
+    }
 
-  static propTypes = {
-    next_topic_id: PropTypes.number.isRequired,
-    setActiveTopic: PropTypes.func.isRequired,
-    active_topic: PropTypes.object.isRequired,
-    topics_amount: PropTypes.number.isRequired,
-    params: React.PropTypes.object
-  }
+    static propTypes = {
+        next_topic_id: PropTypes.number.isRequired,
+        setActiveTopic: PropTypes.func.isRequired,
+        active_topic: PropTypes.object.isRequired,
+        topics_amount: PropTypes.number.isRequired,
+        params: React.PropTypes.object
+    }
 
-  static contextTypes = {
-    router: React.PropTypes.object
-  }
+    static contextTypes = {
+        router: React.PropTypes.object
+    }
 
-  _openTopic() {
-    const topicId = this.props.next_topic_id
-    this.props.setActiveTopic(topicId)
-    this.context.router.push('/topic/' + topicId)
-  }
+    _openTopic() {
+        const topicId = this.props.next_topic_id
+        if (topicId < this.props.topics_amount) {
+            this.props.setActiveTopic(topicId)
+            this.context.router.push('/topic/' + topicId)
+        } else {
+            this.props.finishTest()
+            this.context.router.push('/results')
+        }
+    }
 
-  render () {
-    return <Topic onClickHandler={this._openTopic}
-                  topic={this.props.active_topic}
-                  doneTopics={this.props.next_topic_id}
-                  topicsAmount={this.props.topics_amount} />
-  }
+    render () {
+        return <Topic onClickHandler={this._openTopic}
+                      topic={this.props.active_topic}
+                      doneTopics={this.props.next_topic_id}
+                      topicsAmount={this.props.topics_amount} />
+    }
 
 }
 
@@ -44,5 +49,6 @@ const mapStateToProps = (state) => ({
 })
 
 export default connect((mapStateToProps), {
-    setActiveTopic
+    setActiveTopic,
+    finishTest
 })(TopicContainer)
