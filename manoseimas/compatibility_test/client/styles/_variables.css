@@ -1,11 +1,13 @@
 $black: #202a36;
 $gray: #b7b7b7;
 $grey: $gray;
+$green: #00a162;
+$red: #ca0837;
 $background: #f0f0f0;
 
 $tiny: 12px;
 $small: 14px;
-$normal: 16px;
+$normal: 18px;
 $medium: 22px;
 $big: 28px;
 $huge: 34px;

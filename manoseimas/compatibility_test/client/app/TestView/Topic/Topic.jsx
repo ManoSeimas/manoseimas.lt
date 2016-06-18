@@ -1,6 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router'
-import { StatusBar, TopicGroup } from '../../../components'
+import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../../components'
+import styles from '../../../styles/base.css'
 
 const Topic = (props) =>
     <div>
@@ -10,10 +10,18 @@ const Topic = (props) =>
             <TopicGroup name={props.topic.group} number={'0' + props.doneTopics} />
         </header>
 
-        <div>
-          Topic {props.topic.name} - {props.topic.description}
-          <a className='button' onClick={props.onClickHandler}>Toliau</a>
+        <div className={styles.content}>
+            <div className={styles.text}>
+                <strong>{props.topic.name}</strong>
+            </div>
+            <ButtonsBlock>
+                <Button type={'yes'} action={props.onClickHandler}>Taip</Button>
+                <Button type={'no'} action={props.onClickHandler}>Ne</Button>
+                <Button type={'skip'} action={props.onClickHandler}>Praleisti</Button>
+            </ButtonsBlock>
         </div>
+
+        <div className={styles['context-image']}></div>
     </div>
 
 Topic.propTypes = {

@@ -1,4 +1,5 @@
 @import "../_variables";
+@import "../base";
 
 .instruction {
   margin-top: 35px;
@@ -20,20 +21,4 @@
   font-size: $big;
   background-color: $black;
   color: #fff;
-}
-
-.text {
-  display: inline-block;
-  color: $black;
-  font-size: $big;
-  font-style: normal;
-  font-weight: 300;
-  font-family: 'Roboto' !important;
-  width: calc(100% - 90px);
-  margin-left: 15px;
-  line-height: 1.3;
-
-  strong {
-    font-weight: normal;
-  }
 }
