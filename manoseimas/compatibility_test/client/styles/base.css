@@ -67,9 +67,10 @@
   font-style: normal;
   font-weight: 300;
   font-family: 'Roboto' !important;
-  width: calc(100% - 90px);
+  width: calc(100% - 40px);
   margin-left: 15px;
   line-height: 1.3;
+  min-height: 230px;
 
   strong {
     font-weight: normal;
