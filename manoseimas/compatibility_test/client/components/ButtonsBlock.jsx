@@ -7,7 +7,7 @@ const ButtonsBlock = (props) =>
     </div>
 
 ButtonsBlock.propTypes = {
-    children: React.PropTypes.element
+    children: React.PropTypes.arrayOf(React.PropTypes.element)
 }
 
 export default ButtonsBlock

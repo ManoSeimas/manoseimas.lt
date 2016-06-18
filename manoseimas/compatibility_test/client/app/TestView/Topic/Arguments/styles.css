@@ -1,0 +1,6 @@
+@import "../../../../styles/_variables";
+
+.button {
+  composes: small_button from '../../../../styles/base.css';
+  margin-left: 20px;
+}

@@ -1,0 +1,6 @@
+@import "../../../../styles/_variables";
+
+.modal {
+  background-color: #fff;
+  border-radius: $radius;
+}

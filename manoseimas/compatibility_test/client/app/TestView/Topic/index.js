@@ -22,7 +22,7 @@ class TopicContainer extends React.Component {
         router: React.PropTypes.object
     }
 
-    _openTopic() {
+    _openTopic () {
         const topicId = this.props.next_topic_id
         if (topicId < this.props.topics_amount) {
             this.props.setActiveTopic(topicId)

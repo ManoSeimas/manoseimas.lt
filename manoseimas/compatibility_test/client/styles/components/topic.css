@@ -1,0 +1,15 @@
+@import "../base";
+
+.text {
+  compose: text from '../base.css';
+  width: calc(100% - 40px);
+  margin-left: 0;
+}
+
+.topic {
+  min-height: 230px;
+}
+
+.actions {
+  margin-top: 20px;
+}
