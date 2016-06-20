@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from jsonfield import JSONField
@@ -49,3 +50,9 @@ class Argument(models.Model):
     supporting = models.BooleanField(default=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
                               related_name='arguments')
+
+
+class UserResult(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    test = models.ForeignKey(CompatTest, null=True)
+    result = JSONField()
