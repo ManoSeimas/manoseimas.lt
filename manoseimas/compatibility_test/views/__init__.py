@@ -1,10 +1,15 @@
 # -*- coding: utf-8 -*-
+import json
+
 from django.shortcuts import render
 from django.views.generic import View
 from django.http import JsonResponse
 
+from lazysignup.decorators import allow_lazy_user
+
 from manoseimas.compatibility_test.models import CompatTest
 from manoseimas.compatibility_test.models import Topic
+from manoseimas.compatibility_test.models import UserResult
 
 
 def topics_all():
@@ -73,3 +78,24 @@ class ResultsView(View):
             'title': 'Seimo rinkimai 2016',
         }
         return render(request, self.template_name, context)
+
+
+@allow_lazy_user
+def answers_json(request):
+    user = request.user
+    answers = {}
+    results = UserResult.objects.filter(user=user)
+    if request.method == 'POST':
+        if results:
+            ur = results[0]
+        else:
+            ur = UserResult()
+            ur.user = user
+        answers = json.loads(request.body)
+        ur.result = answers
+        ur.save()
+    else:
+        if results:
+            ur = results[0]
+            answers = ur.result
+    return JsonResponse(answers)
