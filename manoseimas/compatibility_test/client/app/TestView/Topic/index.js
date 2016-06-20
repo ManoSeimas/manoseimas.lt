@@ -1,7 +1,10 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Topic from './Topic'
-import { setActiveTopic, finishTest } from '../../../store/modules/test_state'
+import { setActiveTopic,
+         finishTest,
+         toggleArgumentsModal,
+         toggleMoreModal } from '../../../store/modules/test_state'
 
 class TopicContainer extends React.Component {
 
@@ -13,6 +16,9 @@ class TopicContainer extends React.Component {
     static propTypes = {
         next_topic_id: PropTypes.number.isRequired,
         setActiveTopic: PropTypes.func.isRequired,
+        finishTest: PropTypes.func.isRequired,
+        toggleArgumentsModal: PropTypes.func.isRequired,
+        toggleMoreModal: PropTypes.func.isRequired,
         active_topic: PropTypes.object.isRequired,
         topics_amount: PropTypes.number.isRequired,
         params: React.PropTypes.object
@@ -35,6 +41,8 @@ class TopicContainer extends React.Component {
 
     render () {
         return <Topic onClickHandler={this._openTopic}
+                      toggleArguments={this.props.toggleArgumentsModal}
+                      toggleDetails={this.props.toggleMoreModal}
                       topic={this.props.active_topic}
                       doneTopics={this.props.next_topic_id}
                       topicsAmount={this.props.topics_amount} />
@@ -50,5 +58,7 @@ const mapStateToProps = (state) => ({
 
 export default connect((mapStateToProps), {
     setActiveTopic,
-    finishTest
+    finishTest,
+    toggleArgumentsModal,
+    toggleMoreModal
 })(TopicContainer)

@@ -3,6 +3,8 @@
 // ------------------------------------
 export const SET_ACTIVE_TOPIC = 'SET_ACTIVE_TOPIC'
 export const FINISH_TEST = 'FINISH_TEST'
+export const TOGGLE_ARGUMENTS_MODAL = 'TOGGLE_ARGUMENTS_MODAL'
+export const TOGGLE_MORE_MODAL = 'TOGGLE_MORE_MODAL'
 
 // ------------------------------------
 // Actions
@@ -20,9 +22,23 @@ export function finishTest () {
   }
 }
 
+export function toggleArgumentsModal () {
+  return {
+    type: TOGGLE_ARGUMENTS_MODAL
+  }
+}
+
+export function toggleMoreModal () {
+  return {
+    type: TOGGLE_MORE_MODAL
+  }
+}
+
 export const actions = {
   setActiveTopic,
-  finishTest
+  finishTest,
+  toggleArgumentsModal,
+  toggleMoreModal
 }
 
 // ------------------------------------
@@ -49,6 +65,22 @@ const ACTION_HANDLERS = {
       active_topic: undefined,
       next_topic_id: 0,
       previous_topic_id: undefined,
+    })
+  },
+  TOGGLE_ARGUMENTS_MODAL: (state, action) => {
+    return Object.assign({}, state, {
+      active_topic: Object.assign({}, state.active_topic, {
+        arguments_modal: !state.active_topic.arguments_modal,
+        more_modal: false
+      })
+    })
+  },
+  TOGGLE_MORE_MODAL: (state, action) => {
+    return Object.assign({}, state, {
+      active_topic: Object.assign({}, state.active_topic, {
+        arguments_modal: false,
+        more_modal: !state.active_topic.more_modal
+      })
     })
   }
 }

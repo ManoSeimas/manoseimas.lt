@@ -12,4 +12,10 @@
 
 .actions {
   margin-top: 20px;
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+  top: 0;
 }

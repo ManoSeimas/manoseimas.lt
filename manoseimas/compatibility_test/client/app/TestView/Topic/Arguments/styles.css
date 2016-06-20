@@ -1,6 +1,41 @@
 @import "../../../../styles/_variables";
 
-.button {
-  composes: small_button from '../../../../styles/base.css';
-  margin-left: 20px;
+.arguments .argument {
+  margin-top: 20px;
+  h3 {
+    color: $black;
+    font-family: 'Roboto' !important;
+    font-weight: normal;
+    margin-bottom: 0;
+    margin-top: 10px;
+  }
+}
+
+.head {
+  text-transform: uppercase;
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+.box {
+  display: inline-block;
+  width: calc(50% - 15px);
+  vertical-align: top;
+}
+
+.negative-box {
+  composes: box;
+  margin-left: 25px;
+}
+
+.positive-head {
+  composes: head;
+  border-bottom: 1px solid $green;
+  color: $green;
+}
+
+.negative-head {
+  composes: head;
+  border-bottom: 1px solid $red;
+  color: $red;
 }

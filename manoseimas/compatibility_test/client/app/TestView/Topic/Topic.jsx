@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../../components'
+import Modal from './Modal'
 import Arguments from './Arguments'
-import MoreInfo from './MoreInfo'
 import styles from '../../../styles/components/topic.css'
 
 const Topic = (props) => {
@@ -19,11 +19,20 @@ const Topic = (props) => {
                     <strong>{props.topic.name}</strong>
                 </div>
                 <div className={styles.actions}>
-                    <MoreInfo />
-                    <Arguments arguments={topic_arguments}
-                               toggleArguments={props.onClickHandler}
-                               opened={false}
-                               />
+                    <div className={styles.absolute}>
+                        <Button type='small'
+                                action={props.toggleDetails}
+                                arrow={true}>Daugiau informacijos</Button>
+                        <Button type='small'
+                                action={props.toggleArguments}
+                                arrow={true}>Padėkite apsispręsti</Button>
+                    </div>
+                    {(props.topic.arguments_modal)
+                        ? <Modal title='Padėkite apsispręsti' closeModal={props.toggleArguments}>
+                              <Arguments arguments={props.topic.arguments} />
+                          </Modal>
+                        : ''
+                    }
                 </div>
             </div>
 
@@ -39,10 +48,12 @@ const Topic = (props) => {
 }
 
 Topic.propTypes = {
-  topic: React.PropTypes.object,
-  doneTopics: React.PropTypes.number,
-  topicsAmount: React.PropTypes.number,
-  onClickHandler: React.PropTypes.func
+    topic: React.PropTypes.object,
+    doneTopics: React.PropTypes.number,
+    topicsAmount: React.PropTypes.number,
+    onClickHandler: React.PropTypes.func,
+    toggleArguments: React.PropTypes.func,
+    toggleDetails: React.PropTypes.func,
 }
 
 export default Topic

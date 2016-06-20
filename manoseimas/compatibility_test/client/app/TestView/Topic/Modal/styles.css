@@ -1,6 +1,32 @@
 @import "../../../../styles/_variables";
 
 .modal {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 90%;
   background-color: #fff;
   border-radius: $radius;
+  padding: 20px;
+
+  .header {
+    margin-bottom: 10px;
+
+    h2 {
+      font-size: $normal;
+      margin-bottom: 5px;
+      display: inline-block;
+      width: calc(100% - 15px);
+      font-family: 'Roboto' !important;
+      font-weight: 500;
+    }
+
+    .close {
+      cursor: pointer;
+      display: inline-block;
+      width: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
 }

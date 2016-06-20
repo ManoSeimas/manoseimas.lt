@@ -1,27 +1,32 @@
-import React, { PropTypes } from 'react'
-import Modal from '../Modal'
-import { Button } from '../../../../components'
+import React from 'react'
 import styles from './styles.css'
 
-export default class Arguments extends React.Component {
+const Arguments = (props) =>
+    <div className={styles.arguments}>
+        <div className={styles.box}>
+            <div className={styles['positive-head']}>Už</div>
+            {props.arguments.map(argument => {
+                if (argument.supporting)
+                    return <div className={styles.argument}>
+                            <h3>{argument.name}</h3>
+                            <p>{argument.description}</p>
+                        </div>
+            })}
+        </div>
+        <div className={styles['negative-box']}>
+            <div className={styles['negative-head']}>Prieš</div>
+            {props.arguments.map(argument => {
+                if (!argument.supporting)
+                    return <div className={styles.argument}>
+                            <h3>{argument.name}</h3>
+                            <p>{argument.description}</p>
+                        </div>
+            })}
+        </div>
+    </div>
 
-    static propTypes = {
-        arguments: PropTypes.object.isRequired,
-        toggleArguments: PropTypes.func.isRequired,
-        opened: PropTypes.bool.isRequired
-    }
-
-    render () {
-        return (
-            <div className='inline'>
-                {(this.props.opened)
-                    ? <Modal><h3>Modal opened</h3></Modal>
-                    : <Button type='small'
-                              action={this.props.toggleArguments}
-                              arrow={true}>Padėkite apsispręsti</Button>
-                }
-            </div>
-        )
-    }
-
+Arguments.propTypes = {
+    arguments: React.PropTypes.object.isRequired
 }
+
+export default Arguments
