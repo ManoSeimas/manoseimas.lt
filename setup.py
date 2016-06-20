@@ -45,5 +45,6 @@ setup(
         'django-webtest',
         'whoosh',
         'django-haystack',
+        'django-lazysignup',
     ],
 )
