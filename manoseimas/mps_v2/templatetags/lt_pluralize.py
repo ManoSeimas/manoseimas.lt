@@ -5,6 +5,8 @@ register = template.Library()
 
 @register.simple_tag
 def lt_pluralize(n, singular, plural1, plural2):
+    if n is None or n is '' or n is u'':
+        return plural2
     n = int(n)
     if n % 10 == 1 and n % 100 != 11:
         return singular

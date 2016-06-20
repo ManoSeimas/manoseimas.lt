@@ -1,0 +1,19 @@
+@import "../_variables";
+
+.question-steps {
+  display: block;
+  width: 580px;
+}
+
+.step {
+  background-color: $grey;
+  height: 3px;
+  width: calc(10% - 3px);
+  display: inline-block;
+  margin-right: 3px;
+}
+
+.active-step {
+  composes: step;
+  background-color: $black;
+}

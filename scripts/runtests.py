@@ -5,7 +5,6 @@ import argparse
 import subprocess
 import os
 import os.path
-import json
 
 
 def repeat(func, arg, n):
@@ -54,6 +53,7 @@ def run_tests(args):
 
     cmd = [
         'bin/django', 'test',
+        '--verbosity=2',
         '--settings=%s' % settings,
         '--nocapture',
         '--nologcapture',
@@ -61,6 +61,7 @@ def run_tests(args):
         '--with-doctest',
         '--doctest-tests',
         '--noinput',
+        '--keepdb',
     ] + args.paths
 
     if args.profile:
@@ -107,17 +108,9 @@ def run_coverage_report(args):
 
 
 def main(args=None):
-    buildout_dir = os.path.abspath(repeat(os.path.dirname, __file__, 2))
-
-    with open(os.path.join(buildout_dir, 'settings.json')) as f:
-        config = json.load(f)
-
-    parts_dir = config['buildout-parts-dir']
-    django_sboard_path = os.path.join(parts_dir, 'django-sboard')
-
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        'paths', nargs='*', default=['manoseimas', django_sboard_path],
+        'paths', nargs='*', default=['manoseimas'],
         help='paths to test files',
     )
     parser.add_argument(

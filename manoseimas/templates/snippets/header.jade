@@ -1,6 +1,5 @@
 - load static from staticfiles
 - load i18n
-- load sboard
 
 header.ui.page.grid
   .computer.tablet.only.row
@@ -10,7 +9,7 @@ header.ui.page.grid
 
         .right.menu
           .item
-            form(action="{% url 'search' %}" method="get")
+            form(action="{% url 'haystack_search' %}" method="get")
               .ui.icon.input
                 input(placeholder="Ieškok politikų, temų, argumentų", type="text", name="q").long-search-box
                 i.search.link.icon

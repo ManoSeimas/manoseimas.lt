@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import sboard.models
 
 
 class Migration(migrations.Migration):
@@ -16,7 +15,7 @@ class Migration(migrations.Migration):
             name='Voting',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('node', sboard.models.NodeForeignKey(max_length=16)),
+                ('node', models.CharField(max_length=16)),
                 ('timestamp', models.DateTimeField()),
                 ('stenogram_topic', models.ForeignKey(related_name='votings', to='mps_v2.StenogramTopic')),
             ],

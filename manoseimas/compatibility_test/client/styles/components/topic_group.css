@@ -1,0 +1,24 @@
+@import "../_variables";
+
+.topic-group {
+  margin-top: 5px;
+}
+
+.number {
+  display: inline-block;
+  color: $black;
+  font-size: $big;
+  font-weight: bold;
+}
+
+.name {
+  display: inline-block;
+  color: $black;
+  font-size: $normal;
+  font-style: normal;
+  font-weight: 500;
+  font-family: 'Roboto' !important;
+  width: calc(100% - 90px);
+  margin-left: 5px;
+  line-height: 1.3;
+}
