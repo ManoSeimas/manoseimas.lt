@@ -149,6 +149,7 @@ INSTALLED_APPS = (
     'sorl.thumbnail',
     'compressor',
     'haystack',
+    'lazysignup',
 
     'manoseimas',
 
@@ -243,6 +244,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.open_id.OpenIdAuth',
+    'lazysignup.backends.LazySignupBackend',
 )
 
 GOOGLE_ANALYTICS_KEY = config.google_analytics_key
