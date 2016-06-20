@@ -2,6 +2,7 @@ import React from 'react'
 import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../../components'
 import Modal from './Modal'
 import Arguments from './Arguments'
+import MoreInfo from './MoreInfo'
 import styles from '../../../styles/components/topic.css'
 
 const Topic = (props) => {
@@ -27,6 +28,12 @@ const Topic = (props) => {
                                 action={props.toggleArguments}
                                 arrow={true}>Padėkite apsispręsti</Button>
                     </div>
+                    {(props.topic.more_modal)
+                        ? <Modal title='Daugiau informacijos' closeModal={props.toggleDetails}>
+                              <MoreInfo description={props.topic.description} />
+                          </Modal>
+                        : ''
+                    }
                     {(props.topic.arguments_modal)
                         ? <Modal title='Padėkite apsispręsti' closeModal={props.toggleArguments}>
                               <Arguments arguments={props.topic.arguments} />

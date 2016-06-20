@@ -1,8 +1,10 @@
 import React from 'react'
-import { Button } from '../../../components'
 
 const MoreInfo = (props) =>
-    <Button type='small'
-            arrow={true}>Daugiau informacijos</Button>
+    <div>{props.description}</div>
+
+MoreInfo.propTypes = {
+    description: React.PropTypes.string
+}
 
 export default MoreInfo
