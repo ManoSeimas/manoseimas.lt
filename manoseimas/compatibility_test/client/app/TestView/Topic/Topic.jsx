@@ -44,9 +44,11 @@ const Topic = (props) => {
             </div>
 
             <ButtonsBlock>
-                <Button type={'yes'} action={props.onClickHandler}>Taip</Button>
-                <Button type={'no'} action={props.onClickHandler}>Ne</Button>
-                <Button type={'skip'} action={props.onClickHandler}>Praleisti</Button>
+                <Button type='yes'
+                        action={() => props.saveAnswer(props.topic.id, 1)}>Taip</Button>
+                <Button type='no'
+                        action={() => props.saveAnswer(props.topic.id, -1)}>Ne</Button>
+                <Button type='skip' action={props.nextTopic}>Praleisti</Button>
             </ButtonsBlock>
         </div>
 
@@ -58,7 +60,8 @@ Topic.propTypes = {
     topic: React.PropTypes.object,
     doneTopics: React.PropTypes.number,
     topicsAmount: React.PropTypes.number,
-    onClickHandler: React.PropTypes.func,
+    saveAnswer: React.PropTypes.func,
+    nextTopic: React.PropTypes.func,
     toggleArguments: React.PropTypes.func,
     toggleDetails: React.PropTypes.func,
 }
