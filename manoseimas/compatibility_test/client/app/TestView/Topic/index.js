@@ -2,10 +2,9 @@ import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import Topic from './Topic'
 import { setActiveTopic,
-         finishTest,
          toggleArgumentsModal,
          toggleMoreModal } from '../../../store/modules/test_state'
-import { saveAnswer } from '../../../store/modules/results'
+import { saveAnswer, saveAllAnswers } from '../../../store/modules/results'
 
 
 class TopicContainer extends React.Component {
@@ -19,7 +18,7 @@ class TopicContainer extends React.Component {
     static propTypes = {
         next_topic_id: PropTypes.number.isRequired,
         setActiveTopic: PropTypes.func.isRequired,
-        finishTest: PropTypes.func.isRequired,
+        saveAllAnswers: PropTypes.func.isRequired,
         toggleArgumentsModal: PropTypes.func.isRequired,
         toggleMoreModal: PropTypes.func.isRequired,
         saveAnswer: PropTypes.func.isRequired,
@@ -38,7 +37,7 @@ class TopicContainer extends React.Component {
             this.props.setActiveTopic(topicId)
             this.context.router.push('/topic/' + topicId)
         } else {
-            this.props.finishTest()
+            this.props.saveAllAnswers()
             this.context.router.push('/results')
         }
     }
@@ -72,7 +71,7 @@ const mapStateToProps = (state) => ({
 
 export default connect((mapStateToProps), {
     setActiveTopic,
-    finishTest,
+    saveAllAnswers,
     toggleArgumentsModal,
     toggleMoreModal,
     saveAnswer

@@ -1,3 +1,6 @@
+import fetch from 'isomorphic-fetch'
+import { finishTest } from './test_state'
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -7,13 +10,47 @@ export const LOAD_RESULTS = 'LOAD_RESULTS'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function saveAnswer (topic_id, answers) {
+export function saveAnswer (topic_id, answer) {
   return {
     type: SAVE_ANSWER,
     topic_id: topic_id,
-    answers: answers
+    answer: answer
   }
 }
+
+export function saveAllAnswers () {
+  return (dispatch, getState) => {
+    dispatch(finishTest())
+    return fetch('/test/json/answers', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(getState().results.answers)
+    }).then(response => response.json())
+      .then(json => console.log('JSON ', json))
+      .catch(err => console.error('Request error: ', err))
+  }
+}
+// export function saveAllAnswers () {
+//   return (dispatch, getState) => {
+//     dispatch(finishTest())
+//     let answers = getState().results.answers
+//     return new Promise(resolve => {
+//       const request = new XMLHttpRequest()
+//       request.open('POST', '/test/json/answers', true)
+//       request.onlaod = function () {
+//         if (request.status >= 200 && request.status < 400) {
+//           console.log(JSON.parse(request.responseText))
+//         } else {
+//           console.error('Request error!')
+//         }
+//       }
+//       request.send(JSON.stringify(answers))
+//     })
+//   }
+// }
 
 export function loadResults (user_id, test_id) {
   return {
@@ -25,6 +62,7 @@ export function loadResults (user_id, test_id) {
 
 export const actions = {
   saveAnswer,
+  saveAllAnswers,
   loadResults
 }
 
@@ -34,7 +72,7 @@ export const actions = {
 const ACTION_HANDLERS = {
   SAVE_ANSWER: (state, action) => {
     let answers = state.answers
-    answers[action.topic_id] = action.answers
+    answers[action.topic_id] = action.answer
     return Object.assign({}, state, { answers: answers })
   },
   LOAD_RESULTS: (state, action) => {
