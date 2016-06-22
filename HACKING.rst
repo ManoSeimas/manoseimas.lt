@@ -103,8 +103,8 @@ You can use this command for testing::
       manoseimas
 
 Note ``--keepdb`` flag, with this flag, database from previous test run will be
-reused. Usually this is a good thig, because tests will run much faster, but if
-database schema is changes, you need to create migration file and then recreate
-database::
+reused. Usually this is a good thing, because tests will run much faster, but
+if database schema changes, you will need to create a migration file and then
+recreate database::
 
     mysql -uroot -e 'DROP DATABASE IF EXISTS test_manoseimas; CREATE DATABASE test_manoseimas CHARSET=utf8;'
