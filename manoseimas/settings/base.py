@@ -282,3 +282,6 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(BUILDOUT_DIR, 'var', 'whoosh_index'),
     },
 }
+
+# We have compatibility_test and many similar names ending with _test, so we need a better test discovery.
+NOSE_ARGS = ['--match', '^[Tt]est']
