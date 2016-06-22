@@ -25,6 +25,9 @@ class TopicAdmin(admin.ModelAdmin):
 
 class TestGroupInline(admin.TabularInline):
     model = models.TestGroup
+    raw_id_fields = [
+        'topics',
+    ]
 
 
 class CompatTestAdmin(admin.ModelAdmin):
@@ -33,8 +36,17 @@ class CompatTestAdmin(admin.ModelAdmin):
     inlines = [TestGroupInline]
 
 
+class TestGroupTopicsInline(admin.TabularInline):
+    model = models.TestGroup.topics.through
+    raw_id_fields = [
+        'topic',
+    ]
+
+
 class TestGroupAdmin(admin.ModelAdmin):
     list_display = ('name',)
+    exclude = ('topics',)
+    inlines = [TestGroupTopicsInline]
 
 admin.site.register(models.CompatTest, CompatTestAdmin)
 admin.site.register(models.Topic, TopicAdmin)
