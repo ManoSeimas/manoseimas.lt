@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 import json
 
+from django_webtest import WebTest
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -60,3 +62,12 @@ class TestCompatibilityTest(TestCase):
                 'votings': [],
             },
         ])
+
+
+class TestViews(WebTest):
+    def test_index_view(self):
+        topic = factories.TopicFactory()
+        factories.TopicVotingFactory.create_batch(3, topic=topic)
+        factories.TestGroupFactory(topics=[topic])
+        resp = self.app.get('/test/')
+        self.assertEqual(resp.html.title.string, 'Politinio suderinamumo testas - manoSeimas.lt')

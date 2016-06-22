@@ -55,18 +55,12 @@ def get_current_test():
     return CompatTest.objects.order_by('id').first()
 
 
-class IndexView(View):
-    template_name = 'start_test.jade'
-
-    def topics(self):
-        return topics_all()
-
-    def get(self, request):
-        context = {
-            'topics': self.topics(),
-            'title': 'Seimo rinkimai 2016',
-        }
-        return render(request, self.template_name, context)
+def start_test(request):
+    context = {
+        'topics': topics_all(),
+        'title': 'Seimo rinkimai 2016',
+    }
+    return render(request, 'start_test.jade', context)
 
 
 def topics_json(request):

@@ -27,7 +27,7 @@ class UserFactory(DjangoModelFactory):
 
 
 class VotingFactory(DjangoModelFactory):
-    name = 'dėl pasiūlymo svarstyti šį projektą ypatingos skubos tvarka;'
+    name = 'priėmimas po pateikimo'
     timestamp = FuzzyNaiveDateTime(datetime.datetime(2008, 1, 1))
     source = factory.Sequence(lambda n: 'http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=%d' % n)
 
