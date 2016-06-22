@@ -48,5 +48,6 @@ setup(
         'django-lazysignup',
         'factory_boy',
         'pytz',
+        'beautifulsoup4',  # used by webtest tests
     ],
 )
