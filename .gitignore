@@ -37,6 +37,7 @@ assets/bundles
 client/bundles
 webpack-stats.json
 webpack-stats-prod.json
+bundles
 
 # Widget build files and output
 /manoseimas/widget/frontend/node_modules
