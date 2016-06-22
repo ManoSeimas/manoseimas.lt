@@ -1,21 +1,17 @@
 from django.contrib import admin
 
-from manoseimas.compatibility_test.models import CompatTest
-from manoseimas.compatibility_test.models import Topic
-from manoseimas.compatibility_test.models import TopicVoting
-from manoseimas.compatibility_test.models import Argument
-from manoseimas.compatibility_test.models import TestGroup
+from manoseimas.compatibility_test import models
 
 
 class VotingInline(admin.TabularInline):
-    model = TopicVoting
+    model = models.TopicVoting
     raw_id_fields = [
         'voting',
     ]
 
 
 class ArgumentInline(admin.TabularInline):
-    model = Argument
+    model = models.Argument
 
 
 class TopicAdmin(admin.ModelAdmin):
@@ -28,7 +24,7 @@ class TopicAdmin(admin.ModelAdmin):
 
 
 class TestGroupInline(admin.TabularInline):
-    model = TestGroup
+    model = models.TestGroup
 
 
 class CompatTestAdmin(admin.ModelAdmin):
@@ -40,6 +36,6 @@ class CompatTestAdmin(admin.ModelAdmin):
 class TestGroupAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
-admin.site.register(CompatTest, CompatTestAdmin)
-admin.site.register(Topic, TopicAdmin)
-admin.site.register(TestGroup, TestGroupAdmin)
+admin.site.register(models.CompatTest, CompatTestAdmin)
+admin.site.register(models.Topic, TopicAdmin)
+admin.site.register(models.TestGroup, TestGroupAdmin)
