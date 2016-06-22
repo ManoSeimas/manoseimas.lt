@@ -5,12 +5,11 @@ from __future__ import unicode_literals
 
 import datetime
 
-import pytz
 import factory
 
 from django.conf import settings
 from factory.django import DjangoModelFactory
-from factory.fuzzy import FuzzyDateTime
+from factory.fuzzy import FuzzyNaiveDateTime
 
 from manoseimas.scrapy.models import Voting
 from manoseimas.compatibility_test.models import Topic, TopicVoting, CompatTest, TestGroup, Argument, UserResult
@@ -29,7 +28,7 @@ class UserFactory(DjangoModelFactory):
 
 class VotingFactory(DjangoModelFactory):
     name = 'dėl pasiūlymo svarstyti šį projektą ypatingos skubos tvarka;'
-    timestamp = FuzzyDateTime(datetime.datetime(2008, 1, 1, tzinfo=pytz.utc))
+    timestamp = FuzzyNaiveDateTime(datetime.datetime(2008, 1, 1))
     source = factory.Sequence(lambda n: 'http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=%d' % n)
 
     class Meta:
