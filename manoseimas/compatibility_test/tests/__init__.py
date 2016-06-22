@@ -1,3 +1,8 @@
+# coding: utf-8
+
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
 import json
 
 from django.core.urlresolvers import reverse
@@ -5,6 +10,8 @@ from django.test import TestCase
 
 from manoseimas.models import ManoSeimasUser
 from manoseimas.compatibility_test.models import UserResult
+from manoseimas.compatibility_test.views import topics_all
+from manoseimas.compatibility_test import factories
 
 
 class TestAnswersJson(TestCase):
@@ -36,3 +43,20 @@ class TestAnswersJson(TestCase):
         ur = UserResult.objects.first()
         self.assertEqual(ur.user, user)
         self.assertEqual(ur.result, answers)
+
+
+class TestCompatibilityTest(TestCase):
+    def test_topics_all(self):
+        topic = factories.TopicFactory()
+        factories.TestGroupFactory(topics=[topic])
+
+        self.assertEqual(topics_all(), [
+            {
+                'id': topic.pk,
+                'group': 'Socialiniai reikalai',
+                'name': 'Aukštojo mokslo reforma',
+                'description': '',
+                'arguments': [],
+                'votings': [],
+            },
+        ])
