@@ -71,3 +71,16 @@ class TestViews(WebTest):
         factories.TestGroupFactory(topics=[topic])
         resp = self.app.get('/test/')
         self.assertEqual(resp.html.title.string, 'Politinio suderinamumo testas - manoSeimas.lt')
+
+
+class TestJsonViews(WebTest):
+    csrf_checks = False
+
+    def test_answers_json(self):
+        # Save user answers
+        resp = self.app.post_json('/test/json/answers/', {'foo': 'bar'})
+        self.assertEqual(resp.json, {'foo': 'bar'})
+
+        # Get saved user answers back
+        self.app.get('/test/json/answers/')
+        self.assertEqual(resp.json, {'foo': 'bar'})
