@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch'
+import Cookies from 'js-cookie'
 import { finishTest } from './test_state'
 
 // ------------------------------------
@@ -21,36 +21,17 @@ export function saveAnswer (topic_id, answer) {
 export function saveAllAnswers () {
   return (dispatch, getState) => {
     dispatch(finishTest())
-    return fetch('/test/json/answers', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(getState().results.answers)
-    }).then(response => response.json())
-      .then(json => console.log('JSON ', json))
-      .catch(err => console.error('Request error: ', err))
+    return new Promise(resolve => {
+      const request = new XMLHttpRequest()
+      request.open('POST', '/test/json/answers', true)
+      request.setRequestHeader('X-CSRFToken', Cookies.get('csrftoken'))
+      request.addEventListener('load', function () {
+        console.log('Response', JSON.parse(request.responseText))
+      })
+      request.send(JSON.stringify(getState().results.answers))
+    })
   }
 }
-// export function saveAllAnswers () {
-//   return (dispatch, getState) => {
-//     dispatch(finishTest())
-//     let answers = getState().results.answers
-//     return new Promise(resolve => {
-//       const request = new XMLHttpRequest()
-//       request.open('POST', '/test/json/answers', true)
-//       request.onlaod = function () {
-//         if (request.status >= 200 && request.status < 400) {
-//           console.log(JSON.parse(request.responseText))
-//         } else {
-//           console.error('Request error!')
-//         }
-//       }
-//       request.send(JSON.stringify(answers))
-//     })
-//   }
-// }
 
 export function loadResults (user_id, test_id) {
   return {

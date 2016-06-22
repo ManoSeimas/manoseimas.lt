@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import json
 
 from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
 from django.views.generic import View
 from django.http import JsonResponse
 
@@ -55,6 +56,7 @@ def get_current_test():
     return CompatTest.objects.order_by('id').first()
 
 
+@ensure_csrf_cookie
 def start_test(request):
     context = {
         'topics': topics_all(),
@@ -78,6 +80,7 @@ class ResultsView(View):
         return render(request, self.template_name, context)
 
 
+@csrf_protect
 @allow_lazy_user
 def answers_json(request):
     user = request.user
