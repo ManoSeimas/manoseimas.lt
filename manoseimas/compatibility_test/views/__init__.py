@@ -48,7 +48,7 @@ def topics_all():
 
 
 def get_current_test():
-    return CompatTest.objects.first()
+    return CompatTest.objects.order_by('id').first()
 
 
 class IndexView(View):
