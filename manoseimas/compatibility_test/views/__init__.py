@@ -73,9 +73,62 @@ def topics_json(request):
 class ResultsView(View):
     template_name = 'results.jade'
 
+    def results(self, test_id=None, user_id=None):
+        # Generate results by given test_id and user_id.
+        # More requirements:
+        # https://github.com/ManoSeimas/manoseimas.lt/issues/154
+
+        if not test_id:
+            test_id = get_current_test().id
+
+        return {
+            'user_answers': {},
+            'fractions': [
+                {
+                    'title': 'Darbo partijos frakcija',
+                    'short_title': 'DP',
+                    'logo': '/media/fraction_logos/tt.png',
+                    'answers': {'1': 1, '2': 0.3, '3': 0.5, '4': -0.8, '5': 0}
+                }, {
+                    'title': 'Liberalų sąjūdžio frakcija',
+                    'short_title': 'LLS',
+                    'logo': '/media/fraction_logos/lls.png',
+                    'answers': {'1': 0.5, '2': -0.3, '3': 0.5, '4': -0.8, '5': 1}
+                }, {
+                    'title': 'Lietuvos lenkų rinkimų akcijos frakcija',
+                    'short_title': 'LLRA',
+                    'logo': '/media/fraction_logos/llra.png',
+                    'answers': {'1': 0.75, '2': 1, '3': -0.8, '4': -1, '5': 0}
+                }
+            ],
+            'mps': [
+                {
+                    'name': 'Jonas Jonaitis',
+                    'faction': 'DP',
+                    'answers': {'1': 1, '2': -0.3, '3': 0.5, '4': -0.8, '5': 0}
+                }, {
+                    'name': 'Petras Petraitis',
+                    'faction': 'LLRA',
+                    'answers': {'1': 1, '2': 0.5, '3': 1, '4': -0.8, '5': 0}
+                }, {
+                    'name': 'Jonas Petraitis',
+                    'faction': 'LLRA',
+                    'answers': {'1': -0.8, '2': 1, '3': 0.5, '4': -1, '5': 1}
+                }, {
+                    'name': 'Petras Jonaitis',
+                    'faction': 'LLS',
+                    'answers': {'1': 0.5, '2': -1, '3': 0.5, '4': -0.8, '5': -1}
+                }
+            ]
+        }
+
+    def post(self, request):
+        return JsonResponse(self.results())
+
     def get(self, request):
         context = {
             'title': 'Seimo rinkimai 2016',
+            'results': self.results()
         }
         return render(request, self.template_name, context)
 
@@ -98,4 +151,4 @@ def answers_json(request):
         if results:
             ur = results[0]
             answers = ur.result
-    return JsonResponse(answers)
+    return JsonResponse({'answers': answers, 'user': user.id})
