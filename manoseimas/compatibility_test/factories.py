@@ -18,6 +18,7 @@ from manoseimas.compatibility_test.models import Topic, TopicVoting, CompatTest,
 class UserFactory(DjangoModelFactory):
     first_name = 'Vardenis'
     last_name = 'Pavardenis'
+    username = 'vardenis'
     email = factory.LazyAttribute(lambda x: '%s@example.com' % x.username)
     is_active = True
 

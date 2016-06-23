@@ -7,6 +7,7 @@ import datetime
 import itertools
 
 from django_webtest import WebTest
+import factory
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -34,16 +35,16 @@ class TestAnswersJson(WebTest):
         self.assertEqual(UserResult.objects.count(), 0)
 
     def test_answers_json_post(self):
-        answers = {'answers': [
-            ['1', 'yes'],
-            ['2', 'no'],
-        ]}
+        answers = {
+            '1': 'yes',
+            '2': 'no',
+        }
         resp = self.app.post_json(reverse('answers_json'), answers)
         user = ManoSeimasUser.objects.first()
         self.assertEqual(resp.json, {'answers': answers, 'user': user.pk})
         # lazy user is created
         self.assertEqual(ManoSeimasUser.objects.count(), 1)
-        # results are saved
+        # answers are saved
         self.assertEqual(UserResult.objects.count(), 1)
         ur = UserResult.objects.first()
         self.assertEqual(ur.user, user)
@@ -68,12 +69,32 @@ class TestCompatibilityTest(TestCase):
 
 
 class TestViews(WebTest):
+    csrf_checks = False
+
     def test_index_view(self):
         topic = factories.TopicFactory()
         factories.TopicVotingFactory.create_batch(3, topic=topic)
         factories.TestGroupFactory(topics=[topic])
         resp = self.app.get('/test/')
         self.assertEqual(resp.html.title.string, 'Politinio suderinamumo testas - manoSeimas.lt')
+
+    def test_results_view(self):
+        answers = {
+            '1': 'yes',
+            '2': 'no',
+        }
+        topics = factories.TopicFactory.create_batch(
+            2,
+            name=factory.Iterator(['Socialinis modelis', 'Kariuomenė']),
+        )
+        factories.TestGroupFactory(topics=topics)
+        resp = self.app.post('/test/results/')
+        self.assertEqual(resp.json['user_answers'], None)
+
+        ur = factories.UserResultFactory(result=answers)
+        self.app.set_user(ur.user)
+        resp = self.app.post('/test/results/')
+        self.assertEqual(resp.json['user_answers'], answers)
 
 
 class TestPositions(WebTest):
