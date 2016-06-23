@@ -26,7 +26,7 @@ const Arguments = (props) =>
     </div>
 
 Arguments.propTypes = {
-    arguments: React.PropTypes.object.isRequired
+    arguments: React.PropTypes.array.isRequired
 }
 
 export default Arguments
