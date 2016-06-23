@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from manoseimas.factories import AdminUserFactory
 from manoseimas.scrapy.tests.utils import fixture
 from manoseimas.scrapy.models import Voting
+from manoseimas.scrapy.models import PersonVote
 
 
 def _response(path, fragment, item_id):
@@ -44,3 +45,4 @@ class TestViews(WebTest):
             'Valstybės saugumo departamento įstatymo 10 straipsnio pakeitimo '
             'ĮSTATYMO PROJEKTAS (Nr. XIP-2992)'
         ))
+        self.assertEqual(PersonVote.objects.filter(voting_id='-10765').count(), 141)

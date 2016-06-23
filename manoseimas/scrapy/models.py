@@ -38,6 +38,7 @@ class Person(ScrapyPipe):
 
 
 class PersonVote(ScrapyPipe):
+    voting_id = models.CharField(max_length=16)
     p_asm_id = models.CharField(max_length=16)
     fraction = models.CharField(max_length=16)
     name = models.CharField(max_length=255)
@@ -51,6 +52,7 @@ class PersonVote(ScrapyPipe):
             'abstain': -1,
             'no-vote': -1,
         }
+        self.voting_id = item['voting_id']
         self.p_asm_id = item['person']
         self.fraction = item['fraction']
         self.name = item['name']

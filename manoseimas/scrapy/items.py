@@ -177,6 +177,7 @@ class VotingDocument(Item):
 
 class PersonVote(Item):
     _id = Field()
+    voting_id = Field()
     name = Field()
     person = Field()
     fraction = Field()
