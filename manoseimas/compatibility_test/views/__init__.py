@@ -17,10 +17,11 @@ from manoseimas.compatibility_test.models import Topic
 from manoseimas.compatibility_test.models import UserResult
 
 
-def topics_all():
+def topics_all(test_id=None):
     qs = Topic.objects.all()
-    test = get_current_test()
-    qs = qs.filter(groups__test=test)
+    if not test_id:
+        test_id = get_current_test().id
+    qs = qs.filter(groups__test_id=test_id)
     qs = qs.prefetch_related('groups', 'arguments')
 
     topics = []
@@ -57,16 +58,19 @@ def get_current_test():
 
 
 @ensure_csrf_cookie
-def start_test(request):
+def start_test(request, test_id=None):
+    if not test_id:
+        test_id = get_current_test().id
+    test = CompatTest.objects.get(id=test_id)
     context = {
-        'topics': topics_all(),
-        'title': 'Seimo rinkimai 2016',
+        'topics': topics_all(test_id),
+        'title': test.name,
     }
     return render(request, 'start_test.jade', context)
 
 
-def topics_json(request):
-    topics = topics_all()
+def topics_json(request, test_id=None):
+    topics = topics_all(test_id)
     return JsonResponse({'items': topics})
 
 
