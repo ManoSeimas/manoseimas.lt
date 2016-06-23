@@ -38,6 +38,7 @@ else:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'manoseimas',
         'OPTIONS': {
             'init_command': init_command,
             'read_default_file': os.path.expanduser('~/.my.cnf'),
