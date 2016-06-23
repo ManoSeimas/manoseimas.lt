@@ -76,6 +76,7 @@ class TestSittingsSpider(TestCase):
         self.assertEqual([x['number'] for x in item['documents']], [u'XIP-2992', u'XIP-2993'])
         self.assertEqual(item['votes'][0], {
             '_id': u'-10765:47852',
+            'voting_id': u'-10765v',
             'fraction': u'TTF',
             'name': u'Ačas Remigijus',
             'person': u'47852p',
@@ -93,6 +94,7 @@ class TestSittingsSpider(TestCase):
         self.assertEqual([x['number'] for x in item['documents']], [u'XIP-2779(2)', u'XIP-2780(2)', u'XIP-2781(2)'])
         self.assertEqual(item['votes'][0], {
             '_id': u'-11071:48690',
+            'voting_id': u'-11071v',
             'fraction': u'TSLKDF',
             'name': u'Adomėnas Mantas',
             'person': u'48690p',

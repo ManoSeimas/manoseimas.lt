@@ -27,8 +27,22 @@ class UserFactory(DjangoModelFactory):
 
 
 class VotingFactory(DjangoModelFactory):
+    key = factory.Sequence(lambda n: '%dv' % n)
+    value = {
+        'documents': [
+            {
+                'id': '393905d',
+                'type': 'pateikimas',
+                'number': 'XIP-2992',
+                'name': (
+                    'Valstybės saugumo departamento įstatymo 10 straipsnio '
+                    'pakeitimo ĮSTATYMO PROJEKTAS (Nr. XIP-2992)'
+                )
+            },
+        ],
+    }
     name = 'priėmimas po pateikimo'
-    timestamp = FuzzyNaiveDateTime(datetime.datetime(2008, 1, 1))
+    timestamp = FuzzyNaiveDateTime(datetime.datetime(2012, 11, 16))
     source = factory.Sequence(lambda n: 'http://www3.lrs.lt/pls/inter/w5_sale.bals?p_bals_id=%d' % n)
 
     class Meta:
@@ -38,6 +52,7 @@ class VotingFactory(DjangoModelFactory):
 
 class TopicFactory(DjangoModelFactory):
     name = 'Aukštojo mokslo reforma'
+    description = 'Aukštojo mokslo reforma'
     positions = {}
 
     class Meta:

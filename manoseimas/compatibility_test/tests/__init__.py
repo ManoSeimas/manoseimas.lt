@@ -3,12 +3,19 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import datetime
+import itertools
+
 from django_webtest import WebTest
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from manoseimas.scrapy.models import PersonVote
+
+from manoseimas.factories import AdminUserFactory
 from manoseimas.models import ManoSeimasUser
+from manoseimas.compatibility_test.models import Topic
 from manoseimas.compatibility_test.models import UserResult
 from manoseimas.compatibility_test.views import topics_all
 from manoseimas.compatibility_test import factories
@@ -53,7 +60,7 @@ class TestCompatibilityTest(TestCase):
                 'id': topic.pk,
                 'group': 'Socialiniai reikalai',
                 'name': 'Aukštojo mokslo reforma',
-                'description': '',
+                'description': 'Aukštojo mokslo reforma',
                 'arguments': [],
                 'votings': [],
             },
@@ -67,3 +74,63 @@ class TestViews(WebTest):
         factories.TestGroupFactory(topics=[topic])
         resp = self.app.get('/test/')
         self.assertEqual(resp.html.title.string, 'Politinio suderinamumo testas - manoSeimas.lt')
+
+
+class TestPositions(WebTest):
+    maxDiff = None
+
+    def test_position(self):
+        AdminUserFactory()
+
+        votings = []
+        seq = itertools.count(1)
+        topic = factories.TopicFactory()
+        mps = [
+            ('1', 'FOO', 'First Last', [1, 2]),
+            ('2', 'FOO', 'Second Last', [-2, 2]),
+            ('3', 'BAR', 'Third Last', [-2, 0, -1]),
+        ]
+
+        # Create some votings and assigne them to the topic
+        for i in range(3):
+            voting = factories.VotingFactory()
+            factories.TopicVotingFactory(topic=topic, voting=voting)
+            votings.append(voting)
+
+        # Create person votes for topic and votings
+        for p_asm_id, fraction, name, votes in mps:
+            for i, vote in enumerate(votes):
+                PersonVote.objects.create(
+                    key=str(next(seq)),
+                    voting_id=votings[i].key,
+                    p_asm_id=p_asm_id,
+                    fraction=fraction,
+                    name=name,
+                    vote=vote,
+                    timestamp=datetime.datetime(2012, 11, 16),
+                )
+
+        # Save topic from Django admin
+        url = reverse('admin:compatibility_test_topic_change', args=[topic.pk])
+        resp = self.app.get(url, user='admin')
+        resp.forms['topic_form'].submit('_save')
+
+        # Check if topic position was updated.
+        topic = Topic.objects.get(pk=topic.pk)
+        self.assertEqual(topic.positions, {
+            '1': {
+                'fraction': 'FOO',
+                'name': 'First Last',
+                'vote': 1.5,
+            },
+            '2': {
+                'fraction': 'FOO',
+                'name': 'Second Last',
+                'vote': 0,
+            },
+            '3': {
+                'fraction': 'BAR',
+                'name': 'Third Last',
+                'vote': -1,
+            },
+        })

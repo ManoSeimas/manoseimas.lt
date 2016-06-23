@@ -448,7 +448,7 @@ class SittingsSpider(ManoSeimasSpider):
             p_id = person.select('td[1]/a/@href').re(r'p_asm_id=(-?\d+)')[0]
 
             p_vote.add_value('_id', '%s:%s' % (_id, p_id))
-            p_vote.add_value('voting_id', _id)
+            p_vote.add_value('voting_id', '%sv' % _id)
             p_vote.add_value('person', '%sp' % p_id)
             p_vote.add_xpath('name', 'td[1]/a/text()')
             p_vote.add_xpath('fraction', 'td[2]/text()')

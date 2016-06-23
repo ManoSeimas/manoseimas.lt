@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from manoseimas.compatibility_test import models
+from manoseimas.compatibility_test import services
 
 
 class VotingInline(admin.TabularInline):
@@ -21,6 +22,12 @@ class TopicAdmin(admin.ModelAdmin):
         ArgumentInline,
         VotingInline
     ]
+
+    def save_related(self, request, form, formsets, change):
+        super(TopicAdmin, self).save_related(request, form, formsets, change)
+        topic = form.instance
+        topic.positions = services.get_topic_positions(topic)
+        topic.save()
 
 
 class TestGroupInline(admin.TabularInline):
