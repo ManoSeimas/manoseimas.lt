@@ -103,18 +103,22 @@ class ResultsView(View):
             ],
             'mps': [
                 {
+                    'id': 1,
                     'name': 'Jonas Jonaitis',
                     'faction': 'DP',
                     'answers': {'1': 1, '2': -0.3, '3': 0.5, '4': -0.8, '5': 0}
                 }, {
+                    'id': 2,
                     'name': 'Petras Petraitis',
                     'faction': 'LLRA',
                     'answers': {'1': 1, '2': 0.5, '3': 1, '4': -0.8, '5': 0}
                 }, {
+                    'id': 3,
                     'name': 'Jonas Petraitis',
                     'faction': 'LLRA',
                     'answers': {'1': -0.8, '2': 1, '3': 0.5, '4': -1, '5': 1}
                 }, {
+                    'id': 4,
                     'name': 'Petras Jonaitis',
                     'faction': 'LLS',
                     'answers': {'1': 0.5, '2': -1, '3': 0.5, '4': -0.8, '5': -1}

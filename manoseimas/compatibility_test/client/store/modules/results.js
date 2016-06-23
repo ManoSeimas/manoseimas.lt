@@ -17,6 +17,7 @@ function api_call(method, url, req_body) {
 // ------------------------------------
 export const SAVE_ANSWER = 'SAVE_ANSWER'
 export const LOAD_RESULTS = 'LOAD_RESULTS'
+export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB'
 
 // ------------------------------------
 // Actions
@@ -26,6 +27,13 @@ export function loadResults (results) {
   return {
     type: LOAD_RESULTS,
     results: results
+  }
+}
+
+export function setActiveTab (tab_id) {
+  return {
+    type: SET_ACTIVE_TAB,
+    tab_id: tab_id
   }
 }
 
@@ -74,6 +82,9 @@ const ACTION_HANDLERS = {
     answers[action.topic_id] = action.answer
     return Object.assign({}, state, { answers: answers })
   },
+  SET_ACTIVE_TAB: (state, action) => {
+    return Object.assign({}, state, { active_tab: action.tab_id })
+  },
   LOAD_RESULTS: (state, action) => {
     return Object.assign({}, state, {
       fractions: action.results.fractions,
@@ -90,7 +101,8 @@ const initialState = {
   // answers can be '1' - positive, '-1' - negative, '0' or undefined - skip
   answers: {},
   fractions: [],
-  mps: []
+  mps: [],
+  active_tab: 'fractions'
 }
 export default (state = initialState, action) => {
   const handler = ACTION_HANDLERS[action.type]

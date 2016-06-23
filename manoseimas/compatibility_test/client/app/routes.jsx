@@ -2,7 +2,7 @@ import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 import Layout from './layout'
 import { StartTest, Topic } from './TestView'
-import { Results } from './ResultsView'
+import Results from './ResultsView'
 
 export default (store) => {
     return (

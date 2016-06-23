@@ -1,0 +1,20 @@
+@import "../_variables";
+
+.tabs {
+  width: 100%;
+  border-radius: $radius;
+}
+
+.tab {
+  display: inline-block;
+  width: 50%;
+  background-color: $grey;
+  cursor: pointer;
+}
+
+.active-tab {
+  composes: tab;
+  background-color: $black;
+  color: #fff;
+  cursor: initial;
+}
