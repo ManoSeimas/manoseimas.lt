@@ -3,8 +3,6 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-import json
-
 from django_webtest import WebTest
 
 from django.core.urlresolvers import reverse
@@ -16,11 +14,14 @@ from manoseimas.compatibility_test.views import topics_all
 from manoseimas.compatibility_test import factories
 
 
-class TestAnswersJson(TestCase):
+class TestAnswersJson(WebTest):
+    csrf_checks = False
+
     def test_answers_json_get(self):
         self.assertEqual(ManoSeimasUser.objects.count(), 0)
-        response = self.client.get(reverse('answers_json'))
-        self.assertEqual(response.content, "{}")
+        resp = self.app.get(reverse('answers_json'))
+        user = ManoSeimasUser.objects.first()
+        self.assertEqual(resp.json, {'answers': {}, 'user': user.pk})
         # lazy user is created
         self.assertEqual(ManoSeimasUser.objects.count(), 1)
         self.assertEqual(UserResult.objects.count(), 0)
@@ -30,16 +31,11 @@ class TestAnswersJson(TestCase):
             ['1', 'yes'],
             ['2', 'no'],
         ]}
-        answers_json = json.dumps(answers)
-        response = self.client.post(
-            reverse('answers_json'),
-            data=answers_json,
-            content_type='application/json'
-        )
-        self.assertEqual(response.content, answers_json)
+        resp = self.app.post_json(reverse('answers_json'), answers)
+        user = ManoSeimasUser.objects.first()
+        self.assertEqual(resp.json, {'answers': answers, 'user': user.pk})
         # lazy user is created
         self.assertEqual(ManoSeimasUser.objects.count(), 1)
-        user = ManoSeimasUser.objects.first()
         # results are saved
         self.assertEqual(UserResult.objects.count(), 1)
         ur = UserResult.objects.first()
@@ -71,16 +67,3 @@ class TestViews(WebTest):
         factories.TestGroupFactory(topics=[topic])
         resp = self.app.get('/test/')
         self.assertEqual(resp.html.title.string, 'Politinio suderinamumo testas - manoSeimas.lt')
-
-
-class TestJsonViews(WebTest):
-    csrf_checks = False
-
-    def test_answers_json(self):
-        # Save user answers
-        resp = self.app.post_json('/test/json/answers/', {'foo': 'bar'})
-        self.assertEqual(resp.json, {'foo': 'bar'})
-
-        # Get saved user answers back
-        self.app.get('/test/json/answers/')
-        self.assertEqual(resp.json, {'foo': 'bar'})
