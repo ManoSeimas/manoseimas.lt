@@ -2,7 +2,8 @@
 
 .question-steps {
   display: block;
-  width: 580px;
+  lost-column: 3/4 0;
+  float: inherit !important;
 }
 
 .step {

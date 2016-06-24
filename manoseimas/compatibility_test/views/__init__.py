@@ -91,40 +91,47 @@ class ResultsView(View):
                 {
                     'title': 'Darbo partijos frakcija',
                     'short_title': 'DP',
-                    'logo': '/media/fraction_logos/tt.png',
-                    'answers': {'1': 1, '2': 0.3, '3': 0.5, '4': -0.8, '5': 0}
+                    'logo': '/media/fraction_logos/dp.jpg',
+                    'answers': {'1': 1, '2': 0.3, '3': 0.5, '4': -0.8, '5': 0},
+                    'members_amount': 21,
                 }, {
                     'title': 'Liberalų sąjūdžio frakcija',
                     'short_title': 'LLS',
-                    'logo': '/media/fraction_logos/lls.png',
-                    'answers': {'1': 0.5, '2': -0.3, '3': 0.5, '4': -0.8, '5': 1}
+                    'logo': '/media/fraction_logos/lls.jpg',
+                    'answers': {'1': 0.5, '2': -0.3, '3': 0.5, '4': -0.8, '5': 1},
+                    'members_amount': 10,
                 }, {
                     'title': 'Lietuvos lenkų rinkimų akcijos frakcija',
                     'short_title': 'LLRA',
-                    'logo': '/media/fraction_logos/llra.png',
-                    'answers': {'1': 0.75, '2': 1, '3': -0.8, '4': -1, '5': 0}
+                    'logo': '/media/fraction_logos/llra.jpg',
+                    'answers': {'1': 0.75, '2': 1, '3': -0.8, '4': -1, '5': 0},
+                    'members_amount': 4,
                 }
             ],
             'mps': [
                 {
                     'id': 1,
                     'name': 'Jonas Jonaitis',
-                    'faction': 'DP',
+                    'fraction': 'DP',
+                    'logo': '/media/profile_images/00a6a60429383aaa36a868c2595a06c88e6422b0.jpg',
                     'answers': {'1': 1, '2': -0.3, '3': 0.5, '4': -0.8, '5': 0}
                 }, {
                     'id': 2,
                     'name': 'Petras Petraitis',
-                    'faction': 'LLRA',
+                    'fraction': 'LLRA',
+                    'logo': '/media/profile_images/01667d36a4df869561133dfe44a39ca881ce2b5e_PpSk71U.jpg',
                     'answers': {'1': 1, '2': 0.5, '3': 1, '4': -0.8, '5': 0}
                 }, {
                     'id': 3,
                     'name': 'Jonas Petraitis',
-                    'faction': 'LLRA',
+                    'fraction': 'LLRA',
+                    'logo': '/media/profile_images/01ffb49169abd4606343aa2e9e621e527fa1013e_yDdIUBb.jpg',
                     'answers': {'1': -0.8, '2': 1, '3': 0.5, '4': -1, '5': 1}
                 }, {
                     'id': 4,
                     'name': 'Petras Jonaitis',
-                    'faction': 'LLS',
+                    'fraction': 'LLS',
+                    'logo': '/media/profile_images/0c5b864efce2278579c4a1a0fa1985851454c244_TViMIZR.jpg',
                     'answers': {'1': 0.5, '2': -1, '3': 0.5, '4': -0.8, '5': -1}
                 }
             ]

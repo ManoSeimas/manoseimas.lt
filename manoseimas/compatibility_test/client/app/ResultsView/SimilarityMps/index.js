@@ -1,6 +1,8 @@
 import React from 'react'
+import { SimilarityBar } from '../../../components'
+import styles from '../../../styles/views/results.css'
 
-function similarity (user_answers, fraction_answers) {
+function calculate_similarity (user_answers, fraction_answers) {
     let points = 0,
         answers_count = 0
 
@@ -16,12 +18,27 @@ function similarity (user_answers, fraction_answers) {
 
 const SimilarityMps = ({user_answers, mps}) =>
     <div>
-        <p>Kuo didesnis procentas, tuo labiau Seimo narys atitinka Jūsų pažiūras.</p>
-        <ul>
-            {mps.map(mp => {
-                return <li>{mp.name} - {similarity(user_answers, mp.answers)}%</li>
-            })}
-        </ul>
+        <div className={styles.note}>
+            Kuo didesnis procentas, tuo labiau Seimo narys atitinka Jūsų pažiūras.
+        </div>
+        {mps.map(mp => {
+            let similarity = calculate_similarity(user_answers, mp.answers)
+            return (
+                <div className={styles.item}>
+                    <div className={styles.img}>
+                        <img src={mp.logo} alt={mp.title + ' logo'} />
+                    </div>
+                    <main>
+                        <div className={styles.title}>{mp.name}, {mp.fraction}, {similarity}%</div>
+                        <SimilarityBar similarity={similarity} />
+                        <a href={'#' + mp.short_title}>
+                            {mp.members_amount} nariai {' '}
+                            <div className={styles.arrow}></div>
+                        </a>
+                    </main>
+                </div>
+            )
+        })}
     </div>
 
 SimilarityMps.propTypes = {

@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../styles/components/tabs.css'
 
 const Tabs = ({tabs, active, onClickHandler}) =>
-    <div clasName={styles['tabs']}>
+    <div className={styles.tabs}>
         {tabs.map(tab =>  <Tab key={tab.id} id={tab.id}
                                active={active === tab.id}
                                title={tab.title}

@@ -4,12 +4,14 @@ import Button from './Button'
 import ButtonsBlock from './ButtonsBlock'
 import Tabs from './Tabs'
 import TopicGroup from './TopicGroup'
+import SimilarityBar from './SimilarityBar'
 
 export {
-    StatusBar,
     Block,
     Button,
     ButtonsBlock,
+    SimilarityBar,
+    StatusBar,
     Tabs,
     TopicGroup
 }

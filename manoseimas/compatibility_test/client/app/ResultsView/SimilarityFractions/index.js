@@ -1,6 +1,8 @@
 import React from 'react'
+import { SimilarityBar } from '../../../components'
+import styles from '../../../styles/views/results.css'
 
-function similarity (user_answers, fraction_answers) {
+function calculate_similarity (user_answers, fraction_answers) {
     let points = 0,
         answers_count = 0
 
@@ -16,13 +18,29 @@ function similarity (user_answers, fraction_answers) {
 
 const SimilarityFractions = ({user_answers, fractions}) =>
     <div>
-        <p>Kuo didesnis procentas, tuo labiau frakcija atitinka Jūsų pažiūras.</p>
-        <ul>
-            {fractions.map(fraction => {
-                return <li key={fraction.short_title}>{fraction.title} - {similarity(user_answers, fraction.answers)}%</li>
-            })}
-        </ul>
+        <div className={styles.note}>
+            Kuo didesnis procentas, tuo labiau frakcija atitinka Jūsų pažiūras.
+        </div>
+        {fractions.map(fraction => {
+            let similarity = calculate_similarity(user_answers, fraction.answers)
+            return (
+                <div className={styles.item}>
+                    <div className={styles.img}>
+                        <img src={fraction.logo} alt={fraction.title + ' logo'} />
+                    </div>
+                    <main>
+                        <div className={styles.title}>{fraction.title}, {similarity}%</div>
+                        <SimilarityBar similarity={similarity} />
+                        <a href={'#' + fraction.short_title}>
+                            {fraction.members_amount} nariai {' '}
+                            <div className={styles.arrow}></div>
+                        </a>
+                    </main>
+                </div>
+            )
+        })}
     </div>
+
 
 SimilarityFractions.propTypes = {
   user_answers: React.PropTypes.object,

@@ -9,6 +9,7 @@
   margin-top: 0;
   font-weight: normal;
   font-size: $huge;
+  font-family: 'Roboto', sans-serif;
 }
 
 :global header {
@@ -91,6 +92,7 @@
 .content {
   lost-column: 3/4 0;
   margin-right: 0 !important;
+  padding-right: 10px;
 
   h2 {
     margin-bottom: 50px;
