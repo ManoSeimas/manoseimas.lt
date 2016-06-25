@@ -9,7 +9,7 @@ const SimilarityBar = ({similarity}) => {
         color = '#ca0837'
 
     return <div className={styles.bar}>
-        <div style={{'background-color': color, width: similarity + '%'}}></div>
+        <div style={{backgroundColor: color, width: similarity + '%'}}></div>
     </div>
 }
 

@@ -18,18 +18,6 @@ class ResultsView extends React.Component {
         mps: PropTypes.array
     }
 
-    getAnswer (answer) {
-        answer = (answer) ? answer.toString() : '0'
-        switch (answer) {
-            case '1':
-                return 'taip'
-            case '-1':
-                return 'ne'
-            default:
-                return 'praleista'
-        }
-    }
-
     render () {
         let tabs = [
             { id: 'fractions', title: 'Pagal frakcijas' },
@@ -47,18 +35,14 @@ class ResultsView extends React.Component {
                     <h2 className='title'>Rezultatai</h2>
                     <Tabs tabs={tabs} active={this.props.active_tab} onClickHandler={this.props.setActiveTab} />
                     {(this.props.active_tab === 'fractions')
-                        ? <SimilarityFractions fractions={this.props.fractions} user_answers={this.props.answers} />
-                        : <SimilarityMps mps={this.props.mps} user_answers={this.props.answers} />
+                        ? <SimilarityFractions fractions={this.props.fractions}
+                                               user_answers={this.props.answers}
+                                               topics={this.props.topics} />
+                        : <SimilarityMps mps={this.props.mps}
+                                         user_answers={this.props.answers} />
                     }
-
-                    <h2>My votes:</h2>
-                    <ul>
-                        {this.props.topics.map(topic => {
-                            return <li key={topic.id}>{topic.name} - {this.getAnswer(this.props.answers[topic.id])}</li>
-                        })}
-                    </ul>
-                    <Link to='/'>Restart test</Link>
                 </div>
+                <Link to='/'>Restart test</Link>
             </div>
         )
     }

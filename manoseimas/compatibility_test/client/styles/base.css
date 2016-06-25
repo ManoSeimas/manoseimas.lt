@@ -12,6 +12,12 @@
   font-family: 'Roboto', sans-serif;
 }
 
+:global h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: $big;
+  font-weight: normal;
+}
+
 :global header {
   margin-bottom: 50px;
 }

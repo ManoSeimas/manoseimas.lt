@@ -16,7 +16,19 @@ function calculate_similarity (user_answers, fraction_answers) {
     return Math.round((points / answers_count)*100)
 }
 
-const SimilarityFractions = ({user_answers, fractions}) =>
+function getAnswer (answer) {
+    answer = (answer) ? answer.toString() : '0'
+    switch (answer) {
+        case '1':
+            return 'taip'
+        case '-1':
+            return 'ne'
+        default:
+            return 'praleista'
+    }
+}
+
+const SimilarityFractions = ({user_answers, fractions, topics}) =>
     <div>
         <div className={styles.note}>
             Kuo didesnis procentas, tuo labiau frakcija atitinka Jūsų pažiūras.
@@ -24,7 +36,7 @@ const SimilarityFractions = ({user_answers, fractions}) =>
         {fractions.map(fraction => {
             let similarity = calculate_similarity(user_answers, fraction.answers)
             return (
-                <div className={styles.item}>
+                <div className={styles.item} key={fraction.short_title}>
                     <div className={styles.img}>
                         <img src={fraction.logo} alt={fraction.title + ' logo'} />
                     </div>
@@ -39,12 +51,49 @@ const SimilarityFractions = ({user_answers, fractions}) =>
                 </div>
             )
         })}
+        <div className={styles.topics}>
+            <h3>Interaktyvūs frakcijų rezultatai pagal klausimus</h3>
+            <div className={styles.note}>
+                Šioje rezultatų dalyje galite keisti savo atsakymus ir stebėti kaip keičiasi rezultatai.
+            </div>
+            <ol>
+                {topics.map(topic => {
+                    return <li key={topic.id}>
+                        {topic.name} - {getAnswer(user_answers[topic.id])} <br />
+                        <label><input type='checkbox' name={'topic'+topic.id} value={topic.id} />
+                        šis klausimas man svarbus</label>
+                        <div className={styles['similarity-bar']}>
+                            <div className={styles.no}>PRIEŠ</div>
+                            <div style={{width: '500px'}}>
+                                <div className={styles.line}></div>
+                                <div className={styles.actions}>
+                                    <div className={styles.action}>
+                                        <img src={(user_answers[topic.id] === -1) ? '/static/img/person-active.png' : '/static/img/person.png'}
+                                             onClick={() => console.log('NO')} />
+                                    </div>
+                                    <div className={styles.action}>
+                                        <img src={(user_answers[topic.id] === undefined) ? '/static/img/person-active.png' : '/static/img/person.png'}
+                                             onClick={() => console.log('SKIP')} />
+                                    </div>
+                                    <div className={styles.action}>
+                                        <img src={(user_answers[topic.id]) ? '/static/img/person-active.png' : '/static/img/person.png'}
+                                             onClick={() => console.log('YES')} />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={styles.yes}>UŽ</div>
+                        </div>
+                    </li>
+                })}
+            </ol>
+        </div>
     </div>
 
 
 SimilarityFractions.propTypes = {
   user_answers: React.PropTypes.object,
-  fractions: React.PropTypes.array
+  fractions: React.PropTypes.array,
+  topics: React.PropTypes.array
 }
 
 export default SimilarityFractions

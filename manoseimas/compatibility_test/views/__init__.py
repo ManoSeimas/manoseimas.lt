@@ -89,18 +89,21 @@ class ResultsView(View):
             'user_answers': {},
             'fractions': [
                 {
+                    'id': 1,
                     'title': 'Darbo partijos frakcija',
                     'short_title': 'DP',
                     'logo': '/media/fraction_logos/dp.jpg',
                     'answers': {'1': 1, '2': 0.3, '3': 0.5, '4': -0.8, '5': 0},
                     'members_amount': 21,
                 }, {
+                    'id': 2,
                     'title': 'Liberalų sąjūdžio frakcija',
                     'short_title': 'LLS',
                     'logo': '/media/fraction_logos/lls.jpg',
                     'answers': {'1': 0.5, '2': -0.3, '3': 0.5, '4': -0.8, '5': 1},
                     'members_amount': 10,
                 }, {
+                    'id': 3,
                     'title': 'Lietuvos lenkų rinkimų akcijos frakcija',
                     'short_title': 'LLRA',
                     'logo': '/media/fraction_logos/llra.jpg',
