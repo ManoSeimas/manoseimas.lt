@@ -94,7 +94,7 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
   SAVE_ANSWER: (state, action) => {
-    let answers = state.answers
+    let answers = Object.assign({}, state.answers)
     answers[action.topic_id] = action.answer
     return Object.assign({}, state, { answers: answers })
   },
