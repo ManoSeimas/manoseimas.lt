@@ -60,8 +60,9 @@ const SimilarityFractions = ({user_answers, fractions, topics}) =>
                 {topics.map(topic => {
                     return <li key={topic.id}>
                         {topic.name} - {getAnswer(user_answers[topic.id])} <br />
-                        <label><input type='checkbox' name={'topic'+topic.id} value={topic.id} />
-                        šis klausimas man svarbus</label>
+                        <input type='checkbox' name={'topic'+topic.id} id={'topic'+topic.id} value={topic.id} />
+                        <label htmlFor={'topic'+topic.id} className={styles.checkbox}>šis klausimas man svarbus</label>
+
                         <div className={styles['similarity-bar']}>
                             <div className={styles.no}>PRIEŠ</div>
                             <div style={{width: '500px'}}>
