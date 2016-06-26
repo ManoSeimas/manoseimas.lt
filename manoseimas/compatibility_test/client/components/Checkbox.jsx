@@ -2,13 +2,14 @@ import React from 'react'
 import styles from '../styles/components/checkbox.css'
 
 const Checkbox = ({name, value, actionHandler, children}) =>
-    <div onClick={actionHandler}>
+    <div>
         <input type='checkbox'
                name={name}
                id={name}
                value={value} />
         <label htmlFor={name}
-               className={styles.checkbox}>{children}</label>
+               className={styles.checkbox}
+               onClick={actionHandler}>{children}</label>
     </div>
 
 Checkbox.propTypes = {

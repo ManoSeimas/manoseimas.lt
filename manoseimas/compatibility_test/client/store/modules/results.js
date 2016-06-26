@@ -19,6 +19,7 @@ export const SAVE_ANSWER = 'SAVE_ANSWER'
 export const LOAD_RESULTS = 'LOAD_RESULTS'
 export const GET_RESULTS = 'GET_RESULTS'
 export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB'
+export const TOGGLE_IMPORTANCE = 'TOGGLE_IMPORTANCE'
 
 // ------------------------------------
 // Actions
@@ -59,6 +60,13 @@ export function saveAnswer (topic_id, answer) {
   }
 }
 
+export function toggleImportance (topic_id) {
+  return {
+    type: TOGGLE_IMPORTANCE,
+    topic_id: topic_id
+  }
+}
+
 export function saveAllAnswers () {
   return (dispatch, getState) => {
     dispatch(finishTest())  // Go to results page.
@@ -82,6 +90,7 @@ export function saveAllAnswers () {
 }
 
 export const actions = {
+  toggleImportance,
   saveAnswer,
   saveAllAnswers,
   setActiveTab,
@@ -95,7 +104,13 @@ export const actions = {
 const ACTION_HANDLERS = {
   SAVE_ANSWER: (state, action) => {
     let answers = Object.assign({}, state.answers)
-    answers[action.topic_id] = action.answer
+    answers[action.topic_id] = Object.assign({}, answers[action.topic_id], {answer: action.answer})
+    return Object.assign({}, state, { answers: answers })
+  },
+  TOGGLE_IMPORTANCE: (state, action) => {
+    let answers = Object.assign({}, state.answers)
+    let answer = answers[action.topic_id] || {}
+    answers[action.topic_id] = Object.assign({}, answer, {important: !answer.important})
     return Object.assign({}, state, { answers: answers })
   },
   SET_ACTIVE_TAB: (state, action) => {
