@@ -1,5 +1,5 @@
 import React from 'react'
-import { SimilarityBar } from '../../../components'
+import { SimilarityBar, Checkbox } from '../../../components'
 import styles from '../../../styles/views/results.css'
 
 function calculate_similarity (user_answers, fraction_answers) {
@@ -60,8 +60,9 @@ const SimilarityFractions = ({user_answers, fractions, topics}) =>
                 {topics.map(topic => {
                     return <li key={topic.id}>
                         {topic.name} - {getAnswer(user_answers[topic.id])} <br />
-                        <input type='checkbox' name={'topic'+topic.id} id={'topic'+topic.id} value={topic.id} />
-                        <label htmlFor={'topic'+topic.id} className={styles.checkbox}>šis klausimas man svarbus</label>
+                        <Checkbox name={'topic'+topic.id}
+                                  value={topic.id.toString()}
+                                  actionHandler={() => console.log('Checkbox')}>šis klausimas man svarbus</Checkbox>
 
                         <div className={styles['similarity-bar']}>
                             <div className={styles.no}>PRIEŠ</div>
