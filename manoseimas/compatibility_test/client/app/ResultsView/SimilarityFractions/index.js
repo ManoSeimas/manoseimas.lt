@@ -91,7 +91,7 @@ class SimilarityFractions extends React.Component {
                                     <div className={styles.actions}>
                                         <div className={styles.action}>
                                             <img src={(user_answers[topic.id] === -1)
-                                                        ? '/static/img/person-active.png'
+                                                        ? '/static/img/person-negative.png'
                                                         : '/static/img/person.png'}
                                                  onClick={() => this.props.saveAnswer(topic.id, -1)} />
                                         </div>
@@ -103,7 +103,7 @@ class SimilarityFractions extends React.Component {
                                         </div>
                                         <div className={styles.action}>
                                             <img src={(user_answers[topic.id] === 1)
-                                                        ? '/static/img/person-active.png'
+                                                        ? '/static/img/person-positive.png'
                                                         : '/static/img/person.png'}
                                                  onClick={() => this.props.saveAnswer(topic.id, 1)} />
                                         </div>
