@@ -2,7 +2,9 @@ import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 import Layout from './layout'
 import { StartTest, Topic } from './TestView'
-import Results from './ResultsView'
+import ResultsLayout from './ResultsView'
+import SimilarityFractions from './ResultsView/SimilarityFractions'
+import SimilarityMps from './ResultsView/SimilarityMps'
 
 export default (store) => {
     return (
@@ -11,7 +13,10 @@ export default (store) => {
 
             <Route path="/topic" component={Topic} />
             <Route path="/topic/:topicId" component={Topic} />
-            <Route path="/results" component={Results} />
+            <Route path="/results" component={ResultsLayout}>
+                <IndexRoute component={SimilarityFractions} />
+                <Route path="/results/mps" component={SimilarityMps} />
+            </Route>
         </Route>
     )
 }

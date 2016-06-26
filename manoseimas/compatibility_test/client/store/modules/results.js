@@ -17,6 +17,7 @@ function api_call(method, url, req_body) {
 // ------------------------------------
 export const SAVE_ANSWER = 'SAVE_ANSWER'
 export const LOAD_RESULTS = 'LOAD_RESULTS'
+export const GET_RESULTS = 'GET_RESULTS'
 export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB'
 
 // ------------------------------------
@@ -27,6 +28,19 @@ export function loadResults (results) {
   return {
     type: LOAD_RESULTS,
     results: results
+  }
+}
+
+export function getResults () {
+  return (dispatch, getState) => {
+    return new Promise(resolve => {
+      api_call('POST', '/test/results/', 'test_id=1')
+        .then(response => {
+          const results = JSON.parse(response)
+          dispatch(loadResults(results))
+        })
+        .catch(error => console.error(error))
+    })
   }
 }
 
@@ -70,7 +84,9 @@ export function saveAllAnswers () {
 export const actions = {
   saveAnswer,
   saveAllAnswers,
-  loadResults
+  setActiveTab,
+  loadResults,
+  getResults
 }
 
 // ------------------------------------
