@@ -92,12 +92,12 @@ class SimilarityFractions extends React.Component {
                 )
             })}
             {(show_header)
-                ? <StickyHeader width="712px">
+                ? <StickyHeader width="650px">
                     <div className={styles['similarity-header']}>
                         {fractions.map(fraction => {
                             let similarity = this.calculate_similarity(fraction.answers)
                             return (
-                                <div className={styles.img} style={{left: similarity * 7}} key={fraction.short_title}>
+                                <div className={styles.img} style={{left: similarity * 6}} key={fraction.short_title}>
                                     <img src={fraction.logo} alt={fraction.title + ' logo'} />
                                 </div>
                             )
