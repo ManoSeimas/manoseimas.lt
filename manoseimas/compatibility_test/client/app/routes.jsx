@@ -2,9 +2,7 @@ import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 import Layout from './layout'
 import { StartTest, Topic } from './TestView'
-import ResultsLayout from './ResultsView'
-import SimilarityFractions from './ResultsView/SimilarityFractions'
-import SimilarityMps from './ResultsView/SimilarityMps'
+import { ResultsLayout, SimilarityFractions, SimilarityMps } from './ResultsView'
 
 export default (store) => {
     return (
