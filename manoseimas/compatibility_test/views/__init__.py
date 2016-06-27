@@ -109,6 +109,13 @@ class ResultsView(View):
                     'logo': '/media/fraction_logos/llra.jpg',
                     'answers': {'1': 0.75, '2': 1, '3': -0.8, '4': -1, '5': 0},
                     'members_amount': 4,
+                }, {
+                    'id': 4,
+                    'title': 'Lietuvos socialdemokratų frakcija',
+                    'short_title': 'LSDP',
+                    'logo': '/media/fraction_logos/lsdp.png',
+                    'answers': {'1': 0.25, '2': -1, '3': -0.8, '4': -1, '5': 0},
+                    'members_amount': 4,
                 }
             ],
             'mps': [
