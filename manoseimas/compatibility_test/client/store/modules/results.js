@@ -1,16 +1,5 @@
-import Cookies from 'js-cookie'
 import { finishTest } from './test_state'
-
-function api_call(method, url, req_body) {
-  return new Promise((resolve, reject) => {
-    const request = new XMLHttpRequest()
-    request.open(method, url, true)
-    request.setRequestHeader('X-CSRFToken', Cookies.get('csrftoken'))
-    request.addEventListener('load', () => resolve(request.responseText))
-    request.addEventListener('error', () => reject('Request Error: ', request.response))
-    request.send(req_body)
-  })
-}
+import { fetch } from '../utils'
 
 // ------------------------------------
 // Constants
@@ -35,7 +24,7 @@ export function loadResults (results) {
 export function getResults () {
   return (dispatch, getState) => {
     return new Promise(resolve => {
-      api_call('POST', '/test/results/', 'test_id=1')
+      fetch('POST', '/test/results/', 'test_id=1')
         .then(response => {
           const results = JSON.parse(response)
           dispatch(loadResults(results))
@@ -73,11 +62,11 @@ export function saveAllAnswers () {
     return new Promise(resolve => {
       // Save answers
       const answers = getState().results.answers
-      api_call('POST', '/test/json/answers', JSON.stringify(answers))
+      fetch('POST', '/test/json/answers', JSON.stringify(answers))
         .then(response => {
           // Get and load user's results
           const user_id = JSON.parse(response).user
-          api_call('POST', '/test/results/', `user_id=${user_id}&test_id=1`)
+          fetch('POST', '/test/results/', `user_id=${user_id}&test_id=1`)
             .then(response => {
               const results = JSON.parse(response)
               dispatch(loadResults(results))
