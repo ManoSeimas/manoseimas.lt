@@ -9,6 +9,8 @@ export const LOAD_RESULTS = 'LOAD_RESULTS'
 export const GET_RESULTS = 'GET_RESULTS'
 export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB'
 export const TOGGLE_IMPORTANCE = 'TOGGLE_IMPORTANCE'
+export const SHOW_HEADER = 'SHOW_HEADER'
+export const HIDE_HEADER = 'HIDE_HEADER'
 
 // ------------------------------------
 // Actions
@@ -78,13 +80,27 @@ export function saveAllAnswers () {
   }
 }
 
+export function showHeader () {
+  return {
+    type: SHOW_HEADER
+  }
+}
+
+export function hideHeader () {
+  return {
+    type: HIDE_HEADER
+  }
+}
+
 export const actions = {
   toggleImportance,
   saveAnswer,
   saveAllAnswers,
   setActiveTab,
   loadResults,
-  getResults
+  getResults,
+  showHeader,
+  hideHeader
 }
 
 // ------------------------------------
@@ -110,6 +126,12 @@ const ACTION_HANDLERS = {
       fractions: action.results.fractions,
       mps: action.results.mps
     })
+  },
+  SHOW_HEADER: (state, action) => {
+    return Object.assign({}, state, { show_header: true })
+  },
+  HIDE_HEADER: (state, action) => {
+    return Object.assign({}, state, { show_header: false })
   }
 }
 
@@ -122,7 +144,8 @@ const initialState = {
   answers: {},
   fractions: [],
   mps: [],
-  active_tab: 'fractions'
+  active_tab: 'fractions',
+  show_header: false
 }
 export default (state = initialState, action) => {
   const handler = ACTION_HANDLERS[action.type]

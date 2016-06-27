@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
+import { subscribe } from 'subscribe-ui-event'
 import { SimilarityBar, Checkbox } from '../../../components'
-import { saveAnswer, getResults, toggleImportance } from '../../../store/modules/results'
-
+import { saveAnswer, getResults, toggleImportance, showHeader, hideHeader } from '../../../store/modules/results'
+import SimilarityFractions from './SimilarityFractions'
 import styles from '../../../styles/views/results.css'
 
-class SimilarityFractions extends React.Component {
+class SimilarityFractionsContainer extends React.Component {
 
     static propTypes = {
       user_answers: PropTypes.object,
@@ -13,32 +14,14 @@ class SimilarityFractions extends React.Component {
       topics: PropTypes.array,
       saveAnswer: PropTypes.func,
       getResults: PropTypes.func,
-      toggleImportance: PropTypes.func
+      toggleImportance: PropTypes.func,
+      show_header: PropTypes.bool,
+      showHeader: PropTypes.func,
+      hideHeader: PropTypes.func
     }
 
     componentWillMount () {
         this.props.getResults()
-    }
-
-    calculate_similarity (fraction_answers) {
-        let points = 0,
-            answers_count = 0,
-            answers = this.props.user_answers
-
-        for (let answer_id in fraction_answers) {
-            if (answers[answer_id] && answers[answer_id].answer) {
-                let answer_points = Math.abs((answers[answer_id].answer + fraction_answers[answer_id]) / 2)
-                if (answers[answer_id].important) {
-                    answers_count += 2
-                    answer_points *= 2
-                } else {
-                    answers_count++
-                }
-                points += answer_points
-            }
-        }
-
-        return Math.round((points / answers_count)*100)
     }
 
     getAnswer (topic_id) {
@@ -48,30 +31,17 @@ class SimilarityFractions extends React.Component {
     }
 
     render () {
-        let {fractions, user_answers, topics} = this.props
+        let {fractions, user_answers, topics, show_header} = this.props
         return (
             <div>
                 <div className={styles.note}>
                     Kuo didesnis procentas, tuo labiau frakcija atitinka Jūsų pažiūras.
                 </div>
-                {fractions.map(fraction => {
-                    let similarity = this.calculate_similarity(fraction.answers)
-                    return (
-                        <div className={styles.item} key={fraction.short_title}>
-                            <div className={styles.img}>
-                                <img src={fraction.logo} alt={fraction.title + ' logo'} />
-                            </div>
-                            <main>
-                                <div className={styles.title}>{fraction.title}, {similarity}%</div>
-                                <SimilarityBar similarity={similarity} />
-                                <a href={'#' + fraction.short_title}>
-                                    {fraction.members_amount} nariai {' '}
-                                    <div className={styles.arrow}></div>
-                                </a>
-                            </main>
-                        </div>
-                    )
-                })}
+                <SimilarityFractions user_answers={user_answers}
+                                     fractions={fractions}
+                                     show_header={show_header}
+                                     showHeader={this.props.showHeader}
+                                     hideHeader={this.props.hideHeader} />
                 <div className={styles.topics}>
                     <h3>Interaktyvūs frakcijų rezultatai pagal klausimus</h3>
                     <div className={styles.note}>
@@ -125,11 +95,14 @@ class SimilarityFractions extends React.Component {
 const mapStateToProps = (state) => ({
     user_answers: state.results.answers,
     fractions: state.results.fractions,
-    topics: state.test_state.topics
+    topics: state.test_state.topics,
+    show_header: state.results.show_header
 })
 
 export default connect((mapStateToProps), {
     saveAnswer,
     toggleImportance,
-    getResults
-})(SimilarityFractions)
+    getResults,
+    showHeader,
+    hideHeader
+})(SimilarityFractionsContainer)

@@ -1,0 +1,11 @@
+@import "../_variables";
+
+.sticky-header {
+  position: fixed;
+  top: 0;
+  height: 60px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px $grey;
+  width: $container-width;
+  padding: 15px;
+}

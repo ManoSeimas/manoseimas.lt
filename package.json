@@ -48,6 +48,7 @@
     "webpack-bundle-tracker": "0.0.93",
     "webpack-dev-server": "^1.14.1",
     "es6-promise": "~3.2.1",
-    "js-cookie": "~2.1.2"
+    "js-cookie": "~2.1.2",
+    "subscribe-ui-event": "~1.0.12"
   }
 }
