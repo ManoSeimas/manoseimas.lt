@@ -63,8 +63,9 @@ class TestViews(WebTest):
             'title': 'Antanas Nedzinskas',
         })
         self.assertEqual(resp.json['voting']['_id'], '-10765v')
-        self.assertEqual(resp.json['voting']['votes']['abstain'], [
-            ['53924p', 'LSF'],
-            ['63p', 'TSLKDF'],
-            ['53902p', 'JF'],
-        ])
+        self.assertEqual(resp.json['voting']['votes'], {
+            'aye': [['53911p', 'JF']],
+            'no-vote': [],
+            'abstain': [],
+            'no': [],
+        })

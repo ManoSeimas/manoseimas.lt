@@ -93,11 +93,22 @@ def voting_data(request, slug):
     else:
         mps = {}
 
+    # Remove votings if MP, that voted is not known. This can happen if scraping of mps and votings went out of sync. In
+    # this case just remove votings that does not have associated MPs, making widget work, but with less data.
+    for vote, votes in _voting['votes'].items():
+        _voting['votes'][vote] = [v for v in votes if v[0] in mps]
+
     return {
         'fractions': fractions,
         'voting': _voting,
         'mps': mps,
     }
+
+
+@ajax_request('GET')
+def profile_data(request):
+    # XXX: https://github.com/ManoSeimas/manoseimas.lt/issues/178
+    return {}
 
 
 # Unfortunately, problems with django_social_auth prevent us from passing additional parameters
