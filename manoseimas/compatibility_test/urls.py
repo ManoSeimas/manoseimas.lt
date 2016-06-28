@@ -13,6 +13,6 @@ test_urls = patterns(
 
 urlpatterns = patterns(
     '',
-    url(r'^$', views.start_test, name='start_test'),
+    url(r'^$', views.start_test),
     url(r'^(?P<test_id>\d+)/', include(test_urls)),
 )

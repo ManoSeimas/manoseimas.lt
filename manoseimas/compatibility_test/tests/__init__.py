@@ -78,8 +78,10 @@ class TestViews(WebTest):
     def test_index_view(self):
         topic = factories.TopicFactory()
         factories.TopicVotingFactory.create_batch(3, topic=topic)
-        factories.TestGroupFactory(topics=[topic])
+        group = factories.TestGroupFactory(topics=[topic])
         resp = self.app.get('/test/')
+        self.assertRedirects(resp, '/test/%d/' % group.test.id)
+        resp = resp.follow()
         self.assertEqual(resp.html.title.string, 'Politinio suderinamumo testas - manoSeimas.lt')
 
     def test_results_view(self):

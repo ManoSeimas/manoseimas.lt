@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 import json
 
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import View
 from django.http import JsonResponse
@@ -67,6 +67,7 @@ def get_test_by_id(test_id):
 def start_test(request, test_id=None):
     if not test_id:
         test_id = get_current_test().id
+        return redirect('start_test', test_id=test_id)
     test = CompatTest.objects.get(id=test_id)
     context = {
         'topics': topics_all(test_id),
