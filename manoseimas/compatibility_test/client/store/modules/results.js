@@ -67,8 +67,8 @@ export function saveAllAnswers () {
       fetch('POST', '/test/json/answers', JSON.stringify(answers))
         .then(response => {
           // Get and load user's results
-          const user_id = JSON.parse(response).user
-          fetch('POST', '/test/results/', `user_id=${user_id}&test_id=1`)
+          const test_id = JSON.parse(response).test_id
+          fetch('POST', '/test/results/', `test_id=${test_id}`)
             .then(response => {
               const results = JSON.parse(response)
               dispatch(loadResults(results))
@@ -124,8 +124,12 @@ const ACTION_HANDLERS = {
   LOAD_RESULTS: (state, action) => {
     return Object.assign({}, state, {
       fractions: action.results.fractions,
-      mps: action.results.mps
+      mps: action.results.mps,
+      answers: action.results.user_answers
     })
+  },
+  LOAD_ANSWERS: (state, action) => {
+    return Object.assign({}, state, {answers: action.answers})
   },
   SHOW_HEADER: (state, action) => {
     return Object.assign({}, state, { show_header: true })

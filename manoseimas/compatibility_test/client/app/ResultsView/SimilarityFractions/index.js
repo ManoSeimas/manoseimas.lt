@@ -1,7 +1,10 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { subscribe } from 'subscribe-ui-event'
-import { saveAnswer, getResults, toggleImportance, showHeader, hideHeader } from '../../../store/modules/results'
+import { saveAnswer,
+         getResults,
+         toggleImportance,
+         showHeader,
+         hideHeader } from '../../../store/modules/results'
 import SimilarityFractions from './SimilarityFractions'
 import Topics from './Topics'
 import styles from '../../../styles/views/results.css'
@@ -21,7 +24,10 @@ class SimilarityFractionsContainer extends React.Component {
     }
 
     componentWillMount () {
-        this.props.getResults()
+        // Load test results if they are still not in redux store.
+        if (!this.props.fractions.length){
+            this.props.getResults()
+        }
     }
 
     render () {
