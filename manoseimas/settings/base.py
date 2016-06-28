@@ -242,6 +242,7 @@ DEFAULT_FROM_EMAIL = 'manoseimas@doublemarked.com'
 AUTH_USER_MODEL = 'manoseimas.ManoSeimasUser'
 
 AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
     'social.backends.google.GoogleOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.open_id.OpenIdAuth',

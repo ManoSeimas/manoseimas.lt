@@ -25,10 +25,6 @@ MIDDLEWARE_CLASSES += (
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 
-AUTHENTICATION_BACKENDS += (
-    'django.contrib.auth.backends.ModelBackend',
-)
-
 INSTALLED_APPS += (
     'debug_toolbar',
 )
