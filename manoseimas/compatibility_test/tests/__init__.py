@@ -28,7 +28,7 @@ class TestAnswersJson(WebTest):
     def test_answers_json_get(self):
         self.assertEqual(ManoSeimasUser.objects.count(), 0)
         test = factories.CompatTestFactory()
-        resp = self.app.get(reverse('answers_json'))
+        resp = self.app.get(reverse('answers_json', kwargs={'test_id': test.id}))
         self.assertEqual(resp.json, {'answers': {}, 'test_id': test.id})
         # lazy user is created
         self.assertEqual(ManoSeimasUser.objects.count(), 1)
@@ -40,7 +40,10 @@ class TestAnswersJson(WebTest):
             '2': 'no',
         }
         test = factories.CompatTestFactory()
-        resp = self.app.post_json(reverse('answers_json'), answers)
+        resp = self.app.post_json(
+            reverse('answers_json', kwargs={'test_id': test.id}),
+            answers
+        )
         user = ManoSeimasUser.objects.first()
         self.assertEqual(resp.json, {'answers': answers, 'test_id': test.id})
         # lazy user is created
@@ -89,13 +92,13 @@ class TestViews(WebTest):
             name=factory.Iterator(['Socialinis modelis', 'Kariuomenė']),
         )
         test = factories.CompatTestFactory()
-        resp = self.app.post('/test/results/')
         factories.TestGroupFactory(topics=topics, test=test)
+        resp = self.app.post(reverse('test_results', kwargs={'test_id': test.id}))
         self.assertEqual(resp.json['user_answers'], None)
 
         ur = factories.UserResultFactory(result=answers)
         self.app.set_user(ur.user)
-        resp = self.app.post('/test/results/')
+        resp = self.app.post(reverse('test_results', kwargs={'test_id': test.id}))
         self.assertEqual(resp.json['user_answers'], answers)
 
 
