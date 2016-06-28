@@ -5,6 +5,8 @@ import { fetch } from '../utils'
 // Constants
 // ------------------------------------
 export const SAVE_ANSWER = 'SAVE_ANSWER'
+export const LOAD_ANSWERS = 'LOAD_ANSWERS'
+export const GET_ANSWERS = 'GET_ANSWERS'
 export const LOAD_RESULTS = 'LOAD_RESULTS'
 export const GET_RESULTS = 'GET_RESULTS'
 export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB'
@@ -30,6 +32,26 @@ export function getResults () {
         .then(response => {
           const results = JSON.parse(response)
           dispatch(loadResults(results))
+        })
+        .catch(error => console.error(error))
+    })
+  }
+}
+
+export function loadAnswers (answers) {
+  return {
+    type: LOAD_ANSWERS,
+    answers: answers
+  }
+}
+
+export function getAnswers () {
+  return (dispatch, getState) => {
+    return new Promise(resolve => {
+      fetch('GET', '/test/json/answers')
+        .then(response => {
+          const answers = JSON.parse(response).answers
+          dispatch(loadAnswers(answers))
         })
         .catch(error => console.error(error))
     })
