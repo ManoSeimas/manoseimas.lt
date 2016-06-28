@@ -57,6 +57,12 @@ def get_current_test():
     return CompatTest.objects.order_by('id').first()
 
 
+def get_test_by_id(test_id):
+    if not test_id:
+        return get_current_test()
+    return CompatTest.objects.filter(id=test_id).first()
+
+
 @ensure_csrf_cookie
 def start_test(request, test_id=None):
     if not test_id:
@@ -65,6 +71,7 @@ def start_test(request, test_id=None):
     context = {
         'topics': topics_all(test_id),
         'title': test.name,
+        'test_id': test.id,
     }
     return render(request, 'start_test.jade', context)
 
@@ -77,16 +84,24 @@ def topics_json(request, test_id=None):
 class ResultsView(View):
     template_name = 'results.jade'
 
-    def results(self, test_id=None, user_id=None):
-        # Generate results by given test_id and user_id.
+    def get_answers(self, user, test_id):
+        if not user:
+            return None
+
+        test = get_test_by_id(test_id)
+        results = UserResult.objects.filter(user=user, test=test).first()
+        if results:
+            return results.result
+        else:
+            return None
+
+    def results(self, user=None, test_id=None):
+        # Generate results by given test_id and user.
         # More requirements:
         # https://github.com/ManoSeimas/manoseimas.lt/issues/154
 
-        if not test_id:
-            test_id = get_current_test().id
-
         return {
-            'user_answers': {},
+            'user_answers': self.get_answers(user, test_id),
             'fractions': [
                 {
                     'id': 1,
@@ -148,12 +163,16 @@ class ResultsView(View):
         }
 
     def post(self, request):
-        return JsonResponse(self.results())
+        user = request.user
+        test_id = request.POST.get('test_id', None)
+        return JsonResponse(self.results(user, test_id))
 
     def get(self, request):
+        user = request.user
         context = {
             'title': 'Seimo rinkimai 2016',
-            'results': self.results()
+            'test_id': get_current_test().id,
+            'results': self.results(user),
         }
         return render(request, self.template_name, context)
 
@@ -161,19 +180,17 @@ class ResultsView(View):
 @allow_lazy_user
 def answers_json(request):
     user = request.user
+    test = get_current_test()
     answers = {}
-    results = UserResult.objects.filter(user=user)
+    ur = UserResult.objects.filter(user=user, test=test).first()
     if request.method == 'POST':
-        if results:
-            ur = results[0]
-        else:
+        if not ur:
             ur = UserResult()
             ur.user = user
+            ur.test = test
         answers = json.loads(request.body)
         ur.result = answers
         ur.save()
     else:
-        if results:
-            ur = results[0]
-            answers = ur.result
-    return JsonResponse({'answers': answers, 'user': user.id})
+        answers = ur.result if ur else {}
+    return JsonResponse({'answers': answers, 'test_id': test.id})
