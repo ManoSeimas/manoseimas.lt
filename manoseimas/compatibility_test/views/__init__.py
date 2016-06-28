@@ -89,7 +89,7 @@ class ResultsView(View):
             return None
 
         test = get_test_by_id(test_id)
-        results = UserResult.objects.filter(user=user, test=test).first()
+        results = UserResult.objects.filter(user_id=user.id, test=test).first()
         if results:
             return results.result
         else:
