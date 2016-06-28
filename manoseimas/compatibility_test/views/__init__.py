@@ -177,6 +177,8 @@ class ResultsView(View):
         }
         return render(request, self.template_name, context)
 
+test_results = ResultsView.as_view()
+
 
 @allow_lazy_user
 def answers_json(request, test_id=None):

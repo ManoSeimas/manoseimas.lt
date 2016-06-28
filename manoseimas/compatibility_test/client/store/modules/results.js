@@ -48,7 +48,7 @@ export function loadAnswers (answers) {
 export function getAnswers () {
   return (dispatch, getState) => {
     return new Promise(resolve => {
-      fetch('GET', '/test/json/answers')
+      fetch('GET', '/test/answers')
         .then(response => {
           const answers = JSON.parse(response).answers
           dispatch(loadAnswers(answers))
@@ -86,7 +86,7 @@ export function saveAllAnswers () {
     return new Promise(resolve => {
       // Save answers
       const answers = getState().results.answers
-      fetch('POST', '/test/json/answers', JSON.stringify(answers))
+      fetch('POST', '/test/answers', JSON.stringify(answers))
         .then(response => {
           // Get and load user's results
           const test_id = JSON.parse(response).test_id

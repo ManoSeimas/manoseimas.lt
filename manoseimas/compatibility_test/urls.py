@@ -1,18 +1,18 @@
 from django.conf.urls import include, patterns, url
 
-from manoseimas.compatibility_test.views import start_test
-from manoseimas.compatibility_test.views import ResultsView
+from manoseimas.compatibility_test import views
+
 
 test_urls = patterns(
     '',
-    url(r'^$', start_test, name='start_test'),
-    url(r'^results/$',
-        ResultsView.as_view(), name='test_results'),
-    url(r'^json/', include('manoseimas.compatibility_test.json_urls')),
+    url(r'^$', views.start_test, name='start_test'),
+    url(r'^topics/?$', views.topics_json, name='topics_json'),
+    url(r'^answers/?$', views.answers_json, name='answers_json'),
+    url(r'^results/?$', views.test_results, name='test_results'),
 )
 
 urlpatterns = patterns(
     '',
-    url(r'^$', start_test, name='start_test'),
+    url(r'^$', views.start_test, name='start_test'),
     url(r'^(?P<test_id>\d+)/', include(test_urls)),
 )
