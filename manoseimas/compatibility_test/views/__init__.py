@@ -17,10 +17,8 @@ from manoseimas.compatibility_test.models import Topic
 from manoseimas.compatibility_test.models import UserResult
 
 
-def topics_all(test_id=None):
+def topics_all(test_id):
     qs = Topic.objects.all()
-    if not test_id:
-        test_id = get_current_test().id
     qs = qs.filter(groups__test_id=test_id)
     qs = qs.prefetch_related('groups', 'arguments')
 

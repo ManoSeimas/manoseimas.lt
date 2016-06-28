@@ -57,10 +57,12 @@ class TestAnswersJson(WebTest):
 
 class TestCompatibilityTest(TestCase):
     def test_topics_all(self):
+        test = factories.CompatTestFactory()
         topic = factories.TopicFactory()
-        factories.TestGroupFactory(topics=[topic])
+        factories.TestGroupFactory(test=test, topics=[topic])
+        factories.TopicFactory(name='Darbo kodeksas')
 
-        self.assertEqual(topics_all(), [
+        self.assertEqual(topics_all(test.id), [
             {
                 'id': topic.pk,
                 'group': 'Socialiniai reikalai',
