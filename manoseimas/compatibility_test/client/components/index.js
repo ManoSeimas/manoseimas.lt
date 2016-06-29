@@ -3,6 +3,7 @@ import Button from './Button'
 import ButtonsBlock from './ButtonsBlock'
 import Checkbox from './Checkbox'
 import SimilarityBar from './SimilarityBar'
+import SimilarityWidget from './SimilarityWidget'
 import StatusBar from './StatusBar'
 import StickyHeader from './StickyHeader'
 import Tabs from './Tabs'
@@ -14,6 +15,7 @@ export {
     ButtonsBlock,
     Checkbox,
     SimilarityBar,
+    SimilarityWidget,
     StatusBar,
     StickyHeader,
     Tabs,

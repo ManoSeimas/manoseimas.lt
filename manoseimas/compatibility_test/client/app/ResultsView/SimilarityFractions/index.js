@@ -43,6 +43,7 @@ class SimilarityFractionsContainer extends React.Component {
                                      showHeader={this.props.showHeader}
                                      hideHeader={this.props.hideHeader} />
                 <Topics topics={topics}
+                        fractions={fractions}
                         user_answers={user_answers}
                         toggleImportance={this.props.toggleImportance}
                         saveAnswer={this.props.saveAnswer} />

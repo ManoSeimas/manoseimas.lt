@@ -40,17 +40,9 @@
 }
 
 .img {
-  margin-right: 20px;
-  display: inline-block;
+  composes: img from '../base.css';
   width: 70px;
   height: 70px;
-  overflow: hidden;
-  border-radius: 50%;
-
-  img {
-    width: 100%;
-    height: auto;
-  }
 }
 
 .arrow {
@@ -119,74 +111,28 @@
   }
 }
 
+.similarity-header .img {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 7px;
+  box-shadow: 0 0 3px $grey;
+}
+
 .similarity-bar {
-  width: 100%;
-  margin-top: 10px;
+  composes: similarity-widget from '../components/similarity-widget.css';
+  top: 40px;
+  position: relative;
+  margin-top: 5px;
   div {
     display: inline-block;
     vertical-align: top;
     font-weight: 400;
   }
-  .line {
-    width: 100%;
-    height: 7px;
-    background: linear-gradient(to right, $red 25%, $black 50%, $green 75%);
-    vertical-align: middle;
-  }
-  .yes {
-    color: $green;
-    text-align: right;
-    width: 30px;
-  }
-
-  .no {
-    color: $red;
-    text-align: left;
-    width: 55px;
-  }
 }
 
-.actions {
-  width: 100%;
-  .action {
-    display: inline-block;
-    width: calc(33% + 5px);
-    text-align: center;
-
-    img {
-      width: 30px;
-      cursor: pointer;
-      &:hover { opacity: 0.7 }
-    }
-
-    &:first-child {
-      text-align: left;
-      margin-left: -15px;
-    }
-    &:last-child {
-      text-align: right;
-      img { margin-right: -17px }
-    }
-  }
-}
-
-.similarity-header {
-  .img {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    top: 7px;
-    box-shadow: 0 0 3px $grey;
-  }
-
-  .similarity-bar {
-    top: 40px;
-    position: relative;
-  }
-
-  .line {
-    width: calc(100% - 70px);
-    margin: 0 5px;
-  }
-
+.line {
+  composes: line from '../components/similarity-widget.css';
+  width: calc(100% - 70px);
+  margin: 0 5px;
 }
