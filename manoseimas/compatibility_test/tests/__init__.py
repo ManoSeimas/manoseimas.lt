@@ -115,6 +115,7 @@ class TestPositions(WebTest):
         votings = []
         seq = itertools.count(1)
         topic = factories.TopicFactory()
+        factories.TestGroupFactory(topics=[topic])
         mps = [
             ('1', 'FOO', 'First Last', [1, 2]),
             ('2', 'FOO', 'Second Last', [-2, 2]),
