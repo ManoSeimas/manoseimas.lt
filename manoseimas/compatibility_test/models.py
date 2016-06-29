@@ -48,15 +48,16 @@ class CompatTest(models.Model):
 
 class TestGroup(models.Model):
     name = models.CharField(max_length=200)
-    test = models.ForeignKey(CompatTest, null=True)
-    topics = models.ManyToManyField(Topic, related_name='groups')
+    test = models.ForeignKey(CompatTest, null=True, related_name='groups')
+    topics = models.ManyToManyField(Topic, related_name='groups', blank=True)
 
     # TODO: unique(test, topic)
 
     def __unicode__(self):
-        return self.name
+        return '%s - %s' % (self.test, self.name)
 
     class Meta:
+        ordering = ('test', 'name')
         verbose_name = 'Testo grupė'
         verbose_name_plural = 'Testo grupės'
 

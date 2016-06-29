@@ -1,3 +1,4 @@
+# coding: utf-8
 from django.contrib import admin
 
 from manoseimas.compatibility_test import models
@@ -15,12 +16,24 @@ class ArgumentInline(admin.TabularInline):
     model = models.Argument
 
 
+class TestGroupTopicsInline(admin.TabularInline):
+    model = models.TestGroup.topics.through
+    raw_id_fields = [
+        'topic',
+    ]
+    min_num = 1
+    extra = 0
+    verbose_name = 'Temų grupė'
+    verbose_name_plural = 'Temų grupės'
+
+
 class TopicAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
-    list_filter = ('name',)
+    list_filter = ('groups__test',)
     inlines = [
+        TestGroupTopicsInline,
         ArgumentInline,
-        VotingInline
+        VotingInline,
     ]
 
     def save_related(self, request, form, formsets, change):
@@ -43,17 +56,10 @@ class CompatTestAdmin(admin.ModelAdmin):
     inlines = [TestGroupInline]
 
 
-class TestGroupTopicsInline(admin.TabularInline):
-    model = models.TestGroup.topics.through
-    raw_id_fields = [
-        'topic',
-    ]
-
-
 class TestGroupAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name', 'test')
     exclude = ('topics',)
-    inlines = [TestGroupTopicsInline]
+
 
 admin.site.register(models.CompatTest, CompatTestAdmin)
 admin.site.register(models.Topic, TopicAdmin)
