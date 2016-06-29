@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 
 import json
 
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import View
 from django.http import JsonResponse
@@ -17,10 +17,8 @@ from manoseimas.compatibility_test.models import Topic
 from manoseimas.compatibility_test.models import UserResult
 
 
-def topics_all(test_id=None):
+def topics_all(test_id):
     qs = Topic.objects.all()
-    if not test_id:
-        test_id = get_current_test().id
     qs = qs.filter(groups__test_id=test_id)
     qs = qs.prefetch_related('groups', 'arguments')
 
@@ -67,6 +65,7 @@ def get_test_by_id(test_id):
 def start_test(request, test_id=None):
     if not test_id:
         test_id = get_current_test().id
+        return redirect('start_test', test_id=test_id)
     test = CompatTest.objects.get(id=test_id)
     context = {
         'topics': topics_all(test_id),
@@ -166,25 +165,28 @@ class ResultsView(View):
             ]
         }
 
-    def post(self, request):
+    def post(self, request, **kwargs):
         user = request.user
-        test_id = request.POST.get('test_id', None)
+        test_id = kwargs.get('test_id', None)
         return JsonResponse(self.results(user, test_id))
 
-    def get(self, request):
+    def get(self, request, **kwargs):
         user = request.user
+        test_id = kwargs.get('test_id', None)
         context = {
             'title': 'Seimo rinkimai 2016',
-            'test_id': get_current_test().id,
+            'test_id': test_id,
             'results': self.results(user),
         }
         return render(request, self.template_name, context)
 
+test_results = ResultsView.as_view()
+
 
 @allow_lazy_user
-def answers_json(request):
+def answers_json(request, test_id=None):
     user = request.user
-    test = get_current_test()
+    test = get_test_by_id(test_id)
     answers = {}
     ur = UserResult.objects.filter(user=user, test=test).first()
     if request.method == 'POST':
