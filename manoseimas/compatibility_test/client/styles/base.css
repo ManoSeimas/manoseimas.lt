@@ -22,6 +22,10 @@
   margin-bottom: 50px;
 }
 
+:global a {
+  cursor: pointer;
+}
+
 :global .inline {
   display: inline-block;
 }

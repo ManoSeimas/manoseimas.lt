@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { SimilarityBar } from '../../../components'
+import { SimilarityBar, SimilarityWidget } from '../../../components'
+import { expandTopics } from '../../../store/modules/mps_state'
+import { getResults, setActiveTab, saveAnswer } from '../../../store/modules/results'
 import styles from '../../../styles/views/results.css'
 
 
@@ -8,7 +10,21 @@ class SimilarityMps extends React.Component {
 
     static propTypes = {
       user_answers: React.PropTypes.object,
-      mps: React.PropTypes.array
+      mps: React.PropTypes.array,
+      topics: React.PropTypes.array,
+      expanded_mp: React.PropTypes.number,
+      expandTopics: React.PropTypes.func,
+      getResults: React.PropTypes.func,
+      setActiveTab: React.PropTypes.func,
+      saveAnswer: React.PropTypes.func
+    }
+
+    componentWillMount () {
+        // Load test results if they are still not in redux store.
+        if (!this.props.mps.length){
+            this.props.getResults()
+        }
+        this.props.setActiveTab('mps')
     }
 
     calculate_similarity (user_answers, fraction_answers) {
@@ -26,7 +42,7 @@ class SimilarityMps extends React.Component {
     }
 
     render () {
-        let {user_answers, mps} = this.props
+        let {user_answers, mps, topics, expanded_mp} = this.props
         return (
             <div>
                 <div className={styles.note}>
@@ -42,11 +58,25 @@ class SimilarityMps extends React.Component {
                             <main>
                                 <div className={styles.title}>{mp.name}, {mp.fraction}, {similarity}%</div>
                                 <SimilarityBar similarity={similarity} />
-                                <a href={'#' + mp.short_title}>
-                                    {mp.members_amount} nariai {' '}
+                                <a onClick={() => this.props.expandTopics(mp.id)}>
+                                    Atsakymai pagal klausimus
                                     <div className={styles.arrow}></div>
                                 </a>
                             </main>
+                            {(expanded_mp === mp.id)
+                                ? <div className={styles.topics}><ol>
+                                {topics.map(topic => {
+                                    return <li key={topic.id}>
+                                        {topic.name} <br />
+                                        <SimilarityWidget topic={topic}
+                                                          items={[mp]}
+                                                          saveAnswer={this.props.saveAnswer}
+                                                          user_answers={user_answers} />
+                                    </li>
+                                })}
+                                </ol></div>
+                                : ''
+                            }
                         </div>
                     )
                 })}
@@ -57,7 +87,14 @@ class SimilarityMps extends React.Component {
 
 const mapStateToProps = (state) => ({
     user_answers: state.results.answers,
-    mps: state.results.mps
+    topics: state.test_state.topics,
+    mps: state.results.mps,
+    expanded_mp: state.mps_state.expanded_mp
 })
 
-export default connect((mapStateToProps), {})(SimilarityMps)
+export default connect((mapStateToProps), {
+    expandTopics,
+    getResults,
+    setActiveTab,
+    saveAnswer
+})(SimilarityMps)

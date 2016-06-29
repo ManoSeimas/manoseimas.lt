@@ -17,7 +17,7 @@ const Topics = ({topics, fractions, toggleImportance, saveAnswer, user_answers})
                           value={topic.id.toString()}
                           actionHandler={() => toggleImportance(topic.id)}>šis klausimas man svarbus</Checkbox>
                 <SimilarityWidget topic={topic}
-                                  fractions={fractions}
+                                  items={fractions}
                                   saveAnswer={saveAnswer}
                                   user_answers={user_answers} />
             </li>

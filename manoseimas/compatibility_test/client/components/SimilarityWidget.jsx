@@ -14,15 +14,15 @@ function make_procental_answer (answer) {
     return Math.round((answer + 1)*50)
 }
 
-const SimilarityWidget = ({topic, fractions, user_answers, saveAnswer}) =>
+const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
     <div className={styles['similarity-widget']}>
         <div className={styles.no}>PRIEŠ</div>
         <div className={styles.middle}>
-            {fractions.map(fraction => {
-                let fraction_answer = make_procental_answer(fraction.answers[topic.id])
+            {items.map(item => {
+                let item_answer = make_procental_answer(item.answers[topic.id])
                 return (
-                    <div className={styles.img} style={{left: fraction_answer * 5}} key={fraction.short_title}>
-                        <img src={fraction.logo} alt={fraction.title + ' logo'} />
+                    <div className={styles.img} style={{left: item_answer * 5}} key={'item-' + item.id}>
+                        <img src={item.logo} alt={item.title + ' logo'} />
                     </div>
                 )
             })}
@@ -54,7 +54,7 @@ const SimilarityWidget = ({topic, fractions, user_answers, saveAnswer}) =>
 
 SimilarityWidget.propTypes = {
     topic: React.PropTypes.object.isRequired,
-    fractions: React.PropTypes.array.isRequired,
+    items: React.PropTypes.array.isRequired,
     user_answers: React.PropTypes.object.isRequired,
     saveAnswer: React.PropTypes.func
 }
