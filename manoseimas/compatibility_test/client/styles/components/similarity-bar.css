@@ -11,3 +11,8 @@
     border-radius: 7px;
   }
 }
+
+.slim-bar {
+  composes: bar;
+  height: 10px;
+}

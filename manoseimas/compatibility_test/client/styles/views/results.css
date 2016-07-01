@@ -142,3 +142,20 @@
     cursor: pointer;
   }
 }
+
+.members {
+  padding-left: 90px;
+
+  .img {
+    width: 50px;
+    height: 50px;
+  }
+
+  main {
+    width: calc(100% - 70px);
+  }
+
+  .title {
+    font-size: $small;
+  }
+}

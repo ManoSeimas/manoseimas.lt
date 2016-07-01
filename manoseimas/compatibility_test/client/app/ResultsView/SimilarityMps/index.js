@@ -31,14 +31,14 @@ class SimilarityMps extends React.Component {
         this.props.setActiveTab('mps')
     }
 
-    calculateSimilarity (user_answers, fraction_answers) {
+    calculateSimilarity (user_answers, mp_answers) {
         let points = 0,
             answers_count = 0
 
-        for (let answer_id in fraction_answers) {
+        for (let answer_id in mp_answers) {
             if (user_answers[answer_id] && user_answers[answer_id].answer) {
                 answers_count++
-                points += Math.abs((user_answers[answer_id].answer + fraction_answers[answer_id]) / 2)
+                points += Math.abs((user_answers[answer_id].answer + mp_answers[answer_id]) / 2)
             }
         }
 

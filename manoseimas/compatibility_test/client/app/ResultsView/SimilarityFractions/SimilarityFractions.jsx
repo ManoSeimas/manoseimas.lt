@@ -15,9 +15,12 @@ class SimilarityFractions extends React.Component {
     static propTypes = {
       user_answers: PropTypes.object,
       fractions: PropTypes.array,
+      mps: PropTypes.array,
       show_header: PropTypes.bool,
+      expanded_number: PropTypes.string,
       showHeader: PropTypes.func,
-      hideHeader: PropTypes.func
+      hideHeader: PropTypes.func,
+      expandFraction: PropTypes.func
     }
 
     componentDidMount () {
@@ -70,7 +73,7 @@ class SimilarityFractions extends React.Component {
     }
 
     render () {
-        let {fractions, user_answers, show_header} = this.props
+        let {fractions, mps, user_answers, show_header, expanded_fraction} = this.props
         return (
             <div ref='similarities'>
             {fractions.map(fraction => {
@@ -83,11 +86,30 @@ class SimilarityFractions extends React.Component {
                         <main>
                             <div className={styles.title}>{fraction.title}, {similarity}%</div>
                             <SimilarityBar similarity={similarity} />
-                            <a href={'#' + fraction.short_title}>
+                            <a onClick={() => this.props.expandFraction(fraction.id)}>
                                 {fraction.members_amount} nariai {' '}
                                 <div className={styles.arrow}></div>
                             </a>
                         </main>
+                        {(expanded_fraction === fraction.id)
+                            ? <div className={styles.members}>
+                                {mps.map(mp => {
+                                    if (mp.fraction === fraction.short_title) {
+                                        let similarity = this.calculate_similarity(mp.answers)
+                                        return <div className={styles.item} key={mp.id}>
+                                            <div className={styles.img}>
+                                                <img src={mp.logo} alt={mp.name + ' logo'} />
+                                            </div>
+                                            <main>
+                                                <div className={styles.title}>{mp.name}, {mp.fraction}, {similarity}%</div>
+                                                <SimilarityBar similarity={similarity} slim={true} />
+                                            </main>
+                                        </div>
+                                    }
+                                })}
+                            </div>
+                            : ''
+                        }
                     </div>
                 )
             })}

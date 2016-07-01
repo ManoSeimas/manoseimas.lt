@@ -13,6 +13,7 @@ export const SET_ACTIVE_TAB = 'SET_ACTIVE_TAB'
 export const TOGGLE_IMPORTANCE = 'TOGGLE_IMPORTANCE'
 export const SHOW_HEADER = 'SHOW_HEADER'
 export const HIDE_HEADER = 'HIDE_HEADER'
+export const EXPAND_FRACTION = 'EXPAND_FRACTION'
 
 // ------------------------------------
 // Actions
@@ -113,6 +114,13 @@ export function hideHeader () {
   }
 }
 
+export function expandFraction (fraction_id) {
+  return {
+    type: EXPAND_FRACTION,
+    fraction_id: fraction_id
+  }
+}
+
 export const actions = {
   toggleImportance,
   saveAnswer,
@@ -121,7 +129,8 @@ export const actions = {
   loadResults,
   getResults,
   showHeader,
-  hideHeader
+  hideHeader,
+  expandFraction
 }
 
 // ------------------------------------
@@ -157,6 +166,13 @@ const ACTION_HANDLERS = {
   },
   HIDE_HEADER: (state, action) => {
     return Object.assign({}, state, { show_header: false })
+  },
+  EXPAND_FRACTION: (state, action) => {
+    // Close expanded fraction on second click.
+    if (state.expanded_fraction === action.fraction_id)
+      return Object.assign({}, state, { expanded_fraction: undefined })
+
+    return Object.assign({}, state, { expanded_fraction: action.fraction_id })
   }
 }
 
@@ -170,6 +186,7 @@ const initialState = {
   fractions: [],
   mps: [],
   active_tab: 'fractions',
+  expanded_fraction: undefined,
   show_header: false
 }
 export default (state = initialState, action) => {

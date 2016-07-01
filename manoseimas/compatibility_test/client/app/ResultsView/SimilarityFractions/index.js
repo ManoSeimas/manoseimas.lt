@@ -4,7 +4,8 @@ import { saveAnswer,
          getResults,
          toggleImportance,
          showHeader,
-         hideHeader } from '../../../store/modules/results'
+         hideHeader,
+         expandFraction } from '../../../store/modules/results'
 import SimilarityFractions from './SimilarityFractions'
 import Topics from './Topics'
 import styles from '../../../styles/views/results.css'
@@ -14,13 +15,16 @@ class SimilarityFractionsContainer extends React.Component {
     static propTypes = {
       user_answers: PropTypes.object,
       fractions: PropTypes.array,
+      mps: PropTypes.array,
       topics: PropTypes.array,
       saveAnswer: PropTypes.func,
       getResults: PropTypes.func,
       toggleImportance: PropTypes.func,
       show_header: PropTypes.bool,
       showHeader: PropTypes.func,
-      hideHeader: PropTypes.func
+      hideHeader: PropTypes.func,
+      expanded_fraction: PropTypes.number,
+      expandFraction: PropTypes.func
     }
 
     componentWillMount () {
@@ -31,7 +35,7 @@ class SimilarityFractionsContainer extends React.Component {
     }
 
     render () {
-        let {fractions, user_answers, topics, show_header} = this.props
+        let {fractions, mps, user_answers, topics, show_header, expanded_fraction} = this.props
         return (
             <div>
                 <div className={styles.note}>
@@ -39,7 +43,10 @@ class SimilarityFractionsContainer extends React.Component {
                 </div>
                 <SimilarityFractions user_answers={user_answers}
                                      fractions={fractions}
+                                     mps={mps}
+                                     expanded_fraction={expanded_fraction}
                                      show_header={show_header}
+                                     expandFraction={this.props.expandFraction}
                                      showHeader={this.props.showHeader}
                                      hideHeader={this.props.hideHeader} />
                 <Topics topics={topics}
@@ -55,8 +62,10 @@ class SimilarityFractionsContainer extends React.Component {
 const mapStateToProps = (state) => ({
     user_answers: state.results.answers,
     fractions: state.results.fractions,
+    mps: state.results.mps,
     topics: state.test_state.topics,
-    show_header: state.results.show_header
+    show_header: state.results.show_header,
+    expanded_fraction: state.results.expanded_fraction
 })
 
 export default connect((mapStateToProps), {
@@ -64,5 +73,6 @@ export default connect((mapStateToProps), {
     toggleImportance,
     getResults,
     showHeader,
-    hideHeader
+    hideHeader,
+    expandFraction
 })(SimilarityFractionsContainer)
