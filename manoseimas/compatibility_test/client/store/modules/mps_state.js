@@ -31,6 +31,10 @@ export const actions = {
 // ------------------------------------
 const ACTION_HANDLERS = {
     EXPAND_TOPICS: (state, action) => {
+        // Close expanded mp on second click.
+        if (state.expanded_mp === action.mp_id)
+            return Object.assign({}, state, { expanded_mp: undefined })
+
         return Object.assign({}, state, { expanded_mp: action.mp_id })
     },
     SELECT_FRACTION: (state, action) => {
