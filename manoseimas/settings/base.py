@@ -1,10 +1,13 @@
 # coding: utf-8
 
+import os
 import os.path
 import exportrecipe
+import platform
 
 from django.utils.translation import ugettext_lazy as _
 
+DIST = platform.linux_distribution()[:2]
 
 PROJECT_DIR = os.path.realpath(os.path.dirname(os.path.dirname(__file__)))
 BUILDOUT_DIR = os.path.abspath(os.path.join(PROJECT_DIR, '..'))
@@ -25,11 +28,19 @@ MANAGERS = ADMINS
 
 ATOMIC_REQUESTS = True
 
+if DIST == ('Ubuntu', '16.04'):
+    # With MySQL 5.7 the command SET storage_engine=MyISAM won't work.
+    # http://stackoverflow.com/a/37220446/475477
+    init_command = 'SET default_storage_engine=INNODB'
+else:
+    init_command = 'SET storage_engine=INNODB'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'manoseimas',
         'OPTIONS': {
-            'init_command': 'SET storage_engine=INNODB',
+            'init_command': init_command,
             'read_default_file': os.path.expanduser('~/.my.cnf'),
         },
     }
@@ -45,7 +56,6 @@ LANGUAGE_CODE = 'lt'
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_DIR, 'locale'),
-    os.path.join(config.buildout_parts_dir, 'django-sboard/sboard/locale'),
 )
 
 SITE_ID = 1
@@ -68,7 +78,8 @@ STATICFILES_DIRS = (
     os.path.join(config.buildout_parts_dir, 'bootstrap'),
     os.path.join(config.buildout_parts_dir, 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
     os.path.join(PROJECT_DIR, 'widget', 'frontend', 'build'),
-    os.path.join(BUILDOUT_DIR, 'client'),
+    os.path.join(BUILDOUT_DIR, 'build'),
+    os.path.join(BUILDOUT_DIR, 'bundles'),
 )
 
 STATICFILES_FINDERS = (
@@ -137,35 +148,28 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'social.apps.django_app.default',
     'sorl.thumbnail',
-    'couchdbkit.ext.django',
     'compressor',
+    'haystack',
+    'lazysignup',
 
     'manoseimas',
-
-    'sboard',
-    'sboard.profiles',
-    'sboard.categories',
 
     'django_extensions',
     'test_utils',
     'django_nose',
 
-    'manoseimas.legislation',
-    'manoseimas.votings',
-    'manoseimas.mps',
     'manoseimas.mps_v2',
-    'manoseimas.solutions',         # depends on: votings
-    'manoseimas.compat',            # depends on: solutions
     'manoseimas.widget',
     'manoseimas.lobbyists',
     'manoseimas.compatibility_test',
+    'manoseimas.scrapy',
 
+    'rest_framework',
     'webpack_loader',
 )
 
 MIGRATION_MODULES = {
     'default': 'manoseimas.migrations.python_social_auth',
-    'profiles': 'manoseimas.migrations.sboard_profiles',
 }
 
 
@@ -204,7 +208,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        '': { # wildcard
+        '': {  # wildcard
             'level': 'DEBUG',
             'handlers': ['everything'],
         },
@@ -218,34 +222,8 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
-        'couchdbkit': {
-            'handlers': ['null'],
-            'propagate': True,
-            'level': 'INFO',
-        },
-        'restkit': {
-            'handlers': ['null'],
-            'propagate': True,
-            'level': 'INFO',
-        },
     }
 }
-
-PUBLIC_COUCHDB_SERVER = 'http://couchdb.manoseimas.lt/'
-
-COUCHDB_SERVER = config.couchdb_server
-COUCHDB_DATABASES = (
-    ('sboard', COUCHDB_SERVER + 'nodes'),
-    ('sboard.profiles', COUCHDB_SERVER + 'nodes'),
-
-    # XXX: do some thing, that adding these settings should not be necessary.
-    ('manoseimas.compat', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.legislation', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.mps', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.solutions', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.votings', COUCHDB_SERVER + 'nodes'),
-    ('manoseimas.widget', COUCHDB_SERVER + 'nodes'),
-)
 
 ELASTICSEARCH_SERVERS = (
     '127.0.0.1:9200',
@@ -261,13 +239,14 @@ CACHES = {
 PROTOCOL = 'http'
 DEFAULT_FROM_EMAIL = 'manoseimas@doublemarked.com'
 
-AUTH_PROFILE_MODULE = 'profiles.Profile'
 AUTH_USER_MODEL = 'manoseimas.ManoSeimasUser'
 
 AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
     'social.backends.google.GoogleOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.open_id.OpenIdAuth',
+    'lazysignup.backends.LazySignupBackend',
 )
 
 GOOGLE_ANALYTICS_KEY = config.google_analytics_key
@@ -277,25 +256,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = config.facebook_api_secret
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = config.google_oauth2_key
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = config.google_oauth2_secret
-
-SBOARD_NODES = (
-    'sboard.categories.nodes.CategoryNode',
-    'manoseimas.legislation.nodes.LawNode',
-    'manoseimas.legislation.nodes.LawChangeNode',
-    'manoseimas.legislation.nodes.LawProjectNode',
-    'manoseimas.votings.nodes.VotingNode',
-    'manoseimas.policy.nodes.PolicyNode',
-)
-
-SBOARD_SEARCH_HANDLERS = (
-    'manoseimas.votings.nodes.search_lrs_url',
-    'manoseimas.compat.nodes.CompatSearchView',
-)
-
-SBOARD_PAGE_TEMPLATES = (
-    ('sboard/page.html', 'Plain page'),
-    ('index.html', 'Index page'),
-)
 
 RESTRUCTUREDTEXT_FILTER_SETTINGS = {
     'footnote_references': 'superscript',
@@ -313,8 +273,17 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'dist/',
+        'BUNDLE_DIR_NAME': 'bundles/',
         'STATS_FILE': os.path.join(BUILDOUT_DIR, 'webpack-stats-prod.json'),
     }
 }
 
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(BUILDOUT_DIR, 'var', 'whoosh_index'),
+    },
+}
+
+# We have compatibility_test and many similar names ending with _test, so we need a better test discovery.
+NOSE_ARGS = ['--match', '^[Tt]est']

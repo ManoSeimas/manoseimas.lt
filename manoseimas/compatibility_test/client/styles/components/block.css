@@ -1,0 +1,24 @@
+@import "../_variables";
+@import "../base";
+
+.instruction {
+  margin-top: 35px;
+  max-width: 600px;
+}
+
+.instruction > .number {
+  vertical-align: top;
+}
+
+.number {
+  display: inline-block;
+  width: 20px;
+  padding: 12px 18px;
+  margin: 5px;
+  border-radius: 30px;
+  text-align: center;
+  font-weight: bold;
+  font-size: $big;
+  background-color: $black;
+  color: #fff;
+}

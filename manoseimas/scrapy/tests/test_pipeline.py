@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
+import os.path
 import StringIO
 import unittest
+import datetime
 
-from couchdbkit import Server
-from mock import patch
+from django.conf import settings
 
 from scrapy.http import HtmlResponse
 
 from ..items import Person
 from ..pipelines import ManoseimasPipeline, LobbyistNameMatcher
-from ..db import get_db
 from ..spiders.mps import MpsSpider
+from manoseimas.scrapy import models
 
 from .utils import fixture
 
@@ -28,17 +29,8 @@ class FakePipeline(ManoseimasPipeline):
 
 
 class TestPipeline(unittest.TestCase):
-    def setUp(self):
-        self.server = Server()
-        self.db = self.server.get_or_create_db('manoseimas_pipline_testdb')
 
-    def tearDown(self):
-        self.server.delete_db(self.db.dbname)
-
-    @patch('manoseimas.scrapy.pipelines.get_db')
-    def test_pipline(self, mock_get_db):
-        mock_get_db.return_value = self.db
-
+    def test_pipline(self):
         item = Person()
 
         item['_id'] = '000001'
@@ -76,24 +68,26 @@ class TestPipeline(unittest.TestCase):
             ('avatar', StringIO.StringIO('attachment content'), 'image/png')
         ]
 
-        self.assertFalse(self.db.doc_exist(item['_id']))
+        self.assertFalse(models.Person.objects.filter(key=item['_id']).exists())
 
         pipeline = ManoseimasPipeline()
         pipeline.process_item(item, None)
 
-        self.assertTrue(self.db.doc_exist(item['_id']))
-
-        doc = self.db.get(item['_id'])
-        rev = doc['_rev']
+        doc = models.Person.objects.get(key=item['_id'])
+        doc.updated -= datetime.timedelta(minutes=5)
+        doc.save()
+        rev = doc.updated
 
         # Update same item once again, document revision must be different.
         pipeline.process_item(item, None)
-        doc = self.db.get(item['_id'])
-        self.assertNotEqual(rev, doc['_rev'])
+        doc = models.Person.objects.get(key=item['_id'])
+        self.assertNotEqual(rev, doc.updated)
 
-        attachment = self.db.fetch_attachment(doc, 'avatar', stream=True)
-        content = attachment.read()
+        with open(os.path.join(settings.MEDIA_ROOT, 'attachments', 'person', str(doc.pk), 'avatar')) as f:
+            content = f.read()
         self.assertEqual(content, 'attachment content')
+
+        doc.delete()
 
     def test_pipline_from_spider(self):
         spider = MpsSpider()
@@ -106,21 +100,6 @@ class TestPipeline(unittest.TestCase):
 
         pipeline = ManoseimasPipeline()
         pipeline.process_item(item, spider)
-
-
-class TestPipelineGetDB(unittest.TestCase):
-    @patch('manoseimas.scrapy.settings.COUCHDB_DATABASES', (
-        ('legalacts', 'http://127.0.0.1:5984', 'my_legalacts_testdb',),
-        ('person', 'http://127.0.0.1:5984', 'my_person_testdb',),
-    ))
-    def test_get_db(self):
-        db = get_db('person', cache=False)
-        self.assertEqual(db.dbname, 'my_person_testdb')
-        db.server.delete_db(db.dbname)
-
-        db = get_db('legalacts', cache=False)
-        self.assertEqual(db.dbname, 'my_legalacts_testdb')
-        db.server.delete_db(db.dbname)
 
 
 class TestLobbyistNameMatcher(unittest.TestCase):

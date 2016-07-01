@@ -1,0 +1,28 @@
+@import "../_variables";
+
+.tabs {
+  width: 100%;
+}
+
+.tab {
+  display: inline-block;
+  width: 50%;
+  padding: 10px 0;
+  text-align: center;
+  font-weight: 400;
+  font-size: $normal;
+  background-color: #fff;
+  cursor: pointer;
+
+  &:first-child { border-radius: $radius 0 0 $radius }
+  &:last-child { border-radius: 0 $radius $radius 0 }
+  &:hover { background-color: color($grey a(20%)) }
+}
+
+.active-tab {
+  composes: tab;
+  background-color: $black;
+  color: #fff;
+  cursor: initial;
+  &:hover { background-color: color($black a(90%)) }
+}

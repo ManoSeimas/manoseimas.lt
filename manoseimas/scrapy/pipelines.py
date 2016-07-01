@@ -5,18 +5,20 @@ import os
 
 from django.db import transaction
 from django.core.files.base import ContentFile
+from django.conf import settings
+
+from scrapy.item import Item
 
 import manoseimas.common.utils.words as words_utils
 
-from manoseimas.scrapy.db import get_db, get_doc, store_doc
 from manoseimas.scrapy.items import (
     Person, StenogramTopic, ProposedLawProjectProposer,
     Lobbyist, LobbyistDeclaration, Suggestion)
 from manoseimas.scrapy.helpers.stenograms import get_voting_for_stenogram
 from manoseimas.scrapy.helpers.stenograms import get_votings_by_date
+from manoseimas.scrapy import models
 
-from manoseimas.mps.abbr import get_fraction_abbr
-
+from manoseimas.mps_v2.abbr import get_fraction_abbr
 from manoseimas.mps_v2.models import ParliamentMember, PoliticalParty
 from manoseimas.mps_v2.models import Group, GroupMembership
 from manoseimas.mps_v2.models import Stenogram, StenogramStatement
@@ -53,37 +55,68 @@ def check_spider_pipeline(process_item_method):
     return wrapper
 
 
+def save_item(item):
+    pipeline = ManoseimasPipeline()
+    if isinstance(item, Item):
+        pipeline.process_item(item, None)
+        item_name = pipeline.get_item_name()
+        Model = pipeline.models[item_name]
+        return Model.objects.get(key=item['_id'])
+    else:
+        item_name = item['doc_type'].lower()
+        Model = pipeline.models[item_name]
+        instance = Model()
+        instance.update_from_item(item)
+        instance.save()
+        return instance
+
+
 class ManoseimasPipeline(object):
+    models = {
+        'person': models.Person,
+        'voting': models.Voting,
+        'question': models.Question,
+        'personvote': models.PersonVote,
+    }
 
-    def store_item(self, db, doc, item):
-        store_doc(db, doc)
+    def open_spider(self, spider):
+        pass
 
-    def get_doc(self, db, item):
-        return get_doc(db, item['_id'])
+    def get_item_name(self, item):
+        return item.__class__.__name__.lower()
 
     @check_spider_pipeline
     def process_item(self, item, spider):
         if '_id' not in item or not item['_id']:
             raise Exception('Missing doc _id. Doc: %s' % item)
 
-        item_name = item.__class__.__name__.lower()
-        db = get_db(item_name)
+        item_name = self.get_item_name(item)
+        Model = self.models[item_name]
 
-        doc = self.get_doc(db, item)
-        if doc is None:
-            doc = dict(item)
-            doc['doc_type'] = item_name
-        else:
-            # Some documents contain source versioning. In those cases,
-            # we must ensure we're not clobbering a newer sourced
-            # document with an older version.
-            if not is_latest_version(item, doc):
-                return
+        _item = dict(item)
+        attachments = _item.pop('_attachments', None) or []
 
-            doc.update(item)
+        try:
+            obj = Model.objects.get(key=_item['_id'])
+        except Model.DoesNotExist:
+            obj = Model()
 
-        doc['updated'] = datetime.datetime.now().isoformat()
-        self.store_item(db, doc, item)
+        # Some documents contain source versioning. In those cases,
+        # we must ensure we're not clobbering a newer sourced
+        # document with an older version.
+        if not is_latest_version(_item, obj.value):
+            return
+
+        obj.update_from_item(_item)
+        obj.save()
+
+        for name, stream, mime in attachments:
+            path = os.path.join(settings.MEDIA_ROOT, 'attachments', item_name, str(obj.pk))
+            if not os.path.exists(path):
+                os.makedirs(path)
+            stream.seek(0)
+            with open(os.path.join(path, name), 'wb') as f:
+                f.write(stream.read())
 
         return item
 
@@ -237,15 +270,10 @@ class ManoSeimasModelPersistPipeline(object):
 
         presenter_names = set()
         for doc in docs:
-            for document in doc.get('documents', []):
+            for document in doc.value.get('documents', []):
                 for speaker in document.get('speakers', []):
                     presenter_names.add(speaker['name'])
-            Voting.objects.create(
-                stenogram_topic=topic,
-                node=doc['_id'],
-                timestamp=datetime.datetime.strptime(doc['created'],
-                                                     '%Y-%m-%dT%H:%M:%SZ'),
-            )
+            Voting.objects.create(stenogram_topic=topic, voting=doc, timestamp=doc.timestamp)
         presenters = filter(bool,
                             map(self.mp_matcher.get_mp_by_name,
                                 list(presenter_names)))

@@ -1,0 +1,136 @@
+@import "_variables";
+
+:global body {
+  font-family: 'Roboto', sans-serif;
+}
+
+:global h2 {
+  color: $black;
+  margin-top: 0;
+  font-weight: normal;
+  font-size: $huge;
+  font-family: 'Roboto', sans-serif;
+}
+
+:global h3 {
+  font-family: 'Roboto', sans-serif;
+  font-size: $big;
+  font-weight: normal;
+}
+
+:global header {
+  margin-bottom: 50px;
+}
+
+:global .inline {
+  display: inline-block;
+}
+
+:global .button {
+  display: inline-block;
+  padding: 1em 4em;
+  background-color: $black;
+  color: white;
+  font-size: $normal;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 3px;
+
+  &:hover {
+    background-color: color($black a(90%));
+    cursor: pointer;
+  }
+}
+
+.small_button {
+  display: inline-block;
+  padding: 5px 15px;
+  margin-right: 15px;
+  background-color: $black;
+  color: white;
+  font-size: $small;
+  font-weight: 100;
+  text-decoration: none;
+  border-radius: $radius;
+  width: 150px;
+
+  &:hover {
+    background-color: color($black a(90%));
+    cursor: pointer;
+  }
+}
+
+.base_button {
+  background-color: #fff;
+  border-radius: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 5px;
+  display: inline-block;
+  padding: 15px 0;
+  margin-right: 15px;
+  font-family: 'Roboto' !important;
+  font-size: $normal;
+  font-weight: bold;
+  text-transform: uppercase;
+  width: 30%;
+  text-align: center;
+
+  &:hover {
+    background-color: color(#fff blackness(3%));
+    cursor: pointer;
+  }
+}
+
+.note {
+  font-style: italic;
+  font-weight: 300;
+  font-size: $small;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  line-height: 1.5;
+  max-width: 550px;
+}
+
+.block {
+  margin-left: 80px;
+}
+
+.content {
+  lost-column: 3/4 0;
+  margin-right: 0 !important;
+  padding-right: 10px;
+
+  h2 {
+    margin-bottom: 50px;
+  }
+}
+
+.context-image {
+  height: 300px;
+  border: 2px dashed $grey;
+  lost-column: 1/4 0;
+}
+
+.text {
+  display: inline-block;
+  color: $black;
+  font-size: $big;
+  font-style: normal;
+  font-weight: 300;
+  font-family: 'Roboto' !important;
+  width: calc(100% - 90px);
+  margin-left: 15px;
+  line-height: 1.3;
+
+  strong {
+    font-weight: normal;
+  }
+}
+
+p {
+  color: $black;
+  font-weight: 300;
+  font-family: 'Roboto' !important;
+  line-height: 1.3;
+  margin-top: 5px;
+}

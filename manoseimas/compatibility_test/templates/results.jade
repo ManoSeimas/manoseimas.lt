@@ -1,0 +1,20 @@
+- extends "test_base.jade"
+- load static from staticfiles
+- load render_bundle from webpack_loader
+- load to_json from json_data
+
+- block title
+  | Politinio suderinamumo testo resultatai - manoSeimas.lt
+
+- block main
+  script.
+    window.___INITIAL_STATE__ = {
+      test_state: {
+        title: {% to_json title %}
+      }
+    }
+
+  #compat-app
+
+  - render_bundle 'react'
+  - render_bundle 'compat_test'

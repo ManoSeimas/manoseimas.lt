@@ -1,0 +1,192 @@
+@import "../_variables";
+
+.content {
+  composes: content from '../base.css';
+
+  h2 {
+    margin-bottom: 15px;
+    font-style: normal;
+  }
+}
+
+.context-image {
+  composes: context-image from '../base.css';
+}
+
+.note {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  color: $black;
+  font-weight: 300;
+  font-family: 'Roboto' !important;
+  font-style: italic;
+  line-height: 1.3;
+  font-size: $normal;
+}
+
+.item {
+  margin-top: 20px;
+
+  main {
+    display: inline-block;
+    width: calc(100% - 90px);
+    vertical-align: top;
+  }
+
+  a {
+    font-size: $small;
+    color: $dark;
+  }
+}
+
+.img {
+  margin-right: 20px;
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  overflow: hidden;
+  border-radius: 50%;
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+}
+
+.arrow {
+  display: inline-block;
+  vertical-align: middle;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: $dark transparent transparent transparent;
+  margin-left: 5px;
+}
+
+.title {
+  font-family: 'Roboto' !important;
+  font-weight: 500;
+  font-size: $normal;
+  color: $black;
+  margin-bottom: 5px;
+}
+
+.topics {
+  margin-top: 40px;
+
+  h3 {
+    font-weight: 400;
+    font-size: $medium;
+    margin-bottom: 5px;
+  }
+
+  .note {
+    margin-bottom: 20px;
+  }
+
+  ol {
+    counter-reset: li;
+    padding-left: 0px;
+  }
+
+  li {
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 20px;
+    font-size: $normal;
+    color: $black;
+    list-style: none;
+    line-height: 1.5;
+
+    &:before {
+      content: counter(li);
+      counter-increment: li;
+      position: absolute;
+      left: 0;
+      top: 0;
+      margin-top: 3px;
+
+      border-radius: 50%;
+      background-color: $black;
+      font-size: $medium;
+      font-weight: 300;
+      color: #fafafa;
+      text-align: center;
+      width: 33px;
+      height: 33px;
+    }
+  }
+}
+
+.similarity-bar {
+  width: 100%;
+  margin-top: 10px;
+  div {
+    display: inline-block;
+    vertical-align: top;
+    font-weight: 400;
+  }
+  .line {
+    width: 100%;
+    height: 7px;
+    background: linear-gradient(to right, $red 25%, $black 50%, $green 75%);
+    vertical-align: middle;
+  }
+  .yes {
+    color: $green;
+    text-align: right;
+    width: 30px;
+  }
+
+  .no {
+    color: $red;
+    text-align: left;
+    width: 55px;
+  }
+}
+
+.actions {
+  width: 100%;
+  .action {
+    display: inline-block;
+    width: calc(33% + 5px);
+    text-align: center;
+
+    img {
+      width: 30px;
+      cursor: pointer;
+      &:hover { opacity: 0.7 }
+    }
+
+    &:first-child {
+      text-align: left;
+      margin-left: -15px;
+    }
+    &:last-child {
+      text-align: right;
+      img { margin-right: -17px }
+    }
+  }
+}
+
+.similarity-header {
+  .img {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 7px;
+    box-shadow: 0 0 3px $grey;
+  }
+
+  .similarity-bar {
+    top: 40px;
+    position: relative;
+  }
+
+  .line {
+    width: calc(100% - 70px);
+    margin: 0 5px;
+  }
+
+}

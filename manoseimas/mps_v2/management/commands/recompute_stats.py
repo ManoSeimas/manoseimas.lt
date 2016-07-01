@@ -45,7 +45,7 @@ class Command(BaseCommand):
         ordered = toposort_flatten(deps)
         return map(lambda name: reverse[name], ordered)
 
-    def compute_precomputed_fields(self):
+    def compute_precomputed_fields(self, options):
         model_classes = self.sort_precomp_models(filter(
             lambda model_cls: getattr(model_cls, 'precomputed_fields', None),
             apps.get_models()
@@ -57,8 +57,10 @@ class Command(BaseCommand):
                 )
             else:
                 objects = model_cls.objects.all()
-            print('Computing fields for {}'.format(model_cls.__name__))
-            for object in tqdm(objects):
+            if options['verbosity'] > 0:
+                self.stdout.write('Computing fields for {}'.format(model_cls.__name__))
+            objects_iter = tqdm(objects) if options['verbosity'] > 0 else objects
+            for object in objects_iter:
                 for field, compute_fn in model_cls.precomputed_fields:
                     if callable(compute_fn):
                         value = compute_fn()
@@ -80,24 +82,29 @@ class Command(BaseCommand):
     @transaction.atomic
     def handle(self, **options):
 
-        print('Computing precomputed model fields')
-        self.compute_precomputed_fields()
+        if options['verbosity'] > 0:
+            self.stdout.write('Computing precomputed model fields')
+        self.compute_precomputed_fields(options)
 
-        print('Computing MP rankings...')
+        if options['verbosity'] > 0:
+            self.stdout.write('Computing MP rankings...')
         mps = models.ParliamentMember.objects.all()
+        mps_iter = tqdm(mps) if options['verbosity'] > 0 else mps
         stats = [ItemStats(mp.id,
                            mp.statement_count,
                            mp.long_statement_count,
                            mp.vote_percentage,
                            mp.discussion_contribution_percentage,
                            mp.passed_law_project_ratio)
-                 for mp in tqdm(mps)]
+                 for mp in mps_iter]
         self.save_rankings(models.MPRanking, mps, stats)
 
-        print('Computing Fraction rankings...')
+        if options['verbosity'] > 0:
+            self.stdout.write('Computing Fraction rankings...')
         fractions = models.Group.objects.filter(
             type=models.Group.TYPE_FRACTION
         )
+        fractions_iter = tqdm(fractions) if options['verbosity'] > 0 else fractions
         fraction_stats = [
             ItemStats(
                 fraction.id,
@@ -106,6 +113,6 @@ class Command(BaseCommand):
                 fraction.avg_vote_percentage,
                 fraction.avg_discussion_contribution_percentage,
                 fraction.avg_passed_law_project_ratio,
-            ) for fraction in tqdm(fractions)
+            ) for fraction in fractions_iter
         ]
         self.save_rankings(models.GroupRanking, fractions, fraction_stats)

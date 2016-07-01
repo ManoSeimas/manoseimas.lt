@@ -16,25 +16,34 @@ Before starting, install system dependencies (this will require ``sudo``)::
 
     make ubuntu
 
-Run CouchDB using Docker::
-
-    docker run -d -p 5984:5984 --name couchdb klaemo/couchdb:1.6.1
-
-If you don't have Docker, you can install CouchDB using the manual way (see
-`Appendix: Manual CouchDB install`_) also you can install CouchDB using your package
-manager. It's up to you how you get CouchDB running.
-
 Build the project::
 
     make
 
+Install npm packages::
+
+    npm install
+
+Create mysql user::
+
+    mysql -u root
+      CREATE DATABASE IF NOT EXISTS manoseimas CHARSET=utf8;
+      CREATE USER 'manoseimas'@'localhost';
+      GRANT ALL PRIVILEGES ON *.* TO 'manoseimas'@'localhost';
+      FLUSH PRIVILEGES;
+
+Create mysql config file::
+
+    vim ~/.my.cnf
+      [client]
+      database = manoseimas
+      user = manoseimas
+      password =
+      default-character-set = utf8
+
 Run migrations::
 
     bin/django migrate
-
-Sync CouchDB views for scrapy::
-
-    bin/initscrapy
 
 And run the project::
 
@@ -60,35 +69,6 @@ browser and navigate to::
     http://127.0.0.1:8000
 
 
-Appendix: Manual CouchDB install
-================================
-
-https://github.com/iriscouch/build-couchdb
-
-In short, CouchDB can be installed using these commands::
-
-    sudo apt-get install make gcc zlib1g-dev libssl-dev rake
-    git clone git://github.com/iriscouch/build-couchdb
-    cd build-couchdb
-    git submodule init
-    git submodule update
-    rake
-
-After building CouchDB, run it using this command::
-
-    ./build/bin/couchdb
-
-
-Production CouchDB access
-=========================
-
-To access CouchDB web UI run this command::
-
-    ssh -L 9000:localhost:5984 manoseimas.lt
-
-And visit http://localhost:9000/_utils/
-
-
 Manually running crawlers and housekeeping
 ==========================================
 
@@ -97,16 +77,34 @@ These crawlers are currently present::
     bin/scrapy crawl mps  # Parliament member profiles
     bin/scrapy crawl stenograms  # Stenograms
     bin/scrapy crawl law_projects  # Law project stats
-    bin/scrapy crawl sittings  # Sittings and voting stats, usually invoked via syncsittings
+    bin/scrapy crawl sittings  # Sittings and voting stats
     bin/scrapy crawl lobbyists  # Lobbyists
 
 These commands are used to precompute and load various things::
 
-    bin/django recompute_stats  # Recompute stats on models
-    bin/django couchdb_sync_id  # Run this if you see CouchDB conflicts
-    bin/django syncsittings [--update] [--scrape]  # update sittings
-    bin/django syncmps [--update] [--scrape]  # update mps
-    bin/django syncpositions  # Sync MP and Fraction positions on various political issues
+    bin/django recompute_stats
 
 See the crontab rules in ``deployment/deploy.yml`` for the order and frequency
 of their execution.
+
+
+Running tests
+=============
+
+You can use this command for testing::
+
+  bin/django test \
+      -v 2 \
+      --settings=manoseimas.settings.testing \
+      --nocapture --nologcapture \
+      --all-modules --with-doctest --doctest-tests \
+      --with-coverage --cover-erase --cover-package manoseimas \
+      --noinput --failfast --keepdb \
+      manoseimas
+
+Note ``--keepdb`` flag, with this flag, database from previous test run will be
+reused. Usually this is a good thing, because tests will run much faster, but
+if database schema changes, you will need to create a migration file and then
+recreate database::
+
+    mysql -uroot -e 'DROP DATABASE IF EXISTS test_manoseimas; CREATE DATABASE test_manoseimas CHARSET=utf8;'

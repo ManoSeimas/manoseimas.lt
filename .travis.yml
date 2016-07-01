@@ -16,13 +16,17 @@ cache:
 before_cache:
   - rm -f $HOME/.cache/pip/log/debug.log
 before_install:
-  - mysql -uroot -e 'create database manoseimas;'
+  - mysql -uroot -e 'create database manoseimas charset=utf8;'
   - printf "[client]\ndatabase = manoseimas\nuser = root\npassword =\ndefault-character-set = utf8\n" > ~/.my.cnf
 install:
   - pip install -U pip
   - python scripts/genconfig.py config/env/development.cfg
   - make
+  - npm install -g npm@2
+  - npm install
+  - npm run build
 script:
+  - mysql -uroot -e 'drop database if exists test_manoseimas; create database test_manoseimas charset=utf8'
   - make test
 notifications:
   slack:

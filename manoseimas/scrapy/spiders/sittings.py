@@ -1,5 +1,6 @@
 # coding: utf-8
 import urllib
+import datetime
 
 from six import text_type
 
@@ -20,8 +21,8 @@ from manoseimas.scrapy.loaders import Loader
 from manoseimas.scrapy.loaders import absolute_url
 from manoseimas.scrapy.spiders import ManoSeimasSpider, mark_no_cache
 from manoseimas.scrapy.utils import Increment
-from manoseimas.scrapy.db import get_sequential_votings, get_question
 from manoseimas.scrapy import pipelines
+from manoseimas.scrapy import models
 
 
 # By default, never earlier than Seimas sitting 80, which is Fall 2008.
@@ -73,26 +74,26 @@ class SittingsSpider(ManoSeimasSpider):
 
         if resume.lower() != "no":
             # Resume spidering from the last stored Voting, if there is one
-            resume_from = get_sequential_votings(limit=1)
+            resume_from = models.Voting.objects.order_by('key').last()
         else:
-            resume_from = []
+            resume_from = None
 
-        if resume_from:
-            voting = resume_from[0]
-            question = get_question(voting['question'])
-            session = question['session']
+        if resume_from and 'question' in resume_from.value:
+            voting = resume_from
+            question = models.Question.objects.get(key=voting.value['question'])
+            session = question.value['session']
             # Note: We're incrementing range arguments by 1 because our
             # range comparison expects a standard [a,b) interval,
             # with 2nd-argument exclusivity, and we're dealing with
             # negative numbers.
             sitting_session_range = [
                 (int(session['id']), None),
-                (None, 1+int(session['fakt_pos_id']))
+                (None, 1 + int(session['fakt_pos_id']))
             ]
-            question_range = [(None, 1+int(question['source']['id']))]
+            question_range = [(None, 1 + int(question.value['source']['id']))]
             # Note: We increment (see above note) and then decrement in order
             # to reach the next voting. Net result is 0 offset.
-            voting_range = [(None, int(voting['source']['id']))]
+            voting_range = [(None, int(voting.value['source']['id']))]
 
         self.rules = (
             Rule(QualifiedRangeSgmlLinkExtractor(
@@ -165,7 +166,7 @@ class SittingsSpider(ManoSeimasSpider):
         voting = Loader(self, response, Voting(), item, required=required)
 
         url = item.select('td[2]/a[1]/@href').extract()[0]
-        source = self._get_source(url, 'p_bals_id')
+        source = self._get_source_absolute_url(response, url, 'p_bals_id')
         _id = source['id']
 
         voting.add_value('_id', '%sv' % _id)
@@ -316,7 +317,7 @@ class SittingsSpider(ManoSeimasSpider):
         xpath = '/html/body/div/table/tr[3]/td/table/tr/td'
         hxs = HtmlXPathSelector(response).select(xpath)[0]
 
-        source = self._get_source(response.url, 'p_svarst_kl_stad_id')
+        source = self._get_source_absolute_url(response, response.url, 'p_svarst_kl_stad_id')
         _id = source['id']
 
         question = Loader(self, response, Question(), hxs, required=(
@@ -419,12 +420,21 @@ class SittingsSpider(ManoSeimasSpider):
                  'div[contains(h4,"rezultatai")]/table')
         hxs = HtmlXPathSelector(response).select(xpath)[0]
 
-        source = self._get_source(response.url, 'p_bals_id')
+        source = self._get_source_absolute_url(response, response.url, 'p_bals_id')
         _id = source['id']
 
         voting = Loader(self, response, Voting(), hxs, required=(
-            '_id', 'votes',))
+            '_id', 'datetime', 'votes',))
         voting.add_value('_id', '%sv' % _id)
+
+        datetime_xpath_base = '/html/body/div/table/tr[3]/td/table/tr/td/'
+        date = hxs.xpath(datetime_xpath_base + 'div[2]/b/a[2]/text()')[0].extract()
+        time = hxs.xpath(datetime_xpath_base + (
+            'align/text()[contains(., "Balsavimo laikas")]/following-sibling::b[1]/text()'
+        ))[0].extract()
+        timestamp = '%s %s' % (date, time)
+        datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
+        voting.add_value('datetime', timestamp)
 
         self._parse_voting_legal_acts(response, voting)
 
@@ -433,15 +443,20 @@ class SittingsSpider(ManoSeimasSpider):
                 continue  # Skip header
 
             p_vote = Loader(self, response, PersonVote(), person, required=(
-                'person', 'fraction', 'vote',))
+                '_id', 'voting_id', 'person', 'fraction', 'vote',))
 
             p_id = person.select('td[1]/a/@href').re(r'p_asm_id=(-?\d+)')[0]
 
+            p_vote.add_value('_id', '%s:%s' % (_id, p_id))
+            p_vote.add_value('voting_id', '%sv' % _id)
             p_vote.add_value('person', '%sp' % p_id)
             p_vote.add_xpath('name', 'td[1]/a/text()')
             p_vote.add_xpath('fraction', 'td[2]/text()')
             p_vote.add_value('vote', self._get_vote_value(person))
+            p_vote.add_value('datetime', timestamp)
 
-            voting.add_value('votes', dict(p_vote.load_item()))
+            p_vote = p_vote.load_item()
+            voting.add_value('votes', dict(p_vote))
+            yield p_vote
 
         yield voting.load_item()

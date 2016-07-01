@@ -1,0 +1,13 @@
+@import "../_variables";
+
+.bar {
+  border-radius: 7px;
+  background-color: #fafafa;
+  height: 15px;
+  margin-bottom: 5px;
+
+  div {
+    height: 15px;
+    border-radius: 7px;
+  }
+}
