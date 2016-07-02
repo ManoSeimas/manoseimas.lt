@@ -1,3 +1,5 @@
+import { saveAllAnswers } from './results'
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -17,8 +19,9 @@ export function setActiveTopic (topic_id) {
 }
 
 export function finishTest () {
-  return {
-    type: FINISH_TEST
+  return function (dispatch) {
+    dispatch({type: FINISH_TEST})  // Go to results page.
+    dispatch(saveAllAnswers())
   }
 }
 

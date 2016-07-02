@@ -1,4 +1,3 @@
-import { finishTest } from './test_state'
 import { setSelectedFractions  } from './mps_state'
 import { fetch } from '../utils'
 
@@ -77,10 +76,13 @@ export function setActiveTab (tab_id) {
 }
 
 export function saveAnswer (topic_id, answer) {
-  return {
-    type: SAVE_ANSWER,
-    topic_id: topic_id,
-    answer: answer
+  return (dispatch, getState) => {
+    dispatch({
+      type: SAVE_ANSWER,
+      topic_id: topic_id,
+      answer: answer
+    })
+    dispatch(saveAllAnswers())
   }
 }
 
@@ -93,7 +95,6 @@ export function toggleImportance (topic_id) {
 
 export function saveAllAnswers () {
   return (dispatch, getState) => {
-    dispatch(finishTest())  // Go to results page.
     return new Promise(resolve => {
       // Save answers
       const answers = getState().results.answers
