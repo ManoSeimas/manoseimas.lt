@@ -3,7 +3,7 @@ import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../../components
 import Modal from './Modal'
 import Arguments from './Arguments'
 import MoreInfo from './MoreInfo'
-import styles from '../../../styles/components/topic.css'
+import styles from '../../../styles/views/topic.css'
 
 const Topic = (props) => {
     let topic_arguments = {}
@@ -20,7 +20,7 @@ const Topic = (props) => {
                     <strong>{props.topic.name}</strong>
                 </div>
                 <div className={styles.actions}>
-                    <div className={styles.absolute}>
+                    <div className={styles.relative}>
                         <Button type='small'
                                 action={props.toggleDetails}
                                 arrow={true}>Daugiau informacijos</Button>

@@ -2,7 +2,7 @@
 
 .modal {
   position: relative;
-  top: 0;
+  top: 5px;
   left: 0;
   width: 90%;
   background-color: #fff;
