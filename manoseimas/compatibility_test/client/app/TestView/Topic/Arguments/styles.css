@@ -6,8 +6,13 @@
     color: $black;
     font-family: 'Roboto' !important;
     font-weight: normal;
-    margin-bottom: 0;
+    font-size: $normal;
+    margin-bottom: 10px;
     margin-top: 10px;
+  }
+
+  p {
+    line-height: 1.4;
   }
 }
 
