@@ -9,7 +9,7 @@
 .step {
   background-color: $grey;
   height: 3px;
-  width: calc(10% - 3px);
+  width: calc(8.33% - 3px);
   display: inline-block;
   margin-right: 3px;
 }

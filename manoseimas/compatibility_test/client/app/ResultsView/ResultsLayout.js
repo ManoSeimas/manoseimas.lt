@@ -8,7 +8,7 @@ export const ResultsLayout = ({ children }) =>
     <div>
         <header>
             <img src='/static/img/logo-black.png' className='logo' />
-            <StatusBar current={10} max={10} />
+            <StatusBar current={12} max={12} />
         </header>
         <div className={styles.content}>
             <h2 className='title'>Rezultatai</h2>
