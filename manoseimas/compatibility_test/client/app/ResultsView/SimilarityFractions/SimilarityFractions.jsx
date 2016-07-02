@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { subscribe } from 'subscribe-ui-event'
 import { SimilarityBar, StickyHeader } from '../../../components'
+import FractionMps from './FractionMps'
 import styles from '../../../styles/views/results.css'
 
 class SimilarityFractions extends React.Component {
@@ -10,6 +11,7 @@ class SimilarityFractions extends React.Component {
         this.subscribers
         this.header_position
         this.scrollHandler = this.scrollHandler.bind(this)
+        this.showMoreMps = this.showMoreMps.bind(this)
     }
 
     static propTypes = {
@@ -20,7 +22,13 @@ class SimilarityFractions extends React.Component {
       expanded_number: PropTypes.string,
       showHeader: PropTypes.func,
       hideHeader: PropTypes.func,
-      expandFraction: PropTypes.func
+      expandFraction: PropTypes.func,
+      setActiveTab: PropTypes.func,
+      setSelectedFractions: PropTypes.func
+    }
+
+    static contextTypes = {
+        router: React.PropTypes.object
     }
 
     componentDidMount () {
@@ -41,7 +49,7 @@ class SimilarityFractions extends React.Component {
         }
     }
 
-    scrollHandler(event, payload) {
+    scrollHandler (event, payload) {
         if (payload.scroll.top > this.header_position && !this.props.show_header) {
             this.props.showHeader()
         }
@@ -72,6 +80,22 @@ class SimilarityFractions extends React.Component {
         return Math.round((points / answers_count)*100)
     }
 
+    get_mps (fraction) {
+        let mps = []
+        for (let mp of this.props.mps) {
+            if (mp.fraction == fraction) {
+                mps.push(mp)
+            }
+        }
+        return mps
+    }
+
+    showMoreMps (fraction_id) {
+        // Open /mps and set selected_fractions to fraction_id
+        this.context.router.push('/results/mps')
+        this.props.setSelectedFractions([fraction_id])
+    }
+
     render () {
         let {fractions, mps, user_answers, show_header, expanded_fraction} = this.props
         return (
@@ -92,22 +116,9 @@ class SimilarityFractions extends React.Component {
                             </a>
                         </main>
                         {(expanded_fraction === fraction.id)
-                            ? <div className={styles.members}>
-                                {mps.map(mp => {
-                                    if (mp.fraction === fraction.short_title) {
-                                        let similarity = this.calculate_similarity(mp.answers)
-                                        return <div className={styles.item} key={mp.id}>
-                                            <div className={styles.img}>
-                                                <img src={mp.logo} alt={mp.name + ' logo'} />
-                                            </div>
-                                            <main>
-                                                <div className={styles.title}>{mp.name}, {mp.fraction}, {similarity}%</div>
-                                                <SimilarityBar similarity={similarity} slim={true} />
-                                            </main>
-                                        </div>
-                                    }
-                                })}
-                            </div>
+                            ? <FractionMps mps={this.get_mps(fraction.short_title)}
+                                           user_answers={user_answers}
+                                           showMoreMps={this.showMoreMps} />
                             : ''
                         }
                     </div>

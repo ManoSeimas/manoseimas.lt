@@ -1,4 +1,5 @@
 import { finishTest } from './test_state'
+import { setSelectedFractions  } from './mps_state'
 import { fetch } from '../utils'
 
 // ------------------------------------
@@ -59,10 +60,19 @@ export function getAnswers () {
   }
 }
 
-export function setActiveTab (tab_id) {
+// Only change active tab
+export function setTab (tab_id) {
   return {
     type: SET_ACTIVE_TAB,
     tab_id: tab_id
+  }
+}
+
+// Change tab and reset ui state data
+export function setActiveTab (tab_id) {
+  return (dispatch, getState) => {
+    dispatch(setTab(tab_id))
+    dispatch(setSelectedFractions([]))
   }
 }
 
@@ -149,7 +159,11 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, { answers: answers })
   },
   SET_ACTIVE_TAB: (state, action) => {
-    return Object.assign({}, state, { active_tab: action.tab_id })
+    return Object.assign({}, state, {
+      active_tab: action.tab_id,
+      expanded_fraction: undefined,
+      show_header: false
+    })
   },
   LOAD_RESULTS: (state, action) => {
     return Object.assign({}, state, {

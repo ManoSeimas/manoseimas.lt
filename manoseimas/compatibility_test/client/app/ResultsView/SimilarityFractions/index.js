@@ -5,7 +5,9 @@ import { saveAnswer,
          toggleImportance,
          showHeader,
          hideHeader,
+         setTab,
          expandFraction } from '../../../store/modules/results'
+import { setSelectedFractions } from '../../../store/modules/mps_state.js'
 import SimilarityFractions from './SimilarityFractions'
 import Topics from './Topics'
 import styles from '../../../styles/views/results.css'
@@ -22,6 +24,8 @@ class SimilarityFractionsContainer extends React.Component {
       toggleImportance: PropTypes.func,
       show_header: PropTypes.bool,
       showHeader: PropTypes.func,
+      setTab: PropTypes.func,
+      setSelectedFractions: PropTypes.func,
       hideHeader: PropTypes.func,
       expanded_fraction: PropTypes.number,
       expandFraction: PropTypes.func
@@ -47,6 +51,8 @@ class SimilarityFractionsContainer extends React.Component {
                                      expanded_fraction={expanded_fraction}
                                      show_header={show_header}
                                      expandFraction={this.props.expandFraction}
+                                     setActiveTab={this.props.setTab}
+                                     setSelectedFractions={this.props.setSelectedFractions}
                                      showHeader={this.props.showHeader}
                                      hideHeader={this.props.hideHeader} />
                 <Topics topics={topics}
@@ -74,5 +80,7 @@ export default connect((mapStateToProps), {
     getResults,
     showHeader,
     hideHeader,
-    expandFraction
+    expandFraction,
+    setTab,
+    setSelectedFractions
 })(SimilarityFractionsContainer)

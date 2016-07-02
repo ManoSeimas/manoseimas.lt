@@ -3,6 +3,7 @@
 // ------------------------------------
 export const EXPAND_TOPICS = 'EXPAND_TOPICS'
 export const SELECT_FRACTION = 'SELECT_FRACTION'
+export const SET_SELECTED_FRACTIONS = 'SET_SELECTED_FRACTIONS'
 
 // ------------------------------------
 // Actions
@@ -21,9 +22,17 @@ export function selectFraction (fraction_id) {
     }
 }
 
+export function setSelectedFractions (fraction_ids) {
+    return {
+        type: SET_SELECTED_FRACTIONS,
+        fraction_ids: fraction_ids
+    }
+}
+
 export const actions = {
     expandTopics,
-    selectFraction
+    selectFraction,
+    setSelectedFractions
 }
 
 // ------------------------------------
@@ -51,6 +60,9 @@ const ACTION_HANDLERS = {
             ]
         }
         return Object.assign({}, state, { selected_fractions: selected_fractions })
+    },
+    SET_SELECTED_FRACTIONS: (state, action) => {
+        return Object.assign({}, state, { selected_fractions: action.fraction_ids})
     }
 }
 

@@ -161,6 +161,34 @@ class ResultsView(View):
                     'fraction_id': 2,
                     'logo': '/media/profile_images/0c5b864efce2278579c4a1a0fa1985851454c244_TViMIZR.jpg',
                     'answers': {'1': 0.5, '2': -1, '3': 0.5, '4': -0.8, '5': -1}
+                }, {
+                    'id': 5,
+                    'name': 'Juozas Petraitis',
+                    'fraction': 'LLRA',
+                    'fraction_id': 3,
+                    'logo': '/media/profile_images/01667d36a4df869561133dfe44a39ca881ce2b5e_PpSk71U.jpg',
+                    'answers': {'1': 1, '2': 0.5, '3': 1, '4': -0.8, '5': 0}
+                }, {
+                    'id': 6,
+                    'name': 'Jonas Juozaitis',
+                    'fraction': 'LLRA',
+                    'fraction_id': 3,
+                    'logo': '/media/profile_images/01ffb49169abd4606343aa2e9e621e527fa1013e_yDdIUBb.jpg',
+                    'answers': {'1': -0.8, '2': 1, '3': 0.5, '4': -1, '5': 1}
+                }, {
+                    'id': 7,
+                    'name': 'Petras Juozaitis',
+                    'fraction': 'LLRA',
+                    'fraction_id': 3,
+                    'logo': '/media/profile_images/00a6a60429383aaa36a868c2595a06c88e6422b0.jpg',
+                    'answers': {'1': 1, '2': 0.9, '3': -1, '4': -0.8, '5': 0.5}
+                }, {
+                    'id': 8,
+                    'name': 'Juozas Petraitis',
+                    'fraction': 'LLRA',
+                    'fraction_id': 3,
+                    'logo': '/media/profile_images/0c5b864efce2278579c4a1a0fa1985851454c244_TViMIZR.jpg',
+                    'answers': {'1': -1, '2': -1, '3': 0.5, '4': -0.8, '5': 1}
                 }
             ]
         }

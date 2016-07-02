@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { SimilarityBar, SimilarityWidget } from '../../../components'
 import { expandTopics, selectFraction } from '../../../store/modules/mps_state'
-import { getResults, setActiveTab, saveAnswer } from '../../../store/modules/results'
+import { getResults, setTab, saveAnswer } from '../../../store/modules/results'
 import FractionsSelector from './FractionsSelector'
 import styles from '../../../styles/views/results.css'
 
@@ -19,7 +19,7 @@ class SimilarityMps extends React.Component {
       expandTopics: React.PropTypes.func,
       getResults: React.PropTypes.func,
       saveAnswer: React.PropTypes.func,
-      setActiveTab: React.PropTypes.func,
+      setTab: React.PropTypes.func,
       selectFraction: React.PropTypes.func
     }
 
@@ -28,7 +28,7 @@ class SimilarityMps extends React.Component {
         if (!this.props.mps.length){
             this.props.getResults()
         }
-        this.props.setActiveTab('mps')
+        this.props.setTab('mps')
     }
 
     calculateSimilarity (user_answers, mp_answers) {
@@ -111,6 +111,6 @@ export default connect((mapStateToProps), {
     expandTopics,
     getResults,
     saveAnswer,
-    setActiveTab,
+    setTab,
     selectFraction
 })(SimilarityMps)
