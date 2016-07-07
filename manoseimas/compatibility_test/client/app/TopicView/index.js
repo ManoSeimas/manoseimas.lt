@@ -31,6 +31,11 @@ class TopicContainer extends React.Component {
         router: React.PropTypes.object
     }
 
+    componentWillMount () {
+        if (Object.keys(this.props.active_topic).length === 0)
+            this.props.setActiveTopic(0)
+    }
+
     _nextTopic () {
         const topicId = this.props.next_topic_id
         if (topicId < this.props.topics_amount) {
