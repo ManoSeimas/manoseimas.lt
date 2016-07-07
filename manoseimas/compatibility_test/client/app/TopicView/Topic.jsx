@@ -1,9 +1,9 @@
 import React from 'react'
-import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../../components'
+import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../components'
 import Modal from './Modal'
 import Arguments from './Arguments'
 import MoreInfo from './MoreInfo'
-import styles from '../../../styles/views/topic.css'
+import styles from '../../styles/views/topic.css'
 
 const Topic = (props) => {
     let topic_arguments = {}

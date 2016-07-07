@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import Topic from './Topic'
 import { setActiveTopic,
          toggleArgumentsModal,
-         toggleMoreModal } from '../../../store/modules/test_state'
-import { saveAnswer, saveAllAnswers } from '../../../store/modules/results'
+         toggleMoreModal } from '../../store/modules/test_state'
+import { saveAnswer, saveAllAnswers } from '../../store/modules/results'
 
 
 class TopicContainer extends React.Component {
