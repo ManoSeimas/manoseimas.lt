@@ -36,33 +36,6 @@ def get_mp_votes(source_id, start_date='2012-11-16', end_date=None):
     return votes
 
 
-def prepare_positions(node):
-    from manoseimas.compat.models import PersonPosition
-
-    def position_to_dict(position):
-        return {
-            'node_ref': position.node.ref,
-            'permalink': position.node.ref.permalink(),
-            'formatted': position.format_position(),
-            'title': position.node.ref.title,
-            'position': position.position,
-            'klass': position.klass,
-        }
-
-    position_list = list(PersonPosition.objects.filter(profile=node))
-    position_list.sort(key=lambda pp: abs(pp.position), reverse=True)
-
-    positions = {'for': [], 'against': [], 'neutral': []}
-    for position in position_list:
-        if abs(position.position) < 0.2:
-            positions['neutral'].append(position_to_dict(position))
-        elif position.position > 0:
-            positions['for'].append(position_to_dict(position))
-        else:
-            positions['against'].append(position_to_dict(position))
-    return positions
-
-
 class ParliamentMember(CrawledItem):
     slug = AutoSlugField(populate_from=('first_name', 'last_name'),
                          max_length=120)
@@ -129,7 +102,7 @@ class ParliamentMember(CrawledItem):
     @property
     def fraction(self):
         ''' Current parliamentarian's fraction. '''
-        if getattr(self, '_fraction'):
+        if getattr(self, '_fraction', None):
             return self._fraction[0].group
         else:
             membership = GroupMembership.objects.filter(
@@ -216,10 +189,9 @@ class ParliamentMember(CrawledItem):
             return 0.0
 
     def get_positions(self):
-        # XXX:
-        # mp_node = couch.view('sboard/by_slug', key=self.slug).one()
-        # return prepare_positions(mp_node)
-        return None
+        from manoseimas.compatibility_test import services
+        positions = services.get_topic_positions()
+        return positions['mps'].get(self.pk, {})
 
     def get_collaborators_qs(self):
         collaborators = ParliamentMember.objects.filter(
@@ -366,10 +338,9 @@ class Group(CrawledItem):
         return agg['avg_contrib']
 
     def get_positions(self):
-        # XXX:
-        # fraction_node = couch.view('sboard/by_slug', key=self.slug).one()
-        # return prepare_positions(fraction_node)
-        return {'for': [], 'against': [], 'neutral': []}
+        from manoseimas.compatibility_test import services
+        positions = services.get_topic_positions()
+        return positions['fractions'].get(self.pk, {})
 
     def get_avg_proposed_law_project_count(self):
         agg = self.active_members.annotate(

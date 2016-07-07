@@ -107,4 +107,4 @@ reused. Usually this is a good thing, because tests will run much faster, but
 if database schema changes, you will need to create a migration file and then
 recreate database::
 
-    mysql -uroot -e 'DROP DATABASE IF EXISTS test_manoseimas; CREATE DATABASE test_manoseimas CHARSET=utf8;'
+    mysql -e 'DROP DATABASE IF EXISTS test_manoseimas; CREATE DATABASE test_manoseimas CHARSET=utf8;'

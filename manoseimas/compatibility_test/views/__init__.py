@@ -12,6 +12,7 @@ from django.http import JsonResponse
 
 from lazysignup.decorators import allow_lazy_user
 
+from manoseimas.mps_v2.models import Group, ParliamentMember
 from manoseimas.compatibility_test.models import CompatTest
 from manoseimas.compatibility_test.models import Topic
 from manoseimas.compatibility_test.models import UserResult
@@ -99,97 +100,37 @@ class ResultsView(View):
         # More requirements:
         # https://github.com/ManoSeimas/manoseimas.lt/issues/154
 
+        # XXX: move to settings
+        import collections
+        import datetime
+        DateTimeRange = collections.namedtuple('DateTimeRange', ['since', 'until'])
+        TERM_OF_OFFICE_RANGE = DateTimeRange(
+            since=datetime.datetime(2012, 10, 14),
+            until=datetime.datetime(2016, 10, 9),
+        )
+
+        term_of_office = '{0:%Y}-{1:%Y}'.format(*TERM_OF_OFFICE_RANGE)
         return {
             'user_answers': self.get_answers(user, test_id),
             'fractions': [
                 {
-                    'id': 1,
-                    'title': 'Darbo partijos frakcija',
-                    'short_title': 'DP',
-                    'logo': '/media/fraction_logos/dp.jpg',
-                    'answers': {'1': 1, '2': 0.3, '3': 0.5, '4': -0.8, '5': 0},
-                    'members_amount': 21,
-                }, {
-                    'id': 2,
-                    'title': 'Liberalų sąjūdžio frakcija',
-                    'short_title': 'LLS',
-                    'logo': '/media/fraction_logos/lls.jpg',
-                    'answers': {'1': 0.5, '2': -0.3, '3': 0.5, '4': -0.8, '5': 1},
-                    'members_amount': 10,
-                }, {
-                    'id': 3,
-                    'title': 'Lietuvos lenkų rinkimų akcijos frakcija',
-                    'short_title': 'LLRA',
-                    'logo': '/media/fraction_logos/llra.jpg',
-                    'answers': {'1': 0.75, '2': 1, '3': -0.8, '4': -1, '5': 0},
-                    'members_amount': 4,
-                }, {
-                    'id': 4,
-                    'title': 'Lietuvos socialdemokratų frakcija',
-                    'short_title': 'LSDP',
-                    'logo': '/media/fraction_logos/lsdp.png',
-                    'answers': {'1': 0.25, '2': -1, '3': -0.8, '4': -1, '5': 0},
-                    'members_amount': 4,
-                }
+                    'id': group.pk,
+                    'title': group.name,
+                    'short_title': group.abbr,
+                    'logo': group.logo.url,
+                    'answers': group.positions,
+                    'members_amount': group.active_member_count,
+                } for group in Group.objects.filter(type=Group.TYPE_FRACTION).order_by('pk')
             ],
             'mps': [
                 {
-                    'id': 1,
-                    'name': 'Jonas Jonaitis',
-                    'fraction': 'DP',
-                    'fraction_id': 1,
-                    'logo': '/media/profile_images/00a6a60429383aaa36a868c2595a06c88e6422b0.jpg',
-                    'answers': {'1': 1, '2': -0.3, '3': 0.5, '4': -0.8, '5': 0}
-                }, {
-                    'id': 2,
-                    'name': 'Petras Petraitis',
-                    'fraction': 'LLRA',
-                    'fraction_id': 3,
-                    'logo': '/media/profile_images/01667d36a4df869561133dfe44a39ca881ce2b5e_PpSk71U.jpg',
-                    'answers': {'1': 1, '2': 0.5, '3': 1, '4': -0.8, '5': 0}
-                }, {
-                    'id': 3,
-                    'name': 'Jonas Petraitis',
-                    'fraction': 'LLRA',
-                    'fraction_id': 3,
-                    'logo': '/media/profile_images/01ffb49169abd4606343aa2e9e621e527fa1013e_yDdIUBb.jpg',
-                    'answers': {'1': -0.8, '2': 1, '3': 0.5, '4': -1, '5': 1}
-                }, {
-                    'id': 4,
-                    'name': 'Petras Jonaitis',
-                    'fraction': 'LLS',
-                    'fraction_id': 2,
-                    'logo': '/media/profile_images/0c5b864efce2278579c4a1a0fa1985851454c244_TViMIZR.jpg',
-                    'answers': {'1': 0.5, '2': -1, '3': 0.5, '4': -0.8, '5': -1}
-                }, {
-                    'id': 5,
-                    'name': 'Juozas Petraitis',
-                    'fraction': 'LLRA',
-                    'fraction_id': 3,
-                    'logo': '/media/profile_images/01667d36a4df869561133dfe44a39ca881ce2b5e_PpSk71U.jpg',
-                    'answers': {'1': 1, '2': 0.5, '3': 1, '4': -0.8, '5': 0}
-                }, {
-                    'id': 6,
-                    'name': 'Jonas Juozaitis',
-                    'fraction': 'LLRA',
-                    'fraction_id': 3,
-                    'logo': '/media/profile_images/01ffb49169abd4606343aa2e9e621e527fa1013e_yDdIUBb.jpg',
-                    'answers': {'1': -0.8, '2': 1, '3': 0.5, '4': -1, '5': 1}
-                }, {
-                    'id': 7,
-                    'name': 'Petras Juozaitis',
-                    'fraction': 'LLRA',
-                    'fraction_id': 3,
-                    'logo': '/media/profile_images/00a6a60429383aaa36a868c2595a06c88e6422b0.jpg',
-                    'answers': {'1': 1, '2': 0.9, '3': -1, '4': -0.8, '5': 0.5}
-                }, {
-                    'id': 8,
-                    'name': 'Juozas Petraitis',
-                    'fraction': 'LLRA',
-                    'fraction_id': 3,
-                    'logo': '/media/profile_images/0c5b864efce2278579c4a1a0fa1985851454c244_TViMIZR.jpg',
-                    'answers': {'1': -1, '2': -1, '3': 0.5, '4': -0.8, '5': 1}
-                }
+                    'id': mp.pk,
+                    'name': mp.full_name,
+                    'fraction': mp.fraction.abbr if mp.fraction else None,
+                    'fraction_id': mp.fraction.pk if mp.fraction else None,
+                    'logo': mp.photo.url,
+                    'answers': mp.positions,
+                } for mp in ParliamentMember.objects.filter(term_of_office=term_of_office).order_by('pk')
             ]
         }
 

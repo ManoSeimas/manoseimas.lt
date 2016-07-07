@@ -12,9 +12,6 @@ from jsonfield import JSONField
 class Topic(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    # [[mp_id, fraction_id, pozicija], ...]
-    # recalculating on each voting adding
-    positions = JSONField(editable=False)
     votings = models.ManyToManyField('scrapy.Voting', through='TopicVoting')
 
     def __unicode__(self):
@@ -28,7 +25,7 @@ class Topic(models.Model):
 class TopicVoting(models.Model):
     topic = models.ForeignKey(Topic)
     voting = models.ForeignKey('scrapy.Voting')
-    factor = models.PositiveIntegerField(default=1)  # voting importance
+    factor = models.IntegerField(default=1)  # voting importance
 
     def __unicode__(self):
         return self.voting.get_title()

@@ -38,9 +38,7 @@ class TopicAdmin(admin.ModelAdmin):
 
     def save_related(self, request, form, formsets, change):
         super(TopicAdmin, self).save_related(request, form, formsets, change)
-        topic = form.instance
-        topic.positions = services.get_topic_positions(topic)
-        topic.save()
+        services.update_topic_positions(services.get_topic_positions())
 
 
 class TestGroupInline(admin.TabularInline):

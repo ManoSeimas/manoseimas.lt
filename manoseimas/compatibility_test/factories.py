@@ -54,7 +54,6 @@ class VotingFactory(DjangoModelFactory):
 class TopicFactory(DjangoModelFactory):
     name = 'Aukštojo mokslo reforma'
     description = 'Aukštojo mokslo reforma'
-    positions = {}
 
     class Meta:
         model = Topic
