@@ -13,7 +13,6 @@ from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyNaiveDateTime
 
 from manoseimas.scrapy.models import Voting, PersonVote
-from manoseimas.mps_v2.models import Group
 from manoseimas.mps_v2.factories import GroupFactory, ParliamentMemberFactory, GroupMembershipFactory
 from manoseimas.compatibility_test.models import Topic, TopicVoting, CompatTest, TestGroup, Argument, UserResult
 from manoseimas.compatibility_test.services import get_topic_positions, update_topic_positions
@@ -118,13 +117,14 @@ class UserResultFactory(DjangoModelFactory):
         django_get_or_create = ('user', 'test')
 
 
-def compatibility_test_factory(topic, data, term_of_office=settings.TERM_OF_OFFICE_RANGE):
+def compatibility_test_factory(term, topic, data):
     votings = []
     seq = itertools.count(1)
 
     # Create fractions
+    groups = {}
     for fraction in set([x[1] for x in data]):
-        GroupFactory(abbr=fraction, name=fraction)
+        groups[fraction] = GroupFactory(abbr=fraction, name=fraction)
 
     # Create some votings and assign them to the topic
     for i in range(3):
@@ -134,12 +134,12 @@ def compatibility_test_factory(topic, data, term_of_office=settings.TERM_OF_OFFI
 
     # Create person votes for topic and votings
     for p_asm_id, fraction, first_name, last_name, votes in data:
-        group = Group.objects.get(abbr=fraction)
+        group = groups[fraction]
         mp = ParliamentMemberFactory(
             source_id=p_asm_id,
             first_name=first_name,
             last_name=last_name,
-            term_of_office='{0:%Y}-{1:%Y}'.format(*term_of_office),
+            term_of_office='{0:%Y}-{1:%Y}'.format(*term),
         )
         GroupMembershipFactory(member=mp, group=group)
         for i, vote in enumerate(votes):
@@ -150,7 +150,7 @@ def compatibility_test_factory(topic, data, term_of_office=settings.TERM_OF_OFFI
                 fraction=fraction,
                 name='%s %s' % (first_name, last_name),
                 vote=vote,
-                timestamp=datetime.datetime(2015, 1, 1),
+                timestamp=term.since,
             )
 
-    update_topic_positions(get_topic_positions())
+    update_topic_positions(get_topic_positions(term))

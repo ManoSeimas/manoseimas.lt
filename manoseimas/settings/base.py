@@ -5,17 +5,20 @@ import os.path
 import exportrecipe
 import platform
 import collections
-import datetime
 
+from datetime import datetime as dt
 from django.utils.translation import ugettext_lazy as _
 
 DateTimeRange = collections.namedtuple('DateTimeRange', ['since', 'until'])
 
-# Seimo kadencija
-TERM_OF_OFFICE_RANGE = DateTimeRange(
-    since=datetime.datetime(2012, 10, 14),
-    until=datetime.datetime(2016, 10, 9),
-)
+# Current parliament term
+TERM_OF_OFFICE_RANGE = DateTimeRange(dt(2012, 10, 14), dt(2016, 10, 9))
+
+# All parliament terms
+PARLIAMENT_TERMS = {
+    '2012-2016': DateTimeRange(dt(2012, 10, 14), dt(2016, 10, 9)),
+    '2008-2012': DateTimeRange(dt(2008, 10, 12), dt(2012, 10, 14)),
+}
 
 DIST = platform.linux_distribution()[:2]
 

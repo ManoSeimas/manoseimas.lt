@@ -11,7 +11,9 @@ from manoseimas.mps_v2.models import Group, ParliamentMember
 from manoseimas.scrapy.models import PersonVote
 
 
-def get_topic_positions():
+def get_topic_positions(term=None):
+    term = term or settings.TERM_OF_OFFICE_RANGE
+
     # {
     #     'fractions': {Group.id: {Topic.id: position}},
     #     'mps': {ParliamentMember.id: {Topic.id: position}},
@@ -25,7 +27,7 @@ def get_topic_positions():
     fractions = dict(Group.objects.filter(type=Group.TYPE_FRACTION).values_list('abbr', 'id'))
 
     # {PersonVote.p_asm_id: ParliamentMember.id}
-    term_of_office = '{0:%Y}-{1:%Y}'.format(*settings.TERM_OF_OFFICE_RANGE)
+    term_of_office = '{0:%Y}-{1:%Y}'.format(*term)
     mps = dict(ParliamentMember.objects.filter(term_of_office=term_of_office).values_list('source_id', 'id'))
 
     groups = [
@@ -49,8 +51,8 @@ def get_topic_positions():
             GROUP BY {groupby}, TopicVoting.topic_id
             HAVING SUM(ABS(TopicVoting.factor)) > 0
         '''.format(groupby=groupby), {
-            'since': settings.TERM_OF_OFFICE_RANGE.since.strftime('%Y-%m-%d'),
-            'until': settings.TERM_OF_OFFICE_RANGE.until.strftime('%Y-%m-%d'),
+            'since': term.since.strftime('%Y-%m-%d'),
+            'until': term.until.strftime('%Y-%m-%d'),
         })
         for vote in results:
             try:
@@ -80,3 +82,7 @@ def update_topic_positions(results):
         mp = ParliamentMember.objects.get(pk=mp_id)
         mp.positions = positions
         mp.save()
+
+
+def get_term_range(term_of_office):
+    return settings.PARLIAMENT_TERMS.get(term_of_office, settings.TERM_OF_OFFICE_RANGE)

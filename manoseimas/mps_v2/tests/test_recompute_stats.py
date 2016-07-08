@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.core import management
 
 from django_webtest import WebTest
@@ -12,6 +13,8 @@ from manoseimas.scrapy.spiders.stenograms import StenogramSpider
 from manoseimas.scrapy.pipelines import ManoseimasPipeline
 from manoseimas.scrapy.pipelines import ManoSeimasModelPersistPipeline
 from manoseimas.scrapy.tests.utils import crawl
+from manoseimas.compatibility_test.factories import TopicFactory, compatibility_test_factory
+from manoseimas.mps_v2.models import ParliamentMember
 
 
 class TestRecomputeStats(WebTest):
@@ -61,3 +64,22 @@ class TestRecomputeStats(WebTest):
             'type': 'fraction',
             'url': '/mp/fractions/liberalu-ir-centro-sajungos-frakcija/'
         }]})
+
+        def _get_positions(mp):
+            mp = ParliamentMember.objects.get(pk=mp.pk)
+            return {int(k): float(v) for k, v in mp.positions.items()}
+
+        mp = ParliamentMember.objects.get(source_id='53911p')
+
+        # Check if MP positions where updated
+        self.assertEqual(_get_positions(mp), {})
+
+        # Try to update MP positions manually
+        term = settings.PARLIAMENT_TERMS['2008-2012']
+        topic = TopicFactory(name='Aukštojo mokslo reforma')
+        compatibility_test_factory(term, topic, [('53911p', mp.fraction.abbr, mp.first_name, mp.last_name, [1, 2])])
+        self.assertEqual(_get_positions(mp), {topic.pk: 1.5})
+
+        # Try to update MP positions via recompute_stats management command
+        management.call_command('recompute_stats', verbosity=0)
+        self.assertEqual(_get_positions(mp), {topic.pk: 1.5})

@@ -190,7 +190,8 @@ class ParliamentMember(CrawledItem):
 
     def get_positions(self):
         from manoseimas.compatibility_test import services
-        positions = services.get_topic_positions()
+        term = services.get_term_range(self.term_of_office)
+        positions = services.get_topic_positions(term)
         return positions['mps'].get(self.pk, {})
 
     def get_collaborators_qs(self):
@@ -339,7 +340,7 @@ class Group(CrawledItem):
 
     def get_positions(self):
         from manoseimas.compatibility_test import services
-        positions = services.get_topic_positions()
+        positions = services.get_topic_positions()  # XXX: parliament term should be passed here
         return positions['fractions'].get(self.pk, {})
 
     def get_avg_proposed_law_project_count(self):

@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.test import TestCase
 
 from manoseimas.mps_v2 import helpers
@@ -13,8 +14,9 @@ class TestHelpers(TestCase):
     maxDiff = None
 
     def test_get_profile_positions(self):
+        term = settings.TERM_OF_OFFICE_RANGE
         topic = TopicFactory(name='Aukštojo mokslo reforma')
-        compatibility_test_factory(topic, [('1', 'LSDPF', 'Petras', 'Gražulis', [1, 2])])
+        compatibility_test_factory(term, topic, [('1', 'LSDPF', 'Petras', 'Gražulis', [1, 2])])
 
         # Test profile position conversion
         mp = ParliamentMember.objects.get(first_name='Petras')
