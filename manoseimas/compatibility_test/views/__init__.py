@@ -117,7 +117,7 @@ class ResultsView(View):
                     'id': group.pk,
                     'title': group.name,
                     'short_title': group.abbr,
-                    'logo': group.logo.url,
+                    'logo': group.logo.url if group.logo else None,
                     'answers': group.positions,
                     'members_amount': group.active_member_count,
                 } for group in Group.objects.filter(type=Group.TYPE_FRACTION).order_by('pk')
