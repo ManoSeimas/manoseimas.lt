@@ -4,20 +4,11 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import collections
-import datetime
+
+from django.conf import settings
 
 from manoseimas.mps_v2.models import Group, ParliamentMember
 from manoseimas.scrapy.models import PersonVote
-
-
-DateTimeRange = collections.namedtuple('DateTimeRange', ['since', 'until'])
-
-
-# Seimo kadencija
-TERM_OF_OFFICE_RANGE = DateTimeRange(
-    since=datetime.datetime(2012, 10, 14),
-    until=datetime.datetime(2016, 10, 9),
-)
 
 
 def get_topic_positions():
@@ -34,7 +25,7 @@ def get_topic_positions():
     fractions = dict(Group.objects.filter(type=Group.TYPE_FRACTION).values_list('abbr', 'id'))
 
     # {PersonVote.p_asm_id: ParliamentMember.id}
-    term_of_office = '{0:%Y}-{1:%Y}'.format(*TERM_OF_OFFICE_RANGE)
+    term_of_office = '{0:%Y}-{1:%Y}'.format(*settings.TERM_OF_OFFICE_RANGE)
     mps = dict(ParliamentMember.objects.filter(term_of_office=term_of_office).values_list('source_id', 'id'))
 
     groups = [
@@ -58,8 +49,8 @@ def get_topic_positions():
             GROUP BY {groupby}, TopicVoting.topic_id
             HAVING SUM(ABS(TopicVoting.factor)) > 0
         '''.format(groupby=groupby), {
-            'since': TERM_OF_OFFICE_RANGE.since.strftime('%Y-%m-%d'),
-            'until': TERM_OF_OFFICE_RANGE.until.strftime('%Y-%m-%d'),
+            'since': settings.TERM_OF_OFFICE_RANGE.since.strftime('%Y-%m-%d'),
+            'until': settings.TERM_OF_OFFICE_RANGE.until.strftime('%Y-%m-%d'),
         })
         for vote in results:
             try:

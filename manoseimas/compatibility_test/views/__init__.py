@@ -9,6 +9,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import View
 from django.http import JsonResponse
+from django.conf import settings
 
 from lazysignup.decorators import allow_lazy_user
 
@@ -100,16 +101,7 @@ class ResultsView(View):
         # More requirements:
         # https://github.com/ManoSeimas/manoseimas.lt/issues/154
 
-        # XXX: move to settings
-        import collections
-        import datetime
-        DateTimeRange = collections.namedtuple('DateTimeRange', ['since', 'until'])
-        TERM_OF_OFFICE_RANGE = DateTimeRange(
-            since=datetime.datetime(2012, 10, 14),
-            until=datetime.datetime(2016, 10, 9),
-        )
-
-        term_of_office = '{0:%Y}-{1:%Y}'.format(*TERM_OF_OFFICE_RANGE)
+        term_of_office = '{0:%Y}-{1:%Y}'.format(*settings.TERM_OF_OFFICE_RANGE)
         return {
             'user_answers': self.get_answers(user, test_id),
             'fractions': [

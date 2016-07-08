@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.db.models import Prefetch
 from django.utils.safestring import mark_safe
 
+from manoseimas.mps_v2 import helpers
 from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
 
 
@@ -68,7 +69,7 @@ def mp_profile(request, mp_slug):
 
     context = {
         'profile': profile,
-        'positions': mp.positions,
+        'positions': helpers.get_profile_positions(mp.positions),
         'groups': mp.other_groups,
         'all_fractions': mp.all_fractions,
         'committees': mp.committees,
