@@ -12,7 +12,7 @@ from .json import *
 
 
 def index_view(request):
-    parliament = Group.objects.get(type=Group.TYPE_PARLIAMENT)
+    parliament = Group.objects.filter(type=Group.TYPE_PARLIAMENT).order_by('-name').first()
     explanations = {
         'votings': "Šis rodiklis parodo, kiek vidutiškai balsavimų Seimo narys dalyvavo nuo 2012 m. (balsavo už, prieš arba susilaikė).",
         'statements': "Šis rodiklis parodo, kiek vidutiniškai kartų nuo 2012 m. kadencijos pradžios Seimo narys pasisakė Seimo plenarinių posėdžių metu. Skaičiuojami visi pasisakymai.",
