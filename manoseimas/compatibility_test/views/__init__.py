@@ -117,7 +117,7 @@ class ResultsView(View):
                     'id': group.pk,
                     'title': group.name,
                     'short_title': group.abbr,
-                    'logo': group.logo.url,
+                    'logo': group.logo.url if group.logo else None,
                     'answers': group.positions,
                     'members_amount': group.active_member_count,
                 } for group in Group.objects.filter(type=Group.TYPE_FRACTION).order_by('pk')
@@ -128,7 +128,7 @@ class ResultsView(View):
                     'name': mp.full_name,
                     'fraction': mp.fraction.abbr if mp.fraction else None,
                     'fraction_id': mp.fraction.pk if mp.fraction else None,
-                    'logo': mp.photo.url,
+                    'logo': mp.photo.url if mp.photo else None,
                     'answers': mp.positions,
                 } for mp in ParliamentMember.objects.filter(term_of_office=term_of_office).order_by('pk')
             ]

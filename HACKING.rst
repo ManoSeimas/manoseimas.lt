@@ -80,6 +80,9 @@ These crawlers are currently present::
     bin/scrapy crawl sittings  # Sittings and voting stats
     bin/scrapy crawl lobbyists  # Lobbyists
 
+You can use ``bin/scrapy crawl --loglevel=INFO <spider>`` to get more details
+to de screen while scrapy crawls.
+
 These commands are used to precompute and load various things::
 
     bin/django recompute_stats
