@@ -1,6 +1,6 @@
 import React from 'react'
-import { Block, StatusBar } from '../../../components'
-import styles from '../../../styles/base.css'
+import { Block, StatusBar } from '../../components'
+import styles from '../../styles/base.css'
 
 const StartTest = (props) =>
     <div>

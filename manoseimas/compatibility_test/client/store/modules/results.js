@@ -82,7 +82,10 @@ export function saveAnswer (topic_id, answer) {
       topic_id: topic_id,
       answer: answer
     })
-    dispatch(saveAllAnswers())
+
+    const answers = getState().results.answers
+    fetch('POST', 'answers', JSON.stringify(answers))
+      .catch(error => console.error('Error in saving answers: ', error))
   }
 }
 
@@ -96,18 +99,10 @@ export function toggleImportance (topic_id) {
 export function saveAllAnswers () {
   return (dispatch, getState) => {
     return new Promise(resolve => {
-      // Save answers
+      // Save answers & load results
       const answers = getState().results.answers
       fetch('POST', 'answers', JSON.stringify(answers))
-        .then(response => {
-          // Get and load user's results
-          fetch('POST', 'results')
-            .then(response => {
-              const results = JSON.parse(response)
-              dispatch(loadResults(results))
-            })
-            .catch(error => console.error(error))
-        })
+        .then(response => dispatch(getResults()))
         .catch(error => console.error(error))
     })
   }

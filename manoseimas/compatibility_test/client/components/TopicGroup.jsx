@@ -9,7 +9,7 @@ const TopicGroup = (props) =>
 
 TopicGroup.propTypes = {
     number: React.PropTypes.string.isRequired,
-    name: React.PropTypes.string.isRequired
+    name: React.PropTypes.string
 }
 
 export default TopicGroup

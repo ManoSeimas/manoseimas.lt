@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import Topic from './Topic'
 import { setActiveTopic,
          toggleArgumentsModal,
-         toggleMoreModal } from '../../../store/modules/test_state'
-import { saveAnswer, saveAllAnswers } from '../../../store/modules/results'
+         toggleMoreModal,
+         finishTest } from '../../store/modules/test_state'
+import { saveAnswer } from '../../store/modules/results'
 
 
 class TopicContainer extends React.Component {
@@ -18,7 +19,7 @@ class TopicContainer extends React.Component {
     static propTypes = {
         next_topic_id: PropTypes.number.isRequired,
         setActiveTopic: PropTypes.func.isRequired,
-        saveAllAnswers: PropTypes.func.isRequired,
+        finishTest: PropTypes.func.isRequired,
         toggleArgumentsModal: PropTypes.func.isRequired,
         toggleMoreModal: PropTypes.func.isRequired,
         saveAnswer: PropTypes.func.isRequired,
@@ -31,13 +32,18 @@ class TopicContainer extends React.Component {
         router: React.PropTypes.object
     }
 
+    componentWillMount () {
+        if (Object.keys(this.props.active_topic).length === 0)
+            this.props.setActiveTopic(0)
+    }
+
     _nextTopic () {
         const topicId = this.props.next_topic_id
         if (topicId < this.props.topics_amount) {
             this.props.setActiveTopic(topicId)
             this.context.router.push('/topic/' + topicId)
         } else {
-            this.props.saveAllAnswers()
+            this.props.finishTest()
             this.context.router.push('/results')
         }
     }
@@ -71,7 +77,7 @@ const mapStateToProps = (state) => ({
 
 export default connect((mapStateToProps), {
     setActiveTopic,
-    saveAllAnswers,
+    finishTest,
     toggleArgumentsModal,
     toggleMoreModal,
     saveAnswer

@@ -1,7 +1,8 @@
 import React from 'react'
 import { IndexRoute, Route } from 'react-router'
 import Layout from './layout'
-import { StartTest, Topic } from './TestView'
+import TopicView from './TopicView'
+import StartTest from './StartTest'
 import { ResultsLayout, SimilarityFractions, SimilarityMps } from './ResultsView'
 
 export default (store) => {
@@ -9,8 +10,8 @@ export default (store) => {
         <Route path="/" component={Layout}>
             <IndexRoute component={StartTest} />
 
-            <Route path="/topic" component={Topic} />
-            <Route path="/topic/:topicId" component={Topic} />
+            <Route path="/topic" component={TopicView} />
+            <Route path="/topic/:topicId" component={TopicView} />
             <Route path="/results" component={ResultsLayout}>
                 <IndexRoute component={SimilarityFractions} />
                 <Route path="/results/mps" component={SimilarityMps} />

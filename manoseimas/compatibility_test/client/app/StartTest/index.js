@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import StartTest from './StartTest'
-import { setActiveTopic } from '../../../store/modules/test_state'
+import { setActiveTopic } from '../../store/modules/test_state'
 
 class StartTestContainer extends React.Component {
 
