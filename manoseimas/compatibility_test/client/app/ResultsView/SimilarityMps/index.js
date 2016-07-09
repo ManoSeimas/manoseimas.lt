@@ -38,7 +38,7 @@ class SimilarityMps extends React.Component {
         for (let answer_id in mp_answers) {
             if (user_answers[answer_id] && user_answers[answer_id].answer) {
                 answers_count++
-                points += Math.abs((user_answers[answer_id].answer + mp_answers[answer_id]) / 2)
+                points += Math.abs((user_answers[answer_id].answer + Number(mp_answers[answer_id])) / 2)
             }
         }
 

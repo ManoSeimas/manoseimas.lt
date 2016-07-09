@@ -66,7 +66,7 @@ class SimilarityFractions extends React.Component {
 
         for (let answer_id in fraction_answers) {
             if (answers[answer_id] && answers[answer_id].answer) {
-                let answer_points = Math.abs((answers[answer_id].answer + fraction_answers[answer_id]) / 2)
+                let answer_points = Math.abs((answers[answer_id].answer + Number(fraction_answers[answer_id])) / 2)
                 if (answers[answer_id].important) {
                     answers_count += 2
                     answer_points *= 2

@@ -10,7 +10,7 @@ function calculate_similarity (user_answers, mp_answers) {
 
     for (let answer_id in mp_answers) {
         if (answers[answer_id] && answers[answer_id].answer) {
-            let answer_points = Math.abs((answers[answer_id].answer + mp_answers[answer_id]) / 2)
+            let answer_points = Math.abs((answers[answer_id].answer + Number(mp_answers[answer_id])) / 2)
             if (answers[answer_id].important) {
                 answers_count += 2
                 answer_points *= 2

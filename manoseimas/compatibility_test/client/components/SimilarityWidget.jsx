@@ -11,7 +11,9 @@ function make_procental_answer (answer) {
     // -1p = 0%     (-1 + 1) * 50 => 0
     //  0p = 50%     (0 + 1) * 50 => 50
     //  1p = 100%    (1 + 1) * 50 => 100
-    return Math.round((answer + 1)*50)
+    if (isNaN(answer))
+        return 0
+    return Math.round((Number(answer) + 1)*50)
 }
 
 const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
@@ -19,9 +21,9 @@ const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
         <div className={styles.no}>PRIEŠ</div>
         <div className={styles.middle}>
             {items.map(item => {
-                let item_answer = make_procental_answer(item.answers[topic.id])
+                let answer = (item.answers) ? item.answers[topic.id] : 0
                 return (
-                    <div className={styles.img} style={{left: item_answer * 5}} key={'item-' + item.id}>
+                    <div className={styles.img} style={{left:  make_procental_answer(answer) * 5}} key={'item-' + item.id}>
                         <img src={item.logo} alt={item.title + ' logo'} />
                     </div>
                 )
