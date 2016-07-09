@@ -101,28 +101,30 @@ class SimilarityFractions extends React.Component {
         return (
             <div ref='similarities'>
             {fractions.map(fraction => {
-                let similarity = this.calculate_similarity(fraction.answers)
-                return (
-                    <div className={styles.item} key={fraction.short_title}>
-                        <div className={styles.img}>
-                            <img src={fraction.logo} alt={fraction.title + ' logo'} />
+                if (fraction.members_amount > 0) {
+                    let similarity = this.calculate_similarity(fraction.answers)
+                    return (
+                        <div className={styles.item} key={fraction.short_title}>
+                            <div className={styles.img}>
+                                <img src={fraction.logo} alt={fraction.title + ' logo'} />
+                            </div>
+                            <main>
+                                <div className={styles.title}>{fraction.title}, {similarity}%</div>
+                                <SimilarityBar similarity={similarity} />
+                                <a onClick={() => this.props.expandFraction(fraction.id)}>
+                                    {fraction.members_amount} nariai {' '}
+                                    <div className={styles.arrow}></div>
+                                </a>
+                            </main>
+                            {(expanded_fraction === fraction.id)
+                                ? <FractionMps mps={this.get_mps(fraction.short_title)}
+                                               user_answers={user_answers}
+                                               showMoreMps={this.showMoreMps} />
+                                : ''
+                            }
                         </div>
-                        <main>
-                            <div className={styles.title}>{fraction.title}, {similarity}%</div>
-                            <SimilarityBar similarity={similarity} />
-                            <a onClick={() => this.props.expandFraction(fraction.id)}>
-                                {fraction.members_amount} nariai {' '}
-                                <div className={styles.arrow}></div>
-                            </a>
-                        </main>
-                        {(expanded_fraction === fraction.id)
-                            ? <FractionMps mps={this.get_mps(fraction.short_title)}
-                                           user_answers={user_answers}
-                                           showMoreMps={this.showMoreMps} />
-                            : ''
-                        }
-                    </div>
-                )
+                    )
+                }
             })}
             {(show_header)
                 ? <StickyHeader width="650px">
