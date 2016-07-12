@@ -63,18 +63,33 @@ def get_test_by_id(test_id):
     return CompatTest.objects.filter(id=test_id).first()
 
 
+def get_test_context(test_id):
+    test = get_test_by_id(test_id)
+    return {
+        'topics': topics_all(test_id),
+        'title': test.name,
+        'test_id': test.id,
+    }
+
+
 @ensure_csrf_cookie
 def start_test(request, test_id=None):
     if not test_id:
         test_id = get_current_test().id
         return redirect('start_test', test_id=test_id)
-    test = CompatTest.objects.get(id=test_id)
-    context = {
-        'topics': topics_all(test_id),
-        'title': test.name,
-        'test_id': test.id,
-    }
-    return render(request, 'start_test.jade', context)
+
+    return render(request, 'start_test.jade', get_test_context(test_id))
+
+
+@ensure_csrf_cookie
+def shared_test(request, test_id, results_hash):
+    context = get_test_context(test_id)
+    context.update({
+        'og_title': 'Man artimiausi TS-LKD, o kas artimiau tau?',
+        'og_description': 'Atlik politinio suderinamumo testą ir sužinok kuri partija Seime balsavo taip kaip balsuotum tu.',
+        'og_image': 'http://manoseimas.lt/media/fraction_logos/lsdp.png',
+    })
+    return render(request, 'shared_test.jade', context)
 
 
 def topics_json(request, test_id=None):

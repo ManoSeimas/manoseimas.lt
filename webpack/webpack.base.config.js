@@ -13,6 +13,7 @@ module.exports = {
 
     entry: {
        compat_test: app_root + '/compatibility_test/client/index',
+       shared_test: app_root + '/compatibility_test/client/app/SharedTest/index',
        react: ['react', 'react-dom', 'react-router', 'react-redux', 'redux'],
     },
 
