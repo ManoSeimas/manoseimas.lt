@@ -1,5 +1,5 @@
 import { setSelectedFractions  } from './mps_state'
-import { fetch } from '../utils'
+import { fetch, sortResults } from '../utils'
 
 // ------------------------------------
 // Constants
@@ -18,7 +18,6 @@ export const EXPAND_FRACTION = 'EXPAND_FRACTION'
 // ------------------------------------
 // Actions
 // ------------------------------------
-
 export function loadResults (results) {
   return {
     type: LOAD_RESULTS,
@@ -32,7 +31,8 @@ export function getResults () {
       fetch('POST', 'results')
         .then(response => {
           const results = JSON.parse(response)
-          dispatch(loadResults(results))
+          dispatch(loadResults(sortResults(results)))
+          dispatch(loadAnswers(results.user_answers))
         })
         .catch(error => console.error(error))
     })
@@ -82,6 +82,7 @@ export function saveAnswer (topic_id, answer) {
       topic_id: topic_id,
       answer: answer
     })
+    dispatch(loadResults(sortResults(getState().results)))
 
     const answers = getState().results.answers
     fetch('POST', 'answers', JSON.stringify(answers))
@@ -90,9 +91,12 @@ export function saveAnswer (topic_id, answer) {
 }
 
 export function toggleImportance (topic_id) {
-  return {
-    type: TOGGLE_IMPORTANCE,
-    topic_id: topic_id
+  return (dispatch, getState) => {
+    dispatch({
+      type: TOGGLE_IMPORTANCE,
+      topic_id: topic_id
+    })
+    dispatch(loadResults(sortResults(getState().results)))
   }
 }
 
@@ -165,7 +169,7 @@ const ACTION_HANDLERS = {
     return Object.assign({}, state, {
       fractions: action.results.fractions,
       mps: action.results.mps,
-      answers: action.results.user_answers
+      // answers: action.results.user_answers
     })
   },
   LOAD_ANSWERS: (state, action) => {

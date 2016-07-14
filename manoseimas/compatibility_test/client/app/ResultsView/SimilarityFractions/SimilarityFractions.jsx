@@ -59,27 +59,6 @@ class SimilarityFractions extends React.Component {
         }
     }
 
-    calculate_similarity (fraction_answers) {
-        let points = 0,
-            answers_count = 0,
-            answers = this.props.user_answers
-
-        for (let answer_id in fraction_answers) {
-            if (answers[answer_id] && answers[answer_id].answer) {
-                let answer_points = Math.abs((answers[answer_id].answer + Number(fraction_answers[answer_id])) / 2)
-                if (answers[answer_id].important) {
-                    answers_count += 2
-                    answer_points *= 2
-                } else {
-                    answers_count++
-                }
-                points += answer_points
-            }
-        }
-
-        return Math.round((points / answers_count)*100)
-    }
-
     get_mps (fraction) {
         let mps = []
         for (let mp of this.props.mps) {
@@ -102,15 +81,14 @@ class SimilarityFractions extends React.Component {
             <div ref='similarities'>
             {fractions.map(fraction => {
                 if (fraction.members_amount > 0) {
-                    let similarity = this.calculate_similarity(fraction.answers)
                     return (
                         <div className={styles.item} key={fraction.short_title}>
                             <div className={styles.img}>
                                 <img src={fraction.logo} alt={fraction.title + ' logo'} />
                             </div>
                             <main>
-                                <div className={styles.title}>{fraction.title}, {similarity}%</div>
-                                <SimilarityBar similarity={similarity} />
+                                <div className={styles.title}>{fraction.title}, {fraction.similarity}%</div>
+                                <SimilarityBar similarity={fraction.similarity} />
                                 <a onClick={() => this.props.expandFraction(fraction.id)}>
                                     {fraction.members_amount} nariai {' '}
                                     <div className={styles.arrow}></div>
@@ -127,12 +105,11 @@ class SimilarityFractions extends React.Component {
                 }
             })}
             {(show_header)
-                ? <StickyHeader width="650px">
+                ? <StickyHeader width="680px">
                     <div className={styles['similarity-header']}>
                         {fractions.map(fraction => {
-                            let similarity = this.calculate_similarity(fraction.answers)
                             return (
-                                <div className={styles.img} style={{left: similarity * 6}} key={fraction.short_title}>
+                                <div className={styles.img} style={{left: fraction.similarity * 6}} key={fraction.short_title}>
                                     <img src={fraction.logo} alt={fraction.title + ' logo'} />
                                 </div>
                             )
