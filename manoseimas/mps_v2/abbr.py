@@ -31,6 +31,8 @@ FRACTION_ABBR_EXCEPTIONS = {
     (u'jungtinė liberalų ir centro sąjungos ir tautos prisikėlimo partijos '
      u'frakcija'): u'JF',
     (u'tėvynės sąjungos frakcija'): u'TSLKDF',
+    u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija': u'TSLKDF',
+    u'Lietuvos lenkų rinkimų akcijos-Krikščioniškų šeimų sąjungos frakcija': u'LLRAKŠSF',
 }
 
 
