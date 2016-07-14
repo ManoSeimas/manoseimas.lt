@@ -31,7 +31,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['manoseimas.lt', 'www.manoseimas.lt',
                  'manoseimas-staging.pov.lt',
-                 'ms.tinginiai.lt', 'localhost']
+                 'ms.tinginiai.lt', 'manoseimas.nous.lt', 'localhost']
 
 ADMINS = (
     ('Server Admin', 'sirexas@gmail.com'),

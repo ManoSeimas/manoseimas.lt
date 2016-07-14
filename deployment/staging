@@ -1,3 +1,3 @@
 # use: ansible-playbook -i staging deploy.yml -K
 [staging]
-manoseimas-staging.pov.lt
+manoseimas.nous.lt
