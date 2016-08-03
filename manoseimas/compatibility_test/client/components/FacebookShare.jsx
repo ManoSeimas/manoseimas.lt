@@ -57,13 +57,13 @@ class FacebookShare extends React.Component {
         description = description + `${fraction_one.title} ${fraction_one.similarity}%; `
         description = description + `${fraction_two.title} ${fraction_two.similarity}%; `
         description = description + `${fraction_three.title} ${fraction_three.similarity}%. \n`
-        let caption = 'Su kokiomis politinėmis partijomis ir politikais sutampi tu? Sužinok >>>'
+        description = description + 'Su kokiomis politinėmis partijomis ir politikais sutampi tu?'
+        let caption = 'Sužinok daugiau >>>'
 
         FB.ui({
             method: 'feed',
-            link: 'http://manoseimas.lt/testas', //base_url + '/test',
+            link: base_url + '/test',
             picture: picture,
-            // name: 'manoSeimas politinių pažiūrų testas',
             caption: caption,
             description: description
         }, this.props.responseHandler)
