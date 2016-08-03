@@ -36,7 +36,7 @@ class SimilarityFractions extends React.Component {
         setTimeout(() => {
             let node = this.refs['similarities']
             this.header_position = node.offsetTop + node.offsetHeight - 100
-        }, 1000);
+        }, 3000);
         this.subscribers = [
             subscribe('scroll', this.scrollHandler, {enableScrollInfo:true})
         ]
