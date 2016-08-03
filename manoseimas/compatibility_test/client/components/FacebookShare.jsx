@@ -51,7 +51,6 @@ class FacebookShare extends React.Component {
         const fraction_three = this.props.fractions[2]
 
         const picture = base_url + '/static/img/fb-share/' + `${fraction_one.short_title}/${fraction_two.short_title}-${fraction_three.short_title}.png`
-        console.log(fraction_one, picture)
 
         let description = ''
         description = description + `${fraction_one.title} ${fraction_one.similarity}%; `
@@ -64,6 +63,7 @@ class FacebookShare extends React.Component {
             method: 'feed',
             link: base_url + '/test',
             picture: picture,
+            name: 'Politinių pažiūrų testas',
             caption: caption,
             description: description
         }, this.props.responseHandler)
