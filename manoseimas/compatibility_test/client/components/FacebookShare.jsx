@@ -50,20 +50,21 @@ class FacebookShare extends React.Component {
         const fraction_two = this.props.fractions[1]
         const fraction_three = this.props.fractions[2]
 
-        const picture = base_url + '/static/img/fb-share/' + `${fraction_one.short_title}/${fraction_one.short_title}-${fraction_two.short_title}-${fraction_three.short_title}.png`
+        const picture = base_url + '/static/img/fb-share/' + `${fraction_one.short_title}/${fraction_two.short_title}-${fraction_three.short_title}.png`
+        console.log(fraction_one, picture)
 
         let description = ''
         description = description + `${fraction_one.title} ${fraction_one.similarity}%; `
         description = description + `${fraction_two.title} ${fraction_two.similarity}%; `
         description = description + `${fraction_three.title} ${fraction_three.similarity}%. \n`
-        description = description + 'Su kokiomis politinėmis partijomis ir politikais sutampi tu? Sužinok >>>'
+        let caption = 'Su kokiomis politinėmis partijomis ir politikais sutampi tu? Sužinok >>>'
 
         FB.ui({
             method: 'feed',
-            link: base_url + '/test',
+            link: 'http://manoseimas.lt/testas', //base_url + '/test',
             picture: picture,
-            name: 'manoSeimas politinių pažiūrų testas',
-            caption: base_url + '/test',
+            // name: 'manoSeimas politinių pažiūrų testas',
+            caption: caption,
             description: description
         }, this.props.responseHandler)
     }
