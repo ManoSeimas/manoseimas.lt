@@ -8,7 +8,7 @@
     home: /opt/{{ name }}
     path: "{{ home }}/app"
     repo: https://github.com/manoseimas/manoseimas.lt
-    git_ref: master
+    git_ref: new_test
 
 
   tasks:
