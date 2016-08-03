@@ -28,6 +28,20 @@
   margin-top: 20px;
 }
 
+.button_facebook {
+  composes: base_button from '../base.css';
+  background-color: $facebook;
+  color: #ffffff;
+  width: initial;
+  min-width: 90%;
+  border-bottom: none;
+  margin-right: 0;
+
+  &:hover {
+    background-color: color($facebook blackness(50%));
+  }
+}
+
 .button_small {
   composes: small_button from '../base.css';
 

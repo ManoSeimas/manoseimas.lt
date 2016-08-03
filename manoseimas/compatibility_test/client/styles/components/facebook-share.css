@@ -1,0 +1,51 @@
+@import "../_variables";
+
+.share-block {
+  border-radius: $radius;
+  text-align: center;
+  border: 1px dashed $gray;
+  padding: 15px 5px;
+  margin-left: 15px;
+  background-color: #fff;
+  width: calc($container-width / 4);
+
+  header {
+    font-size: $normal;
+    margin-bottom: 20px;
+  }
+
+  .fractions {
+    position: relative;
+    height: 110px;
+    margin-bottom: 10px;
+  }
+}
+
+
+.img-main {
+  composes: img from '../base.css';
+  width: 40%;
+  // height: 50%;
+  position: absolute;
+  left: 30%;
+  z-index: 10;
+}
+
+.image {
+  composes: img from '../base.css';
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  top: 15%;
+  margin-right: 0;
+}
+
+.img-second {
+  composes: image;
+  left: 15px;
+}
+
+.img-third {
+  composes: image;
+  right: 15px;
+}

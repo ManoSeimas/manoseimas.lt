@@ -9,8 +9,9 @@
   }
 }
 
-.context-image {
+.context-image, .side {
   composes: context-image from '../base.css';
+  border: 0;
 }
 
 .note {

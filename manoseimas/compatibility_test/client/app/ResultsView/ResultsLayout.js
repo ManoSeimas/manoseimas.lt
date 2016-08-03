@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
-import { StatusBar } from '../../components'
+import { StatusBar, FacebookShare } from '../../components'
 import Tabs from './Tabs'
 import styles from '../../styles/views/results.css'
 
@@ -15,7 +14,9 @@ export const ResultsLayout = ({ children }) =>
             <Tabs />
             {children}
         </div>
-        <Link to='/'>Restart test</Link>
+        <div className={styles.side}>
+            <FacebookShare responseHandler={(response) => (console.log(response))} />
+        </div>
     </div>
 
 ResultsLayout.propTyoes = {
