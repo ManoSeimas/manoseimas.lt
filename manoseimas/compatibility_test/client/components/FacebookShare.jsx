@@ -63,7 +63,7 @@ class FacebookShare extends React.Component {
             method: 'feed',
             link: base_url + '/test',
             picture: picture,
-            name: 'Politinių pažiūrų testas',
+            name: 'Politinių pažiūrų testas - manoSeimas.lt',
             caption: caption,
             description: description
         }, this.props.responseHandler)

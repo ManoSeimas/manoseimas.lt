@@ -3,7 +3,7 @@ import styles from '../styles/components/similarity-bar.css'
 
 const SimilarityBar = ({similarity, slim}) => {
     let color = '#00a162'
-    if (similarity < 70)
+    if (similarity < 60)
         color = '#646464'
     if (similarity < 40)
         color = '#ca0837'
