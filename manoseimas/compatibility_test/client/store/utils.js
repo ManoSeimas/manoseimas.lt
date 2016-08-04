@@ -37,20 +37,25 @@ export function calculateSimilarity(fraction_answers, user_answers) {
 }
 
 export function sortResults(results) {
+    // Filter out old/inactive/renamed fractions which have 0 members.
+    results.fractions = results.fractions.filter((fraction) => fraction.members_amount > 0)
+
+    // Calculate similarity
     results.fractions = results.fractions.map((fraction) => {
         let similarity = calculateSimilarity(fraction.answers, results.user_answers || results.answers)
         fraction.similarity = similarity
         return fraction
     })
 
+    // Sort fractions by similarity (desc)
     results.fractions.sort((a, b) => {
         if (a.similarity > b.similarity)
-          return -1
+            return -1
 
-      if (a.similarity < b.similarity)
-          return 1
+        if (a.similarity < b.similarity)
+            return 1
 
-      return 0
+        return 0
     })
 
     return results
