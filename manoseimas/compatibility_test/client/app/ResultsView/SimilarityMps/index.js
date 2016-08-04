@@ -31,20 +31,6 @@ class SimilarityMps extends React.Component {
         this.props.setTab('mps')
     }
 
-    calculateSimilarity (user_answers, mp_answers) {
-        let points = 0,
-            answers_count = 0
-
-        for (let answer_id in mp_answers) {
-            if (user_answers[answer_id] && user_answers[answer_id].answer) {
-                answers_count++
-                points += Math.abs((user_answers[answer_id].answer + Number(mp_answers[answer_id])) / 2)
-            }
-        }
-
-        return Math.round((points / answers_count)*100)
-    }
-
     render () {
         let {user_answers, mps, fractions, selected_fractions, topics, expanded_mp} = this.props
         return (
@@ -60,7 +46,6 @@ class SimilarityMps extends React.Component {
                     Kuo didesnis procentas, tuo labiau Seimo narys atitinka Jūsų pažiūras.
                 </div>
                 {mps.map(mp => {
-                    let similarity = this.calculateSimilarity(user_answers, mp.answers)
                     if (selected_fractions.indexOf(mp.fraction_id) > -1 || selected_fractions.length === 0) {
                         return (
                             <div className={styles.item} key={mp.id}>
@@ -68,8 +53,8 @@ class SimilarityMps extends React.Component {
                                     <img src={mp.logo} alt={mp.title + ' logo'} />
                                 </div>
                                 <main>
-                                    <div className={styles.title}>{mp.name}, {mp.fraction}, {similarity}%</div>
-                                    <SimilarityBar similarity={similarity} />
+                                    <div className={styles.title}>{mp.name}, {mp.fraction}, {mp.similarity}%</div>
+                                    <SimilarityBar similarity={mp.similarity} />
                                     <a onClick={() => this.props.expandTopics(mp.id)}>
                                         Atsakymai pagal klausimus
                                         <div className={styles.arrow}></div>
