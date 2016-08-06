@@ -22,7 +22,7 @@ export function calculateSimilarity(item_answers, user_answers) {
 
     for (let answer_id in item_answers) {
         if (answers[answer_id] && answers[answer_id].answer) {
-            let answer_points = Math.abs((answers[answer_id].answer + Number(item_answers[answer_id])) / 2)
+            let answer_points = Math.abs((answers[answer_id].answer + Number(item_answers[answer_id])) / 4)
             if (answers[answer_id].important) {
                 answers_count += 2
                 answer_points *= 2

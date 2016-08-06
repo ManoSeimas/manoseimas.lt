@@ -13,7 +13,7 @@ function make_procental_answer (answer) {
     //  1p = 100%    (1 + 1) * 50 => 100
     if (isNaN(answer))
         return 0
-    return Math.round((Number(answer) + 1)*50)
+    return Math.round((Number(answer) / 2 + 1)*50)
 }
 
 const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
@@ -34,7 +34,7 @@ const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
                     <img src={(getAnswer(user_answers, topic.id) < 0)
                                 ? '/static/img/person-negative.png'
                                 : '/static/img/person.png'}
-                                onClick={() => saveAnswer(topic.id, -1)} />
+                                onClick={() => saveAnswer(topic.id, -2)} />
                 </div>
                 <div className={styles.action}>
                     <img src={(getAnswer(user_answers, topic.id) === undefined)
@@ -46,7 +46,7 @@ const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
                     <img src={(getAnswer(user_answers, topic.id) > 0)
                                 ? '/static/img/person-positive.png'
                                 : '/static/img/person.png'}
-                                onClick={() => saveAnswer(topic.id, 1)} />
+                                onClick={() => saveAnswer(topic.id, 2)} />
                 </div>
             </div>
         </div>

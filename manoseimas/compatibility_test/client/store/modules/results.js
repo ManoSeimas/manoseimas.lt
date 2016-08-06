@@ -195,7 +195,7 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   // key - topic_id, value - answer
-  // answers can be '1' - positive, '-1' - negative, '0' or undefined - skip
+  // answers can be '2' - positive; '-2' - negative; '0' or undefined - skip
   answers: {},
   fractions: [],
   mps: [],

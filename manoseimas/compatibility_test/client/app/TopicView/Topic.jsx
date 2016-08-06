@@ -45,9 +45,9 @@ const Topic = (props) => {
 
             <ButtonsBlock>
                 <Button type='yes'
-                        action={() => props.saveAnswer(props.topic.id, 1)}>Taip</Button>
+                        action={() => props.saveAnswer(props.topic.id, 2)}>Taip</Button>
                 <Button type='no'
-                        action={() => props.saveAnswer(props.topic.id, -1)}>Ne</Button>
+                        action={() => props.saveAnswer(props.topic.id, -2)}>Ne</Button>
                 <Button type='skip' action={props.nextTopic}>Praleisti</Button>
             </ButtonsBlock>
         </div>
