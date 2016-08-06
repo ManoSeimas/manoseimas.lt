@@ -40,7 +40,12 @@ class VotingAdmin(admin.ModelAdmin):
             return super(VotingAdmin, self).save_related(request, form, formsets, change)
 
 
+class PersonVoteAdmin(admin.ModelAdmin):
+    list_display = ('p_asm_id', 'name', 'vote', 'value')
+    list_filter = ('name',)
+
+
 admin.site.register(Question)
 admin.site.register(Person)
 admin.site.register(Voting, VotingAdmin)
-admin.site.register(PersonVote)
+admin.site.register(PersonVote, PersonVoteAdmin)
