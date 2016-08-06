@@ -5,14 +5,10 @@ header.ui.page.grid
   .computer.tablet.only.row
     .row
       .ui.pointing.menu.fixed
-        a(href="/"): img(src="{% static 'img/logo.png' %}").logo
+        .centered.menu
+          a(href="/"): img(src="{% static 'img/logo.png' %}").logo
 
         .right.menu
-          .item
-            form(action="{% url 'haystack_search' %}" method="get")
-              .ui.icon.input
-                input(placeholder="Ieškok politikų, temų, argumentų", type="text", name="q").long-search-box
-                i.search.link.icon
           .item
             a(href="http://transparency.lt/donate/", target="_NEW").donate Prisidėk!
           .ui.dropdown.item

@@ -69,12 +69,20 @@ header {
   form { margin: -9px 0;}
   input.long-search-box { width: 20em; }
   .pointing.menu {
-    background-image: none;
+    background-color: $white !important;
     background-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0px 1px 2px 0px transparent;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.15), 0px 0px 0px 1px rgba(0, 0, 0, 0.05);
+
+    .centered.menu {
+      float: left;
+      text-align: center;
+      position: absolute;
+      width: 100%;
+    }
 
     input { background-color: inherit; }
     .item::before { background: none; }
+
   }
 
   .dropdown-menu {
@@ -82,10 +90,15 @@ header {
   }
 
   a.donate {
-    color: $red !important;
+    color: $grayDark;
     padding: 0.5em 1em;
-    border: 1px solid $red;
+    border: 1px solid $grayDark;
     border-radius: $borderRadius;
+
+    &:hover {
+      background-color: $grayDark;
+      color: $white !important;
+    }
   }
 }
 
@@ -1231,7 +1244,7 @@ p.text-muted { color: $gray; }
 
 a:hover { text-decoration: none; }
 
-#main-block { margin-top: 4.65em; }
+#main-block { margin-top: 9em; }
 
 .colored-bg {
   background-color: $coloredBgColor;
