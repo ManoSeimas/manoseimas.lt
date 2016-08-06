@@ -1,11 +1,29 @@
+# -*- coding: utf-8 -*-
+
 import logging
 
 from django.conf import settings
 from django.shortcuts import render
 
 from manoseimas.scrapy.models import Voting
+from manoseimas.mps_v2.models import Group
 
 logger = logging.getLogger(__name__)
+
+
+def index(request):
+    parliament = Group.objects.filter(type=Group.TYPE_PARLIAMENT).order_by('-name').first()
+    explanations = {
+        'votings': "Šis rodiklis parodo, kiek vidutiškai balsavimų Seimo narys dalyvavo nuo 2012 m. (balsavo už, prieš arba susilaikė).",
+        'statements': "Šis rodiklis parodo, kiek vidutiniškai kartų nuo 2012 m. kadencijos pradžios Seimo narys pasisakė Seimo plenarinių posėdžių metu. Skaičiuojami visi pasisakymai.",
+        'projects': 'Šis rodiklis parodo, kiek vidutiniškai kartų Seimo narys pasirašė po Seimo narių teiktais teisės aktų projektais.'
+    }
+    context = {'parliament': parliament, 'explanations': explanations}
+    return render(request, 'index.jade', context)
+
+
+def influence(request):
+    return render(request, 'influence.jade', {})
 
 
 def login(request):

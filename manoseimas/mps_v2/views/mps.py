@@ -1,9 +1,22 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from django.db.models import Prefetch
 from django.utils.safestring import mark_safe
 
 from manoseimas.mps_v2 import helpers
 from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
+
+
+def mps_list(request):
+    parliament = Group.objects.filter(type=Group.TYPE_PARLIAMENT).order_by('-name').first()
+    explanations = {
+        'votings': "Šis rodiklis parodo, kiek vidutiškai balsavimų Seimo narys dalyvavo nuo 2012 m. (balsavo už, prieš arba susilaikė).",
+        'statements': "Šis rodiklis parodo, kiek vidutiniškai kartų nuo 2012 m. kadencijos pradžios Seimo narys pasisakė Seimo plenarinių posėdžių metu. Skaičiuojami visi pasisakymai.",
+        'projects': 'Šis rodiklis parodo, kiek vidutiniškai kartų Seimo narys pasirašė po Seimo narių teiktais teisės aktų projektais.'
+    }
+    context = {'parliament': parliament, 'explanations': explanations}
+    return render(request, 'mps_list.jade', context)
 
 
 def mp_profile(request, mp_slug):

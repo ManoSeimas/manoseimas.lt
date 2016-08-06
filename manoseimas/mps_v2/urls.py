@@ -5,6 +5,8 @@ from manoseimas.mps_v2 import views
 
 urlpatterns = patterns(
     '',
+    url(r'^/?$',
+        views.mps_list, name='mp_list_all'),
     url(r'^fractions/?$',
         views.mp_fraction_list, name='mp_fraction_list'),
     url(r'^discussion/(?P<statement_id>\d+)$',
