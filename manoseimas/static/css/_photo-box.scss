@@ -55,7 +55,7 @@
   background: url(#{$staticRoot}/img/frontpage-bg.jpg);
   background-repeat: no-repeat;
   background-position: top center;
-  min-height: 25em;
+  min-height: 36em;
   padding-top: 5.5em;
 
   .title {
@@ -75,6 +75,12 @@
     }
   }
   .column.center.aligned { padding-bottom: 1em; }
+
+  @media($smallScreen) {
+    min-height: initial;
+    padding-top: 2em;
+    padding-bottom: 1em;
+  }
 }
 
 .photo-box.parliamentarian {

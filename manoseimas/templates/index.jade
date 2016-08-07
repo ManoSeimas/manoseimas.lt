@@ -6,45 +6,151 @@
 - block title
   | manoSeimas.lt – stebėk, kaip dirba Seimo nariai
 
--block inlinejs
-  script(src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js", type="text/javascript")
-  script(src="{% static 'js/jquery.scrollTo-1.4.3.1-min.js' %}")
-
-  - compress js
-    script(src="{% static 'components/react_loader.jsx' %}", type="text/jsx", charset="utf-8")
-    script(src="{% static 'components/row_components.jsx' %}", type="text/jsx", charset="utf-8")
-    script(src="{% static 'components/filter_component.jsx' %}", type="text/jsx", charset="utf-8")
-    script(src="{% static 'components/switcher_component.jsx' %}", type="text/jsx", charset="utf-8")
-
 -block middle
   .photo-box.index
     .ui.page.grid
       .doubling.one.column.row
         .column.center.aligned
-          img(src="{% static 'img/logo-white.png' %}").logo
-          h1.title Stebėk, kaip dirba Seimo nariai
+          .test-box
+            h1 Sužinok,
+            h2 kas šios kadencijos Seime tave atstovavo geriausiai
 
-          .byline
-            p Projektą rengia
-            a(href="http://transparency.lt/" target="_blank").tils-logo.white
+            .steps
+              .step
+                img(src="{% static 'img/test-ico1.png' %}")
+                .desc Atsakyk į klausimus
+              .step
+                img(src="{% static 'img/test-ico2.png' %}")
+                .desc Sužinok rezultatus
+              .step
+                img(src="{% static 'img/test-ico3.png' %}")
+                .desc Pasidalink su draugais
 
-  .colored-bg.index-stats
-    .ui.zero.margin.center.aligned.page.grid
-      .stats-description Vidutiniškai šios kadencijos Seimo narys:
+            a(href='/test').ui.start-test.button Pradėti testą
 
-      .stats-box.slim.popup(data-content="{{explanations.votings}}")
-        .block: .explanation dalyvavo
-        .block: h4.number {{parliament.avg_vote_percentage|floatformat:0}}%
-        .block: .explanation balsavimų
+  .ui.stackable.page.grid.features
+    .doubling.one.column.row
+      .column.center.aligned
+        img(src="{% static 'img/logo-black.png' %}").logo
+        div.title portale taip pat:
 
-      .stats-box.slim.popup(data-content="{{explanations.statements}}")
-        .block: .explanation pasisakė
-        .block: h4.number {{parliament.avg_statement_count|floatformat:0}}
-        .block: .explanation {% lt_pluralize parliament.avg_statement_count|floatformat:0 'kartą' 'kartus' 'kartų' %}
+    .three.column.row
+      .column.center.aligned
+        .block
+          img(src="{% static 'img/front-page/fractions.png' %}")
+          a(href="{% url 'mp_fraction_list' %}").button Sek, ką veikia Seimo frakcijos
+      .column.center.aligned
+        .block
+          img(src="{% static 'img/front-page/mps.png' %}")
+          a(href="{% url 'mp_list_all' %}").button.wide Sužinok, kaip balsuoja tavo Seimo narys
+      .column.center.aligned
+        .block
+          img(src="{% static 'img/front-page/influence.png' %}")
+          a(href="{% url 'influence' %}").button Pamatyk, kas Seima siekia įtakos
 
-      .stats-box.slim.popup(data-content="{{explanations.projects}}")
-        .block: .explanation pateikė
-        .block: h4.number {{parliament.avg_law_project_count|floatformat:0}}
-        .block: .explanation įstatymo {% lt_pluralize parliament.avg_law_project_count|floatformat:0 'projektą' 'projektus' 'projektų' %}
 
-  #filter-component
+  .ui.page.grid.donate
+    .column.center.aligned
+      a(href='#').ui.button PAAUKOTI
+
+  .ui.stackable.page.grid.team
+    .doubling.one.column.row
+      .column.center.aligned
+        h2.title Iniciatyvos komanda:
+
+    .doubling.five.column.row
+      .column
+        .person
+          .bullet
+          .who
+            .name Ignas Rubikas
+            .role Iniciatyvos vadovas
+        .person
+          .bullet
+          .who
+            .name Mantas Zimnickas
+            .role Programuotojas
+        .person
+          .bullet
+          .who
+            .name Darius Česnulis
+            .role Savanoris
+      .column
+        .person
+          .bullet
+          .who
+            .name Sergejus Muravjovas
+            .role TILS vadovas
+        .person
+          .bullet
+          .who
+            .name Gabrielius Mackevičius
+            .role Iliustratorius
+        .person
+          .bullet
+          .who
+            .name Denis Ivanov
+            .role Savanoris
+        .person
+          .bullet
+          .who
+            .name Greta Rožėnaitė
+            .role Savanorė
+      .column
+        .person
+          .bullet
+          .who
+            .name Gavija Lukšaitė
+            .role Iniciatyvos koordinatorė
+        .person
+          .bullet
+          .who
+            .name Agnė Patackaitė
+            .role Savanorė
+        .person
+          .bullet
+          .who
+            .name Elena Lesieur
+            .role Savanorė
+        .person
+          .bullet
+          .who
+            .name Ingrida Kniežaitė
+            .role Savanorė
+      .column
+        .person
+          .bullet
+          .who
+            .name Jaro Šatkevič
+            .role Programuotojas
+        .person
+          .bullet
+          .who
+            .name Aistė Jotautytė
+            .role Savanorė
+        .person
+          .bullet
+          .who
+            .name Erika Zlatkutė
+            .role Savanorė
+        .person
+          .bullet
+          .who
+            .name Kornelija Viečaitė
+            .role Savanorė
+      .column
+        .person
+          .bullet
+          .who
+            .name Ramunė Norkutė
+            .role Dizainerė
+        .person
+          .bullet
+          .who
+            .name Austėja Pliupelytė
+            .role Savanorė
+        .person
+          .bullet
+          .who
+            .name Gabrielė Krupovič
+            .role Savanorė

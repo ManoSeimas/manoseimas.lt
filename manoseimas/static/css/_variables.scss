@@ -60,3 +60,10 @@ $normal:                16px;
 $medium:                22px;
 $big:                   2rem;
 $huge:                  2.5rem;
+
+
+// Screen sizes
+// -------------
+$largeScreen:           'min-width: 1480px';
+$mediumScreen:          'max-width: 1280px';
+$smallScreen:           'max-width: 768px';

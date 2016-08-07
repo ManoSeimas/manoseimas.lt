@@ -10,7 +10,7 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^$', 'manoseimas.views.index'),
-    url(r'^influence/?$', 'manoseimas.views.influence'),
+    url(r'^influence/?$', 'manoseimas.views.influence', name='influence'),
     url(r'^votings/?$', 'manoseimas.views.votings'),
     url(r'^search/',
         include('haystack.urls')),
