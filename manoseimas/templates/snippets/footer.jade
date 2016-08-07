@@ -2,41 +2,21 @@
 
 footer
   .ui.vertical.segment
+    .ui.stackable.page.grid
+      .two.column.row
+        .column.center.aligned.sponsor
+          a(href="http://www.transparency.lt/"): img(src="{% static 'img/tils-footer.png' %}")
+        .column.center.aligned
+          a(href="http://lithuania.nlembassy.org/")
+            img(src="{% static 'img/ambasada-footer.png' %}" title="Nyderlandų ambasada")
+
+  .ui.vertical.segment.footer
     .ui.page.grid
-      .doubling.two.column.row
-        .column
-          .ui.grid.center.aligned
-            .five.wide.column.vertical-middle
-              a(target="_blank" href="http://www.transparency.lt")
-                img(src="{% static 'img/tils-logo-updated.png' %}")
-            .six.wide.column.vertical-middle
-              a(target="_blank" href="http://www.eeagrants.com/")
-                img(src="{% static 'img/eea-logo.png' %}", style="width: 50%")
-            .five.wide.column.vertical-middle
-              img(src="{% static 'img/eu-logo.png' %}", style="width: 50%")
-          .sixteen.wide.column.row
-            .copyright.
-              Iš dalies finansuojama EK programos „Nusikalstamumo prevencija ir
-              kova su nusikalstamumu“ lėšomis. EK Vidaus reikalų generalinis
-              direktoratas.
-        .column
-          .ui.grid.center.aligned
-            .three.wide.column.display-table-cell.vertical-middle
-              h2: a(href="/apie-projekta/") Apie projektą
-            .two.wide.column.display-table-cell.vertical-middle
-              h2: a(href="/test") Testas
-            .three.wide.center.aligned.column.display-table-cell.vertical-middle
-              h2: a(href="/votings") Seimo balsavimai
-            .three.wide.column.display-table-cell.vertical-middle
-              h2: a(href="/prisijunk") Prisijunk
-            .three.wide.column.display-table-cell.vertical-middle
-              h2: a(href="http://transparency.lt/donate/" target="_NEW") Aukoti
-            .four.wide.column
-              a(target="_blank" href="http://www.facebook.com/tilietuva")
-                img(src="{% static 'img/fb-icon-32.png' %}")
-              a(target="_blank" href="http://www.twitter.com/#!/ManoSeimas")
-                img(src="{% static 'img/twitter-icon-32.png' %}")
-          .sixteen.wide.column.row
-            .copyright  2012-2016, manoSeimas.lt pateikiamas pagal 
-              <a href="http://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>
-              turinio naudojimo licenciją
+      .center.aligned.column
+        .menu
+          a(href="/about").item Apie iniciatyvą
+          a(href="/test").item Testas
+
+        .copyright © 2012-2016, manoSeimas.lt pateikiamas pagal
+          a(href="http://creativecommons.org/licenses/by/4.0/") &nbsp; CC BY 4.0
+          turinio naudojimo licenciją

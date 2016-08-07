@@ -143,6 +143,7 @@
     font-weight: 300;
     font-size: $big;
     color: $textColor;
+    margin-bottom: .5em;
 
     @media($smallScreen) {
       font-size: $medium;

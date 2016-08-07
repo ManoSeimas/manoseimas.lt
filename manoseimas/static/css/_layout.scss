@@ -15,7 +15,44 @@
 footer {
   padding: 20px 20px 20px 20px;
   background: $white;
-  border-top: 1px solid $wellBorder;
+  border-top: 1px solid $coloredBgColor;
+
+  .sponsor {
+    border-right: 1px solid $coloredBgColor;
+
+    @media($smallScreen) {
+      border: none;
+    }
+  }
+
+  .ui.vertical.segment.footer {
+      color: $textColor;
+
+      .menu {
+        margin: 2em;
+
+        .item{
+          margin: 5px 25px;
+          font-weight: 500;
+          font-size: $medium * 0.9;
+          color: $black;
+
+          &:hover {
+            color: lighten($black, 20%)
+          }
+
+          @media($smallScreen) {
+            font-size: $normal;
+          }
+        }
+      }
+
+      .copyright {
+        font-weight: 300;
+        color: $grayDark;
+      }
+  }
+
 
   h2, h2 a, h2 a:hover {
     color: #2A4C96;
