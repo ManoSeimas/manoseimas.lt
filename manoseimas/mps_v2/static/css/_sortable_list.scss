@@ -1,4 +1,4 @@
-#fraction-filter-component {
+#filter-component, #mps-list-component  {
   .none.margin { margin: 0; }
 
   .ui.tabular.menu {
@@ -14,7 +14,9 @@
   .none.margin { margin: 0; }
 }
 
-#fraction-filter-component .ui.page.grid.active_tab, #fraction-member-list {
+#filter-component .ui.page.grid.active_tab,
+#mps-list-component .ui.page.grid.active_tab,
+#fraction-member-list {
   font-size: $small !important;
   padding-bottom: 2rem;
   margin-top: 1rem !important;

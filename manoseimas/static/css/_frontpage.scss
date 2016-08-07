@@ -1,108 +1,191 @@
 // Front page styles
 // -----------------
-.index {
-  .column {
-    padding: 2em;
-  }
-}
 
-.ui.page.grid.fraction {
-  margin: 1rem 0;
-}
 
 .test-box {
-  margin: 3em 0;
-  p {
-    margin: auto;
-    width: 35em;
+  width: 500px !important;
+  margin: auto;
+
+  h1, h2 {
+    font-family: 'Roboto', sans-serif;
+    color: $white;
+    text-shadow: 1px 1px $grayDark;
   }
-  .ui.green.wide.button {
-    margin-top: 1.5em;
+
+  h1 {
+    font-size: 3rem;
   }
-}
 
-.sidebar {
-  margin-top: 1em;
-  .item {
-    display: inline-block;
-    background-color: $white;
-    border: 1px solid $grayLite;
-    padding: 0.5rem !important;
-    padding-left: 1rem !important;
-    margin-bottom: 0.5em;
-    width: 13em;
-    cursor: pointer;
+  h2 {
+    color: $white;
+    font-size: $big;
+    font-weight: 300;
+    margin-top: 10px;
+  }
 
-    img { height: 40px; width: 40px; margin-right: 5px; cursor: inherit; }
-    h4 { font-size: $small; line-height: 1.2; cursor: inherit; }
+  .start-test.button {
+    background-color: $msGreen;
+    padding: 1em 2em;
+    font-size: $medium;
+    color: $white;
+    text-transform: uppercase;
+    font-weight: 300;
+    letter-spacing: 1px;
 
-    .title {
-      float: right;
-      width: 8em;
-      cursor: inherit;
+    &:hover {
+      background-color: darken($msGreen, 10%);
+      box-shadow: none;
     }
   }
 
-  .item:hover, .item.selected {
-    border-color: $greenDark;
-    background-color: $greenDark;
-    h4 { color: $white; }
-  }
-  .item.selected {
-    padding: 0.8rem 0.5rem 0.8rem 1rem !important; }
-}
+  @media($smallScreen) {
+    width: 100% !important;
 
-.subtabs {
-  @extend .sidebar;
-  .header {
-    @extend .item;
+    h1 {
+      font-size: $huge;
+    }
+
+    h2 {
+      font-size: $medium;
+      line-height: 1.3;
+      margin-bottom: .5em;
+    }
+
+    .start-test.button {
       font-size: $normal;
-      font-weight: bold;
-      text-align: center;
-      color: $black;
-      cursor: auto;
-  }
-  .header:hover {
-    background-color: $white;
-    border-color: $grayLite;
-  }
-  .item
-    .title {
-      font-size: $normal;
-      width: 6.5rem;
-      color: $black;
     }
-    .count {
-      font-size: $big;
-      text-align: right;
-      width: 3.6rem;
-      float: left;
-      color: $black;
-      padding-top: 0.65rem;
-    }
-
-  .item:hover, .item.selected {
-    .title { color: $white; }
-    .count { color: $white; }
   }
 }
 
-.colored-bg.index-stats {
-  border-bottom: none;
-  background-color: rgba(255, 255, 255, 0.05);
-}
-.index-stats {
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
-
-  .stats-description {
-    font-size: $normal;
-    font-weight: 200;
+.steps {
+  margin: 2em 0;
+  .step {
     display: inline-block;
+    width: 120px;
+    margin: 0 20px;
+
+    .desc {
+      text-transform: uppercase;
+      color: $white;
+      font-size: $small;
+      font-weight: 200;
+      padding-top: .5em;
+    }
+  }
+
+  @media($smallScreen) {
+    display: none;
+  }
+}
+
+.ui.page.features {
+  margin: 2rem 0;
+
+  .title {
+    font-size: $medium;
+    margin-top: 5px;
+  }
+
+  .block {
+    img {
+      width: 250px;
+    }
+
+    .button {
+      margin: 1em auto;
+      display: block;
+      padding: 1em 2em;
+      border-radius: $borderRadius;
+      background-color: $black;
+      color: $white;
+      width: 210px;
+
+      &:hover {
+        background-color: lighten($black, 10%)
+      }
+    }
+    .button.wide {
+      width: 260px;
+      padding: 1em 2.3em;
+    }
+  }
+}
+
+.ui.page.donate {
+  background-color: $grayLite;
+  height: 120px;
+  width: 100%;
+  display: table;
+  margin-top: 0;
+  margin-bottom: 0;
+
+  .column {
     vertical-align: middle;
-    text-align: right;
-    color: $gray;
-    max-width: 15rem;
-    margin-bottom: 0;
+    height: 105px;
+    display: table-cell;
+    padding: 0;
+  }
+
+  .button {
+    padding: 1em 3em;
+    // vertical-align: middle;
+  }
+}
+
+.ui.page.team {
+  margin-top: 0;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+  background-color: $coloredBgColor;
+
+  h2.title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-size: $big;
+    color: $textColor;
+    margin-bottom: .5em;
+
+    @media($smallScreen) {
+      font-size: $medium;
+      text-align: left;
+      margin-left: 2em;
+    }
+  }
+
+  .person {
+    margin-bottom: 2em;
+
+    .bullet, .who {
+      display: inline-block;
+    }
+    .bullet {
+      vertical-align: top;
+      width: 20px;
+      height: 20px;
+      box-shadow: 1px 1px 10px #888888;
+      border-radius: 50%;
+      margin-right: 15px;
+    }
+
+    .who {
+      width: calc(100% - 40px);
+      font-family: 'Roboto', sans-serif;
+      vertical-align: top;
+      margin-top: -2px;
+
+      .name {
+        font-weight: 500;
+        font-size: $normal;
+      }
+      .role {
+        font-weight: 300;
+        font-size: $small;
+      }
+    }
+
+    @media($smallScreen) {
+      width: 250px;
+      margin-left: 2.5em;
+    }
   }
 }

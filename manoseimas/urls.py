@@ -9,12 +9,17 @@ admin.autodiscover()
 
 urlpatterns = patterns(
     '',
-    url(r'^$', 'manoseimas.mps_v2.views.index_view'),
+    url(r'^$', 'manoseimas.views.index'),
+    url(r'^influence/?$', 'manoseimas.views.influence', name='influence'),
     url(r'^votings/?$', 'manoseimas.views.votings'),
-    url(r'^search/', include('haystack.urls')),
-    url(r'^accounts/', include('social.apps.django_app.urls', namespace='social')),
-    url(r'^login/', 'manoseimas.views.login', name="login"),
-    url(r'^logout/', 'django.contrib.auth.views.logout', {'next_page': '/'}, name="logout"),
+    url(r'^search/',
+        include('haystack.urls')),
+    url(r'^accounts/',
+        include('social.apps.django_app.urls', namespace='social')),
+    url(r'^login/',
+        'manoseimas.views.login', name="login"),
+    url(r'^logout/',
+        'django.contrib.auth.views.logout', {'next_page': '/'}, name="logout"),
 
     url(r'^widget/', include('manoseimas.widget.urls')),
     url(r'^mp/', include('manoseimas.mps_v2.urls')),

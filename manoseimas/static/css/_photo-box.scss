@@ -2,7 +2,7 @@
 // -----------
 .photo-box {
   margin-top: -6rem;
-  padding-top: 6em;
+  padding-top: 3em;
 
   .title {
     color: $white;
@@ -31,7 +31,7 @@
   background: url(#{$staticRoot}/img/seimas.jpg);
   background-repeat: no-repeat;
   background-position: -00px -240px;
-  min-height: 22em;
+  min-height: 21em;
 
   .transparent-bg {
     margin: auto;
@@ -52,10 +52,10 @@
 }
 
 .photo-box.index {
-  background: url(#{$staticRoot}/img/frontpage-bg.png);
+  background: url(#{$staticRoot}/img/frontpage-bg.jpg);
   background-repeat: no-repeat;
-  background-position: center;
-  min-height: 25em;
+  background-position: top center;
+  min-height: 36em;
   padding-top: 5.5em;
 
   .title {
@@ -75,6 +75,12 @@
     }
   }
   .column.center.aligned { padding-bottom: 1em; }
+
+  @media($smallScreen) {
+    min-height: initial;
+    padding-top: 2em;
+    padding-bottom: 1em;
+  }
 }
 
 .photo-box.parliamentarian {

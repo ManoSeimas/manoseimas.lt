@@ -16,6 +16,7 @@ html(lang=en)
 
     title {% block title %}{{ title }}{% endblock %}
 
+    link(href='https://fonts.googleapis.com/css?family=Roboto:400,300,100,100italic,300italic,400italic,500,500italic', rel='stylesheet', type='text/css')
     link(rel="shortcut icon", type="image/x-icon", href="{% static 'favicon.png' %}")
     link(rel="stylesheet" href="{% static 'semantic/semantic.min.css' %}")
     - compress css

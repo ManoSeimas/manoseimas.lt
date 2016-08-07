@@ -22,9 +22,12 @@ const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
         <div className={styles.middle}>
             {items.map(item => {
                 let answer = (item.answers) ? item.answers[topic.id] : 0
+                let percents = make_procental_answer(answer)
                 return (
-                    <div className={styles.img} style={{left:  make_procental_answer(answer) * 5}} key={'item-' + item.id}>
-                        <img src={item.logo} alt={item.title + ' logo'} />
+                    <div className={styles.img}
+                         style={{left:  percents * 5, zIndex: percents}}
+                         key={'item-' + item.id}>
+                        <img src={item.logo} alt={`${item.title} logo`} title={`${item.title} - ${percents}%`} />
                     </div>
                 )
             })}

@@ -1,11 +1,22 @@
+# -*- coding: utf-8 -*-
+
 import logging
 
 from django.conf import settings
 from django.shortcuts import render
 
 from manoseimas.scrapy.models import Voting
+from manoseimas.mps_v2.models import Group
 
 logger = logging.getLogger(__name__)
+
+
+def index(request):
+    return render(request, 'index.jade')
+
+
+def influence(request):
+    return render(request, 'influence.jade', {})
 
 
 def login(request):
