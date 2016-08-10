@@ -86,7 +86,7 @@ class TestViews(WebTest):
         resp = self.app.get('/test/')
         self.assertRedirects(resp, '/test/%d/' % group.test.id)
         resp = resp.follow()
-        self.assertEqual(resp.html.title.string, 'Politinio suderinamumo testas - manoSeimas.lt')
+        self.assertEqual(resp.html.title.string, 'Politinių pažiūrų testas - manoSeimas.lt')
 
     def test_results_view(self):
         tp1, tp2 = topics = [

@@ -19,7 +19,7 @@ class ParliamentMemberFactory(DjangoModelFactory):
     source_id = factory.Sequence(lambda n: '%s' % n)
     first_name = 'Petras'
     last_name = 'Gražulis'
-    date_of_birth = FuzzyNaiveDateTime(datetime.datetime(1950, 1, 1))
+    # date_of_birth = FuzzyNaiveDateTime(datetime.datetime(1950, 1, 1))
     email = factory.LazyAttribute(lambda x: '%s.%s@lrs.lt' % (x.first_name.lower(), x.last_name.lower()))
     phone = factory.Sequence(lambda n: '+370600%05d' % n)
     photo = factory.django.ImageField()
