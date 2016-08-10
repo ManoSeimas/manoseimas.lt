@@ -46,6 +46,7 @@ setup(
         'whoosh',
         'django-haystack',
         'django-lazysignup',
+        'django-wysiwyg',
         'factory_boy',
         'pytz',
         'beautifulsoup4',  # used by webtest tests

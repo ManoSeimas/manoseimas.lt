@@ -175,10 +175,12 @@ INSTALLED_APPS = (
     'manoseimas.widget',
     'manoseimas.lobbyists',
     'manoseimas.compatibility_test',
+    'manoseimas.flatpages',
     'manoseimas.scrapy',
 
     'rest_framework',
     'webpack_loader',
+    'django_wysiwyg',
 )
 
 MIGRATION_MODULES = {

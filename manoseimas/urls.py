@@ -5,7 +5,14 @@ from django.contrib import admin
 
 import manoseimas.set_session_expiry  # noqa
 
+from manoseimas.flatpages.views import flatpage_view
+
+
 admin.autodiscover()
+
+flatpage_patterns = [
+    url('^about', flatpage_view, kwargs={'page': 'about'}, name='about'),
+]
 
 urlpatterns = patterns(
     '',
@@ -26,6 +33,7 @@ urlpatterns = patterns(
     url(r'^json/', include('manoseimas.mps_v2.json_urls')),
     url(r'^lobbyists/', include('manoseimas.lobbyists.urls')),
     url(r'^test/', include('manoseimas.compatibility_test.urls')),
+    url('^', include(flatpage_patterns)),
     url(r'^valdymas/', include(admin.site.urls)),
 )
 
