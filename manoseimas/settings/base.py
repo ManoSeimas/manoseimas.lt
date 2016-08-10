@@ -181,6 +181,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'webpack_loader',
     'django_wysiwyg',
+    'tinymce',
 )
 
 MIGRATION_MODULES = {
@@ -292,6 +293,8 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BUILDOUT_DIR, 'webpack-stats-prod.json'),
     }
 }
+
+DJANGO_WYSIWYG_FLAVOR = "tinymce_advanced"
 
 HAYSTACK_CONNECTIONS = {
     'default': {

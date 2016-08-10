@@ -46,6 +46,7 @@ setup(
         'whoosh',
         'django-haystack',
         'django-lazysignup',
+        'django-tinymce',
         'django-wysiwyg',
         'factory_boy',
         'pytz',

@@ -35,6 +35,7 @@ urlpatterns = patterns(
     url(r'^test/', include('manoseimas.compatibility_test.urls')),
     url('^', include(flatpage_patterns)),
     url(r'^valdymas/', include(admin.site.urls)),
+    url(r'^tinymce/', include('tinymce.urls')),
 )
 
 if settings.DEBUG:
