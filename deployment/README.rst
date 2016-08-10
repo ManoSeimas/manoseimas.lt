@@ -16,7 +16,7 @@ To deploy this app on staging run the following command::
 If you don't have root access on the staging server, you can still do an update
 of the existing deployment with::
 
-    ansible-playbook -i staging deploy.yml -K --tags update
+    ansible-playbook --sudo-user=manoseimas -i staging deploy.yml -K --tags update
 
 
 .. _Ansible: http://www.ansible.com/
