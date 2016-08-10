@@ -45,6 +45,7 @@ class TestMpsSpider(unittest.TestCase):
 
     def test_adomenas(self):
         spider = MpsSpider()
+        url = ('http://www3.lrs.lt/pls/inter/w5_show?p_r=6113&p_k=1&p_a=5&p_asm_id=48690&p_kade_id=6')
         url = ('http://www3.lrs.lt/pls/inter/w5_show?'
                'p_r=6113&p_k=1&p_a=5&p_asm_id=48690&p_kade_id=6')
         response = HtmlResponse(url, body=fixture('mp_48690.html'))
@@ -176,5 +177,23 @@ class TestMpsSpider(unittest.TestCase):
         self.assertEqual(item['home_page'],
                          'http://www3.lrs.lt/pls/inter/w5_show?p_r=4487&p_k=1')
         self.assertEqual(item['phone'], ['2396025', '2396626'])
+
+        self.assertTrue(len(item['biography']) > 0)
+
+    def test_sysas(self):
+        spider = MpsSpider()
+        url = 'http://www3.lrs.lt/pls/inter/w5_show?p_a=5&p_asm_id=7252&p_k=1&p_kade_id=7&p_r=8801'
+        response = HtmlResponse(url, body=fixture('mp_7252.html'))
+
+        items = list(spider.parse_person(response))
+        self.assertEqual(len(items), 1)
+        item = items[0]
+
+        self.assertEqual(item['first_name'], u'Algirdas')
+        self.assertEqual(item['last_name'], u'Sysas')
+        self.assertEqual(item['email'], [u'Sysas@lrs.lt', u'alsysa@lrs.lt'])
+        self.assertEqual(item['home_page'], 'http://www.sysas.eu')
+        self.assertEqual(item['phone'], ['(8 5) 2396702'])
+        self.assertEqual(item['parliament'], ['2012-2016', ''])
 
         self.assertTrue(len(item['biography']) > 0)

@@ -1,23 +1,34 @@
-import unidecode
-from django.shortcuts import render
-from decorators import ajax_request
-
-from manoseimas.votings.models import get_recent_votings
-
-from sboard.nodes import search_words_re
-from sboard.models import couch
+# -*- coding: utf-8 -*-
 
 import logging
 
+from django.conf import settings
+from django.shortcuts import render
+
+from manoseimas.scrapy.models import Voting
+from manoseimas.mps_v2.models import Group
+
 logger = logging.getLogger(__name__)
+
+
+def index(request):
+    return render(request, 'index.jade')
+
+
+def influence(request):
+    return render(request, 'influence.jade', {})
+
+
+def login(request):
+    return render(request, 'manoseimas/login.html', {'settings': settings})
 
 
 def votings(request):
     day = None
     recent = []
     last_date = ""
-    for v in get_recent_votings(100):
-        date = v.created.date()
+    for v in Voting.objects.order_by('-timestamp')[:100]:
+        date = v.timestamp.date()
         if date != last_date:
             if len(recent) >= 7:
                 break
@@ -25,50 +36,19 @@ def votings(request):
             day = {'date': date, 'votings': []}
             recent.append(day)
 
+        if not v.value['documents']:
+            continue
+
         last_date = date
-        title = v.documents[0]['name'] if v.documents else v.title
+        title = v.get_title()
+
+        if title is None:
+            continue
 
         day['votings'].append({
-            'id': v._id,
+            'id': v.key,
             'title': title,
-            'date': v.created
+            'date': v.timestamp
         })
 
     return render(request, 'votings.jade', {'recent_votings': recent})
-
-
-def normalize_search(value):
-    r = unidecode.unidecode(value)
-    return r.lower()
-
-
-@ajax_request('GET')
-def ajax_search(request):
-    qry = normalize_search(request.GET.get('q'))
-    qry = search_words_re.split(qry)
-    qry = filter(None, qry)
-    if len(qry):
-        key = qry[0]
-        args = dict(startkey=[key, 'Z'], endkey=[key])
-        nodes = couch.view('compat/search', descending=True, limit=25, **args)
-        results = []
-        for n in nodes:
-            r = {'id': n._id, 'type': n.doc_type}
-            if 'title' in n:
-                r['title'] = n.title
-            if 'created' in n:
-                r['created'] = str(n.created)
-            if n.doc_type == "Voting":
-                docs = []
-                for doc in n.documents:
-                    if key in normalize_search(doc['name']):
-                        docs.append(doc)
-
-                r['documents'] = docs
-
-            results.append(r)
-        return results
-
-    else:
-        return []
-

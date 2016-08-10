@@ -107,7 +107,7 @@ update_position = (slug, position, callback) ->
     post VOTING_URL, { position: position, node: "+"+slug }, callback
 
 fetch_profile = (profile_id, callback) ->
-    fetch_data SERVER_URL + "/" + profile_id + ".json", (data) ->
+    fetch_data SERVER_URL + "data/profile/", (data) ->
         callback data if callback?
 
 fetch_voting = (slug, callback) ->
@@ -190,6 +190,3 @@ ajax_request = (url, method, params, callback) ->
 
         postdata = (k+"="+encodeURIComponent(v) for k,v of params).join '&'
         xhr.send postdata
-
-
-

@@ -11,7 +11,7 @@ ubuntu:
 	sudo apt-get -y build-dep python-imaging python-mysqldb python-pylibmc
 	sudo apt-get -y install build-essential python-dev python-virtualenv \
 		git mercurial gettext exuberant-ctags libxml2-dev libxslt1-dev \
-		libffi-dev libssl-dev antiword
+		libffi-dev libssl-dev antiword coffeescript
 
 run: bin/django ; bin/django devserver 0.0.0.0:8000
 
@@ -31,9 +31,9 @@ bin/buildout: bin/pip
 	bin/pip install zc.buildout==2.4.6
 	touch -c $@
 
-mkdirs: var/log var/www/static var/www/media
+mkdirs: var/log var/www/static var/www/media build bundles
 
-var/log var/www/static var/www/media: ; mkdir -p $@
+var/log var/www/static var/www/media build bundles: ; mkdir -p $@
 
 bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildcard config/env/*.cfg) setup.py
 	bin/buildout
@@ -42,15 +42,17 @@ bin/django bin/sassc: bin/buildout buildout.cfg $(wildcard config/*.cfg) $(wildc
 
 migrate: bin/django ; bin/django migrate
 
+clean:
+	rm -rf bin develop-eggs .installed.cfg .mr.developer.cfg buildout.cfg parts
+
 reset_mysql:
 	mysql -e 'drop database if exists manoseimas; create database manoseimas character set utf8 collate utf8_bin;'
 
 import_backup: bin/django
 	mysql -u manoseimas < backup/manoseimas.sql
 	bin/django migrate --fake-initial
-	bin/django couchdb_sync_id
 
-.PHONY: all help run mkdirs widget tags migrate import_backup
+.PHONY: all help run mkdirs widget tags migrate clean reset_mysql import_backup
 
 here := manoseimas/widget/frontend
 include $(here)/Makefile

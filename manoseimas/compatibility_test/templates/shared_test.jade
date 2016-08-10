@@ -1,0 +1,28 @@
+- extends "test_base.jade"
+- load static from staticfiles
+- load render_bundle from webpack_loader
+- load to_json from json_data
+
+- block og
+  meta(property="og:type" content="website")
+  meta(property="og:title" content=og_title)
+  meta(property="og:description" content=og_description)
+  meta(property="og:image" content=og_image)
+  meta(property="og:url" content="http://manoseimas.lt/test")
+
+- block title
+  | Politinio suderinamumo testas - manoSeimas.lt
+
+- block main
+  script.
+    window.___INITIAL_STATE__ = {
+      title: {% to_json title %},
+      topics: {% to_json topics %},
+      test_id: {% to_json test_id %}
+    }
+
+  .container
+    #shared-test-start
+
+  - render_bundle 'react'
+  - render_bundle 'shared_test'

@@ -1,0 +1,13 @@
+- extends "new_base.jade"
+- load static from staticfiles
+- load compress from compress
+- load lt_pluralize
+
+- block title
+  | manoSeimas.lt – Apie projektą
+
+-block middle
+  .ui.page.grid
+    .column.center.aligned
+      h1.title {{title}}
+      div.content {{content|safe}}

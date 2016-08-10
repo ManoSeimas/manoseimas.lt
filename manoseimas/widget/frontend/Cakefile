@@ -66,5 +66,3 @@ clean = (options, callback) ->
 
     console.log "Cleaning up dirs #{tmp_dir} and #{out_dir}..."
     cmd "rm -f #{tmp_dir}/* #{out_dir}/js/manoSeimas-widget.debug.js #{out_dir}/js/manoSeimas-widget.min.js", callback
-
-

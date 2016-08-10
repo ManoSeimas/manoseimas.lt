@@ -1,0 +1,12 @@
+@import "../../../styles/_variables";
+
+.note {
+  margin-top: 30px;
+  margin-bottom: 15px;
+  color: $black;
+  font-weight: 300;
+  font-family: 'Roboto' !important;
+  font-style: italic;
+  line-height: 1.3;
+  font-size: $normal;
+}

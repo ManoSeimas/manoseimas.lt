@@ -6,13 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
 
-from sboard.models import NodeForeignKey
-from sboard.models import couch
-from couchdbkit.exceptions import ResourceNotFound
-
-
 from manoseimas.mps_v2.utils import is_state_actor
-from manoseimas.utils import reify, dict_fetch_all
+from manoseimas.utils import reify, dict_fetch_all, todate
+from manoseimas.scrapy import models as scrapy_models
 
 import manoseimas.common.utils.words as words_utils
 
@@ -30,31 +26,14 @@ def get_mp_full_name(mp):
     return mp.full_name
 
 
-def prepare_positions(node):
-    from manoseimas.compat.models import PersonPosition
-
-    def position_to_dict(position):
-        return {
-            'node_ref': position.node.ref,
-            'permalink': position.node.ref.permalink(),
-            'formatted': position.format_position(),
-            'title': position.node.ref.title,
-            'position': position.position,
-            'klass': position.klass,
-        }
-
-    position_list = list(PersonPosition.objects.filter(profile=node))
-    position_list.sort(key=lambda pp: abs(pp.position), reverse=True)
-
-    positions = {'for': [], 'against': [], 'neutral': []}
-    for position in position_list:
-        if abs(position.position) < 0.2:
-            positions['neutral'].append(position_to_dict(position))
-        elif position.position > 0:
-            positions['for'].append(position_to_dict(position))
-        else:
-            positions['against'].append(position_to_dict(position))
-    return positions
+def get_mp_votes(source_id, start_date='2012-11-16', end_date=None):
+    start_date = todate(start_date)
+    end_date = todate(end_date)
+    votes = scrapy_models.PersonVote.objects.filter(
+        p_asm_id=source_id,
+        timestamp__range=(start_date, end_date),
+    )
+    return votes
 
 
 class ParliamentMember(CrawledItem):
@@ -113,6 +92,9 @@ class ParliamentMember(CrawledItem):
     def __unicode__(self):
         return self.full_name
 
+    def get_absolute_url(self):
+        return reverse('mp_profile', kwargs={'mp_slug': self.slug})
+
     @property
     def fractions(self):
         return self.groups.filter(type=Group.TYPE_FRACTION)
@@ -120,7 +102,7 @@ class ParliamentMember(CrawledItem):
     @property
     def fraction(self):
         ''' Current parliamentarian's fraction. '''
-        if getattr(self, '_fraction'):
+        if getattr(self, '_fraction', None):
             return self._fraction[0].group
         else:
             membership = GroupMembership.objects.filter(
@@ -159,13 +141,10 @@ class ParliamentMember(CrawledItem):
 
     @property
     def votes(self):
-        # Avoiding circular imports
-        from manoseimas.votings.models import get_mp_votes
         return get_mp_votes(self.source_id)
 
     def get_vote_percentage(self):
-        from manoseimas.votings.models import get_total_votes
-        votes = sum(self.votes.values()) if self.votes else 0
+        votes = scrapy_models.PersonVote.objects.filter(p_asm_id=self.source_id).count()
         # Get total votes during the time MP was in fractions
         fraction_memberships = GroupMembership.objects.filter(
             member=self,
@@ -175,8 +154,11 @@ class ParliamentMember(CrawledItem):
             start_date = membership.since.isoformat()
             end_date = (membership.until.isoformat()
                         if membership.until else None)
-            total_votes += get_total_votes(start_date=start_date,
-                                           end_date=end_date)
+            total_votes += (
+                scrapy_models.Voting.objects.
+                filter(timestamp__range=(start_date, end_date)).
+                count()
+            )
         if total_votes:
             vote_percentage = float(votes) / total_votes * 100.0
         else:
@@ -207,11 +189,10 @@ class ParliamentMember(CrawledItem):
             return 0.0
 
     def get_positions(self):
-        try:
-            mp_node = couch.view('sboard/by_slug', key=self.slug).one()
-            return prepare_positions(mp_node)
-        except ResourceNotFound:
-            return None
+        from manoseimas.compatibility_test import services
+        term = services.get_term_range(self.term_of_office)
+        positions = services.get_topic_positions(term)
+        return positions['mps'].get(self.pk, {})
 
     def get_collaborators_qs(self):
         collaborators = ParliamentMember.objects.filter(
@@ -358,8 +339,9 @@ class Group(CrawledItem):
         return agg['avg_contrib']
 
     def get_positions(self):
-        fraction_node = couch.view('sboard/by_slug', key=self.slug).one()
-        return prepare_positions(fraction_node)
+        from manoseimas.compatibility_test import services
+        positions = services.get_topic_positions()  # XXX: parliament term should be passed here
+        return positions['fractions'].get(self.pk, {})
 
     def get_avg_proposed_law_project_count(self):
         agg = self.active_members.annotate(
@@ -519,12 +501,12 @@ class StenogramStatement(CrawledItem):
 
 
 class Voting(models.Model):
+    voting = models.ForeignKey('scrapy.Voting', related_name='stenogram_votings', null=True)
     stenogram_topic = models.ForeignKey(StenogramTopic, related_name='votings')
-    node = NodeForeignKey()
     timestamp = models.DateTimeField()
 
     class Meta:
-        unique_together = ('stenogram_topic', 'node')
+        unique_together = ('voting', 'stenogram_topic')
 
 
 def percentile_property(attr):
@@ -706,11 +688,16 @@ class Suggestion(CrawledItem):
 
     @classmethod
     def suggestion_and_project_count_state(self):
-        return [item for item in self.suggestion_and_project_count()
-                     if item['state_actor']]
+        return [
+            item
+            for item in self.suggestion_and_project_count()
+            if item['state_actor']
+        ]
 
     @classmethod
     def suggestion_and_project_count_other(self):
-        return [item for item in self.suggestion_and_project_count()
-                     if not item['state_actor']]
-
+        return [
+            item
+            for item in self.suggestion_and_project_count()
+            if not item['state_actor']
+        ]

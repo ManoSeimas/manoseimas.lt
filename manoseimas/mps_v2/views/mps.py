@@ -1,8 +1,22 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from django.db.models import Prefetch
 from django.utils.safestring import mark_safe
 
+from manoseimas.mps_v2 import helpers
 from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
+
+
+def mps_list(request):
+    parliament = Group.objects.filter(type=Group.TYPE_PARLIAMENT).order_by('-name').first()
+    explanations = {
+        'votings': "Šis rodiklis parodo, kiek vidutiškai balsavimų Seimo narys dalyvavo nuo 2012 m. (balsavo už, prieš arba susilaikė).",
+        'statements': "Šis rodiklis parodo, kiek vidutiniškai kartų nuo 2012 m. kadencijos pradžios Seimo narys pasisakė Seimo plenarinių posėdžių metu. Skaičiuojami visi pasisakymai.",
+        'projects': 'Šis rodiklis parodo, kiek vidutiniškai kartų Seimo narys pasirašė po Seimo narių teiktais teisės aktų projektais.'
+    }
+    context = {'parliament': parliament, 'explanations': explanations}
+    return render(request, 'mps_list.jade', context)
 
 
 def mp_profile(request, mp_slug):
@@ -60,7 +74,6 @@ def mp_profile(request, mp_slug):
         'long_statement_percentage': mp.get_long_statement_percentage,
         'contributed_discussion_percentage':
             mp.discussion_contribution_percentage,
-        'votes': mp.votes,
         'vote_percent': mp.vote_percentage,
         'proposed_projects': mp.proposed_law_project_count,
         'passed_projects': mp.passed_law_project_count,
@@ -69,13 +82,13 @@ def mp_profile(request, mp_slug):
 
     context = {
         'profile': profile,
-        'positions': mp.positions,
+        'positions': helpers.get_profile_positions(mp.positions),
         'groups': mp.other_groups,
         'all_fractions': mp.all_fractions,
         'committees': mp.committees,
         'biography': mark_safe(mp.biography),
         'stats': stats,
-        'photo_url': mp.photo.url,
+        'photo_url': mp.photo.url if mp.photo else None,
         'ranking': mp.ranking,
         'top_collaborating_mps': top_collaborators,
     }

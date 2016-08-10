@@ -273,5 +273,5 @@ var Switcher = React.createClass({
 
 React.render(
   <Switcher />,
-  document.getElementById('fraction-filter-component')
+  document.getElementById('filter-component')
 );

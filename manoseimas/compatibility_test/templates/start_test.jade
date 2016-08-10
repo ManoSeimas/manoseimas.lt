@@ -1,0 +1,30 @@
+- extends "test_base.jade"
+- load static from staticfiles
+- load render_bundle from webpack_loader
+- load to_json from json_data
+
+- block title
+  | Politinių pažiūrų testas - manoSeimas.lt
+
+- block main
+  script.
+    window.___INITIAL_STATE__ = {
+      test_state: {
+        active_topic: {},
+        next_topic_id: 0,
+        previous_topic_id: undefined,
+        topics: {% to_json topics %},
+        modal: undefined,
+        title: {% to_json title %},
+        test_id: {% to_json test_id %}
+      },
+      mps_state: {
+        expanded_mp: undefined,
+        selected_fractions: []
+      }
+    }
+
+  #compat-app
+
+  - render_bundle 'react'
+  - render_bundle 'compat_test'

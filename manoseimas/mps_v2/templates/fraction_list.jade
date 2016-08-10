@@ -1,27 +1,24 @@
 - extends "new_base.jade"
 - load lt_pluralize
 - load static from staticfiles
+- load compress from compress
 
 - block title
-  | Frakcijos
+  | LRS frakcijos - statistika - manoSeimas.lt
+
+-block inlinejs
+  script(src="https://npmcdn.com/react@15.3.0/dist/react.js", type="text/javascript")
+  script(src="https://npmcdn.com/react-dom@15.3.0/dist/react-dom.js", type="text/javascript")
+  script(src="{% static 'js/jquery.scrollTo-1.4.3.1-min.js' %}")
+
+  - compress js
+    script(src="{% static 'components/react_loader.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/row_components.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/filter_component.jsx' %}", type="text/jsx", charset="utf-8")
+    script(src="{% static 'components/fractions_list.jsx' %}", type="text/jsx", charset="utf-8")
 
 - block middle
   .photo-box.single-title
-    .transparent-bg: .title: h1 Frakcijos
+    .transparent-bg: .title: h1 Seimo frakcijos
 
-  .ui.center.aligned.zero.margin.page.grid
-    .switcher
-      a.item.active Frakcijos
-      a(href="{% url 'mp_list_all' %}").item Parlamentarai
-
-  .ui.zero.margin.page.grid
-    for fraction in fractions
-      if fraction.active_members.count > 0
-        .fraction.box
-          if fraction.logo
-            img(src="{{ fraction.logo.url }}")
-          else
-            img(src="{% static 'img/fractions/fraction-default.png' %}")
-          .info
-            h2: a(href="{% url 'mp_fraction' fraction.slug %}") {{fraction.name}}
-            p {{fraction.active_member_count}} {% lt_pluralize fraction.active_member_count 'narys' 'nariai' 'narių' %}
+  #filter-component

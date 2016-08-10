@@ -7,9 +7,7 @@ import difflib
 import datetime
 import operator
 
-import couchdbkit.exceptions
-
-from manoseimas.scrapy.db import get_db
+from manoseimas.scrapy import models
 
 clean_words_re = re.compile(r'ir|svarstymas|pateikimas|priėmimas')
 clean_title_re = re.compile(r'[()[\]„“",  ]+')
@@ -19,9 +17,9 @@ def get_voting_for_stenogram(votings, title, dt):
     """Find voting for stenogram by stenogram topic title and datetime
 
     Parameters:
-    - votings: list of dicts, each dict iscouchdb document with doc_type=voting
+    - votings: queryset of compatibility_test.Voting objects
     - title: str, stenogram topic title
-    - dt: datetime.datetime, stenogram tipic date and time
+    - dt: datetime.datetime, stenogram topic date and time
 
     Returns: generator with docs matching given title and datetime
 
@@ -35,12 +33,11 @@ def get_voting_for_stenogram(votings, title, dt):
 
     title = clean_title(title)
     votings_by_ratio = []
-    for doc in votings:
-        _dt = datetime.datetime.strptime(doc['created'], '%Y-%m-%dT%H:%M:%SZ')
-        _title = clean_title(' '.join([d['name'] for d in doc.get('documents',
-                                                                  [])]))
+    for voting in votings:
+        _dt = voting.timestamp
+        _title = clean_title(' '.join([d['name'] for d in voting.value['documents']]))
         ratio = difflib.SequenceMatcher(None, title, _title).ratio()
-        votings_by_ratio.append((ratio, abs(_dt - dt), doc))
+        votings_by_ratio.append((ratio, abs(_dt - dt), voting))
 
     allowed_time_delta = datetime.timedelta(minutes=30)
     if votings_by_ratio:
@@ -60,10 +57,7 @@ def get_voting_for_stenogram(votings, title, dt):
 
 def get_votings_by_date(date):
     assert isinstance(date, datetime.date)
-    db = get_db('nodes_voting')
-    rows = db.view('scrapy/voting_by_date', key=date.isoformat(),
-                   include_docs=True)
-    try:
-        return [row['doc'] for row in rows]
-    except couchdbkit.exceptions.ResourceNotFound:
-        return []
+    return models.Voting.objects.filter(timestamp__range=(
+        datetime.datetime.combine(date, datetime.time.min),
+        datetime.datetime.combine(date, datetime.time.max),
+    ))

@@ -27,6 +27,7 @@ dob_re = re.compile(u'Gim\u0117 (\d{4}) m\. (\w+) (\d+) d\.', re.UNICODE)
 
 # This maps URL components to different Seimas versions
 seimas_version_map = {
+    786: 0,   # not sure where these numbers come from so adding 0
     6113: 10,
     8801: 11
 }
@@ -147,6 +148,8 @@ class MpsSpider(ManoSeimasSpider):
         details = str2dict(split, details, normalize=mapwords({
             u'išrinkta': u'išrinktas',
             u'seimo narė': u'seimo narys',
+            u'el p': u'asmeninis elektroninis paštas',
+            u'asmeninė svetainė': u'asmeniniai puslapiai',
         }))
         details = dict(details)
 
@@ -161,7 +164,7 @@ class MpsSpider(ManoSeimasSpider):
 
         person.add_xpath(
             'home_page',
-            'a[contains(font/text(), "Asmeniniai puslapiai")]/@href'
+            u'a[contains(font/text(), "Asmeniniai puslapiai") or contains(font/text(), "Asmeninė svetainė")]/@href'
         )
         person.add_xpath('candidate_page',
                          'a[contains(text(), "Kandidato puslapis")]/@href')
@@ -177,8 +180,8 @@ class MpsSpider(ManoSeimasSpider):
 
         # parliament
         parliament = header_hxs.xpath('div/b/font/text()')
-        parliament = parliament.re(r'(\d{4}-\d{4})')
-        parliament = ''.join(parliament)
+        parliament = parliament.re(r'(\d{4}[-\x97]\d{4})')
+        parliament = ''.join(parliament).replace(u'\x97', u'-')
         person.add_value('parliament', parliament)
         if u'seimo narys' in details:
             keys = ['nuo', 'iki']

@@ -1,0 +1,26 @@
+@import "../base";
+
+.text {
+  compose: text from '../base.css';
+  width: calc(100% - 40px);
+  margin-left: 0;
+}
+
+.topic {
+  min-height: 230px;
+}
+
+.actions {
+  margin-top: 20px;
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+  top: 0;
+}
+
+.relative {
+  position: relative;
+  top: 0;
+}

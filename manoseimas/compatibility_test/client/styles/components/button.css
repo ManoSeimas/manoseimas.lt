@@ -1,0 +1,61 @@
+@import "../_variables";
+
+.button {
+  composes: base_button from '../base.css';
+}
+
+.button_yes {
+  composes: base_button from '../base.css';
+  border-bottom-color: $green;
+  color: $green;
+}
+
+.button_no {
+  composes: base_button from '../base.css';
+  border-bottom-color: $red;
+  color: $red;
+}
+
+.button_skip {
+  composes: base_button from '../base.css';
+  border-bottom-color: $black;
+  color: $black;
+}
+
+.button_block {
+  position: relative;
+  bottom: 0;
+  margin-top: 20px;
+}
+
+.button_facebook {
+  composes: base_button from '../base.css';
+  background-color: $facebook;
+  color: #ffffff;
+  width: initial;
+  min-width: 90%;
+  border-bottom: none;
+  margin-right: 0;
+
+  &:hover {
+    background-color: color($facebook blackness(50%));
+  }
+}
+
+.button_small {
+  composes: small_button from '../base.css';
+
+  div {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 5px 5px 0 5px;
+  border-color: #ffffff transparent transparent transparent;
+  margin-left: 5px;
+}
