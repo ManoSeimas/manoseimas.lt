@@ -11,7 +11,8 @@ from manoseimas.flatpages.views import flatpage_view
 admin.autodiscover()
 
 flatpage_patterns = [
-    url('^about', flatpage_view, kwargs={'page': 'about'}, name='about'),
+    url(r'^about/(?P<page>[-_\w]+)/$', flatpage_view, name='flatpage'),
+    url(r'^about/?$', flatpage_view, kwargs={'page': 'about'}, name='about'),
 ]
 
 urlpatterns = patterns(
