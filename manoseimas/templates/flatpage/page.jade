@@ -6,8 +6,13 @@
 - block title
   | manoSeimas.lt – Apie projektą
 
+- block extra_css
+  - compress css
+    link(rel="stylesheet", type="text/x-scss", href="{% static 'css/flatpages.scss' %}")
+
+
 -block middle
-  .ui.page.grid
-    .column.center.aligned
+  .ui.page.grid.flat-page
+    .column
       h1.title {{title}}
       div.content {{content|safe}}

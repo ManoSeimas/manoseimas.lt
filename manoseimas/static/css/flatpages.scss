@@ -1,0 +1,45 @@
+// Flatpages styles
+// -----------------
+@import 'variables';
+
+.flat-page {
+  margin-top: -90px !important;
+  padding-top: 30px !important;
+  padding-bottom: 20px !important;
+  background-color: $coloredBgColor;
+
+  h1, h2, h3 {
+    color: $textColor;
+  }
+
+  h2, h3 {
+    border-bottom: 1px solid $grayLite;
+  }
+
+  h1 {
+    font-size: $huge;
+    color: $black;
+  }
+
+  h2 {
+    font-size: $big;
+  }
+
+  h3 {
+    font-size: $medium;
+  }
+
+  .math {
+    font-size: $medium;
+    text-align: left;
+    font-weight: 300;
+  }
+
+  ul {
+    margin-left: 50px;
+    li {
+      margin-bottom: 10px;
+    }
+  }
+
+}

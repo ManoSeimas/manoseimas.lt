@@ -24,6 +24,9 @@ html(lang=en)
       link(rel="stylesheet", type="text/x-scss", href="{% static 'css/styles.scss' %}")
       link(rel="stylesheet", type="text/x-scss", href="{% static 'main.scss' %}")
 
+    | {% block extra_css %}
+    | {% endblock %}
+
     script(src="{% static 'jquery.min.js' %}")
     script(src="{% static 'semantic/semantic.min.js' %}")
     - compress js
