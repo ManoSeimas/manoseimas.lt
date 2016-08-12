@@ -1,5 +1,4 @@
 import React from 'react'
-import { Link } from 'react-router'
 import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../components'
 import Arguments from './Arguments'
 import Modal from './Modal'
@@ -10,9 +9,9 @@ const Topic = (props) => {
     let topic_arguments = {}
     return <div>
         <header>
-            <Link to="/">
+            <a href="/">
                 <img src='/static/img/logo-black.png' className='logo' />
-            </Link>
+            </a>
             <StatusBar current={props.doneTopics} max={props.topicsAmount} />
             <TopicGroup name={props.topic.group} number={'0' + props.doneTopics.toString()} />
         </header>

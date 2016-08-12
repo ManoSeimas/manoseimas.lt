@@ -7,9 +7,12 @@ import styles from '../../styles/views/results.css'
 export const ResultsLayout = ({ children }) =>
     <div>
         <header>
-            <Link to="/">
-                <img src='/static/img/logo-black.png' className='logo' />
-            </Link>
+            <a href="/">
+                <img src='/static/img/logo-black.png'
+                     className='logo'
+                     alt='manoSeimas logo'
+                     title='manoSeimas.lt home' />
+            </a>
             <StatusBar current={12} max={12} />
         </header>
         <div className={styles.content}>
