@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../components'
-import Modal from './Modal'
 import Arguments from './Arguments'
+import Modal from './Modal'
 import MoreInfo from './MoreInfo'
 import styles from '../../styles/views/topic.css'
 

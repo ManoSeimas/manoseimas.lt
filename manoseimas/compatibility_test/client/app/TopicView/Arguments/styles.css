@@ -2,6 +2,7 @@
 
 .arguments .argument {
   margin-top: 20px;
+
   h3 {
     color: $black;
     font-family: 'Roboto' !important;
@@ -14,6 +15,18 @@
   p {
     line-height: 1.4;
   }
+}
+
+h2.title {
+  margin-bottom: 20px;
+}
+
+.text {
+  line-height: 1.5;
+  color: $textColor;
+  font-weight: 300;
+  font-size: $normal;
+  word-break: break-word;
 }
 
 .head {
@@ -43,4 +56,17 @@
   composes: head;
   border-bottom: 1px solid $red;
   color: $red;
+}
+
+.more {
+  margin-left: 7px; 
+  font-weight: 300;
+  font-size: $small;
+  text-decoration: underline;
+  font-family: 'Roboto' !important;
+  color: $dark;
+
+  &:hover {
+    color: $gray;
+  }
 }

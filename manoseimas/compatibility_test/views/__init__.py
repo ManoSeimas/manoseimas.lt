@@ -27,7 +27,7 @@ def topics_all(test_id):
     topics = []
     for topic in qs:
         arguments = topic.arguments.all().values(
-            'id', 'name', 'description', 'supporting'
+            'id', 'name', 'short_description', 'description', 'supporting'
         )
         topic_votings = topic.topicvoting_set.all().values(
             'voting__id', 'voting__name', 'voting__source', 'factor',

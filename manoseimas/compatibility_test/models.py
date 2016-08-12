@@ -60,8 +60,9 @@ class TestGroup(models.Model):
 
 
 class Argument(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField()
+    name = models.CharField(max_length=150)
+    short_description = models.TextField(max_length=300)
+    description = models.TextField(blank=True)
     supporting = models.BooleanField(default=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
                               related_name='arguments')
