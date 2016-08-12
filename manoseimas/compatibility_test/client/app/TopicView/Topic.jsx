@@ -22,9 +22,11 @@ const Topic = (props) => {
                 <div className={styles.actions}>
                     <div className={styles.relative}>
                         <Button type='small'
+                                active={props.topic.more_modal}
                                 action={props.toggleDetails}
                                 arrow={true}>Daugiau informacijos</Button>
                         <Button type='small'
+                                active={props.topic.arguments_modal}
                                 action={props.toggleArguments}
                                 arrow={true}>Padėkite apsispręsti</Button>
                     </div>
