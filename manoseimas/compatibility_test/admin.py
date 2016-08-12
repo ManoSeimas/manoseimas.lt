@@ -52,7 +52,6 @@ class TestGroupInline(admin.TabularInline):
 class CompatTestAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
     list_filter = ('name',)
-    change_form_template = 'admin_topic.jade'
     inlines = [TestGroupInline]
 
 
