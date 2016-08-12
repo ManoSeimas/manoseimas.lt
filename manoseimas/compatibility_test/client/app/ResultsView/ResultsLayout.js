@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { Link } from 'react-router'
 import { StatusBar, FacebookShare } from '../../components'
 import Tabs from './Tabs'
 import styles from '../../styles/views/results.css'
@@ -6,7 +7,9 @@ import styles from '../../styles/views/results.css'
 export const ResultsLayout = ({ children }) =>
     <div>
         <header>
-            <img src='/static/img/logo-black.png' className='logo' />
+            <Link to="/">
+                <img src='/static/img/logo-black.png' className='logo' />
+            </Link>
             <StatusBar current={12} max={12} />
         </header>
         <div className={styles.content}>
