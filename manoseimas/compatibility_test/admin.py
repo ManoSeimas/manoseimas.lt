@@ -28,9 +28,10 @@ class TestGroupTopicsInline(admin.TabularInline):
 
 
 class TopicAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
+    list_display = ('name', 'slug', 'description')
     list_filter = ('groups__test',)
     change_form_template = 'admin_topic.jade'
+    prepopulated_fields = {"slug": ("name",)}
     inlines = [
         TestGroupTopicsInline,
         ArgumentInline,

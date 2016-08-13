@@ -44,6 +44,7 @@ def topics_all(test_id):
         topics.append({
             'id': topic.id,
             'name': topic.name,
+            'slug': topic.slug,
             'group': topic.groups.first().name,
             'description': topic.description,
             'arguments': list(arguments),
@@ -65,8 +66,13 @@ def get_test_by_id(test_id):
 
 def get_test_context(test_id):
     test = get_test_by_id(test_id)
+    topics = topics_all(test_id)
     return {
-        'topics': topics_all(test_id),
+        'topics': topics,
+        'first_topic': {
+            'position': 0,
+            'slug': topics[0]['slug'],
+        },
         'title': test.name,
         'test_id': test.id,
     }

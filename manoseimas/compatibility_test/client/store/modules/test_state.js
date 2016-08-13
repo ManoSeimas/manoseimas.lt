@@ -11,10 +11,10 @@ export const TOGGLE_MORE_MODAL = 'TOGGLE_MORE_MODAL'
 // ------------------------------------
 // Actions
 // ------------------------------------
-export function setActiveTopic (topic_id) {
+export function setActiveTopic (slug) {
   return {
     type: SET_ACTIVE_TOPIC,
-    topic_id: topic_id
+    slug
   }
 }
 
@@ -57,17 +57,39 @@ function getTopicById (topic_id, topics) {
 
 const ACTION_HANDLERS = {
   SET_ACTIVE_TOPIC: (state, action) => {
+    // If there are no slug given, it's first topic
+    let position = 0
+    let found = false // Set to true when find at least one topic
+    const topic = (action.slug)
+      ? state.topics.filter(t => {
+        if (!found)
+          position += 1
+
+        if (t.slug === action.slug) {
+          found = true
+          return true
+        }
+        return false
+      })[0]
+      : state.topics[0]
+
+    let next_topic =  {
+      position: position+1,
+      slug: ((position) < state.topics.length) ? state.topics[position].slug : 'undefinedx'
+    }
+
     return Object.assign({}, state, {
-      active_topic: state.topics[action.topic_id],
-      previous_topic_id: (state.active_topic) ? action.topic_id - 1 : undefined,
-      next_topic_id: (state.active_topic) ? action.topic_id + 1 : 1
+      active_topic: topic,
+      active_topic_position: position,
+      previous_position: (state.active_topic && position > 0) ? position - 1 : undefined,
+      next_topic: next_topic
     })
   },
   FINISH_TEST: (state, action) => {
     return Object.assign({}, state, {
       active_topic: undefined,
-      next_topic_id: 0,
-      previous_topic_id: undefined,
+      next_topic: {},
+      previous_position: undefined,
     })
   },
   TOGGLE_ARGUMENTS_MODAL: (state, action) => {
@@ -85,7 +107,7 @@ const ACTION_HANDLERS = {
         more_modal: !state.active_topic.more_modal
       })
     })
-  }
+  },
 }
 
 // ------------------------------------
@@ -93,9 +115,14 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
   active_topic: {},
-  next_topic_id: 0,
-  previous_topic_id: undefined,
+  active_topic_slug: '',
+  next_topic: {
+    position: 0,
+    slug: ''
+  },
+  previous_position: undefined,
   topics: [],
+  topics_amount: 0,
   title: 'Test name'
 }
 export default (state = initialState, action) => {

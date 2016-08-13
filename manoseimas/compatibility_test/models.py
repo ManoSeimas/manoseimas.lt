@@ -11,6 +11,7 @@ from jsonfield import JSONField
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, max_length=40)
     description = models.TextField()
     votings = models.ManyToManyField('scrapy.Voting', through='TopicVoting')
 

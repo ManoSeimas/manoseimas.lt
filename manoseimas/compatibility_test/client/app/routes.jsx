@@ -11,7 +11,7 @@ export default (store) => {
             <IndexRoute component={StartTest} />
 
             <Route path="/topic" component={TopicView} />
-            <Route path="/topic/:topicId" component={TopicView} />
+            <Route path="/topic/:topicSlug" component={TopicView} />
             <Route path="/results" component={ResultsLayout}>
                 <IndexRoute component={SimilarityFractions} />
                 <Route path="/results/mps" component={SimilarityMps} />
