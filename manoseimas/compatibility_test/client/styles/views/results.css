@@ -10,7 +10,7 @@
 }
 
 .context-image, .side {
-  composes: context-image from '../base.css';
+  composes: context from '../base.css';
   border: 0;
 }
 

@@ -59,3 +59,15 @@
   border-color: #ffffff transparent transparent transparent;
   margin-left: 5px;
 }
+
+.active {
+  background-color: white;
+  color: $black;
+  padding-left: 20px;
+  font-weight: 400;
+
+  &:hover {
+    background-color: white;
+    color: $dark;
+  }
+}

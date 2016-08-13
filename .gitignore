@@ -49,3 +49,4 @@ bundles
 /deployment/credentials
 
 *.DS_Store
+/share

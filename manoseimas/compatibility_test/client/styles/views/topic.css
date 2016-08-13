@@ -28,4 +28,11 @@
 .content {
   margin-bottom: 50px;
   min-height: calc(100vh - 550px);
+
+.topic-image {
+  composes: context;
+  border: 2px dashed $grey;
 }
+
+.context-img {
+  width: 100%;

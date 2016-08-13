@@ -11,8 +11,11 @@ from jsonfield import JSONField
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True, max_length=40)
     description = models.TextField()
     votings = models.ManyToManyField('scrapy.Voting', through='TopicVoting')
+    image = models.ImageField(upload_to='topic_images',
+                              blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -34,6 +37,8 @@ class TopicVoting(models.Model):
 class CompatTest(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, default='')
+    image = models.ImageField(upload_to='test_images',
+                              blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -60,8 +65,9 @@ class TestGroup(models.Model):
 
 
 class Argument(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField()
+    name = models.CharField(max_length=150)
+    short_description = models.TextField(max_length=300)
+    description = models.TextField(blank=True)
     supporting = models.BooleanField(default=True)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE,
                               related_name='arguments')

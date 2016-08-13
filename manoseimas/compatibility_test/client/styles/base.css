@@ -61,7 +61,7 @@
   background-color: $black;
   color: white;
   font-size: $small;
-  font-weight: 200;
+  font-weight: 300;
   text-decoration: none;
   border-radius: $radius;
   width: 150px;
@@ -118,10 +118,19 @@
   }
 }
 
-.context-image {
-  height: 300px;
-  border: 2px dashed $grey;
+.context {
+  min-height: 300px;
   lost-column: 1/4 0;
+
+  img {
+    padding: 10px;
+    width: calc(100% - 20px);
+  }
+}
+
+.context-image {
+  compose: context;
+  border: 2px dashed $grey;
 }
 
 .text {

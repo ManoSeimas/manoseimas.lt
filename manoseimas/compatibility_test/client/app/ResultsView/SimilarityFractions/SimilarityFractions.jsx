@@ -87,7 +87,7 @@ class SimilarityFractions extends React.Component {
                                 <img src={fraction.logo} alt={fraction.title + ' logo'} />
                             </div>
                             <main>
-                                <div className={styles.title}>{fraction.title}, {fraction.similarity}%</div>
+                                <div className={styles.title}>{`${fraction.title}, ${fraction.similarity}%`}</div>
                                 <SimilarityBar similarity={fraction.similarity} />
                                 <a onClick={() => this.props.expandFraction(fraction.id)}>
                                     {fraction.members_amount} nariai {' '}
