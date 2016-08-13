@@ -34,13 +34,19 @@ const StartTest = (props) =>
             </div>
         </div>
 
-        <div className={styles['context-image']}></div>
+        {(props.img_url) ?
+            <div className={styles['context']}>
+                <img src={props.img_url} alt="" />
+            </div>
+        : <div className={styles['context-image']}></div>
+        }
     </div>
 
 StartTest.propTypes = {
     onClickHandler: React.PropTypes.func.isRequired,
     amount: React.PropTypes.number.isRequired,
-    title: React.PropTypes.string.isRequired
+    title: React.PropTypes.string.isRequired,
+    img_url: React.PropTypes.string
 }
 
 export default StartTest

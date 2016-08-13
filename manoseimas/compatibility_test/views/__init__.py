@@ -41,11 +41,6 @@ def topics_all(test_id):
             }
             for tv in topic_votings
         ]
-
-        image_url = ''
-        if topic.image:
-            image_url = topic.image.url
-
         topics.append({
             'id': topic.id,
             'name': topic.name,
@@ -54,7 +49,7 @@ def topics_all(test_id):
             'description': topic.description,
             'arguments': list(arguments),
             'votings': votings,
-            'image': image_url,
+            'image': topic.image.url if topic.image else None,
         })
     # TODO: randomise by group #153
     return topics
@@ -81,6 +76,7 @@ def get_test_context(test_id):
         },
         'title': test.name,
         'test_id': test.id,
+        'test_img': test.image.url if test.image else None,
     }
 
 

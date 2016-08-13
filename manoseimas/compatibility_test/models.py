@@ -37,6 +37,8 @@ class TopicVoting(models.Model):
 class CompatTest(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, default='')
+    image = models.ImageField(upload_to='test_images',
+                              blank=True, null=True)
 
     def __unicode__(self):
         return self.name

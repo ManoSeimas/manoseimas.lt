@@ -14,7 +14,8 @@ class StartTestContainer extends React.Component {
     next_topic: PropTypes.object.isRequired,
     topics_amount: PropTypes.number.isRequired,
     setActiveTopic: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    image: PropTypes.string
   }
 
   static contextTypes = {
@@ -30,6 +31,7 @@ class StartTestContainer extends React.Component {
   render () {
     return <StartTest onClickHandler={this._openTopic}
                       amount={this.props.topics_amount}
+                      img_url={this.props.img_url}
                       title={this.props.title} />
   }
 }
@@ -37,7 +39,8 @@ class StartTestContainer extends React.Component {
 const mapStateToProps = (state) => ({
     next_topic: state.test_state.next_topic,
     topics_amount: state.test_state.topics.length,
-    title: state.test_state.title
+    title: state.test_state.title,
+    img_url: state.test_state.test_img
 })
 
 export default connect((mapStateToProps), {
