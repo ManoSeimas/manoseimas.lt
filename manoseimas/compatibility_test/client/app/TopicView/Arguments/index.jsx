@@ -9,14 +9,14 @@ const Arguments = (props) =>
             <div className={styles['positive-head']}>Už</div>
             {props.arguments.map(argument => {
                 if (argument.supporting)
-                    return <Argument argument={argument} />
+                    return <Argument argument={argument} key={argument.id}/>
             })}
         </div>
         <div className={styles['negative-box']}>
             <div className={styles['negative-head']}>Prieš</div>
             {props.arguments.map(argument => {
                 if (!argument.supporting)
-                    return <Argument argument={argument} />
+                    return <Argument argument={argument} key={argument.id} />
             })}
         </div>
     </div>
