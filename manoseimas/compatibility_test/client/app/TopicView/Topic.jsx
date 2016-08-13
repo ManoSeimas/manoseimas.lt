@@ -56,7 +56,11 @@ const Topic = (props) => {
             </ButtonsBlock>
         </div>
 
-        <div className={styles['context-image']}></div>
+        <div className={styles['topic-image']}>
+            {(props.topic.image)
+                ? <img src={props.topic.image} alt='topic image' />
+                : undefined}
+        </div>
     </div>
 }
 

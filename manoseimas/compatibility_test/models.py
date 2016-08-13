@@ -14,6 +14,8 @@ class Topic(models.Model):
     slug = models.SlugField(unique=True, max_length=40)
     description = models.TextField()
     votings = models.ManyToManyField('scrapy.Voting', through='TopicVoting')
+    image = models.ImageField(upload_to='topic_images',
+                              blank=True, null=True)
 
     def __unicode__(self):
         return self.name

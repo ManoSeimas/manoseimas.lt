@@ -41,6 +41,11 @@ def topics_all(test_id):
             }
             for tv in topic_votings
         ]
+
+        image_url = ''
+        if topic.image:
+            image_url = topic.image.url
+
         topics.append({
             'id': topic.id,
             'name': topic.name,
@@ -49,6 +54,7 @@ def topics_all(test_id):
             'description': topic.description,
             'arguments': list(arguments),
             'votings': votings,
+            'image': image_url,
         })
     # TODO: randomise by group #153
     return topics
