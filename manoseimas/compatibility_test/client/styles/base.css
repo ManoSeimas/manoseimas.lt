@@ -110,6 +110,7 @@
 .content {
   lost-column: 3/4 0;
   margin-right: 0 !important;
+  margin-bottom: 50px;
   padding-right: 10px;
 
   h2 {

@@ -24,3 +24,8 @@
   position: relative;
   top: 0;
 }
+
+.content {
+  margin-bottom: 50px;
+  min-height: calc(100vh - 550px);
+}

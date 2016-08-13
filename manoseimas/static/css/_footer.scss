@@ -1,0 +1,52 @@
+// Header and Footer
+// ----------------------------
+
+@import 'variables';
+
+footer {
+  background: $white;
+  border-top: 1px solid $coloredBgColor;
+
+  img {
+    max-width: 500px !important;
+  }
+
+  .sponsor {
+    border-right: 1px solid $coloredBgColor;
+
+    @media($smallScreen) {
+      border: none;
+    }
+  }
+
+
+  .ui.vertical.segment.footer {
+      color: $textColor;
+
+      .menu {
+        margin: 2em;
+
+        .item{
+          margin: 5px 25px;
+          font-weight: 500;
+          font-size: $medium * 0.9;
+          color: $black;
+
+          &:hover {
+            color: lighten($black, 20%)
+          }
+
+          @media($smallScreen) {
+            font-size: $normal;
+          }
+        }
+      }
+
+
+      .copyright {
+        font-weight: 300;
+        color: $grayDark;
+      }
+  }
+
+}

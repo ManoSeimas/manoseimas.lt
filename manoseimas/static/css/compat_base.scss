@@ -1,8 +1,95 @@
+@import 'variables';
+
 body {
-  background-color: #f0f0f0;
+  background-color: #f0f0f0 !important;
+  margin: initial !important;
+  padding: initial !important;
+
 }
 
 #main-block {
   margin: auto;
   width: 960px;
 }
+
+footer {
+  clear: both;
+  border-top: 1px solid $grayLite;
+
+  .ui.segment {
+    position: relative;
+    padding: 20px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .ui.vertical.segment {
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+    background-color: transparent;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 1px 0 rgba(39,41,43,.15)inset;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .ui.page.grid {
+    width: 960px;
+    margin: auto;
+    padding-left: 4em;
+    padding-right: 4em;
+  }
+}
+
+.ui.grid {
+  display: block;
+  text-align: left;
+  font-size: 0;
+  padding: 0;
+  margin: -1rem;
+}
+
+.ui.grid:after, .ui.grid > .row:after {
+  content: '';
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+.ui.grid > .row {
+  position: relative;
+  display: block;
+  width: auto!important;
+  padding: 1rem 0;
+  font-size: 0;
+}
+
+.ui.grid > .two.column.row > .column {
+  width: calc(50% - 2px) !important;
+  padding: 0;
+}
+
+.ui.grid [class*="center aligned"].column {
+  text-align: center!important;
+}
+
+.ui.grid > .row > .column {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.ui.grid > .column:not(.row), .ui.grid > .row > .column {
+  position: relative;
+  display: inline-block;
+  font-size: 1rem;
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  vertical-align: top;
+}
+
