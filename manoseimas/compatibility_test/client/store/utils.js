@@ -46,6 +46,8 @@ export function sortResults(results) {
         return fraction
     })
 
+    // Filter our not active mps (they don't have fraction)
+    results.mps = results.mps.filter((mp) => mp.fraction_id)
 
     // Calculate mps similarity
     results.mps = results.mps.map((mp) => {
