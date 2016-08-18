@@ -62,6 +62,8 @@
 
 .active {
   background-color: white;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
   color: $black;
   padding-left: 20px;
   font-weight: 400;

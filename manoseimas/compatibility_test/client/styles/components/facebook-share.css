@@ -10,8 +10,9 @@
   width: calc($container-width / 4);
 
   header {
-    font-size: $normal;
+    font-size: $medium;
     margin-bottom: 20px;
+    margin-top: 5px;
   }
 
   .fractions {
@@ -24,11 +25,15 @@
 
 .img-main {
   composes: img from '../base.css';
-  width: 40%;
-  // height: 50%;
+  width: 95px;
+  height: 95px;
   position: absolute;
   left: 30%;
   z-index: 10;
+
+  img {
+    padding: 0;
+  }
 }
 
 .image {
