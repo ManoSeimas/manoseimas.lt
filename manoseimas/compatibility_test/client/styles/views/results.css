@@ -65,6 +65,16 @@
   float: left;
 }
 
+.fraction-logo {
+  composes: img from '../base.css';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 50px;
+  left: 40px;
+  box-shadow: 0 0 4px $black;
+}
+
 .arrow {
   display: inline-block;
   vertical-align: middle;
