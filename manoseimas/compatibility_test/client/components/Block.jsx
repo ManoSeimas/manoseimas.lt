@@ -4,7 +4,7 @@ import styles from '../styles/components/block.css'
 const Block = (props) =>
     <div className={styles.instruction}>
         <div className={styles.number}>{props.number}</div>
-        <div className={styles.text}>
+        <div className={styles.text} style={props.style}>
             {props.children}
         </div>
     </div>

@@ -120,6 +120,7 @@
 
 .context {
   min-height: 300px;
+  margin-top: 60px;
   lost-column: 1/4 0;
 
   img {
@@ -131,6 +132,7 @@
 .context-image {
   compose: context;
   border: 2px dashed $grey;
+  margin-top: initial;
 }
 
 .text {
