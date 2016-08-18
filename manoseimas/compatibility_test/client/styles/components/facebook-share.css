@@ -10,7 +10,7 @@
   width: calc($container-width / 4);
 
   header {
-    font-size: $medium;
+    font-size: 18px;
     margin-bottom: 20px;
     margin-top: 5px;
   }
