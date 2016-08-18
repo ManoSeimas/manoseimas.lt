@@ -9,4 +9,8 @@
   box-shadow: 0 1px 3px $grey;
   width: $container-width;
   padding: 15px;
+
+  @media(max-width: 768px) {
+    display: none;
+  }
 }

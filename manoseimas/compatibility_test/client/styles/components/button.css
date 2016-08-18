@@ -31,6 +31,10 @@
 .button_facebook {
   composes: base_button from '../base.css';
   background-color: $facebook;
+  background-image: url('/static/img/fb-logo-white.png');
+  background-position: 12px 12px;
+  background-repeat: no-repeat;
+  background-size: 20px;
   color: #ffffff;
   width: initial;
   min-width: 90%;
@@ -39,6 +43,12 @@
 
   &:hover {
     background-color: color($facebook blackness(50%));
+  }
+
+  @media(max-width: 768px) {
+    font-size: $tiny;
+    padding: 10px 0;
+    background-position: 5px 5px;
   }
 }
 

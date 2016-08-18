@@ -1,4 +1,5 @@
 @import "_variables";
+@import "_mobile";
 
 :global body {
   font-family: 'Roboto', sans-serif;
@@ -53,6 +54,13 @@
     cursor: pointer;
   }
 }
+
+:global #compat-app {
+  @media(max-width: 768px) {
+    padding: 15px;
+  }
+}
+
 
 .small_button {
   display: inline-block;

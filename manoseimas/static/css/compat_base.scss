@@ -10,6 +10,11 @@ body {
 #main-block {
   margin: auto;
   width: 960px;
+
+  @media($smallScreen) {
+    width: 100%;
+    padding: 0;
+  }
 }
 
 footer {

@@ -20,8 +20,13 @@
     height: 110px;
     margin-bottom: 10px;
   }
-}
 
+  @media(max-width: 768px) {
+    right: 10px;
+    width: 150px;
+    .fractions, header { display: none }
+  }
+}
 
 .img-main {
   composes: img from '../base.css';
