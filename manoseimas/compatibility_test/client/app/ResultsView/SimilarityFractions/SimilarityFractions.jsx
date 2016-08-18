@@ -83,8 +83,10 @@ class SimilarityFractions extends React.Component {
                 if (fraction.members_amount > 0) {
                     return (
                         <div className={styles.item} key={fraction.short_title}>
-                            <div className={styles.img}>
-                                <img src={fraction.logo} alt={fraction.title + ' logo'} />
+                            <div className={styles.logo}>
+                                <div className={styles.img}>
+                                    <img src={fraction.logo} alt={fraction.title + ' logo'} />
+                                </div>
                             </div>
                             <main>
                                 <div className={styles.title}>{`${fraction.title}, ${fraction.similarity}%`}</div>
