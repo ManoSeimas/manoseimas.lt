@@ -1,0 +1,45 @@
+@import "../_variables";
+
+.content {
+    composes: content from "../base.css";
+
+    @media(max-width: 768px) {
+      lost-column: 1/1 0;
+      h2 {
+        margin-bottom: 20px;
+      }
+    }
+}
+
+.context {
+    composes: context from "../base.css";
+
+    @media(max-width: 768px) {
+        display: none;
+    }
+}
+
+.context-image {
+    composes: context-image from "../base.css";
+
+    @media(max-width: 768px) {
+        display: none;
+    }
+}
+
+.block {
+    composes: block from "../base.css";
+
+    @media(max-width: 768px) {
+        margin-top: 20px;
+        margin-left: 0;
+        width: 100%;
+        
+        .note {
+            color: $dark;
+            font-size: $small;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+    }
+}

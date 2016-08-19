@@ -2,22 +2,27 @@
 
 .button {
   composes: base_button from '../base.css';
+
+  @media(max-width: 768px) {
+    margin-right: 5px;
+    width: calc(33% - 5px)
+  }
 }
 
 .button_yes {
-  composes: base_button from '../base.css';
+  composes: button;
   border-bottom-color: $green;
   color: $green;
 }
 
 .button_no {
-  composes: base_button from '../base.css';
+  composes: button;
   border-bottom-color: $red;
   color: $red;
 }
 
 .button_skip {
-  composes: base_button from '../base.css';
+  composes: button;
   border-bottom-color: $black;
   color: $black;
 }
@@ -59,6 +64,12 @@
     display: inline-block;
     vertical-align: middle;
   }
+
+  @media(max-width: 768px) {
+    font-size: $tiny;
+    margin-right: 5px;
+    width: calc(50% - 40px);
+  }
 }
 
 .arrow {
@@ -68,6 +79,10 @@
   border-width: 5px 5px 0 5px;
   border-color: #ffffff transparent transparent transparent;
   margin-left: 5px;
+
+  @media(max-width: 768px) {
+    display: none !important;
+  }
 }
 
 .active {
@@ -81,5 +96,12 @@
   &:hover {
     background-color: white;
     color: $dark;
+  }
+
+  @media(max-width: 768px) {
+    font-size: $tiny;
+    margin-right: 5px;
+    padding-left: 15px;
+    width: calc(50% - 40px);
   }
 }

@@ -10,16 +10,28 @@
   font-weight: normal;
   font-size: $huge;
   font-family: 'Roboto', sans-serif;
+
+  @media(max-width: 768px) {
+    font-size: $big;
+  }
 }
 
 :global h3 {
   font-family: 'Roboto', sans-serif;
   font-size: $big;
   font-weight: normal;
+
+  @media(max-width: 768px) {
+    font-size: $medium;
+  }
 }
 
 :global header {
   margin-bottom: 50px;
+
+  @media(max-width: 768px) {
+    margin-bottom: 25px;
+  }
 }
 
 :global a {
@@ -51,6 +63,12 @@
   &:hover {
     background-color: color($black a(90%));
     cursor: pointer;
+  }
+
+  @media(max-width: 768px) {
+    width: calc(100% - 40px);
+    text-align: center;
+    padding: 15px;
   }
 }
 

@@ -42,7 +42,13 @@ class Argument extends React.Component {
     openModal () { this.setState({open: true}) }
     closeModal () { this.setState({open: false}) }
 
+
+    isMobile () {
+        return window.innerWidth < 768
+    }
+
     customStyle () {
+        const width = (this.isMobile()) ? '90%' : '600px'
         return {
             overlay : {
                 position          : 'fixed',
@@ -54,7 +60,7 @@ class Argument extends React.Component {
             },
             content : {
                 position                   : 'absolute',
-                width                      : '600px',
+                width                      : width,
                 height                     : 'auto',
                 top                        : '50%',
                 left                       : '50%',
@@ -66,7 +72,7 @@ class Argument extends React.Component {
                 WebkitOverflowScrolling    : 'touch',
                 borderRadius               : '4px',
                 outline                    : 'none',
-                padding                    : '30px'
+                padding                    : '30px',
             }
         }
     }
@@ -89,6 +95,10 @@ class Argument extends React.Component {
                     <h2 className={styles.title}>{argument.name}</h2>
                     <div className={styles.text}
                          dangerouslySetInnerHTML={{__html:argument.description}} />
+                    {(this.isMobile())
+                        ? <div onClick={this.closeModal} style={{marginTop: '20px'}}>Close</div>
+                        : undefined
+                    }
                 </Modal>
             </div>
         )

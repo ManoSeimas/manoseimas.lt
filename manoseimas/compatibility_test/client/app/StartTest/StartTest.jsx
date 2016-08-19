@@ -1,6 +1,6 @@
 import React from 'react'
 import { Block, StatusBar } from '../../components'
-import styles from '../../styles/base.css'
+import styles from '../../styles/views/start.css'
 
 const StartTest = (props) =>
     <div>
@@ -31,7 +31,7 @@ const StartTest = (props) =>
 
             <div className={styles['block']}>
                 <div className={styles['note']}>
-                    Dėmesio, manoSeimas.lt apžvelgia tik <strong>12</strong> svarbių valstybės
+                    Dėmesio, manoSeimas.lt apžvelgia tik 12 svarbių valstybės
                     gyvenimo klausimų. Primename, kad renkantis už ką balsuoti, neužtenka
                     vadovautis vien šio testo rezultatais.
                 </div>

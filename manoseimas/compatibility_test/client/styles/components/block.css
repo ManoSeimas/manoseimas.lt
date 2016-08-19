@@ -15,11 +15,19 @@
   strong {
     font-weight: normal;
   }
+
+  @media(max-width: 768px) {
+    font-size: $medium;
+  }
 }
 
 .instruction {
   margin-top: 25px;
   max-width: 600px;
+
+  @media(max-width: 768px) {
+    margin-top: 10px;
+  }
 }
 
 .instruction > .number {
@@ -37,4 +45,9 @@
   font-size: $big;
   background-color: $black;
   color: #fff;
+
+  @media(max-width: 768px) {
+    font-size: $medium;
+    padding: 10px 12px;
+  }
 }
