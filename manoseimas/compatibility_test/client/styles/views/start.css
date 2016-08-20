@@ -43,3 +43,7 @@
         }
     }
 }
+
+.note {
+    composes: note from "../base.css";
+}
