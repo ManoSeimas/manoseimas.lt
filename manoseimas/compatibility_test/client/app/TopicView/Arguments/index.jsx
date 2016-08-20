@@ -73,6 +73,8 @@ class Argument extends React.Component {
                 borderRadius               : '4px',
                 outline                    : 'none',
                 padding                    : '30px',
+                overflow                   : 'scroll',
+                maxHeight                  : '100vh',
             }
         }
     }
