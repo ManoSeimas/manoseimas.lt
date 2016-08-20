@@ -19,6 +19,7 @@ urlpatterns = patterns(
     '',
     url(r'^$', 'manoseimas.views.index'),
     url(r'^influence/?$', 'manoseimas.views.influence', name='influence'),
+    url(r'^team/?$', 'manoseimas.views.team', name='team'),
     url(r'^votings/?$', 'manoseimas.views.votings'),
     url(r'^search/',
         include('haystack.urls')),

@@ -31,13 +31,17 @@ footer {
           font-weight: 500;
           font-size: $medium * 0.9;
           color: $black;
+          display: inline-block;
+          width: 130px;
 
           &:hover {
             color: lighten($black, 20%)
           }
 
           @media($smallScreen) {
-            font-size: $normal;
+            font-size: $small;
+            margin: 5px;
+            width: 30%;
           }
         }
       }
@@ -48,5 +52,4 @@ footer {
         color: $grayDark;
       }
   }
-
 }

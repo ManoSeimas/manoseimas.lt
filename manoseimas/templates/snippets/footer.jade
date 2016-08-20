@@ -14,8 +14,13 @@ footer
     .ui.page.grid
       .center.aligned.column
         .menu
-          a(href="/about").item Apie iniciatyvą
-          a(href="/test").item Testas
+          .mobile-only
+            a(href="/about").item Apie
+            a(href="/team").item Komanda
+            a(href="/test").item Testas
+          .desktop-only
+            a(href="/about").item Apie&nbsp;iniciatyvą
+            a(href="/test").item Atlik testą
 
         .copyright © 2012-2016, manoSeimas.lt pateikiamas pagal
           a(href="http://creativecommons.org/licenses/by/4.0/") &nbsp; CC BY 4.0
