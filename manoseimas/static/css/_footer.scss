@@ -6,19 +6,35 @@
 footer {
   background: $white;
   border-top: 1px solid $coloredBgColor;
+  box-shadow: 0 1px 0 rgba(39,41,43,.1)inset;
 
   img {
     max-width: 500px !important;
-  }
-
-  .sponsor {
-    border-right: 1px solid $coloredBgColor;
 
     @media($smallScreen) {
-      border: none;
+      max-width: 98% !important;
+      padding: initial;
     }
   }
 
+  .column.row.sponsors {
+    padding: 2rem 0;
+    .sponsor {
+      border-right: 1px solid rgba(39,41,43,.15);
+    }
+    @media($smallScreen) {
+      padding: 1rem 1rem;
+      .sponsor {
+        border: none;      }
+      .column.center.aligned {
+        padding: 0;
+      }
+    }
+  }
+
+  .ui.vertical.segment {
+    box-shadow: 0 -1px 0 rgba(39,41,43,0.1)inset;
+  }
 
   .ui.vertical.segment.footer {
       color: $textColor;
@@ -41,15 +57,16 @@ footer {
           @media($smallScreen) {
             font-size: $small;
             margin: 5px;
-            width: 30%;
+            width: 25%;
           }
         }
       }
 
 
       .copyright {
-        font-weight: 300;
+        font-weight: 400;
         color: $grayDark;
+        font-size: $small;
       }
   }
 }

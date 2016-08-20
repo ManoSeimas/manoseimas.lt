@@ -3,7 +3,6 @@
 
 
 .test-box {
-  width: 500px !important;
   margin: auto;
 
   h1, h2 {
@@ -13,18 +12,20 @@
   }
 
   h1 {
-    font-size: 3rem;
+    font-size: 3.2rem;
   }
 
   h2 {
     color: $white;
-    font-size: $big;
-    font-weight: 300;
+    font-size: 2.2rem;
+    font-weight: 400;
     margin-top: 10px;
+    margin-bottom: 36px;
+    line-height: 1.2;
   }
 
   .start-test.button {
-    background-color: $msGreen;
+    background-color: #31BC01;
     padding: 1em 2em;
     font-size: $medium;
     color: $white;
@@ -33,8 +34,26 @@
     letter-spacing: 1px;
 
     &:hover {
-      background-color: darken($msGreen, 10%);
+      background-color: darken(#31BC01, 10%);
       box-shadow: none;
+    }
+  }
+
+  .main {
+    width: 480px;
+    display: inline-block;
+    // margin-left: 190px;
+    margin-top: 40px;
+  }
+
+  .visualisation {
+    display: inline-block;
+    vertical-align: top;
+    width: 220px;
+
+    img {
+      width: 220px;
+      margin-left: 40px;
     }
   }
 
@@ -48,33 +67,23 @@
     h2 {
       font-size: $medium;
       line-height: 1.3;
-      margin-bottom: .5em;
+      margin-bottom: 1em;
     }
 
     .start-test.button {
       font-size: $normal;
     }
-  }
-}
 
-.steps {
-  margin: 2em 0;
-  .step {
-    display: inline-block;
-    width: 120px;
-    margin: 0 20px;
-
-    .desc {
-      text-transform: uppercase;
-      color: $white;
-      font-size: $small;
-      font-weight: 200;
-      padding-top: .5em;
+    .main {
+      width: 90%;
+      margin-top: 10px;
+      margin-bottom: 30px;
     }
-  }
 
-  @media($smallScreen) {
-    display: none;
+    .visualisation {
+      display: none;
+    }
+
   }
 }
 
@@ -132,6 +141,80 @@
   }
 }
 
+.steps {
+  margin: 2em 0;
+  .step {
+    display: inline-block;
+    width: 120px;
+    margin: 0 20px;
+
+    .desc {
+      font-family: 'Roboto', sans-serif;
+      text-transform: uppercase;
+      color: $white;
+      font-size: $small;
+      font-weight: 300;
+      padding-top: .5em;
+    }
+  }
+
+  @media($smallScreen) {
+    display: none;
+  }
+}
+
+.ui.page.test-steps {
+  background-color: $coloredBgColor;
+  padding-top: 1.5rem;
+  box-shadow: 0 -1px 0 rgba(39,41,43,.05)inset;
+
+  @media($smallScreen) {
+    padding-top: .5rem;
+  }
+
+  .steps {
+    .step-arrow {
+      display: inline-block;
+      vertical-align: top;
+      img {
+        width: 50px;
+        margin-top: 35px;
+      }
+    }
+
+    .step .desc {
+      color: $textColor;
+      font-weight: 500;
+      font-size: $normal;
+      line-height: 1.4;
+      padding-top: 1em;
+    }
+
+    @media($smallScreen) {
+      margin-top: 1rem;
+      display: initial;
+
+      .step {
+        margin: 10px 5px;
+        width: 80px;
+        img {
+          width: 50px
+        }
+        .desc {
+          font-size: $tiny;
+        }
+      }
+
+      .step-arrow {
+        img {
+          width: 30px;
+          margin-top: 25px;
+        }
+      }
+    }
+  }
+}
+
 .ui.page.team {
   margin-top: 0;
   padding-top: 1.5rem;
@@ -176,6 +259,14 @@
       .name {
         font-weight: 500;
         font-size: $normal;
+
+        a {
+          color: $textColor;
+
+          &:hover {
+            color: lighten($textColor, 10%)
+          }
+        }
       }
       .role {
         font-weight: 300;
