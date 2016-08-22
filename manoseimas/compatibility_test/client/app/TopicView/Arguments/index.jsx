@@ -49,10 +49,12 @@ class Argument extends React.Component {
 
     customStyle () {
         const width = (this.isMobile()) ? '90%' : '600px'
+        const overflow = (this.isMobile()) ? 'scroll' : 'none'
+        const top = (this.isMobile()) ? '15px' : '0px'
         return {
             overlay : {
                 position          : 'fixed',
-                top               : 0,
+                top               : top,
                 left              : 0,
                 right             : 0,
                 bottom            : 0,
@@ -68,13 +70,12 @@ class Argument extends React.Component {
                 transform                  : 'translate(-50%, -50%)',
                 border                     : '1px solid #ccc',
                 background                 : '#fff',
-                overflow                   : 'none',
+                overflow                   : overflow,
                 WebkitOverflowScrolling    : 'touch',
                 borderRadius               : '4px',
                 outline                    : 'none',
                 padding                    : '30px',
-                overflow                   : 'scroll',
-                maxHeight                  : '100vh',
+                maxHeight                  : '99vh',
             }
         }
     }
@@ -83,12 +84,12 @@ class Argument extends React.Component {
         let argument = this.props.argument
         return (
             <div className={styles.argument} key={argument.id}>
-                <h3>{argument.name}</h3>
-                <p>{argument.short_description}
-                    {(argument.description)
-                        ? <a className={styles.more} onClick={this.openModal}>Daugiau</a>
-                        : undefined }
-                </p>
+                <h3>{(argument.description)
+                    ? <a onClick={this.openModal}>{argument.name}</a>
+                    : argument.name
+                    }
+                </h3>
+                <p>{argument.short_description}</p>
 
                 <Modal
                     isOpen={this.state.open}
@@ -98,7 +99,7 @@ class Argument extends React.Component {
                     <div className={styles.text}
                          dangerouslySetInnerHTML={{__html:argument.description}} />
                     {(this.isMobile())
-                        ? <div onClick={this.closeModal} style={{marginTop: '20px'}}>Close</div>
+                        ? <div onClick={this.closeModal} style={{margin: '20px 0',}}>Close</div>
                         : undefined
                     }
                 </Modal>

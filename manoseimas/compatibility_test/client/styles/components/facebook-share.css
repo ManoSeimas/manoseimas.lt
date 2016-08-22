@@ -59,3 +59,9 @@
   composes: image;
   right: 15px;
 }
+
+.img-second, .img-third {
+  img {
+    margin: -12px 0 0 -12px;
+  }
+}
