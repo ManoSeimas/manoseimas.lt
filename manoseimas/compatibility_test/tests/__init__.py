@@ -68,9 +68,11 @@ class TestCompatibilityTest(TestCase):
                 'id': topic.pk,
                 'group': 'Socialiniai reikalai',
                 'name': 'Aukštojo mokslo reforma',
+                'slug': 'aukstojo-mokslo-reforma',
                 'description': 'Aukštojo mokslo reforma',
                 'arguments': [],
                 'votings': [],
+                'image': None,
             },
         ])
 
