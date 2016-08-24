@@ -34,7 +34,7 @@ urlpatterns = patterns(
     url(r'^mp/', include('manoseimas.mps_v2.urls')),
     url(r'^json/', include('manoseimas.mps_v2.json_urls')),
     url(r'^lobbyists/', include('manoseimas.lobbyists.urls')),
-    url(r'^test/', include('manoseimas.compatibility_test.urls')),
+    url(r'^testas/', include('manoseimas.compatibility_test.urls')),
     url('^', include(flatpage_patterns)),
     url(r'^valdymas/', include(admin.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),
