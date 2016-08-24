@@ -33,11 +33,18 @@ class TopicContainer extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const topicSlug = nextProps.params.topicSlug
-        if (Object.keys(nextProps.params).length === 0) {
+        const new_slug = nextProps.params.topicSlug
+        if (new_slug !== this.props.params.topicSlug && nextProps.active_topic.slug !== new_slug) {
+            this.props.setActiveTopic(new_slug)
+        }
+    }
+
+    componentWillMount() {
+        const topicSlug = this.props.params.topicSlug
+        if (Object.keys(this.props.params).length === 0) {
             this.props.setActiveTopic()
         } else {
-            if (!nextProps.active_topic || this.props.active_topic.slug !== topicSlug) {
+            if (!this.props.active_topic || this.props.active_topic.slug !== topicSlug) {
                 this.props.setActiveTopic(topicSlug)
             }
         }
