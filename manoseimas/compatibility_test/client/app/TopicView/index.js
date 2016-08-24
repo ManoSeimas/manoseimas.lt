@@ -32,12 +32,12 @@ class TopicContainer extends React.Component {
         router: React.PropTypes.object
     }
 
-    componentWillMount () {
-        const topicSlug = this.props.params.topicSlug
-        if (Object.keys(this.props.params).length === 0) {
+    componentWillReceiveProps(nextProps) {
+        const topicSlug = nextProps.params.topicSlug
+        if (Object.keys(nextProps.params).length === 0) {
             this.props.setActiveTopic()
         } else {
-            if (this.props.active_topic.slug !== topicSlug) {
+            if (!nextProps.active_topic || this.props.active_topic.slug !== topicSlug) {
                 this.props.setActiveTopic(topicSlug)
             }
         }
@@ -66,13 +66,17 @@ class TopicContainer extends React.Component {
 
     render () {
         const done_topics = (this.props.next_topic.position > 2) ? this.props.next_topic.position - 1 : 1
-        return <Topic saveAnswer={this._setAnswer}
-                      nextTopic={this._nextTopic}
-                      toggleArguments={this.props.toggleArgumentsModal}
-                      toggleDetails={this.props.toggleMoreModal}
-                      topic={this.props.active_topic}
-                      doneTopics={done_topics}
-                      topicsAmount={this.props.topics_amount} />
+        if (this.props.active_topic) {
+            return <Topic saveAnswer={this._setAnswer}
+                          nextTopic={this._nextTopic}
+                          toggleArguments={this.props.toggleArgumentsModal}
+                          toggleDetails={this.props.toggleMoreModal}
+                          topic={this.props.active_topic}
+                          doneTopics={done_topics}
+                          topicsAmount={this.props.topics_amount} />
+        } else {
+            return <div>Loading...</div>
+        }
     }
 
 }
