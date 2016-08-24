@@ -68,9 +68,11 @@ class TestCompatibilityTest(TestCase):
                 'id': topic.pk,
                 'group': 'Socialiniai reikalai',
                 'name': 'Aukštojo mokslo reforma',
+                'slug': 'aukstojo-mokslo-reforma',
                 'description': 'Aukštojo mokslo reforma',
                 'arguments': [],
                 'votings': [],
+                'image': None,
             },
         ])
 
@@ -83,8 +85,8 @@ class TestViews(WebTest):
         topic = factories.TopicFactory()
         factories.TopicVotingFactory.create_batch(3, topic=topic)
         group = factories.TestGroupFactory(topics=[topic])
-        resp = self.app.get('/test/')
-        self.assertRedirects(resp, '/test/%d/' % group.test.id)
+        resp = self.app.get('/testas/')
+        self.assertRedirects(resp, '/testas/%d/' % group.test.id)
         resp = resp.follow()
         self.assertEqual(resp.html.title.string, 'Politinių pažiūrų testas - manoSeimas.lt')
 

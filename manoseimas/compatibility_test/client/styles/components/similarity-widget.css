@@ -25,6 +25,10 @@
     width: 550px;
     margin-top: 10px;
     position: relative;
+
+    @media(max-width: 768px) {
+      width: calc(100% - 90px);
+    }
   }
 }
 
@@ -42,6 +46,10 @@
   height: 50px;
   top: -55px;
   box-shadow: 0 0 3px $grey;
+
+  @media(max-width: 768px) {
+    display: none !important;
+  }
 }
 
 .actions {

@@ -2,10 +2,11 @@
 
 footer
   .ui.vertical.segment
-    .ui.stackable.page.grid
-      .two.column.row
+    .ui.page.grid
+      .two.column.row.sponsors
         .column.center.aligned.sponsor
-          a(href="http://www.transparency.lt/"): img(src="{% static 'img/tils-footer.png' %}")
+          a(href="http://www.transparency.lt/")
+            img(src="{% static 'img/tils-footer.png' %}")
         .column.center.aligned
           a(href="http://lithuania.nlembassy.org/")
             img(src="{% static 'img/ambasada-footer.png' %}" title="Nyderlandų ambasada")
@@ -14,9 +15,15 @@ footer
     .ui.page.grid
       .center.aligned.column
         .menu
-          a(href="/about").item Apie iniciatyvą
-          a(href="/test").item Testas
+          .mobile-only
+            a(href="/team").item Komanda
+            a(href="/about").item &nbsp; Apie
+            a(href="/testas").item Testas
+          .desktop-only
+            a(href="/about").item Apie&nbsp;iniciatyvą
+            a(href="/testas").item Atlik testą
 
-        .copyright © 2012-2016, manoSeimas.lt pateikiamas pagal
-          a(href="http://creativecommons.org/licenses/by/4.0/") &nbsp; CC BY 4.0
-          turinio naudojimo licenciją
+        .copyright
+          | © 2012-2016, manoSeimas.lt pateikiamas pagal
+          a(href="http://creativecommons.org/licenses/by/4.0/") &nbsp; CC&nbsp;BY&nbsp;4.0 
+          | turinio naudojimo licenciją

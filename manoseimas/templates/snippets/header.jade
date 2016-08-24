@@ -10,36 +10,38 @@ header.ui.page.grid
 
         .right.menu
           .item
-            a(href="http://transparency.lt/donate/", target="_NEW").donate Prisidėk!
-          .ui.dropdown.item
-            if request.user.is_authenticated
-              i.user.icon
-              | {{ request.user|truncatechars:26 }}
-              i.dropdown.icon
-              .menu
-                a.item(href="{{ request.user.get_profile.get_node.permalink }}")
-                  i.icon-user
-                  | Profilis
-                a.item(href="{% url 'logout' %}")
-                  i.icon-off
-                  | Atsijungti
-            else
-              i.user.icon
-              | Prisijungti
-              i.dropdown.icon
-              .menu
-                a.item(href="{% url 'social:begin' 'google-oauth2' %}") Google
-                if FACEBOOK_APP_ID
-                  a.item(href="{% url 'social:begin' 'facebook-oauth2' %}") Facebook
+            a(href="http://transparency.lt/donate/", target="_NEW").donate Paaukoti
+          //- .ui.dropdown.item
+          //-   if request.user.is_authenticated
+          //-     i.user.icon
+          //-     | {{ request.user|truncatechars:26 }}
+          //-     i.dropdown.icon
+          //-     .menu
+          //-       a.item(href="{{ request.user.get_profile.get_node.permalink }}")
+          //-         i.icon-user
+          //-         | Profilis
+          //-       a.item(href="{% url 'logout' %}")
+          //-         i.icon-off
+          //-         | Atsijungti
+          //-   else
+          //-     i.user.icon
+          //-     | Prisijungti
+          //-     i.dropdown.icon
+          //-     .menu
+          //-       a.item(href="{% url 'social:begin' 'google-oauth2' %}") Google
+          //-       if FACEBOOK_APP_ID
+          //-         a.item(href="{% url 'social:begin' 'facebook-oauth2' %}") Facebook
 
   .mobile.only.row
     .ui.pointing.small.menu.fixed
       a(href="/"): img(src="{% static 'img/logo.png' %}").logo-small
       .right.menu
-        .ui.dropdown.item
-          i.content.icon
-          .menu
-            a.item(href="{% url 'social:begin' 'google-oauth2' %}") Google
-            if FACEBOOK_APP_ID
-              a.item(href="{% url 'social:begin' 'facebook-oauth2' %}") Facebook
-            a.item(href="{% url 'login' %}") OpenID
+        .item
+          a(href="http://transparency.lt/donate/", target="_NEW").donate Paaukoti
+        //- .ui.dropdown.item
+        //-   i.content.icon
+        //-   .menu
+        //-     a.item(href="{% url 'social:begin' 'google-oauth2' %}") Google
+        //-     if FACEBOOK_APP_ID
+        //-       a.item(href="{% url 'social:begin' 'facebook-oauth2' %}") Facebook
+        //-     a.item(href="{% url 'login' %}") OpenID

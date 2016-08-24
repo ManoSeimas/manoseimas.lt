@@ -2,22 +2,27 @@
 
 .button {
   composes: base_button from '../base.css';
+
+  @media(max-width: 768px) {
+    margin-right: 5px;
+    width: calc(33% - 5px)
+  }
 }
 
 .button_yes {
-  composes: base_button from '../base.css';
+  composes: button;
   border-bottom-color: $green;
   color: $green;
 }
 
 .button_no {
-  composes: base_button from '../base.css';
+  composes: button;
   border-bottom-color: $red;
   color: $red;
 }
 
 .button_skip {
-  composes: base_button from '../base.css';
+  composes: button;
   border-bottom-color: $black;
   color: $black;
 }
@@ -31,6 +36,10 @@
 .button_facebook {
   composes: base_button from '../base.css';
   background-color: $facebook;
+  background-image: url('/static/img/fb-logo-white.png');
+  background-position: 12px 12px;
+  background-repeat: no-repeat;
+  background-size: 20px;
   color: #ffffff;
   width: initial;
   min-width: 90%;
@@ -39,6 +48,12 @@
 
   &:hover {
     background-color: color($facebook blackness(50%));
+  }
+
+  @media(max-width: 768px) {
+    font-size: $tiny;
+    padding: 10px 0;
+    background-position: 5px 5px;
   }
 }
 
@@ -49,6 +64,12 @@
     display: inline-block;
     vertical-align: middle;
   }
+
+  @media(max-width: 768px) {
+    font-size: $tiny;
+    margin-right: 5px;
+    width: calc(50% - 40px);
+  }
 }
 
 .arrow {
@@ -58,4 +79,29 @@
   border-width: 5px 5px 0 5px;
   border-color: #ffffff transparent transparent transparent;
   margin-left: 5px;
+
+  @media(max-width: 768px) {
+    display: none !important;
+  }
+}
+
+.active {
+  background-color: white;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  color: $black;
+  padding-left: 20px;
+  font-weight: 400;
+
+  &:hover {
+    background-color: white;
+    color: $dark;
+  }
+
+  @media(max-width: 768px) {
+    font-size: $tiny;
+    margin-right: 5px;
+    padding-left: 15px;
+    width: calc(50% - 40px);
+  }
 }

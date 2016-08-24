@@ -11,13 +11,15 @@ from manoseimas.flatpages.views import flatpage_view
 admin.autodiscover()
 
 flatpage_patterns = [
-    url('^about', flatpage_view, kwargs={'page': 'about'}, name='about'),
+    url(r'^about/(?P<page>[-_\w]+)/$', flatpage_view, name='flatpage'),
+    url(r'^about/?$', flatpage_view, kwargs={'page': 'about'}, name='about'),
 ]
 
 urlpatterns = patterns(
     '',
     url(r'^$', 'manoseimas.views.index'),
     url(r'^influence/?$', 'manoseimas.views.influence', name='influence'),
+    url(r'^team/?$', 'manoseimas.views.team', name='team'),
     url(r'^votings/?$', 'manoseimas.views.votings'),
     url(r'^search/',
         include('haystack.urls')),
@@ -32,7 +34,7 @@ urlpatterns = patterns(
     url(r'^mp/', include('manoseimas.mps_v2.urls')),
     url(r'^json/', include('manoseimas.mps_v2.json_urls')),
     url(r'^lobbyists/', include('manoseimas.lobbyists.urls')),
-    url(r'^test/', include('manoseimas.compatibility_test.urls')),
+    url(r'^testas/', include('manoseimas.compatibility_test.urls')),
     url('^', include(flatpage_patterns)),
     url(r'^valdymas/', include(admin.site.urls)),
     url(r'^tinymce/', include('tinymce.urls')),

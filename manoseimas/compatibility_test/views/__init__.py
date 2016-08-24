@@ -27,7 +27,7 @@ def topics_all(test_id):
     topics = []
     for topic in qs:
         arguments = topic.arguments.all().values(
-            'id', 'name', 'description', 'supporting'
+            'id', 'name', 'short_description', 'description', 'supporting'
         )
         topic_votings = topic.topicvoting_set.all().values(
             'voting__id', 'voting__name', 'voting__source', 'factor',
@@ -44,10 +44,12 @@ def topics_all(test_id):
         topics.append({
             'id': topic.id,
             'name': topic.name,
+            'slug': topic.slug,
             'group': topic.groups.first().name,
             'description': topic.description,
             'arguments': list(arguments),
             'votings': votings,
+            'image': topic.image.url if topic.image else None,
         })
     # TODO: randomise by group #153
     return topics
@@ -65,10 +67,16 @@ def get_test_by_id(test_id):
 
 def get_test_context(test_id):
     test = get_test_by_id(test_id)
+    topics = topics_all(test_id)
     return {
-        'topics': topics_all(test_id),
+        'topics': topics,
+        'first_topic': {
+            'position': 0,
+            'slug': topics[0]['slug'],
+        },
         'title': test.name,
         'test_id': test.id,
+        'test_img': test.image.url if test.image else None,
     }
 
 

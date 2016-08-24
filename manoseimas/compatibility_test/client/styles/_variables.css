@@ -7,11 +7,13 @@ $red: #ca0837;
 $background: #f0f0f0;
 $facebook: #3b5998;
 
+$textColor: $black;
+
 $tiny: 12px;
 $small: 14px;
-$normal: 18px;
-$medium: 22px;
-$big: 28px;
+$normal: 16px;
+$medium: 20px;
+$big: 24px;
 $huge: 34px;
 
 $radius: 3px;

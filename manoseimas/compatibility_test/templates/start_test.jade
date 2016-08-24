@@ -11,18 +11,19 @@
     window.___INITIAL_STATE__ = {
       test_state: {
         active_topic: {},
-        next_topic_id: 0,
-        previous_topic_id: undefined,
+        next_topic: {% to_json first_topic %},
+        previous_position: undefined,
         topics: {% to_json topics %},
         modal: undefined,
         title: {% to_json title %},
-        test_id: {% to_json test_id %}
+        test_id: {% to_json test_id %},
+        test_img: {% to_json test_img %}
       },
       mps_state: {
         expanded_mp: undefined,
         selected_fractions: []
       }
-    }
+    };
 
   #compat-app
 

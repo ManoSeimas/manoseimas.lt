@@ -1,7 +1,6 @@
 // Photo boxes
 // -----------
 .photo-box {
-  margin-top: -6rem;
   padding-top: 3em;
 
   .title {
@@ -55,7 +54,8 @@
   background: url(#{$staticRoot}/img/frontpage-bg.jpg);
   background-repeat: no-repeat;
   background-position: top center;
-  min-height: 36em;
+  background-size: cover;
+  min-height: 33em;
   padding-top: 5.5em;
 
   .title {
@@ -77,8 +77,8 @@
   .column.center.aligned { padding-bottom: 1em; }
 
   @media($smallScreen) {
-    min-height: initial;
-    padding-top: 2em;
+    min-height: 24em;
+    padding-top: 5em;
     padding-bottom: 1em;
   }
 }
@@ -88,6 +88,7 @@
   background-position: center;
   min-height: 40em;
   padding-top: 5em;
+  margin-top: -7em;
 
   .logo-box {
     padding-top: 3.5em;

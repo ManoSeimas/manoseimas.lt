@@ -10,16 +10,28 @@
   font-weight: normal;
   font-size: $huge;
   font-family: 'Roboto', sans-serif;
+
+  @media(max-width: 768px) {
+    font-size: $big;
+  }
 }
 
 :global h3 {
   font-family: 'Roboto', sans-serif;
   font-size: $big;
   font-weight: normal;
+
+  @media(max-width: 768px) {
+    font-size: $medium;
+  }
 }
 
 :global header {
   margin-bottom: 50px;
+
+  @media(max-width: 768px) {
+    margin-bottom: 25px;
+  }
 }
 
 :global a {
@@ -52,7 +64,20 @@
     background-color: color($black a(90%));
     cursor: pointer;
   }
+
+  @media(max-width: 768px) {
+    width: calc(100% - 40px);
+    text-align: center;
+    padding: 15px;
+  }
 }
+
+:global #compat-app {
+  @media(max-width: 768px) {
+    padding: 15px;
+  }
+}
+
 
 .small_button {
   display: inline-block;
@@ -61,7 +86,7 @@
   background-color: $black;
   color: white;
   font-size: $small;
-  font-weight: 200;
+  font-weight: 300;
   text-decoration: none;
   border-radius: $radius;
   width: 150px;
@@ -110,6 +135,7 @@
 .content {
   lost-column: 3/4 0;
   margin-right: 0 !important;
+  margin-bottom: 50px;
   padding-right: 10px;
 
   h2 {
@@ -117,10 +143,21 @@
   }
 }
 
-.context-image {
-  height: 300px;
-  border: 2px dashed $grey;
+.context {
+  min-height: 300px;
+  margin-top: 60px;
   lost-column: 1/4 0;
+
+  img {
+    padding: 10px;
+    width: calc(100% - 20px);
+  }
+}
+
+.context-image {
+  compose: context;
+  border: 2px dashed $grey;
+  margin-top: initial;
 }
 
 .text {

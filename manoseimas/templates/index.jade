@@ -12,21 +12,35 @@
       .doubling.one.column.row
         .column.center.aligned
           .test-box
-            h1 Sužinok,
-            h2 kas šios kadencijos Seime tave atstovavo geriausiai
+            .main
+              h1 Sužinok,
+              h2 kas šios kadencijos LR Seime tave atstovavo geriausiai
+  
+              a(href='/testas').ui.start-test.button Pradėti testą
+         
+            .visualisation
+              img(src="{% static 'img/klaustukas.png' %}")
 
-            .steps
-              .step
-                img(src="{% static 'img/test-ico1.png' %}")
-                .desc Atsakyk į klausimus
-              .step
-                img(src="{% static 'img/test-ico2.png' %}")
-                .desc Sužinok rezultatus
-              .step
-                img(src="{% static 'img/test-ico3.png' %}")
-                .desc Pasidalink su draugais
 
-            a(href='/test').ui.start-test.button Pradėti testą
+  .ui.stackable.page.grid.test-steps
+    .one.column.row
+      .column.center.aligned
+        h2.title Kaip tai veikia:
+        .steps
+          a.step(href="/test")
+            img(src="{% static 'img/test-ico1.png' %}")
+            .desc Atsakyk į klausimus
+          .step-arrow
+            img(src="{% static 'img/arrow-right-icon.png' %}")
+          a.step(href="/test")
+            img(src="{% static 'img/test-ico2.png' %}")
+            .desc Sužinok rezultatus
+          .step-arrow
+            img(src="{% static 'img/arrow-right-icon.png' %}")
+          a.step(href="/test")
+            img(src="{% static 'img/test-ico3.png' %}")
+            .desc Pasidalink su draugais
+
 
   .ui.stackable.page.grid.features
     .doubling.one.column.row
@@ -46,111 +60,13 @@
       .column.center.aligned
         .block
           img(src="{% static 'img/front-page/influence.png' %}")
-          a(href="{% url 'influence' %}").button Pamatyk, kas Seima siekia įtakos
+          a(href="{% url 'influence' %}").button Pamatyk, kas Seime siekia įtakos
 
 
   .ui.page.grid.donate
     .column.center.aligned
       a(href='#').ui.button PAAUKOTI
 
-  .ui.stackable.page.grid.team
-    .doubling.one.column.row
-      .column.center.aligned
-        h2.title Iniciatyvos komanda:
 
-    .doubling.five.column.row
-      .column
-        .person
-          .bullet
-          .who
-            .name Ignas Rubikas
-            .role Iniciatyvos vadovas
-        .person
-          .bullet
-          .who
-            .name Mantas Zimnickas
-            .role Programuotojas
-        .person
-          .bullet
-          .who
-            .name Darius Česnulis
-            .role Savanoris
-      .column
-        .person
-          .bullet
-          .who
-            .name Sergejus Muravjovas
-            .role TILS vadovas
-        .person
-          .bullet
-          .who
-            .name Gabrielius Mackevičius
-            .role Iliustratorius
-        .person
-          .bullet
-          .who
-            .name Denis Ivanov
-            .role Savanoris
-        .person
-          .bullet
-          .who
-            .name Greta Rožėnaitė
-            .role Savanorė
-      .column
-        .person
-          .bullet
-          .who
-            .name Gavija Lukšaitė
-            .role Iniciatyvos koordinatorė
-        .person
-          .bullet
-          .who
-            .name Agnė Patackaitė
-            .role Savanorė
-        .person
-          .bullet
-          .who
-            .name Elena Lesieur
-            .role Savanorė
-        .person
-          .bullet
-          .who
-            .name Ingrida Kniežaitė
-            .role Savanorė
-      .column
-        .person
-          .bullet
-          .who
-            .name Jaro Šatkevič
-            .role Programuotojas
-        .person
-          .bullet
-          .who
-            .name Aistė Jotautytė
-            .role Savanorė
-        .person
-          .bullet
-          .who
-            .name Erika Zlatkutė
-            .role Savanorė
-        .person
-          .bullet
-          .who
-            .name Kornelija Viečaitė
-            .role Savanorė
-      .column
-        .person
-          .bullet
-          .who
-            .name Ramunė Norkutė
-            .role Dizainerė
-        .person
-          .bullet
-          .who
-            .name Austėja Pliupelytė
-            .role Savanorė
-        .person
-          .bullet
-          .who
-            .name Gabrielė Krupovič
-            .role Savanorė
+  .desktop-only
+    - include "snippets/team.jade"

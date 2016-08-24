@@ -1,7 +1,7 @@
 import React from 'react'
 import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../components'
-import Modal from './Modal'
 import Arguments from './Arguments'
+import Modal from './Modal'
 import MoreInfo from './MoreInfo'
 import styles from '../../styles/views/topic.css'
 
@@ -9,7 +9,9 @@ const Topic = (props) => {
     let topic_arguments = {}
     return <div>
         <header>
-            <img src='/static/img/logo-black.png' className='logo' />
+            <a href="/">
+                <img src='/static/img/logo-black.png' className='logo' />
+            </a>
             <StatusBar current={props.doneTopics} max={props.topicsAmount} />
             <TopicGroup name={props.topic.group} number={'0' + props.doneTopics.toString()} />
         </header>
@@ -22,9 +24,11 @@ const Topic = (props) => {
                 <div className={styles.actions}>
                     <div className={styles.relative}>
                         <Button type='small'
+                                active={props.topic.more_modal}
                                 action={props.toggleDetails}
                                 arrow={true}>Daugiau informacijos</Button>
                         <Button type='small'
+                                active={props.topic.arguments_modal}
                                 action={props.toggleArguments}
                                 arrow={true}>Padėkite apsispręsti</Button>
                     </div>
@@ -52,7 +56,11 @@ const Topic = (props) => {
             </ButtonsBlock>
         </div>
 
-        <div className={styles['context-image']}></div>
+        <div className={styles['topic-image']}>
+            {(props.topic.image)
+                ? <img src={props.topic.image} alt='topic image' />
+                : undefined}
+        </div>
     </div>
 }
 

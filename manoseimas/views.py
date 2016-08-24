@@ -19,6 +19,10 @@ def influence(request):
     return render(request, 'influence.jade', {})
 
 
+def team(request):
+    return render(request, 'team_view.jade', {})
+
+
 def login(request):
     return render(request, 'manoseimas/login.html', {'settings': settings})
 

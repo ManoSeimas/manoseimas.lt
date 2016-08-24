@@ -3,15 +3,15 @@ import styles from '../styles/components/similarity-bar.css'
 
 const SimilarityBar = ({similarity, slim}) => {
     let color = '#0A9955'
-    if (similarity < 90)
-        color = '#248F5C'
     if (similarity < 80)
-        color = '#3E8664'
+        color = '#248F5C'
     if (similarity < 70)
-        color = '#587C6B'
+        color = '#3E8664'
     if (similarity < 60)
+        color = '#587C6B'
+    if (similarity < 55)
         color = '#737373'
-    if (similarity < 50)
+    if (similarity < 45)
         color = '#885864'
     if (similarity < 40)
         color = '#9E3D55'

@@ -46,11 +46,15 @@ class SimilarityMps extends React.Component {
                     Kuo didesnis procentas, tuo labiau Seimo narys atitinka Jūsų pažiūras.
                 </div>
                 {mps.map(mp => {
+                    let fraction = fractions.find((element, index, array) => mp.fraction_id === element.id) || {}
                     if ((selected_fractions.indexOf(mp.fraction_id) > -1 || selected_fractions.length === 0) && mp.similarity) {
                         return (
                             <div className={styles.item} key={mp.id}>
-                                <div className={styles.img}>
-                                    <img src={mp.logo} alt={mp.title + ' logo'} />
+                                <div className={styles.logo}>
+                                    <div className={styles.img}>
+                                        <img src={mp.logo} alt={mp.title + ' logo'} />
+                                    </div>
+                                    <img src={fraction.logo} className={styles['fraction-logo']} />
                                 </div>
                                 <main>
                                     <div className={styles.title}>{mp.name}, {mp.fraction}, {mp.similarity}%</div>

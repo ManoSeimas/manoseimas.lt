@@ -80,7 +80,7 @@ class FacebookShare extends React.Component {
         }
         return (
             <div className={styles['share-block']} style={sticky_style}>
-                <header>Mano balsavimai seime sutaptų su:</header>
+                <header>Mano balsavimai Seime sutaptų su:</header>
                 {(fractions.length > 2)
                     ? <div className={styles.fractions}>
                         <div className={styles['img-main']}>

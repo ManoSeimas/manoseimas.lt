@@ -9,92 +9,7 @@
   margin: 4px 2px 4px 2px;
 }
 
-
-// Header and Footer
-// ----------------------------
-footer {
-  padding: 20px 20px 20px 20px;
-  background: $white;
-  border-top: 1px solid $coloredBgColor;
-
-  .sponsor {
-    border-right: 1px solid $coloredBgColor;
-
-    @media($smallScreen) {
-      border: none;
-    }
-  }
-
-  .ui.vertical.segment.footer {
-      color: $textColor;
-
-      .menu {
-        margin: 2em;
-
-        .item{
-          margin: 5px 25px;
-          font-weight: 500;
-          font-size: $medium * 0.9;
-          color: $black;
-
-          &:hover {
-            color: lighten($black, 20%)
-          }
-
-          @media($smallScreen) {
-            font-size: $normal;
-          }
-        }
-      }
-
-      .copyright {
-        font-weight: 300;
-        color: $grayDark;
-      }
-  }
-
-
-  h2, h2 a, h2 a:hover {
-    color: #2A4C96;
-    font-size: $baseFontSize;
-    font-weight: 600;
-    padding: 0;
-    line-height: 1.3;
-  }
-
-  a {
-    color: $gray;
-  }
-
-  .nav {
-    li {
-      margin-top: 7px;
-    }
-
-    li > a {
-      display: inline;
-
-      &:hover {
-        background-color: transparent;
-      }
-    }
-  }
-
-  .follow-us a {
-    padding-left: 8px;
-  }
-
-  .ui{
-    img { margin-right: 5px; }
-
-    .copyright {
-      margin: 10px 20px;
-      font-size: 85%;
-      color: $textColor;
-    }
-  }
-}
-
+@import 'footer';
 
 header {
   .mobile.only.row { margin-left: .5rem; }
@@ -1281,7 +1196,7 @@ p.text-muted { color: $gray; }
 
 a:hover { text-decoration: none; }
 
-#main-block { margin-top: 9em; }
+#main-block { margin-top: 3em; }
 
 .colored-bg {
   background-color: $coloredBgColor;

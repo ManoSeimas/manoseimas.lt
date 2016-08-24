@@ -5,3 +5,15 @@
 @import 'frontpage';
 @import 'photo-box';
 @import 'elements';
+
+.desktop-only {
+  @media($smallScreen) {
+    display: none !important;
+  }
+}
+
+.mobile-only {
+    @media($desktopScreen) {
+        display: none !important;
+    }
+}

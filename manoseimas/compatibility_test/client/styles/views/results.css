@@ -7,11 +7,21 @@
     margin-bottom: 15px;
     font-style: normal;
   }
+
+  @media(max-width: 768px) {
+    lost-column: 1/1;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 .context-image, .side {
-  composes: context-image from '../base.css';
+  composes: context from '../base.css';
   border: 0;
+
+  @media(max-width: 768px) {
+    min-height: initial;
+  }
 }
 
 .note {
@@ -40,10 +50,39 @@
   }
 }
 
+.logo {
+  display: inline-block;
+  margin-right: 20px;
+  position: relative;
+}
+
 .img {
   composes: img from '../base.css';
   width: 70px;
   height: 70px;
+  margin-right: 0;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.tick {
+  width: 25px !important;
+  z-index: 10;
+  position: absolute;
+  top: 45px;
+  left: 0;
+  float: left;
+}
+
+.fraction-logo {
+  composes: img from '../base.css';
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  top: 50px;
+  left: 40px;
+  box-shadow: 0 0 4px $black;
 }
 
 .arrow {
