@@ -7,13 +7,14 @@ import styles from '../../styles/views/topic.css'
 
 const Topic = (props) => {
     let topic_arguments = {}
+    const zero = (props.doneTopics < 10) ? '0' : ''
     return <div>
         <header>
             <a href="/">
                 <img src='/static/img/logo-black.png' className='logo' />
             </a>
             <StatusBar current={props.doneTopics} max={props.topicsAmount} />
-            <TopicGroup name={props.topic.group} number={'0' + props.doneTopics.toString()} />
+            <TopicGroup name={props.topic.group} number={zero + props.doneTopics.toString()} />
         </header>
 
         <div className={styles.content}>
