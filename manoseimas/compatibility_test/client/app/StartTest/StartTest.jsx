@@ -23,9 +23,9 @@ const StartTest = (props) =>
                     panašiausiai į tave.
                 </span>
             </Block>
-            <Block number={3} style={{marginTop: '15px'}}>
+            <Block number={3} style={{marginTop: '15px'}} desktopOnly={true}>
                 <span>
-                    <strong>Dalinkis</strong> rezultatais su draugiais.
+                    <strong>Dalinkis</strong> rezultatais su draugais.
                 </span>
             </Block>
 
