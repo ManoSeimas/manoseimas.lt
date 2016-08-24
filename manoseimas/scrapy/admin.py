@@ -41,7 +41,7 @@ class VotingAdmin(admin.ModelAdmin):
 
 
 class PersonVoteAdmin(admin.ModelAdmin):
-    list_display = ('p_asm_id', 'name', 'vote', 'value')
+    list_display = ('p_asm_id', 'name', 'vote', 'value', 'fraction')
     list_filter = ('name',)
 
 
