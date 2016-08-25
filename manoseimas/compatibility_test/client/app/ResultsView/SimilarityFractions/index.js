@@ -10,6 +10,7 @@ import { saveAnswer,
 import { setSelectedFractions } from '../../../store/modules/mps_state.js'
 import SimilarityFractions from './SimilarityFractions'
 import Topics from './Topics'
+import Loader from 'react-loader'
 import styles from '../../../styles/views/results.css'
 
 class SimilarityFractionsContainer extends React.Component {
@@ -41,6 +42,7 @@ class SimilarityFractionsContainer extends React.Component {
     render () {
         let {fractions, mps, user_answers, topics, show_header, expanded_fraction} = this.props
         return (
+          <Loader loaded={fractions.length > 0}>
             <div>
                 <div className={styles.note}>
                     Kuo didesnis procentas, tuo labiau frakcija atitinka Jūsų pažiūras.
@@ -61,6 +63,7 @@ class SimilarityFractionsContainer extends React.Component {
                         toggleImportance={this.props.toggleImportance}
                         saveAnswer={this.props.saveAnswer} />
             </div>
+          </Loader>
         )
     }
 }
