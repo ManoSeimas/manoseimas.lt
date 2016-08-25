@@ -668,7 +668,7 @@ class Suggestion(CrawledItem):
                         mps_v2_suggestion as t3
                         WHERE
                             t1.id=t2.suggester_id AND t2.suggestion_id=t3.id
-                    GROUP BY submitter, source_id
+                    GROUP BY submitter_slug, submitter, source_id
                  ) AS t4
             )
             GROUP BY submitter_slug, submitter;
