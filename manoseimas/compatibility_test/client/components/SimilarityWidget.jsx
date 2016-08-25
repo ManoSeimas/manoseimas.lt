@@ -16,7 +16,7 @@ function answerType (type, user_answers, topic_id) {
         },
         neutral: {
             img: '/static/img/person-active.png',
-            show_icon: (getAnswer(user_answers, topic_id) === 0),
+            show_icon: (getAnswer(user_answers, topic_id) === undefined),
             value: undefined
         },
         negative: {
