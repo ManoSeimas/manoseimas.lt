@@ -61,8 +61,8 @@ class FacebookShare extends React.Component {
         const fraction_three = this.props.fractions[2]
 
         const picture = base_url + '/static/img/fb-share/' +
-                        this.shortTitle(fraction_one) + '/'
-                        this.shortTitle(fraction_two) + '-'
+                        this.shortTitle(fraction_one) + '/' +
+                        this.shortTitle(fraction_two) + '-' +
                         this.shortTitle(fraction_three) + '.png'
 
         const caption = 'Sužinok daugiau >>>'
