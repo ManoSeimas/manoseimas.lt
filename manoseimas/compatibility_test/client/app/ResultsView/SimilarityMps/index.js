@@ -71,7 +71,6 @@ class SimilarityMps extends React.Component {
                                             {topic.name} <br />
                                             <SimilarityWidget topic={topic}
                                                               items={[mp]}
-                                                              saveAnswer={this.props.saveAnswer}
                                                               user_answers={user_answers} />
                                         </li>
                                     })}

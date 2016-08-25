@@ -7,6 +7,27 @@ function getAnswer (user_answers, topic_id) {
     return undefined
 }
 
+function answerType (type, user_answers, topic_id) {
+    const types = {
+        positive: {
+            img: '/static/img/person-positive.png',
+            show_icon: (getAnswer(user_answers, topic_id) > 0),
+            value: 2
+        },
+        neutral: {
+            img: '/static/img/person-active.png',
+            show_icon: (getAnswer(user_answers, topic_id) === 0),
+            value: undefined
+        },
+        negative: {
+            img: '/static/img/person-negative.png',
+            show_icon: (getAnswer(user_answers, topic_id) < 0),
+            value: -2
+        }
+    }
+    return types[type]
+}
+
 function make_procental_answer (answer) {
     // -1p = 0%     (-1 + 1) * 50 => 0
     //  0p = 50%     (0 + 1) * 50 => 50
@@ -15,6 +36,18 @@ function make_procental_answer (answer) {
         return 0
     return Math.round((Number(answer) / 2 + 1)*50)
 }
+
+const ChangeVote = ({answer, onClick}) =>
+    <img src={(answer.show_icon) ? answer.img : '/static/img/person.png'}
+         onClick={onClick} />
+
+const ShowVote = ({answer}) => {
+    if (answer.show_icon) {
+        return <img src={answer.img} />
+    }
+    return null
+}
+
 
 const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
     <div className={styles['similarity-widget']}>
@@ -34,22 +67,25 @@ const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
             <div className={styles.line}></div>
             <div className={styles.actions}>
                 <div className={styles.action}>
-                    <img src={(getAnswer(user_answers, topic.id) < 0)
-                                ? '/static/img/person-negative.png'
-                                : '/static/img/person.png'}
-                                onClick={() => saveAnswer(topic.id, -2)} />
+                    {(saveAnswer)
+                        ? <ChangeVote answer={answerType('negative', user_answers, topic.id)}
+                                      onClick={() => saveAnswer(topic.id, -2)} />
+                        : <ShowVote answer={answerType('negative', user_answers, topic.id)} />
+                    }
                 </div>
                 <div className={styles.action}>
-                    <img src={(getAnswer(user_answers, topic.id) === undefined)
-                                ? '/static/img/person-active.png'
-                                : '/static/img/person.png'}
-                                onClick={() => saveAnswer(topic.id, undefined)} />
+                    {(saveAnswer)
+                        ? <ChangeVote answer={answerType('neutral', user_answers, topic.id)}
+                                      onClick={() => saveAnswer(topic.id, -2)} />
+                        : <ShowVote answer={answerType('neutral', user_answers, topic.id)} />
+                    }
                 </div>
                 <div className={styles.action}>
-                    <img src={(getAnswer(user_answers, topic.id) > 0)
-                                ? '/static/img/person-positive.png'
-                                : '/static/img/person.png'}
-                                onClick={() => saveAnswer(topic.id, 2)} />
+                    {(saveAnswer)
+                        ? <ChangeVote answer={answerType('positive', user_answers, topic.id)}
+                                      onClick={() => saveAnswer(topic.id, -2)} />
+                        : <ShowVote answer={answerType('positive', user_answers, topic.id)} />
+                    }
                 </div>
             </div>
         </div>
