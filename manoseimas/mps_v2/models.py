@@ -671,7 +671,7 @@ class Suggestion(CrawledItem):
                     GROUP BY submitter, source_id
                  ) AS t4
             )
-            GROUP BY submitter;
+            GROUP BY submitter_slug, submitter;
         """)
         rows = dict_fetch_all(cursor)
 
