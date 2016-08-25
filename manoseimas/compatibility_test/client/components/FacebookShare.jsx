@@ -45,8 +45,8 @@ class FacebookShare extends React.Component {
     // Because we have lots of TS-LDK files, it's easier just to use this function, than to convert files.
     shortTitle (fraction) {
         let short_title = fraction.short_title
-        if (short_title === 'TSLDKF')
-            short_title = 'TS-LDKF'
+        if (short_title === 'TSLKDF')
+            short_title = 'TS-LKDF'
         if (short_title === 'LLRAKŠSF')
             short_title = 'LLRA-KŠSF'
         return short_title
