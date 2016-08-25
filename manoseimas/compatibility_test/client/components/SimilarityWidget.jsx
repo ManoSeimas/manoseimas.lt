@@ -76,14 +76,14 @@ const SimilarityWidget = ({topic, items, user_answers, saveAnswer}) =>
                 <div className={styles.action}>
                     {(saveAnswer)
                         ? <ChangeVote answer={answerType('neutral', user_answers, topic.id)}
-                                      onClick={() => saveAnswer(topic.id, -2)} />
+                                      onClick={() => saveAnswer(topic.id, undefined)} />
                         : <ShowVote answer={answerType('neutral', user_answers, topic.id)} />
                     }
                 </div>
                 <div className={styles.action}>
                     {(saveAnswer)
                         ? <ChangeVote answer={answerType('positive', user_answers, topic.id)}
-                                      onClick={() => saveAnswer(topic.id, -2)} />
+                                      onClick={() => saveAnswer(topic.id, 2)} />
                         : <ShowVote answer={answerType('positive', user_answers, topic.id)} />
                     }
                 </div>
