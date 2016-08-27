@@ -65,7 +65,9 @@ class PersonVote(ScrapyPipe):
         if self.fraction == u'LLRAF':
             self.fraction = u'LLRAKŠSF'
         elif self.fraction == u'TS-LKDF':
-            self.fraction == u'TSLKDF'
+            self.fraction = u'TSLKDF'
+        elif self.fraction == u'LLRA-KŠSF':
+            self.fraction = u'LLRAKŠSF'
         super(PersonVote, self).save(*args, **kwargs)
 
 
