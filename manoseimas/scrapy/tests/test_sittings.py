@@ -53,7 +53,7 @@ class TestSittingsSpider(TestCase):
         votings = fixture('votings.json')
         for v in votings:
             items = parse_voting(v['_id'])
-            self.assertGreater(len(items), 140)
+            self.assertGreater(len(items), 80)
 
             p_vote = items[0]
             self.assertTrue(isinstance(p_vote, PersonVote))
