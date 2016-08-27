@@ -1,4 +1,6 @@
 from collections import Counter, defaultdict
+import datetime
+
 from django.core.urlresolvers import reverse
 from django.db import models, connection
 from django_extensions.db.fields import AutoSlugField
@@ -28,6 +30,8 @@ def get_mp_full_name(mp):
 
 def get_mp_votes(source_id, start_date='2012-11-16', end_date=None):
     start_date = todate(start_date)
+    if end_date is None:
+        end_date = datetime.date.today()
     end_date = todate(end_date)
     votes = scrapy_models.PersonVote.objects.filter(
         p_asm_id=source_id,
@@ -151,9 +155,9 @@ class ParliamentMember(CrawledItem):
             group__type=Group.TYPE_FRACTION)
         total_votes = 0
         for membership in fraction_memberships:
-            start_date = membership.since.isoformat()
-            end_date = (membership.until.isoformat()
-                        if membership.until else None)
+            start_date = membership.since
+            end_date = (membership.until if membership.until
+                        else datetime.date.today())
             total_votes += (
                 scrapy_models.Voting.objects.
                 filter(timestamp__range=(start_date, end_date)).
