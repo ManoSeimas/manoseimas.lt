@@ -24,11 +24,11 @@ class TestServices(TestCase):
         mps = [
             ('1', 'LSDPF', 'Petras', 'Gražulis', [1, 2]),
             ('2', 'LSDPF', 'Mantas', 'Adomėnas', [-2, 2]),
-            ('3', 'TS-LKDF', 'Remigijus', 'Ačas', [-2, 0, -1]),
+            ('3', 'TSLKDF', 'Remigijus', 'Ačas', [-2, 0, -1]),
         ]
 
         GroupFactory(abbr='LSDPF', name='Lietuvos socialdemokratų partijos frakcija')
-        GroupFactory(abbr='TS-LKDF', name='Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija')
+        GroupFactory(abbr='TSLKDF', name='Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija')
 
         # Create some votings and assign them to the topic
         for i in range(3):
@@ -73,7 +73,7 @@ class TestServices(TestCase):
         self.assertEqual(results, {
             'fractions': {
                 'LSDPF': {topic.pk: 0.75},
-                'TS-LKDF': {topic.pk: -1.0},
+                'TSLKDF': {topic.pk: -1.0},
             },
             'mps': {
                 'Petras': {topic.pk: 1.5},

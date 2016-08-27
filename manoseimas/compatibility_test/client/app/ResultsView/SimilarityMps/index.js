@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { SimilarityBar, SimilarityWidget } from '../../../components'
-import { expandTopics, selectFraction } from '../../../store/modules/mps_state'
+import { expandTopics, selectFraction, showAllMps } from '../../../store/modules/mps_state'
 import { getResults, setTab, saveAnswer } from '../../../store/modules/results'
 import FractionsSelector from './FractionsSelector'
+import ListOfMps from './ListOfMps'
+import Loader from 'react-loader'
 import styles from '../../../styles/views/results.css'
-
 
 class SimilarityMps extends React.Component {
 
@@ -20,7 +20,8 @@ class SimilarityMps extends React.Component {
       getResults: React.PropTypes.func,
       saveAnswer: React.PropTypes.func,
       setTab: React.PropTypes.func,
-      selectFraction: React.PropTypes.func
+      selectFraction: React.PropTypes.func,
+      show_all_mps: React.PropTypes.bool
     }
 
     componentWillMount () {
@@ -32,57 +33,35 @@ class SimilarityMps extends React.Component {
     }
 
     render () {
-        let {user_answers, mps, fractions, selected_fractions, topics, expanded_mp} = this.props
+        const {
+            selected_fractions,
+            user_answers,
+            mps,
+            fractions,
+            topics,
+            expanded_mp,
+            show_all_mps
+        } = this.props
         return (
-            <div>
-                <div className={styles.note}>
-                    Pasirinkite dominančias frakcijas (galima rinktis kelias iš karto):
+            <Loader loaded={mps.length > 0}>
+                <div>
+                    <div className={styles.note}>
+                        Pasirinkite dominančias frakcijas (galima rinktis kelias iš karto):
+                    </div>
+                    <FractionsSelector fractions={fractions}
+                                       selected_fractions={selected_fractions}
+                                       selectFraction={this.props.selectFraction} />
+                    <ListOfMps mps={mps}
+                               fractions={fractions}
+                               topics={topics}
+                               expanded_mp={expanded_mp}
+                               expandTopics={this.props.expandTopics}
+                               showAllMps={this.props.showAllMps}
+                               show_all_mps={show_all_mps}
+                               selected_fractions={selected_fractions}
+                               user_answers={user_answers} />
                 </div>
-                <FractionsSelector fractions={fractions}
-                                   selected_fractions={selected_fractions}
-                                   selectFraction={this.props.selectFraction} />
-
-                <div className={styles.note}>
-                    Kuo didesnis procentas, tuo labiau Seimo narys atitinka Jūsų pažiūras.
-                </div>
-                {mps.map(mp => {
-                    let fraction = fractions.find((element, index, array) => mp.fraction_id === element.id) || {}
-                    if ((selected_fractions.indexOf(mp.fraction_id) > -1 || selected_fractions.length === 0) && mp.similarity) {
-                        return (
-                            <div className={styles.item} key={mp.id}>
-                                <div className={styles.logo}>
-                                    <div className={styles.img}>
-                                        <img src={mp.logo} alt={mp.title + ' logo'} />
-                                    </div>
-                                    <img src={fraction.logo} className={styles['fraction-logo']} />
-                                </div>
-                                <main>
-                                    <div className={styles.title}>{mp.name}, {mp.fraction}, {mp.similarity}%</div>
-                                    <SimilarityBar similarity={mp.similarity} />
-                                    <a onClick={() => this.props.expandTopics(mp.id)}>
-                                        Atsakymai pagal klausimus
-                                        <div className={styles.arrow}></div>
-                                    </a>
-                                </main>
-                                {(expanded_mp === mp.id)
-                                    ? <div className={styles.topics}><ol>
-                                    {topics.map(topic => {
-                                        return <li key={topic.id}>
-                                            {topic.name} <br />
-                                            <SimilarityWidget topic={topic}
-                                                              items={[mp]}
-                                                              saveAnswer={this.props.saveAnswer}
-                                                              user_answers={user_answers} />
-                                        </li>
-                                    })}
-                                    </ol></div>
-                                    : ''
-                                }
-                            </div>
-                        )
-                    }
-                })}
-            </div>
+            </Loader>
         )
     }
 }
@@ -93,7 +72,8 @@ const mapStateToProps = (state) => ({
     mps: state.results.mps,
     fractions: state.results.fractions,
     selected_fractions: state.mps_state.selected_fractions,
-    expanded_mp: state.mps_state.expanded_mp
+    expanded_mp: state.mps_state.expanded_mp,
+    show_all_mps: state.mps_state.show_all_mps
 })
 
 export default connect((mapStateToProps), {
@@ -101,5 +81,6 @@ export default connect((mapStateToProps), {
     getResults,
     saveAnswer,
     setTab,
-    selectFraction
+    selectFraction,
+    showAllMps
 })(SimilarityMps)

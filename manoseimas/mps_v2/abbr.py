@@ -30,10 +30,10 @@ FRACTION_ABBR_EXCEPTIONS = {
     u'mišri seimo narių grupė': u'MG',
     (u'jungtinė liberalų ir centro sąjungos ir tautos prisikėlimo partijos '
      u'frakcija'): u'JF',
-    (u'tėvynės sąjungos frakcija'): u'TS-LKDF',
-    (u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija'): u'TS-LKDF',
-    (u'Lietuvos lenkų rinkimų akcijos-Krikščioniškų šeimų sąjungos frakcija'): u'LLRA-KŠSF',
-    (u'Lietuvos lenkų rinkimų akcijos frakcija'): u'LLRA-KŠSF',
+    (u'tėvynės sąjungos frakcija'): u'TSLKDF',
+    (u'Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija'): u'TSLKDF',
+    (u'Lietuvos lenkų rinkimų akcijos-Krikščioniškų šeimų sąjungos frakcija'): u'LLRAKŠSF',
+    (u'Lietuvos lenkų rinkimų akcijos frakcija'): u'LLRAKŠSF',
 }
 
 

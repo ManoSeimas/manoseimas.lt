@@ -2,7 +2,7 @@ import React from 'react'
 import styles from '../styles/components/block.css'
 
 const Block = (props) =>
-    <div className={styles.instruction}>
+    <div className={(props.desktopOnly) ? styles['instruction-no-mobile'] : styles.instruction}>
         <div className={styles.number}>{props.number}</div>
         <div className={styles.text} style={props.style}>
             {props.children}

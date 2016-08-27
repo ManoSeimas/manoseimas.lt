@@ -206,3 +206,17 @@
     display: block;
   }
 }
+
+.mps {
+  .more {
+    display: block;
+    padding: 20px;
+    margin-left: 70px;
+    font-size: $normal;
+    color: $black;
+
+    &:hover {
+      color: $dark;
+    }
+  }
+}

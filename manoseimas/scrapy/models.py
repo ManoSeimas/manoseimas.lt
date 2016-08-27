@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import datetime
 
 from django.db import models
@@ -58,6 +60,15 @@ class PersonVote(ScrapyPipe):
         self.name = item['name']
         self.vote = votemap[item['vote']]
         self.timestamp = datetime.datetime.strptime(item['datetime'], '%Y-%m-%d %H:%M:%S')
+
+    def save(self, *args, **kwargs):
+        if self.fraction == u'LLRAF':
+            self.fraction = u'LLRAKŠSF'
+        elif self.fraction == u'TS-LKDF':
+            self.fraction = u'TSLKDF'
+        elif self.fraction == u'LLRA-KŠSF':
+            self.fraction = u'LLRAKŠSF'
+        super(PersonVote, self).save(*args, **kwargs)
 
 
 class Voting(ScrapyPipe):

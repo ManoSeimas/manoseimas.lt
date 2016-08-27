@@ -10,7 +10,7 @@ from jsonfield import JSONField
 
 
 class Topic(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=300)
     slug = models.SlugField(max_length=40)
     description = models.TextField()
     votings = models.ManyToManyField('scrapy.Voting', through='TopicVoting')

@@ -4,6 +4,7 @@
 export const EXPAND_TOPICS = 'EXPAND_TOPICS'
 export const SELECT_FRACTION = 'SELECT_FRACTION'
 export const SET_SELECTED_FRACTIONS = 'SET_SELECTED_FRACTIONS'
+export const SHOW_ALL_MPS = 'SHOW_ALL_MPS'
 
 // ------------------------------------
 // Actions
@@ -29,10 +30,17 @@ export function setSelectedFractions (fraction_ids) {
     }
 }
 
+export function showAllMps () {
+    return {
+        type: SHOW_ALL_MPS
+    }
+}
+
 export const actions = {
     expandTopics,
     selectFraction,
-    setSelectedFractions
+    setSelectedFractions,
+    showAllMps
 }
 
 // ------------------------------------
@@ -63,6 +71,9 @@ const ACTION_HANDLERS = {
     },
     SET_SELECTED_FRACTIONS: (state, action) => {
         return Object.assign({}, state, { selected_fractions: action.fraction_ids})
+    },
+    SHOW_ALL_MPS: (state, action) => {
+        return Object.assign({}, state, { show_all_mps: true })
     }
 }
 
@@ -71,7 +82,8 @@ const ACTION_HANDLERS = {
 // ------------------------------------
 const initialState = {
     expanded_mp: undefined,
-    selected_fractions: []
+    selected_fractions: [],
+    show_all_mps: false
 }
 export default (state = initialState, action) => {
     const handler = ACTION_HANDLERS[action.type]

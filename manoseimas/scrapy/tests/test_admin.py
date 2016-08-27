@@ -46,4 +46,4 @@ class TestViews(WebTest):
             'Valstybės saugumo departamento įstatymo 10 straipsnio pakeitimo '
             'ĮSTATYMO PROJEKTAS (Nr. XIP-2992)'
         ))
-        self.assertEqual(PersonVote.objects.filter(voting_id='-10765v').count(), 141)
+        self.assertEqual(PersonVote.objects.filter(voting_id='-10765v').count(), 85)

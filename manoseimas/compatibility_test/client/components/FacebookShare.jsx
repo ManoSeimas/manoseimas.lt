@@ -42,6 +42,16 @@ class FacebookShare extends React.Component {
         }
     }
 
+    // Because we have lots of TS-LDK files, it's easier just to use this function, than to convert files.
+    shortTitle (fraction) {
+        let short_title = fraction.short_title
+        if (short_title === 'TSLKDF')
+            short_title = 'TS-LKDF'
+        if (short_title === 'LLRAKŠSF')
+            short_title = 'LLRA-KŠSF'
+        return short_title
+    }
+
     shareOnFacebook () {
         const location = window.location.href.split('/')
         const base_url = location[0] + '//' + location[2]
@@ -50,14 +60,17 @@ class FacebookShare extends React.Component {
         const fraction_two = this.props.fractions[1]
         const fraction_three = this.props.fractions[2]
 
-        const picture = base_url + '/static/img/fb-share/' + `${fraction_one.short_title}/${fraction_two.short_title}-${fraction_three.short_title}.png`
+        const picture = base_url + '/static/img/fb-share/' +
+                        this.shortTitle(fraction_one) + '/' +
+                        this.shortTitle(fraction_two) + '-' +
+                        this.shortTitle(fraction_three) + '.png'
 
-        let description = ''
-        description = description + `${fraction_one.title} ${fraction_one.similarity}%; `
-        description = description + `${fraction_two.title} ${fraction_two.similarity}%; `
-        description = description + `${fraction_three.title} ${fraction_three.similarity}%. \n`
-        description = description + 'Su kokiomis politinėmis partijomis ir politikais sutampi tu?'
-        let caption = 'Sužinok daugiau >>>'
+        const caption = 'Sužinok daugiau >>>'
+        const description = `${fraction_one.title} ${fraction_one.similarity}%; ` +
+                            `${fraction_two.title} ${fraction_two.similarity}%; ` +
+                            `${fraction_three.title} ${fraction_three.similarity}%. \n` +
+                            'Su kokiomis politinėmis partijomis ir politikais sutampi tu?'
+
 
         FB.ui({
             method: 'feed',

@@ -44,8 +44,8 @@
 
 .topic-image {
   composes: context;
-  border: 2px dashed $grey;
   margin-top: 0;
+  img { max-height: 300px; }
 
   @media(max-width: 768px) {
     display: none;

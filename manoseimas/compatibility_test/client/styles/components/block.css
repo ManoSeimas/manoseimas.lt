@@ -30,6 +30,14 @@
   }
 }
 
+.instruction-no-mobile {
+  composes: instruction;
+
+  @media(max-width: 768px) {
+    display: none;
+  }
+}
+
 .instruction > .number {
   vertical-align: top;
 }

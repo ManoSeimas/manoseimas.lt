@@ -39,6 +39,8 @@ export function calculateSimilarity(item_answers, user_answers) {
 export function sortResults(results) {
     // Filter out old/inactive/renamed fractions which have 0 members.
     results.fractions = results.fractions.filter((fraction) => fraction.members_amount > 0)
+    // Filter out MF fraction, we don't want to show it in results
+    results.fractions = results.fractions.filter((fraction) => fraction.short_title !== 'MG')
 
     // Calculate fractions similarity
     results.fractions = results.fractions.map((fraction) => {
@@ -46,7 +48,7 @@ export function sortResults(results) {
         return fraction
     })
 
-    // Filter our not active mps (they don't have fraction)
+    // Filter out not active mps (they don't have fraction)
     results.mps = results.mps.filter((mp) => mp.fraction_id)
 
     // Calculate mps similarity
