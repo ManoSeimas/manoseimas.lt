@@ -34,9 +34,8 @@ const ListOfMps = (props) => {
         : [0, 1, 2, 3, 4, selected_mps.length-5, selected_mps.length-4, selected_mps.length-3, selected_mps.length-2, selected_mps.length-1].map(item => {
           let mp = selected_mps[item]
           let fraction = fractions.find((element, index, array) => mp.fraction_id === element.id) || {}
-          return <div>
+          return <div key={mp.id}>
             <OneMp mp={mp}
-                   key={mp.id}
                    fraction={fraction}
                    topics={topics}
                    user_answers={user_answers}
