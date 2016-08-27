@@ -205,11 +205,11 @@ class TestPositions(WebTest):
         mps = [
             ('1', 'LSDPF', 'Petras', 'Gražulis', [1, 2]),
             ('2', 'LSDPF', 'Mantas', 'Adomėnas', [-2, 2]),
-            ('3', 'TS-LKDF', 'Remigijus', 'Ačas', [-2, 0, -1]),
+            ('3', 'TSLKDF', 'Remigijus', 'Ačas', [-2, 0, -1]),
         ]
 
         GroupFactory(abbr='LSDPF', name='Lietuvos socialdemokratų partijos frakcija')
-        GroupFactory(abbr='TS-LKDF', name='Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija')
+        GroupFactory(abbr='TSLKDF', name='Tėvynės sąjungos-Lietuvos krikščionių demokratų frakcija')
 
         # Create some votings and assigne them to the topic
         for i in range(3):
@@ -247,7 +247,7 @@ class TestPositions(WebTest):
         gr = lambda x: {int(k): float(v) for k, v in Group.objects.get(abbr=x).positions.items()}
         mp = lambda x: {int(k): float(v) for k, v in ParliamentMember.objects.get(first_name=x).positions.items()}
         self.assertEqual(gr('LSDPF'), {topic.pk: 0.75})
-        self.assertEqual(gr('TS-LKDF'), {topic.pk: -1.0})
+        self.assertEqual(gr('TSLKDF'), {topic.pk: -1.0})
         self.assertEqual(mp('Petras'), {topic.pk: 1.5})
         self.assertEqual(mp('Mantas'), {topic.pk: 0.0})
         self.assertEqual(mp('Remigijus'), {topic.pk: -1.0})
