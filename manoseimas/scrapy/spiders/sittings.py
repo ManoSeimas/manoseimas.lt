@@ -446,17 +446,18 @@ class SittingsSpider(ManoSeimasSpider):
                 '_id', 'voting_id', 'person', 'fraction', 'vote',))
 
             p_id = person.select('td[1]/a/@href').re(r'p_asm_id=(-?\d+)')[0]
-
-            p_vote.add_value('_id', '%s:%s' % (_id, p_id))
-            p_vote.add_value('voting_id', '%sv' % _id)
-            p_vote.add_value('person', '%sp' % p_id)
-            p_vote.add_xpath('name', 'td[1]/a/text()')
-            p_vote.add_xpath('fraction', 'td[2]/text()')
-            p_vote.add_value('vote', self._get_vote_value(person))
-            p_vote.add_value('datetime', timestamp)
-
-            p_vote = p_vote.load_item()
-            voting.add_value('votes', dict(p_vote))
-            yield p_vote
+            vote_value = self._get_vote_value(person)
+            # Only include votes that were actually voting,
+            if vote_value != 'no-vote':
+                p_vote.add_value('_id', '%s:%s' % (_id, p_id))
+                p_vote.add_value('voting_id', '%sv' % _id)
+                p_vote.add_value('person', '%sp' % p_id)
+                p_vote.add_xpath('name', 'td[1]/a/text()')
+                p_vote.add_xpath('fraction', 'td[2]/text()')
+                p_vote.add_value('datetime', timestamp)
+                p_vote.add_value('vote', vote_value)
+                p_vote = p_vote.load_item()
+                voting.add_value('votes', dict(p_vote))
+                yield p_vote
 
         yield voting.load_item()
