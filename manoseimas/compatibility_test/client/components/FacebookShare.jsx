@@ -56,9 +56,12 @@ class FacebookShare extends React.Component {
         const location = window.location.href.split('/')
         const base_url = location[0] + '//' + location[2]
 
-        const fraction_one = this.props.fractions[0]
-        const fraction_two = this.props.fractions[1]
-        const fraction_three = this.props.fractions[2]
+        // Don't include MG in facebook share results
+        fractions = this.realFractions
+
+        const fraction_one = fractions[0]
+        const fraction_two = fractions[1]
+        const fraction_three = fractions[2]
 
         const picture = base_url + '/static/img/fb-share/' +
                         this.shortTitle(fraction_one) + '/' +
@@ -82,8 +85,12 @@ class FacebookShare extends React.Component {
         }, this.props.responseHandler)
     }
 
+    get realFractions () {
+        return this.props.fractions.filter(fraction => fraction.short_title !== 'MG')
+    }
+
     render () {
-        let fractions = this.props.fractions
+        let fractions = this.realFractions
         let sticky_style = {}
         if (this.state.sticky) {
             sticky_style = {
