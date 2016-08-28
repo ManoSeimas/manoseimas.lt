@@ -57,7 +57,7 @@ class FacebookShare extends React.Component {
         const base_url = location[0] + '//' + location[2]
 
         // Don't include MG in facebook share results
-        fractions = this.realFractions
+        const fractions = this.realFractions
 
         const fraction_one = fractions[0]
         const fraction_two = fractions[1]
