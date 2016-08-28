@@ -80,7 +80,7 @@ class SimilarityFractions extends React.Component {
         return (
             <div ref='similarities'>
             {fractions.map(fraction => {
-                if (fraction.members_amount > 0) {
+                if (fraction.members_amount > 0 && fraction.short_title !== 'MG') {
                     return (
                         <div className={styles.item} key={fraction.short_title}>
                             <div className={styles.logo}>

@@ -38,9 +38,7 @@ export function calculateSimilarity(item_answers, user_answers) {
 
 export function sortResults(results) {
     // Filter out old/inactive/renamed fractions which have 0 members.
-    results.fractions = results.fractions.filter(fraction => fraction.members_amount > 0)
-    // Filter out MF fraction, we don't want to show it in results
-    results.fractions = results.fractions.filter(fraction => fraction.short_title !== 'MG')
+    results.fractions = results.fractions.filter((fraction) => fraction.members_amount > 0)
 
     // Calculate fractions similarity
     results.fractions = results.fractions.map((fraction) => {
@@ -56,9 +54,6 @@ export function sortResults(results) {
         mp.similarity = calculateSimilarity(mp.answers, results.user_answers || results.answers)
         return mp
     })
-
-    //Filter out mps with similarity NaN
-    results.mps = results.mps.filter(mp => !isNaN(mp.similarity))
 
     // Sort fractions and mps by similarity (desc)
     function compare (a, b) {
