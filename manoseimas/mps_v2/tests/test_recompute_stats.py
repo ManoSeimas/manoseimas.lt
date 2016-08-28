@@ -56,7 +56,7 @@ class TestRecomputeStats(WebTest):
             'avg_long_statement_count': None,
             'avg_passed_law_project_ratio': 0.0,
             'avg_statement_count': None,
-            'avg_vote_percentage': 50.0,
+            'avg_vote_percentage': 0.0,
             'logo_url': '/static/img/fractions/fraction-default.png',
             'member_count': 1,
             'name': 'Liberalų ir centro sąjungos frakcija',
