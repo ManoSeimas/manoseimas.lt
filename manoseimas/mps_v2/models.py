@@ -28,11 +28,11 @@ def get_mp_full_name(mp):
     return mp.full_name
 
 
-def get_mp_votes(source_id, start_date='2012-11-16', end_date=None):
-    start_date = todate(start_date)
+def get_mp_votes(source_id,
+                 start_date=datetime.date(2012, 11, 16),
+                 end_date=None):
     if end_date is None:
         end_date = datetime.date.today()
-    end_date = todate(end_date)
     votes = scrapy_models.PersonVote.objects.filter(
         p_asm_id=source_id,
         timestamp__range=(start_date, end_date),
@@ -145,10 +145,9 @@ class ParliamentMember(CrawledItem):
 
     @property
     def votes(self):
-        return get_mp_votes(self.source_id)
+        return get_mp_votes(self.source_id).count()
 
     def get_vote_percentage(self):
-        votes = scrapy_models.PersonVote.objects.filter(p_asm_id=self.source_id).count()
         # Get total votes during the time MP was in fractions
         fraction_memberships = GroupMembership.objects.filter(
             member=self,
@@ -164,7 +163,7 @@ class ParliamentMember(CrawledItem):
                 count()
             )
         if total_votes:
-            vote_percentage = float(votes) / total_votes * 100.0
+            vote_percentage = float(self.votes) / total_votes * 100.0
         else:
             vote_percentage = 0.0
         return vote_percentage
