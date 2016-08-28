@@ -21,15 +21,13 @@ const ListOfMps = (props) => {
       {(show_all_mps)
         ? selected_mps.map(mp => {
             let fraction = fractions.find((element, index, array) => mp.fraction_id === element.id) || {}
-            if (!isNaN(mp.similarity))
-                return <OneMp mp={mp}
-                              key={mp.id}
-                              fraction={fraction}
-                              topics={topics}
-                              user_answers={user_answers}
-                              expanded_mp={expanded_mp}
-                              expandTopics={props.expandTopics} />
-        })
+            return <OneMp mp={mp}
+                          key={mp.id}
+                          fraction={fraction}
+                          topics={topics}
+                          user_answers={user_answers}
+                          expanded_mp={expanded_mp}
+                          expandTopics={props.expandTopics} />})
         : [0, 1, 2, 3, 4, selected_mps.length-5, selected_mps.length-4, selected_mps.length-3, selected_mps.length-2, selected_mps.length-1].map(item => {
           let mp = selected_mps[item]
           let fraction = fractions.find((element, index, array) => mp.fraction_id === element.id) || {}

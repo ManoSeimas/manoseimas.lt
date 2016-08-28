@@ -57,6 +57,9 @@ export function sortResults(results) {
         return mp
     })
 
+    //Filter out mps with similarity NaN
+    results.mps = results.mps.filter(mp => !isNaN(mp.similarity))
+
     // Sort fractions and mps by similarity (desc)
     function compare (a, b) {
         if (a.similarity > b.similarity)
