@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 import json
 
+from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import View
@@ -134,6 +135,7 @@ class ResultsView(View):
                     'fraction_id': mp.fraction.pk if mp.fraction else None,
                     'logo': mp.photo.url if mp.photo else None,
                     'answers': mp.positions,
+                    'url': reverse('mp_profile', args=[mp.slug]),
                 } for mp in ParliamentMember.objects.filter(term_of_office=term_of_office).order_by('pk')
             ]
         }

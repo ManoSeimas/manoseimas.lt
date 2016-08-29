@@ -4,12 +4,12 @@ import styles from '../../../styles/views/results.css'
 
 const OneMp = ({mp, fraction, topics, user_answers, expandTopics, expanded_mp}) =>
   <div className={styles.item} key={mp.id}>
-      <div className={styles.logo}>
+      <a href={mp.url} className={styles.logo} target='_blank'>
           <div className={styles.img}>
               <img src={mp.logo} alt={mp.title + ' logo'} />
           </div>
           <img src={fraction.logo} className={styles['fraction-logo']} />
-      </div>
+      </a>
       <main>
           <div className={styles.title}>{mp.name}, {mp.fraction}, {mp.similarity}%</div>
           <SimilarityBar similarity={mp.similarity} />
