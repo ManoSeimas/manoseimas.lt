@@ -50,17 +50,17 @@
 
     .three.column.row
       .column.center.aligned
-        .block
+        a(href="{% url 'mp_fraction_list' %}").block
           img(src="{% static 'img/front-page/fractions.png' %}")
-          a(href="{% url 'mp_fraction_list' %}").button Sek, ką veikia Seimo frakcijos
+          .button Sek, ką veikia Seimo frakcijos
       .column.center.aligned
-        .block
+        a(href="{% url 'mp_list_all' %}").block
           img(src="{% static 'img/front-page/mps.png' %}")
-          a(href="{% url 'mp_list_all' %}").button.wide Sužinok, kaip balsuoja tavo Seimo narys
+          .button.wide Sužinok, kaip balsuoja tavo Seimo narys
       .column.center.aligned
-        .block
+        a(href="{% url 'influence' %}").block
           img(src="{% static 'img/front-page/influence.png' %}")
-          a(href="{% url 'influence' %}").button Pamatyk, kas Seime siekia įtakos
+          .button Pamatyk, kas Seime siekia įtakos
 
 
   .ui.page.grid.donate
