@@ -116,6 +116,12 @@
     background-color: color(#fff blackness(3%));
     cursor: pointer;
   }
+
+  @media(max-width: 768px) {
+    &:hover {
+      background-color: #fff;
+    };
+  }
 }
 
 .note {
