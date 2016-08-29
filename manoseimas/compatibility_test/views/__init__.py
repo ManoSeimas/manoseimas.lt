@@ -89,17 +89,6 @@ def start_test(request, test_id=None):
     return render(request, 'start_test.jade', get_test_context(test_id))
 
 
-@ensure_csrf_cookie
-def shared_test(request, test_id, results_hash):
-    context = get_test_context(test_id)
-    context.update({
-        'og_title': 'Man artimiausi TS-LKD, o kas artimiau tau?',
-        'og_description': 'Atlik politinio suderinamumo testą ir sužinok kuri partija Seime balsavo taip kaip balsuotum tu.',
-        'og_image': 'http://manoseimas.lt/media/fraction_logos/lsdp.png',
-    })
-    return render(request, 'shared_test.jade', context)
-
-
 def topics_json(request, test_id=None):
     topics = topics_all(test_id)
     return JsonResponse({'items': topics})
