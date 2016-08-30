@@ -14,6 +14,8 @@ class TopicContainer extends React.Component {
         super(props)
         this._setAnswer = this._setAnswer.bind(this)
         this._nextTopic = this._nextTopic.bind(this)
+        this._toggleDetails = this._toggleDetails.bind(this)
+        this._toggleArguments = this._toggleArguments.bind(this)
     }
 
     static propTypes = {
@@ -71,13 +73,33 @@ class TopicContainer extends React.Component {
         }
     }
 
+    _toggleDetails () {
+        // Track click in Google Analytics
+        window.ga('send', 'event', {
+            eventCategory: 'Toggle Details',
+            eventAction: 'click',
+            eventLabel: this.props.active_topic.slug
+        })
+        this.props.toggleMoreModal()
+    }
+
+    _toggleArguments () {
+        // Track click in Google Analytics
+        window.ga('send', 'event', {
+            eventCategory: 'Toggle Arguments',
+            eventAction: 'click',
+            eventLabel: this.props.active_topic.slug
+        })
+        this.props.toggleArgumentsModal()
+    }
+
     render () {
         const done_topics = (this.props.next_topic.position > 2) ? this.props.next_topic.position - 1 : 1
         if (this.props.active_topic) {
             return <Topic saveAnswer={this._setAnswer}
                           nextTopic={this._nextTopic}
-                          toggleArguments={this.props.toggleArgumentsModal}
-                          toggleDetails={this.props.toggleMoreModal}
+                          toggleArguments={this._toggleArguments}
+                          toggleDetails={this._toggleDetails}
                           topic={this.props.active_topic}
                           doneTopics={done_topics}
                           topicsAmount={this.props.topics_amount} />
