@@ -13,6 +13,9 @@ const store = configureStore(initialState, browserHistory)
 const history = syncHistoryWithStore(browserHistory, store, {
   selectLocationState: (state) => state.router
 })
+history.listen(function (location) {
+    window.ga('send', 'pageview', location.pathname);
+})
 
 ReactDOM.render(
     <Provider store={store}>

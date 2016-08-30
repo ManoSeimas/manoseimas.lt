@@ -26,6 +26,8 @@ html(lang=en)
       link(rel="stylesheet", type="text/x-scss", href="{% static 'css/compat_base.scss' %}")
       link(rel="stylesheet", type="text/x-scss", href="{% static 'css/_footer.scss' %}")
 
+    {% include "partials/google_analytics.html" %}
+
   body
     div#main-block
       | {% block main %}
@@ -48,4 +50,3 @@ html(lang=en)
        fjs.parentNode.insertBefore(js, fjs);
      }(document, 'script', 'facebook-jssdk'));
 
-  {% include "partials/google_analytics.html" %}
