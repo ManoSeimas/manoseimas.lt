@@ -14,7 +14,7 @@ const history = syncHistoryWithStore(browserHistory, store, {
   selectLocationState: (state) => state.router
 })
 history.listen(function (location) {
-    window.ga('send', 'pageview', location.pathname);
+    window.ga('send', 'pageview', '/testas/1' + location.pathname);
 })
 
 ReactDOM.render(
