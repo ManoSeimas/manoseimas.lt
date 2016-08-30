@@ -74,6 +74,12 @@ class FacebookShare extends React.Component {
                             `${fraction_three.title} ${fraction_three.similarity}%. \n` +
                             'Su kokiomis politinėmis partijomis ir politikais sutampi tu?'
 
+        // Track click in Google Analytics
+        window.ga('send', 'event', {
+            eventCategory: 'Facebook Share',
+            eventAction: 'click',
+            eventLabel: 'Click from Results'
+        });
 
         FB.ui({
             method: 'feed',
