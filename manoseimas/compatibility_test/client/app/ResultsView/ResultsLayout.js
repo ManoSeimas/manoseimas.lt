@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
-import { StatusBar, FacebookShare } from '../../components'
+import { StatusBar, FacebookShare, Footer } from '../../components'
 import Tabs from './Tabs'
 import styles from '../../styles/views/results.css'
 
@@ -15,14 +15,17 @@ export const ResultsLayout = ({ children }) =>
             </a>
             <StatusBar current={12} max={12} />
         </header>
-        <div className={styles.content}>
-            <h2 className='title'>Rezultatai</h2>
-            <Tabs />
-            {children}
+        <div className={styles['main-area']}>
+            <div className={styles.content}>
+                <h2 className='title'>Rezultatai</h2>
+                <Tabs />
+                {children}
+            </div>
+            <div className={styles.side}>
+                <FacebookShare responseHandler={(response) => (console.log(response))} />
+            </div>
         </div>
-        <div className={styles.side}>
-            <FacebookShare responseHandler={(response) => (console.log(response))} />
-        </div>
+        <Footer />
     </div>
 
 ResultsLayout.propTyoes = {

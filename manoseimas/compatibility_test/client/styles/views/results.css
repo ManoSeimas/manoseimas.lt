@@ -1,5 +1,9 @@
 @import "../_variables";
 
+.main-area {
+  lost-utility: clearfix;
+}
+
 .content {
   composes: content from '../base.css';
 

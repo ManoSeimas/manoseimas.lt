@@ -3,6 +3,7 @@ import Button from './Button'
 import ButtonsBlock from './ButtonsBlock'
 import Checkbox from './Checkbox'
 import FacebookShare from './FacebookShare'
+import Footer from './Footer'
 import SimilarityBar from './SimilarityBar'
 import SimilarityWidget from './SimilarityWidget'
 import StatusBar from './StatusBar'
@@ -16,6 +17,7 @@ export {
     ButtonsBlock,
     Checkbox,
     FacebookShare,
+    Footer,
     SimilarityBar,
     SimilarityWidget,
     StatusBar,

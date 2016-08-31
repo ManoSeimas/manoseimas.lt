@@ -1,0 +1,81 @@
+@import "../_variables";
+
+footer {
+    width: 100vw;
+    background-color: white;
+    position: absolute;
+    right: 0;
+    padding: 0;
+}
+
+.sponsors {
+    lost-utility: clearfix;
+    margin: 2rem auto;
+    width: $container-width;
+
+    img {
+        width: 99%;
+    }
+
+    @media(max-width: 768px) {
+        width: 100%;
+    }
+}
+
+.sponsor {
+    lost-column: 1/2 2 0;
+    box-sizing: border-box;
+    padding-right: 20px;
+
+    @media(max-width: 768px) {
+        padding-right: 0;
+    }
+}
+
+.sponsor-left {
+    composes: sponsor;
+    border-right: 1px solid rgba(39, 41, 43, 0.15);
+}
+
+.menu {
+    text-align: center;
+    margin: 2rem;
+    padding-top: 2rem;
+    box-shadow: 0 1px 0 rgba(39,41,43,0.1)inset;
+
+    .item {
+        margin: 5px 25px;
+        font-family: 'Roboto', sans-serif;
+        font-weight: 400;
+        font-size: $medium;
+        color: $textColor;
+        text-decoration: none;
+
+        &:hover {
+            color: $dark;
+        };
+
+        @media(max-width: 768px) {
+            font-size: $small;
+            margin: 5px;
+            width: 25%;
+        }
+    }
+}
+
+.copyright {
+    text-align: center;
+    font-size: $small;
+    color: $dark;
+    margin-bottom: 1rem;
+
+    a {
+        font-size: $small;
+        color: $linkColor;
+        text-decoration: none;
+
+        &:hover {
+            color: color($linkColor a(80%));
+        }
+    }
+}

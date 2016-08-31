@@ -27,6 +27,7 @@
 }
 
 :global header {
+  margin-top: 10px;
   margin-bottom: 50px;
 
   @media(max-width: 768px) {
