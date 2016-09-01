@@ -2,6 +2,7 @@
 
 .main-area {
   lost-utility: clearfix;
+  min-height: calc(100vh - 430px)
 }
 
 .content {

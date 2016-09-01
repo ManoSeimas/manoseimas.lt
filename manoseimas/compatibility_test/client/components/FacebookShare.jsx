@@ -1,45 +1,18 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { subscribe } from 'subscribe-ui-event'
 import Button from './Button'
 import styles from '../styles/components/facebook-share.css'
 
 class FacebookShare extends React.Component {
-
-    constructor (props) {
-        super(props)
-        this.state = { sticky: false }
-        this.subscribers
-        this.shareOnFacebook = this.shareOnFacebook.bind(this)
-        this.scrollHandler = this.scrollHandler.bind(this)
-    }
 
     static propTypes = {
         responseHandler: React.PropTypes.func,
         fractions: React.PropTypes.array
     }
 
-    componentDidMount () {
-        this.subscribers = [
-            subscribe('scroll', this.scrollHandler, {enableScrollInfo:true})
-        ]
-    }
-
-    componentWillUnmount () {
-        let subscribers = this.subscribers || []
-        for (let subscriber of subscribers) {
-            subscriber.unsubscribe()
-        }
-    }
-
-    scrollHandler (event, payload) {
-        if (payload.scroll.top > 100 && !this.state.sticky) {
-            this.setState({sticky: true})
-        }
-
-        if (payload.scroll.top < 101 && this.state.sticky) {
-            this.setState({sticky: false})
-        }
+    constructor (props) {
+        super(props)
+        this.shareOnFacebook = this.shareOnFacebook.bind(this)
+        this.realFractions = this.realFractions.bind(this)
     }
 
     // Because we have lots of TS-LDK files, it's easier just to use this function, than to convert files.
@@ -52,12 +25,16 @@ class FacebookShare extends React.Component {
         return short_title
     }
 
+    realFractions () {
+        return this.props.fractions.filter(fraction => fraction.short_title !== 'MG')
+    }
+
     shareOnFacebook () {
         const location = window.location.href.split('/')
         const base_url = location[0] + '//' + location[2]
 
         // Don't include MG in facebook share results
-        const fractions = this.realFractions
+        const fractions = this.realFractions()
 
         const fraction_one = fractions[0]
         const fraction_two = fractions[1]
@@ -79,7 +56,7 @@ class FacebookShare extends React.Component {
             eventCategory: 'Facebook Share',
             eventAction: 'click',
             eventLabel: 'Click from Results'
-        });
+        })
 
         FB.ui({
             method: 'feed',
@@ -91,21 +68,10 @@ class FacebookShare extends React.Component {
         }, this.props.responseHandler)
     }
 
-    get realFractions () {
-        return this.props.fractions.filter(fraction => fraction.short_title !== 'MG')
-    }
-
     render () {
-        let fractions = this.realFractions
-        let sticky_style = {}
-        if (this.state.sticky) {
-            sticky_style = {
-                position: 'fixed',
-                top: '10px'
-            }
-        }
+        let fractions = this.realFractions()
         return (
-            <div className={styles['share-block']} style={sticky_style}>
+            <div className={styles['share-block']}>
                 <header>Mano balsavimai Seime sutaptų su:</header>
                 {(fractions.length > 2)
                     ? <div className={styles.fractions}>
@@ -129,8 +95,4 @@ class FacebookShare extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    fractions: state.results.fractions
-})
-
-export default connect((mapStateToProps), {})(FacebookShare)
+export default FacebookShare

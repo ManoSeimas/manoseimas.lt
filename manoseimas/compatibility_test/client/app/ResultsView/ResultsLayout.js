@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
-import { StatusBar, FacebookShare, Footer } from '../../components'
+import { StatusBar, Footer } from '../../components'
 import Tabs from './Tabs'
+import Sidebar from './Sidebar'
 import styles from '../../styles/views/results.css'
 
 export const ResultsLayout = ({ children }) =>
@@ -21,9 +22,7 @@ export const ResultsLayout = ({ children }) =>
                 <Tabs />
                 {children}
             </div>
-            <div className={styles.side}>
-                <FacebookShare responseHandler={(response) => (console.log(response))} />
-            </div>
+            <Sidebar />
         </div>
         <Footer />
     </div>
