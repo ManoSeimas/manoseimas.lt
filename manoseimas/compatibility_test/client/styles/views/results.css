@@ -2,7 +2,11 @@
 
 .main-area {
   lost-utility: clearfix;
-  min-height: calc(100vh - 430px)
+  min-height: calc(100vh - 430px);
+
+  @media(max-width: 768px) {
+    min-height: calc(100vh - 250px);
+  }
 }
 
 .content {
