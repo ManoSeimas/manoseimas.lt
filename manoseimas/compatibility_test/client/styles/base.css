@@ -79,6 +79,9 @@
   }
 }
 
+:global .logo {
+  width: 190px;
+};
 
 .small_button {
   display: inline-block;
