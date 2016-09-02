@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { subscribe } from 'subscribe-ui-event'
-import { FacebookShare } from '../../components'
+import { FacebookShare, ManoBalsas } from '../../components'
 import styles from '../../styles/views/results.css'
 
 class Sidebar extends React.Component {
@@ -64,6 +64,7 @@ class Sidebar extends React.Component {
                 <div className={styles.side}>
                     <div  style={sticky_style}>
                         <FacebookShare responseHandler={this.trackFBShare} fractions={this.props.fractions} />
+                        <ManoBalsas />
                     </div>
                 </div>
             )

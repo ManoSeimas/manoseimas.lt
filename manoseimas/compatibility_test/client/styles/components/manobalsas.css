@@ -1,0 +1,26 @@
+@import "../_variables";
+
+.block {
+    background-color: #1f4572;
+    border-radius: $radius;
+    padding: 5px;
+    margin-top: 15px;
+    margin-left: 15px;
+    width: calc($container-width / 4);
+
+    img {
+        width: 200px;
+        margin-left: 5px;
+    }
+
+    @media(max-width: 768px) {
+        display: none;
+    }
+}
+
+.note {
+    color: white;
+    font-size: $small;
+    padding: 15px;
+}
+

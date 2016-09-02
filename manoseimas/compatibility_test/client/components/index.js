@@ -4,6 +4,7 @@ import ButtonsBlock from './ButtonsBlock'
 import Checkbox from './Checkbox'
 import FacebookShare from './FacebookShare'
 import Footer from './Footer'
+import ManoBalsas from './ManoBalsas'
 import SimilarityBar from './SimilarityBar'
 import SimilarityWidget from './SimilarityWidget'
 import StatusBar from './StatusBar'
@@ -18,6 +19,7 @@ export {
     Checkbox,
     FacebookShare,
     Footer,
+    ManoBalsas,
     SimilarityBar,
     SimilarityWidget,
     StatusBar,
