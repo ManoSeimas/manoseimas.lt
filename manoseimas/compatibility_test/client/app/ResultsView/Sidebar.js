@@ -18,7 +18,6 @@ class Sidebar extends React.Component {
     }
 
     componentDidMount () {
-        console.log('scroll')
         this.subscribers = [
             subscribe('scroll', this.scrollHandler, {enableScrollInfo:true})
         ]
