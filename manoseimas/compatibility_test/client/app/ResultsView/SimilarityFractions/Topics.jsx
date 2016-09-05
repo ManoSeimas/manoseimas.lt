@@ -11,10 +11,12 @@ const Topics = ({topics, fractions, toggleImportance, saveAnswer, user_answers})
         </div>
         <ol>
         {topics.map(topic => {
+            let checked = (user_answers[topic.id]) ? user_answers[topic.id].important : false
             return <li key={topic.id}>
                 {topic.name} <br />
                 <Checkbox name={'topic'+topic.id}
                           value={topic.id.toString()}
+                          checked={checked}
                           actionHandler={() => toggleImportance(topic.id)}>šis klausimas man svarbus</Checkbox>
                 <SimilarityWidget topic={topic}
                                   items={fractions}
