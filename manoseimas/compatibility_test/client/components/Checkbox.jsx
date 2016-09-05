@@ -6,11 +6,11 @@ const Checkbox = ({name, value, checked, actionHandler, children}) =>
         <input type='checkbox'
                name={name}
                id={name}
+               value={value}
                checked={checked}
-               value={value} />
+               onChange={actionHandler} />
         <label htmlFor={name}
-               className={styles.checkbox}
-               onClick={actionHandler}>{children}</label>
+               className={styles.checkbox}>{children}</label>
     </div>
 
 Checkbox.propTypes = {

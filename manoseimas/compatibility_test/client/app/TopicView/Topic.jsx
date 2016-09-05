@@ -1,13 +1,13 @@
 import React from 'react'
-import { StatusBar, TopicGroup, ButtonsBlock, Button } from '../../components'
+import { StatusBar, TopicGroup, ButtonsBlock, Button, Checkbox } from '../../components'
 import Arguments from './Arguments'
 import Modal from './Modal'
 import MoreInfo from './MoreInfo'
 import styles from '../../styles/views/topic.css'
 
 const Topic = (props) => {
-    let topic_arguments = {}
     const zero = (props.doneTopics < 10) ? '0' : ''
+    const answer = props.answers[props.topic.id]
     return <div>
         <header>
             <a href="/">
@@ -48,6 +48,13 @@ const Topic = (props) => {
                 </div>
             </div>
 
+            <Checkbox name={'topic'+props.topic.id}
+                      value={props.topic.id.toString()}
+                      checked={(answer) ? answer.important : false}
+                      actionHandler={() => props.toggleImportance(props.topic.id)}>
+                Šis klausimas man svarbus
+            </Checkbox>
+
             <ButtonsBlock>
                 <Button type='yes'
                         action={() => props.saveAnswer(props.topic.id, 2)}>Taip</Button>
@@ -55,6 +62,8 @@ const Topic = (props) => {
                         action={() => props.saveAnswer(props.topic.id, -2)}>Ne</Button>
                 <Button type='skip' action={props.nextTopic}>Praleisti</Button>
             </ButtonsBlock>
+
+
         </div>
 
         <div className={styles['topic-image']}>
@@ -66,6 +75,7 @@ const Topic = (props) => {
 }
 
 Topic.propTypes = {
+    answers: React.PropTypes.object,
     topic: React.PropTypes.object,
     doneTopics: React.PropTypes.number,
     topicsAmount: React.PropTypes.number,
@@ -73,6 +83,7 @@ Topic.propTypes = {
     nextTopic: React.PropTypes.func,
     toggleArguments: React.PropTypes.func,
     toggleDetails: React.PropTypes.func,
+    toggleImportance: React.PropTypes.func
 }
 
 export default Topic

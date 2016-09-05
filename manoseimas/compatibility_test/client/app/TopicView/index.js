@@ -5,7 +5,7 @@ import { setActiveTopic,
          toggleArgumentsModal,
          toggleMoreModal,
          finishTest } from '../../store/modules/test_state'
-import { saveAnswer } from '../../store/modules/results'
+import { saveAnswer, toggleImportance } from '../../store/modules/results'
 
 
 class TopicContainer extends React.Component {
@@ -24,9 +24,11 @@ class TopicContainer extends React.Component {
         finishTest: PropTypes.func.isRequired,
         toggleArgumentsModal: PropTypes.func.isRequired,
         toggleMoreModal: PropTypes.func.isRequired,
+        toggleImportance: PropTypes.func.isRequired,
         saveAnswer: PropTypes.func.isRequired,
         active_topic: PropTypes.object.isRequired,
         topics_amount: PropTypes.number.isRequired,
+        answers: PropTypes.object.isRequired,
         params: React.PropTypes.object
     }
 
@@ -95,14 +97,16 @@ class TopicContainer extends React.Component {
 
     render () {
         const done_topics = (this.props.next_topic.position > 2) ? this.props.next_topic.position - 1 : 1
-        if (this.props.active_topic) {
+        if (this.props.active_topic && this.props.active_topic.id) {
             return <Topic saveAnswer={this._setAnswer}
                           nextTopic={this._nextTopic}
                           toggleArguments={this._toggleArguments}
                           toggleDetails={this._toggleDetails}
+                          toggleImportance={this.props.toggleImportance}
                           topic={this.props.active_topic}
                           doneTopics={done_topics}
-                          topicsAmount={this.props.topics_amount} />
+                          topicsAmount={this.props.topics_amount}
+                          answers={this.props.answers} />
         } else {
             return <div>Loading...</div>
         }
@@ -113,7 +117,8 @@ class TopicContainer extends React.Component {
 const mapStateToProps = (state) => ({
     next_topic: state.test_state.next_topic,
     active_topic: state.test_state.active_topic,
-    topics_amount: state.test_state.topics.length
+    topics_amount: state.test_state.topics.length,
+    answers: state.results.answers
 })
 
 export default connect((mapStateToProps), {
@@ -121,5 +126,6 @@ export default connect((mapStateToProps), {
     finishTest,
     toggleArgumentsModal,
     toggleMoreModal,
+    toggleImportance,
     saveAnswer
 })(TopicContainer)

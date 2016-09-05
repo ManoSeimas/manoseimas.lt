@@ -101,7 +101,6 @@ export function toggleImportance (topic_id) {
     const answers = getState().results.answers
     fetch('POST', 'answers', JSON.stringify(answers))
       .catch(error => console.error('Error in saving answers: ', error))
-
   }
 }
 

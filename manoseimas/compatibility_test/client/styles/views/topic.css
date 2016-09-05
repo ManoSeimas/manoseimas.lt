@@ -11,7 +11,7 @@
 }
 
 .topic {
-  min-height: 230px;
+  min-height: 210px;
 
   @media(max-width: 768px) {
     min-height: initial;

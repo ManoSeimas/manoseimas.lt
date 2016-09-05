@@ -69,7 +69,12 @@ class SimilarityWidget extends React.Component {
     get_image_position (percents) {
         let coeficient = this.state.element_width / 100
         let corection = 25  // Correction per image radius, we want to start from img center.
-        return percents * coeficient - corection
+        let result = percents * coeficient - corection
+
+        if (isNaN(result))
+            return 0
+
+        return result
     }
 
     render () {
