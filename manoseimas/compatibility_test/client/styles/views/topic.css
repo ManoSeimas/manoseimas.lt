@@ -21,6 +21,10 @@
 .actions {
   margin-top: 20px;
   position: relative;
+
+  @media(max-width: 768px) {
+    margin-bottom: 15px;
+  }
 }
 
 .absolute {
