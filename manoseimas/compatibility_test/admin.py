@@ -61,6 +61,11 @@ class TestGroupAdmin(admin.ModelAdmin):
     exclude = ('topics',)
 
 
+class UserResultAdmin(admin.ModelAdmin):
+    list_display = ('user', 'test', 'result')
+
+
 admin.site.register(models.CompatTest, CompatTestAdmin)
 admin.site.register(models.Topic, TopicAdmin)
 admin.site.register(models.TestGroup, TestGroupAdmin)
+admin.site.register(models.UserResult, UserResultAdmin)
