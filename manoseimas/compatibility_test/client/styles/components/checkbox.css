@@ -14,7 +14,7 @@ input[type='checkbox']:checked ~ label.checkbox:before {
 label.checkbox {
   vertical-align: middle;
   font-size: $small;
-  font-weight: 300;
+  font-weight: 400;
   &:before {
     content: '\00a0';
     border-radius: $radius;
@@ -27,5 +27,9 @@ label.checkbox {
     text-align: center;
     line-height: $small;
     font-size: $small;
+  }
+
+  @media(max-width: 768px) {
+    font-weight: 300;
   }
 }
