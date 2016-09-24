@@ -140,9 +140,15 @@ class MPNameMatcher(object):
         mp = self.mp_names.get(mp_name)
         if not mp:
             parts = mp_name.split(' ')
-            if len(parts) >= 2:
-                mp_name = ' '.join((parts[0], parts[-1]))
-                mp = self.mp_names.get(mp_name.upper())
+            if len(parts) > 2:
+                new_mp_name = ' '.join((parts[0], parts[-1]))
+                mp = self.mp_names.get(new_mp_name.upper())
+            elif len(parts) == 2:
+                # Handle double last names with a dash instead of a space
+                last_name = parts[-1]
+                adjusted_last_name = ' '.join(last_name.split('-'))
+                new_mp_name = ' '.join([parts[0], adjusted_last_name])
+                mp = self.mp_names.get(new_mp_name.upper())
         return mp
 
 
