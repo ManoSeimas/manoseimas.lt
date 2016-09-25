@@ -41,7 +41,7 @@ MANAGERS = ADMINS
 
 ATOMIC_REQUESTS = True
 
-if DIST == ('Ubuntu', '16.04'):
+if DIST == ('Ubuntu', '16.04') or platform.system() == 'Darwin':
     # With MySQL 5.7 the command SET storage_engine=MyISAM won't work.
     # http://stackoverflow.com/a/37220446/475477
     init_command = 'SET default_storage_engine=INNODB'

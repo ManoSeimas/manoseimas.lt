@@ -107,7 +107,7 @@ class StenogramSpider(ManoSeimasSpider):
     start_urls = ['http://www3.lrs.lt/pls/inter/w5_sale.kad_ses']
 
     stenogram_link_extractor = LxmlLinkExtractor(
-        allow=[r'/pls/inter/dokpaieska.showdoc_l\?p_id=\d+'],
+        allow=[r'/pls/inter\d?/dokpaieska.showdoc_l\?p_id=\d+'],
         restrict_xpaths=[('//a[text()="Stenograma"]')]
     )
 
