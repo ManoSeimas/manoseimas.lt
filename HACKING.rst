@@ -50,6 +50,64 @@ And run the project::
     make run
 
 
+OSX Setup
+---------
+
+You will need to run MySQL 5.7 in OSX. Cleanest way to do that is to use Docker
+for OSX and ``docker-compose``::
+
+    docker-compose up -d  # -d will run in daemon mode.
+
+You will likely need some headers for mysql and a client, so you'll have to install
+these (mysql server won't get run unless enabled)::
+
+    brew install mysql
+
+Create mysql user::
+
+    mysql -u root
+      CREATE DATABASE IF NOT EXISTS manoseimas CHARSET=utf8;
+      CREATE USER 'manoseimas'@'localhost';
+      GRANT ALL PRIVILEGES ON *.* TO 'manoseimas'@'localhost';
+      FLUSH PRIVILEGES;
+
+Build the project::
+
+    make
+
+Install npm packages::
+
+    npm install
+
+Create mysql config file::
+
+    vim ~/.my.cnf
+      [client]
+      host = 127.0.0.1
+      database = manoseimas
+      user = manoseimas
+      password =
+      default-character-set = utf8
+
+Run migrations::
+
+    bin/django migrate
+
+And run the project::
+
+    make run
+
+Run tests::
+
+    make test
+
+If you see a problem migrating permissions in tests (``OperationalError``
+any tests are run), recreate the test DB with ``utf-8`` encoding.
+(TODO: This should be automated)::
+
+    mysql -e 'DROP DATABASE IF EXISTS test_manoseimas; CREATE DATABASE test_manoseimas CHARSET=utf8;'
+
+
 Vagrant setup
 -------------
 
