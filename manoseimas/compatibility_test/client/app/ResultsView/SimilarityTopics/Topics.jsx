@@ -4,7 +4,6 @@ import styles from '../../../styles/views/results.css'
 
 const Topics = ({topics, fractions, toggleImportance, saveAnswer, user_answers}) =>
     <div className={styles.topics}>
-        <h3>Interaktyvūs frakcijų rezultatai pagal klausimus</h3>
         <div className={styles.note}>
             Šioje rezultatų dalyje galite keisti savo atsakymus ir stebėti kaip keičiasi
             rezultatai.

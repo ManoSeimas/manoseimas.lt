@@ -7,12 +7,11 @@ import { saveAnswer,
          hideHeader,
          setTab,
          expandFraction } from '../../../store/modules/results'
-import { setSelectedFractions } from '../../../store/modules/mps_state.js'
-import SimilarityFractions from './SimilarityFractions'
+import Topics from './Topics'
 import Loader from 'react-loader'
 import styles from '../../../styles/views/results.css'
 
-class SimilarityFractionsContainer extends React.Component {
+class SimilarityTopicsContainer extends React.Component {
 
     static propTypes = {
       user_answers: PropTypes.object,
@@ -25,7 +24,6 @@ class SimilarityFractionsContainer extends React.Component {
       show_header: PropTypes.bool,
       showHeader: PropTypes.func,
       setTab: PropTypes.func,
-      setSelectedFractions: PropTypes.func,
       hideHeader: PropTypes.func,
       expanded_fraction: PropTypes.number,
       expandFraction: PropTypes.func
@@ -39,23 +37,15 @@ class SimilarityFractionsContainer extends React.Component {
     }
 
     render () {
-        let {fractions, mps, user_answers, topics, show_header, expanded_fraction} = this.props
+        let {fractions, user_answers, topics} = this.props
         return (
           <Loader loaded={fractions.length > 0}>
             <div>
-                <div className={styles.note}>
-                    Kuo didesnis procentas, tuo labiau frakcija atitinka Jūsų pažiūras.
-                </div>
-                <SimilarityFractions user_answers={user_answers}
-                                     fractions={fractions}
-                                     mps={mps}
-                                     expanded_fraction={expanded_fraction}
-                                     show_header={show_header}
-                                     expandFraction={this.props.expandFraction}
-                                     setActiveTab={this.props.setTab}
-                                     setSelectedFractions={this.props.setSelectedFractions}
-                                     showHeader={this.props.showHeader}
-                                     hideHeader={this.props.hideHeader} />
+                <Topics topics={topics}
+                        fractions={fractions}
+                        user_answers={user_answers}
+                        toggleImportance={this.props.toggleImportance}
+                        saveAnswer={this.props.saveAnswer} />
             </div>
           </Loader>
         )
@@ -79,5 +69,4 @@ export default connect((mapStateToProps), {
     hideHeader,
     expandFraction,
     setTab,
-    setSelectedFractions
-})(SimilarityFractionsContainer)
+})(SimilarityTopicsContainer)
