@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { saveAnswer,
-         getResults,
+import { getResults,
          toggleImportance,
          showHeader,
          hideHeader,
@@ -18,8 +17,6 @@ class SimilarityFractionsContainer extends React.Component {
       user_answers: PropTypes.object,
       fractions: PropTypes.array,
       mps: PropTypes.array,
-      topics: PropTypes.array,
-      saveAnswer: PropTypes.func,
       getResults: PropTypes.func,
       toggleImportance: PropTypes.func,
       show_header: PropTypes.bool,
@@ -39,7 +36,7 @@ class SimilarityFractionsContainer extends React.Component {
     }
 
     render () {
-        let {fractions, mps, user_answers, topics, show_header, expanded_fraction} = this.props
+        let {fractions, mps, user_answers, show_header, expanded_fraction} = this.props
         return (
           <Loader loaded={fractions.length > 0}>
             <div>
@@ -66,13 +63,11 @@ const mapStateToProps = (state) => ({
     user_answers: state.results.answers,
     fractions: state.results.fractions,
     mps: state.results.mps,
-    topics: state.test_state.topics,
     show_header: state.results.show_header,
     expanded_fraction: state.results.expanded_fraction
 })
 
 export default connect((mapStateToProps), {
-    saveAnswer,
     toggleImportance,
     getResults,
     showHeader,
