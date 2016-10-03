@@ -203,7 +203,7 @@ const initialState = {
   answers: {},
   fractions: [],
   mps: [],
-  active_tab: 'fractions',
+  active_tab: 'topics',
   expanded_fraction: undefined,
   show_header: false
 }

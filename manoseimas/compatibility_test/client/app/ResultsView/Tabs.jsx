@@ -23,6 +23,8 @@ class ResultTabs extends React.Component {
         this.props.setActiveTab(id)
         if (id === 'mps') {
             this.context.router.push('/results/mps')
+        } else if ( id === 'fractions') {
+            this.context.router.push('/results/fractions')
         } else {
             this.context.router.push('/results')
         }
@@ -30,13 +32,13 @@ class ResultTabs extends React.Component {
 
     render () {
         let tabs = [
+            { id: 'topics', title: 'Pagal klausimus' },
             { id: 'fractions', title: 'Pagal frakcijas' },
             { id: 'mps', title: 'Pagal Seimo narius'}
         ]
         return <Tabs tabs={tabs}
                      active={this.props.active_tab}
                      onClickHandler={this._setActiveTab} />
-
     }
 }
 
