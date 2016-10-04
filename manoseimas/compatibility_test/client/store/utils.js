@@ -17,7 +17,7 @@ export function calculateSimilarity(item_answers, user_answers) {
         answers = user_answers
 
     // Similarity is 0% if there is no data about item answers
-    if (!item_answers)
+    if (!item_answers || !Object.keys(item_answers).length)
         return 0
 
     for (let answer_id in item_answers) {
