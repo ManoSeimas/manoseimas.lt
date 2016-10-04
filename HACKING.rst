@@ -67,8 +67,9 @@ Create mysql user::
 
     mysql -u root
       CREATE DATABASE IF NOT EXISTS manoseimas CHARSET=utf8;
-      CREATE USER 'manoseimas'@'localhost';
-      GRANT ALL PRIVILEGES ON *.* TO 'manoseimas'@'localhost';
+      CREATE DATABASE IF NOT EXISTS test_manoseimas CHARSET=utf8;
+      CREATE USER 'manoseimas'@'%';
+      GRANT ALL PRIVILEGES ON *.* TO 'manoseimas'@'%';
       FLUSH PRIVILEGES;
 
 Build the project::
