@@ -31,8 +31,8 @@ def _get_topic_details(topic, position):
         'node_ref': topic.pk,
         'permalink': '#',  # we don't have topic page
         'formatted': (_('Palaiko %d%%') if position >= 0 else _('Nepalaiko %d%%')) % percent,
-        'title': 'Aukštojo mokslo reforma',
-        'position': 1.5,
+        'title': topic.name,
+        'position': position,
         'klass': _get_position_css_class(position),
     }
 
