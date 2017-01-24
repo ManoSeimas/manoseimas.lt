@@ -22,3 +22,8 @@ If you found a bug, report it here:
 
 If you want to contribute with development, read HACKING.rst file. Source code
 is hosted at https://github.com/ManoSeimas/manoseimas.lt/
+
+
+.. image:: https://api.codacy.com/project/badge/Grade/0a268e210e6e4cebb1c00b068b591e62
+   :alt: Codacy Badge
+   :target: https://www.codacy.com/app/frgtn/manoseimas-lt?utm_source=github.com&utm_medium=referral&utm_content=ManoSeimas/manoseimas.lt&utm_campaign=badger
