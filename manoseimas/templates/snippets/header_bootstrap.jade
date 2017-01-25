@@ -15,34 +15,6 @@ header.ui.page.grid
                 i.search.link.icon
           .item
             a(href="http://transparency.lt/donate/", target="_NEW").donate Prisidėk!
-          .ui.item
-            if request.user.is_authenticated
-              .dropdown
-                a(href="#" data-toggle="dropdown").dropdown-toggle
-                  i.user.icon
-                  | {{ request.user|truncatechars:26 }}
-                  i.caret
-                .dropdown-menu.menu
-                  a(href="{{ request.user.get_profile.get_node.permalink }}").item
-                    | {% trans "Profile" %}
-                  a(href="{% url 'logout' %}").item
-                    | {% trans "Log out" %}
-            else
-              .dropdown
-                a(href="#" data-toggle="dropdown").dropdown-toggle
-                  i.user.icon
-                  | {% trans "Log in" %}
-                  i.caret
-
-                .dropdown-menu.menu
-                  a(href="{% url 'social:begin' 'google-oauth2' %}").item
-                    | {% trans "Google" %}
-                  if FACEBOOK_APP_ID
-                    a(href="{% url 'social:begin' 'facebook-oauth2' %}").item
-                      | {% trans "Facebook" %}
-                  a(href="{% url 'login' %}").item
-                    | {% trans "OpenID" %}
-
   .mobile.only.row
     .ui.pointing.small.menu.fixed
       a(href="/"): img(src="{% static 'img/logo.png' %}").logo-small
