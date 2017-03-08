@@ -61,11 +61,25 @@ for OSX and ``docker-compose``::
 You will likely need some headers for mysql and a client, so you'll have to install
 these (mysql server won't get run unless enabled)::
 
-    brew install mysql
+    brew install mysql libmemcached openssl
+
+If you get errors about missing openssl headers, you will need to link them manually::
+
+    ln -s /usr/opt/openssl/include/openssl /usr/local/include/openssl
+
+Create mysql config file::
+
+    vim ~/.my.cnf
+      [client]
+      host = 127.0.0.1
+      database = manoseimas
+      user = manoseimas
+      password =
+      default-character-set = utf8
 
 Create mysql user::
 
-    mysql -u root
+    mysql -u root mysql
       CREATE DATABASE IF NOT EXISTS manoseimas CHARSET=utf8;
       CREATE DATABASE IF NOT EXISTS test_manoseimas CHARSET=utf8;
       CREATE USER 'manoseimas'@'%';
@@ -80,15 +94,9 @@ Install npm packages::
 
     npm install
 
-Create mysql config file::
+Install coffee-script (manoseimas depends on globally installed coffee)::
 
-    vim ~/.my.cnf
-      [client]
-      host = 127.0.0.1
-      database = manoseimas
-      user = manoseimas
-      password =
-      default-character-set = utf8
+    npm install -g coffee-script
 
 Run migrations::
 
