@@ -22,7 +22,7 @@ class TestViews(WebTest):
         crawl(
             Pipeline=ManoSeimasModelPersistPipeline, spider=MpsSpider(),
             param='p_asm_id', method='parse_person', path='mp_%s.html', urls=[
-                'http://www3.lrs.lt/pls/inter/w5_show?p_r=6113&p_k=1&p_a=5&p_asm_id=53911&p_kade_id=6',
+                'http://www.lrs.lt/sip/portal.show?p_r=8801&p_k=1&p_a=seimo_narys_responsive&p_asm_id=48690',
             ],
         )
 
@@ -44,15 +44,16 @@ class TestViews(WebTest):
 
         self.app.get('/widget/?voting_id=%s' % voting.key)
         resp = self.app.get('/widget/data/voting/%s' % voting.key)
-        self.assertEqual(resp.json['fractions']['JF'], {
-            '_id': 'JF',
+        self.assertEqual(resp.json['fractions'][u'TSLKDF'], {
+            '_id': 'TSLKDF',
             'image': None,
             'source': None,
-            'abbreviation': 'JF',
-            'slug': 'jungtine-liberalu-ir-centro-sajungos-ir-tautos-prisikelimo-partijos-frakcija',
-            'title': 'Jungtinė (Liberalų ir centro sąjungos ir Tautos prisikėlimo partijos) frakcija',
+            'abbreviation': 'TSLKDF',
+            'slug': u'tevynes-sajungos-lietuvos-krikscioniu-demokratu-frakcija',
+            'title': u'T\u0117vyn\u0117s s\u0105jungos-Lietuvos krik\u0161\u010dioni\u0173 demokrat\u0173 frakcija',
         })
-        self.assertEqual(resp.json['mps']['53911p'], {
+
+        self.assertEqual(resp.json['mps']['48690p'], {
             '_id': '53911p',
             'first_name': 'Antanas',
             'fraction': 'JF',

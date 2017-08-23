@@ -173,6 +173,9 @@ class MpsSpider(ManoSeimasSpider):
         for email in email_hxs:
             person.add_value('email', email.extract())
 
+        # TODO
+        person.add_value('office_address', ['Dummy'])
+
         website_hxs = contacts_hxs.xpath(
             'div/div[contains(@class, "site")]/a/@href'
         )
