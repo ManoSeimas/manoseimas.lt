@@ -16,6 +16,7 @@ TERM_OF_OFFICE_RANGE = DateTimeRange(dt(2012, 10, 14), dt(2016, 10, 9))
 
 # All parliament terms
 PARLIAMENT_TERMS = {
+    '2016-2020': DateTimeRange(dt(2016, 10, 14), dt(2020, 10, 9)),
     '2012-2016': DateTimeRange(dt(2012, 10, 14), dt(2016, 10, 9)),
     '2008-2012': DateTimeRange(dt(2008, 10, 12), dt(2012, 10, 14)),
 }
@@ -41,12 +42,10 @@ MANAGERS = ADMINS
 
 ATOMIC_REQUESTS = True
 
-if DIST == ('Ubuntu', '16.04') or platform.system() == 'Darwin':
-    # With MySQL 5.7 the command SET storage_engine=MyISAM won't work.
-    # http://stackoverflow.com/a/37220446/475477
-    init_command = 'SET default_storage_engine=INNODB'
-else:
-    init_command = 'SET storage_engine=INNODB'
+# if DIST == ('Ubuntu', '16.04') or platform.system() == 'Darwin':
+# With MySQL 5.7 the command SET storage_engine=MyISAM won't work.
+# http://stackoverflow.com/a/37220446/475477
+init_command = 'SET default_storage_engine=INNODB'
 
 DATABASES = {
     'default': {

@@ -23,7 +23,7 @@ class TestRecomputeStats(WebTest):
         crawl(
             Pipeline=ManoSeimasModelPersistPipeline, spider=MpsSpider(),
             param='p_asm_id', method='parse_person', path='mp_%s.html', urls=[
-                'http://www3.lrs.lt/pls/inter/w5_show?p_r=6113&p_k=1&p_a=5&p_asm_id=53911&p_kade_id=6',
+                'http://www.lrs.lt/sip/portal.show?p_r=8801&p_k=1&p_a=seimo_narys&p_asm_id=48690',
             ],
         )
 
@@ -54,30 +54,30 @@ class TestRecomputeStats(WebTest):
         self.assertEqual(resp.json, {'items': [{
             'avg_discussion_contribution_percentage': 0.0,
             'avg_long_statement_count': None,
-            'avg_passed_law_project_ratio': 0.0,
-            'avg_statement_count': None,
-            'avg_vote_percentage': 0.0,
-            'logo_url': '/static/img/fractions/fraction-default.png',
+            'name': u'T\u0117vyn\u0117s s\u0105jungos-Lietuvos krik\u0161\u010dioni\u0173 demokrat\u0173 frakcija',
             'member_count': 1,
-            'name': 'Liberalų ir centro sąjungos frakcija',
-            'slug': 'liberalu-ir-centro-sajungos-frakcija',
+            'url': u'/mp/fractions/tevynes-sajungos-lietuvos-krikscioniu-demokratu-frakcija/',
+            'avg_vote_percentage': 0.0,
+            'avg_statement_count': None,
+            'avg_passed_law_project_ratio': 0.0,
+            'logo_url': u'/static/img/fractions/fraction-default.png',
+            'slug': 'tevynes-sajungos-lietuvos-krikscioniu-demokratu-frakcija',
             'type': 'fraction',
-            'url': '/mp/fractions/liberalu-ir-centro-sajungos-frakcija/'
         }]})
 
         def _get_positions(mp):
             mp = ParliamentMember.objects.get(pk=mp.pk)
             return {int(k): float(v) for k, v in mp.positions.items()}
 
-        mp = ParliamentMember.objects.get(source_id='53911p')
+        mp = ParliamentMember.objects.get(source_id='48690p')
 
         # Check if MP positions where updated
         self.assertEqual(_get_positions(mp), {})
 
         # Try to update MP positions manually
-        term = settings.PARLIAMENT_TERMS['2008-2012']
+        term = settings.PARLIAMENT_TERMS['2016-2020']
         topic = TopicFactory(name='Aukštojo mokslo reforma')
-        compatibility_test_factory(term, topic, [('53911p', mp.fraction.abbr, mp.first_name, mp.last_name, [1, 2])])
+        compatibility_test_factory(term, topic, [('48690p', mp.fraction.abbr, mp.first_name, mp.last_name, [1, 2])])
         self.assertEqual(_get_positions(mp), {topic.pk: 1.5})
 
         # Try to update MP positions via recompute_stats management command

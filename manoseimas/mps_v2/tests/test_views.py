@@ -21,7 +21,7 @@ class TestViews(WebTest):
         crawl(
             Pipeline=ManoSeimasModelPersistPipeline, spider=MpsSpider(),
             param='p_asm_id', method='parse_person', path='mp_%s.html', urls=[
-                'http://www3.lrs.lt/pls/inter/w5_show?p_r=6113&p_k=1&p_a=5&p_asm_id=53911&p_kade_id=6',
+                'http://www.lrs.lt/sip/portal.show?p_r=8801&p_k=1&p_a=seimo_narys_responsive&p_asm_id=48690',
             ],
         )
 
@@ -48,4 +48,4 @@ class TestViews(WebTest):
 
         management.call_command('recompute_stats', verbosity=0)
 
-        self.app.get('/mp/parliamentarian/antanas-nedzinskas/')
+        self.app.get('/mp/parliamentarian/mantas-adomenas/')
