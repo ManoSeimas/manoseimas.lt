@@ -75,7 +75,7 @@ class TestRecomputeStats(WebTest):
         self.assertEqual(_get_positions(mp), {})
 
         # Try to update MP positions manually
-        term = settings.PARLIAMENT_TERMS['2012-2016']
+        term = settings.PARLIAMENT_TERMS['2016-2020']
         topic = TopicFactory(name='Aukštojo mokslo reforma')
         compatibility_test_factory(term, topic, [('48690p', mp.fraction.abbr, mp.first_name, mp.last_name, [1, 2])])
         self.assertEqual(_get_positions(mp), {topic.pk: 1.5})

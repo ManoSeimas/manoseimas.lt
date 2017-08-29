@@ -55,6 +55,7 @@ def get_topic_positions(term=None):
             'until': term.until.strftime('%Y-%m-%d'),
         })
         for vote in results:
+
             try:
                 positions[key][idmapping[getattr(vote, attr)]][vote.topic_id] = vote.position
             except KeyError as e:
