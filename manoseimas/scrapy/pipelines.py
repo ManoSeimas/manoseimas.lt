@@ -201,7 +201,8 @@ class ManoSeimasModelPersistPipeline(object):
         mp.biography = item.get('biography')
         mp.source = source_url
 
-        image = item.get('images', [None])[0]
+        image = (item.get('images') or [None])[0]
+
         if image:
             image_base = spider.settings['IMAGES_STORE']
             photo_path = os.path.join(image_base, image['path'])
