@@ -11,8 +11,8 @@ from manoseimas.mps_v2.models import ParliamentMember, GroupMembership, Group
 def mps_list(request):
     parliament = Group.objects.filter(type=Group.TYPE_PARLIAMENT).order_by('-name').first()
     explanations = {
-        'votings': "Šis rodiklis parodo, kiek vidutiškai balsavimų Seimo narys dalyvavo nuo 2012 m. (balsavo už, prieš arba susilaikė).",
-        'statements': "Šis rodiklis parodo, kiek vidutiniškai kartų nuo 2012 m. kadencijos pradžios Seimo narys pasisakė Seimo plenarinių posėdžių metu. Skaičiuojami visi pasisakymai.",
+        'votings': "Šis rodiklis parodo, kiek vidutiškai balsavimų Seimo narys dalyvavo nuo 2016 m. (balsavo už, prieš arba susilaikė).",
+        'statements': "Šis rodiklis parodo, kiek vidutiniškai kartų nuo 2016 m. kadencijos pradžios Seimo narys pasisakė Seimo plenarinių posėdžių metu. Skaičiuojami visi pasisakymai.",
         'projects': 'Šis rodiklis parodo, kiek vidutiniškai kartų Seimo narys pasirašė po Seimo narių teiktais teisės aktų projektais.'
     }
     context = {'parliament': parliament, 'explanations': explanations}

@@ -21,8 +21,8 @@ def mp_fraction(request, fraction_slug):
 
     explanations = {
         'projects_collaboration': "",
-        'stats_voitings': "Skaičiuojama, kokioje dalyje balsavimų frakcija dalyvavo (balsavo už, prieš arba susilaikė) nuo 2012 m. kadencijos pradžios. Frakcijos dalyvavimas balsavimuose skaičiuojamas pagal kiekvieno frakcijos nario dalyvavimą, apskaičiavus jų vidurkį.",
-        'stats_discussions': "Skaičiuojama, kiek vidutiniškai kartų frakcijos narys pasisakė per Seimo plenarinius posėdžius nuo 2012 m. kadencijos pradžios.  Skaičiuojami visi pasisakymai.",
+        'stats_voitings': "Skaičiuojama, kokioje dalyje balsavimų frakcija dalyvavo (balsavo už, prieš arba susilaikė) nuo 2016 m. kadencijos pradžios. Frakcijos dalyvavimas balsavimuose skaičiuojamas pagal kiekvieno frakcijos nario dalyvavimą, apskaičiavus jų vidurkį.",
+        'stats_discussions': "Skaičiuojama, kiek vidutiniškai kartų frakcijos narys pasisakė per Seimo plenarinius posėdžius nuo 2016 m. kadencijos pradžios.  Skaičiuojami visi pasisakymai.",
         'stats_long_statements': "Ilgi pasisakymai - daugiau nei 50 žodžių.",
         'stats_proposed_projects': "Skaičiuojama, kiek vidutiniškai kartų frakcijos narys pasirašė po Seimo narių teiktais teisės aktų projektais.",
         'stats_successful_projects': "Skaičiuojama, kiek vidutiniškai priimta frakcijos narių teikimui pasirašytų teisės aktų projektų.",
