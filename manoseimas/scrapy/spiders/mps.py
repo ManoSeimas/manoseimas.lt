@@ -101,9 +101,12 @@ class MpsSpider(ManoSeimasSpider):
             u'Parlamentinėse grupėse': 'group',
         }
         group_type = None
-        for item in hxs.xpath(
-                'div/div[2]/div[3]/'
-                'div/div[contains(@id, "smn-dabar-dirba")]/*'):
+        groups = Selector(response).xpath(
+                '//*/div[contains(@class, "pl-container")]'
+                '/div[contains(@class, "pl-head-container")]'
+                '/div[contains(@id, "smn-dabar-dirba")]/*'
+        )
+        for item in groups:
             tag = item.xpath('name()').extract()[0]
             tag = tag.lower()
             if tag == 'h3':
@@ -142,12 +145,15 @@ class MpsSpider(ManoSeimasSpider):
             u'seimo narys',
             u'buvo išrinktas',
             u'buvo išrinkta',
+            u'kontaktai',
         ]
         details = ' '.join(person_hxs.xpath('descendant::text()').extract())
+
         details = str2dict(split, details, normalize=mapwords({
             u'išrinkta': u'išrinktas',
             u'seimo narė': u'seimo narys',
         }))
+
         details = dict(details)
 
         contacts_hxs = hxs.xpath(
