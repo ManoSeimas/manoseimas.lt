@@ -51,19 +51,38 @@ class TestRecomputeStats(WebTest):
         management.call_command('recompute_stats', verbosity=0)
 
         resp = self.app.get('/json/fractions/')
-        self.assertEqual(resp.json, {'items': [{
-            'avg_discussion_contribution_percentage': 0.0,
-            'avg_long_statement_count': None,
-            'name': u'T\u0117vyn\u0117s s\u0105jungos-Lietuvos krik\u0161\u010dioni\u0173 demokrat\u0173 frakcija',
-            'member_count': 1,
-            'url': u'/mp/fractions/tevynes-sajungos-lietuvos-krikscioniu-demokratu-frakcija/',
-            'avg_vote_percentage': 0.0,
-            'avg_statement_count': None,
-            'avg_passed_law_project_ratio': 0.0,
-            'logo_url': u'/static/img/fractions/fraction-default.png',
-            'slug': 'tevynes-sajungos-lietuvos-krikscioniu-demokratu-frakcija',
-            'type': 'fraction',
-        }]})
+        self.assertEqual(resp.json, {u'items': [
+            {
+                u'avg_discussion_contribution_percentage': 0.0,
+                u'avg_long_statement_count': None,
+                u'name':
+                u'Lietuvos valstie\u010di\u0173 ir \u017eali\u0173j\u0173 s\u0105jungos frakcija',
+                u'member_count': 1,
+                u'url': u'/mp/fractions/lietuvos-valstieciu-ir-zaliuju-sajungos-frakcija/',
+                u'avg_vote_percentage': 0.0,
+                u'avg_statement_count': None,
+                u'avg_passed_law_project_ratio': 0.0,
+                u'logo_url': u'/static/img/fractions/fraction-default.png',
+                u'type':
+                u'fraction',
+                u'slug':
+                u'lietuvos-valstieciu-ir-zaliuju-sajungos-frakcija'
+            },
+            {
+                u'avg_discussion_contribution_percentage': 0.0,
+                u'avg_long_statement_count': None,
+                u'name': u'T\u0117vyn\u0117s s\u0105jungos-Lietuvos krik\u0161\u010dioni\u0173 demokrat\u0173 frakcija',
+                u'member_count': 1,
+                u'url': u'/mp/fractions/tevynes-sajungos-lietuvos-krikscioniu-demokratu-frakcija/',
+                u'avg_vote_percentage': 0.0,
+                u'avg_statement_count': None,
+                u'avg_passed_law_project_ratio': 0.0,
+                u'logo_url': u'/static/img/fractions/fraction-default.png',
+                u'type': u'fraction',
+                u'slug': u'tevynes-sajungos-lietuvos-krikscioniu-demokratu-frakcija'
+            }
+        ]}
+        )
 
         def _get_positions(mp):
             mp = ParliamentMember.objects.get(pk=mp.pk)

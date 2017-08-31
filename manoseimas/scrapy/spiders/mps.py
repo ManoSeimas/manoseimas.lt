@@ -129,7 +129,6 @@ class MpsSpider(ManoSeimasSpider):
         person.add_value('_id', '%sp' % _id)
 
         # Details
-
         split = [
             u'asmeniniai puslapiai',
             u'asmeninis elektroninis paštas',
@@ -170,11 +169,13 @@ class MpsSpider(ManoSeimasSpider):
 
         email_xpath = 'div/div[contains(descendant::text(), "El. p.")]/a/text()'
         email_hxs = contacts_hxs.xpath(email_xpath)
+
         for email in email_hxs:
             person.add_value('email', email.extract())
 
         # TODO
-        person.add_value('office_address', ['Dummy'])
+
+        person.add_value('office_address', [''])
 
         website_hxs = contacts_hxs.xpath(
             'div/div[contains(@class, "site")]/a/@href'
@@ -190,9 +191,10 @@ class MpsSpider(ManoSeimasSpider):
         person.add_value('source', source)
 
         # photo
-        photo = hxs.xpath('div/div/div/img/@src').extract()[0]
-        person.add_value('photo', photo)
-        person.add_value('image_urls', photo)
+        photo = hxs.xpath('div/div/div/img/@src').extract()
+        if photo:
+            person.add_value('photo', photo[0])
+            person.add_value('image_urls', photo[0])
 
         # parliament
         parliament = hxs.xpath(
@@ -212,16 +214,8 @@ class MpsSpider(ManoSeimasSpider):
             }
             person.add_value('groups', [parliament_group])
 
-        first_name = hxs.xpath(
-            'div/div/div[contains(@class, "smn-name")]/text()'
-        ).extract()[0]
-
-        last_name = hxs.xpath(
-            (
-                'div/div/div[contains(@class, "smn-name")]'
-                '/span[contains(@class, "smn-pavarde")]/text()'
-            )
-        ).extract()[0]
+        first_name = Selector(response).xpath('//*/div[contains(@class, "smn-name")]/text()').extract()[0]
+        last_name = Selector(response).xpath('//*/span[contains(@class, "smn-pavarde")]/text()').extract()[0]
 
         person.add_value('first_name', unicode(first_name))
         person.add_value('last_name', unicode(last_name.title()))
@@ -244,6 +238,7 @@ class MpsSpider(ManoSeimasSpider):
                 u'p[contains(@class, "buvo-isrinkta")]/descendant::text()'
                 )
         history_hxs = hxs.xpath(xpath)
+
         if history_hxs:
             for item in history_hxs:
                 parliament = ''.join(item.re(r'(\d{4}[^-]\d{4})'))
