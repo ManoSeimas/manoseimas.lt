@@ -197,12 +197,22 @@ class MpsSpider(ManoSeimasSpider):
         person.add_value('source', source)
 
         # photo
-        photo = hxs.xpath('div/div/div/img/@src').extract()
+        # first for P leader
+        # second for the rest
+        photo_selectors = [
+            '//*[@id="page-content"]/div/div[1]/div[1]/img/@src',
+            '//*[contains(@class, "seimo-nario-foto")]/img/@src',
+        ]
+        photo = None
+        for photo_selector in photo_selectors:
+            photo = Selector(response).xpath(photo_selector).extract()
+            if photo:
+                break
         if photo:
             person.add_value('photo', photo[0])
             person.add_value('image_urls', photo[0])
-
         # parliament
+
         parliament = hxs.xpath(
             'div/div/div[contains(@class, "smn-kadencija")]/span/text()'
         )

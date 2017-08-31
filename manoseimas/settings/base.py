@@ -12,11 +12,11 @@ from django.utils.translation import ugettext_lazy as _
 DateTimeRange = collections.namedtuple('DateTimeRange', ['since', 'until'])
 
 # Current parliament term
-TERM_OF_OFFICE_RANGE = DateTimeRange(dt(2012, 10, 14), dt(2016, 10, 9))
+TERM_OF_OFFICE_RANGE = DateTimeRange(dt(2016, 11, 14), dt(2020, 10, 9))
 
 # All parliament terms
 PARLIAMENT_TERMS = {
-    '2016-2020': DateTimeRange(dt(2016, 10, 14), dt(2020, 10, 9)),
+    '2016-2020': DateTimeRange(dt(2016, 11, 14), dt(2020, 10, 9)),
     '2012-2016': DateTimeRange(dt(2012, 10, 14), dt(2016, 10, 9)),
     '2008-2012': DateTimeRange(dt(2008, 10, 12), dt(2012, 10, 14)),
 }
