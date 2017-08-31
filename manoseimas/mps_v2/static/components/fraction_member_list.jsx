@@ -10,14 +10,14 @@ var FractionMemberList = React.createClass({
           {
               key: 'vote_percentage',
               title: 'Dalyvavimas balsavimuose',
-              explanation: 'Skaičiuojama, kokioje dalyje balsavimų Seimo narys dalyvavo (balsavo už, prieš arba susilaikė) nuo 2012 m. kadencijos pradžios.',
+              explanation: 'Skaičiuojama, kokioje dalyje balsavimų Seimo narys dalyvavo (balsavo už, prieš arba susilaikė) nuo 2016 m. kadencijos pradžios.',
               icon: undefined,
               order: -1
           },
           {
               key: 'statement_count',
               title: 'Aktyvumas diskusijose',
-              explanation: 'Skaičiuojama, kiek kartų Seimo narys pasisakė per Seimo plenarinius posėdžius nuo 2012 m. kadencijos pradžios.',
+              explanation: 'Skaičiuojama, kiek kartų Seimo narys pasisakė per Seimo plenarinius posėdžius nuo 2016 m. kadencijos pradžios.',
               icon: 'comment outline icon',
               order: -1
           },

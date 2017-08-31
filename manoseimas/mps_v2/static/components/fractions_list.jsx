@@ -18,7 +18,7 @@ var FractionsList = React.createClass({
             }, {
                 key: 'avg_vote_percentage',
                 title: 'Dalyvavimas balsavimuose',
-                explanation: 'Skaičiuojama, kokioje dalyje balsavimų kiekviena frakcija dalyvavo (balsavo už, prieš arba susilaikė) nuo 2012 m. kadencijos pradžios. Frakcijos dalyvavimas balsavimuose skaičiuojamas pagal kiekvieno frakcijos nario dalyvavimą, apskaičiavus jų vidurkį.',
+                explanation: 'Skaičiuojama, kokioje dalyje balsavimų kiekviena frakcija dalyvavo (balsavo už, prieš arba susilaikė) nuo 2016 m. kadencijos pradžios. Frakcijos dalyvavimas balsavimuose skaičiuojamas pagal kiekvieno frakcijos nario dalyvavimą, apskaičiavus jų vidurkį.',
                 icon: '', order: -1
             }, {
                 key: 'avg_statement_count',
