@@ -1,3 +1,8 @@
 ---
-server_name: manoseimas.lt
-server_aliases: [www.manoseimas.lt]
+server_name: manoseimas.pov.lt
+server_aliases: [www.manoseimas.pov.lt]
+
+placeholder_name: manoseimas_placeholder
+placeholder_path: /var/{{ placeholder_name }}
+placeholder_server_name: manoseimas.lt
+placeholder_server_aliases: [www.manoseimas.lt]

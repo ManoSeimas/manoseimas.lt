@@ -31,7 +31,7 @@ config = exportrecipe.load(os.path.join(BUILDOUT_DIR, 'settings.json'))
 DEBUG = False
 
 ALLOWED_HOSTS = ['manoseimas.lt', 'www.manoseimas.lt',
-                 'manoseimas-staging.pov.lt',
+                 'manoseimas-staging.pov.lt', 'manoseimas.pov.lt',
                  'ms.tinginiai.lt', 'manoseimas.nous.lt', 'localhost']
 
 ADMINS = (
@@ -88,7 +88,9 @@ STATICFILES_DIRS = (
     os.path.join(config.buildout_parts_dir, 'jquery'),
     os.path.join(config.buildout_parts_dir, 'history.js'),
     os.path.join(config.buildout_parts_dir, 'bootstrap'),
-    os.path.join(config.buildout_parts_dir, 'bootstrap-sass', 'vendor', 'assets', 'stylesheets'),
+    os.path.join(config.buildout_parts_dir,
+                 'bootstrap-sass', 'vendor',
+                 'assets', 'stylesheets'),
     os.path.join(PROJECT_DIR, 'widget', 'frontend', 'build'),
     os.path.join(BUILDOUT_DIR, 'build'),
     os.path.join(BUILDOUT_DIR, 'bundles'),

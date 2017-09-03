@@ -156,7 +156,7 @@
     tags: update
 
   - name: collectstatic
-    command: bin/django collectstatic --noinput chdir={{ path }}
+    shell: LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 bin/django collectstatic --noinput chdir={{ path }}
     become_user: "{{ name }}"
     tags: update
 
@@ -229,10 +229,15 @@
     template: src=templates/apache.conf dest=/etc/apache2/sites-enabled/{{ name }}.conf
     notify: reload apache
 
+  - name: set up apache virtual host for the placeholder
+    template: src=templates/placeholder.conf dest=/etc/apache2/sites-enabled/{{ placeholder_name }}.conf
+    notify: reload apache
+
   - name: create log dirs
     file: path=/var/log/apache2/{{ item }} state=directory
     with_items:
     - "{{ name }}"
+    - "{{ placeholder_name }}"
 
   - name: remove default apache vhost
     file: path=/etc/apache2/sites-enabled/000-default.conf state=absent
@@ -241,6 +246,13 @@
   - name: ensure apache is running and starts on boot
     service: name=apache2 state=started enabled=true
 
+  # Copy placeholder files
+
+  - name: create placeholder dir
+    file: path=/opt/{{ placeholder_name }}/var/www state=directory
+
+  - name: copy placeholder file
+    copy: src=files/placeholder.html dest=/opt/{{ placeholder_name }}/var/www/index.html
 
   handlers:
 
