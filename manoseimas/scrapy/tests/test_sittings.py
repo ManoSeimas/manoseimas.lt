@@ -84,3 +84,41 @@ class TestSittingsSpider(TestCase):
             '_id': u'-26942:79163',
             'voting_id': u'-26942v'
             })
+
+    def test_voting_pipeline(self):
+        crawl(
+            Pipeline=ManoseimasPipeline, spider=SittingsSpider(),
+            param='p_svarst_kl_stad_id', method='parse_question', path='questions/%s.html', urls=[
+                'http://www.lrs.lt/sip/portal.show?p_r=15275&p_k=1&p_a=sale_klaus_stadija&p_svarst_kl_stad_id=-26736',
+            ],
+        )
+
+        crawl(
+            Pipeline=ManoseimasPipeline, spider=SittingsSpider(),
+            param='p_bals_id', method='parse_person_votes', path='votings/%s.html', urls=[
+                'http://www.lrs.lt/sip/portal.show?p_r=15275&p_k=1&p_a=sale_bals&p_bals_id=-26960',
+            ],
+        )
+
+        voting = models.Voting.objects.get()
+        self.assertEqual(voting.key, u'-26960v')
+        self.assertEqual(voting.name, u'dėl savaitės (nuo 2011-03-28) darbotvarkės patvirtinimo;')
+        self.assertEqual(voting.timestamp, datetime.datetime(2011, 3, 24, 12, 19, 12))
+        self.assertEqual(voting.source, u'http://www3.lrs.lt/pls/inter/w5_sale_new.bals?p_bals_id=-10764')
+        self.assertEqual(sorted(voting.value.keys()), [
+            '_id',
+            'datetime',
+            'documents',
+            'formulation',
+            'no_vote',
+            'question',
+            'registration',
+            'result',
+            'source',
+            'total_votes',
+            'type',
+            'vote_abstain',
+            'vote_aye',
+            'vote_no',
+            'votes',
+        ])

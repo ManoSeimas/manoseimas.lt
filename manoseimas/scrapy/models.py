@@ -56,7 +56,7 @@ class PersonVote(ScrapyPipe):
         }
         self.voting_id = item['voting_id']
         self.p_asm_id = item['person']
-        self.fraction = item['fraction']
+        self.fraction = item.get('fraction') or ''
         self.name = item['name']
         self.vote = votemap[item['vote']]
         self.timestamp = datetime.datetime.strptime(item['datetime'], '%Y-%m-%d %H:%M:%S')

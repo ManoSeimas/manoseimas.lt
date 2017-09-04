@@ -11,6 +11,7 @@ from six import text_type
 from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
 
 from scrapy.contrib.spiders import Rule
+from scrapy.selector import Selector
 from scrapy.selector import HtmlXPathSelector
 
 from manoseimas.scrapy.items import PersonVote
@@ -188,6 +189,8 @@ class SittingsSpider(ManoSeimasSpider):
             self._parse_question_votes(voting, (2, 4, 5, 6))
         else:
             formulation = item.select('td[2]/text()[2]').extract()[0].strip()
+            if u'dėl pritarimo po pateikimo' in formulation:
+                formulation = Selector(response).xpath('//*[@id="page-content"]/div[3]//b[1]/text()')[0].extract()
 
             # If formulation node is equeal to '(už' it means, that
             # there is no formulation at all.
@@ -210,15 +213,17 @@ class SittingsSpider(ManoSeimasSpider):
 
     def _parse_question_agenda(self, response, hxs, question):
 
+        question_rows = hxs.select('tr')
+
         date = question['session']['date']
         registration = None
-        for item in hxs:
+        for item in question_rows:
             # Registration
-            if item.select('td[2]/a[1][contains(@href, "p_reg_id=")]'):
+            if item.select('td[2]/a[contains(@href, "p_reg_id=")]'):
                 registration = Loader(self, response, Registration(), item,
                                       required=('datetime',))
 
-                url = item.select('td[2]/a[1]/@href').extract()[0]
+                url = item.select('td[2]/a/@href').extract()[0]
                 _id = text_type(self._get_query_attr(url, 'p_reg_id'))
 
                 registration.add_value('id', _id)
@@ -227,7 +232,7 @@ class SittingsSpider(ManoSeimasSpider):
                 registration.add_xpath('joined', 'td[2]/b[1]/text()')
 
             # Voting
-            if item.select('td[2]/a[1][contains(@href, "p_bals_id=")]'):
+            if item.select('td[2]/a[contains(@href, "p_bals_id=")]'):
                 voting = self._get_question_voting(response, item, question)
                 votes = sum([int(voting.get_output_value('vote_%s' % f))
                              for f in ('aye', 'no', 'abstain')])
