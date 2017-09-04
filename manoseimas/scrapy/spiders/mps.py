@@ -96,6 +96,7 @@ class MpsSpider(ManoSeimasSpider):
     def _parse_groups(self, response, hxs, person):
         group_type_map = {
             u'Seimo komitetuose': 'committee',
+            u'Pakomitečiuose': 'subcommittee',
             u'Seimo komisijose': 'commission',
             u'Seimo frakcijose': 'fraction',
             u'Parlamentinėse grupėse': 'group',
@@ -110,7 +111,14 @@ class MpsSpider(ManoSeimasSpider):
             tag = item.xpath('name()').extract()[0]
             tag = tag.lower()
             if tag == 'h3':
-                name = item.xpath('text()').extract()[0]
+                # check if this is a normal group
+                name_extract = item.xpath('text()').extract()
+                if name_extract:
+                    name = name_extract[0]
+                else:
+                    # subcommittees are rendered inside an ul because
+                    # that is a really good way to indent stuff
+                    name = item.xpath('ul/text()').extract()[0]
                 group_type = group_type_map[name]
             elif group_type and tag == 'table':
                 self._parse_group_items(response, person, item, group_type)
