@@ -242,6 +242,7 @@ class PoliticalParty(CrawledItem):
 class Group(CrawledItem):
     TYPE_GROUP = 'group'
     TYPE_COMMITTEE = 'committee'
+    TYPE_SUBCOMMITTEE = 'subcommittee'
     TYPE_COMMISSION = 'commission'
     TYPE_FRACTION = 'fraction'
     TYPE_PARLIAMENT = 'parliament'
@@ -249,6 +250,7 @@ class Group(CrawledItem):
     GROUP_TYPES = (
         (TYPE_GROUP, _('Group')),
         (TYPE_COMMITTEE, _('Committee')),
+        (TYPE_SUBCOMMITTEE, _('Subcommittee')),
         (TYPE_COMMISSION, _('Commission')),
         (TYPE_FRACTION, _('Fraction')),
         (TYPE_PARLIAMENT, _('Parliament')),
