@@ -1,6 +1,10 @@
 # coding: utf-8
+from __future__ import unicode_literals
+
 import urllib
 import datetime
+
+import re
 
 from six import text_type
 
@@ -63,7 +67,7 @@ class SittingsSpider(ManoSeimasSpider):
     )
 
     def __init__(self, resume="yes",
-                 start_url='http://www3.lrs.lt/pls/inter/w5_sale.kad_ses'):
+                 start_url='http://www.lrs.lt/sip/portal.show?p_r=15275&p_k=1&p_a=sale_kad_viena_ses'):
         # print "Arguments: Start_url: %s ; Resume? %s" % (start_url, resume)
 
         self.start_urls = [start_url]
@@ -97,14 +101,12 @@ class SittingsSpider(ManoSeimasSpider):
 
         self.rules = (
             Rule(QualifiedRangeSgmlLinkExtractor(
-                 allow=[
-                     # List of Seimas sittings
-                     r'/pls/inter/w5_sale\.ses_pos\?p_ses_id=(\d+)',
-                     # List of days with early and late sessions
-                     r'/pls/inter/w5_sale\.fakt_pos\?p_fakt_pos_id=(-?\d+)'
-                 ],
-                 allow_range=sitting_session_range),
-                 process_request=mark_no_cache),
+                allow=[
+                    # List of Seimas sittings
+                    r'/pls/inter/w5_sale\.ses_pos\?p_ses_id=(\d+)',
+                ],
+                allow_range=sitting_session_range),
+                process_request=mark_no_cache),
 
             # Discussion on a question
             Rule(QualifiedRangeSgmlLinkExtractor(
@@ -122,18 +124,23 @@ class SittingsSpider(ManoSeimasSpider):
         ManoSeimasSpider.__init__(self)
 
     def _get_session(self, response, hxs):
-        session_id = hxs.select('div[1]/a[1]').re(r'p_ses_id=(\d+)')
+
+        session_id = hxs.select('div[contains(@id, "breadcrumb")]').re(r'p_ses_id=(\d+)')
 
         hxs = hxs.select("div[2]/b")
 
         session = Loader(self, response, Session(), hxs, required=(
             'id', 'fakt_pos_id', 'number', 'date', 'type',))
 
+        date_xpath = "//*/h1[contains(@class, 'page-title')]"
+        heading_text = HtmlXPathSelector(response).select(date_xpath)[0].extract()
+        date = re.search(r'(\d+\-\d+\-\d+)', heading_text).group(1)
+
         session.add_value('id', session_id)
         session.add_value('fakt_pos_id',
                           hxs.select('a[1]').re(r'p_fakt_pos_id=(-\d+)'))
         session.add_value('number', hxs.select('a[1]/text()').re(r'Nr. (\d+)'))
-        session.add_xpath('date', 'a[2]/text()')
+        session.add_value('date', date)
         session.add_xpath('type', 'a[3]/text()')
 
         return dict(session.load_item())
@@ -202,6 +209,7 @@ class SittingsSpider(ManoSeimasSpider):
         return voting
 
     def _parse_question_agenda(self, response, hxs, question):
+
         date = question['session']['date']
         registration = None
         for item in hxs:
@@ -279,7 +287,7 @@ class SittingsSpider(ManoSeimasSpider):
         qdoc.add_xpath('name', 'b[1]/text()')
         qdoc.add_value('type',
                        hxs.select('b[1]/following::text()[1]').re('^; (.+)'))
-        number_re = (r'[A-Z]{1,4}'
+        number_re = (r'[A-Z]{1,5}'
                      r'-'
                      r'\d+'
                      r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
@@ -314,7 +322,7 @@ class SittingsSpider(ManoSeimasSpider):
                                               position=1)
 
     def parse_question(self, response):
-        xpath = '/html/body/div/table/tr[3]/td/table/tr/td'
+        xpath = "/html/body/div[2]/div/div[contains(@id, 'body-container')]/*/div[contains(@class, 'default-responsive')]"
         hxs = HtmlXPathSelector(response).select(xpath)[0]
 
         source = self._get_source_absolute_url(response, response.url, 'p_svarst_kl_stad_id')
@@ -331,7 +339,7 @@ class SittingsSpider(ManoSeimasSpider):
 
         yield question.load_item()
 
-        agenda_hxs = hxs.select('table[@class="basic"]/tr')
+        agenda_hxs = hxs.select('table')
         agenda = self._parse_question_agenda(response, agenda_hxs,
                                              question.item) or []
         for item in agenda:
@@ -371,7 +379,7 @@ class SittingsSpider(ManoSeimasSpider):
             'type',
             hxs.select('b[1]/following::text()[1]').re('^; (.+)')
         )
-        number_re = (r'[A-Z]{1,4}'
+        number_re = (r'[A-Z]{1,5}'
                      r'-'
                      r'\d+'
                      r'(([a-zA-Z0-9]{1,2})?(\([^)]{1,4}\))?)*')
@@ -383,7 +391,7 @@ class SittingsSpider(ManoSeimasSpider):
         return qdoc.load_item()
 
     def _parse_voting_legal_acts(self, response, voting):
-        xpath = '/html/body/div/table/tr[3]/td/table/tr/td/align'
+        xpath = "/html/body/div[2]/div/div[contains(@id, 'body-container')]/*/div[contains(@class, 'default-responsive')]"
         hxs = HtmlXPathSelector(response).select(xpath)[0]
 
         many_docs = hxs.select('ol/li')
@@ -416,8 +424,7 @@ class SittingsSpider(ManoSeimasSpider):
         return absolute_urls
 
     def parse_person_votes(self, response):
-        xpath = ('/html/body/div/table/tr[3]/td/table/tr/td/align/'
-                 'div[contains(h4,"rezultatai")]/table')
+        xpath = "/html/body/div[2]/div/div[contains(@id, 'body-container')]/*/div[contains(@class, 'default-responsive')]/*/table[contains(@class, 'tbl-default')]"
         hxs = HtmlXPathSelector(response).select(xpath)[0]
 
         source = self._get_source_absolute_url(response, response.url, 'p_bals_id')
@@ -427,11 +434,14 @@ class SittingsSpider(ManoSeimasSpider):
             '_id', 'datetime', 'votes',))
         voting.add_value('_id', '%sv' % _id)
 
-        datetime_xpath_base = '/html/body/div/table/tr[3]/td/table/tr/td/'
-        date = hxs.xpath(datetime_xpath_base + 'div[2]/b/a[2]/text()')[0].extract()
-        time = hxs.xpath(datetime_xpath_base + (
-            'align/text()[contains(., "Balsavimo laikas")]/following-sibling::b[1]/text()'
-        ))[0].extract()
+        date_xpath = "//*/h1[contains(@class, 'page-title')]"
+        heading_text = HtmlXPathSelector(response).select(date_xpath)[0].extract()
+        date = re.search(r'(\d+\-\d+\-\d+)', heading_text).group(1)
+
+        time_xpath = "//*/div/text()[contains( ., 'Balsavimo laikas')]/following-sibling::b"
+        time_text = HtmlXPathSelector(response).select(time_xpath)[0].extract()
+        time = re.search(r'(\d+\:\d+\:\d+)', time_text).group(1)
+
         timestamp = '%s %s' % (date, time)
         datetime.datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
         voting.add_value('datetime', timestamp)
