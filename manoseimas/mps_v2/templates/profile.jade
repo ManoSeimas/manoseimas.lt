@@ -136,7 +136,7 @@
       .collaborators
         for mp in top_collaborating_mps
           .parliamentarian.box
-            img(src="{{ mp.photo.url }}")
+            img(src="{% if mp.photo %}{{ mp.photo.url }} {% endif %}")
             .info
               h2: a(href="{% url 'mp_profile' mp.slug %}") {{mp.full_name}}
               if mp.fraction
