@@ -10,9 +10,11 @@ from six import text_type
 
 from manoseimas.scrapy.linkextractors import QualifiedRangeSgmlLinkExtractor
 
+from scrapy import Request
 from scrapy.contrib.spiders import Rule
 from scrapy.selector import Selector
 from scrapy.selector import HtmlXPathSelector
+from scrapy.contrib.linkextractors.lxmlhtml import LxmlLinkExtractor
 
 from manoseimas.scrapy.items import PersonVote
 from manoseimas.scrapy.items import Question
@@ -67,14 +69,14 @@ class SittingsSpider(ManoSeimasSpider):
         pipelines.ManoseimasPipeline,
     )
 
-    def __init__(self, resume="yes",
+    def __init__(self, resume="no",
                  start_url='http://www.lrs.lt/sip/portal.show?p_r=15275&p_k=1&p_a=sale_kad_viena_ses'):
         # print "Arguments: Start_url: %s ; Resume? %s" % (start_url, resume)
 
         self.start_urls = [start_url]
 
-        sitting_session_range = [(MINIMUM_SITTING, None), (None, None)]
-        question_range = None
+        sitting_session_range = [(MINIMUM_SITTING, None)]
+        self.question_range = None
         voting_range = None
 
         if resume.lower() != "no":
@@ -95,7 +97,7 @@ class SittingsSpider(ManoSeimasSpider):
                 (int(session['id']), None),
                 (None, 1 + int(session['fakt_pos_id']))
             ]
-            question_range = [(None, 1 + int(question.value['source']['id']))]
+            self.question_range = [(None, 1 + int(question.value['source']['id']))]
             # Note: We increment (see above note) and then decrement in order
             # to reach the next voting. Net result is 0 offset.
             voting_range = [(None, int(voting.value['source']['id']))]
@@ -104,16 +106,20 @@ class SittingsSpider(ManoSeimasSpider):
             Rule(QualifiedRangeSgmlLinkExtractor(
                 allow=[
                     # List of Seimas sittings
-                    r'/pls/inter/w5_sale\.ses_pos\?p_ses_id=(\d+)',
+                    r'/sip/portal\.show\?p_r=15275&p_k=1&p_a=sale_ses_pos&p_ses_id=(\d+)'
                 ],
                 allow_range=sitting_session_range),
                 process_request=mark_no_cache),
 
-            # Discussion on a question
-            Rule(QualifiedRangeSgmlLinkExtractor(
-                allow=[r'p_svarst_kl_stad_id=(-?\d+)'],
-                allow_range=question_range
-            ), 'parse_question', follow=True, process_request=mark_no_cache),
+            Rule(
+                LxmlLinkExtractor(
+                    allow=[
+                        r'/sip/portal\.show\?p_r=15275&p_k=1&p_a=sale_fakt_pos&p_fakt_pos_id=(-?\d+)',
+                    ],
+                ),
+                'parse_sitting',
+                process_request=mark_no_cache
+            ),
 
             # Voting results by person
             Rule(QualifiedRangeSgmlLinkExtractor(
@@ -124,25 +130,19 @@ class SittingsSpider(ManoSeimasSpider):
 
         ManoSeimasSpider.__init__(self)
 
-    def _get_session(self, response, hxs):
+    def _get_session(self, response, hxs, session):
+        # Expect session prepopulated with p_fakt_pos_id, type and number
 
         session_id = hxs.select('div[contains(@id, "breadcrumb")]').re(r'p_ses_id=(\d+)')
 
         hxs = hxs.select("div[2]/b")
-
-        session = Loader(self, response, Session(), hxs, required=(
-            'id', 'fakt_pos_id', 'number', 'date', 'type',))
 
         date_xpath = "//*/h1[contains(@class, 'page-title')]"
         heading_text = HtmlXPathSelector(response).select(date_xpath)[0].extract()
         date = re.search(r'(\d+\-\d+\-\d+)', heading_text).group(1)
 
         session.add_value('id', session_id)
-        session.add_value('fakt_pos_id',
-                          hxs.select('a[1]').re(r'p_fakt_pos_id=(-\d+)'))
-        session.add_value('number', hxs.select('a[1]/text()').re(r'Nr. (\d+)'))
         session.add_value('date', date)
-        session.add_xpath('type', 'a[3]/text()')
 
         return dict(session.load_item())
 
@@ -326,6 +326,35 @@ class SittingsSpider(ManoSeimasSpider):
                 self._parse_question_speakers(response, hxs, question,
                                               position=1)
 
+    def _extract_fakt_pos_id(self, url):
+        return self._get_query_attr(url, 'p_fakt_pos_id')
+
+    def parse_sitting(self, response):
+
+        # Discussion on a question
+        link_extractor = QualifiedRangeSgmlLinkExtractor(
+            allow=[
+                r'/sip/portal\.show\?p_r=15275&p_k=1&p_a=sale_klaus_stadija&p_svarst_kl_stad_id=(-?\d+)',
+            ],
+            allow_range=self.question_range
+        )
+
+        p_fakt_pos_id = self._extract_fakt_pos_id(response.url)
+
+        xpath = "/html/body/div[2]/div/div[contains(@id, 'body-container')]/*/div[contains(@class, 'default-responsive')]"
+        hxs = HtmlXPathSelector(response).select(xpath)[0]
+        title_xs = hxs.select('h1[contains(@class, "page-title")]/text()')
+
+        for link in link_extractor.extract_links(response):
+
+            session = Loader(self, response, item=Session(), required=(
+                'id', 'fakt_pos_id', 'number', 'date', 'type',))
+
+            session.add_value('fakt_pos_id', p_fakt_pos_id)
+            session.add_value('number', title_xs.re(r'Nr. (\d+)'))
+            session.add_value('type', title_xs.re(r'Seimo (\w+) '))
+            yield Request(link.url, callback=self.parse_question, meta={'session': session})
+
     def parse_question(self, response):
         xpath = "/html/body/div[2]/div/div[contains(@id, 'body-container')]/*/div[contains(@class, 'default-responsive')]"
         hxs = HtmlXPathSelector(response).select(xpath)[0]
@@ -339,7 +368,7 @@ class SittingsSpider(ManoSeimasSpider):
 
         self._parse_question_documents(response, hxs, question)
 
-        question.add_value('session', self._get_session(response, hxs))
+        question.add_value('session', self._get_session(response, hxs, response.meta['session']))
         question.add_value('source', source)
 
         yield question.load_item()
